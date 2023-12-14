@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="../../../root.css">
+    <link rel="stylesheet" href="../mypage.css">
+    <script src="https://kit.fontawesome.com/2364e2b536.js" crossorigin="anonymous"></script>
+</head>
+
+<body>
+
+    <div class="global-dialog-bg">
+        <div class="global-dialog-container">
+            <p class="gd-content">알림 모달 테스트</p>
+            <div class="gd-confirm" onclick="closeGDModal()">확인</div>
+        </div>
+    </div>
+
+    <header></header>
+
+    <main id="my-page-main">
+        <div class="mp-left-menu">
+            <section>
+                <div class="mplm-section-title">계정관리</div>
+                <ul>
+                    <li class="mplm-nav-item active">
+                        <a href="#">개인정보 수정</a>
+                    </li>
+                </ul>
+            </section>
+            <section>
+                <div class="mplm-section-title">My활동</div>
+                <ul>
+                    <li class="mplm-nav-item">
+                        <a href="#">북마크</a>
+                    </li>
+                    <li class="mplm-nav-item">
+                        <a href="#">예약내역</a>
+                    </li>
+                    <li class="mplm-nav-item">
+                        <a href="#">후기관리</a>
+                    </li>
+                </ul>
+            </section>
+            <section>
+                <div class="mplm-section-title">장소 관리</div>
+                <ul>
+                    <li class="mplm-nav-item">
+                        <a href="#">장소 관리</a>
+                    </li>
+                </ul>
+            </section>
+        </div>
+        <div class="mp-content">
+            <article>
+                <div class="mpc-title">
+                    <h2>개인정보 수정</h2>
+                </div>
+                <div style="display: none;">
+                    <div class="mpc-auth-info1">
+                        회원님의 개인 정보를 소중하게 보호하고 있습니다.<br>회원님의 동의 없이 회원정보를 제3자에게 제공하지 않습니다.
+                    </div>
+                    <div class="mpc-auth-info2">
+                        고객님의 개인 정보 보호를 위해 비밀번호를 입력 후, 이용이 가능합니다.
+                    </div>
+                    <div class="mpc-auth-container">
+                        <label for="pw" class="mpc-auth">
+                            <span>비밀번호</span>
+                            <input type="password" id="pw" placeholder="비밀번호를 입력해 주세요.">
+                        </label>
+                        <button class="mpc-auth-button" type="submit">회원 확인</button>
+                    </div>
+                </div>
+                <div style="width: 750px;">
+                    <figure class="mpc-user-info-user">
+                        <img src="https://img.shareit.kr/data/character/1.png" alt="테스트 유저"
+                            class="mpc-user-info-user-img">
+                        <figcaption>
+                            <b>테스트 유저</b>님
+                        </figcaption>
+                    </figure>
+                    <div>
+                        <div class="mpc-user-info-container">
+                            <span>가입된 이메일</span>
+                            <input class="input-readonly" placeholder="test****@gmail.com" readonly>
+                        </div>
+                        <div class="mpc-user-info-container">
+                            <span>휴대 전화</span>
+                            <input class="input-readonly" placeholder="01012345678" readonly>
+                            <button type="submit" onclick="openMYModal()">전화번호 변경</button>
+                        </div>
+                        <div class="mpc-user-info-container">
+                            <span>새 비밀번호</span>
+                            <input type="password" id="newPw" placeholder="영문, 숫자, 특수문자 2가지 이상 포함 6~15자리">
+                        </div>
+                        <div class="mpc-user-info-container">
+                            <span>새 비밀번호 확인</span>
+                            <input type="password" id="newPwCheck" placeholder="영문, 숫자, 특수문자 2가지 이상 포함 6~15자리">
+                            <button type="submit" id="pwChangeConfirm">비밀번호 변경</button>
+                        </div>
+                    </div>
+                </div>
+            </article>
+        </div>
+    </main>
+
+    <div class="modal-bg show">
+        <div class="modal-phone-container">
+            <div class="modal-row" style="margin-top: 20px;">
+                <p style="font-weight: bold; font-size: 12px; line-height: 14px; color: rgb(158, 164, 170);">
+                    새 전화번호
+                </p>
+            </div>
+            <div id="newPhoneNumCon" class="modal-input-container" style="margin-top: 8px;">
+                <input id="newPhone" type="text" pattern="[0-9]*"
+                    oninput="this.value=this.value.replace(/[^0-9]/g,'');" maxlength="11"
+                    required="required">
+                <div id="newPhoneEraseBtn" class="modal-input-delete" style="right: 110px;">
+                    <img src="//s3.hourplace.co.kr/web/images/icon/round_delete_g.svg"
+                        style="width: 16px; height: 16px;">
+                </div>
+                <div id="newPhoneAuthBtn" class="modal-input-button disable">
+                    <p>인증번호 받기</p>
+                </div>
+            </div>
+            <div id="authNumInputCon" class="modal-input-container disable" style="margin-top: 20px;">
+                <input id="authNumInput" type="text" id="authNo" pattern="[0-9]*"
+                    oninput="this.value=this.value.replace(/[^0-9]/g,'');" maxlength="6"
+                    placeholder="문자로 받은 인증번호를 알려주세요" required="required" style="width: calc(100% - 80px);">
+                <div id="timerContainer" class="modal-timer-container">
+                    <p id="timerText"></p>
+                </div>
+            </div>
+            <p class="modal-alert-text"></p>
+            <div style="display: flex; justify-content: center;">
+                <div class="modal-confirm-btn disable">
+                    <p>
+                        인증 완료
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script src="user-info.js"></script>
+<script src="../../global-dialog-modal.js"></script>
+
+</html>
