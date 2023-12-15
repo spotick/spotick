@@ -151,6 +151,18 @@ input{
     content: url(https://hourplace.co.kr/images/icon/check_b.svg);
 }
 
+.invalid-msg{
+    color: red;
+    margin-left: 12px;
+    font-weight: bolder;
+    font-size: 10px;
+    line-height: -20px;
+}
+
+.none{
+    display: none;
+}
+
 
 
 
