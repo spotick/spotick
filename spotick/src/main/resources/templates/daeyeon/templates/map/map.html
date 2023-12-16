@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>지도서비스</title>
+  <link rel="stylesheet" href="../../static/css/map/map.css">
+</head>
+
+<body>
+  <header class="header"></header>
+  <div class="map-container">
+    <div class="kakao-map-api-wrap">
+      <div id="map"></div>
+    </div>
+  </div>
+
+  <footer class="footer"></footer>
+  <script src="https://code.jquery.com/jquery-3.6.4.js"></script>
+
+  <script type="text/javascript"
+    src="//dapi.kakao.com/v2/maps/sdk.js?appkey=3dc12d7c2624483dc7c019a0a91b727f&libraries=clusterer,service" ></script>
+  <script type="module"  src="../../static/js/map/kakaoMapService.js"></script>
+
+</body>
+
+</html>
