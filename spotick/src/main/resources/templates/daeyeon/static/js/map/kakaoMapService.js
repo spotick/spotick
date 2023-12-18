@@ -20,14 +20,9 @@ let clusterer = new kakao.maps.MarkerClusterer({
   averageCenter: true, // 클러스터에 포함된 마커들의 평균 위치를 클러스터 마커 위치로 설정
   minLevel: 8, // 클러스터 할 최소 지도 레벨
   disableClickZoom: true, // 클러스터 마커를 클릭했을 때 지도가 확대되지 않도록 설정한다
-  // markers:markers,
-  // texts:[
-  //   `여기${size}`,
-  //   `저기${size}`
-  // ],
-  styles:[{
-    display:'flex',
-  }]
+  // styles:[{
+  //   display:'flex',
+  // }]
 });
 
 // 데이터를 가져오기 위해 jQuery를 사용합니다
