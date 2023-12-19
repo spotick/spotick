@@ -109,10 +109,13 @@ input[type="number"]::-webkit-inner-spin-button {
   display: none;
 }
 
-.find-section {
+.find-section,
+.find-completed-container{
   padding: 0 70px;
 }
-.find-section > section {
+
+.find-section  section,
+.find-completed-container section{
   flex-direction: column;
 }
 
@@ -146,7 +149,8 @@ label > input {
   text-align: left;
 }
 
-#certNumber{
+#certNumber,
+#passwordCertNumber{
   font-weight: bold;
 }
 
@@ -173,8 +177,9 @@ label > input {
 }
 
 .find-id-btn,
-.find-password-btn{
-  margin-top: 16px;
+.find-password-btn,
+.change-password-btn{
+  margin-top: 12px;
   background-color: rgb(240, 240, 240);
   color: rgb(163, 163, 163);
   font-size: 16px;
@@ -184,12 +189,27 @@ label > input {
 }
 
 .find-id-btn.on,
-.find-password-btn.on{
+.find-password-btn.on,
+.change-password-btn.on{
   color: #fff;
   background-color: #007aff;
 }
 
-.warning-msg{
+.go-login{
+  color: #fff;
+  background-color: #007aff;
+  margin-top: 12px;
+  font-size: 16px;
+  border-radius: 4px;
+  height: 56px;
+  font-weight: bold;
+}
+
+.warning-msg,
+.id-cert-msg,
+.pw-cert-msg,
+.check-fail-msg,
+.invalid-password-msg{
   color: red;
   font-size: 12px;
   margin-top: 4px;
@@ -197,10 +217,32 @@ label > input {
 }
 
 .input-box{
-  margin-bottom: 16px;
+  margin-bottom: 8px;
 }
 
+.find-id-info-box{
+  background-color: rgb(241, 245, 290);
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  padding: 40px 0;
+}
 
+.register-date{
+  color: rgb(138, 138, 138);
+  font-size: 13px;
+  text-align: center;
+  margin: 4px 0;
+}
+
+.find-guide-msg{
+  font-size: 12px;
+  line-height: 17px;
+  color: rgb(163, 163, 163);
+  text-align: center;
+  white-space: pre-line;
+  margin-bottom: 40px;
+}
 
 
 

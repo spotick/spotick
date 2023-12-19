@@ -1,88 +1,98 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>아이디/비밀번호 찾기</title>
-  <link rel="stylesheet" href="../../static/css/user/find.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>아이디/비밀번호 찾기</title>
+    <link rel="stylesheet" href="../../static/css/user/find.css"/>
 </head>
 
 <body>
-  <div class="global-container">
+<div class="global-container">
     <div class="main-container">
-      <div class="find-container">
-        <div class="id-pw-title-box flex-align-center">
-          <h2>아이디/비밀번호 찾기</h2>
+        <div class="find-container">
+            <div class="id-pw-title-box flex-align-center">
+                <h2>아이디/비밀번호 찾기</h2>
+            </div>
+            <div class="find-wrap">
+
+
+                <div class="title-container">
+                    <button type="button" class="title-box find-focus">
+                        아이디
+                    </button>
+                    <button type="button" class="title-box ">
+                        비밀번호
+                    </button>
+                </div>
+                <!-- 아이디 찾기 부분 -->
+                <div class="find-section">
+                    <section class="id-section flex-center">
+                        <p class="guide-msg">회원가입 시 등록하신<br>이름과 휴대폰 번호를 입력해주세요</p>
+                        <div class="input-box">
+                            <label for="name">
+                                <input id="name" type="text" class="name required" name="name" placeholder="이름">
+                            </label>
+                            <p class="warning-msg none">이름을 정확히 입력해 주세요</p>
+                        </div>
+                        <div class="input-box">
+                            <label for="tel">
+                                <input id="tel" type="number" class="tel required" name="tel"
+                                       placeholder="휴대전화(-제외 하고 입력)">
+                            </label>
+                            <p class="warning-msg none">전화번호를 정확히 입력해 주세요</p>
+                        </div>
+                        <div class="input-box">
+                            <label for="certNumber" class="cert-number-label">
+                                <input id="certNumber" type="number" class="certNumber" name="tel" placeholder="인증번호"
+                                       readonly>
+                                <button class="cert-btn flex-align-center">인증번호</button>
+                            </label>
+                            <p class="id-cert-msg none">인증번호를 다시 입력해 주세요</p>
+                        </div>
+
+                        <button type="button" class="find-id-btn find-btn flex">아이디 찾기</button>
+
+                    </section>
+                    <div class="password-wrap">
+
+                        <section class="flex-center password-section none">
+                            <p class="guide-msg">회원정보에 등록한 아이디를 입력해주세요</p>
+                            <div class="input-box">
+                                <label for="name">
+                                    <input id="email" type="text" class="email" name="email" placeholder="아이디(이메일)">
+                                </label>
+                                <p class="warning-msg none">아이디(이메일) 정확히 입력해 주세요</p>
+                            </div>
+                            <div class="input-box">
+                                <label for="passwordCertNumber" class="cert-number-label">
+                                    <input id="passwordCertNumber" type="number" class="password-cert-number"
+                                           name="passwordCertNumber"
+                                           placeholder="인증번호" readonly>
+                                    <button class="cert-btn flex-align-center">인증번호</button>
+                                </label>
+                                <p class="pw-cert-msg none">인증번호를 다시 입력해 주세요</p>
+                            </div>
+
+                            <button type="button" class="find-password-btn find-btn flex">비밀번호 찾기</button>
+
+                        </section>
+
+
+                    </div>
+                </div>
+
+
+            </div>
+
         </div>
-        <div class="find-wrap">
-          <div class="title-container">
-            <button type="button" class="title-box find-focus">
-              아이디
-            </button>
-            <button type="button" class="title-box ">
-              비밀번호
-            </button>
-          </div>
-          <!-- 아이디 찾기 부분 -->
-          <div class="find-section">
-            <section class="id-section flex-center">
-              <p class="guide-msg">회원가입 시 등록하신<br>이름과 휴대폰 번호를 입력해주세요</p>
-              <div class="input-box">
-                <label for="name">
-                  <input id="name" type="text" class="name required" name="name" placeholder="이름" >
-                </label>
-                <p class="warning-msg none">이름을 정확히 입력해 주세요</p>
-              </div>
-              <div class="input-box">
-                <label for="tel">
-                  <input id="tel" type="number" class="tel required" name="tel" placeholder="휴대전화(-제외 하고 입력)">
-                </label>
-                <p class="warning-msg none">전화번호를 정확히 입력해 주세요</p>
-              </div>
-              <div class="input-box">
-                <label for="certNumber" class="cert-number-label">
-                  <input id="certNumber" type="number" class="certNumber" name="tel" placeholder="인증번호" readonly>
-                  <div class="cert-btn flex-align-center">인증번호</div>
-                </label>
-                <p class="cert-msg none">인증번호를 다시 입력해 주세요</p>
-              </div>
-
-              <button type="button" class="find-id-btn flex">아이디 찾기</button>
-
-            </section>
-
-            <section class="flex-center password-section none">
-              <p class="guide-msg">회원정보에 등록한 아이디를 입력해주세요</p>
-              <div class="input-box">
-                <label for="name">
-                  <input id="email" type="text" class="email required" name="email" placeholder="아이디(이메일)" >
-                </label>
-                <p class="warning-msg none">아이디(이메일) 정확히 입력해 주세요</p>
-              </div>
-              <div class="input-box">
-                <label for="passwordCertNumber" class="cert-number-label">
-                  <input id="passwordCertNumber" type="number" class="password-cert-number" name="" placeholder="인증번호" readonly>
-                  <div class="cert-btn flex-align-center">인증번호</div>
-                </label>
-                <p class="cert-msg none">인증번호를 다시 입력해 주세요</p>
-              </div>
-
-              <button type="button" class="find-id-btn flex">아이디 찾기</button>
-
-            </section>
-          </div>
-
-
-        </div>
-
-      </div>
     </div>
-  </div>
+</div>
 
 
-  <script src="https://code.jquery.com/jquery-3.6.4.js"></script>
-  <script src="../../static/js/user/find.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.4.js"></script>
+<script src="../../static/js/user/find.js"></script>
 </body>
 
 </html>

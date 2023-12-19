@@ -38,11 +38,11 @@ function requiredCheckOk() {
 }
 
 // 인풋 및 체크여부에 따라 서브밋 버튼 동작 설정
-$("body").on("change click", function () {
+$("body").on("blur",'input', function () {
     // 간단한 회원가입시의 체크 검사
-    $(".submit-btn").toggleClass("on", requiredCheckOk());
+    // $(".submit-btn").toggleClass("on", requiredCheckOk());
     // 모든 유효성 검사 적용
-    // $(".submit-btn").toggleClass("on", isValidFields());
+    $(".submit-btn").toggleClass("on", isValidFields());
 });
 
 // 이벤트 위임으로 회원가입 폼 제출처리
@@ -71,7 +71,7 @@ function isValidEmail() {
         data: $("#email").val(),
         success: function (result) {
             if (!result) {
-                //해당 닉네임이 있는지 없는지 숫자로 가져온다(0,1)
+                //해당 닉네임이 있는지 없는지
                 $(".email-fail").removeClass("none");
                 return true;
             } else {
@@ -129,3 +129,4 @@ function isInputEmpty() {
     });
     return isValid;
 }
+
