@@ -1,14 +1,14 @@
 // 로그인 유효성검사(이메일 형식, 비밀번호 길이)
 
 // 모든 기능 완성되면 삭제
-$('#submit').addClass('on');
+// $('#submit').addClass('on');
 
 // 작업 빨리 완성해야할 때는 주석처리
-// $('input').on('change',function(){
-//   let email = $('#email').val();
-//   let password = $('#password').val();
-//   $('#submit').toggleClass('on', isValid(email, password));
-// });
+$('input').on('change',function(){
+  let email = $('#email').val();
+  let password = $('#password').val();
+  $('#submit').toggleClass('on', isValid(email, password));
+});
 
 // 이벤트 위임으로 로그인 폼 제출처리
 $('.submit-box').on('click','.on',function(){

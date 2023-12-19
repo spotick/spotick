@@ -1,3 +1,9 @@
+/**
+ * 서버연결되고 유효성검사로 회원가입 버튼 누루게 하는 부분 수정해야함
+ * 지금 상태로 하면 모든 인풋마다 클릭이나 blur이벤트 발생될 때마다
+ * 불필요하게 ajax연결이 되서 비효율적임
+ * 일단은 퍼블리싱 작업부터
+ */
 $(".all-check").on("click", function () {
     $(this).toggleClass("on");
 
@@ -38,7 +44,7 @@ function requiredCheckOk() {
 }
 
 // 인풋 및 체크여부에 따라 서브밋 버튼 동작 설정
-$("body").on("blur",'input', function () {
+$("body").on("change click",'input, .agreement>div', function () {
     // 간단한 회원가입시의 체크 검사
     // $(".submit-btn").toggleClass("on", requiredCheckOk());
     // 모든 유효성 검사 적용
@@ -62,59 +68,59 @@ function isValidFields(){
 // 이메일 유효성 및 중복 검사
 function isValidEmail() {
     const regex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
-    if( regex.test($("#email").val())){
-        return false;
-    }
-    $.ajax({
-        url: ``, //url
-        type: "post",
-        data: $("#email").val(),
-        success: function (result) {
-            if (!result) {
-                //해당 닉네임이 있는지 없는지
-                $(".email-fail").removeClass("none");
-                return true;
-            } else {
-                $(".email-fail").addClass("none");
-                return false;
-            }
-        },
-        error: function (a, b, c) {
-            console.error(c);
-        },
-    });
+    return regex.test($("#email").val());
+
+    // $.ajax({
+    //     url: ``, //url
+    //     type: "post",
+    //     data: $("#email").val(),
+    //     success: function (result) {
+    //         if (!result) {
+    //             //해당 닉네임이 있는지 없는지
+    //             $(".email-fail").removeClass("none");
+    //             return true;
+    //         } else {
+    //             $(".email-fail").addClass("none");
+    //             return false;
+    //         }
+    //     },
+    //     error: function (a, b, c) {
+    //         console.error(c);
+    //     },
+    // });
 }
 
 // 닉네임 중복 검사
 function isValidNickName() {
-    $.ajax({
-        url: ``, //url
-        type: "post",
-        data: $("#nick-name").val(),
-        success: function (result) {
-            if (!result) {
-                //해당 닉네임이 있는지 없는지 숫자로 가져온다(0,1)
-                $(".nick-name-fail").removeClass("none");
-                return true;
-            } else {
-                $(".nick-name-fail").addClass("none");
-                return false;
-            }
-        },
-        error: function (a, b, c) {
-            console.error(c);
-        },
-    });
+    return $("#nick-name").val() !== '';
+    // $.ajax({
+    //     url: ``, //url
+    //     type: "post",
+    //     data: {nickName:$("#nick-name").val()},
+    //     success: function (result) {
+    //         if (!result) {
+    //             //해당 닉네임이 있는지 없는지 숫자로 가져온다(0,1)
+    //             $(".nick-name-fail").removeClass("none");
+    //             return true;
+    //         } else {
+    //             $(".nick-name-fail").addClass("none");
+    //             return false;
+    //         }
+    //     },
+    //     error: function (a, b, c) {
+    //         console.error(c);
+    //     },
+    // });
 }
 
 // 비밀번호 유효성 검사
 function isValidPasswordLength() {
     const passwordRegex = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,20}$/;
     if (passwordRegex.test($("#password").val())) {
-        $(".password-fail").removeClass("none");
+        $(".password-fail").addClass("none");
         return true;
     } else {
-        $(".password-fail").addClass("none");
+        $(".password-fail").removeClass("none");
         return false;
     }
 }
