@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="../../root.css">
+    <link rel="stylesheet" href="../mypage.css">
+    <script src="https://kit.fontawesome.com/2364e2b536.js" crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <main id="my-page-main">
+        <div class="modal-bg">
+            <div class="global-dialog-container">
+                <p class="gd-content">0</p>
+                <div class="gd-confirm" onclick="closeModal()">확인</div>
+            </div>
+            <div class="global-selection-container">
+                <p class="gs-question"></p>
+                <div style="display: flex;">
+                    <div class="gs-select-btn" onclick="closeGlobalSelection()">취소</div>
+                    <div class="gs-select-btn gs-confirm" style="color: rgb(0, 117, 235);">확인</div>
+                </div>
+            </div>
+            <div class="modal-review-form-container">
+                <div style="display: flex; margin-bottom: 20px;">
+                    <div class="mpcr-img-con">
+                        <img style="width: 180px;" height="100px"
+                            src="//img.hourplace.co.kr/place/user/47919/2022/05/29/74f9815f-fc9d-4dec-8037-41861f43cae9?s=550x364&amp;t=cover&amp;q=80">
+                    </div>
+                    <div class="mpcr-card-content">
+                        <div class="mpccc-row">
+                            <p href="#" class="mpccc-top-font">
+                                <a href="#">호리존</a>
+                                <span style="margin: 0 2px;">·</span>
+                                <a href="#">서울</a>
+                            </p>
+                        </div>
+                        <div class="mpccc-row">
+                            <a href="#" class="mpccc-title-font general-ellipsis-1">
+                                제목 테스트
+                            </a>
+                        </div>
+                        <div class="mpccc-row" style="margin-top: 10px;">
+                            <p class="mpccc-price">16,500원</p>
+                            <div class="mpccc-eval">
+                                <img src="../../imgs/gold_star.svg">
+                                <p class="mpccc-eval-num"> 5.0 </p>
+                                <a href="#" class="mpccc-review-count">리뷰
+                                    <span>149</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mpcr-divider"></div>
+                    <div class="mpcr-info">
+                        <div class="mpcri-title">예약 정보</div>
+                        <div class="mpcri-date">
+                            <span>2022.12.22 17시</span>
+                            <span style="margin: 0 4px; color: #868686;">~</span>
+                            <span>2022.12.23.10시</span>
+                        </div>
+                        <div class="mpcri-people-count">
+                            <div>
+                                사용 인원: <span>0</span>명
+                            </div>
+                        </div>
+                        <div class="mpcri-content">
+                            <span>요청 사항: </span>테스트 요청사항 테스트 요청사항 테스트 요청사항 테스트 요청사항 테스트 요청사항 테스트 요청사항 테스트 요청사항
+                            테스트 요청사항
+                        </div>
+                    </div>
+                </div>
+                <h2 class="mri-title">후기작성</h2>
+                <div class="mrf-star-rating-con">
+                    <span class="mrf-star on" value="1" onclick="setReviewScore(1)"></span>
+                    <span class="mrf-star" value="2" onclick="setReviewScore(2)"></span>
+                    <span class="mrf-star" value="3" onclick="setReviewScore(3)"></span>
+                    <span class="mrf-star" value="4" onclick="setReviewScore(4)"></span>
+                    <span class="mrf-star" value="5" onclick="setReviewScore(5)"></span>
+                    <div class="mrf-rating-count-con">
+                        <input id="reviewRating" type="text" value="1" readonly>점
+                    </div>
+                </div>
+                <div class="mr-form">
+                    <textarea name="" id="mrContent" cols="30" rows="10" maxlength="200" oninput="checkTypeCounts()"
+                        placeholder="최소 10자 이상 입력해주세요"></textarea>
+                </div>
+                <div class="mr-type-counter">
+                    <span>글자수</span>
+                    <span id="typeCounter">0</span>
+                    <span>/ 200</span>
+                </div>
+                <div style="display: flex; justify-content: center;">
+                    <button id="mrConfirmBtn" class="modal-confirm-btn" disabled>
+                        <p>작성 완료</p>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="mp-left-menu">
+            <section>
+                <div class="mplm-section-title">계정관리</div>
+                <ul>
+                    <li class="mplm-nav-item">
+                        <a href="#">개인정보 수정</a>
+                    </li>
+                </ul>
+            </section>
+            <section>
+                <div class="mplm-section-title">My활동</div>
+                <ul>
+                    <li class="mplm-nav-item">
+                        <a href="#">북마크</a>
+                    </li>
+                    <li class="mplm-nav-item">
+                        <a href="#">예약내역</a>
+                    </li>
+                    <li class="mplm-nav-item active">
+                        <a href="#">후기관리</a>
+                    </li>
+                </ul>
+            </section>
+            <section>
+                <div class="mplm-section-title">장소 관리</div>
+                <ul>
+                    <li class="mplm-nav-item">
+                        <a href="#">장소 관리</a>
+                    </li>
+                </ul>
+            </section>
+        </div>
+        <div class="mp-content">
+            <article>
+                <div class="mpc-title not-with-line">
+                    <h2>후기관리</h2>
+                </div>
+                <nav class="mpc-top-nav">
+                    <button type="button" class="mpc-top-nav-button active">
+                        작성가능 후기(<span>0</span>)
+                    </button>
+                    <button type="button" class="mpc-top-nav-button">
+                        작성한 후기(<span>0</span>)
+                    </button>
+                </nav>
+                <div class="mpc-review-wrap">
+                    <article>
+                        <div class="mpcre-item-container">
+                            <div class="mpcre-img-con">
+                                <img
+                                    src="//img.hourplace.co.kr/place/user/47919/2022/05/29/74f9815f-fc9d-4dec-8037-41861f43cae9?s=550x364&amp;t=cover&amp;q=80">
+                            </div>
+                            <div class="mpcre-card-content">
+                                <div class="mpccc-row">
+                                    <p href="#" class="mpccc-top-font">
+                                        <a href="#">호리존</a>
+                                        <span style="margin: 0 2px;">·</span>
+                                        <a href="#">서울</a>
+                                    </p>
+                                </div>
+                                <div class="mpccc-row">
+                                    <a href="#" class="mpccc-title-font general-ellipsis-1">
+                                        제목 테스트 제목 테스트 제목 테스트 제목 테스트 제목 테스트
+                                    </a>
+                                </div>
+                                <div class="mpccc-row" style="margin-top: 10px;">
+                                    <p class="mpccc-price">16,500원</p>
+                                    <div class="mpccc-eval">
+                                        <img src="../../imgs/gold_star.svg">
+                                        <p class="mpccc-eval-num"> 5.0 </p>
+                                        <a href="#" class="mpccc-review-count">리뷰
+                                            <span>149</span>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mpcre-btn-con">
+                                <button>
+                                    <span onclick="popupReviewFrom(1)">작성하기</span>
+                                </button>
+                            </div>
+                        </div>
+                    </article>
+                    <article>
+                        <div class="mpcre-item-container">
+                            <div class="mpcre-img-con">
+                                <img
+                                    src="//img.hourplace.co.kr/place/user/47919/2022/05/29/74f9815f-fc9d-4dec-8037-41861f43cae9?s=550x364&amp;t=cover&amp;q=80">
+                            </div>
+                            <div class="mpcre-card-content">
+                                <div class="mpccc-row">
+                                    <p href="#" class="mpccc-top-font">
+                                        <a href="#">호리존</a>
+                                        <span style="margin: 0 2px;">·</span>
+                                        <a href="#">서울</a>
+                                    </p>
+                                </div>
+                                <div class="mpccc-row">
+                                    <a href="#" class="mpccc-title-font general-ellipsis-1">
+                                        제목 테스트 제목 테스트 제목 테스트 제목 테스트 제목 테스트
+                                    </a>
+                                </div>
+                                <div class="mpccc-row" style="margin-top: 10px;">
+                                    <p class="mpccc-price">16,500원</p>
+                                    <div class="mpccc-eval">
+                                        <img src="../../imgs/gold_star.svg">
+                                        <p class="mpccc-eval-num"> 5.0 </p>
+                                        <a href="#" class="mpccc-review-count">리뷰
+                                            <span>149</span>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mpcre-btn-con">
+                                <button>
+                                    <span onclick="popupReviewFrom(2)">작성하기</span>
+                                </button>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+                <div class="mpc-wrote-review-container">
+                    <article>
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                            <div class="mpcre-card-content">
+                                <div class="mpccc-row">
+                                    <p href="#" class="mpccc-top-font">
+                                        <a href="#">호리존</a>
+                                        <span style="margin: 0 2px;">·</span>
+                                        <a href="#">서울</a>
+                                    </p>
+                                </div>
+                                <div class="mpccc-row">
+                                    <a href="#" class="mpccc-title-font general-ellipsis-1">
+                                        제목 테스트 제목 테스트 제목 테스트 제목 테스트 제목 테스트
+                                    </a>
+                                </div>
+                                <div class="mpccc-row" style="margin-top: 10px;">
+                                    <p class="mpccc-price">16,500원</p>
+                                    <div class="mpccc-eval">
+                                        <img src="../../imgs/gold_star.svg">
+                                        <p class="mpccc-eval-num"> 5.0 </p>
+                                        <a href="#" class="mpccc-review-count">리뷰
+                                            <span>149</span>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mpcre-img-con">
+                                <img
+                                    src="//img.hourplace.co.kr/place/user/47919/2022/05/29/74f9815f-fc9d-4dec-8037-41861f43cae9?s=550x364&amp;t=cover&amp;q=80">
+                            </div>
+                        </div>
+                        <div class="mpcwre-container">
+                            <div class="mpcwre-line">
+                                <span class="mpcwre-star"></span>
+                                <span class="mpcwre-rating">5</span>
+                                <span class="mpcwre-line-divider"></span>
+                                <span class="mpcwre-nickname">testNickname1234</span>
+                                <span class="mpcwre-line-divider"></span>
+                                <span class="mpcwre-date">2023-12-23</span>
+                                <div class="mpcwre-action-btn">
+                                    <button type="button">
+                                        <i class="fa-solid fa-ellipsis-vertical"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <a href="#">
+                                <p class="mpcwre-content">테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용
+                                    테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용
+                                    테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 </p>
+                            </a>
+                        </div>
+                    </article>
+                </div>
+            </article>
+        </div>
+    </main>
+</body>
+<script src="../mypage.js"></script>
+<script src="reviews.js"></script>
+
+</html>
