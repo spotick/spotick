@@ -19,7 +19,6 @@
     position: relative;
     color: rgb(94, 102, 141);
     font-size: 18px;
-    font-family: Medium, sans-serif;
     letter-spacing: -0.45px;
     margin-bottom: 29px;
 }
@@ -39,7 +38,6 @@
     align-items: center;
     gap: 9px;
     font-size: 15px;
-    font-family: Regular, sans-serif;
     letter-spacing: -0.38px;
     line-height: 22px;
     color: rgb(189, 189, 189);
@@ -47,7 +45,6 @@
 
 .mplm-nav-item:hover a, .mplm-nav-item.active a {
     color: rgb(36, 36, 36);
-    font-family: Medium, sans-serif;
 }
 
 .mplm-nav-item.active a::after {
@@ -94,7 +91,6 @@
     margin-right: 18px;
     color: rgb(36, 36, 36);
     font-size: 24px;
-    font-family: Regular, sans-serif;
     letter-spacing: -0.6px;
 }
 
@@ -102,7 +98,6 @@
     padding: 36px 0px 16px;
     color: rgb(189, 189, 189);
     font-size: 16px;
-    font-family: Light, sans-serif;
     letter-spacing: -0.4px;
     line-height: 27px;
     border-bottom: 1px solid rgb(240, 240, 240);
@@ -113,7 +108,6 @@
     margin: 85px 0px 47px;
     color: rgb(87, 87, 87);
     font-size: 18px;
-    font-family: Regular, sans-serif;
     letter-spacing: -0.45px;
     line-height: 26px;
     text-align: center;
@@ -149,7 +143,6 @@
     margin-right: 8px;
     color: rgb(87, 87, 87);
     font-size: 18px;
-    font-family: Regular, sans-serif;
     letter-spacing: -0.9px;
     flex-shrink: 0;
 }
@@ -158,7 +151,6 @@
     width: 310px;
     color: rgb(36, 36, 36);
     font-size: 16px;
-    font-family: Regular, sans-serif;
     letter-spacing: -0.4px;
 }
 
@@ -169,7 +161,6 @@
     background: rgb(0, 117, 235);
     color: rgb(255, 255, 255);
     font-size: 18px;
-    font-family: Medium, sans-serif;
     letter-spacing: -0.9px;
     border-radius: 4px;
     box-shadow: rgba(142, 161, 200, 0.16) 0px 3px 33px 0px;
@@ -186,7 +177,6 @@
 .mpc-user-info-user figcaption {
     color: rgb(87, 87, 87);
     font-size: 18px;
-    font-family: Light, sans-serif;
     letter-spacing: -0.45px;
 }
 
@@ -209,7 +199,6 @@
     width: 110px;
     color: rgb(87, 87, 87);
     font-size: 15px;
-    font-family: Regular, sans-serif;
     letter-spacing: -0.75px;
     flex-shrink: 0;
 }
@@ -218,7 +207,6 @@
     width: 514px;
     color: rgb(36, 36, 36);
     font-size: 15px;
-    font-family: Regular, sans-serif;
     letter-spacing: -0.38px;
     text-align: right;
 }
@@ -228,7 +216,6 @@
     padding: 3px 13px 5px;
     color: rgb(0, 117, 235);
     font-size: 14px;
-    font-family: Medium, sans-serif;
     letter-spacing: -0.7px;
     line-height: 20px;
     border: 1px solid rgb(0, 117, 235);
@@ -397,11 +384,13 @@
     cursor: pointer;
     margin-top: 40px;
     width: 132px;
+    color: #fff;
 }
 
-.modal-confirm-btn.disable {
+.modal-confirm-btn:disabled {
     cursor: not-allowed;
     background-color: #e7eaee;
+    color: #9ea4aa;
 }
 
 .modal-confirm-btn p {
@@ -412,7 +401,6 @@
     line-height: 1.38;
     letter-spacing: -.1px;
     text-align: center;
-    color: #fff;
 }
 
 .modal-confirm-btn.disable p {
@@ -550,7 +538,6 @@
 }
 
 .mpc-top-nav-button {
-    font-family: Regular, sans-serif;
     font-size: 16px;
     line-height: 30px;
     color: rgb(189, 189, 189);
@@ -579,6 +566,7 @@
     border: 1px solid #d4d4d4;
     border-radius: 8px;
     padding: 10px 15px;
+    cursor: pointer;
 }
 
 .mpcr-img-con {
@@ -601,11 +589,6 @@
     height: 100px;
     margin: auto 8px;
     background-color: #d4d4d4;
-}
-
-.mpcr-info {
-    display: flex;
-    
 }
 
 .mpcr-card-content {
@@ -638,6 +621,7 @@
     line-height: 14px;
     color: rgb(38, 40, 43);
     margin-bottom: 4px;
+    white-space: nowrap;
 }
 
 .mpcri-people-count {
@@ -698,4 +682,167 @@
 
 .mpcra-item:hover {
     background-color: #f2f2f2;
+}
+
+.mpc-review-wrap {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+}
+
+.mpc-review-wrap article {
+    width: 50%;
+    padding: 0px 10px;
+    height: 100%;
+    margin-bottom: 20px;
+}
+
+.mpcre-item-container {
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    border: 1px solid #d4d4d4;
+    border-radius: 8px;
+    padding: 10px 15px;
+}
+
+.mpcre-img-con {
+    overflow: hidden;
+    border-radius: 8px;
+    max-width: 180px;
+    width: 100%;
+    max-height: 150px;
+    margin-right: 8px;
+}
+
+.mpcre-img-con img {
+    object-fit: cover;
+    width: 100%;
+    height: 100%;
+}
+
+.mpcre-card-content {
+    position: relative;
+    padding: 10px 0px 40px;
+    width: 280px;
+    min-width: 280px;
+}
+
+.mpcri-title {
+    font-weight: bold;
+    font-size: 16px;
+    line-height: 14px;
+    color: rgb(38, 40, 43);
+    margin-bottom: 10px;
+}
+
+.mpcre-btn-con {
+    position: absolute;
+    bottom: 10px;
+    right: 15px;
+}
+
+.mpcre-btn-con button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 4px;
+    background-color: #007aff;
+    padding: 6px 16px;
+    color: white;
+    font-weight: 600;
+}
+
+.mpc-wrote-review-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+.mpc-wrote-review-container article {
+    width: 75%;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #d4d4d4;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    padding: 10px 15px;
+}
+
+.mpcwre-container {
+    padding: 24px 0px 16px;
+    border-top: 1px solid rgb(240, 240, 240);
+}
+
+.mpcwre-line {
+    display: flex;
+    position: relative;
+    -webkit-box-align: center;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.mpcwre-star {
+    width: 15px; 
+    height: 15px;
+    display: inline-block; 
+    background: url(../imgs/star.png) no-repeat; 
+    background-size: 100%; 
+    box-sizing: border-box; 
+}
+
+.mpcwre-rating {
+    font-size: 14px;
+    line-height: 19px;
+    color: rgb(36, 36, 36);
+    margin: 0px 0px 0px 4px;
+}
+
+.mpcwre-nickname {
+    font-size: 13px;
+    line-height: 19px;
+    color: rgb(36, 36, 36);
+}
+
+.mpcwre-line-divider {
+    width: 1.5px;
+    height: 14px;
+    margin: 0 6px;
+    background-color: rgb(163, 163, 163);
+    font-size: 12px;
+}
+
+.mpcwre-date {
+    font-size: 13px;
+    line-height: 19px;
+    color: rgb(163, 163, 163);
+}
+
+.mpcwre-content {
+    display: -webkit-box;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    word-break: break-all;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    font-size: 15px;
+    line-height: 22px;
+    color: rgb(87, 87, 87);
+}
+
+.mpcwre-action-btn {
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+
+.mpcwre-action-btn button {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+}
+
+.mpcwre-action-btn button i {
+    font-size: 16px;
 }

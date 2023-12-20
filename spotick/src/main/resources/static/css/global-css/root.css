@@ -1,7 +1,62 @@
-* {
+@font-face {
+    font-family: 'S-CoreDream';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_six@1.2/S-CoreDream-1Thin.woff') format('woff');
+    font-weight: 100;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'S-CoreDream';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_six@1.2/S-CoreDream-2ExtraLight.woff') format('woff');
+    font-weight: 200;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'S-CoreDream';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_six@1.2/S-CoreDream-3Light.woff') format('woff');
+    font-weight: 300;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'S-CoreDream';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_six@1.2/S-CoreDream-4Regular.woff') format('woff');
+    font-weight: 400;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'S-CoreDream';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_six@1.2/S-CoreDream-5Medium.woff') format('woff');
+    font-weight: 500;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'S-CoreDream';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_six@1.2/S-CoreDream-6Medium.woff') format('woff');
+    font-weight: 600;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'S-CoreDream';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_six@1.2/S-CoreDream-7ExtraBold.woff') format('woff');
+    font-weight: 700;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'S-CoreDream';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_six@1.2/S-CoreDream-8Heavy.woff') format('woff');
+    font-weight: 800;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'S-CoreDream';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_six@1.2/S-CoreDream-9Black.woff') format('woff');
+    font-weight: 900;
+    font-style: normal;
+}
+
+*, body, span {
     box-sizing: border-box;
     outline: none;
-    font-family: "-apple-system",BlinkMacSystemFont,"Apple SD Gothic Neo","Noto Sans KR","Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
+    font-family: 'S-CoreDream';
 }
 
 ul {
@@ -17,8 +72,17 @@ li {
     text-align: -webkit-match-parent;
 }
 
-li, ol, ul {
+li,
+ol,
+ul {
     list-style: none;
+}
+
+textarea {
+    border: 0;
+    background-color: transparent;
+    resize: none;
+    overflow-y: auto;
 }
 
 a {
@@ -40,12 +104,41 @@ a:hover {
     outline: none;
 }
 
-blockquote, body, button, code, dd, div, dl, dt, fieldset, form, h1, h2, h3, h4, h5, h6, input, label, legend, li, ol, p, pre, select, td, textarea, th, ul, figure {
+blockquote,
+body,
+button,
+code,
+dd,
+div,
+dl,
+dt,
+fieldset,
+form,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+input,
+label,
+legend,
+li,
+ol,
+p,
+pre,
+select,
+td,
+textarea,
+th,
+ul,
+figure {
     margin: 0;
     padding: 0;
 }
 
-button, input {
+button,
+input {
     background: transparent;
     border: 0;
     cursor: pointer;
@@ -82,7 +175,8 @@ img {
     width: 100%;
 }
 
-.hc-afterlogin, .hc-beforelogin {
+.hc-afterlogin,
+.hc-beforelogin {
     display: flex;
     align-items: center;
 }
@@ -115,7 +209,6 @@ img {
 }
 
 .hc-content-type {
-    font-family: Medium, sans-serif;
     font-size: 16px;
     line-height: 24px;
     color: rgb(163, 163, 163);
@@ -131,7 +224,6 @@ img {
     place-content: center;
     top: 0px;
     transition: all 0.2s ease 0s;
-    font-family: Medium, sans-serif;
     font-size: 16px;
     line-height: 24px;
     color: rgb(255, 255, 255);
@@ -250,7 +342,7 @@ img {
     display: flex;
     border: 1px solid #b5b5b5;
     border-radius: 8px;
-    padding:  8px;
+    padding: 8px;
     position: relative;
 }
 
@@ -274,7 +366,7 @@ img {
     display: none;
 }
 
-.hd-usermenu{
+.hd-usermenu {
     display: none;
     position: absolute;
     right: 0;
@@ -371,7 +463,8 @@ img {
 }
 
 .hdn-item:not(:last-child) {
-    border-bottom: 1px solid rgb(231, 234, 238);;
+    border-bottom: 1px solid rgb(231, 234, 238);
+    ;
 }
 
 .hdn-icon {
@@ -415,8 +508,17 @@ img {
     white-space: nowrap;
 }
 
+.general-ellipsis-1 {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    word-break: break-all;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+}
+
 /* 모달창 css */
-.global-modal-bg {
+.modal-bg {
     display: none;
     width: 100%;
     height: 100%;
@@ -427,12 +529,13 @@ img {
     z-index: 9999;
 }
 
-.global-modal-bg.show {
+.modal-bg.show {
     display: block;
 }
 
 .global-dialog-container {
     position: absolute;
+    display: none;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
@@ -442,8 +545,11 @@ img {
     box-shadow: rgba(96, 96, 96, 0.22) 0px 2px 18px 0px;
 }
 
+.global-dialog-container.show {
+    display: block;
+}
+
 .gd-content {
-    font-family: Medium, sans-serif;
     font-size: 15px;
     letter-spacing: -0.45px;
     text-align: center;
@@ -459,7 +565,6 @@ img {
     width: 100%;
     height: 50px;
     border-top: 1px solid rgb(240, 240, 240);
-    font-family: Medium, sans-serif;
     font-size: 16px;
     line-height: 1.38;
     letter-spacing: -0.8px;
@@ -469,11 +574,184 @@ img {
     cursor: pointer;
 }
 
-.general-ellipsis-1 {
+.global-selection-container {
+    position: absolute;
+    display: none;
+    z-index: 9999;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 280px;
+    background-color: rgb(255, 255, 255);
+    border-radius: 10px;
+    box-shadow: rgba(96, 96, 96, 0.22) 0px 2px 18px 0px;
     overflow: hidden;
-    text-overflow: ellipsis;
-    display: -webkit-box;
-    word-break: break-all;
-    -webkit-line-clamp: 1;
-    -webkit-box-orient: vertical;
+}
+
+.global-selection-container.show {
+    display: block;
+}
+
+.gs-question {
+    font-size: 15px;
+    letter-spacing: -0.45px;
+    text-align: center;
+    color: rgb(36, 36, 36);
+    padding: 30px 33px;
+    white-space: pre-wrap;
+}
+
+.gs-select-btn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 50px;
+    border: 1px solid rgb(240, 240, 240);
+    font-size: 16px;
+    line-height: 1.38;
+    letter-spacing: -0.8px;
+    background-color: rgb(255, 255, 255);
+    cursor: pointer;
+}
+
+.gs-select-btn:active {
+    background-color: #f2f2f2;
+}
+
+.modal-reservation-info {
+    position: absolute;
+    display: none;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgb(255, 255, 255);
+    border-radius: 10px;
+    box-shadow: rgba(96, 96, 96, 0.22) 0px 2px 18px 0px;
+    padding: 40px 30px;
+}
+
+.modal-reservation-info.show {
+    display: block;
+}
+
+.mri-title {
+    font-weight: bold;
+    color: rgb(38, 40, 43);
+    margin-bottom: 10px;
+    margin-bottom: 14px;
+}
+
+.mri-content {
+    display: flex;
+    flex-direction: row;
+    width: 600px;
+    border: 1px solid #d4d4d4;
+    border-radius: 8px;
+    justify-content: space-between;
+    padding: 8px 10px;
+}
+
+.mri-input-container {
+    display: flex;
+    align-items: center;
+    border: 1px solid #dfe2e7;
+    background-color: #f7f8f9;
+    border-radius: 4px;
+    padding: 4px 8px
+}
+
+.mri-input-container input {
+    text-align: right;
+    width: 100%;
+    cursor: default;
+}
+
+.mri-input-title {
+    font-weight: 600;
+    font-size: 18px;
+    margin-bottom: 4px;
+}
+
+.mri-textarea {
+    width: 300px;
+}
+
+.mri-divider {
+    width: 1px;
+    background-color: #d4d4d4;
+    margin: 0 auto 0
+}
+
+.modal-review-form-container {
+    position: absolute;
+    display: none;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgb(255, 255, 255);
+    border-radius: 10px;
+    box-shadow: rgba(96, 96, 96, 0.22) 0px 2px 18px 0px;
+    padding: 40px 30px;
+}
+
+.modal-review-form-container.show {
+    display: block;
+}
+
+.mrf-star-rating-con {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.mrf-star {
+    width: 25px; 
+    height: 25px;
+    margin-right: 4px;
+    display: inline-block; 
+    background: url(imgs/blank-star.png) no-repeat; 
+    background-size: 100%; 
+    box-sizing: border-box; 
+}
+
+.mrf-star.on {
+    background: url(imgs/star.png) no-repeat;
+    background-size: 100%;
+}
+
+.mrf-rating-count-con {
+    margin-left: 4px;
+    font-size: 16px;
+    color: #797979;
+}
+
+.mrf-rating-count-con input {
+    width: 14px;
+    cursor: default;
+    font-size: 20px;
+}
+
+.mr-form {
+    width: 100%;
+    border: 1px solid #d4d4d4;
+    border-radius: 8px;
+}
+
+.mr-form textarea {
+    padding: 8px;
+    width: 100%;
+    font-size: 16px;
+}
+
+.mr-type-counter {
+    display: flex;
+    justify-content: flex-end;
+    font-size: 14px;
+    color: #797979;
+}
+
+.mr-type-counter span:not(:last-child) {
+    margin-right: 10px;
 }
