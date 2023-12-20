@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>로그인</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../static/css/user/login.css" />
+
+</head>
+
+<body>
+<header class="header"></header>
+<div class="body">
+  <div class="main">
+    <div class="main-container">
+      <div class="sign-wrap">
+        <form action="#" method="post" class="login-form">
+          <div class="signin">
+
+            <h1 class="flex-center">LOGO</h1>
+            <p class="flex-center">고객님 환영합니다! 기다리고 있었습니다.</p>
+
+            <div class="login-box">
+              <div class="input_container bottom">
+                <input type="email" name="email" placeholder="이메일" id="email" required="required">
+              </div>
+
+              <div class="input_container bottom">
+                <input type="password" id="password" name="password" placeholder="비밀번호" />
+              </div>
+              <!-- 로그인 실패 메세지 -->
+              <div class="fail-msg">
+                <p>아이디 및 비밀번호를 확인해 주세요</p>
+              </div>
+
+              <!-- <div class="auto-log">
+                <div class="check-box">
+                  <input type="checkbox" id="saveId" name="saveId" />
+                  <label class="save-id">아이디 저장</label>
+                </div>
+              </div> -->
+              <div class="submit-box flex-center">
+                <div class="flex-center submit login-btn " id="submit">
+                  <p>로그인</p>
+                </div>
+              </div>
+            </div>
+            <div class="oauth">
+              <button type="button" class="kakao-login login-btn">
+                  <span>
+                    <img src="https://img.lifet.co.kr/icon/icon_kakao.svg" alt="">
+                  </span>
+                <p>카카오 로그인</p>
+              </button>
+              <button type="button" class="naver-login login-btn">
+                  <span>
+                    <img src="https://img.lifet.co.kr/icon/icon_naver.svg" alt="">
+                  </span>
+                <p>네이버 로그인</p>
+              </button>
+              <button type="button" class="google-login login-btn">
+                  <span>
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg" alt="Google Icon">
+                  </span>
+                <p>Google 로그인</p>
+              </button>
+
+            </div>
+            <div class="split-line">
+              <hr>
+              <span>or</span>
+            </div>
+            <div class="join flex-center">
+              <a href="#" class="find-id">아이디/비밀번호 찾기</a>
+              <a href="/user/join">이메일로 회원가입</a>
+            </div>
+
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer class="footer"></footer>
+<script src="https://code.jquery.com/jquery-3.6.4.js"></script>
+<script src="../../static/js/user/login.js"></script>
+</body>
+
+</html>
