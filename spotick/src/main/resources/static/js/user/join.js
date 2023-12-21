@@ -24,6 +24,14 @@ $(".check").on("click", function () {
     }
 });
 
+$('input').on('focus',function (){
+    $(this).closest('.input-box').css('border-color','#007AFF');
+}).on('blur',function (){
+    $(this).closest('.input-box').css('border-color','#dfe2e7');
+})
+
+
+
 function isAllCheck() {
     for (let i = 0; i < $(".check").length; i++) {
         if (!$(".check")[i].classList.contains("on")) {
