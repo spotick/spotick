@@ -1,7 +1,7 @@
 * {
   margin: 0;
   padding: 0;
-  font-family: "Pretendard";
+  font-family: 'S-CoreDream', sans-serif;
   list-style-type: none;
 }
 
@@ -131,7 +131,6 @@ input[type="number"]::-webkit-inner-spin-button {
 
 label {
   display: flex;
-  width: 95%;
   height: 56px;
   padding: 0px 0px 0px 16px;
   border: 1px solid rgb(212, 219, 226);
@@ -243,6 +242,8 @@ label > input {
   white-space: pre-line;
   margin-bottom: 40px;
 }
+
+
 
 
 
