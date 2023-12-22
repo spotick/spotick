@@ -8,69 +8,118 @@ $('.start').on('click', '.submit-btn.on', function () {
     $(".register-form").submit();
 });
 
+let $fileList = $('.file-wrap');
+let width = $('.file-container').width();
+let idx = 0;
+let length = 0;
+
 $('#placeFile').on('change', function (event) {
     let files = Array.from(event.target.files);
-
-    updatePreviewVisibility();
-    updateButtonVisibility(); // 버튼 가시성 업데이트 추가
 
     // 미리보기 이미지 목록을 비웁니다.
     $('.file-wrap').empty();
 
-    files.forEach((f) => {
+    files.forEach((file,i) => {
         let reader = new FileReader();
+
         reader.onload = function (e) {
             let li = `
                 <li class="file-item">
                     <img src="${e.target.result}" alt="">
-                    <button type="button" class="delete" data-fileIdx="">
+                    <button type="button" class="delete" data-name="${file.name}">
                         <i class="fa-solid fa-x"></i>
                     </button>
                 </li>
             `;
             $('.file-wrap').append(li);
         };
-        reader.readAsDataURL(f);
+        reader.readAsDataURL(file);
     });
+    updatePreviewVisibility(true);
+    length = files.length;
+    checkEnd();
 });
 
-// 삭제 버튼 기능
-$('.file-wrap').on('click', '.delete', function() {
-    $(this).closest('.file-item').remove();
-    updatePreviewVisibility();
-    updateButtonVisibility(); // 버튼 가시성 업데이트 추가
-});
-
-// 이전 버튼 기능
-$('.prev').on('click', function() {
-    let first = $('.file-wrap .file-item:first');
-    $('.file-wrap').append(first);
-    updateButtonVisibility(); // 버튼 가시성 업데이트 추가
-});
-
-// 다음 버튼 기능
+// 미리보기 사진 다음버튼
 $('.next').on('click', function() {
-    let last = $('.file-wrap .file-item:last');
-    $('.file-wrap').prepend(last);
-    updateButtonVisibility(); // 버튼 가시성 업데이트 추가
+    idx++;
+    $fileList.css('transform', 'translateX(' + (-width * idx) + 'px)').css('transition', '0.5s');
+    checkEnd();
 });
 
-function updatePreviewVisibility() {
-    let isEmpty = $('.file-item').length === 0;
-    $('.file-label').toggleClass('none', !isEmpty);
-    $('.file-container').toggleClass('none', isEmpty);
+// 미리보기 사진 이전버튼
+$('.prev').on('click', function() {
+    idx--;
+    $fileList.css('transform', 'translateX(' + (-width * idx) + 'px)').css('transition', '0.5s');
+    checkEnd();
+});
+
+$('.file-wrap').on('click','.delete',function (){
+    let files = $('#placeFile')[0].files;
+
+    // 삭제된 이미지의 인덱스를 찾습니다.
+    let deletedIndex = $(this).parent().index();
+
+    $(this).parent().remove();
+    let fileName = $(this).data('name');
+    let dt = new DataTransfer();
+
+    for (let i = 0; i < files.length; i++) {
+        if (files[i].name !== fileName) {
+            dt.items.add(files[i]);
+        }
+    }
+
+    files = dt.files;
+    $('#placeFile')[0].files = files;
+
+    length = $('.file-item').length;
+
+    // 삭제된 이미지가 현재 인덱스보다 앞에 있으면 idx를 감소시킵니다.
+    if(deletedIndex < idx) {
+        idx--;
+    }
+
+    // 삭제 후 현재 인덱스가 목록 길이를 초과하지 않도록 조정합니다.
+    if(idx >= length) {
+        idx = length - 1;
+    }
+
+    if(length == 0){
+        updatePreviewVisibility(false);
+        idx = 0; // 목록이 비었을 때 idx를 0으로 리셋합니다.
+    }
+
+    // translateX 값을 업데이트합니다.
+    $fileList.css('transform', 'translateX(' + (-width * idx) + 'px)').css('transition', '0.5s');
+
+    checkEnd();
+});
+
+
+function checkEnd() {
+    if(idx <= 0){
+        $('.prev').hide();
+    }else {
+        $('.prev').show();
+    }
+    if(idx >= length - 1){
+        $('.next').hide();
+    }else {
+        $('.next').show();
+    }
 }
 
-// 새로운 함수: 버튼 가시성 업데이트
-function updateButtonVisibility() {
-    let totalItems = $('.file-item').length;
-    let firstItemVisible = $('.file-wrap .file-item:first').is(':visible');
-    let lastItemVisible = $('.file-wrap .file-item:last').is(':visible');
-
-    $('.prev').toggle(!firstItemVisible);
-    $('.next').toggle(!lastItemVisible);
+function updatePreviewVisibility(isTrue) {
+    $('.file-label').toggleClass('none', isTrue);
+    $('.file-container').toggleClass('none', !isTrue);
 }
 
+
+$('body').on('click',function (){
+    console.log(`idx : ${idx}`);
+    console.log(`length : ${length}`);
+})
 
 
 

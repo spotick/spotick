@@ -262,17 +262,20 @@ input[type="file"] {
     border-radius: 4px;
     display: flex;
     align-items: center;
+    overflow: hidden;
+
 }
 
 .file-wrap{
     display: flex;
-    overflow: hidden;
+    height: 300px;
+    width: 500px;
+    position: relative;
 }
 
 .file-wrap img {
-    height: 300px;
-    width: 500px;
     border-radius: 4px;
+    width: 500px;
 }
 
 .img-button-box{
@@ -291,12 +294,9 @@ input[type="file"] {
 }
 
 .file-item{
-    position: relative;
     display: flex;
     justify-content: flex-end;
-    transition: opacity 0.5s ease;
 }
-
 
 .delete{
     font-size: 30px;
