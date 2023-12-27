@@ -5,8 +5,14 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+<!--    달력css-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css"
+          integrity="sha512-aOG0c6nPNzGk+5zjwyJaoRUgCdOrfSDhmMID2u4+OIslr0GjpLKo7Xm0Ao3xmpM4T8AmIouRkqwj1nrdVsLKEQ=="
+          crossorigin="anonymous" referrerpolicy="no-referrer"/>
+    <link rel="stylesheet" href="../../static/css/global-css/datepicker.css">
     <link rel="stylesheet" href="../../static/css/global-css/root.css">
     <link rel="stylesheet" href="../../static/css/place/detail.css"/>
+
     <title>장소 상세보기</title>
 </head>
 <body>
@@ -365,7 +371,24 @@
                     <div class="schedule-box flex-align">
                         <p>스케줄을 선택하세요</p>
                     </div>
-                    <div class="none">달력</div>
+                    <div class="calendar-wrap">
+                        <div class="choice-box">
+                            <div class="calendar-box">
+                                <input type="hidden" id="selectedDate">
+                                <div id="datepicker"></div>
+
+                            </div>
+
+                            <div class="time-choice-wrap"></div>
+                        </div>
+
+                        <div class="calendar-ctr-box">
+
+
+                        </div>
+
+
+                    </div>
                 </div>
 
                 <p class="small-title">총인원</p>
@@ -410,7 +433,7 @@
                     </div>
                 </div>
                 <div class="flex-align-center">
-<!--                    <button class="reservation-btn" type="button">예약 요청하기</button>-->
+                    <!--                    <button class="reservation-btn" type="button">예약 요청하기</button>-->
                     <button class="reservation-btn" type="button">바로결제</button>
                 </div>
             </div>
@@ -426,33 +449,42 @@
         <div class="place-img-info-wrap flex-between-align">
             <div class="place-img-info-box flex-between-align">
                 <div class="img-count">
-                    1/19
+                   <span class="current-img-num">1</span>/4
                 </div>
                 <p>포인트, 원서 2호점</p>
             </div>
 
-            <button class="flex-align-center modal-close" type="button">닫기 <span>X</span></button>
+            <button class="flex-align-center modal-close" type="button">닫기 X</button>
         </div>
 
-        <div class="modal-img-wrap flex">
+        <div class="modal-img-wrap">
             <div class="modal-img-box">
-<!--                -->
+                <!-- 모달 이미지   -->
                 <div class="modal-img-item">
-                    <img src="https://img.shareit.kr/prod/img/2023-12-07/ef66f2a8-d103-499d-8928-8aa1b786fbb0.jpg" alt="">
+                    <img src="https://img.shareit.kr/prod/img/2023-12-07/ef66f2a8-d103-499d-8928-8aa1b786fbb0.jpg"
+                         alt="">
                 </div>
                 <div class="modal-img-item">
-                    <img src="https://img.shareit.kr/prod/img/2023-12-07/ef66f2a8-d103-499d-8928-8aa1b786fbb0.jpg" alt="">
+                    <img src="https://img.shareit.kr/prod/img/2023-12-07/b80ed218-b885-4f65-8c82-df1249442559.jpg"
+                         alt="">
                 </div>
                 <div class="modal-img-item">
-                    <img src="https://img.shareit.kr/prod/img/2023-12-07/ef66f2a8-d103-499d-8928-8aa1b786fbb0.jpg" alt="">
+                    <img src="https://img.shareit.kr/prod/img/2023-12-07/fc869766-a2d5-4afa-b7a1-0105795afe66.jpg"
+                         alt="">
                 </div>
                 <div class="modal-img-item">
-                    <img src="https://img.shareit.kr/prod/img/2023-12-07/ef66f2a8-d103-499d-8928-8aa1b786fbb0.jpg" alt="">
+                    <img src="https://img.shareit.kr/prod/img/2023-12-07/bdb34031-1ca4-4856-99ee-58dc3f868401.jpg"
+                         alt="">
                 </div>
-
-
-
             </div>
+
+            <button type="button" class="prev">
+                <img src="https://shareit.kr/_next/static/media/round_arrow_left_gray024.707193e8.svg" alt="">
+            </button>
+            <button type="button" class="next">
+                <img src="https://shareit.kr/_next/static/media/round_arrow_right_gray024.7f7e18a3.svg" alt="">
+            </button>
+
 
         </div>
 
@@ -460,9 +492,13 @@
 </div>
 
 
-
 <script src="https://kit.fontawesome.com/c6992f5b12.js" crossorigin="anonymous"></script>
 <script src="https://code.jquery.com/jquery-3.6.4.js"></script>
+<!-- 달력-->
+<script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+<script src="../../static/js/place/detail/calendar.js"></script>
+
+
 <script type="text/javascript"
         src="//dapi.kakao.com/v2/maps/sdk.js?appkey=3dc12d7c2624483dc7c019a0a91b727f&libraries=services"></script>
 <script src="../../static/js/place/detail/detail.js"></script>
