@@ -3,11 +3,6 @@
     background-color: #ffa200;
 }
 
-.footer {
-    height: 100px;
-    background-color: #007aff;
-}
-
 /* 헤더부분(프레그먼트 만들어지면 삭제) */
 
 .flex {
