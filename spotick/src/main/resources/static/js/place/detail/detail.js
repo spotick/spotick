@@ -142,14 +142,16 @@ $('.inquiry-modal-wrap').on('click','.inquiry-submit.on',function (){
 });
 
 
-
-
 function clearInquiry(){
     $('#inquiryContent').val('');
     $('.letter-count span').text(0);
     $('.inquiry-submit').removeClass('on');
 }
 
+// 좋아요 버튼
+$('.place-like-btn').on('click',function (){
+    $(this).find('span').toggleClass('none');
+});
 
 
 

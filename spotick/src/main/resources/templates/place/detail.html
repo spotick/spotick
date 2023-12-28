@@ -5,7 +5,7 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-<!--    달력css-->
+    <!--    달력css-->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css"
           integrity="sha512-aOG0c6nPNzGk+5zjwyJaoRUgCdOrfSDhmMID2u4+OIslr0GjpLKo7Xm0Ao3xmpM4T8AmIouRkqwj1nrdVsLKEQ=="
           crossorigin="anonymous" referrerpolicy="no-referrer"/>
@@ -52,7 +52,13 @@
         <div class="content-wrap">
             <div class="basic-info-box">
                 <p class="sub-title">포인트, 원서 2호점</p>
-                <span class="place-name">포인트, 원서 2호점</span>
+                <div class="flex-between-align">
+                    <span class="place-name">포인트, 원서 2호점</span>
+                    <button class="place-like-btn" type="button">
+                        <span><i class="fa-regular fa-heart"></i></span>
+                        <span class="none"><i class="fa-solid fa-heart" style="color: red"></i></span>
+                    </button>
+                </div>
                 <div class="place-address-box">
                     <img src="https://shareit.kr/_next/static/media/location_filled_sweetBlue046.de36d6ce.svg" alt="">
                     <span>서울 종로구 창덕궁길 106 2층</span>
@@ -412,7 +418,9 @@
                                     <p class="time-guide">종료 시간</p>
                                     <select class="checkInOut" disabled name="reservationCheckOut" id="checkOut">
                                         <option value="0">오전 12시</option>
-                                        <option disabled value="1"><del>오전 1시</del> </option>
+                                        <option disabled value="1">
+                                            <del>오전 1시</del>
+                                        </option>
                                         <option value="2">오전 2시</option>
                                         <option value="3">오전 3시</option>
                                         <option value="4">오전 4시</option>
@@ -435,7 +443,7 @@
                                         <option value="21">오후 9시</option>
                                         <option value="22">오후 10시</option>
                                         <option value="23">오후 11시</option>
-                                    </select  >
+                                    </select>
                                 </div>
                                 <button class="flex-align-center" type="button">
                                     완료
@@ -519,7 +527,7 @@
         <div class="place-img-info-wrap flex-between-align">
             <div class="place-img-info-box flex-between-align">
                 <div class="img-count">
-                   <span class="current-img-num">1</span>/4
+                    <span class="current-img-num">1</span>/4
                 </div>
                 <p>포인트, 원서 2호점</p>
             </div>
@@ -571,7 +579,7 @@
             <p class="letter-count"><span>0</span>/200자</p>
         </div>
         <textarea name="inquiryContent" id="inquiryContent" cols="30" rows="10"
-            placeholder="장소에 대해서 궁금한 점을 문의해주세요"></textarea>
+                  placeholder="장소에 대해서 궁금한 점을 문의해주세요"></textarea>
         <div class="flex-align-center">
             <button class="inquiry-submit" type="button">문의등록</button>
         </div>
