@@ -56,16 +56,16 @@
 *, body, span {
     box-sizing: border-box;
     outline: none;
-    font-family: 'S-CoreDream';
+    font-family: 'S-CoreDream', sans-serif;
 }
 
 ul {
     display: block;
     margin-block-start: 1em;
     margin-block-end: 1em;
-    margin-inline-start: 0px;
-    margin-inline-end: 0px;
-    padding-inline-start: 0px;
+    margin-inline-start: 0;
+    margin-inline-end: 0;
+    padding-inline-start: 0;
 }
 
 li {
@@ -533,7 +533,7 @@ img {
     display: block;
 }
 
-.global-dialog-container {
+.global-dialogue-container {
     position: absolute;
     display: none;
     top: 50%;
@@ -542,10 +542,10 @@ img {
     width: 280px;
     background-color: rgb(255, 255, 255);
     border-radius: 10px;
-    box-shadow: rgba(96, 96, 96, 0.22) 0px 2px 18px 0px;
+    box-shadow: rgba(96, 96, 96, 0.22) 0 2px 18px 0;
 }
 
-.global-dialog-container.show {
+.global-dialogue-container.show {
     display: block;
 }
 
@@ -570,8 +570,12 @@ img {
     letter-spacing: -0.8px;
     color: rgb(0, 117, 235);
     background-color: rgb(255, 255, 255);
-    border-radius: 0px 0px 10px 10px;
+    border-radius: 0 0 10px 10px;
     cursor: pointer;
+}
+
+.gd-confirm:active {
+    background-color: #f2f2f2;
 }
 
 .global-selection-container {
@@ -711,13 +715,13 @@ img {
     height: 25px;
     margin-right: 4px;
     display: inline-block; 
-    background: url(imgs/blank-star.png) no-repeat; 
+    background: url(../../imgs/blank-star.png) no-repeat;
     background-size: 100%; 
     box-sizing: border-box; 
 }
 
 .mrf-star.on {
-    background: url(imgs/star.png) no-repeat;
+    background: url(../../imgs/star.png) no-repeat;
     background-size: 100%;
 }
 

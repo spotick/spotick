@@ -10,24 +10,19 @@ actionBtns.forEach(actionBtn => {
 });
 
 
-function popupCancelReservation(){
-    modalBg.classList.add('show');
-    globalSelectionContainer.classList.add('show');
-    document.querySelector('.gs-question').innerHTML = "예약을<br>취소하시겠습니까?"
-    document.querySelector('.gs-confirm').onclick = () => cancelReservation(2);
+
+function showGSForCancelingReservation(placeId) {
+    showGlobalSelction("예약을 취소하시겠습니까?", () => cancelReservation(placeId))
 }
 
-function cancelReservation(index) {
-    console.log(index);
+function cancelReservation(placeId) {
+    console.log(placeId);
 }
 
-function popupRemoveHistory(){
-    modalBg.classList.add('show');
-    globalSelectionContainer.classList.add('show');
-    document.querySelector('.gs-question').innerHTML = "예약내역을<br>삭제하시겠습니까?"
-    document.querySelector('.gs-confirm').onclick = () => removeHistory(2);
+function showGSForRemoveHistory(placeId) {
+    showGlobalSelction("예약내역을<br>삭제하시겠습니까?", () => removeHistory(placeId))
 }
 
-function removeHistory(index) {
-    console.log(index);
+function removeHistory(placeId) {
+    console.log(placeId);
 }
