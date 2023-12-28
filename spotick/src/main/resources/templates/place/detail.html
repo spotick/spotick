@@ -1,11 +1,11 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-<!--    달력css-->
+    <!--    달력css-->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css"
           integrity="sha512-aOG0c6nPNzGk+5zjwyJaoRUgCdOrfSDhmMID2u4+OIslr0GjpLKo7Xm0Ao3xmpM4T8AmIouRkqwj1nrdVsLKEQ=="
           crossorigin="anonymous" referrerpolicy="no-referrer"/>
@@ -52,7 +52,13 @@
         <div class="content-wrap">
             <div class="basic-info-box">
                 <p class="sub-title">포인트, 원서 2호점</p>
-                <span class="place-name">포인트, 원서 2호점</span>
+                <div class="flex-between-align">
+                    <span class="place-name">포인트, 원서 2호점</span>
+                    <button class="place-like-btn" type="button">
+                        <span><i class="fa-regular fa-heart"></i></span>
+                        <span class="none"><i class="fa-solid fa-heart" style="color: red"></i></span>
+                    </button>
+                </div>
                 <div class="place-address-box">
                     <img src="https://shareit.kr/_next/static/media/location_filled_sweetBlue046.de36d6ce.svg" alt="">
                     <span>서울 종로구 창덕궁길 106 2층</span>
@@ -371,23 +377,79 @@
                     <div class="schedule-box flex-align">
                         <p>스케줄을 선택하세요</p>
                     </div>
-                    <div class="calendar-wrap">
+                    <div class="calendar-wrap none">
                         <div class="choice-box">
                             <div class="calendar-box">
-                                <input type="hidden" id="selectedDate">
+                                <input type="hidden" id="reservationDate">
                                 <div id="datepicker"></div>
-
                             </div>
-
-                            <div class="time-choice-wrap"></div>
+                            <div class="time-choice-wrap flex-column">
+                                <div>
+                                    <p class="time-guide">시작 시간</p>
+                                    <select class="checkInOut" name="reservationCheckIn" id="checkIn">
+                                        <option selected disabled>선택안함</option>
+                                        <option value="0">오전 12시</option>
+                                        <option value="1">오전 1시</option>
+                                        <option value="2">오전 2시</option>
+                                        <option value="3">오전 3시</option>
+                                        <option value="4">오전 4시</option>
+                                        <option value="5">오전 5시</option>
+                                        <option value="6">오전 6시</option>
+                                        <option value="7">오전 7시</option>
+                                        <option value="8">오전 8시</option>
+                                        <option value="9">오전 9시</option>
+                                        <option value="10">오전 10시</option>
+                                        <option value="11">오전 11시</option>
+                                        <option value="12">오후 12시</option>
+                                        <option value="13">오후 1시</option>
+                                        <option value="14">오후 2시</option>
+                                        <option value="15">오후 3시</option>
+                                        <option value="16">오후 4시</option>
+                                        <option value="17">오후 5시</option>
+                                        <option value="18">오후 6시</option>
+                                        <option value="19">오후 7시</option>
+                                        <option value="20">오후 8시</option>
+                                        <option value="21">오후 9시</option>
+                                        <option value="22">오후 10시</option>
+                                        <option value="23">오후 11시</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <p class="time-guide">종료 시간</p>
+                                    <select class="checkInOut" disabled name="reservationCheckOut" id="checkOut">
+                                        <option value="0">오전 12시</option>
+                                        <option disabled value="1">
+                                            <del>오전 1시</del>
+                                        </option>
+                                        <option value="2">오전 2시</option>
+                                        <option value="3">오전 3시</option>
+                                        <option value="4">오전 4시</option>
+                                        <option value="5">오전 5시</option>
+                                        <option value="6">오전 6시</option>
+                                        <option value="7">오전 7시</option>
+                                        <option value="8">오전 8시</option>
+                                        <option value="9">오전 9시</option>
+                                        <option value="10">오전 10시</option>
+                                        <option value="11">오전 11시</option>
+                                        <option value="12">오후 12시</option>
+                                        <option value="13">오후 1시</option>
+                                        <option value="14">오후 2시</option>
+                                        <option value="15">오후 3시</option>
+                                        <option value="16">오후 4시</option>
+                                        <option value="17">오후 5시</option>
+                                        <option value="18">오후 6시</option>
+                                        <option value="19">오후 7시</option>
+                                        <option value="20">오후 8시</option>
+                                        <option value="21">오후 9시</option>
+                                        <option value="22">오후 10시</option>
+                                        <option value="23">오후 11시</option>
+                                    </select>
+                                </div>
+                                <button class="flex-align-center" type="button">
+                                    완료
+                                </button>
+                            </div>
                         </div>
-
-                        <div class="calendar-ctr-box">
-
-
-                        </div>
-
-
                     </div>
                 </div>
 
@@ -397,7 +459,23 @@
                     <div class="people-box flex-align">
                         <p>총인원 수를 입력하세요</p>
                     </div>
-                    <div class="none">인원 선택</div>
+                    <div class="select-people-wrap none">
+                        <div class="people-select-box">
+                            <p>총인원 수</p>
+                            <div class="flex-align">
+                                <button class="minus" type="button">-</button>
+                                <div class="reservation-visitors flex-align-center">
+                                    <input class="visitors" max="99" min="1" type="number" value="1">
+                                </div>
+                                <button class="plus" type="button">+</button>
+                            </div>
+                        </div>
+                        <div class="visitor-ctr-box flex-between-align">
+                            <button type="button" class="visitors-reset">초기화</button>
+                            <button type="button" class="visitors-btn">완료</button>
+
+                        </div>
+                    </div>
                 </div>
 
                 <div class="calculate-box">
@@ -444,12 +522,12 @@
 </div>
 
 <!--사진 모달창 시작-->
-<div class="modal-container none">
+<div class="img-modal-container none">
     <div class="modal-wrap">
         <div class="place-img-info-wrap flex-between-align">
             <div class="place-img-info-box flex-between-align">
                 <div class="img-count">
-                   <span class="current-img-num">1</span>/4
+                    <span class="current-img-num">1</span>/4
                 </div>
                 <p>포인트, 원서 2호점</p>
             </div>
@@ -477,20 +555,37 @@
                          alt="">
                 </div>
             </div>
-
             <button type="button" class="prev">
                 <img src="https://shareit.kr/_next/static/media/round_arrow_left_gray024.707193e8.svg" alt="">
             </button>
             <button type="button" class="next">
                 <img src="https://shareit.kr/_next/static/media/round_arrow_right_gray024.7f7e18a3.svg" alt="">
             </button>
+        </div>
+    </div>
+</div>
+<!--사진 모달창 끝-->
 
-
+<!--문의 모달창 시작-->
+<div class="inquiry-modal-container flex-align-center none">
+    <div class="inquiry-modal-wrap flex-align">
+        <button class="inquiry-cancel" type="button">
+            <img src="https://s3.hourplace.co.kr/web/images/icon/close_v4.svg" alt="">
+        </button>
+        <p class="small-title">궁금한 내용을 적어주세요</p>
+        <p class="sub-title">호스트가 확인 후 답변을 드릴 거예요!</p>
+        <div class="inquiry-content-box flex-between-align">
+            <p class="inquiry-guide">내용</p>
+            <p class="letter-count"><span>0</span>/200자</p>
+        </div>
+        <textarea name="inquiryContent" id="inquiryContent" cols="30" rows="10"
+                  placeholder="장소에 대해서 궁금한 점을 문의해주세요"></textarea>
+        <div class="flex-align-center">
+            <button class="inquiry-submit" type="button">문의등록</button>
         </div>
 
     </div>
 </div>
-
 
 <script src="https://kit.fontawesome.com/c6992f5b12.js" crossorigin="anonymous"></script>
 <script src="https://code.jquery.com/jquery-3.6.4.js"></script>

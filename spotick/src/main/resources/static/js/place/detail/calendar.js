@@ -20,14 +20,14 @@ $(function () {
     $("#datepicker").datepicker({
         minDate: currentDate,  // 선택할 수 있는 최소 날짜를 현재 날짜로 설정
         onSelect: function (dateText) {  // 날짜를 선택했을 때 실행할 함수
-            $("#selectedDate").val(dateText);  // 선택한 날짜를 input 요소에 표시
+            $("#reservationDate").val(dateText);  // 선택한 날짜를 input 요소에 표시
         },
         beforeShowDay: function (date) {  // 달력의 각 날짜를 표시하기 전에 실행할 함수
-            let selectedDate = $("#selectedDate").datepicker('getDate');  // 선택한 날짜를 가져옴
-            // 선택한 날짜와 표시할 날짜가 같으면 'selectedDate' 클래스를 추가
-            if (selectedDate !== null) {
-                if (date.getTime() === selectedDate.getTime()) {
-                    return [true, 'selectedDate'];
+            let reservationDate = $("#reservationDate").datepicker('getDate');  // 선택한 날짜를 가져옴
+            // 선택한 날짜와 표시할 날짜가 같으면 'reservationDate' 클래스를 추가
+            if (reservationDate !== null) {
+                if (date.getTime() === reservationDate.getTime()) {
+                    return [true, 'reservationDate'];
                 }
             }
             return [true, ''];  // 그렇지 않으면 클래스를 추가하지 않음
@@ -45,4 +45,4 @@ let day = ('0' + today.getDate()).slice(-2);  // 일을 가져옴 (두 자리 �
 
 let dateString = year + '-' + month + '-' + day;  // 날짜를 '년-월-일' 형태로 만듦
 
-$("#selectedDate").val(dateString);  // 만든 날짜를 input 요소에 표시
+$("#reservationDate").val(dateString);  // 만든 날짜를 input 요소에 표시
