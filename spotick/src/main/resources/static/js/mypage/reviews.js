@@ -12,7 +12,7 @@ function popupReviewFrom(postId) {
     mrContent.value = '';
     typeCounter.innerHTML = '0';
     reviewRating.value = 1
-    stars.forEach(star => {star == stars[0] ? star.classList.add('on') : star.classList.remove('on')})
+    stars.forEach(star => {star === stars[0] ? star.classList.add('on') : star.classList.remove('on')})
     mrConfirmBtn.disabled = true;
 }
 
@@ -42,7 +42,7 @@ function checkTypeCounts() {
 // 후기 등록 재확인
 function recheckReviewForm(postId) {
     globalSelectionContainer.classList.add('show');
-    globalSelctionQuestion.innerHTML = "후기를 작성하시겠습니까?"
+    globalSelectionQuestion.innerHTML = "후기를 작성하시겠습니까?"
     globalSelectionConfirm.onclick = () => postReview(postId);
 }
 

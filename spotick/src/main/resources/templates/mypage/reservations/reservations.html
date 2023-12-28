@@ -5,17 +5,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <link rel="stylesheet" href="../../root.css">
-    <link rel="stylesheet" href="../mypage.css">
-    <link rel="stylesheet" href="../../calendarService/calendar.css">
+    <link rel="stylesheet" href="../../../static/css/global-css/root.css">
+    <link rel="stylesheet" href="../../../static/css/mypage/mypage.css">
+    <link rel="stylesheet" href="../../../static/css/global-css/calendar.css">
     <script src="https://kit.fontawesome.com/2364e2b536.js" crossorigin="anonymous"></script>
 </head>
 
 <body>
     <main id="my-page-main">
         <div class="modal-bg">
-            <div class="global-dialog-container">
-                <p class="gd-content">0</p>
+            <div class="global-dialogue-container">
+                <p class="gd-content"></p>
                 <div class="gd-confirm" onclick="closeModal()">확인</div>
             </div>
             <div class="global-selection-container">
@@ -141,6 +141,9 @@
         </div>
         <div class="mp-content">
             <article>
+                <div class="mpc-title">
+                    <h2>예약내역</h2>
+                </div>
                 <div class="mpcr-container">
                     <article>
                         <div class="mpcr-item-container">
@@ -149,8 +152,8 @@
                                     <i class="fa-solid fa-ellipsis-vertical"></i>
                                 </button>
                                 <div class="mpcr-action-dropdown">
-                                    <div class="mpcra-item" onclick="popupCancelReservation()">예약 취소</div>
-                                    <div class="mpcra-item" onclick="popupRemoveHistory()">기록 삭제</div>
+                                    <div class="mpcra-item" onclick="showGSForCancelingReservation(4)">예약 취소</div>
+                                    <div class="mpcra-item" onclick="showGSForRemoveHistory(3)">기록 삭제</div>
                                 </div>
                             </div>
                             <div class="mpcr-img-con">
@@ -173,7 +176,7 @@
                                 <div class="mpccc-row" style="margin-top: 10px;">
                                     <p class="mpccc-price">16,500원</p>
                                     <div class="mpccc-eval">
-                                        <img src="../../imgs/gold_star.svg">
+                                        <img src="../../../imgs/gold_star.svg">
                                         <p class="mpccc-eval-num"> 5.0 </p>
                                         <a href="#" class="mpccc-review-count">리뷰
                                             <span>149</span>
@@ -206,9 +209,9 @@
         </div>
     </main>
 </body>
-<script src="reservations.js"></script>
-<script src="../mypage.js"></script>
-<script src="../../calendarService/calendar.js"></script>
+<script src="../../../static/js/mypage/mypage.js"></script>
+<script src="../../../static/js/mypage/reservations.js"></script>
+<script src="../../../static/js/global-js/calendar.js"></script>
 <script>
     // 현재 날짜 정보 저장
     const today = new Date();
