@@ -1,7 +1,6 @@
 let boardLat = 37.582171864461685;
 let boardLng =126.98956734824502;
 let place = $('.place-name').text();
-console.log(place)
 
 let mapContainer = document.getElementById('map'), // 지도를 표시할 div
     mapOption = {

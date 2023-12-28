@@ -329,7 +329,7 @@
 
 
 .inquiry-write-btn,
-.review-write-btn {
+.review-write-btn{
     display: flex;
     align-items: center;
     width: fit-content;
@@ -626,7 +626,8 @@
     color: rgb(114, 120, 127);
 }
 
-.reservation-btn{
+.reservation-btn,
+.inquiry-submit{
     margin-top: 20px;
     height: 52px;
     border-radius: 8px;
@@ -637,12 +638,14 @@
     width: 300px;
 }
 
-.reservation-btn.on{
+.reservation-btn.on,
+.inquiry-submit.on{
     background-color: #007AFF;
     color: white;
 }
 
-.modal-container{
+.img-modal-container,
+.inquiry-modal-container{
     width: 100%;
     height: 100%;
     position: fixed;
@@ -757,22 +760,182 @@
     box-shadow: rgba(0, 0, 0, 0.1) 2px 2px 8px 0px;
     border: 1px solid rgb(239, 243, 245);
     background-color: rgb(255, 255, 255);
-
 }
 
 .choice-box{
     width: 100%;
     height: fit-content;
-    padding: 10px 10px 0;
     display: flex;
-    justify-content: space-between;
+    justify-content: space-evenly;
+}
+
+.time-choice-wrap{
+    padding-top: 70px;
 }
 
 
+.time-guide{
+    font-weight: bold;
+    font-size: 12px;
+    line-height: 14px;
+    color: rgb(158, 164, 170);
+    margin-bottom: 12px;
+}
+
+.checkInOut{
+    font-size: 14px;
+    padding: 0px 8px 0px 14px;
+    border-radius: 4px;
+    border: 1px solid rgb(223, 226, 231);
+    height: 40px;
+    width: 120px;
+    margin-bottom: 30px;
+
+}
+
+.time-choice-wrap button{
+    color: white;
+    background-color: #007AFF;
+    border-radius: 4px;
+    font-weight: bold;
+    font-size: 16px;
+    padding: 8px 0;
+}
+
+.select-people-wrap{
+    position: absolute;
+    z-index: 2;
+    top: 74px;
+    right: 0;
+    width: 100%;
+    border-radius: 8px;
+    box-shadow: rgba(0, 0, 0, 0.1) 2px 2px 8px 0px;
+    border: 1px solid rgb(239, 243, 245);
+    background-color: rgb(255, 255, 255);
+}
+
+.people-select-box {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 30px 20px;
+}
+
+.people-select-box p{
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.reservation-visitors{
+    width: 54px;
+    height: 42px;
+    font-size: 15px;
+    border: 1px solid #0b0b0b;
+    border-radius: 4px;
+}
+
+.visitors{
+    text-align: center;
+    width: 100%;
+}
 
 
+.minus,
+.plus{
+    border-radius: 50%;
+    border: 1px solid rgb(227, 227, 232);
+    width: 40px;
+    height: 40px;
+    font-size: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 10px;
+    text-align: center;
+    line-height: 10px;
+}
 
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
 
+.visitor-ctr-box{
+    border-top: 1px solid rgb(231, 234, 238);
+    padding: 30px 30px;
+}
+
+.visitors-reset{
+    font-size: 15px;
+    font-weight: 500;
+}
+
+.visitors-reset:hover{
+    text-decoration: underline;
+}
+
+.visitors-btn{
+    width: 80px;
+    height: 40px;
+    border-radius: 4px;
+    background-color: #007AFF;
+    color: white;
+    font-weight: 500;
+}
+
+.inquiry-modal-wrap{
+    margin: 0 auto;
+    width: 420px;
+    height: 500px;
+    background-color: white;
+    border-radius: 8px;
+    position: relative;
+    padding: 20px 0;
+    flex-direction: column;
+}
+
+.inquiry-cancel{
+    position: absolute;
+    margin-top: 12px;
+    right: 30px;
+    width: 25px;
+}
+
+.inquiry-guide{
+    font-weight: bold;
+    font-size: 12px;
+    color: rgb(158, 164, 170);
+    margin: 8px 0;
+}
+
+.inquiry-content-box{
+    width: 320px;
+    margin-top: 30px;
+}
+
+#inquiryContent{
+    border-radius: 4px;
+    border: solid 1px #dfe2e7;
+    font-size: 16px;
+    padding: 10px;
+    width: 320px;
+    height: 250px;
+}
+
+textarea::-webkit-scrollbar {
+    display: none;
+}
+
+.letter-count{
+    font-weight: 500;
+    font-size: 12px;
+    color: rgb(69, 75, 80);
+}
+
+.over{
+    color: red;
+}
 
 
 
