@@ -469,6 +469,22 @@
     flex-direction: row;
 }
 
+.content-between {
+    justify-content: space-between;
+}
+
+.mpccc-status {
+
+}
+
+.mpccc-btn {
+    border-radius: 4px;
+    background-color: #ffa200;
+    padding: 4px;
+    cursor: pointer;
+    color: white;
+}
+
 .mpccc-top-font {
     margin-top: 2px;
     font-weight: bold;
@@ -859,12 +875,12 @@
 }
 
 .mpcwre-star {
-    width: 15px; 
+    width: 15px;
     height: 15px;
-    display: inline-block; 
-    background: url(../imgs/star.png) no-repeat; 
-    background-size: 100%; 
-    box-sizing: border-box; 
+    display: inline-block;
+    background: url(../imgs/star.png) no-repeat;
+    background-size: 100%;
+    box-sizing: border-box;
 }
 
 .mpcwre-rating {

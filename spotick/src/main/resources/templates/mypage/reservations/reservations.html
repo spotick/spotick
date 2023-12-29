@@ -3,215 +3,296 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <title>Document</title>
-    <link rel="stylesheet" href="../../../static/css/global-css/root.css">
-    <link rel="stylesheet" href="../../../static/css/mypage/mypage.css">
-    <link rel="stylesheet" href="../../../static/css/global-css/calendar.css">
-    <script src="https://kit.fontawesome.com/2364e2b536.js" crossorigin="anonymous"></script>
+    <link href="../../../static/css/global-css/root.css" rel="stylesheet">
+    <link href="../../../static/css/mypage/mypage.css" rel="stylesheet">
+    <link href="../../../static/css/global-css/calendar.css" rel="stylesheet">
+    <script crossorigin="anonymous" src="https://kit.fontawesome.com/2364e2b536.js"></script>
 </head>
 
 <body>
-    <main id="my-page-main">
-        <div class="modal-bg">
-            <div class="global-dialogue-container">
-                <p class="gd-content"></p>
-                <div class="gd-confirm" onclick="closeModal()">확인</div>
+<main id="my-page-main">
+    <div class="modal-bg">
+        <div class="global-dialogue-container">
+            <p class="gd-content"></p>
+            <div class="gd-confirm" onclick="closeModal()">확인</div>
+        </div>
+        <div class="global-selection-container">
+            <p class="gs-question"></p>
+            <div style="display: flex;">
+                <div class="gs-select-btn" onclick="closeModal()">취소</div>
+                <div class="gs-select-btn gs-confirm" style="color: rgb(0, 117, 235);">확인</div>
             </div>
-            <div class="global-selection-container">
-                <p class="gs-question"></p>
-                <div style="display: flex;">
-                    <div class="gs-select-btn" onclick="closeModal()">취소</div>
-                    <div class="gs-select-btn gs-confirm" style="color: rgb(0, 117, 235);">확인</div>
+        </div>
+        <div class="modal-reservation-info">
+            <div style="display: flex; margin-bottom: 20px;">
+                <div class="mpcr-img-con">
+                    <img height="100px" src="//img.hourplace.co.kr/place/user/47919/2022/05/29/74f9815f-fc9d-4dec-8037-41861f43cae9?s=550x364&amp;t=cover&amp;q=80"
+                         style="width: 180px;">
                 </div>
-            </div>
-            <div class="modal-reservation-info">
-                <div style="display: flex; margin-bottom: 20px;">
-                    <div class="mpcr-img-con">
-                        <img style="width: 180px;" height="100px"
-                            src="//img.hourplace.co.kr/place/user/47919/2022/05/29/74f9815f-fc9d-4dec-8037-41861f43cae9?s=550x364&amp;t=cover&amp;q=80">
+                <div class="mpcr-card-content">
+                    <div class="mpccc-row">
+                        <p class="mpccc-top-font" href="#">
+                            <a href="#">호리존</a>
+                            <span style="margin: 0 2px;">·</span>
+                            <a href="#">서울</a>
+                        </p>
                     </div>
-                    <div class="mpcr-card-content">
-                        <div class="mpccc-row">
-                            <p href="#" class="mpccc-top-font">
-                                <a href="#">호리존</a>
-                                <span style="margin: 0 2px;">·</span>
-                                <a href="#">서울</a>
-                            </p>
-                        </div>
-                        <div class="mpccc-row">
-                            <a href="#" class="mpccc-title-font general-ellipsis-1">
-                                제목 테스트
+                    <div class="mpccc-row">
+                        <a class="mpccc-title-font general-ellipsis-1" href="#">
+                            제목 테스트
+                        </a>
+                    </div>
+                    <div class="mpccc-row" style="margin-top: 10px;">
+                        <p class="mpccc-price">16,500원</p>
+                        <div class="mpccc-eval">
+                            <img src="../../imgs/gold_star.svg">
+                            <p class="mpccc-eval-num"> 5.0 </p>
+                            <a class="mpccc-review-count" href="#">리뷰
+                                <span>149</span>
                             </a>
                         </div>
-                        <div class="mpccc-row" style="margin-top: 10px;">
-                            <p class="mpccc-price">16,500원</p>
-                            <div class="mpccc-eval">
-                                <img src="../../imgs/gold_star.svg">
-                                <p class="mpccc-eval-num"> 5.0 </p>
-                                <a href="#" class="mpccc-review-count">리뷰
-                                    <span>149</span>
-                                </a>
-                            </div>
-                        </div>
                     </div>
                 </div>
-                <h2 class="mri-title">예약 정보</h2>
-                <div class="mri-content">
-                    <div>
-                        <div class="mri-input-title">사용 인원</div>
-                        <div class="mri-input-container" style="width: 100px; margin-bottom: 20px;">
-                            <input type="text" value="2" readonly>
-                            <span>명</span>
-                        </div>
-                        <div class="mri-input-title">내 요청 사항</div>
-                        <div class="mri-input-container">
-                            <textarea class="mri-textarea" cols="30" rows="10"
-                                readonly>테스트 요청사항 테스트 요청사항 테스트 요청사항 테스트 요청사항 테스트 요청사항 테스트 요청사항 테스트 요청사항 테스트 요청사항 </textarea>
-                        </div>
+            </div>
+            <h2 class="mri-title">예약 정보</h2>
+            <div class="mri-content">
+                <div>
+                    <div class="mri-input-title">사용 인원</div>
+                    <div class="mri-input-container" style="width: 100px; margin-bottom: 20px;">
+                        <input readonly type="text" value="2">
+                        <span>명</span>
                     </div>
-                    <div class="mri-divider"></div>
-                    <div>
-                        <table class="calendar">
-                            <thead class="calendar-head">
-                                <tr class="ch-title">
-                                    <td onClick="calendarService.prevCalendar()" style="cursor:pointer;">&#60;</td>
-                                    <td colspan="5">
-                                        <span id="calYear"></span>년
-                                        <span id="calMonth"></span>월
-                                    </td>
-                                    <td onClick="calendarService.nextCalendar()" style="cursor:pointer;">&#62;</td>
-                                </tr>
-                                <tr class="ch-day">
-                                    <td>일</td>
-                                    <td>월</td>
-                                    <td>화</td>
-                                    <td>수</td>
-                                    <td>목</td>
-                                    <td>금</td>
-                                    <td>토</td>
-                                </tr>
-                            </thead>
-                            <tbody class="calendar-body">
-                            </tbody>
-                        </table>
-                        <div class="mri-input-title">대여 시작시간</div>
-                        <div class="mri-input-container" style="margin-bottom: 10px;">
-                            <input type="text" value="2023년 12월 17일 17시" readonly>
-                        </div>
-                        <div class="mri-input-title">대여 시작시간</div>
-                        <div class="mri-input-container">
-                            <input type="text" value="2023년 12월 18일 10시" readonly>
-                        </div>
+                    <div class="mri-input-title">내 요청 사항</div>
+                    <div class="mri-input-container">
+                            <textarea class="mri-textarea" cols="30" readonly
+                                      rows="10">테스트 요청사항 테스트 요청사항 테스트 요청사항 테스트 요청사항 테스트 요청사항 테스트 요청사항 테스트 요청사항 테스트 요청사항 </textarea>
+                    </div>
+                </div>
+                <div class="mri-divider"></div>
+                <div>
+                    <table class="calendar">
+                        <thead class="calendar-head">
+                        <tr class="ch-title">
+                            <td onClick="calendarService.prevCalendar()" style="cursor:pointer;">&#60;</td>
+                            <td colspan="5">
+                                <span id="calYear"></span>년
+                                <span id="calMonth"></span>월
+                            </td>
+                            <td onClick="calendarService.nextCalendar()" style="cursor:pointer;">&#62;</td>
+                        </tr>
+                        <tr class="ch-day">
+                            <td>일</td>
+                            <td>월</td>
+                            <td>화</td>
+                            <td>수</td>
+                            <td>목</td>
+                            <td>금</td>
+                            <td>토</td>
+                        </tr>
+                        </thead>
+                        <tbody class="calendar-body">
+                        </tbody>
+                    </table>
+                    <div class="mri-input-title">대여 시작시간</div>
+                    <div class="mri-input-container" style="margin-bottom: 10px;">
+                        <input readonly type="text" value="2023년 12월 17일 17시">
+                    </div>
+                    <div class="mri-input-title">대여 시작시간</div>
+                    <div class="mri-input-container">
+                        <input readonly type="text" value="2023년 12월 18일 10시">
                     </div>
                 </div>
             </div>
         </div>
-        <div class="mp-left-menu">
-            <section>
-                <div class="mplm-section-title">계정관리</div>
-                <ul>
-                    <li class="mplm-nav-item">
-                        <a href="#">개인정보 수정</a>
-                    </li>
-                </ul>
-            </section>
-            <section>
-                <div class="mplm-section-title">My활동</div>
-                <ul>
-                    <li class="mplm-nav-item">
-                        <a href="#">북마크</a>
-                    </li>
-                    <li class="mplm-nav-item active">
-                        <a href="#">예약내역</a>
-                    </li>
-                    <li class="mplm-nav-item">
-                        <a href="#">후기관리</a>
-                    </li>
-                </ul>
-            </section>
-            <section>
-                <div class="mplm-section-title">장소 관리</div>
-                <ul>
-                    <li class="mplm-nav-item">
-                        <a href="#">장소 관리</a>
-                    </li>
-                </ul>
-            </section>
-        </div>
-        <div class="mp-content">
-            <article>
-                <div class="mpc-title">
-                    <h2>예약내역</h2>
-                </div>
-                <div class="mpcr-container">
-                    <article>
-                        <div class="mpcr-item-container">
-                            <div class="mpcr-action-btn">
-                                <button type="button">
-                                    <i class="fa-solid fa-ellipsis-vertical"></i>
-                                </button>
-                                <div class="mpcr-action-dropdown">
-                                    <div class="mpcra-item" onclick="showGSForCancelingReservation(4)">예약 취소</div>
-                                    <div class="mpcra-item" onclick="showGSForRemoveHistory(3)">기록 삭제</div>
-                                </div>
+    </div>
+    <div class="mp-left-menu">
+        <section>
+            <div class="mplm-section-title">계정관리</div>
+            <ul>
+                <li class="mplm-nav-item">
+                    <a href="#">개인정보 수정</a>
+                </li>
+            </ul>
+        </section>
+        <section>
+            <div class="mplm-section-title">My활동</div>
+            <ul>
+                <li class="mplm-nav-item">
+                    <a href="#">북마크</a>
+                </li>
+                <li class="mplm-nav-item active">
+                    <a href="#">예약내역</a>
+                </li>
+                <li class="mplm-nav-item">
+                    <a href="#">후기관리</a>
+                </li>
+            </ul>
+        </section>
+        <section>
+            <div class="mplm-section-title">장소 관리</div>
+            <ul>
+                <li class="mplm-nav-item">
+                    <a href="#">장소 관리</a>
+                </li>
+            </ul>
+        </section>
+    </div>
+    <div class="mp-content">
+        <article>
+            <div class="mpc-title">
+                <h2>예약내역</h2>
+            </div>
+            <div class="mpcr-container">
+                <article>
+                    <div class="mpcr-item-container">
+                        <div class="mpcr-action-btn">
+                            <button type="button">
+                                <i class="fa-solid fa-ellipsis-vertical"></i>
+                            </button>
+                            <div class="mpcr-action-dropdown">
+                                <div class="mpcra-item" onclick="showGSForCancelingReservation(4)">예약 취소</div>
+                                <div class="mpcra-item" onclick="showGSForRemoveHistory(3)">기록 삭제</div>
                             </div>
-                            <div class="mpcr-img-con">
-                                <img style="width: 180px;" height="100px"
-                                    src="//img.hourplace.co.kr/place/user/47919/2022/05/29/74f9815f-fc9d-4dec-8037-41861f43cae9?s=550x364&amp;t=cover&amp;q=80">
+                        </div>
+                        <div class="mpcr-img-con">
+                            <img height="100px" src="//img.hourplace.co.kr/place/user/47919/2022/05/29/74f9815f-fc9d-4dec-8037-41861f43cae9?s=550x364&amp;t=cover&amp;q=80"
+                                 style="width: 180px;">
+                        </div>
+                        <div class="mpcr-card-content" style="padding: 10px 0 0 0">
+                            <div class="mpccc-row">
+                                <p class="mpccc-top-font" href="#">
+                                    <a href="#">호리존</a>
+                                    <span style="margin: 0 2px;">·</span>
+                                    <a href="#">서울</a>
+                                </p>
                             </div>
-                            <div class="mpcr-card-content">
-                                <div class="mpccc-row">
-                                    <p href="#" class="mpccc-top-font">
-                                        <a href="#">호리존</a>
-                                        <span style="margin: 0 2px;">·</span>
-                                        <a href="#">서울</a>
-                                    </p>
-                                </div>
-                                <div class="mpccc-row">
-                                    <a href="#" class="mpccc-title-font general-ellipsis-1">
-                                        제목 테스트 제목 테스트 제목 테스트 제목 테스트 제목 테스트
+                            <div class="mpccc-row">
+                                <a class="mpccc-title-font general-ellipsis-1" href="#">
+                                    제목 테스트 제목 테스트 제목 테스트 제목 테스트 제목 테스트
+                                </a>
+                            </div>
+                            <div class="mpccc-row" style="margin-top: 10px;">
+                                <p class="mpccc-price">16,500원</p>
+                                <div class="mpccc-eval">
+                                    <img src="../../../imgs/gold_star.svg">
+                                    <p class="mpccc-eval-num"> 5.0 </p>
+                                    <a class="mpccc-review-count" href="#">리뷰
+                                        <span>149</span>
                                     </a>
                                 </div>
-                                <div class="mpccc-row" style="margin-top: 10px;">
-                                    <p class="mpccc-price">16,500원</p>
-                                    <div class="mpccc-eval">
-                                        <img src="../../../imgs/gold_star.svg">
-                                        <p class="mpccc-eval-num"> 5.0 </p>
-                                        <a href="#" class="mpccc-review-count">리뷰
-                                            <span>149</span>
-                                        </a>
-                                    </div>
+                            </div>
+                            <div class="mpccc-row content-between" style="margin-top: 10px;">
+                                <div class="mpccc-status">
+                                    <span>결제 대기 중</span>
+                                </div>
+                                <button type="button" class="mpccc-btn" onclick="payItem()">
+                                    <span>결제 하기</span>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="mpcr-divider"></div>
+                        <div class="mpcr-info">
+                            <div class="mpcri-title">예약 정보</div>
+                            <div class="mpcri-date">
+                                <span>2022.12.22 17시</span>
+                                <span style="margin: 0 4px; color: #868686;">~</span>
+                                <span>2022.12.23.10시</span>
+                            </div>
+                            <div class="mpcri-people-count">
+                                <div>
+                                    사용 인원: <span>0</span>명
                                 </div>
                             </div>
-                            <div class="mpcr-divider"></div>
-                            <div class="mpcr-info">
-                                <div class="mpcri-title">예약 정보</div>
-                                <div class="mpcri-date">
-                                    <span>2022.12.22 17시</span>
-                                    <span style="margin: 0 4px; color: #868686;">~</span>
-                                    <span>2022.12.23.10시</span>
+                            <div class="mpcri-content">
+                                <span>요청 사항: </span>테스트 요청사항 테스트 요청사항 테스트 요청사항 테스트 요청사항 테스트 요청사항 테스트 요청사항 테스트 요청사항
+                                테스트 요청사항
+                            </div>
+                        </div>
+                    </div>
+                </article>
+            </div>
+        </article>
+        <article>
+            <div class="mpc-title">
+                <h2>예약내역</h2>
+            </div>
+            <div class="mpcr-container">
+                <article>
+                    <div class="mpcr-item-container">
+                        <div class="mpcr-action-btn">
+                            <button type="button">
+                                <i class="fa-solid fa-ellipsis-vertical"></i>
+                            </button>
+                            <div class="mpcr-action-dropdown">
+                                <div class="mpcra-item" onclick="showGSForCancelingReservation(4)">예약 취소</div>
+                                <div class="mpcra-item" onclick="showGSForRemoveHistory(3)">기록 삭제</div>
+                            </div>
+                        </div>
+                        <div class="mpcr-img-con">
+                            <img height="100px" src="//img.hourplace.co.kr/place/user/47919/2022/05/29/74f9815f-fc9d-4dec-8037-41861f43cae9?s=550x364&amp;t=cover&amp;q=80"
+                                 style="width: 180px;">
+                        </div>
+                        <div class="mpcr-card-content" style="padding: 10px 0 0 0">
+                            <div class="mpccc-row">
+                                <p class="mpccc-top-font" href="#">
+                                    <a href="#">호리존</a>
+                                    <span style="margin: 0 2px;">·</span>
+                                    <a href="#">서울</a>
+                                </p>
+                            </div>
+                            <div class="mpccc-row">
+                                <a class="mpccc-title-font general-ellipsis-1" href="#">
+                                    제목 테스트 제목 테스트 제목 테스트 제목 테스트 제목 테스트
+                                </a>
+                            </div>
+                            <div class="mpccc-row" style="margin-top: 10px;">
+                                <p class="mpccc-price">16,500원</p>
+                                <div class="mpccc-eval">
+                                    <img src="../../../imgs/gold_star.svg">
+                                    <p class="mpccc-eval-num"> 5.0 </p>
+                                    <a class="mpccc-review-count" href="#">리뷰
+                                        <span>149</span>
+                                    </a>
                                 </div>
-                                <div class="mpcri-people-count">
-                                    <div>
-                                        사용 인원: <span>0</span>명
-                                    </div>
-                                </div>
-                                <div class="mpcri-content">
-                                    <span>요청 사항: </span>테스트 요청사항 테스트 요청사항 테스트 요청사항 테스트 요청사항 테스트 요청사항 테스트 요청사항 테스트 요청사항
-                                    테스트 요청사항
+                            </div>
+                            <div class="mpccc-row content-between" style="margin-top: 10px;">
+                                <div class="mpccc-status">
+                                    <span>결제 완료</span>
                                 </div>
                             </div>
                         </div>
-                    </article>
-                </div>
-            </article>
-        </div>
-    </main>
+                        <div class="mpcr-divider"></div>
+                        <div class="mpcr-info">
+                            <div class="mpcri-title">예약 정보</div>
+                            <div class="mpcri-date">
+                                <span>2022.12.22 17시</span>
+                                <span style="margin: 0 4px; color: #868686;">~</span>
+                                <span>2022.12.23.10시</span>
+                            </div>
+                            <div class="mpcri-people-count">
+                                <div>
+                                    사용 인원: <span>0</span>명
+                                </div>
+                            </div>
+                            <div class="mpcri-content">
+                                <span>요청 사항: </span>테스트 요청사항 테스트 요청사항 테스트 요청사항 테스트 요청사항 테스트 요청사항 테스트 요청사항 테스트 요청사항
+                                테스트 요청사항
+                            </div>
+                        </div>
+                    </div>
+                </article>
+            </div>
+        </article>
+    </div>
+</main>
 </body>
 <script src="../../../static/js/mypage/mypage.js"></script>
 <script src="../../../static/js/mypage/reservations.js"></script>
 <script src="../../../static/js/global-js/calendar.js"></script>
+<script src="https://js.bootpay.co.kr/bootpay-4.3.4.min.js" type="application/javascript"></script>
+<script src="../../../static/js/global-js/bootpay.js"></script>
 <script>
     // 현재 날짜 정보 저장
     const today = new Date();
