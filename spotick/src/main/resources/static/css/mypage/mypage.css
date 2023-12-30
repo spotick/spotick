@@ -754,9 +754,10 @@
     border: 1px solid #b4b4b4;
     border-radius: 8px;
     right: 0;
-    top: 30px;
+    top: 20px;
     margin-top: 4px;
     padding: 10px 0;
+    font-size: 16px;
 }
 
 .mpc-dropdown.show {
@@ -878,7 +879,7 @@
     width: 15px;
     height: 15px;
     display: inline-block;
-    background: url(../imgs/star.png) no-repeat;
+    background: url(../../imgs/star.png) no-repeat;
     background-size: 100%;
     box-sizing: border-box;
 }
@@ -1096,4 +1097,24 @@
     background: #e5e5e5;
     padding: 20px 10px;
     margin-bottom: 20px;
+}
+
+.mpcriq-title {
+    display: -webkit-box;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    word-break: break-all;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+
+.mpcriq-content {
+    display: -webkit-box;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    word-break: break-all;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
 }
