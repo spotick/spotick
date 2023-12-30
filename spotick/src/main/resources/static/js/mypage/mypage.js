@@ -12,6 +12,7 @@ const modalReviewForm = document.querySelector('.modal-review-form-container');
 const modalPhone = document.querySelector('.modal-phone-container');
 
 const modalPlace = document.querySelector('.modal-place');
+const modalInquiry = document.querySelector('.modal-inquiry');
 
 modalBg.addEventListener("click", (e) => {
     if(e.target === modalBg){
@@ -57,16 +58,6 @@ function closeGlobalSelection(){
         modalBg.classList.remove('show');
     }
 }
-
-// 예약 정보 상세
-const reservationInfos = document.querySelectorAll('.mpcr-info');
-
-reservationInfos.forEach(reservationInfo => {
-    reservationInfo.addEventListener('click', () => {
-        modalBg.classList.add('show');
-        modalReservation.classList.add('show');
-    })
-})
 
 function toggleDropdown(button) {
     let dropdown = button.querySelector('.mpc-dropdown');
