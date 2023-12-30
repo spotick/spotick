@@ -1,10 +1,214 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>장소 예약</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css"
+          integrity="sha512-aOG0c6nPNzGk+5zjwyJaoRUgCdOrfSDhmMID2u4+OIslr0GjpLKo7Xm0Ao3xmpM4T8AmIouRkqwj1nrdVsLKEQ=="
+          crossorigin="anonymous" referrerpolicy="no-referrer"/>
+    <link rel="stylesheet" href="../../static/css/global-css/datepicker.css">
+    <link rel="stylesheet" href="../../static/css/global-css/root.css">
+    <link rel="stylesheet" href="../../static/css/place/reserve.css"/>
 </head>
 <body>
+<div class="header"></div>
 
+<div class="global-container flex-center">
+
+    <div class="reservation-container">
+        <form action="#" method="get">
+            <p class="reserve-receipt">예약접수</p>
+
+            <div class="place-info-wrap flex-column">
+                <p class="section-title">선택한 공간</p>
+                <div class="place-info-box flex-align">
+                    <div class="place-img-box">
+                        <img src="https://img.shareit.kr/tempspaceauth/img/2022-12-12/873f9a89-8bcf-4648-9c8c-a5af837ee84c.jpg"
+                             alt="">
+                    </div>
+                    <div class="place-info">
+                        <p class="place-number">장소 번호 <span>12345</span></p>
+                        <p class="place-name">3호 로맨틱 복층 파티</p>
+                        <p class="sub-title">강남역 파티룸 모임공간235</p>
+                    </div>
+                </div>
+            </div>
+            <div class="reserve-date-container">
+                <p class="section-title">날짜 선택</p>
+
+                <div class="calendar-wrap">
+                    <div class="choice-box">
+                        <div class="calendar-box">
+                            <input type="hidden" id="reservationDate">
+                            <div id="datepicker"></div>
+                        </div>
+                        <div class="time-choice-wrap flex-column">
+                            <div>
+                                <p class="time-guide">시작 시간</p>
+                                <select class="checkInOut" name="reservationCheckIn" id="checkIn">
+                                    <option selected disabled>선택안함</option>
+                                    <option value="0">오전 12시</option>
+                                    <option value="1">오전 1시</option>
+                                    <option value="2">오전 2시</option>
+                                    <option value="3">오전 3시</option>
+                                    <option value="4">오전 4시</option>
+                                    <option value="5">오전 5시</option>
+                                    <option value="6">오전 6시</option>
+                                    <option value="7">오전 7시</option>
+                                    <option value="8">오전 8시</option>
+                                    <option value="9">오전 9시</option>
+                                    <option value="10">오전 10시</option>
+                                    <option value="11">오전 11시</option>
+                                    <option value="12">오후 12시</option>
+                                    <option value="13">오후 1시</option>
+                                    <option value="14">오후 2시</option>
+                                    <option value="15">오후 3시</option>
+                                    <option value="16">오후 4시</option>
+                                    <option value="17">오후 5시</option>
+                                    <option value="18">오후 6시</option>
+                                    <option value="19">오후 7시</option>
+                                    <option value="20">오후 8시</option>
+                                    <option value="21">오후 9시</option>
+                                    <option value="22">오후 10시</option>
+                                    <option value="23">오후 11시</option>
+                                </select>
+                            </div>
+                            <div>
+                                <p class="time-guide">종료 시간</p>
+                                <select class="checkInOut" disabled name="reservationCheckOut" id="checkOut">
+                                    <option value="0">오전 12시</option>
+                                    <option disabled value="1">
+                                        <del>오전 1시</del>
+                                    </option>
+                                    <option value="2">오전 2시</option>
+                                    <option value="3">오전 3시</option>
+                                    <option value="4">오전 4시</option>
+                                    <option value="5">오전 5시</option>
+                                    <option value="6">오전 6시</option>
+                                    <option value="7">오전 7시</option>
+                                    <option value="8">오전 8시</option>
+                                    <option value="9">오전 9시</option>
+                                    <option value="10">오전 10시</option>
+                                    <option value="11">오전 11시</option>
+                                    <option value="12">오후 12시</option>
+                                    <option value="13">오후 1시</option>
+                                    <option value="14">오후 2시</option>
+                                    <option value="15">오후 3시</option>
+                                    <option value="16">오후 4시</option>
+                                    <option value="17">오후 5시</option>
+                                    <option value="18">오후 6시</option>
+                                    <option value="19">오후 7시</option>
+                                    <option value="20">오후 8시</option>
+                                    <option value="21">오후 9시</option>
+                                    <option value="22">오후 10시</option>
+                                    <option value="23">오후 11시</option>
+                                </select>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="select-people-wrap">
+                <div class="flex-align">
+                    <p class="section-title">인원 선택</p>
+                    <span class="selected-count"></span>
+                </div>
+                <div class="select-wrap flex-align-center">
+                    <div class="people-select-box">
+                        <button class="minus flex-align-center" type="button">
+                            <img src="https://shareit.kr/_next/static/media/btn-minus-bluegray.2b4551aa.svg" alt="">
+                        </button>
+                        <div class="reservation-visitors flex-align-center">
+                            <input class="visitors" max="99" min="1" type="number" value="1">
+                        </div>
+                        <button class="plus flex-align-center" type="button">
+                            <img src="https://shareit.kr/_next/static/media/btn-plus-bluegray.d442947d.svg" alt="">
+                        </button>
+                    </div>
+                </div>
+                <div class="visitor-ctr-wrap flex-align-center">
+                    <div class="visitor-ctr-box">
+                        <button type="button" value="5">+5</button>
+                        <button type="button" value="10">+10</button>
+                        <button type="button" value="30">+30</button>
+                        <button type="button" value="50">+50</button>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="reservation-content-container">
+                <div class="flex-align">
+                    <p class="section-title">호스트 전달내용</p>
+                    <span class="note">• 개인 연락처 전달 불가</span>
+                </div>
+
+                <div class="reservation-content-wrap">
+                    <textarea name="reservationContent" id="reserve-content"
+                    placeholder="호스트에게 전달하고 싶은 내용을 적어주세요"></textarea>
+                </div>
+            </div>
+
+            <div class="payment-container">
+                <p class="section-title">결제 정보</p>
+
+                <div class="payment-wrap">
+                    <section class="total-reserve-amount-box">
+                        <p class="info-title">대여 총 금액</p>
+                        <div class="flex-column">
+                            <p class="amount"><span >0</span>원</p>
+                            <p class="payment-guide">시간을 선택해 주세요</p>
+                        </div>
+                    </section>
+                    <section class="people-amount-box">
+                        <p class="info-title">인원 추가 금액</p>
+                        <div class="flex-column">
+                            <p class="amount">+ <span>5500</span>  원</p>
+                            <p class="payment-guide">4명</p>
+                        </div>
+                    </section>
+
+                    <section class="total-amount-box flex-between-align">
+                        <p>총 금액</p>
+                        <p class="total-amount">170,000원</p>
+                    </section>
+
+                </div>
+
+            </div>
+
+            <div class="flex-align-center">
+                <button class="payment-btn">결제</button>
+            </div>
+
+        </form>
+    </div>
+
+
+</div>
+
+
+<script src="https://kit.fontawesome.com/c6992f5b12.js" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.6.4.js"></script>
+<!-- 달력-->
+<script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+<script src="../../static/js/place/detail/calendar.js"></script>
+<script src="../../static/js/place/reserve/resereve.js"></script>
 </body>
 </html>
+
+
+
+
+
+
+
+
+
+
+
+
+
