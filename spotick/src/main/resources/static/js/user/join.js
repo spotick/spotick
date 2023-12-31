@@ -76,7 +76,14 @@ function isValidFields(){
 // 이메일 유효성 및 중복 검사
 function isValidEmail() {
     const regex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
-    return regex.test($("#email").val());
+    let isValid = regex.test($("#email").val());
+    let $emailFail = $('.email-fail');
+    $emailFail.text('');
+    if(!isValid){
+        $emailFail.text('유효하지 않은 이메일 형식입니다.');
+    }
+
+    return isValid;
 
     // $.ajax({
     //     url: ``, //url

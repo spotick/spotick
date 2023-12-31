@@ -1,4 +1,5 @@
 
+// 해당 장소의 기본 인원
 let defaultPeople =4;
 
 $('.visitor-ctr-box button').on('click',function (){
