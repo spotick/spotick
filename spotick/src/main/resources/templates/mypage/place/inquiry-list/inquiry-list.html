@@ -12,47 +12,48 @@
 </head>
 
 <body>
-<main id="my-page-main">
-    <div class="modal-bg show">
-        <div class="global-dialogue-container">
-            <p class="gd-content"></p>
-            <div class="gd-btn" onclick="closeModal()">확인</div>
-        </div>
-        <div class="global-selection-container">
-            <p class="gs-question"></p>
-            <div style="display: flex;">
-                <div class="gs-select-btn" onclick="closeGlobalSelection()">취소</div>
-                <div class="gs-select-btn gs-confirm" style="color: rgb(0, 117, 235);">확인</div>
-            </div>
-        </div>
-        <div class="modal-place show">
-            <div class="modal-place-user-con">
-                <div class="modal-user-icon">
-                    <img
-                            src="https://img.hourplace.co.kr/image/user/109990/2023/12/05/79a6f8ac-6b84-4977-a2da-baa111bcd54d?s=2000x2000&amp;amp;t=inside&amp;amp;q=80&amp;amp;f=jpeg&amp;amp;">
-                </div>
-                <span class="modal-user-name">your name here</span>
-            </div>
-            <div class="modal-place-content-container">
-                <div class="modal-place-con-box">
-                    <div class="modal-place-title">요청 사항</div>
-                    <div class="modal-place-input-con">
-                            <textarea class="modal-place-txarea" cols="30" readonly
-                                      rows="10">테스트 요청사항 테스트 요청사항 테스트 요청사항 테스트 요청사항 테스트 요청사항 테스트 요청사항 테스트 요청사항 테스트 요청사항 </textarea>
-                    </div>
-                    <div class="modal-place-title">답변 작성</div>
-                    <div class="modal-place-input-con">
-                        <textarea class="modal-place-txarea" cols="30" placeholder="여기에 입력하세요." rows="10"></textarea>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-place-btn-wrap" style="justify-content: center;">
-                <button class="modal-place-btn" style="background-color: rgb(40, 184, 40);" type="button">
-                    <span>작성 완료</span>
-                </button>
-            </div>
+<div class="modal-bg show">
+    <div class="global-dialogue-container">
+        <p class="gd-content"></p>
+        <div class="gd-btn" onclick="closeModal()">확인</div>
+    </div>
+    <div class="global-selection-container">
+        <p class="gs-question"></p>
+        <div style="display: flex;">
+            <div class="gs-select-btn" onclick="closeGlobalSelection()">취소</div>
+            <div class="gs-select-btn gs-confirm" style="color: rgb(0, 117, 235);">확인</div>
         </div>
     </div>
+    <div class="modal-place show">
+        <div class="modal-place-user-con">
+            <div class="modal-user-icon">
+                <img
+                        src="https://img.hourplace.co.kr/image/user/109990/2023/12/05/79a6f8ac-6b84-4977-a2da-baa111bcd54d?s=2000x2000&amp;amp;t=inside&amp;amp;q=80&amp;amp;f=jpeg&amp;amp;">
+            </div>
+            <span class="modal-user-name">your name here</span>
+        </div>
+        <div class="modal-place-content-container">
+            <div class="modal-place-con-box">
+                <div class="modal-place-title">요청 사항</div>
+                <div class="modal-place-input-con">
+                            <textarea class="modal-place-txarea" cols="30" readonly
+                                      rows="10">테스트 요청사항 테스트 요청사항 테스트 요청사항 테스트 요청사항 테스트 요청사항 테스트 요청사항 테스트 요청사항 테스트 요청사항 </textarea>
+                </div>
+                <div class="modal-place-title">답변 작성</div>
+                <div class="modal-place-input-con">
+                    <textarea class="modal-place-txarea" cols="30" placeholder="여기에 입력하세요." rows="10"></textarea>
+                </div>
+            </div>
+        </div>
+        <div class="modal-place-btn-wrap" style="justify-content: center;">
+            <button class="modal-place-btn" style="background-color: rgb(40, 184, 40);" type="button">
+                <span>작성 완료</span>
+            </button>
+        </div>
+    </div>
+</div>
+
+<main id="my-page-main">
     <div class="mp-left-menu">
         <section>
             <div class="mplm-section-title">계정관리</div>
@@ -70,6 +71,9 @@
                 </li>
                 <li class="mplm-nav-item">
                     <a href="#">예약내역</a>
+                </li>
+                <li class="mplm-nav-item">
+                    <a href="#">문의 내역</a>
                 </li>
                 <li class="mplm-nav-item">
                     <a href="#">후기관리</a>

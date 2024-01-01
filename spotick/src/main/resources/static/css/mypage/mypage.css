@@ -181,7 +181,8 @@
     font-size: 18px;
     letter-spacing: -0.9px;
     border-radius: 4px;
-    box-shadow: rgba(142, 161, 200, 0.16) 0 3px 33px 0}
+    box-shadow: rgba(142, 161, 200, 0.16) 0 3px 33px 0
+}
 
 .mpc-user-info-user {
     display: flex;
@@ -199,9 +200,22 @@
 
 .mpc-user-info-user-img {
     width: 84px;
-    height: 83px;
+    height: 84px;
     margin-right: 37px;
-    border-radius: 10px;
+    border-radius: 100%;
+    object-fit: cover;
+    cursor: pointer;
+}
+
+.mpc-edit-icon {
+    position: absolute;
+    border-radius: 100%;
+    background-color: #fafafa;
+    width: 24px;
+    height: 24px;
+    box-shadow: rgba(0, 0, 0, 0.1) 2px 2px 8px 0;
+    border: 1px solid rgb(239, 243, 245);
+    cursor: pointer;
 }
 
 .mpc-user-info-container {
@@ -244,184 +258,6 @@
 .mpc-user-info-container button:hover {
     background: rgb(0, 117, 235);
     color: #fff;
-}
-
-.modal-bg {
-    display: none;
-    width: 100%;
-    height: 100%;
-    position: fixed;
-    left: 0;
-    top: 0;
-    background-color: rgba(0, 0, 0, 0.28);
-    z-index: 9999;
-    overflow: auto;
-}
-
-.modal-bg.show {
-    display: block;
-}
-
-.modal-phone-container {
-    display: none;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 580px;
-    padding: 40px 50px;
-    background-color: rgb(255, 255, 255);
-    border-radius: 10px;
-    box-shadow: rgba(96, 96, 96, 0.22) 0 2px 18px 0;
-}
-
-.modal-phone-container.show {
-    display: block;
-}
-
-.modal-row {
-    position: relative;
-    display: flex;
-    flex-direction: row;
-}
-
-.modal-input-container {
-    position: relative;
-    width: 100%;
-    height: 52px;
-    border-radius: 4px;
-    border: 1px solid #dfe2e7;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    padding-right: 14px;
-    padding-left: 14px;
-}
-
-.modal-input-container input {
-    width: calc(100% - 30px);
-    font-size: 15px;
-    font-weight: 400;
-    font-stretch: normal;
-    font-style: normal;
-    line-height: 1.6;
-    letter-spacing: normal;
-    border-width: 0;
-    caret-color: #3c82fa;
-}
-
-.modal-input-container.disable {
-    border: 1px solid #dfe2e7;
-    background-color: #f7f8f9;
-}
-
-.modal-input-container.disable input {
-    background-color: #f7f8f9;
-    color: #9ea4aa;
-    pointer-events: none;
-}
-
-.modal-input-delete {
-    position: absolute;
-    right: 0;
-    width: 44px;
-    height: 44px;
-    display: none;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-}
-
-.modal-input-delete.show {
-    display: flex;
-}
-
-.modal-input-button {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: absolute;
-    right: 7px;
-    width: 109px;
-    height: 38px;
-    border-radius: 4px;
-    background: rgb(38, 40, 43);
-    cursor: pointer;
-}
-
-.modal-input-button.disable {
-    background: rgb(231, 234, 238);
-    cursor: not-allowed;
-}
-
-.modal-input-button p {
-    font-weight: 500;
-    font-size: 14px;
-    line-height: 20px;
-    color: rgb(255, 255, 255);
-}
-
-.modal-input-button.disable p {
-    font-weight: 500;
-    font-size: 14px;
-    line-height: 20px;
-    color: rgb(158, 164, 170);
-}
-
-.modal-timer-container {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    position: absolute;
-    right: 14px;
-    height: 44px;
-}
-
-.modal-timer-container p {
-    font-weight: normal;
-    font-size: 14px;
-    line-height: 20px;
-    text-align: right;
-    color: rgb(158, 164, 170);
-}
-
-.modal-alert-text {
-    margin-top: 10px;
-    font-weight: normal;
-    font-size: 12px;
-    line-height: 16px;
-    color: rgb(255, 75, 62);
-}
-
-.modal-confirm-btn {
-    height: 52px;
-    border-radius: 8px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    background-color: #3c82fa;
-    cursor: pointer;
-    margin-top: 40px;
-    width: 132px;
-    color: #fff;
-}
-
-.modal-confirm-btn:disabled {
-    cursor: not-allowed;
-    background-color: #e7eaee;
-    color: #9ea4aa;
-}
-
-.modal-confirm-btn p {
-    font-size: 16px;
-    font-weight: 500;
-    font-stretch: normal;
-    font-style: normal;
-    line-height: 1.38;
-    letter-spacing: -.1px;
-    text-align: center;
 }
 
 .mpc-cards-wrap {
