@@ -12,101 +12,105 @@
 </head>
 
 <body>
-<main id="my-page-main">
-    <div class="modal-bg">
-        <div class="global-dialogue-container">
-            <p class="gd-content"></p>
-            <div class="gd-confirm" onclick="closeModal()">확인</div>
+<div class="modal-bg">
+    <div class="global-dialogue-container">
+        <p class="gd-content"></p>
+        <div class="gd-confirm" onclick="closeModal()">확인</div>
+    </div>
+    <div class="global-selection-container">
+        <p class="gs-question"></p>
+        <div style="display: flex;">
+            <div class="gs-select-btn" onclick="closeModal()">취소</div>
+            <div class="gs-select-btn gs-confirm" style="color: rgb(0, 117, 235);">확인</div>
         </div>
-        <div class="global-selection-container">
-            <p class="gs-question"></p>
-            <div style="display: flex;">
-                <div class="gs-select-btn" onclick="closeModal()">취소</div>
-                <div class="gs-select-btn gs-confirm" style="color: rgb(0, 117, 235);">확인</div>
+    </div>
+    <div class="modal-reservation-info">
+        <div style="display: flex; margin-bottom: 20px;">
+            <div class="mpcr-img-con">
+                <img height="100px"
+                     src="//img.hourplace.co.kr/place/user/47919/2022/05/29/74f9815f-fc9d-4dec-8037-41861f43cae9?s=550x364&amp;t=cover&amp;q=80"
+                     style="width: 180px;">
             </div>
-        </div>
-        <div class="modal-reservation-info">
-            <div style="display: flex; margin-bottom: 20px;">
-                <div class="mpcr-img-con">
-                    <img height="100px" src="//img.hourplace.co.kr/place/user/47919/2022/05/29/74f9815f-fc9d-4dec-8037-41861f43cae9?s=550x364&amp;t=cover&amp;q=80"
-                         style="width: 180px;">
+            <div class="mpcr-card-content">
+                <div class="mpccc-row">
+                    <p class="mpccc-top-font" href="#">
+                        <a href="#">호리존</a>
+                        <span style="margin: 0 2px;">·</span>
+                        <a href="#">서울</a>
+                    </p>
                 </div>
-                <div class="mpcr-card-content">
-                    <div class="mpccc-row">
-                        <p class="mpccc-top-font" href="#">
-                            <a href="#">호리존</a>
-                            <span style="margin: 0 2px;">·</span>
-                            <a href="#">서울</a>
-                        </p>
-                    </div>
-                    <div class="mpccc-row">
-                        <a class="mpccc-title-font general-ellipsis-1" href="#">
-                            제목 테스트
+                <div class="mpccc-row">
+                    <a class="mpccc-title-font general-ellipsis-1" href="#">
+                        제목 테스트
+                    </a>
+                </div>
+                <div class="mpccc-row" style="margin-top: 10px;">
+                    <p class="mpccc-price">16,500원</p>
+                    <div class="mpccc-eval">
+                        <img src="../../imgs/gold_star.svg">
+                        <p class="mpccc-eval-num"> 5.0 </p>
+                        <a class="mpccc-review-count" href="#">리뷰
+                            <span>149</span>
                         </a>
                     </div>
-                    <div class="mpccc-row" style="margin-top: 10px;">
-                        <p class="mpccc-price">16,500원</p>
-                        <div class="mpccc-eval">
-                            <img src="../../imgs/gold_star.svg">
-                            <p class="mpccc-eval-num"> 5.0 </p>
-                            <a class="mpccc-review-count" href="#">리뷰
-                                <span>149</span>
-                            </a>
-                        </div>
-                    </div>
                 </div>
             </div>
-            <h2 class="mri-title">예약 정보</h2>
-            <div class="mri-content">
-                <div>
-                    <div class="mri-input-title">사용 인원</div>
-                    <div class="mri-input-container" style="width: 100px; margin-bottom: 20px;">
-                        <input readonly type="text" value="2">
-                        <span>명</span>
-                    </div>
-                    <div class="mri-input-title">내 요청 사항</div>
-                    <div class="mri-input-container">
+        </div>
+        <h2 class="mri-title">예약 정보</h2>
+        <div class="mri-content">
+            <div>
+                <div class="mri-input-title">사용 인원</div>
+                <div class="mri-input-container" style="width: 100px; margin-bottom: 20px;">
+                    <input readonly type="text" value="2">
+                    <span>명</span>
+                </div>
+                <div class="mri-input-title">내 요청 사항</div>
+                <div class="mri-input-container">
                             <textarea class="mri-textarea" cols="30" readonly
                                       rows="10">테스트 요청사항 테스트 요청사항 테스트 요청사항 테스트 요청사항 테스트 요청사항 테스트 요청사항 테스트 요청사항 테스트 요청사항 </textarea>
-                    </div>
                 </div>
-                <div class="mri-divider"></div>
-                <div>
-                    <table class="calendar">
-                        <thead class="calendar-head">
-                        <tr class="ch-title">
-                            <td onClick="calendarService.prevCalendar()" style="cursor:pointer;">&#60;</td>
-                            <td colspan="5">
-                                <span id="calYear"></span>년
-                                <span id="calMonth"></span>월
-                            </td>
-                            <td onClick="calendarService.nextCalendar()" style="cursor:pointer;">&#62;</td>
-                        </tr>
-                        <tr class="ch-day">
-                            <td>일</td>
-                            <td>월</td>
-                            <td>화</td>
-                            <td>수</td>
-                            <td>목</td>
-                            <td>금</td>
-                            <td>토</td>
-                        </tr>
-                        </thead>
-                        <tbody class="calendar-body">
-                        </tbody>
-                    </table>
-                    <div class="mri-input-title">대여 시작시간</div>
-                    <div class="mri-input-container" style="margin-bottom: 10px;">
-                        <input readonly type="text" value="2023년 12월 17일 17시">
-                    </div>
-                    <div class="mri-input-title">대여 시작시간</div>
-                    <div class="mri-input-container">
-                        <input readonly type="text" value="2023년 12월 18일 10시">
-                    </div>
+            </div>
+            <div class="mri-divider"></div>
+            <div>
+                <table class="calendar">
+                    <thead class="calendar-head">
+                    <tr class="ch-title">
+                        <td onClick="calendarService.prevCalendar()" style="cursor:pointer;">&#60;</td>
+                        <td colspan="5">
+                            <span id="calYear"></span>년
+                            <span id="calMonth"></span>월
+                        </td>
+                        <td onClick="calendarService.nextCalendar()" style="cursor:pointer;">&#62;</td>
+                    </tr>
+                    <tr class="ch-day">
+                        <td>일</td>
+                        <td>월</td>
+                        <td>화</td>
+                        <td>수</td>
+                        <td>목</td>
+                        <td>금</td>
+                        <td>토</td>
+                    </tr>
+                    </thead>
+                    <tbody class="calendar-body">
+                    </tbody>
+                </table>
+                <div class="mri-input-title">대여 시작시간</div>
+                <div class="mri-input-container" style="margin-bottom: 10px;">
+                    <input readonly type="text" value="2023년 12월 17일 17시">
+                </div>
+                <div class="mri-input-title">대여 시작시간</div>
+                <div class="mri-input-container">
+                    <input readonly type="text" value="2023년 12월 18일 10시">
                 </div>
             </div>
         </div>
     </div>
+</div>
+
+<header></header>
+
+<main id="my-page-main">
     <div class="mp-left-menu">
         <section>
             <div class="mplm-section-title">계정관리</div>
