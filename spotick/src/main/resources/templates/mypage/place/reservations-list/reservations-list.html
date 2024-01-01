@@ -9,6 +9,7 @@
     <link href="../../../../static/css/mypage/mypage.css" rel="stylesheet">
     <link href="../../../../static/css/mypage/mypage-modal.css" rel="stylesheet">
     <link href="../../../../static/css/global-css/calendar.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../../../static/css/global-css/datepicker.css">
     <script crossorigin="anonymous" src="https://kit.fontawesome.com/2364e2b536.js"></script>
 </head>
 
@@ -81,11 +82,11 @@
             </div>
         </div>
         <div class="modal-place-btn-wrap">
-            <button class="modal-place-btn" style="background-color: rgb(40, 184, 40); margin-right: 20px;"
+            <button class="modal-place-btn" style="background-color: #007aff; margin-right: 20px;"
                     type="button">
                 <span>승인</span>
             </button>
-            <button class="modal-place-btn" style="background-color: rgb(232, 45, 45);" type="button">
+            <button class="modal-place-btn" style="background-color: #ffa200;" type="button">
                 <span>거절</span>
             </button>
         </div>
@@ -137,7 +138,7 @@
                 <i class="fa-solid fa-angle-right"></i>
                 <h2>예약 요청</h2>
             </div>
-            <div class="mpcp-wrap">
+            <div class="mpcp-wrap" style="flex-direction: row">
                 <div class="mpcp-main">
                     <div class="mpcp-target">
                         <div style="display: flex; justify-content: space-between;">
@@ -188,7 +189,7 @@
                                     <span style="margin: 0 10px;">~</span>
                                     <span>2023년 12월 25일 10시</span>
                                 </div>
-                                <div class="mpcp-btn">
+                                <div class="mpcp-btn" onclick="openModal(modalPlace)">
                                     <span>상세보기</span>
                                 </div>
                             </div>
@@ -224,6 +225,9 @@
 <script src="../../../../static/js/mypage/mypage.js"></script>
 <script src="../../../../static/js/mypage/place.js"></script>
 <script src="../../../../static/js/global-js/calendar.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.4.js"></script>
+<script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+<script src="../../../../static/js/place/detail/calendar.js"></script>
 <script>
     window.onload = function () {
         let testDate1 = new Date("2023-12-17 18:57:54.253000 +09:00");

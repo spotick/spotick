@@ -12,7 +12,7 @@
 </head>
 
 <body>
-<div class="modal-bg show">
+<div class="modal-bg">
     <div class="global-dialogue-container">
         <p class="gd-content"></p>
         <div class="gd-btn" onclick="closeModal()">확인</div>
@@ -24,7 +24,7 @@
             <div class="gs-select-btn gs-confirm" style="color: rgb(0, 117, 235);">확인</div>
         </div>
     </div>
-    <div class="modal-place show">
+    <div class="modal-place">
         <div class="modal-place-user-con">
             <div class="modal-user-icon">
                 <img
@@ -147,7 +147,7 @@
                                 <div class="mpcp-content" style="font-size: 18px;">
                                     <span>문의사항 제목</span>
                                 </div>
-                                <div class="mpcp-btn">
+                                <div class="mpcp-btn" onclick="openModal(modalPlace)">
                                     <span>상세보기</span>
                                 </div>
                             </div>
