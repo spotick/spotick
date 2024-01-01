@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>Document</title>
+    <link href="../../static/css/global-css/root.css" rel="stylesheet">
+    <script crossorigin="anonymous" src="https://kit.fontawesome.com/2364e2b536.js"></script>
+</head>
+
+<body>
+<header id="page-header" th:fragment="header">
+    <div class="header-content">
+        <div class="header-grid h-content-container">
+            <div class="hc-main">
+                <button class="hc-logo" type="button">
+                    <img alt="로고" src="https://shareit.kr/_next/static/media/logoShareit_blackCombi.669780dc.svg">
+                </button>
+                <div class="hc-types-selector">
+                    <button class="hc-content-type" onclick="toggleContent(0)" type="button">장소</button>
+                    <button class="hc-content-type" onclick="toggleContent(1)" type="button">티켓</button>
+                    <div class="hc-current-type type1" id="currentContent">장소</div>
+                </div>
+            </div>
+            <div class="hc-selections">
+                <div class="hc-contents-list">
+                    <button class="hc-content">
+                        <span class="hc-content-font">홍보 게시판</span>
+                    </button>
+                </div>
+                <div class="hc-content-icon" id="searchBarOpen">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </div>
+                <div class="h-search-bar-container hide" id="searchBar">
+                    <div class="hc-content-icon" id="searchBarClose" style="margin:0">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                    </div>
+                    <input id="searchInput" type="text">
+                    <button class="hc-search-bar-erase hide" id="searchInputDelete">
+                        <i class="fa-solid fa-x"></i>
+                    </button>
+                </div>
+                <div class="hc-content-icon">
+                    <i class="fa-solid fa-location-dot"></i>
+                </div>
+                <hr class="hc-divider">
+                <div class="hc-beforelogin">
+                    <div class="hc-contents-list">
+                        <button class="hc-content">
+                            <span class="hc-content-font">로그인</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="hc-afterlogin">
+                    <div class="hc-contents-list">
+                        <button class="hc-content">
+                            <span class="hc-content-font-small">장소 등록</span>
+                        </button>
+                        <button class="hc-content">
+                            <span class="hc-content-font-small">티켓 등록</span>
+                        </button>
+                    </div>
+                    <div class="h-user-icon" onclick="toggleUsermenu()">
+                        <img
+                                src="https://img.hourplace.co.kr/image/user/109990/2023/12/05/79a6f8ac-6b84-4977-a2da-baa111bcd54d?s=2000x2000&amp;amp;t=inside&amp;amp;q=80&amp;amp;f=jpeg&amp;amp;">
+                    </div>
+                    <div class="hc-content-icon" onclick="toggleNotification()">
+                        <i class="fa-regular fa-bell"></i>
+                    </div>
+                    <div class="hc-content-icon">
+                        <i class="fa-regular fa-bookmark"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="hd-usermenu">
+                <div class="hd-user-name">testuser111111111111111111111111</div>
+                <hr class="hd-divider">
+                <a class="hd-content" href="#">
+                    <p>개인정보 수정</p>
+                </a>
+                <a class="hd-content" href="#">
+                    <p>북마크</p>
+                </a>
+                <a class="hd-content" href="#">
+                    <p>예약내역</p>
+                </a>
+                <a class="hd-content" href="#">
+                    <p>후기관리</p>
+                </a>
+                <hr class="hd-divider">
+                <a class="hd-content" href="#">
+                    <p>장소 관리</p>
+                </a>
+                <hr class="hd-divider">
+                <a class="hd-content" href="#">
+                    <p>고객센터</p>
+                </a>
+                <hr class="hd-divider">
+                <a class="hd-content" href="#">
+                    <p>로그아웃</p>
+                </a>
+            </div>
+            <div class="hd-notification">
+                <div class="hdn-item">
+                    <div style="display: flex;">
+                        <div style="min-width: 40px;">
+                            <img class="hdn-icon"
+                                 src="https://img.hourplace.co.kr/image/user/109990/2023/12/05/79a6f8ac-6b84-4977-a2da-baa111bcd54d?s=2000x2000&amp;amp;t=inside&amp;amp;q=80&amp;amp;f=jpeg&amp;amp;">
+                        </div>
+                        <div style="width: 90%;">
+                            <div style="display: flex; justify-content: space-between;">
+                                <div class="hdn-title">알림 제목</div>
+                                <div class="hdn-date">~일전</div>
+                            </div>
+                            <div class="hdn-content">알림 내용 입니다.알림 내용 입니다.알림 내용 입니다.알림 내용 입니다.알림 내용 입니다.</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="hdn-item">
+                    <div style="display: flex;">
+                        <div style="min-width: 40px;">
+                            <img class="hdn-icon"
+                                 src="https://img.hourplace.co.kr/image/user/109990/2023/12/05/79a6f8ac-6b84-4977-a2da-baa111bcd54d?s=2000x2000&amp;amp;t=inside&amp;amp;q=80&amp;amp;f=jpeg&amp;amp;">
+                        </div>
+                        <div style="width: 90%;">
+                            <div style="display: flex; justify-content: space-between;">
+                                <div class="hdn-title">알림 제목</div>
+                                <div class="hdn-date">~일전</div>
+                            </div>
+                            <div class="hdn-content">알림 내용 입니다.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="header-nav">
+        <div class="header-grid"></div>
+    </div>
+</header>
+
+<main id="page-body"></main>
+
+<footer id="page-footer" th:fragment="footer">
+    <ul class="footer-content">
+        <li class="footer-content-item">
+            <div style="cursor:pointer;" onclick="toggleFooterHome(this)">
+                <b>홈</b>
+            </div>
+            <ul class="fc-popover-homes">
+                <li class="fcph-item">
+                    <a href="#">장소</a>
+                </li>
+                <li class="fcph-item">
+                    <a href="#">티켓</a>
+                </li>
+            </ul>
+        </li>
+        <li class="footer-content-item">
+            <a href="/my-artist/list">지도 서비스</a>
+        </li>
+        <li class="footer-content-item">
+            <a href="/my-library/posts">보관함</a>
+        </li>
+        <li class="footer-content-item">
+            <a href="/my-page/my-page">마이 페이지</a>
+        </li>
+        <li class="footer-content-item">
+            <a href="#">북마크</a>
+        </li>
+        <li class="footer-content-item">
+            <a href="#">고객센터</a>
+        </li>
+        <li class="footer-content-item">© Spotick, Inc.</li>
+    </ul>
+</footer>
+</body>
+
+<script src="../../static/js/global-js/header-footer.js"></script>
+
+</html>

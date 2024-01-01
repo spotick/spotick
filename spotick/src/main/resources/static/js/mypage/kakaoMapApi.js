@@ -106,14 +106,32 @@ function mapSearch() {
 
 // 위도, 경도에 따른 맵 마커 생성 및 화면 이동 함수화
 function resetMapAndMarkerByLatLng(lat, lng) {
-    var mapContainer = document.getElementById('map'), // 지도를 표시할 div
-        mapOption = {
-            center: new kakao.maps.LatLng(lat, lng), // 지도의 중심좌표
-            level: 3 // 지도의 확대 레벨
-        };
+    // 맵 재생성.(생성시 유의사항 : 맵이 보여지는 상태에서 재생성해줘야 보여지므로 서순에 유의할 것)
+    map.relayout();
 
-// 지도를 표시할 div와  지도 옵션으로  지도를 생성합니다
-    var map = new kakao.maps.Map(mapContainer, mapOption);
+    // 화면 이동
+    var moveLatLon = new kakao.maps.LatLng(lat, lng);
+
+    // 지도 중심을 이동 시킵니다
+    map.setCenter(moveLatLon);
+
+    // 마커 재배치
+    var markerPosition  = new kakao.maps.LatLng(lat, lng);
+
+    var marker = new kakao.maps.Marker({
+        position: markerPosition
+    });
+
+    var iwContent = '<div style="padding:5px; margin-left: 18px"><span>기존 지정 위치</span></div>',
+        iwPosition = new kakao.maps.LatLng(lat, lng);
+
+    var infowindow = new kakao.maps.InfoWindow({
+        position : iwPosition,
+        content : iwContent
+    });
+    infowindow.open(map, marker);
+
+    marker.setMap(map);
 }
 
 

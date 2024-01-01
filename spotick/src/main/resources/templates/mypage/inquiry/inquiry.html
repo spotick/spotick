@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>Document</title>
+    <link href="../../../static/css/global-css/root.css" rel="stylesheet">
+    <link href="../../../static/css/mypage/mypage.css" rel="stylesheet">
+    <link href="../../../static/css/mypage/mypage-modal.css" rel="stylesheet">
+    <script crossorigin="anonymous" src="https://kit.fontawesome.com/2364e2b536.js"></script>
+</head>
+
+<body>
+
+<div class="modal-bg">
+    <div class="global-dialogue-container">
+        <p class="gd-content"></p>
+        <div class="gd-confirm" onclick="closeModal()">확인</div>
+    </div>
+    <div class="global-selection-container">
+        <p class="gs-question"></p>
+        <div style="display: flex;">
+            <div class="gs-select-btn" onclick="closeModal()">취소</div>
+            <div class="gs-select-btn gs-confirm" style="color: rgb(0, 117, 235);">확인</div>
+        </div>
+    </div>
+    <div class="modal-inquiry">
+        <div class="modal-place-input-con" style="margin-bottom: 20px">
+            <input class="mpc-inquiry-title" type="text" value="문의 제목 내용" readonly>
+        </div>
+        <div class="modal-place-content-container">
+            <div class="modal-place-con-box">
+                <div class="modal-place-title">문의 내용</div>
+                <div class="modal-place-input-con">
+                            <textarea class="modal-place-txarea" cols="30" readonly
+                                      rows="10">테스트 요청사항 테스트 요청사항 테스트 요청사항 테스트 요청사항 테스트 요청사항 테스트 요청사항 테스트 요청사항 테스트 요청사항 </textarea>
+                </div>
+                <div class="modal-place-title">답변</div>
+                <div class="modal-place-input-con">
+                    <textarea class="modal-place-txarea" cols="30" placeholder="아직 답변받지 못했습니다!" rows="10" readonly></textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<main id="my-page-main">
+    <div class="mp-left-menu">
+        <section>
+            <div class="mplm-section-title">계정관리</div>
+            <ul>
+                <li class="mplm-nav-item active">
+                    <a href="#">개인정보 수정</a>
+                </li>
+            </ul>
+        </section>
+        <section>
+            <div class="mplm-section-title">My활동</div>
+            <ul>
+                <li class="mplm-nav-item">
+                    <a href="#">북마크</a>
+                </li>
+                <li class="mplm-nav-item">
+                    <a href="#">예약내역</a>
+                </li>
+                <li class="mplm-nav-item">
+                    <a href="#">후기관리</a>
+                </li>
+            </ul>
+        </section>
+        <section>
+            <div class="mplm-section-title">장소 관리</div>
+            <ul>
+                <li class="mplm-nav-item">
+                    <a href="#">장소 관리</a>
+                </li>
+            </ul>
+        </section>
+    </div>
+    <div class="mp-content">
+        <article>
+            <div class="mpc-title not-with-line">
+                <h2>문의 내역</h2>
+            </div>
+            <nav class="mpc-top-nav">
+                <button class="mpc-top-nav-button active" type="button">
+                    장소 문의(<span>0</span>)
+                </button>
+                <button class="mpc-top-nav-button" type="button">
+                    티켓 문의(<span>0</span>)
+                </button>
+            </nav>
+            <div class="mpcr-container">
+                <article>
+                    <div class="mpcr-item-container">
+                        <div class="mpcr-action-btn">
+                            <button onclick="toggleDropdown(this)" type="button">
+                                <i aria-hidden="true" class="fa-solid fa-ellipsis"></i>
+                                <div class="mpc-dropdown">
+                                    <div class="action-item" onclick="showGSForInquiryDeletion(5)">
+                                        <span>문의 내역 삭제</span>
+                                    </div>
+                                </div>
+                            </button>
+                        </div>
+                        <div class="mpcr-img-con">
+                            <img height="100px"
+                                 src="//img.hourplace.co.kr/place/user/47919/2022/05/29/74f9815f-fc9d-4dec-8037-41861f43cae9?s=550x364&amp;t=cover&amp;q=80"
+                                 style="width: 180px;">
+                        </div>
+                        <div class="mpcr-card-content">
+                            <div class="mpccc-row">
+                                <p class="mpccc-top-font" href="#">
+                                    <a href="#">호리존</a>
+                                    <span style="margin: 0 2px;">·</span>
+                                    <a href="#">서울</a>
+                                </p>
+                            </div>
+                            <div class="mpccc-row">
+                                <a class="mpccc-title-font general-ellipsis-1" href="#">
+                                    제목 테스트 제목 테스트 제목 테스트 제목 테스트 제목 테스트
+                                </a>
+                            </div>
+                            <div class="mpccc-row" style="margin-top: 10px;">
+                                <p class="mpccc-price">16,500원</p>
+                                <div class="mpccc-eval">
+                                    <img src="../../../imgs/gold_star.svg">
+                                    <p class="mpccc-eval-num"> 5.0 </p>
+                                    <a class="mpccc-review-count" href="#">
+                                        리뷰<span>149</span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mpcr-divider"></div>
+                        <div class="mpcr-info" onclick="popupInquiryModal()">
+                            <div class="mpcri-title">문의 내용</div>
+                            <div class="mpcriq-title">문의 제목 테스트문의 제목 테스트문의 제목 테스트문의 제목 테스트문의 제목 테스트문의 제목 테스트</div>
+                            <div class="mpcriq-content">
+                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin condimentum ante id urna condimentum imperdiet. Donec iaculis ipsum sit amet maximus sagittis. Sed id urna eget mi hendrerit eleifend. Vivamus ullamcorper purus nec lectus mattis ornare. Nam pharetra tristique sapien, quis convallis purus convallis ac. Praesent feugiat nec tortor at maximus. Donec sed metus nec nisl commodo semper pharetra in libero. Etiam et dapibus quam. Cras sed gravida urna. Nunc semper ultricies tellus, non sodales nunc efficitur in. Donec vitae magna blandit, ultrices libero et, accumsan nisi. Aliquam erat volutpat.
+                            </div>
+                        </div>
+                    </div>
+                </article>
+            </div>
+        </article>
+    </div>
+</main>
+</body>
+<script src="../../../static/js/mypage/mypage.js"></script>
+<script src="../../../static/js/mypage/inquiry.js"></script>
+
+</html>

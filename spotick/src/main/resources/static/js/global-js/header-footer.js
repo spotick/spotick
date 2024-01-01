@@ -2,10 +2,10 @@
 function toggleContent(index) {
     let currentType = document.getElementById('currentContent');
 
-    if (index == 1) {
+    if (index === 1) {
         currentType.classList.remove('type1');
         currentType.classList.add('type2');
-        currentContent.innerHTML = '티켓팅';
+        currentContent.innerHTML = '티켓';
     } else {
         currentType.classList.remove('type2');
         currentType.classList.add('type1');
@@ -65,4 +65,9 @@ function toggleUsermenu() {
 function toggleNotification() {
     usermenu.classList.remove('show');
     notification.classList.toggle('show');
+}
+
+function toggleFooterHome(button) {
+    let popover = button.nextElementSibling;
+    popover.classList.toggle('show');
 }

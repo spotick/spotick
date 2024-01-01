@@ -4,48 +4,56 @@
     font-weight: 100;
     font-style: normal;
 }
+
 @font-face {
     font-family: 'S-CoreDream';
     src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_six@1.2/S-CoreDream-2ExtraLight.woff') format('woff');
     font-weight: 200;
     font-style: normal;
 }
+
 @font-face {
     font-family: 'S-CoreDream';
     src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_six@1.2/S-CoreDream-3Light.woff') format('woff');
     font-weight: 300;
     font-style: normal;
 }
+
 @font-face {
     font-family: 'S-CoreDream';
     src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_six@1.2/S-CoreDream-4Regular.woff') format('woff');
     font-weight: 400;
     font-style: normal;
 }
+
 @font-face {
     font-family: 'S-CoreDream';
     src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_six@1.2/S-CoreDream-5Medium.woff') format('woff');
     font-weight: 500;
     font-style: normal;
 }
+
 @font-face {
     font-family: 'S-CoreDream';
     src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_six@1.2/S-CoreDream-6Medium.woff') format('woff');
     font-weight: 600;
     font-style: normal;
 }
+
 @font-face {
     font-family: 'S-CoreDream';
     src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_six@1.2/S-CoreDream-7ExtraBold.woff') format('woff');
     font-weight: 700;
     font-style: normal;
 }
+
 @font-face {
     font-family: 'S-CoreDream';
     src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_six@1.2/S-CoreDream-8Heavy.woff') format('woff');
     font-weight: 800;
     font-style: normal;
 }
+
 @font-face {
     font-family: 'S-CoreDream';
     src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_six@1.2/S-CoreDream-9Black.woff') format('woff');
@@ -56,16 +64,16 @@
 *, body, span {
     box-sizing: border-box;
     outline: none;
-    font-family: 'S-CoreDream';
+    font-family: 'S-CoreDream', sans-serif;
 }
 
 ul {
     display: block;
     margin-block-start: 1em;
     margin-block-end: 1em;
-    margin-inline-start: 0px;
-    margin-inline-end: 0px;
-    padding-inline-start: 0px;
+    margin-inline-start: 0;
+    margin-inline-end: 0;
+    padding-inline-start: 0;
 }
 
 li {
@@ -89,7 +97,6 @@ a {
     color: #007bff;
     text-decoration: none;
     background-color: transparent;
-    -webkit-text-decoration-skip: objects;
 }
 
 a:hover {
@@ -183,7 +190,8 @@ img {
 
 .h-content-container {
     margin: 0 auto;
-    padding: 35px 0px 20px;
+    padding: 35px 0 20px;
+    height: 95px;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -213,7 +221,7 @@ img {
     line-height: 24px;
     color: rgb(163, 163, 163);
     background: rgb(243, 245, 247);
-    padding: 6px 0px;
+    padding: 6px 0;
     width: 76px;
     border-radius: 20px;
 }
@@ -222,12 +230,12 @@ img {
     position: absolute;
     display: flex;
     place-content: center;
-    top: 0px;
+    top: 0;
     transition: all 0.2s ease 0s;
     font-size: 16px;
     line-height: 24px;
     color: rgb(255, 255, 255);
-    padding: 6px 0px;
+    padding: 6px 0;
     width: 76px;
     height: 36px;
     border: 1px solid rgb(212, 219, 226);
@@ -235,7 +243,7 @@ img {
 }
 
 .type1 {
-    left: 0px;
+    left: 0;
     background: rgb(31, 105, 255);
 }
 
@@ -374,7 +382,7 @@ img {
     z-index: 9999;
     width: 220px;
     border-radius: 8px;
-    box-shadow: rgba(0, 0, 0, 0.1) 2px 2px 8px 0px;
+    box-shadow: rgba(0, 0, 0, 0.1) 2px 2px 8px 0;
     border: 1px solid rgb(239, 243, 245);
     background-color: rgb(255, 255, 255);
 }
@@ -440,11 +448,11 @@ img {
     display: none;
     position: absolute;
     top: 95px;
-    right: 0px;
+    right: 0;
     width: 360px;
     height: 380px;
     border-radius: 8px;
-    box-shadow: rgba(0, 0, 0, 0.1) 2px 2px 8px 0px;
+    box-shadow: rgba(0, 0, 0, 0.1) 2px 2px 8px 0;
     border: 1px solid rgb(239, 243, 245);
     background-color: rgb(255, 255, 255);
     overflow-y: scroll;
@@ -463,8 +471,7 @@ img {
 }
 
 .hdn-item:not(:last-child) {
-    border-bottom: 1px solid rgb(231, 234, 238);
-    ;
+    border-bottom: 1px solid rgb(231, 234, 238);;
 }
 
 .hdn-icon {
@@ -517,14 +524,94 @@ img {
     -webkit-box-orient: vertical;
 }
 
+/* 이하 바디 */
+
+#page-body {
+    margin-top: 95px;
+    min-height: calc(100vh - 95px - 25px);
+}
+
+/* 이하 푸터 */
+#page-footer {
+    box-sizing: border-box;
+    background: #e7e7e7;
+    width: 100%;
+}
+
+.footer-content {
+    width: 1200px;
+    height: 25px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.footer-content-item {
+    margin-right: 20px;
+    font-size: 12px;
+    position: relative;
+}
+
+.footer-content-item:last-child {
+    margin-right: 0;
+}
+
+.footer-content-item:not(:last-child)::after {
+    content: "";
+    position: absolute;
+    top: calc(50% - 0.45em);
+    right: -7px;
+    width: 0;
+    height: 0.9em;
+    border-right: 1px solid;
+    opacity: .25;
+}
+
+.fc-popover-homes {
+    display: none;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translateX(-50%) translateY(-150%);
+    border-radius: 8px;
+    box-shadow: rgba(0, 0, 0, 0.1) 2px 2px 8px 0;
+    background-color: rgb(255, 255, 255);
+    border: 1px solid rgb(239, 243, 245);
+    z-index: 1000;
+    overflow: hidden;
+}
+
+.fc-popover-homes.show {
+    display: flex;
+}
+
+.fcph-item {
+    font-size: 16px;
+    white-space: nowrap;
+    padding: 8px 6px;
+    cursor: pointer;
+    transition: all 0.2s ease 0s;
+}
+
+.fcph-item:hover:first-child {
+    background: rgb(31, 105, 255);
+    color: #fff;
+}
+
+.fcph-item:hover:last-child {
+    background: rgb(255, 180, 31);
+    color: #fff;
+}
+
 /* 모달창 css */
 .modal-bg {
     display: none;
     width: 100%;
     height: 100%;
     position: fixed;
-    left: 0px;
-    top: 0px;
+    left: 0;
+    top: 0;
     background-color: rgba(0, 0, 0, 0.28);
     z-index: 9999;
 }
@@ -533,7 +620,7 @@ img {
     display: block;
 }
 
-.global-dialog-container {
+.global-dialogue-container {
     position: absolute;
     display: none;
     top: 50%;
@@ -542,10 +629,10 @@ img {
     width: 280px;
     background-color: rgb(255, 255, 255);
     border-radius: 10px;
-    box-shadow: rgba(96, 96, 96, 0.22) 0px 2px 18px 0px;
+    box-shadow: rgba(96, 96, 96, 0.22) 0 2px 18px 0;
 }
 
-.global-dialog-container.show {
+.global-dialogue-container.show {
     display: block;
 }
 
@@ -570,8 +657,12 @@ img {
     letter-spacing: -0.8px;
     color: rgb(0, 117, 235);
     background-color: rgb(255, 255, 255);
-    border-radius: 0px 0px 10px 10px;
+    border-radius: 0 0 10px 10px;
     cursor: pointer;
+}
+
+.gd-confirm:active {
+    background-color: #f2f2f2;
 }
 
 .global-selection-container {
@@ -584,7 +675,7 @@ img {
     width: 280px;
     background-color: rgb(255, 255, 255);
     border-radius: 10px;
-    box-shadow: rgba(96, 96, 96, 0.22) 0px 2px 18px 0px;
+    box-shadow: rgba(96, 96, 96, 0.22) 0 2px 18px 0;
     overflow: hidden;
 }
 
@@ -627,7 +718,7 @@ img {
     transform: translate(-50%, -50%);
     background-color: rgb(255, 255, 255);
     border-radius: 10px;
-    box-shadow: rgba(96, 96, 96, 0.22) 0px 2px 18px 0px;
+    box-shadow: rgba(96, 96, 96, 0.22) 0 2px 18px 0;
     padding: 40px 30px;
 }
 
@@ -638,7 +729,6 @@ img {
 .mri-title {
     font-weight: bold;
     color: rgb(38, 40, 43);
-    margin-bottom: 10px;
     margin-bottom: 14px;
 }
 
@@ -691,7 +781,7 @@ img {
     transform: translate(-50%, -50%);
     background-color: rgb(255, 255, 255);
     border-radius: 10px;
-    box-shadow: rgba(96, 96, 96, 0.22) 0px 2px 18px 0px;
+    box-shadow: rgba(96, 96, 96, 0.22) 0 2px 18px 0;
     padding: 40px 30px;
 }
 
@@ -707,17 +797,17 @@ img {
 }
 
 .mrf-star {
-    width: 25px; 
+    width: 25px;
     height: 25px;
     margin-right: 4px;
-    display: inline-block; 
-    background: url(imgs/blank-star.png) no-repeat; 
-    background-size: 100%; 
-    box-sizing: border-box; 
+    display: inline-block;
+    background: url(../../imgs/blank-star.png) no-repeat;
+    background-size: 100%;
+    box-sizing: border-box;
 }
 
 .mrf-star.on {
-    background: url(imgs/star.png) no-repeat;
+    background: url(../../imgs/star.png) no-repeat;
     background-size: 100%;
 }
 
