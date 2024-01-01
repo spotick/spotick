@@ -9,20 +9,24 @@ const globalSelectionConfirm = globalSelection.querySelector('.gs-confirm');
 
 const modalReservation = document.querySelector('.modal-reservation-info');
 const modalReviewForm = document.querySelector('.modal-review-form-container');
-const modalPhone = document.querySelector('.modal-phone-container');
+
+const profileModal = document.getElementById('profileModal');
+const nicknameModal = document.getElementById('nicknameModal');
+const phoneModal = document.getElementById('phoneModal');
 
 const modalPlace = document.querySelector('.modal-place');
 const modalInquiry = document.querySelector('.modal-inquiry');
 
 modalBg.addEventListener("click", (e) => {
-    if(e.target === modalBg){
+    if (e.target === modalBg) {
         modalBg.classList.remove('show');
-        globalDialogue?.classList.remove('show');
-        globalSelection?.classList.remove('show');
-        modalReservation?.classList.remove('show');
-        modalReviewForm?.classList.remove('show');
+
+        const childElements = modalBg.children;
+        for (const child of childElements) {
+            child.classList.remove('show');
+        }
     }
-})
+});
 
 // 모달타입을 전달하여 특정 모달창 on
 function openModal(modalType) {
@@ -45,7 +49,7 @@ function showGlobalDialogue(dialogueString) {
     openModal(globalDialogue);
 }
 
-function showGlobalSelction(dialogueString, callback) {
+function showGlobalSelection(dialogueString, callback) {
     globalSelectionQuestion.innerHTML = dialogueString;
     globalSelectionConfirm.onclick = callback;
     openModal(globalSelection);

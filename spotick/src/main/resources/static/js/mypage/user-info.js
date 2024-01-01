@@ -1,5 +1,39 @@
 // 개인정보 수정 =========================================================
 
+// 프로필 사진 수정
+function checkFileSize(inputElement) {
+    const file = inputElement.files[0];
+
+    // 파일 크기를 확인하고 1MB를 초과하는 경우
+    if (file && file.size > 1048576) {
+        showGlobalDialogue("파일 크기가 1MB를 초과합니다.<br>더 작은 파일을 선택해주세요.")
+        inputElement.value = '';
+        return;
+    }
+
+    performUpload(file);
+}
+
+function performUpload(file) {
+    // todo = 서버측으로 파일 post
+    console.log('업로드할 파일:', file);
+}
+
+// 닉네임 수정
+const nicknameChangeButton = document.getElementById('nicknameChangeButton');
+const nicknameInput = document.getElementById('newNickname');
+
+function openNicknameModal(nicknameModal) {
+    nicknameInput.value = "";
+    nicknameChangeButton.setAttribute("disabled", "disabled");
+    openModal(nicknameModal);
+}
+
+function checkInputLength() {
+    nicknameChangeButton.disabled = nicknameInput.value.length < 2;
+}
+
+
 // 전화번호 수정
 const newPhoneNumCon = document.getElementById('newPhoneNumCon');
 const newPhoneInput = document.getElementById('newPhone');
@@ -8,7 +42,7 @@ const newPhoneAuthBtn = document.getElementById('newPhoneAuthBtn');
 const authNumInputCon = document.getElementById('authNumInputCon');
 const authNumInput = document.getElementById('authNumInput');
 const modalAlertText = document.querySelector('.modal-alert-text');
-const confirmBtn = document.querySelector('.modal-confirm-btn');
+const authConfirmBtn = document.getElementById('authConfirmButton');
 
 function openPhoneModal(modalPhone) {
     newPhoneInput.value = "";
@@ -17,7 +51,7 @@ function openPhoneModal(modalPhone) {
     authNumInputCon.classList.add('disable');
     authNumInput.value = "";
     modalAlertText.innerHTML = "";
-    confirmBtn.removeAttribute("disabled");
+    authConfirmBtn.setAttribute("disabled", "disabled");
     stopTimer();
     openModal(modalPhone)
 }
@@ -59,9 +93,9 @@ authNumInput.addEventListener("input", () => {
     let authNumValue = authNumInput.value;
 
     if (authNumValue.length === 6){
-        confirmBtn.removeAttribute('disabled');
+        authConfirmBtn.removeAttribute('disabled');
     } else {
-        confirmBtn.setAttribute('disabled', "true");
+        authConfirmBtn.setAttribute('disabled', "true");
     }
 })
 
@@ -109,7 +143,7 @@ function stopTimer() {
 
 function handleTimerExpiration() {
     modalAlertText.innerHTML = "입력시간이 초과되었습니다. 다시 시도해주세요."
-    confirmBtn.classList.add('disable')
+    authConfirmBtn.classList.add('disable')
     stopTimer();
     newPhoneNumCon.classList.remove('disable');
     newPhoneAuthBtn.classList.remove('disable');
@@ -143,5 +177,6 @@ function confirmChangingPassword(){
         return;
     }
 
+//     todo : 모든 조건식 일치시 비밀번호 업데이트
 
 }
