@@ -3,7 +3,7 @@ const placeManageService = (function () {
 
     function showGSForStopPlace(placeId) {
         dialogueString = "장소 대여를 중단하시겠습니까?<br>(대여 중지 시, 이미 들어온 대여 요청은 모두 취소 됩니다.)"
-        showGlobalSelction(dialogueString, () => stopPlace(placeId));
+        showGlobalSelection(dialogueString, () => stopPlace(placeId));
     }
 
     // todo = 예약을 더이상 받지 않고 등록된 장소에서도 일시적으로 내려가지도록 장소 status 변경처리 요청 필요
@@ -14,7 +14,7 @@ const placeManageService = (function () {
 
     function showGsForRemovePlace(placeId) {
         dialogueString = "장소를 삭제할 시<br>다시 되돌릴 수 없습니다!<br>등록한 장소를 삭제하시겠습니까?"
-        showGlobalSelction(dialogueString, () => removePlace(placeId))
+        showGlobalSelection(dialogueString, () => removePlace(placeId))
     }
 
     function removePlace(placeId) {
@@ -23,7 +23,7 @@ const placeManageService = (function () {
 
     function showGsForResumePlace(placeId) {
         dialogueString = "장소 대여를 재개하시겠습니까?"
-        showGlobalSelction(dialogueString, () => resumePlace(placeId))
+        showGlobalSelection(dialogueString, () => resumePlace(placeId))
     }
 
     function resumePlace(placeId) {

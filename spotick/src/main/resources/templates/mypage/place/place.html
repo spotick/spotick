@@ -13,217 +13,220 @@
 </head>
 
 <body>
-<main id="my-page-main">
-    <div class="modal-bg">
-        <div class="global-dialogue-container">
-            <p class="gd-content"></p>
-            <div class="gd-btn" onclick="closeModal()">확인</div>
-        </div>
-        <div class="global-selection-container">
-            <p class="gs-question"></p>
-            <div style="display: flex;">
-                <div class="gs-select-btn" onclick="closeGlobalSelection()">취소</div>
-                <div class="gs-select-btn gs-confirm" style="color: rgb(0, 117, 235);">확인</div>
-            </div>
-        </div>
-        <div class="modal-place" style="height: 80%; overflow-y: auto">
-            <form action="" class="register-form" enctype="multipart/form-data" method="post">
-                <div class="guide-title-box">
-                    <p>장소 정보 수정</p>
-                </div>
-
-                <div class="notification-box">
-                    <span>장소 정보 수정 시 관리자의 승인이후 변경됩니다.</span>
-                </div>
-
-                <div class="input-wrap">
-                    <div class="input-guide flex">
-                        <p class="input-title">장소 이름</p>
-                        <img alt="필수입력" src="//s3.hourplace.co.kr/web/images/icon/invalid.svg">
-                        <p class="invalid-msg"></p>
-                    </div>
-                    <div class="input-box">
-                        <input id="placeName" name="placeName" placeholder="장소를 대표하는 이름을 입력해 주세요" required type="text">
-                    </div>
-                </div>
-
-                <div class="input-wrap">
-                    <div class="input-guide flex">
-                        <p class="input-title">장소 소제목</p>
-                        <img alt="필수입력" src="//s3.hourplace.co.kr/web/images/icon/invalid.svg">
-                        <p class="invalid-msg"></p>
-                    </div>
-                    <div class="input-box">
-                        <input id="placeSubTitle" name="placeSubTitle" placeholder="장소를 짧게 나타내는 소제목을 입력해주세요" required
-                               type="text">
-                    </div>
-                </div>
-
-
-                <div class="map-box">
-                    <div class="input-guide flex">
-                        <p class="input-title">위치 검색</p>
-                        <p class="guide-msg">장소를 검색하신 후 클릭하여 핀을 찍어주세요</p>
-                    </div>
-                    <div class="search-wrap">
-                        <div class="input-box search-box">
-                            <input id="search" placeholder="장소를 검색해주세요" required type="text">
-                        </div>
-
-                        <div class="flex-align-center">
-                            <button class="search-btn" type="button">
-                                <i class="fa-solid fa-magnifying-glass" style="color: #343434;"></i>
-                            </button>
-                        </div>
-                    </div>
-                    <div id="map"></div>
-                    <input id="placeLat" name="placeLat" type="hidden">
-                    <input id="placeLng" name="placeLng" type="hidden">
-                </div>
-
-                <div class="input-wrap">
-                    <div class="input-guide flex">
-                        <p class="input-title">장소 주소</p>
-                        <img alt="필수입력" src="//s3.hourplace.co.kr/web/images/icon/invalid.svg">
-                        <p class="invalid-msg"></p>
-                    </div>
-                    <div class="input-box">
-                        <input id="placeAddress" name="placeAddress" placeholder="장소 주소를 입력해 주세요" required type="text">
-                    </div>
-                    <div class="input-box">
-                        <input id="placeAddressDetail" name="placeAddressDetail" placeholder="장소의 상세 주소를 입력해 주세요"
-                               required type="text">
-                    </div>
-                </div>
-
-                <div class="img-wrap">
-                    <input accept="image/*" id="placeFile" multiple name="placeFile" type="file">
-                    <label class="file-label flex-align-center" for="placeFile">
-                        <i class="fa-regular fa-image"></i>
-                        <p>장소 사진을 넣어주세요</p>
-                    </label>
-                    <div class="file-container none">
-                        <ul class="file-wrap">
-                        </ul>
-
-                        <div class="img-button-box">
-                            <button class="prev" type="button">
-                                <i class="fa-solid fa-circle-chevron-left"></i>
-                            </button>
-                            <div></div>
-                            <button class="next" type="button">
-                                <i class="fa-solid fa-circle-chevron-right"></i>
-                            </button>
-                        </div>
-                    </div>
-
-                </div>
-
-                <div class="input-wrap">
-                    <div class="input-guide flex">
-                        <p class="input-title">장소 설명</p>
-                        <img alt="필수입력" src="//s3.hourplace.co.kr/web/images/icon/invalid.svg">
-                        <p class="invalid-msg"></p>
-                    </div>
-                    <label class="input-box textarea-box" for="placeInfo">
-                    <textarea id="placeInfo" name="placeInfo"
-                              placeholder="장소에 대해서 자세하게 설명해주세요" required></textarea>
-                    </label>
-                </div>
-
-                <div class="input-wrap">
-                    <div class="input-guide flex">
-                        <p class="input-title">장소 이용규칙</p>
-                        <img alt="필수입력" src="//s3.hourplace.co.kr/web/images/icon/invalid.svg">
-                        <p class="invalid-msg"></p>
-                    </div>
-                    <label class="input-box textarea-box" for="placeRule">
-                    <textarea id="placeRule" name="placeInfo"
-                              placeholder="장소 이용규칙에 대해서 적어주세요" required></textarea>
-                    </label>
-                </div>
-
-                <div class="price-people-container">
-                    <div class="input-wrap hour-price-wrap">
-                        <div class="input-guide flex">
-                            <p class="input-title price-title">시간당 대여 금액</p>
-                            <img alt="필수입력" src="//s3.hourplace.co.kr/web/images/icon/invalid.svg">
-                            <p class="invalid-msg"></p>
-                        </div>
-                        <div class="input-box">
-                            <input id="placeDefaultPrice" min="0" name="placeDefaultPrice" placeholder="금액을 입력해주세요"
-                                   required
-                                   type="number">
-                            <p class="unit">원</p>
-                        </div>
-                    </div>
-                    <div class="input-wrap hour-price-wrap">
-                        <div class="input-guide flex">
-                            <p class="input-title">기본인원</p>
-                            <img alt="필수입력" src="//s3.hourplace.co.kr/web/images/icon/invalid.svg">
-                            <p class="guide-msg">게스트가 예약할 때 기본 인원을 초과하면 할증이 붙어요</p>
-                            <p class="invalid-msg"></p>
-                        </div>
-                        <div class="input-box">
-                            <input id="placeDefaultPeople" min="1" name="placeDefaultPeople" placeholder="기본 인원을 입력해주세요"
-                                   required
-                                   type="number">
-                            <p class="unit">명</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="guide-title-box">
-                    <p>호스트 정보</p>
-                </div>
-
-                <div class="price-people-container">
-                    <div class="input-wrap">
-                        <div class="input-guide flex">
-                            <p class="input-title">예금주</p>
-                            <img alt="필수입력" src="//s3.hourplace.co.kr/web/images/icon/invalid.svg">
-                            <p class="invalid-msg"></p>
-                        </div>
-                        <div class="input-box">
-                            <input id="accountHolder" name="accountHolder" placeholder="예금주를 입력해주세요"
-                                   required
-                                   type="text">
-                        </div>
-                    </div>
-                    <div class="input-wrap">
-                        <div class="input-guide flex">
-                            <p class="input-title">은행명</p>
-                            <img alt="필수입력" src="//s3.hourplace.co.kr/web/images/icon/invalid.svg">
-                            <p class="invalid-msg"></p>
-                        </div>
-                        <div class="input-box select-box">
-                            <select class="select" id="bankName" name="bankName">
-                                <option value="국민">국민</option>
-                                <option value="우리">우리</option>
-                                <option value="농협">농협</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="input-wrap">
-                    <div class="input-guide flex">
-                        <p class="input-title">계좌번호</p>
-                        <img alt="필수입력" src="//s3.hourplace.co.kr/web/images/icon/invalid.svg">
-                        <p class="invalid-msg"></p>
-                    </div>
-                    <div class="input-box">
-                        <input id="accountNumber" name="accountNumber" placeholder="계좌번호를 입력해주세요" required
-                               type="text">
-                    </div>
-                </div>
-                <div class="flex-center start">
-                    <button class="cancel" type="button">취소</button>
-                    <button class="submit-btn flex-align-center" type="button">신청하기</button>
-                </div>
-            </form>
+<div class="modal-bg">
+    <div class="global-dialogue-container">
+        <p class="gd-content"></p>
+        <div class="gd-btn" onclick="closeModal()">확인</div>
+    </div>
+    <div class="global-selection-container">
+        <p class="gs-question"></p>
+        <div style="display: flex;">
+            <div class="gs-select-btn" onclick="closeGlobalSelection()">취소</div>
+            <div class="gs-select-btn gs-confirm" style="color: rgb(0, 117, 235);">확인</div>
         </div>
     </div>
+    <div class="modal-place" style="height: 80%; overflow-y: auto">
+        <form action="" class="register-form" enctype="multipart/form-data" method="post">
+            <div class="guide-title-box">
+                <p>장소 정보 수정</p>
+            </div>
+
+            <div class="notification-box">
+                <span>장소 정보 수정 시 관리자의 승인이후 변경됩니다.</span>
+            </div>
+
+            <div class="input-wrap">
+                <div class="input-guide flex">
+                    <p class="input-title">장소 이름</p>
+                    <img alt="필수입력" src="//s3.hourplace.co.kr/web/images/icon/invalid.svg">
+                    <p class="invalid-msg"></p>
+                </div>
+                <div class="input-box">
+                    <input id="placeName" name="placeName" placeholder="장소를 대표하는 이름을 입력해 주세요" required type="text">
+                </div>
+            </div>
+
+            <div class="input-wrap">
+                <div class="input-guide flex">
+                    <p class="input-title">장소 소제목</p>
+                    <img alt="필수입력" src="//s3.hourplace.co.kr/web/images/icon/invalid.svg">
+                    <p class="invalid-msg"></p>
+                </div>
+                <div class="input-box">
+                    <input id="placeSubTitle" name="placeSubTitle" placeholder="장소를 짧게 나타내는 소제목을 입력해주세요" required
+                           type="text">
+                </div>
+            </div>
+
+
+            <div class="map-box">
+                <div class="input-guide flex">
+                    <p class="input-title">위치 검색</p>
+                    <p class="guide-msg">장소를 검색하신 후 클릭하여 핀을 찍어주세요</p>
+                </div>
+                <div class="search-wrap">
+                    <div class="input-box search-box">
+                        <input id="search" placeholder="장소를 검색해주세요" required type="text">
+                    </div>
+
+                    <div class="flex-align-center">
+                        <button class="search-btn" type="button">
+                            <i class="fa-solid fa-magnifying-glass" style="color: #343434;"></i>
+                        </button>
+                    </div>
+                </div>
+                <div id="map"></div>
+                <input id="placeLat" name="placeLat" type="hidden">
+                <input id="placeLng" name="placeLng" type="hidden">
+            </div>
+
+            <div class="input-wrap">
+                <div class="input-guide flex">
+                    <p class="input-title">장소 주소</p>
+                    <img alt="필수입력" src="//s3.hourplace.co.kr/web/images/icon/invalid.svg">
+                    <p class="invalid-msg"></p>
+                </div>
+                <div class="input-box">
+                    <input id="placeAddress" name="placeAddress" placeholder="장소 주소를 입력해 주세요" required type="text">
+                </div>
+                <div class="input-box">
+                    <input id="placeAddressDetail" name="placeAddressDetail" placeholder="장소의 상세 주소를 입력해 주세요"
+                           required type="text">
+                </div>
+            </div>
+
+            <div class="img-wrap">
+                <input accept="image/*" id="placeFile" multiple name="placeFile" type="file">
+                <label class="file-label flex-align-center" for="placeFile">
+                    <i class="fa-regular fa-image"></i>
+                    <p>장소 사진을 넣어주세요</p>
+                </label>
+                <div class="file-container none">
+                    <ul class="file-wrap">
+                    </ul>
+
+                    <div class="img-button-box">
+                        <button class="prev" type="button">
+                            <i class="fa-solid fa-circle-chevron-left"></i>
+                        </button>
+                        <div></div>
+                        <button class="next" type="button">
+                            <i class="fa-solid fa-circle-chevron-right"></i>
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="input-wrap">
+                <div class="input-guide flex">
+                    <p class="input-title">장소 설명</p>
+                    <img alt="필수입력" src="//s3.hourplace.co.kr/web/images/icon/invalid.svg">
+                    <p class="invalid-msg"></p>
+                </div>
+                <label class="input-box textarea-box" for="placeInfo">
+                    <textarea id="placeInfo" name="placeInfo"
+                              placeholder="장소에 대해서 자세하게 설명해주세요" required></textarea>
+                </label>
+            </div>
+
+            <div class="input-wrap">
+                <div class="input-guide flex">
+                    <p class="input-title">장소 이용규칙</p>
+                    <img alt="필수입력" src="//s3.hourplace.co.kr/web/images/icon/invalid.svg">
+                    <p class="invalid-msg"></p>
+                </div>
+                <label class="input-box textarea-box" for="placeRule">
+                    <textarea id="placeRule" name="placeInfo"
+                              placeholder="장소 이용규칙에 대해서 적어주세요" required></textarea>
+                </label>
+            </div>
+
+            <div class="price-people-container">
+                <div class="input-wrap hour-price-wrap">
+                    <div class="input-guide flex">
+                        <p class="input-title price-title">시간당 대여 금액</p>
+                        <img alt="필수입력" src="//s3.hourplace.co.kr/web/images/icon/invalid.svg">
+                        <p class="invalid-msg"></p>
+                    </div>
+                    <div class="input-box">
+                        <input id="placeDefaultPrice" min="0" name="placeDefaultPrice" placeholder="금액을 입력해주세요"
+                               required
+                               type="number">
+                        <p class="unit">원</p>
+                    </div>
+                </div>
+                <div class="input-wrap hour-price-wrap">
+                    <div class="input-guide flex">
+                        <p class="input-title">기본인원</p>
+                        <img alt="필수입력" src="//s3.hourplace.co.kr/web/images/icon/invalid.svg">
+                        <p class="guide-msg">게스트가 예약할 때 기본 인원을 초과하면 할증이 붙어요</p>
+                        <p class="invalid-msg"></p>
+                    </div>
+                    <div class="input-box">
+                        <input id="placeDefaultPeople" min="1" name="placeDefaultPeople" placeholder="기본 인원을 입력해주세요"
+                               required
+                               type="number">
+                        <p class="unit">명</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="guide-title-box">
+                <p>호스트 정보</p>
+            </div>
+
+            <div class="price-people-container">
+                <div class="input-wrap">
+                    <div class="input-guide flex">
+                        <p class="input-title">예금주</p>
+                        <img alt="필수입력" src="//s3.hourplace.co.kr/web/images/icon/invalid.svg">
+                        <p class="invalid-msg"></p>
+                    </div>
+                    <div class="input-box">
+                        <input id="accountHolder" name="accountHolder" placeholder="예금주를 입력해주세요"
+                               required
+                               type="text">
+                    </div>
+                </div>
+                <div class="input-wrap">
+                    <div class="input-guide flex">
+                        <p class="input-title">은행명</p>
+                        <img alt="필수입력" src="//s3.hourplace.co.kr/web/images/icon/invalid.svg">
+                        <p class="invalid-msg"></p>
+                    </div>
+                    <div class="input-box select-box">
+                        <select class="select" id="bankName" name="bankName">
+                            <option value="국민">국민</option>
+                            <option value="우리">우리</option>
+                            <option value="농협">농협</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="input-wrap">
+                <div class="input-guide flex">
+                    <p class="input-title">계좌번호</p>
+                    <img alt="필수입력" src="//s3.hourplace.co.kr/web/images/icon/invalid.svg">
+                    <p class="invalid-msg"></p>
+                </div>
+                <div class="input-box">
+                    <input id="accountNumber" name="accountNumber" placeholder="계좌번호를 입력해주세요" required
+                           type="text">
+                </div>
+            </div>
+            <div class="flex-center start">
+                <button class="cancel" type="button">취소</button>
+                <button class="submit-btn flex-align-center" type="button">신청하기</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<header></header>
+
+<main id="my-page-main">
     <div class="mp-left-menu">
         <section>
             <div class="mplm-section-title">계정관리</div>
@@ -241,6 +244,9 @@
                 </li>
                 <li class="mplm-nav-item">
                     <a href="#">예약내역</a>
+                </li>
+                <li class="mplm-nav-item">
+                    <a href="#">문의 내역</a>
                 </li>
                 <li class="mplm-nav-item">
                     <a href="#">후기관리</a>
