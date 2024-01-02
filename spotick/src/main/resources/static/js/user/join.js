@@ -49,9 +49,10 @@ $(".submit-box").on("click", ".on", function () {
 });
 
 function isValidFields(){
-    return
+    return (
     isInputOk() &&
-        requiredCheckOk();
+        requiredCheckOk()
+    );
 }
 
 
@@ -135,7 +136,6 @@ function isValidTelNumber(){
 
 function isInputOk(){
     let $inputArr = $('input');
-
     for (let i = 0; i < $inputArr.length; i++) {
         if (!$inputArr[i].classList.contains("ok")) {
             return false;
