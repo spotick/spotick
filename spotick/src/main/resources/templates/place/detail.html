@@ -55,8 +55,8 @@
                 <div class="flex-between-align">
                     <span class="place-name">포인트, 원서 2호점</span>
                     <button class="place-like-btn" type="button">
-                        <span><i class="fa-regular fa-heart"></i></span>
-                        <span class="none"><i class="fa-solid fa-heart" style="color: red"></i></span>
+                        <span><i class="fa-regular fa-bookmark"></i></span>
+                        <span class="none"><i class="fa-solid fa-bookmark" style="color: #007AFF"></i></span>
                     </button>
                 </div>
                 <div class="place-address-box">
@@ -535,25 +535,26 @@
             <button class="flex-align-center modal-close" type="button">닫기 X</button>
         </div>
 
-        <div class="modal-img-wrap">
+        <div class="modal-img-wrap flex-center">
             <div class="modal-img-box">
                 <!-- 모달 이미지   -->
                 <div class="modal-img-item">
-                    <img src="https://img.shareit.kr/prod/img/2023-12-07/ef66f2a8-d103-499d-8928-8aa1b786fbb0.jpg"
+                    <img class="modal-img" src="https://img.shareit.kr/prod/img/2023-12-07/ef66f2a8-d103-499d-8928-8aa1b786fbb0.jpg"
                          alt="">
                 </div>
                 <div class="modal-img-item">
-                    <img src="https://img.shareit.kr/prod/img/2023-12-07/b80ed218-b885-4f65-8c82-df1249442559.jpg"
+                    <img class="modal-img" src="https://img.shareit.kr/prod/img/2023-12-07/b80ed218-b885-4f65-8c82-df1249442559.jpg"
                          alt="">
                 </div>
                 <div class="modal-img-item">
-                    <img src="https://img.shareit.kr/prod/img/2023-12-07/fc869766-a2d5-4afa-b7a1-0105795afe66.jpg"
+                    <img class="modal-img" src="https://img.shareit.kr/prod/img/2023-12-07/fc869766-a2d5-4afa-b7a1-0105795afe66.jpg"
                          alt="">
                 </div>
                 <div class="modal-img-item">
-                    <img src="https://img.shareit.kr/prod/img/2023-12-07/bdb34031-1ca4-4856-99ee-58dc3f868401.jpg"
+                    <img class="modal-img" src="https://img.shareit.kr/prod/img/2023-12-07/bdb34031-1ca4-4856-99ee-58dc3f868401.jpg"
                          alt="">
                 </div>
+
             </div>
             <button type="button" class="prev">
                 <img src="https://shareit.kr/_next/static/media/round_arrow_left_gray024.707193e8.svg" alt="">
@@ -574,6 +575,13 @@
         </button>
         <p class="small-title">궁금한 내용을 적어주세요</p>
         <p class="sub-title">호스트가 확인 후 답변을 드릴 거예요!</p>
+        <div class="inquiry-content-box flex-between-align">
+            <p class="inquiry-guide">문의 제목</p>
+        </div>
+<!--        <div class="inquiry-title-box ">-->
+<!--        </div>-->
+            <input type="text" id="inquiryTitle" name="inquiryTitle" placeholder="문의 제목을 입력해주세요">
+
         <div class="inquiry-content-box flex-between-align">
             <p class="inquiry-guide">내용</p>
             <p class="letter-count"><span>0</span>/200자</p>
