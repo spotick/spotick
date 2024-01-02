@@ -12,7 +12,7 @@
 </head>
 
 <body>
-<div class="modal-bg">
+<div class="modal-bg show">
     <div class="global-dialogue-container">
         <p class="gd-content"></p>
         <div class="gd-confirm" onclick="closeModal()">확인</div>
@@ -24,7 +24,7 @@
             <div class="gs-select-btn gs-confirm" style="color: rgb(0, 117, 235);">확인</div>
         </div>
     </div>
-    <div class="modal-reservation-info">
+    <div class="modal-reservation-info show">
         <div style="display: flex; margin-bottom: 20px;">
             <div class="mpcr-img-con">
                 <img height="100px"
@@ -112,39 +112,41 @@
 
 <main id="my-page-main">
     <div class="mp-left-menu">
-        <section>
-            <div class="mplm-section-title">계정관리</div>
-            <ul>
-                <li class="mplm-nav-item">
-                    <a href="#">개인정보 수정</a>
-                </li>
-            </ul>
-        </section>
-        <section>
-            <div class="mplm-section-title">My활동</div>
-            <ul>
-                <li class="mplm-nav-item">
-                    <a href="#">북마크</a>
-                </li>
-                <li class="mplm-nav-item active">
-                    <a href="#">예약내역</a>
-                </li>
-                <li class="mplm-nav-item">
-                    <a href="#">문의 내역</a>
-                </li>
-                <li class="mplm-nav-item">
-                    <a href="#">후기관리</a>
-                </li>
-            </ul>
-        </section>
-        <section>
-            <div class="mplm-section-title">장소 관리</div>
-            <ul>
-                <li class="mplm-nav-item">
-                    <a href="#">장소 관리</a>
-                </li>
-            </ul>
-        </section>
+        <div class="mplm-sticky">
+            <section>
+                <div class="mplm-section-title">계정관리</div>
+                <ul>
+                    <li class="mplm-nav-item">
+                        <a href="#">개인정보 수정</a>
+                    </li>
+                </ul>
+            </section>
+            <section>
+                <div class="mplm-section-title">My활동</div>
+                <ul>
+                    <li class="mplm-nav-item">
+                        <a href="#">북마크</a>
+                    </li>
+                    <li class="mplm-nav-item active">
+                        <a href="#">예약내역</a>
+                    </li>
+                    <li class="mplm-nav-item">
+                        <a href="#">문의 내역</a>
+                    </li>
+                    <li class="mplm-nav-item">
+                        <a href="#">후기관리</a>
+                    </li>
+                </ul>
+            </section>
+            <section>
+                <div class="mplm-section-title">장소 관리</div>
+                <ul>
+                    <li class="mplm-nav-item">
+                        <a href="#">장소 관리</a>
+                    </li>
+                </ul>
+            </section>
+        </div>
     </div>
     <div class="mp-content">
         <article>
@@ -164,7 +166,8 @@
                             </div>
                         </div>
                         <div class="mpcr-img-con">
-                            <img height="100px" src="//img.hourplace.co.kr/place/user/47919/2022/05/29/74f9815f-fc9d-4dec-8037-41861f43cae9?s=550x364&amp;t=cover&amp;q=80"
+                            <img height="100px"
+                                 src="//img.hourplace.co.kr/place/user/47919/2022/05/29/74f9815f-fc9d-4dec-8037-41861f43cae9?s=550x364&amp;t=cover&amp;q=80"
                                  style="width: 180px;">
                         </div>
                         <div class="mpcr-card-content" style="padding: 10px 0 0 0">
@@ -194,7 +197,7 @@
                                 <div class="mpccc-status">
                                     <span>결제 대기 중</span>
                                 </div>
-                                <button type="button" class="mpccc-btn" onclick="payItem()">
+                                <button class="mpccc-btn" onclick="payItem()" type="button">
                                     <span>결제 하기</span>
                                 </button>
                             </div>
@@ -231,7 +234,8 @@
                             </div>
                         </div>
                         <div class="mpcr-img-con">
-                            <img height="100px" src="//img.hourplace.co.kr/place/user/47919/2022/05/29/74f9815f-fc9d-4dec-8037-41861f43cae9?s=550x364&amp;t=cover&amp;q=80"
+                            <img height="100px"
+                                 src="//img.hourplace.co.kr/place/user/47919/2022/05/29/74f9815f-fc9d-4dec-8037-41861f43cae9?s=550x364&amp;t=cover&amp;q=80"
                                  style="width: 180px;">
                         </div>
                         <div class="mpcr-card-content" style="padding: 10px 0 0 0">

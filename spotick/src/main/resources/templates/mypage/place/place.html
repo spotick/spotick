@@ -7,8 +7,8 @@
     <title>Document</title>
     <link href="../../../static/css/global-css/root.css" rel="stylesheet">
     <link href="../../../static/css/mypage/mypage.css" rel="stylesheet">
-    <link rel="stylesheet" href="../../../static/css/mypage/mypage-modal.css">
-    <link rel="stylesheet" href="../../../static/css/place/register.css"/>
+    <link href="../../../static/css/mypage/mypage-modal.css" rel="stylesheet">
+    <link href="../../../static/css/place/register.css" rel="stylesheet"/>
     <script crossorigin="anonymous" src="https://kit.fontawesome.com/2364e2b536.js"></script>
 </head>
 
@@ -228,39 +228,41 @@
 
 <main id="my-page-main">
     <div class="mp-left-menu">
-        <section>
-            <div class="mplm-section-title">계정관리</div>
-            <ul>
-                <li class="mplm-nav-item">
-                    <a href="#">개인정보 수정</a>
-                </li>
-            </ul>
-        </section>
-        <section>
-            <div class="mplm-section-title">My활동</div>
-            <ul>
-                <li class="mplm-nav-item">
-                    <a href="#">북마크</a>
-                </li>
-                <li class="mplm-nav-item">
-                    <a href="#">예약내역</a>
-                </li>
-                <li class="mplm-nav-item">
-                    <a href="#">문의 내역</a>
-                </li>
-                <li class="mplm-nav-item">
-                    <a href="#">후기관리</a>
-                </li>
-            </ul>
-        </section>
-        <section>
-            <div class="mplm-section-title">장소 관리</div>
-            <ul>
-                <li class="mplm-nav-item active">
-                    <a href="#">장소 관리</a>
-                </li>
-            </ul>
-        </section>
+        <div class="mplm-sticky">
+            <section>
+                <div class="mplm-section-title">계정관리</div>
+                <ul>
+                    <li class="mplm-nav-item">
+                        <a href="#">개인정보 수정</a>
+                    </li>
+                </ul>
+            </section>
+            <section>
+                <div class="mplm-section-title">My활동</div>
+                <ul>
+                    <li class="mplm-nav-item">
+                        <a href="#">북마크</a>
+                    </li>
+                    <li class="mplm-nav-item">
+                        <a href="#">예약내역</a>
+                    </li>
+                    <li class="mplm-nav-item">
+                        <a href="#">문의 내역</a>
+                    </li>
+                    <li class="mplm-nav-item">
+                        <a href="#">후기관리</a>
+                    </li>
+                </ul>
+            </section>
+            <section>
+                <div class="mplm-section-title">장소 관리</div>
+                <ul>
+                    <li class="mplm-nav-item active">
+                        <a href="#">장소 관리</a>
+                    </li>
+                </ul>
+            </section>
+        </div>
     </div>
     <div class="mp-content">
         <article>
@@ -328,7 +330,8 @@
                                     <div class="action-item" onclick="placeManageService.showGsForResumePlace(5)">
                                         <span>장소 대여 재개</span>
                                     </div>
-                                    <div class="action-item" onclick="placeManageService.editPlace('장소 1 테스트', '테스트 정보', 36.35181504357576, 127.37817628873198, '대전광역시 서구 대덕대로 211', '312', '테스트', '테스트1234', 10000, 4, '조남호', '우리', '740101-45-123419')">
+                                    <div class="action-item"
+                                         onclick="placeManageService.editPlace('장소 1 테스트', '테스트 정보', 36.35181504357576, 127.37817628873198, '대전광역시 서구 대덕대로 211', '312', '테스트', '테스트1234', 10000, 4, '조남호', '우리', '740101-45-123419')">
                                         <span>장소 정보 수정</span>
                                     </div>
                                     <div class="action-item" onclick="placeManageService.showGsForRemovePlace(5)">
@@ -399,7 +402,8 @@
                                     <div class="action-item" onclick="placeManageService.showGsForResumePlace(5)">
                                         <span>장소 대여 재개</span>
                                     </div>
-                                    <div class="action-item" onclick="placeManageService.editPlace('장소 1 테스트', '테스트 정보', 36.34783681541046, 127.38439277024877, '대전광역시 서구 대덕대로 211', '312', '테스트2', '이거는 다르다', 10000, 4, '조남호', '국민', '740101-45-123419')">
+                                    <div class="action-item"
+                                         onclick="placeManageService.editPlace('장소 1 테스트', '테스트 정보', 36.34783681541046, 127.38439277024877, '대전광역시 서구 대덕대로 211', '312', '테스트2', '이거는 다르다', 10000, 4, '조남호', '국민', '740101-45-123419')">
                                         <span>장소 정보 수정</span>
                                     </div>
                                     <div class="action-item" onclick="placeManageService.showGsForRemovePlace(5)">
@@ -417,8 +421,8 @@
 </body>
 <script src="https://code.jquery.com/jquery-3.6.4.js"></script>
 <script src="../../../static/js/mypage/mypage.js"></script>
-<script type="text/javascript"
-        src="//dapi.kakao.com/v2/maps/sdk.js?appkey=3dc12d7c2624483dc7c019a0a91b727f&libraries=services"></script>
+<script src="//dapi.kakao.com/v2/maps/sdk.js?appkey=3dc12d7c2624483dc7c019a0a91b727f&libraries=services"
+        type="text/javascript"></script>
 <script src="../../../static/js/place/register/register.js"></script>
 <script src="../../../static/js/mypage/kakaoMapApi.js"></script>
 <script src="../../../static/js/mypage/place.js"></script>

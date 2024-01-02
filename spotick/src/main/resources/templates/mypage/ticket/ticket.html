@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>Document</title>
+    <link href="../../../static/css/global-css/root.css" rel="stylesheet">
+    <link href="../../../static/css/mypage/mypage.css" rel="stylesheet">
+    <script crossorigin="anonymous" src="https://kit.fontawesome.com/2364e2b536.js"></script>
+</head>
+
+<body>
+<div class="modal-bg">
+    <div class="global-dialogue-container">
+        <p class="gd-content"></p>
+        <div class="gd-btn" onclick="closeModal()">확인</div>
+    </div>
+    <div class="global-selection-container">
+        <p class="gs-question"></p>
+        <div style="display: flex;">
+            <div class="gs-select-btn" onclick="closeGlobalSelection()">취소</div>
+            <div class="gs-select-btn gs-confirm" style="color: rgb(0, 117, 235);">확인</div>
+        </div>
+    </div>
+</div>
+
+<header></header>
+
+<main id="my-page-main">
+    <div class="mp-left-menu">
+        <div class="mplm-sticky">
+            <section>
+                <div class="mplm-section-title">계정관리</div>
+                <ul>
+                    <li class="mplm-nav-item">
+                        <a href="#">개인정보 수정</a>
+                    </li>
+                </ul>
+            </section>
+            <section>
+                <div class="mplm-section-title">My활동</div>
+                <ul>
+                    <li class="mplm-nav-item">
+                        <a href="#">북마크</a>
+                    </li>
+                    <li class="mplm-nav-item">
+                        <a href="#">예약내역</a>
+                    </li>
+                    <li class="mplm-nav-item">
+                        <a href="#">문의 내역</a>
+                    </li>
+                    <li class="mplm-nav-item">
+                        <a href="#">후기관리</a>
+                    </li>
+                </ul>
+            </section>
+            <section>
+                <div class="mplm-section-title">티켓팅 관리</div>
+                <ul>
+                    <li class="mplm-nav-item active">
+                        <a href="#">티켓팅 관리</a>
+                    </li>
+                </ul>
+            </section>
+            <section>
+                <div class="mplm-section-title">장소 관리</div>
+                <ul>
+                    <li class="mplm-nav-item">
+                        <a href="#">장소 관리</a>
+                    </li>
+                </ul>
+            </section>
+        </div>
+    </div>
+    <div class="mp-content">
+        <article>
+            <div class="mpc-title not-with-line">
+                <h2>티켓팅 관리</h2>
+            </div>
+            <nav class="mpc-top-nav">
+                <button class="mpc-top-nav-button active" type="button">
+                    전체(<span>0</span>)
+                </button>
+                <button class="mpc-top-nav-button" type="button">
+                    예정된 티켓팅(<span>0</span>)
+                </button>
+                <button class="mpc-top-nav-button" type="button">
+                    종료된 티켓팅(<span>0</span>)
+                </button>
+            </nav>
+            <div class="mpct-content-wrap">
+                <div class="mpc-ticket-list">
+                    <article>
+                        <a class="mpc-ticket-img-con" href="#">
+                            <img alt="테스트"
+                                 src="//t.011st.com/imgUpload/Down/Perf/202310/e6b237ab-f274-4d50-aa75-75e881859c68.jpg">
+                        </a>
+                        <div class="mpct-card-content">
+                            <div class="mpccc-row">
+                                <p class="mpccc-ticket-title general-ellipsis-1">
+                                    <a href="#">제목 테스트 제목 테스트 제목 테스트 제목 테스트 제목 테스트</a>
+                                </p>
+                            </div>
+                            <div class="mpccc-row">
+                                <a class="mpccc-title-font general-ellipsis-1" href="#">
+                                    서울특별시 서초구 서초대로 240 111111111111111111111
+                                </a>
+                            </div>
+                            <div class="mpccc-row" style="margin-top: 10px;">
+                                <p class="mpccc-price">40,000원</p>
+                            </div>
+                            <div class="mpccc-row" style="margin-top: 10px;">
+                                <p class="mpccc-general-font">2024년 1월 24일 ~ 2024년 1월 26일</p>
+                            </div>
+                        </div>
+                    </article>
+                    <article>
+                        <a class="mpc-ticket-img-con" href="#">
+                            <img alt="테스트"
+                                 src="//t.011st.com/imgUpload/Down/Perf/202310/e6b237ab-f274-4d50-aa75-75e881859c68.jpg">
+                        </a>
+                        <div class="mpct-card-content">
+                            <div class="mpccc-row">
+                                <p class="mpccc-ticket-title general-ellipsis-1">
+                                    <a href="#">제목 테스트 제목 테스트 제목 테스트 제목 테스트 제목 테스트</a>
+                                </p>
+                            </div>
+                            <div class="mpccc-row">
+                                <a class="mpccc-title-font general-ellipsis-1" href="#">
+                                    서울특별시 서초구 서초대로 240 111111111111111111111
+                                </a>
+                            </div>
+                            <div class="mpccc-row" style="margin-top: 10px;">
+                                <p class="mpccc-price">40,000원</p>
+                            </div>
+                            <div class="mpccc-row" style="margin-top: 10px;">
+                                <p class="mpccc-general-font">2024년 1월 24일 ~ 2024년 1월 26일</p>
+                            </div>
+                        </div>
+                    </article>
+                    <article>
+                        <a class="mpc-ticket-img-con" href="#">
+                            <img alt="테스트"
+                                 src="//t.011st.com/imgUpload/Down/Perf/202310/e6b237ab-f274-4d50-aa75-75e881859c68.jpg">
+                        </a>
+                        <div class="mpct-card-content">
+                            <div class="mpccc-row">
+                                <p class="mpccc-ticket-title general-ellipsis-1">
+                                    <a href="#">제목 테스트 제목 테스트 제목 테스트 제목 테스트 제목 테스트</a>
+                                </p>
+                            </div>
+                            <div class="mpccc-row">
+                                <a class="mpccc-title-font general-ellipsis-1" href="#">
+                                    서울특별시 서초구 서초대로 240 111111111111111111111
+                                </a>
+                            </div>
+                            <div class="mpccc-row" style="margin-top: 10px;">
+                                <p class="mpccc-price">40,000원</p>
+                            </div>
+                            <div class="mpccc-row" style="margin-top: 10px;">
+                                <p class="mpccc-general-font">2024년 1월 24일 ~ 2024년 1월 26일</p>
+                            </div>
+                        </div>
+                    </article>
+                    <article>
+                        <a class="mpc-ticket-img-con" href="#">
+                            <img alt="테스트"
+                                 src="//t.011st.com/imgUpload/Down/Perf/202310/e6b237ab-f274-4d50-aa75-75e881859c68.jpg">
+                        </a>
+                        <div class="mpct-card-content">
+                            <div class="mpccc-row">
+                                <p class="mpccc-ticket-title general-ellipsis-1">
+                                    <a href="#">제목 테스트 제목 테스트 제목 테스트 제목 테스트 제목 테스트</a>
+                                </p>
+                            </div>
+                            <div class="mpccc-row">
+                                <a class="mpccc-title-font general-ellipsis-1" href="#">
+                                    서울특별시 서초구 서초대로 240 111111111111111111111
+                                </a>
+                            </div>
+                            <div class="mpccc-row" style="margin-top: 10px;">
+                                <p class="mpccc-price">40,000원</p>
+                            </div>
+                            <div class="mpccc-row" style="margin-top: 10px;">
+                                <p class="mpccc-general-font">2024년 1월 24일 ~ 2024년 1월 26일</p>
+                            </div>
+                        </div>
+                    </article>
+                    <article>
+                        <a class="mpc-ticket-img-con" href="#">
+                            <img alt="테스트"
+                                 src="//t.011st.com/imgUpload/Down/Perf/202310/e6b237ab-f274-4d50-aa75-75e881859c68.jpg">
+                        </a>
+                        <div class="mpct-card-content">
+                            <div class="mpccc-row">
+                                <p class="mpccc-ticket-title general-ellipsis-1">
+                                    <a href="#">제목 테스트 제목 테스트 제목 테스트 제목 테스트 제목 테스트</a>
+                                </p>
+                            </div>
+                            <div class="mpccc-row">
+                                <a class="mpccc-title-font general-ellipsis-1" href="#">
+                                    서울특별시 서초구 서초대로 240 111111111111111111111
+                                </a>
+                            </div>
+                            <div class="mpccc-row" style="margin-top: 10px;">
+                                <p class="mpccc-price">40,000원</p>
+                            </div>
+                            <div class="mpccc-row" style="margin-top: 10px;">
+                                <p class="mpccc-general-font">2024년 1월 24일 ~ 2024년 1월 26일</p>
+                            </div>
+                        </div>
+                    </article>
+                    <article>
+                        <a class="mpc-ticket-img-con" href="#">
+                            <img alt="테스트"
+                                 src="//t.011st.com/imgUpload/Down/Perf/202310/e6b237ab-f274-4d50-aa75-75e881859c68.jpg">
+                        </a>
+                        <div class="mpct-card-content">
+                            <div class="mpccc-row">
+                                <p class="mpccc-ticket-title general-ellipsis-1">
+                                    <a href="#">제목 테스트 제목 테스트 제목 테스트 제목 테스트 제목 테스트</a>
+                                </p>
+                            </div>
+                            <div class="mpccc-row">
+                                <a class="mpccc-title-font general-ellipsis-1" href="#">
+                                    서울특별시 서초구 서초대로 240 111111111111111111111
+                                </a>
+                            </div>
+                            <div class="mpccc-row" style="margin-top: 10px;">
+                                <p class="mpccc-price">40,000원</p>
+                            </div>
+                            <div class="mpccc-row" style="margin-top: 10px;">
+                                <p class="mpccc-general-font">2024년 1월 24일 ~ 2024년 1월 26일</p>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+                <div class="mpc-ticket-detail-con">
+                    <div class="mpctd-none" style="display: none">선택된 티켓이 없습니다.<br>좌측에서 선택해주세요.</div>
+                    <div class="mpctd-title">
+                        <p>제목 테스트 1</p>
+                    </div>
+                    <div class="mpctd-subtitle">
+                        <p>서브 제목 1</p>
+                    </div>
+                    <p>행사 장소 주소</p>
+                    <label class="mpctd-input-con" style="margin-bottom: 8px">
+                        <input readonly type="text" value="서울특별시 서초구 서초대로 240">
+                    </label>
+                    <label class="mpctd-input-con" style="margin-bottom: 40px">
+                        <input readonly type="text" value="111">
+                    </label>
+                    <p>티켓 상태</p>
+                    <div class="mpctd-ticket-container" id="ticket-regular">
+                        <table class="ticket-table">
+                            <thead>
+                            <tr>
+                                <td>등급</td>
+                                <td>가격</td>
+                                <td>판매수</td>
+                                <td>총 좌석수</td>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td>일반석</td>
+                                <td>50,000</td>
+                                <td>10</td>
+                                <td>100</td>
+                            </tr>
+                            <tr>
+                                <td>VIP</td>
+                                <td>70,000</td>
+                                <td>2</td>
+                                <td>20</td>
+                            </tr>
+                            <tr>
+                                <td>스탠딩</td>
+                                <td>40,000</td>
+                                <td>2</td>
+                                <td>30</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </article>
+    </div>
+</main>
+</body>
+
+</html>

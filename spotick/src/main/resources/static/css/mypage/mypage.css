@@ -18,8 +18,14 @@
 
 .mp-left-menu {
     width: 200px;
+    height: auto;
     padding-top: 136px;
     padding-left: 28px;
+}
+
+.mplm-sticky {
+    position: sticky;
+    top: 136px;
 }
 
 .mp-left-menu section {
@@ -969,4 +975,127 @@
     word-break: break-all;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 3;
+}
+
+.mpct-content-wrap {
+    display: flex;
+    justify-content: space-between;
+}
+
+.mpc-ticket-list {
+    width: 45%;
+}
+
+.mpc-ticket-list article {
+    display: flex;
+    border-radius: 8px;
+    border: 1px solid #b4b4b4;
+    padding: 8px 4px;
+    margin-bottom: 20px;
+    box-shadow: rgba(0, 0, 0, 0.1) 2px 2px 8px 0;
+}
+
+.mpc-ticket-img-con {
+    min-width: 135px;
+    width: 135px;
+    height: 185px;
+    overflow: hidden;
+    margin-right: 20px;
+}
+
+.mpc-ticket-img-con img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.mpct-card-content {
+    display: flex;
+    flex-direction: column;
+    padding: 10px 0 40px;
+}
+
+.mpccc-ticket-title {
+    margin-top: 2px;
+    font-weight: bold;
+    font-size: 16px;
+    line-height: 20px;
+    color: rgb(38, 40, 43);
+}
+
+.mpccc-general-font {
+    font-size: 14px;
+    color: rgb(87, 87, 87);
+}
+
+.mpc-ticket-detail-con {
+    display: flex;
+    position: sticky;
+    flex-direction: column;
+    width: 50%;
+    height: 100%;
+    top: 180px;
+    border-radius: 8px;
+    border: 1px solid #b4b4b4;
+    padding: 20px 18px;
+    margin-bottom: 20px;
+    box-shadow: rgba(0, 0, 0, 0.1) 2px 2px 8px 0;
+}
+
+.mpctd-none {
+    margin: auto;
+    color: rgb(87, 87, 87);
+}
+
+.mpctd-title {
+    font-size: 20px;
+    line-height: 25px;
+    height: 50px;
+    margin-bottom: 10px;
+}
+
+.mpctd-subtitle {
+    font-size: 16px;
+    line-height: 20px;
+    margin-bottom: 40px;
+}
+
+.mpctd-input-con {
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    border: 1px solid #dfe2e7;
+    background-color: #f7f8f9;
+    border-radius: 4px;
+    padding: 4px 8px;
+}
+
+.mpctd-input-con input {
+    text-align: right;
+    width: 100%;
+    cursor: default;
+}
+
+.mpctd-ticket-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 4px;
+    border: 1px solid #dfe2e7;
+    background-color: #f7f8f9;
+    padding: 20px 16px;
+}
+
+.ticket-table {
+    text-align: center;
+    width: 100%;
+}
+
+.ticket-table thead tr td{
+    border-bottom: 1px solid #b4b4b4;
+    padding-bottom: 10px;
+}
+
+.ticket-table tbody tr td{
+    padding: 10px 0;
 }
