@@ -716,6 +716,7 @@ input[type=checkbox] {
   -webkit-box-align: center;
   align-items: center;
   gap: 4px;
+  margin-top: 6px;
 }
 
 .ItemPrice{

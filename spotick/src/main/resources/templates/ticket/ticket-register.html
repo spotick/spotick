@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <title>장소 등록</title>
     <link rel="stylesheet" href="../../static/css/global-css/root.css">
-    <link rel="stylesheet" href="../../static/css/promotion/ticket-register.css"/>
+    <link rel="stylesheet" href="../../static/css/global-css/datepicker.css">
+    <link rel="stylesheet" href="../../static/css/ticket/ticket-register.css"/>
 </head>
 <body>
 <div class="header"></div>
@@ -110,6 +111,23 @@
                               placeholder="행사에 대해서 자세하게 설명해주세요" required></textarea>
                 </label>
             </div>
+            <div>
+                <div class="input-guide flex">
+                    <p class="input-title price-title">행사 기간</p>
+                    <img src="//s3.hourplace.co.kr/web/images/icon/invalid.svg" alt="필수입력">
+                    <p class="invalid-msg"></p>
+                </div>
+                <div class="calendar-wrap">
+                    <div class="choice-box">
+                        <div class="calendar-box">
+                            <input type="hidden" id="selectedDate">
+                            <div id="datepicker"></div>
+                        </div>
+                        <div class="time-choice-wrap"></div>
+                    </div>
+                    <div class="calendar-ctr-box"></div>
+                </div>
+            </div>
 
             <div class="price-people-container no-flex" style="width: 100%">
                 <div class="input-wrap hour-price-wrap width">
@@ -140,14 +158,21 @@
                     <div class="input-guide flex">
                         <p class="input-title">기본인원</p>
                         <img src="//s3.hourplace.co.kr/web/images/icon/invalid.svg" alt="필수입력">
-                        <p class="guide-msg">게스트가 예약할 때 기본 인원을 초과하면 할증이 붙어요</p>
+                        <p class="guide-msg">등급별 최대 인원수를 알려주세요.</p>
                         <p class="invalid-msg"></p>
                     </div>
-                    <div class="input-box">
-                        <input id="placeDefaultPeople" min="1" type="number" name="placeDefaultPeople"
-                               placeholder="기본 인원을 입력해주세요"
-                               required>
-                        <p class="unit">명</p>
+                    <div class="headcount-input-box">
+                        <div class="input-box">
+                            <input class="placeDefaultPrice" min="0" type="text" name="placeDefaultPrice"
+                                   placeholder="등급을 입력해주세요"
+                                   required disabled>
+                        </div>
+                        <div class="input-box">
+                            <input class="placeDefaultPrice" min="0" type="number" name="placeDefaultPrice"
+                                   placeholder="최대 인원을 입력해주세요"
+                                   required>
+                            <p class="unit">명</p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -203,8 +228,10 @@
         </form>
     </div>
 </div>
-<script src="https://kit.fontawesome.com/c6992f5b12.js" crossorigin="anonymous"></script>
 <script src="https://code.jquery.com/jquery-3.6.4.js"></script>
+<script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+<script src="../../static/js/place/detail/calendar.js"></script>
+<script src="https://kit.fontawesome.com/c6992f5b12.js" crossorigin="anonymous"></script>
 <script type="text/javascript"
         src="//dapi.kakao.com/v2/maps/sdk.js?appkey=3dc12d7c2624483dc7c019a0a91b727f&libraries=services"></script>
 <script src="../../static/js/promotion/register/register.js"></script>
