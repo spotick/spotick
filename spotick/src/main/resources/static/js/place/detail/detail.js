@@ -1,4 +1,3 @@
-
 $('.nav-item').on('click',function (){
     $('.nav-item').not(this).removeClass('nav-focus');
     $(this).addClass('nav-focus');
@@ -57,19 +56,75 @@ $('.people-box, .visitors-btn').on('click', function (){
 
 $(`#checkIn`).on('change',function (){
     $('#checkOut').attr('disabled',false);
+    setCheckOutTimes();
 });
+
+function setCheckOutTimes(){
+    let checkIn = Number($('#checkIn').val());
+    let $checkOut = $('#checkOut');
+    $checkOut.children(':not(:first-child)').remove();
+    let text = '';
+    for(let i = 1; i<24;i++){
+        let time =i+checkIn;
+        time = time>=24?time-24:time
+        if (time === 0){
+            text += `
+               <optgroup label="${getNextDay($('#reservationDate').val()).getDate()}일">
+                </optgroup>
+            `;
+        }
+        text+=`
+            <option value="${time}">${convertToAmPmFormat(time)}시</option>
+        `;
+    }
+    $checkOut.append(text);
+}
+
+function getNextDay(dateString) {
+    let date = new Date(dateString);
+
+    date.setDate(date.getDate() + 1);
+
+    return date;
+}
 
 $('.calendar-wrap button').on('click', function (){
-    $('.schedule-box p').text(getReservationDateTime()).css('color','black');
+    $('.schedule-box p').text(getReservationDateTimeFormat()).css('color','black');
+    setReservationFormCheckInAndOut();
+
+    $('.reservation-btn').toggleClass('on',reservationFormOk());
 });
 
-function getReservationDateTime(){
+// 예약 날짜에 따른 예약 폼 설정
+function setReservationFormCheckInAndOut(){
+    let checkInDate = $('#reservationDate').val();
+    let checkInTime= $('#checkIn').val();
+    let checkOutTime= $('#checkOut').val();
+    let isNextDay = Number(checkInTime)>Number(checkOutTime);
+    console.log(isNextDay)
+    let checkOutDate = isNextDay?formatDate(getNextDay(checkInDate)):checkInDate;
+    $('#reservationCheckIn').val(formatDateTime(checkInDate,checkInTime));
+    $('#reservationCheckOut').val(formatDateTime(checkOutDate,checkOutTime));
+}
+function formatDateTime(date, time) {
+    return date + ' ' + time.padStart(2, '0') + ':00:00';
+}
+
+function formatDate(date) {
+    const year = date.getFullYear();
+    const month = (date.getMonth() + 1).toString().padStart(2, '0'); // 월은 0부터 시작
+    const day = date.getDate().toString().padStart(2, '0');
+    return `${year}-${month}-${day}`;
+}
+
+function getReservationDateTimeFormat(){
     let revArr = $('#reservationDate').val().split('-');
     let checkInTime = $('#checkIn').val();
     let checkOutTime = $('#checkOut').val();
     let checkIn = convertToAmPmFormat(checkInTime);
     let checkOut = convertToAmPmFormat(checkOutTime);
-    return `${revArr[1]}월 ${revArr[2]}일 ${checkIn} ~ ${checkOut} (${checkOutTime-checkInTime}시간)`;
+    let usageTime = checkOutTime-checkInTime;
+    return `${revArr[1]}월 ${revArr[2]}일 ${checkIn.padStart(2, '0')+':00'} ~ ${checkOut.padStart(2, '0')+':00'} (${usageTime<=0?usageTime+24:usageTime}시간)`;
 }
 
 $('.plus').on('click',function (){
@@ -86,7 +141,6 @@ $('.minus').on('click',function (){
     let $visitors = $('.visitors');
     let visitNum= $visitors.val();
     if(visitNum<=1){
-
         $visitors.val(1);
         return;
     }
@@ -94,8 +148,12 @@ $('.minus').on('click',function (){
 });
 
 $('.visitors-btn').on('click',function (){
-    $('.people-box p').text(`총 ${$('.visitors').val()}명`)
+    let visitors = $('.visitors').val();
+    $('.people-box p').text(`총 ${visitors}명`)
         .css('color','black');
+    $('#reservationVisitors').val(visitors);
+
+    $('.reservation-btn').toggleClass('on',reservationFormOk());
 });
 
 $('.visitors-reset').on('click',function (){
@@ -110,7 +168,7 @@ function convertToAmPmFormat(hour) {
     let amPm = hour >= 12 ? '오후' : '오전';
     hour = hour % 12;
     hour = hour ? hour : 12; // 시간이 0이면 12로 변환
-    return `${amPm} ${hour.toString().padStart(2, '0')}:00`;
+    return `${amPm} ${hour.toString()}`;
 }
 
 // 문의 모달창 띄우기
@@ -153,9 +211,21 @@ $('.place-like-btn').on('click',function (){
     $(this).find('span').toggleClass('none');
 });
 
+$('.reservation-submit-box').on('click','.reservation-btn.on',function (){
+   $('#reservationForm').submit();
+});
 
 
 
+function reservationFormOk(){
+    let isTrue = true;
+    $('#reservationForm>input').each(function (){
+        if($(this).val()===''){
+            isTrue =false;
+        }
+    });
+    return isTrue;
+}
 
 
 
