@@ -987,12 +987,20 @@
 }
 
 .mpc-ticket-list article {
+    position: relative;
+}
+
+.mpc-ticket-con {
     display: flex;
+    position: relative;
     border-radius: 8px;
+    background-color: #fff;
     border: 1px solid #b4b4b4;
     padding: 8px 4px;
-    margin-bottom: 20px;
+    margin-bottom: 80px;
     box-shadow: rgba(0, 0, 0, 0.1) 2px 2px 8px 0;
+    cursor: pointer;
+    z-index: 100;
 }
 
 .mpc-ticket-img-con {
@@ -1033,7 +1041,7 @@
     position: sticky;
     flex-direction: column;
     width: 50%;
-    height: 100%;
+    height: 580px;
     top: 180px;
     border-radius: 8px;
     border: 1px solid #b4b4b4;
@@ -1098,4 +1106,44 @@
 
 .ticket-table tbody tr td{
     padding: 10px 0;
+}
+
+.mpct-action-btn {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    right: 8px;
+    bottom: 8px;
+}
+
+.mpct-action-btn i {
+    font-size: 16px;
+}
+
+.mpc-slide-con {
+    position: absolute;
+    z-index: 50;
+    border: 1px solid #b4b4b4;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    border-radius: 0 0 8px 8px;
+    padding: 40px 0 10px;
+    box-shadow: rgba(0, 0, 0, 0.1) 2px 2px 8px 0;
+    transition: all 0.2s ease;
+}
+
+.mpc-slide-con.show {
+    transform: translateY(60px);
+}
+
+.mpc-slide-item {
+    display: flex;
+    justify-content: center;
+    padding: 10px 8px;
+    cursor: pointer;
+}
+
+.mpc-slide-item:hover {
+    background-color: #f2f2f2;
 }
