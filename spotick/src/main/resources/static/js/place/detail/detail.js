@@ -12,11 +12,13 @@ $('.answer-ctr-box').on('click',function (){
 // 장소 이미지 모달창 띄우기
 $('.more-img-btn').on('click',function (){
     $('.img-modal-container').removeClass('none');
+    $('body').css('overflow','hidden');
 });
 
 // 장소 이미지 모달창 닫기
 $('.modal-close').on('click',function (){
     $('.img-modal-container').addClass('none');
+    $('body').css('overflow','unset');
 });
 
 let currentIndex = 0; // 현재 활성화된 이미지의 인덱스
@@ -91,9 +93,18 @@ function getNextDay(dateString) {
 $('.calendar-wrap button').on('click', function (){
     $('.schedule-box p').text(getReservationDateTimeFormat()).css('color','black');
     setReservationFormCheckInAndOut();
-
-    $('.reservation-btn').toggleClass('on',reservationFormOk());
+    let isTrue = reservationFormOk();
+    $('.reservation-btn').toggleClass('on',isTrue);
+    if(isTrue){
+        calculateAmountAndShow();
+    }
 });
+
+function calculateAmountAndShow(){
+    // Todo 사용시간과 예약 인원에 따라 계산해서 화면에 보여주기
+}
+
+
 
 // 예약 날짜에 따른 예약 폼 설정
 function setReservationFormCheckInAndOut(){
@@ -127,6 +138,7 @@ function getReservationDateTimeFormat(){
     return `${revArr[1]}월 ${revArr[2]}일 ${checkIn.padStart(2, '0')+':00'} ~ ${checkOut.padStart(2, '0')+':00'} (${usageTime<=0?usageTime+24:usageTime}시간)`;
 }
 
+
 $('.plus').on('click',function (){
     let $visitors = $('.visitors');
     let visitNum= $visitors.val();
@@ -153,7 +165,11 @@ $('.visitors-btn').on('click',function (){
         .css('color','black');
     $('#reservationVisitors').val(visitors);
 
-    $('.reservation-btn').toggleClass('on',reservationFormOk());
+    let isTrue = reservationFormOk();
+    $('.reservation-btn').toggleClass('on',isTrue);
+    if(isTrue){
+        calculateAmountAndShow();
+    }
 });
 
 $('.visitors-reset').on('click',function (){
@@ -206,7 +222,7 @@ function clearInquiry(){
     $('.inquiry-submit').removeClass('on');
 }
 
-// 좋아요 버튼
+// 북마크 버튼
 $('.place-like-btn').on('click',function (){
     $(this).find('span').toggleClass('none');
 });
@@ -214,7 +230,6 @@ $('.place-like-btn').on('click',function (){
 $('.reservation-submit-box').on('click','.reservation-btn.on',function (){
    $('#reservationForm').submit();
 });
-
 
 
 function reservationFormOk(){
