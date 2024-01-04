@@ -7,6 +7,7 @@
     <title>Document</title>
     <link href="../../../static/css/global-css/root.css" rel="stylesheet">
     <link href="../../../static/css/mypage/mypage.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../../static/css/global-css/post-list-card-item.css">
     <script crossorigin="anonymous" src="https://kit.fontawesome.com/2364e2b536.js"></script>
 </head>
 
@@ -40,6 +41,14 @@
                 </ul>
             </section>
             <section>
+                <div class="mplm-section-title">티켓팅 관리</div>
+                <ul>
+                    <li class="mplm-nav-item">
+                        <a href="#">티켓팅 관리</a>
+                    </li>
+                </ul>
+            </section>
+            <section>
                 <div class="mplm-section-title">장소 관리</div>
                 <ul>
                     <li class="mplm-nav-item">
@@ -55,25 +64,22 @@
                 <h2>북마크</h2>
             </div>
             <div class="mpc-cards-wrap">
-                <article class="OneItemContainer">
-                    <div class="mpc-image-con">
-                        <div class="mpc-image-swiperable">
-                            <div class="mpc-swiper-wrapper">
-                                <div class="mpc-slide-image-item">
-                                    <img src="https://img.shareit.kr/prod/img/2022-07-18/b9c77882-e895-42e5-988a-85a7d5c4f0e0.jpg" alt="실내체육관(낙산관)">
-                                </div>
+                <div class="OneItemContainer hover mybookmark">
+                    <div class="OneItemImgContainer">
+                        <div class="swiper ImageSwiper swiper-initialized swiper-horizontal swiper-pointer-events swiper-backface-hidden">
+                            <div class="swiper-wrapper ImageLength" style="transform: translate3d(0px, 0px, 0px);">
                                 <!-- 이미지 한칸 -->
-                                <div class="mpc-slide-image-item">
-                                    <img src="https://img.shareit.kr/prod/img/2022-07-18/b7cf013c-5714-4891-8459-785516154830.jpg" alt="실내체육관(낙산관)">
+                                <div class="swiper-slide swiper-slide-next">
+                                    <img src="https://img.shareit.kr/prod/img/2022-07-18/b7cf013c-5714-4891-8459-785516154830.jpg" alt="실내체육관(낙산관)" class="ItemImg">
                                 </div>
-                                <div class="mpc-slide-image-item">
-                                    <img src="https://img.shareit.kr/prod/img/2022-07-18/f66fbf97-3357-4c71-b367-c2dd750510d4.jpg" alt="실내체육관(낙산관)">
+                                <div class="swiper-slide">
+                                    <img src="https://img.shareit.kr/prod/img/2022-07-18/f66fbf97-3357-4c71-b367-c2dd750510d4.jpg" alt="실내체육관(낙산관)" class="ItemImg">
                                 </div>
-                                <div class="mpc-slide-image-item">
-                                    <img src="https://img.shareit.kr/prod/img/2022-07-18/71de7186-c3a1-4983-8c55-a71c3ab94458.jpg" alt="실내체육관(낙산관)">
+                                <div class="swiper-slide">
+                                    <img src="https://img.shareit.kr/prod/img/2022-07-18/71de7186-c3a1-4983-8c55-a71c3ab94458.jpg" alt="실내체육관(낙산관)" class="ItemImg">
                                 </div>
-                                <div class="mpc-slide-image-item">
-                                    <img src="https://img.shareit.kr/prod/img/2022-07-18/dc4e5592-b3ec-4b42-abed-c780e1fb3a59.jpg" alt="실내체육관(낙산관)">
+                                <div class="swiper-slide">
+                                    <img src="https://img.shareit.kr/prod/img/2022-07-18/dc4e5592-b3ec-4b42-abed-c780e1fb3a59.jpg" alt="실내체육관(낙산관)" class="ItemImg">
                                 </div>
                             </div>
                             <div class="NavigationBtnContainer">
@@ -85,19 +91,210 @@
                                 </button>
                             </div>
                             <div class="ItemImgPagination">
-                                <p><span class="snapIndex">1</span>/5</p>
+                                <p><span class="snapIndex">1</span>/<span class="slideIndex">5</span></p>
                             </div>
                         </div>
+                        <button type="button" class="ItemBookMarkBtn" onclick="toggleBookmark(this, 1)">
+                            <img src="../../../static/imgs/bookmark_line_white_shadow_48.png" alt="북마크">
+                        </button>
                     </div>
-                    <div class="mpc-content-con">
-
+                    <div class="ItemTextContainer">
+                        <div class="ItemHostNameContainer">
+                            <span class="ItemHostName">서울 성북구</span>
+                            <div class="ItemCountsContainer">
+                                <div class="ItemsStarCountContainer">
+                                    <img src="../../../static/imgs/star_filled_paintYellow056.a8eb6e44.svg" alt="후기갯수" class="ItemCountImg">
+                                    <span class="ItemCountText">4.0(20)</span>
+                                </div>
+                                <div class="ItemsLikeCountContainer">
+                                    <img src="../../../static/imgs/bookmark_thin.svg" alt="북마크갯수" class="ItemCountImg bookmark">
+                                    <span class="ItemCountText">1724</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="ItemSpaceNameContainer">
+                            <p class="ItemSpaceName">낙산관 실내체육관(낙산관)</p>
+                        </div>
+                        <div class="ItemPriceContainer">
+                            <span class="ItemPrice">2023.12.30 ~ 2024.01.30</span>
+                        </div>
                     </div>
-                </article>
+                </div>
+                <div class="OneItemContainer hover mybookmark">
+                    <div class="OneItemImgContainer">
+                        <div class="swiper ImageSwiper swiper-initialized swiper-horizontal swiper-pointer-events swiper-backface-hidden">
+                            <div class="swiper-wrapper ImageLength" style="transform: translate3d(0px, 0px, 0px);">
+                                <!-- 이미지 한칸 -->
+                                <div class="swiper-slide swiper-slide-next">
+                                    <img src="https://img.shareit.kr/prod/img/2022-07-18/b7cf013c-5714-4891-8459-785516154830.jpg" alt="실내체육관(낙산관)" class="ItemImg">
+                                </div>
+                                <div class="swiper-slide">
+                                    <img src="https://img.shareit.kr/prod/img/2022-07-18/f66fbf97-3357-4c71-b367-c2dd750510d4.jpg" alt="실내체육관(낙산관)" class="ItemImg">
+                                </div>
+                                <div class="swiper-slide">
+                                    <img src="https://img.shareit.kr/prod/img/2022-07-18/71de7186-c3a1-4983-8c55-a71c3ab94458.jpg" alt="실내체육관(낙산관)" class="ItemImg">
+                                </div>
+                                <div class="swiper-slide">
+                                    <img src="https://img.shareit.kr/prod/img/2022-07-18/dc4e5592-b3ec-4b42-abed-c780e1fb3a59.jpg" alt="실내체육관(낙산관)" class="ItemImg">
+                                </div>
+                            </div>
+                            <div class="NavigationBtnContainer">
+                                <button type="button" class="NavigationBtn RightBtn">
+                                    <img src="../../../static/imgs/round_arrow_right_gray024.7f7e18a3.svg" alt="다음">
+                                </button>
+                                <button type="button" class="NavigationBtn LeftBtn">
+                                    <img src="../../../static/imgs/round_arrow_left_gray024.707193e8.svg" alt="이전">
+                                </button>
+                            </div>
+                            <div class="ItemImgPagination">
+                                <p><span class="snapIndex">1</span>/<span class="slideIndex">5</span></p>
+                            </div>
+                        </div>
+                        <button type="button" class="ItemBookMarkBtn" onclick="toggleBookmark(this, 1)">
+                            <img src="../../../static/imgs/bookmark_line_white_shadow_48.png" alt="북마크">
+                        </button>
+                    </div>
+                    <div class="ItemTextContainer">
+                        <div class="ItemHostNameContainer">
+                            <span class="ItemHostName">서울 성북구</span>
+                            <div class="ItemCountsContainer">
+                                <div class="ItemsStarCountContainer">
+                                    <img src="../../../static/imgs/star_filled_paintYellow056.a8eb6e44.svg" alt="후기갯수" class="ItemCountImg">
+                                    <span class="ItemCountText">4.0(20)</span>
+                                </div>
+                                <div class="ItemsLikeCountContainer">
+                                    <img src="../../../static/imgs/bookmark_thin.svg" alt="북마크갯수" class="ItemCountImg bookmark">
+                                    <span class="ItemCountText">1724</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="ItemSpaceNameContainer">
+                            <p class="ItemSpaceName">낙산관 실내체육관(낙산관)</p>
+                        </div>
+                        <div class="ItemPriceContainer">
+                            <span class="ItemPrice">2023.12.30 ~ 2024.01.30</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="OneItemContainer hover mybookmark">
+                    <div class="OneItemImgContainer">
+                        <div class="swiper ImageSwiper swiper-initialized swiper-horizontal swiper-pointer-events swiper-backface-hidden">
+                            <div class="swiper-wrapper ImageLength" style="transform: translate3d(0px, 0px, 0px);">
+                                <!-- 이미지 한칸 -->
+                                <div class="swiper-slide swiper-slide-next">
+                                    <img src="https://img.shareit.kr/prod/img/2022-07-18/b7cf013c-5714-4891-8459-785516154830.jpg" alt="실내체육관(낙산관)" class="ItemImg">
+                                </div>
+                                <div class="swiper-slide">
+                                    <img src="https://img.shareit.kr/prod/img/2022-07-18/f66fbf97-3357-4c71-b367-c2dd750510d4.jpg" alt="실내체육관(낙산관)" class="ItemImg">
+                                </div>
+                                <div class="swiper-slide">
+                                    <img src="https://img.shareit.kr/prod/img/2022-07-18/71de7186-c3a1-4983-8c55-a71c3ab94458.jpg" alt="실내체육관(낙산관)" class="ItemImg">
+                                </div>
+                                <div class="swiper-slide">
+                                    <img src="https://img.shareit.kr/prod/img/2022-07-18/dc4e5592-b3ec-4b42-abed-c780e1fb3a59.jpg" alt="실내체육관(낙산관)" class="ItemImg">
+                                </div>
+                            </div>
+                            <div class="NavigationBtnContainer">
+                                <button type="button" class="NavigationBtn RightBtn">
+                                    <img src="../../../static/imgs/round_arrow_right_gray024.7f7e18a3.svg" alt="다음">
+                                </button>
+                                <button type="button" class="NavigationBtn LeftBtn">
+                                    <img src="../../../static/imgs/round_arrow_left_gray024.707193e8.svg" alt="이전">
+                                </button>
+                            </div>
+                            <div class="ItemImgPagination">
+                                <p><span class="snapIndex">1</span>/<span class="slideIndex">5</span></p>
+                            </div>
+                        </div>
+                        <button type="button" class="ItemBookMarkBtn" onclick="toggleBookmark(this, 1)">
+                            <img src="../../../static/imgs/bookmark_line_white_shadow_48.png" alt="북마크">
+                        </button>
+                    </div>
+                    <div class="ItemTextContainer">
+                        <div class="ItemHostNameContainer">
+                            <span class="ItemHostName">서울 성북구</span>
+                            <div class="ItemCountsContainer">
+                                <div class="ItemsStarCountContainer">
+                                    <img src="../../../static/imgs/star_filled_paintYellow056.a8eb6e44.svg" alt="후기갯수" class="ItemCountImg">
+                                    <span class="ItemCountText">4.0(20)</span>
+                                </div>
+                                <div class="ItemsLikeCountContainer">
+                                    <img src="../../../static/imgs/bookmark_thin.svg" alt="북마크갯수" class="ItemCountImg bookmark">
+                                    <span class="ItemCountText">1724</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="ItemSpaceNameContainer">
+                            <p class="ItemSpaceName">낙산관 실내체육관(낙산관)</p>
+                        </div>
+                        <div class="ItemPriceContainer">
+                            <span class="ItemPrice">2023.12.30 ~ 2024.01.30</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="OneItemContainer hover mybookmark">
+                    <div class="OneItemImgContainer">
+                        <div class="swiper ImageSwiper swiper-initialized swiper-horizontal swiper-pointer-events swiper-backface-hidden">
+                            <div class="swiper-wrapper ImageLength" style="transform: translate3d(0px, 0px, 0px);">
+                                <!-- 이미지 한칸 -->
+                                <div class="swiper-slide swiper-slide-next">
+                                    <img src="https://img.shareit.kr/prod/img/2022-07-18/b7cf013c-5714-4891-8459-785516154830.jpg" alt="실내체육관(낙산관)" class="ItemImg">
+                                </div>
+                                <div class="swiper-slide">
+                                    <img src="https://img.shareit.kr/prod/img/2022-07-18/f66fbf97-3357-4c71-b367-c2dd750510d4.jpg" alt="실내체육관(낙산관)" class="ItemImg">
+                                </div>
+                                <div class="swiper-slide">
+                                    <img src="https://img.shareit.kr/prod/img/2022-07-18/71de7186-c3a1-4983-8c55-a71c3ab94458.jpg" alt="실내체육관(낙산관)" class="ItemImg">
+                                </div>
+                                <div class="swiper-slide">
+                                    <img src="https://img.shareit.kr/prod/img/2022-07-18/dc4e5592-b3ec-4b42-abed-c780e1fb3a59.jpg" alt="실내체육관(낙산관)" class="ItemImg">
+                                </div>
+                            </div>
+                            <div class="NavigationBtnContainer">
+                                <button type="button" class="NavigationBtn RightBtn">
+                                    <img src="../../../static/imgs/round_arrow_right_gray024.7f7e18a3.svg" alt="다음">
+                                </button>
+                                <button type="button" class="NavigationBtn LeftBtn">
+                                    <img src="../../../static/imgs/round_arrow_left_gray024.707193e8.svg" alt="이전">
+                                </button>
+                            </div>
+                            <div class="ItemImgPagination">
+                                <p><span class="snapIndex">1</span>/<span class="slideIndex">5</span></p>
+                            </div>
+                        </div>
+                        <button type="button" class="ItemBookMarkBtn" onclick="toggleBookmark(this, 1)">
+                            <img src="../../../static/imgs/bookmark_line_white_shadow_48.png" alt="북마크">
+                        </button>
+                    </div>
+                    <div class="ItemTextContainer">
+                        <div class="ItemHostNameContainer">
+                            <span class="ItemHostName">서울 성북구</span>
+                            <div class="ItemCountsContainer">
+                                <div class="ItemsStarCountContainer">
+                                    <img src="../../../static/imgs/star_filled_paintYellow056.a8eb6e44.svg" alt="후기갯수" class="ItemCountImg">
+                                    <span class="ItemCountText">4.0(20)</span>
+                                </div>
+                                <div class="ItemsLikeCountContainer">
+                                    <img src="../../../static/imgs/bookmark_thin.svg" alt="북마크갯수" class="ItemCountImg bookmark">
+                                    <span class="ItemCountText">1724</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="ItemSpaceNameContainer">
+                            <p class="ItemSpaceName">낙산관 실내체육관(낙산관)</p>
+                        </div>
+                        <div class="ItemPriceContainer">
+                            <span class="ItemPrice">2023.12.30 ~ 2024.01.30</span>
+                        </div>
+                    </div>
+                </div>
             </div>
         </article>
     </div>
 </main>
 </body>
 <script src="../../../static/js/mypage/bookmarks.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+<script src="../../../static/js/global-js/image-slide.js"></script>
 
 </html>
