@@ -37,6 +37,8 @@ img {
     vertical-align: top;
 }
 
+
+
 .ReferenceHallDetailContainer{
     padding-bottom: 36px;
 }
@@ -416,4 +418,130 @@ img {
     background-color: rgb(255, 255, 255);
     color: rgb(94, 102, 141);
     border: 1px solid rgb(212, 219, 226);
+}
+
+.ModalBackground{
+    width: 100%;
+    min-height: 100vh;
+    height: 100%;
+    position: fixed;
+    left: 0px;
+    bottom: 0px;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1050;
+    touch-action: none;
+    display: none;
+}
+
+.ModalBackground.On{
+    display: block;
+}
+
+.ShareModalContainer{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgb(255, 255, 255);
+    width: 354px;
+    border-radius: 20px;
+}
+
+.ShareModalHeader{
+    display: flex;
+    -webkit-box-align: center;
+    align-items: center;
+    -webkit-box-pack: center;
+    justify-content: center;
+    padding: 18px 0px;
+    border-bottom: 1px solid rgb(240, 240, 240);
+}
+
+.ShareModalHeaderTitle{
+    font-size: 16px;
+    line-height: 24px;
+    letter-spacing: -0.96px;
+}
+
+.ShareModalCloseBtn{
+    position: absolute;
+    top: 21px;
+    right: 18px;
+}
+
+.ShareModalCloseImg{
+    width: 18px;
+}
+
+.ShareModalBottomContainer{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 18px;
+}
+
+.ModalShareBtn{
+    width: 100%;
+    padding: 9px;
+    border: 1px solid rgb(212, 219, 226);
+    border-radius: 4px;
+    display: flex;
+    -webkit-box-align: center;
+    align-items: center;
+    -webkit-box-pack: start;
+    justify-content: flex-start;
+    gap: 9px;
+}
+
+.ShareModalShareImgContainer{
+    width: 40px;
+    height: 40px;
+    border-radius: 7px;
+    background: rgb(0, 117, 235);
+    display: flex;
+    -webkit-box-align: center;
+    align-items: center;
+    -webkit-box-pack: center;
+    justify-content: center;
+}
+
+.ModalShareImg{
+    width: 30px;
+}
+
+.ModalShareBtnText{
+    font-size: 15px;
+    line-height: 40px;
+    color: rgb(36, 36, 36);
+}
+
+.ModalKakaoShareBtn{
+    width: 100%;
+    padding: 9px;
+    border: 1px solid rgb(212, 219, 226);
+    border-radius: 4px;
+    display: flex;
+    -webkit-box-align: center;
+    align-items: center;
+    -webkit-box-pack: start;
+    justify-content: flex-start;
+    gap: 9px;
+}
+
+.ShareModalKakaoImg{
+    width: 40px;
+}
+
+.ModalKakaoShareBtnText{
+    font-size: 15px;
+    line-height: 40px;
+    color: rgb(36, 36, 36);
+}
+
+.ModalShareBtn:hover {
+    border: 1px solid rgb(0, 117, 235);
+}
+
+.ModalKakaoShareBtn:hover {
+ border: 1px solid rgb(0, 117, 235);
 }

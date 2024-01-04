@@ -4,8 +4,13 @@
     <meta charset="UTF-8">
     <title>장소 등록</title>
     <link rel="stylesheet" href="../../static/css/global-css/root.css">
-    <link rel="stylesheet" href="../../static/css/global-css/datepicker.css">
+<!--    <link rel="stylesheet" href="../../static/css/global-css/datepicker.css">-->
     <link rel="stylesheet" href="../../static/css/ticket/ticket-register.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css"
+          integrity="sha512-aOG0c6nPNzGk+5zjwyJaoRUgCdOrfSDhmMID2u4+OIslr0GjpLKo7Xm0Ao3xmpM4T8AmIouRkqwj1nrdVsLKEQ=="
+          crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="../../static/css/ticket/register-datepicker.css">
+
 </head>
 <body>
 <div class="header"></div>
@@ -117,16 +122,9 @@
                     <img src="//s3.hourplace.co.kr/web/images/icon/invalid.svg" alt="필수입력">
                     <p class="invalid-msg"></p>
                 </div>
-                <div class="calendar-wrap">
-                    <div class="choice-box">
-                        <div class="calendar-box">
-                            <input type="hidden" id="selectedDate">
-                            <div id="datepicker"></div>
-                        </div>
-                        <div class="time-choice-wrap"></div>
-                    </div>
-                    <div class="calendar-ctr-box"></div>
-                </div>
+                <input type="hidden" id="reservationDate">
+                <div id="datepicker"></div>
+                <div class="calendar-ctr-box"></div>
             </div>
 
             <div class="price-people-container no-flex" style="width: 100%">
@@ -229,12 +227,14 @@
     </div>
 </div>
 <script src="https://code.jquery.com/jquery-3.6.4.js"></script>
+<!-- datepicker js-->
 <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
-<script src="../../static/js/place/detail/calendar.js"></script>
+<script src="../../static/js/ticket/register/calendar.js"></script>
+
 <script src="https://kit.fontawesome.com/c6992f5b12.js" crossorigin="anonymous"></script>
 <script type="text/javascript"
         src="//dapi.kakao.com/v2/maps/sdk.js?appkey=3dc12d7c2624483dc7c019a0a91b727f&libraries=services"></script>
-<script src="../../static/js/promotion/register/register.js"></script>
-<script src="../../static/js/promotion/register/kakaoMapApi.js"></script>
+<script src="../../static/js/ticket/register/register.js"></script>
+<script src="../../static/js/ticket/register/kakaoMapApi.js"></script>
 </body>
 </html>
