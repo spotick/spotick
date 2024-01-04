@@ -8,8 +8,8 @@
     <link rel="stylesheet" href="../../static/css/global-css/root.css">
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
-    <link rel="stylesheet" href="../../static/css/promotion/promotion-list-detail.css">
-    <link rel="stylesheet" href="../../static/css/promotion/promotion-list-detail-swiper.css">
+    <link rel="stylesheet" href="../../static/css/promotion/promotion-detail.css">
+    <link rel="stylesheet" href="../../static/css/promotion/promotion-detail-swiper.css">
     
 
     <title>홍보 리스트 상세보기</title>
@@ -296,6 +296,7 @@
         </div>
       </div>
       <div></div>
+
         <!-- 사이드버튼? -->
         <!-- <div class="ReferenceHallDetailstyle__FloatMobileBox-sc-jz3w9-10 kPsxgC">
           <div class="ReferenceHallDetailstyle__IconBox-sc-jz3w9-11 itaedx">
@@ -308,17 +309,32 @@
           </div>
         </div> -->
         <!-- 사이드버튼? -->
+<!--      공유하기 모달창-->
+      <div class="ModalBackground">
+        <div class="ShareModalContainer">
+          <div class="ShareModalHeader">
+            <span class="ShareModalHeaderTitle">공유하기</span>
+            <button type="button" class="ShareModalCloseBtn">
+              <img src="../../static/imgs/cross_gray034.69d9d880.svg" alt="닫기" class="ShareModalCloseImg">
+            </button>
+          </div>
+          <div class="ShareModalBottomContainer">
+            <button type="button" class="ModalShareBtn">
+              <div class="ShareModalShareImgContainer">
+                <img src="../../static/imgs/link_line_white.9dfe61a7.svg" alt="URL 복사" class="ModalShareImg">
+              </div>
+              <span class="ModalShareBtnText">URL 복사</span>
+            </button>
+            <button type="button" class="ModalKakaoShareBtn">
+              <img src="../../static/imgs/kakaoTalk_text.e3631db4.svg" alt="카카오톡" class="ShareModalKakaoImg">
+              <span class="ModalKakaoShareBtnText">카카오톡</span>
+            </button>
+          </div>
+        </div>
       </div>
+    </div>
   </div>
 </body>
-
-<script>
-var topSwiper = new Swiper(".top-swiper", {
-    pagination: {
-      el: ".swiper-pagination",
-      clickable: true // 페이지네이션을 클릭 가능하게 만듭니다
-    }
-  });
-
-</script>
+<!---->
+<script src="../../static/js/promotion/promotion-detail.js"></script>
 </html>
