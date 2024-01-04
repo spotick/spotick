@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <!--   각 파일에 추가-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.0/css/all.min.css"/>
+    <style>
+      * {
+    margin: 0;
+    padding: 0;
+    font-family: 'Pretendard-Regular';
+}
+
+@font-face {
+    font-family: 'Pretendard-Regular';
+    src: url('https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff') format('woff');
+    font-style: normal;
+}
+
+#chat--screen {
+    box-sizing: border-box;
+}
+
+
+/* 채팅 버튼 */
+#chat--screen .chatbot-button {
+    position: fixed;
+    background-color: transparent;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    padding: 10px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    left: 91vw;
+    top: 74vh;
+}
+
+#chat--screen .chat--open-btn-img {
+    width: 60px;
+    height: 60px;
+}
+
+#chat--screen .chat-notice-icon {
+    background-color: red;
+    color: white;
+    font-size: 12px;
+    width: 20px;
+    height: 20px;
+    position: fixed;
+    top: 540px;
+    left: 1450px;
+    border-radius: 50%;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    display: none;
+}
+
+/* 채팅 창 */
+#chat--screen .chatbot {
+    display: none;
+    position: fixed;
+    right: 20px;
+    bottom: 80px;
+    width: 350px;
+    height: 500px;
+    background-color: white;
+    border-radius: 20px;
+    box-shadow: 0px 0px 32px 6px rgba(177, 180, 198, 0.2);
+    -webkit-box-shadow: 0px 0px 32px 6px rgba(177, 180, 198, 0.2);
+}
+
+#chat--screen .chatbot-header {
+    background-color: #68a5fe;
+    color: white;
+    border-radius: 20px 20px 0 0;
+    height: 55px;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    border-bottom: 1px solid #d6d6d6;
+}
+
+#chat--screen .close-box {
+    text-align: right;
+    display: flex;
+    justify-content: space-between;
+    padding: 0 20px;
+}
+
+#chat--screen .chatbot-close {
+    background: none;
+    border: none;
+    font-size: 20px;
+    color: white;
+    cursor: pointer;
+}
+
+#chat--screen .chatbot-body {
+    height: 71.75%;
+    padding: 10px;
+    overflow-y: auto;
+
+}
+
+#chat--screen .chatbot-footer {
+    padding: 15px 10px 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-top: 1px solid #d6d6d6;
+}
+
+#chat--screen #chatbot-send {
+    margin-left: 20px;
+    padding: 5px;
+    background-color: #68a5fe;
+    border: #68a5fe 1px solid;
+    border-radius: 5px;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+#chatbot-input {
+    height: 28px;
+    padding-left: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+#chat--screen .message {
+    margin: 10px 0;
+    display: flex;
+    align-items: center;
+    word-wrap: break-word;
+}
+
+#chat--screen .message-text {
+    margin: 0 10px 0 10px;
+    border: #68a5fe 1px solid;
+    min-height: 30px;
+    line-height: 30px;
+    border-radius: 10px;
+    padding: 3px 5px;
+}
+
+#chat--screen .user-message {
+    text-align: left;
+    justify-content: right;
+    margin-left: 20px;
+}
+
+#chat--screen .bot-message {
+    text-align: left;
+    justify-content: left;
+    margin-right: 20px;
+}
+
+
+#chat--screen .user-message > .message-text {
+    background-color: #68a5fe;
+    color: white;
+}
+
+::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+}
+
+/* 채팅방 목록 */
+#chat--screen .chat-room-wrap {
+    display: block;
+    height: 100%;
+}
+
+#chat--screen .chat-room-detail-wrap {
+    display: none;
+    height: 100%;
+}
+
+#chat--screen .chat-title-box {
+    display: flex;
+    background-color: #68a5fe;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    width: 100%;
+    height: 55px;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    border-bottom: 1px solid #d6d6d6;
+    justify-content: space-between;
+}
+
+#chat--screen .chat-room-title {
+    display: flex;
+    align-items: center;
+    padding-left: 20px;
+    color: white;
+    font-weight: bold;
+}
+
+#chat--screen .chat-room-list {
+    width: 100%;
+    height: 313.5px;
+    display: flex;
+    flex-direction: column;
+    overflow: scroll;
+}
+
+#chat--screen .chat-logo-img {
+    height: 66.5px;
+    border-radius: 0 0 15px 15px;
+    display: flex;
+    justify-content: center;
+    border-top: 1px solid #d6d6d6;
+}
+
+#chat--screen .chat-logo-img img {
+    height: 98%;
+}
+
+#chat--screen .chat-close {
+    padding-right: 20px;
+}
+
+#chat--screen .chat-room {
+    height: 65px;
+    border-bottom: 1px solid #d6d6d6;
+    padding-left: 15px;
+    display: flex;
+    position: relative;
+}
+
+#chat--screen .chatbot-room:hover,
+.chat-room:hover {
+    background-color: #eaeaeade;
+}
+
+#chat--screen .chatbot-room {
+    height: 65px;
+    border-bottom: 1px solid #d6d6d6;
+    padding-left: 15px;
+    display: flex;
+}
+
+#chat--screen .chat-bot-img-box {
+    width: 15%;
+    display: flex;
+    align-items: center;
+}
+
+#chat--screen .chat-bot-img {
+    width: 40px;
+    height: 40px;
+}
+
+#chat--screen .chat-bot-info-box {
+    width: 75%;
+    display: flex;
+    flex-direction: column;
+    padding-left: 5px;
+}
+
+#chat--screen .chat--bot-name-and-time {
+    width: 95%;
+    padding: 8px 0 3px 0;
+    display: flex;
+    justify-content: space-between;
+}
+
+#chat--screen .chat--bot-name {
+    font-weight: bold;
+    font-size: 14px;
+}
+
+#chat--screen .chat-time-box {
+    font-size: 12px;
+    color: #ccc;
+    padding-top: 3px;
+    padding-left: 15px;
+}
+
+#chat--screen .chat--bot-msg {
+    font-size: 12px;
+    color: #9c9c9c;
+    overflow: hidden;
+    height: 27px;
+}
+
+#chat--screen .user---msg {
+    font-size: 12px;
+    color: #9c9c9c;
+    overflow: hidden;
+    height: 27px;
+}
+
+
+#chat--screen .show-chat,
+#chat--screen .show-chatBot {
+    cursor: pointer;
+}
+
+#chat--screen .chat--more-dot {
+    color: #ccc;
+    cursor: pointer;
+    padding-left: 10px;
+    padding-top: 3px;
+    font-size: 15px;
+    width: 20px;
+    height: 20px;
+}
+
+/* 채팅방 나가기 창 */
+#chat--screen .chatRoom-modify-select-box {
+    width: 80px;
+    height: 80px;
+    border-radius: 10px;
+    text-align: center;
+    vertical-align: middle;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    flex-direction: column;
+    box-shadow: 0px 0px 16px rgba(0, 0, 0, 0.08);
+}
+
+#chat--screen .chatRoom-modify-select-box a {
+    font-size: 17px;
+    text-decoration: none;
+}
+
+#chat--screen .chatRoom-modify-modify1 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: var(--main-font-color);
+}
+
+#chat--screen .chatRoom-modify-modify1:hover {
+    opacity: 0.6;
+}
+
+#chat--screen .chatRoom-modify-delete1 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: red;
+    font-family: Pretendard-Regular;
+}
+
+#chat--screen .chatRoom-modify-delete1:hover {
+    opacity: 0.6;
+}
+
+#chat--screen .chatRoom-modify-btn-list img {
+    margin-left: 8px;
+    margin-bottom: 3px;
+}
+
+#chat--screen .chat-room-exit-btn:hover {
+    background-color: #e9e9e9;
+}
+
+#chat--screen .chat-room-exit-btn {
+    display: none;
+    border: 1px solid #ccc;
+    outline: 0;
+    width: 40px;
+    height: 35px;
+    border-radius: 5px;
+    color: #ff0000;
+    font-weight: bold;
+    font-size: 13px;
+    background-color: white;
+    position: absolute;
+    left: 309px;
+    top: 20px;
+    cursor: pointer;
+}
+
+/* 사용자채팅 불가 안내 메세지 */
+
+#chat--screen .tmp-container{
+    height: 65px;
+    border-bottom: 1px solid #d6d6d6;
+    padding-left: 15px;
+    display: flex;
+    position: relative;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+}
+
+    </style>
+</head>
+<body>
+
+<div id="chat--screen" th:fragment="chat">
+    <div id="chatbot" class="chatbot">
+        <div class="chat-room-wrap">
+
+            <div class="chat-title-box">
+                <div class="chat-room-title">
+                    채팅방 목록
+                </div>
+                <button class="chatbot-close chat-close chat-screen-close">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <div id="connect-chatbot" class="chatbot-room">
+
+                <div class="chat-bot-img-box">
+                    <img src="https://postfiles.pstatic.net/MjAyMzEyMzBfMjUw/MDAxNzAzOTM2OTkyOTky.6zf7pg2z9MMyaQKhbeTZDR-L0_bK6630y20oNgaJ57kg.nXWKCAuIm95-xEvPkShq2Z4E99wZY8-YG9GK_JN3QzMg.PNG.rlaeodus1306/image.png?type=w580" alt="" class="chat-bot-img">
+                </div>
+
+                <div class="chat-bot-info-box">
+                    <div class="chat--bot-name-and-time">
+                        <div class="chat--bot-name show-chatBot">
+                            챗봇과 대화하기
+                        </div>
+                        <div class="chat-time-box">
+
+                        </div>
+
+                    </div>
+                    <!--채팅방 목록에 보여줄 챗봇기본 내용-->
+                    <div class="chat--bot-msg"></div>
+
+                </div>
+
+
+            </div>
+            <ul class="chat-room-list">
+                <!--회원간 채팅불가 안내 메세지-->
+                <li class="tmp-container">
+                    회원 간의 채팅 기능은 준비 중입니다!
+                </li>
+
+                <!-- 채팅방 반복 시작-->
+<!--                <li class="chat-room ">-->
+<!--                    <div class="chat-bot-img-box">-->
+<!--                        <img src="https://lifet.co.kr/img/profile/default.png" alt="" class="chat-bot-img">-->
+<!--                    </div>-->
+
+<!--                    <div class="chat-bot-info-box ">-->
+<!--                        <div class="chat&#45;&#45;bot-name-and-time">-->
+<!--                            <div class="chat&#45;&#45;bot-name show-chat">-->
+<!--                                상대방 아이디-->
+<!--                            </div>-->
+<!--                            <div class="chat-time-box">-->
+<!--                                18:02-->
+<!--                            </div>-->
+
+<!--                        </div>-->
+<!--                        <div class="user-&#45;&#45;msg">-->
+<!--                            어쩌구저쩌구어쩌구저쩌구어쩌구저쩌구어쩌구저쩌구어쩌구저쩌구-->
+<!--                        </div>-->
+
+<!--                    </div>-->
+<!--                    <span class="chat&#45;&#45;more-dot">-->
+<!--              <i class="fa-solid fa-ellipsis-vertical"></i>-->
+<!--            </span>-->
+
+<!--                    <button type="button" class="chat-room-exit-btn">-->
+<!--                        나가기-->
+<!--                        <i class="fa-solid fa-door-open" style="color: #ff0000;"></i>-->
+<!--                    </button>-->
+
+<!--                    <a href=""></a>-->
+<!--                </li>-->
+                <!-- 채팅방 반복 끝-->
+
+            </ul>
+
+            <div class="chat-logo-img">
+                <img src="https://postfiles.pstatic.net/MjAyMzEyMzBfMTY2/MDAxNzAzOTM3MDA0ODQx.8a-P5RdxNfrawk-oKLu8u1JxYAdvi2jyDanWFsALSTQg.u-mWLL4Bcz0Yfq10veaNULYezvFnJnbtPNqmLxypIDEg.PNG.rlaeodus1306/image.png" alt="">
+            </div>
+
+
+        </div>
+
+        <!--채팅창 내용-->
+        <div class="chat-room-detail-wrap">
+
+        </div>
+
+    </div>
+
+    <button id="chatbot-open" class="chatbot-button">
+        <!-- Font Awesome 채팅 아이콘 -->
+        <img class="chat--open-btn-img" src="https://cf.channel.io/pub-file/57027/62be8c24a1021aa00685/120_120.png"
+             alt="">
+    </button>
+    <span class="chat-notice-icon">
+      21
+    </span>
+
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.4.js"></script>
+<script>
+
+  // import * as chatBot from '../module/openAi.js';
+
+$(document).ready(function () {
+    // 채팅창 열기
+    $('#chatbot-open').click(function () {
+        $('#chatbot').show();
+        $('#chatbot-open').hide();
+        $('.chat-room-detail-wrap').hide();
+        $('.chat-room-wrap').show();
+    });
+
+    // 채팅방 목록, 채팅 방 이동
+    $('.show-chatBot').on('click', function () {
+        $('.chat-room-detail-wrap').show();
+        showChatBotRoom();
+        $('.chat-room-wrap').hide();
+
+        $('.chat-prev').on('click', function () {
+            $('.chat-room-detail-wrap').hide();
+            $('.chat-room-wrap').show();
+
+        })
+    });
+
+});
+
+defaultChatMsg();
+
+function defaultChatMsg() {
+    let aiChatData = JSON.parse(sessionStorage.getItem('aiChatData'));
+    let text = "안녕하세요 저는 Happy Pet's Day 사이트의 챗봇입니다.";
+    if (aiChatData) {
+        text = aiChatData[aiChatData.length - 1].content;
+    }
+    $('.chat--bot-msg').text(text);
+}
+
+//세션스토리에 저장할 채팅내용들을 담을 배열 선언
+let aiChatArr = [];
+
+// 챗봇 비동기 통신
+function sendMessage() {
+    let message = $('#chatbot-input').val();
+    if (message.length == 0) {
+        return;
+    }
+    addUserMessage(message);
+    $('#chatbot-input').val('');
+    aiChatArr.push({role: 'user', content: message});
+
+    sessionStorage.setItem('aiChatData', JSON.stringify(aiChatArr));
+    chatBot.sendMessage(aiChatArr, addBotMessage,defaultChatMsg);
+}
+
+
+// 보내기 버튼 클릭 이벤트
+$('.chat-room-detail-wrap').on('click', '#chatbot-send', function () {
+    sendMessage();
+});
+
+// input칸 엔터 이벤트
+$('.chat-room-detail-wrap').on('keypress', '#chatbot-input', function (e) {
+    if (e.code == 'Enter') {
+        sendMessage();
+    }
+});
+
+// 채팅창 닫기
+$('.chat-room-detail-wrap').on('click', '.chat-screen-close', function () {
+    $('#chatbot').hide();
+    $('#chatbot-open').show();
+});
+
+$('.chat-screen-close').on('click', function () {
+    $('#chatbot').hide();
+    $('#chatbot-open').show();
+});
+
+
+// 유저 메세지 추가
+function addUserMessage(message) {
+    let htmlCode = `<div class="user-message message">
+         <div class="message-text">${message}</div>
+       </div>`;
+
+    $('.chatbot-body').append(htmlCode);
+    $('.chatbot-body')[0].scrollTop = $('.chatbot-body')[0].scrollHeight;// 스크롤 하단으로 이동
+}
+
+// 챗봇 메세지 추가
+function addBotMessage(message) {
+    let htmlCode = `<div class="bot-message message">
+         <div class="message-text">${message}</div>
+       </div>`;
+
+    $('.chatbot-body').append(htmlCode);
+    $('.chatbot-body')[0].scrollTop = $('.chatbot-body')[0].scrollHeight;// 스크롤 하단으로 이동
+}
+
+
+// 삭제버튼 띄우기
+$('.chat--more-dot').on('click', function (e) {
+    let exitBtn = $(this).siblings('.chat-room-exit-btn');
+
+    if (exitBtn.is(':visible')) {
+        exitBtn.hide();
+    } else {
+        exitBtn.show();
+    }
+});
+
+// 채팅방 나가기 버튼 클릭시
+$('.chat-room-exit-btn').on('click', function () {
+    $(this).hide();
+});
+
+//챗봇 채팅창 보여주기
+function showChatBotRoom() {
+    let text = '';
+
+    //세션스토리지에 있는 값 가져오기
+    let aiChatData = JSON.parse(sessionStorage.getItem('aiChatData'));
+
+    text += `
+    <div id="chatbot-header" class="chatbot-header">
+                <div class="close-box">
+                    <button type="button" id="chat-prev" class="chatbot-close chat-prev">
+                        <i class="fa-solid fa-arrow-left"></i>
+                    </button>
+                    <h4 class="chat-room-name">챗봇</h4>
+                    <button type="button" class="chatbot-close chat-screen-close">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+            </div>
+            <div id="chatbot-body" class="chatbot-body">
+                <div class="bot-message message">
+                    <div class="message-text">
+                        안녕하세요 저는 Happy Pet's Day 사이트의 챗봇입니다. <br>
+                        저화 대화한 내용은 로그아웃하거나 브라우저를 종료하면 사라지게 됩니다
+                        무엇을 도와드릴까요?
+                    </div>
+                </div>`;
+
+    if (aiChatData) {
+        aiChatData.forEach(c => {
+            text += `
+                        <div class="${c.role == 'user' ? `user-message` : `bot-message`} message">
+                             <div class="message-text">${c.content}</div>
+                        </div>
+                        `;
+        })
+    }
+
+    text += `</div>
+            <div id="chatbot-footer" class="chatbot-footer">
+                <input type="text" id="chatbot-input" placeholder="궁금한것을 물어보세요!"/>
+                <button id="chatbot-send">전송</button>
+            </div>
+    `;
+    $('.chat-room-detail-wrap').html(text);
+}
+
+</script>
+</body>
+</html>

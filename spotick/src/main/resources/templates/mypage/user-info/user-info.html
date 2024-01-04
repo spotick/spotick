@@ -121,39 +121,41 @@
 
 <main id="my-page-main">
     <div class="mp-left-menu">
-        <section>
-            <div class="mplm-section-title">계정관리</div>
-            <ul>
-                <li class="mplm-nav-item active">
-                    <a href="#">개인정보 수정</a>
-                </li>
-            </ul>
-        </section>
-        <section>
-            <div class="mplm-section-title">My활동</div>
-            <ul>
-                <li class="mplm-nav-item">
-                    <a href="#">북마크</a>
-                </li>
-                <li class="mplm-nav-item">
-                    <a href="#">예약내역</a>
-                </li>
-                <li class="mplm-nav-item">
-                    <a href="#">문의 내역</a>
-                </li>
-                <li class="mplm-nav-item">
-                    <a href="#">후기관리</a>
-                </li>
-            </ul>
-        </section>
-        <section>
-            <div class="mplm-section-title">장소 관리</div>
-            <ul>
-                <li class="mplm-nav-item">
-                    <a href="#">장소 관리</a>
-                </li>
-            </ul>
-        </section>
+        <div class="mplm-sticky">
+            <section>
+                <div class="mplm-section-title">계정관리</div>
+                <ul>
+                    <li class="mplm-nav-item active">
+                        <a href="#">개인정보 수정</a>
+                    </li>
+                </ul>
+            </section>
+            <section>
+                <div class="mplm-section-title">My활동</div>
+                <ul>
+                    <li class="mplm-nav-item">
+                        <a href="#">북마크</a>
+                    </li>
+                    <li class="mplm-nav-item">
+                        <a href="#">예약내역</a>
+                    </li>
+                    <li class="mplm-nav-item">
+                        <a href="#">문의 내역</a>
+                    </li>
+                    <li class="mplm-nav-item">
+                        <a href="#">후기관리</a>
+                    </li>
+                </ul>
+            </section>
+            <section>
+                <div class="mplm-section-title">장소 관리</div>
+                <ul>
+                    <li class="mplm-nav-item">
+                        <a href="#">장소 관리</a>
+                    </li>
+                </ul>
+            </section>
+        </div>
     </div>
     <div class="mp-content">
         <article>
@@ -177,8 +179,9 @@
             </div>
             <div style="width: 750px;">
                 <figure class="mpc-user-info-user">
-                    <div style="position: relative" onclick="openModal(profileModal)">
-                        <img alt="테스트 유저" class="mpc-user-info-user-img" src="../../../static/imgs/defaultProfileImgs/3.jpg">
+                    <div onclick="openModal(profileModal)" style="position: relative">
+                        <img alt="테스트 유저" class="mpc-user-info-user-img"
+                             src="../../../static/imgs/defaultProfileImgs/3.jpg">
                         <div class="mpc-edit-icon" style="right: 38px; bottom: 2px">
                             <svg class="feather feather-edit-2" fill="none" height="16" stroke="currentColor"
                                  stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"
@@ -187,7 +190,7 @@
                             </svg>
                         </div>
                     </div>
-                    <figcaption style="display: flex" onclick="openNicknameModal(nicknameModal)">
+                    <figcaption onclick="openNicknameModal(nicknameModal)" style="display: flex">
                         <b style="cursor:pointer;">테스트 유저</b>님
                         <div class="mpc-edit-icon" style="position: relative">
                             <svg class="feather feather-edit-2" fill="none" height="16" stroke="currentColor"
