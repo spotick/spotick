@@ -368,7 +368,12 @@
                 <p class="title">포인트, 원서 2호점</p> <!--장소 이름-->
                 <div class="flex-align">
                     <p class="title">55,000원</p>
+<!--                    장소기본 요금-->
                     <input type="hidden" value="55000" id="placePrice">
+<!--                    인원 초과시 인당 추가 요금-->
+                    <input type="hidden" value="5500" id="placeSurcharge">
+<!--                    장소 기본 인원 -->
+                    <input type="hidden" value="4" id="placeDefaultPeople">
                     <p class="hour"> / 시간</p>
                 </div>
                 <div class="line"></div>
@@ -458,37 +463,8 @@
                     </div>
                 </div>
 
-                <div class="calculate-box none">
-                    <div class="reservation-time-box">
-                        <div class="flex-between-align">
-                            <p class="small-title">총 <span class="usageTime">3</span>시간</p>
-                            <p class="small-title">165,000원</p>
-                        </div>
-                        <div class="flex-between-align">
-                            <p class="sub-title"><span>55,000</span>원 x <span>3</span>시간</p>
-                            <p class="sub-title">165,000원</p>
-                        </div>
-                    </div>
+                <div class="calculate-box">
 
-                    <div class="reservation-people-box">
-                        <div class="flex-between-align">
-                            <p class="small-title">총인원</p>
-                            <p class="small-title">추가 <span>16,500</span>원</p>
-                        </div>
-                        <div class="flex-between-align">
-                            <p class="sub-title">기본 <span>4</span>명 / 예약 <span>5</span>명</p>
-                            <div class="surcharge-box flex-align-center">
-                                <p>인당 <span>5,500</span></p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="line"></div>
-                    <div class="total-reserve-amount-box">
-                        <div class="flex-between-align">
-                            <p class="small-title">총 금액 합계</p>
-                            <p class="small-title"><span>181,500</span>원</p>
-                        </div>
-                    </div>
                 </div>
 <!--                장소 예약하기 폼-->
                 <form id="reservationForm" action="#" method="get">
@@ -499,7 +475,6 @@
                 </form>
 
                 <div class="flex-align-center reservation-submit-box">
-                    <!--                    <button class="reservation-btn" type="button">예약 요청하기</button>-->
                     <button class="reservation-btn " type="button">예약 요청하기</button>
                 </div>
             </div>
