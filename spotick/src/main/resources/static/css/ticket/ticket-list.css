@@ -519,7 +519,7 @@ input[type=checkbox] {
   background: rgb(240, 240, 240);
 }
 
-.OneItemContainer:hover .NavigationBtnContainer{
+.OneItemContainer.hover:hover .NavigationBtnContainer{
   display:block;
 }
 
