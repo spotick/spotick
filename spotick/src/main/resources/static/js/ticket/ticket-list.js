@@ -143,9 +143,6 @@ checkboxes.forEach(checkbox => {
                 newItem.innerHTML = `
           <div class="SelectedItem">
             <span class="SelectedItemText">${checkBoxText.textContent}</span>
-            <button type="button" class="SelectedItemDeleteBtn">
-              <img src="../../static/imgs/cross_1line_gray054.5b1e8cb9.svg" alt="삭제" class="SelectedItemDeleteBtnImg">
-            </button>
           </div>
         `;
                 SelectItemContainer.appendChild(newItem);
@@ -181,9 +178,6 @@ checkboxes.forEach(checkbox => {
                 newItem.innerHTML = `
           <div class="SelectedItem">
             <span class="SelectedItemText">${checkBoxText.textContent}</span>
-            <button type="button" class="SelectedItemDeleteBtn">
-              <img src="../../static/imgs/cross_1line_gray054.5b1e8cb9.svg" alt="삭제" class="SelectedItemDeleteBtnImg">
-            </button>
           </div>
         `;
                 SelectItemContainer.appendChild(newItem);
@@ -266,6 +260,9 @@ areaGroupButtons.forEach(button => {
         areaGroupButtons.forEach(btn => {
             btn.classList.remove('On');
         });
+        checkboxes.forEach(checkbox => {
+            checkbox.disabled = false;
+        })
 
         // 클릭된 버튼에 'On' 클래스 추가
         button.classList.add('On');
