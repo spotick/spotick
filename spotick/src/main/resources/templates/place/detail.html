@@ -368,6 +368,12 @@
                 <p class="title">포인트, 원서 2호점</p> <!--장소 이름-->
                 <div class="flex-align">
                     <p class="title">55,000원</p>
+<!--                    장소기본 요금-->
+                    <input type="hidden" value="55000" id="placePrice">
+<!--                    인원 초과시 인당 추가 요금-->
+                    <input type="hidden" value="5500" id="placeSurcharge">
+<!--                    장소 기본 인원 -->
+                    <input type="hidden" value="4" id="placeDefaultPeople">
                     <p class="hour"> / 시간</p>
                 </div>
                 <div class="line"></div>
@@ -387,7 +393,7 @@
                                 <div>
                                     <p class="time-guide">시작 시간</p>
                                     <select class="checkInOut" name="reservationCheckIn" id="checkIn">
-                                        <option selected disabled>선택안함</option>
+                                        <option selected disabled>시작 시간</option>
                                         <option value="0">오전 12시</option>
                                         <option value="1">오전 1시</option>
                                         <option value="2">오전 2시</option>
@@ -417,32 +423,11 @@
                                 <div>
                                     <p class="time-guide">종료 시간</p>
                                     <select class="checkInOut" disabled name="reservationCheckOut" id="checkOut">
-                                        <option value="0">오전 12시</option>
-                                        <option disabled value="1">
-                                            <del>오전 1시</del>
-                                        </option>
-                                        <option value="2">오전 2시</option>
-                                        <option value="3">오전 3시</option>
-                                        <option value="4">오전 4시</option>
-                                        <option value="5">오전 5시</option>
-                                        <option value="6">오전 6시</option>
-                                        <option value="7">오전 7시</option>
-                                        <option value="8">오전 8시</option>
-                                        <option value="9">오전 9시</option>
-                                        <option value="10">오전 10시</option>
-                                        <option value="11">오전 11시</option>
-                                        <option value="12">오후 12시</option>
-                                        <option value="13">오후 1시</option>
-                                        <option value="14">오후 2시</option>
-                                        <option value="15">오후 3시</option>
-                                        <option value="16">오후 4시</option>
-                                        <option value="17">오후 5시</option>
-                                        <option value="18">오후 6시</option>
-                                        <option value="19">오후 7시</option>
-                                        <option value="20">오후 8시</option>
-                                        <option value="21">오후 9시</option>
-                                        <option value="22">오후 10시</option>
-                                        <option value="23">오후 11시</option>
+                                        <option selected disabled>종료 시간</option>
+<!--                                        <option disabled value="0">-->
+<!--                                           <del>오전 12시</del>-->
+<!--                                        </option>-->
+<!--                                        <option value="23">오후 11시</option>-->
                                     </select>
                                 </div>
                                 <button class="flex-align-center" type="button">
@@ -479,40 +464,18 @@
                 </div>
 
                 <div class="calculate-box">
-                    <div class="reservation-time-box">
-                        <div class="flex-between-align">
-                            <p class="small-title">총 <span>3</span>시간</p>
-                            <p class="small-title">165,000원</p>
-                        </div>
-                        <div class="flex-between-align">
-                            <p class="sub-title"><span>55,000</span>원 x <span>3</span>시간</p>
-                            <p class="sub-title">165,000원</p>
-                        </div>
-                    </div>
 
-                    <div class="reservation-people-box">
-                        <div class="flex-between-align">
-                            <p class="small-title">총인원</p>
-                            <p class="small-title">추가 <span>16,500</span>원</p>
-                        </div>
-                        <div class="flex-between-align">
-                            <p class="sub-title">기본 <span>4</span>명 / 예약 <span>5</span>명</p>
-                            <div class="surcharge-box flex-align-center">
-                                <p>인당 <span>5,500</span></p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="line"></div>
-                    <div class="total-reserve-amount-box">
-                        <div class="flex-between-align">
-                            <p class="small-title">총 금액 합계</p>
-                            <p class="small-title"><span>181,500</span>원</p>
-                        </div>
-                    </div>
                 </div>
-                <div class="flex-align-center">
-                    <!--                    <button class="reservation-btn" type="button">예약 요청하기</button>-->
-                    <button class="reservation-btn" type="button">바로결제</button>
+<!--                장소 예약하기 폼-->
+                <form id="reservationForm" action="#" method="get">
+                    <input type="hidden" name="placeId" id="placeId" value="1">
+                    <input type="hidden" name="reservationCheckIn" id="reservationCheckIn">
+                    <input type="hidden" name="reservationCheckOut" id="reservationCheckOut">
+                    <input type="hidden" name="reservationVisitors" id="reservationVisitors">
+                </form>
+
+                <div class="flex-align-center reservation-submit-box">
+                    <button class="reservation-btn " type="button">예약 요청하기</button>
                 </div>
             </div>
 

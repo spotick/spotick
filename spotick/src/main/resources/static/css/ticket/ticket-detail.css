@@ -57,6 +57,15 @@ button{
   background: none;
 }
 
+.header{
+  height: 100px;
+  background-color: #ffa200;
+  position: fixed;
+  width: 100%;
+  top: 0;
+  z-index: 10;
+}
+
 
 .SpaceDetailPageContainer{
   width: 1200px;
@@ -151,7 +160,9 @@ button{
 }
 
 .SpaceDetailLeftContainer{
+  position: relative;
   width: 678px;
+  margin-top: 100px;
 }
 
 .BasicInformationContainer{
@@ -185,14 +196,10 @@ button{
 
 .BasicInformationShareBtn{
   width: 50px;
-  height: 50px;
-  border-radius: 50%;
   display: flex;
-  -webkit-box-align: center;
   align-items: center;
-  -webkit-box-pack: center;
-  justify-content: center;
-  background: rgb(243, 245, 247);
+  justify-content: flex-end;
+  flex: 1;
 }
 
 .BasicInformationShareImg{
@@ -278,7 +285,7 @@ button{
 
 .InfoTabs{
   position: sticky;
-  top: 103px;
+  top: 100px;
   width: 100%;
   display: flex;
   -webkit-box-align: center;
@@ -1143,6 +1150,10 @@ button{
   border-bottom: 1px solid rgb(240, 240, 240);
 }
 
+.QnaItemContainer:last-of-type{
+  border-bottom: none;
+}
+
 .QnaItemQuestionContainer{
   position: relative;
 }
@@ -1671,11 +1682,11 @@ align-items: center;
 
 .RightReservationBox{
   position: sticky;
-  top: calc(164px);
+  top: calc(110px);
   right: 0px;
   width: 415px;
   height: fit-content;
-  padding: 31px 27px 26px;
+  padding: 21px 27px 26px;
   margin-top: 60px;
   border-radius: 12px;
   background: rgb(255, 255, 255);
@@ -1719,7 +1730,7 @@ align-items: center;
   max-height: 625px;
   border: 1px solid rgb(214, 214, 214);
   border-radius: 10px;
-  margin: 21px 0px 19px;
+  margin-bottom: 19px;
   overflow: auto;
 }
 
@@ -1748,6 +1759,7 @@ align-items: center;
 
 .RadioBoxContainer > div:first-child {
   margin-top: 4px;
+  width: 60%;
 }
 
 .RadioBoxInLine{
@@ -1809,6 +1821,7 @@ align-items: center;
   font-size: 16px;
   line-height: 22px;
   color: rgb(61, 61, 61);
+  padding-left: 5px;
 }
 
 .GoodsInfoDiscountedPriceRuleType{
@@ -1836,7 +1849,6 @@ align-items: center;
   align-items: center;
   -webkit-box-pack: center;
   justify-content: center;
-  background: rgb(250, 250, 250);
 }
 
 .LikeWithReservationButtonImg{
@@ -2233,7 +2245,6 @@ align-items: center;
 .calendar-wrap{
   z-index: 2;
   border-radius: 8px;
-  box-shadow: rgba(0, 0, 0, 0.1) 2px 2px 8px 0px;
   padding: 20px 18px 18px;
   border: 1px solid rgb(239, 243, 245);
   /*border: 1px solid red;*/
@@ -2246,4 +2257,520 @@ align-items: center;
   padding: 10px 10px 0;
   display: flex;
   justify-content: space-between;
+}
+
+/*모달창*/
+.flex {
+  display: flex;
+}
+
+.flex-between-align {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.flex-column {
+  display: flex;
+  flex-direction: column;
+}
+
+.flex-center {
+  display: flex;
+  justify-content: center;
+}
+
+.flex-align-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.flex-align {
+  display: flex;
+  align-items: center;
+}
+
+.small-title {
+  font-weight: bold;
+  font-size: 16px;
+  color: rgb(36, 36, 36);
+  line-height: 22px;
+  margin: 14px 0;
+}
+
+.sub-title {
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 20px;
+  color: rgb(163, 163, 163);
+}
+
+.none {
+  display: none;
+}
+
+.inquiry-modal-container {
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.8);
+  z-index: 1050;
+  touch-action: none;
+}
+
+.inquiry-modal-container.none{
+  display: none;
+}
+
+.inquiry-modal-wrap {
+  margin: 0 auto;
+  width: 420px;
+  height: 500px;
+  background-color: white;
+  border-radius: 8px;
+  position: relative;
+  padding: 20px 0;
+  flex-direction: column;
+}
+
+.inquiry-cancel {
+  position: absolute;
+  margin-top: 12px;
+  right: 30px;
+  width: 25px;
+}
+
+.inquiry-guide {
+  font-weight: bold;
+  font-size: 12px;
+  color: rgb(158, 164, 170);
+  margin: 8px 0;
+}
+
+.inquiry-content-box {
+  width: 320px;
+  margin-top: 10px;
+}
+
+.inquiry-title-box{
+}
+
+#inquiryTitle{
+  border-radius: 4px;
+  border: solid 1px #dfe2e7;
+  font-size: 16px;
+  padding: 10px;
+  width: 320px;
+}
+
+#inquiryContent {
+  border-radius: 4px;
+  border: solid 1px #dfe2e7;
+  font-size: 16px;
+  padding: 10px;
+  width: 320px;
+  height: 250px;
+}
+
+.letter-count {
+  font-weight: 500;
+  font-size: 12px;
+  color: rgb(69, 75, 80);
+}
+
+.reservation-btn,
+.inquiry-submit {
+  margin-top: 20px;
+  height: 52px;
+  border-radius: 8px;
+  background-color: #e7eaee;
+  color: #9ea4aa;
+  font-weight: bold;
+  font-size: 16px;
+  width: 300px;
+}
+
+.reservation-btn.on,
+.inquiry-submit.on {
+  background-color: #007AFF;
+  color: white;
+}
+
+.RadioBox{
+  display: flex;
+}
+
+.minus,
+.plus {
+  border-radius: 50%;
+  border: 1px solid rgb(227, 227, 232);
+  width: 30px;
+  height: 30px;
+  font-size: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 10px;
+  text-align: center;
+  line-height: 10px;
+}
+
+.reservation-visitors {
+  width: 28px;
+  height: 38px;
+  font-size: 15px;
+  border: 1px solid #0b0b0b;
+  border-radius: 4px;
+}
+
+.visitors {
+  text-align: center;
+  width: 100%;
+}
+
+
+.ModalBackground{
+  width: 100%;
+  min-height: 100vh;
+  height: 100%;
+  position: fixed;
+  left: 0px;
+  bottom: 0px;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1050;
+  touch-action: none;
+  display: none;
+}
+
+.ModalBackground.On{
+  display: block;
+}
+
+.ShareModalContainer{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgb(255, 255, 255);
+  width: 354px;
+  border-radius: 20px;
+}
+
+.ShareModalHeader{
+  display: flex;
+  -webkit-box-align: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  justify-content: center;
+  padding: 18px 0px;
+  border-bottom: 1px solid rgb(240, 240, 240);
+}
+
+.ShareModalHeaderTitle{
+  font-size: 16px;
+  line-height: 24px;
+  letter-spacing: -0.96px;
+}
+
+.ShareModalCloseBtn{
+  position: absolute;
+  top: 21px;
+  right: 18px;
+}
+
+.ShareModalCloseImg{
+  width: 18px;
+}
+
+.ShareModalBottomContainer{
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 18px;
+}
+
+.ModalShareBtn{
+  width: 100%;
+  padding: 9px;
+  border: 1px solid rgb(212, 219, 226);
+  border-radius: 4px;
+  display: flex;
+  -webkit-box-align: center;
+  align-items: center;
+  -webkit-box-pack: start;
+  justify-content: flex-start;
+  gap: 9px;
+}
+
+.ShareModalShareImgContainer{
+  width: 40px;
+  height: 40px;
+  border-radius: 7px;
+  background: rgb(0, 117, 235);
+  display: flex;
+  -webkit-box-align: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  justify-content: center;
+}
+
+.ModalShareImg{
+  width: 30px;
+}
+
+.ModalShareBtnText{
+  font-size: 15px;
+  line-height: 40px;
+  color: rgb(36, 36, 36);
+}
+
+.ModalKakaoShareBtn{
+  width: 100%;
+  padding: 9px;
+  border: 1px solid rgb(212, 219, 226);
+  border-radius: 4px;
+  display: flex;
+  -webkit-box-align: center;
+  align-items: center;
+  -webkit-box-pack: start;
+  justify-content: flex-start;
+  gap: 9px;
+}
+
+.ShareModalKakaoImg{
+  width: 40px;
+}
+
+.ModalKakaoShareBtnText{
+  font-size: 15px;
+  line-height: 40px;
+  color: rgb(36, 36, 36);
+}
+
+.ModalShareBtn:hover {
+  border: 1px solid rgb(0, 117, 235);
+}
+
+.ModalKakaoShareBtn:hover {
+  border: 1px solid rgb(0, 117, 235);
+}
+
+/*상단 부분 기본정보*/
+.summary {
+  position: relative;
+  padding-bottom: 1rem;
+  font-size: 0;
+}
+
+.summary .summaryTop {
+  margin-bottom: 1.9rem;
+}
+
+.summary .prdTitle {
+  margin-top: 15px;
+  display: -webkit-box;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 1.5rem;
+  font-weight: bold;
+  line-height: 130%;
+}
+
+.summary .prdTitleBottom {
+  margin-top: 0.9rem;
+}
+
+.summaryBody{
+  display: flex;
+}
+
+.blind {
+  position: absolute;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  margin: -0.1rem;
+  width: 0.1rem;
+  height: 0.1rem;
+}
+
+.summary .prdTitleSmall {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  display: inline-block;
+  max-width: 70rem;
+  color: #666;
+  font-size: 1.4rem;
+  vertical-align: middle;
+}
+
+.summary .posterBox {
+  display: inline-block;
+  width: 20rem;
+}
+
+.summary .posterBox .posterBoxTop {
+  background-image: url(//openimage.interpark.com/ticket-desktop/pages/product/noImage_logo.png);
+  background-repeat: no-repeat;
+  background-color: #f0f0f0;
+  background-position: 50% 50%;
+  position: relative;
+  height: 26rem;
+}
+
+
+.summary .posterBox .posterBoxImage {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: 0.1rem solid #dadee3;
+  box-sizing: border-box;
+}
+
+.summary .posterBox .posterBoxBottom {
+  margin-top: 1.2rem;
+  font-size: 0;
+}
+
+.summary .prdCast {
+  float: left;
+  margin-top: 0.2rem;
+  font-size: 0;
+}
+
+.summary .prdCast .prdCastWrap {
+  display: inline-block;
+}
+
+.summary .prdCast .prdCastBtn {
+  position: relative;
+  display: inline-block;
+  font-size: 1.4rem;
+  font-weight: inherit;
+  line-height: 2.4rem;
+  outline-style: none;
+  cursor: pointer;
+}
+
+.summary .prdCast .prdCastBtn:before {
+  background-image: url(//openimage.interpark.com/ticket-desktop/pages/product/icon_heart.png);
+  background-repeat: no-repeat;
+  position: relative;
+  display: inline-block;
+  top: 0.2rem;
+  width: 1.7rem;
+  height: 1.5rem;
+  padding-right: 0.6rem;
+  background-position: 0 0;
+  content: '';
+}
+
+.summary .prdCast .prdCastNum {
+  display: inline-block;
+  margin-left: 0.5rem;
+  font-size: 1.4rem;
+  font-weight: bold;
+}
+
+.summary .share {
+  float: right;
+}
+
+.summary .share .shareList {
+  font-size: 0;
+}
+
+.summary .info {
+  display: inline-block;
+  width: 25.5rem;
+  margin-left: 30px;
+  vertical-align: top;
+}
+
+.summary .info .infoItem {
+  margin-top: 1.5rem;
+
+}
+
+.summary .info .infoItem:first-child {
+  margin-top: 0;
+  line-height: 2.2rem;
+}
+
+.summary .info .infoLabel {
+  display: inline-block;
+  width: 100px;
+  padding-right:5px;
+  color: #000;
+  font-size: 15px;
+  font-weight: normal;
+  line-height: 160%;
+  vertical-align: top;
+  box-sizing: border-box;
+}
+
+.summary .info .infoDesc {
+  display: inline-block;
+  max-width: 39rem;
+  vertical-align: top;
+}
+
+.summary .info .infoBtn {
+  position: relative;
+  color: #000;
+  font-size: 15px;
+  line-height: 160%;
+  vertical-align: middle;
+  text-align: left;
+  font-weight: inherit;
+}
+
+.summary .info .infoText {
+  position: relative;
+  max-width: 41.5rem;
+  color: #000;
+  font-size: 15px;
+  line-height: 160%;
+}
+
+.summary .info .infoPriceList .infoPriceItem {
+  display: flex;
+  gap: 0.7rem;
+  margin-top: 1.3rem;
+  color: #000;
+  font-size: 0;
+  line-height: 2rem;
+  font-weight: 500;
+}
+
+.summary .info .infoPriceList .infoPriceItem:first-child{
+  margin-top: 0;
+}
+
+.summary .info .infoPriceList .infoPriceItem span {
+  display: inline-block;
+  font-size: 15px;
+  word-break: keep-all;
+  vertical-align: middle;
+}
+
+.summary .info .infoPriceList .infoPriceItem .name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 3rem;
+  max-width: 30rem;
+  color: #666;
+  font-weight: 500;
+}
+
+.summary .info .infoPriceList .infoPriceItem .price {
+  font-weight: 500;
+}
+
+.summary .info .infoPriceList .infoPriceItem .name + .price {
+  vertical-align: top;
 }

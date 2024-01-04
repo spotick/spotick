@@ -2,10 +2,10 @@
 // 모든 OneItemContainer에 대해 반복
 document.querySelectorAll('.OneItemContainer').forEach(function (container, index) {
     // 현재 container의 ImageSwiper 클래스를 가진 요소를 찾음
-    var swiperContainer = container.querySelector('.ImageSwiper');
+    let swiperContainer = container.querySelector('.ImageSwiper');
 
     // Swiper 초기화
-    var swiper = new Swiper(swiperContainer, {
+    let swiper = new Swiper(swiperContainer, {
         pagination: {
             el: swiperContainer.querySelector('.swiper-pagination'),
             clickable: true,
@@ -17,53 +17,19 @@ document.querySelectorAll('.OneItemContainer').forEach(function (container, inde
         on: {
             slideChange: function () {
                 handleSlideChange(this);
-
             },
         },
     });
-
-    // 슬라이드 index최대값
-    page(swiper);
-
 
     // 초기 페이지네이션 업데이트
     updatePagination(swiper);
 });
 
 function handleSlideChange(swiper) {
-    var snapIndexElement = swiper.el.querySelector(".snapIndex");
+    let snapIndexElement = swiper.el.querySelector(".snapIndex");
     if (snapIndexElement) {
         snapIndexElement.textContent = swiper.snapIndex + 1;
     }
-}
-
-function page(swiper){
-    var pageIndex = swiper.el.querySelector(".slideIndex");
-    if (pageIndex) {
-        pageIndex.textContent = swiper.slides.length;
-    }
-    // 슬라이드가 1개일 경우 hover 없애기
-    if(swiper.slides.length === 1){
-        // 부모 노드를 탐색하면서 hover 클래스를 가진 부모를 찾습니다.
-        let parentWithHoverClass = null;
-        let parentNode = pageIndex.parentElement;
-        let parentContainer = pageIndex.parentElement.parentElement;
-        console.log(parentContainer)
-
-        while (parentNode) {
-            if (parentNode.classList.contains("hover")) {
-                parentWithHoverClass = parentNode;
-                break;
-            }
-            parentNode = parentNode.parentElement;
-        }
-
-        if (parentWithHoverClass) {
-            parentContainer.style.display = "none";
-            parentWithHoverClass.classList.remove("hover");
-        }
-    }
-
 }
 
 function updatePagination(swiper) {
@@ -88,13 +54,7 @@ const selectBoxList = document.querySelector('.SelectBoxList');
 const selectBoxBtnImg = document.querySelector('.SelectBoxBtnImg');
 const SelectBoxBtnText = document.querySelector('.SelectBoxBtnText');
 
-// 좋아요 버튼
-function toggleLike(btn) {
-    var likeIcon = btn.querySelector('.ItemLikeBtn img');
 
-    // 이미지를 토글
-    likeIcon.src = likeIcon.src.includes('heart_line') ? '../../static/imgs/heart_filled_white_shadow.708fbebd.png' : '../../static/imgs/heart_line_white_shadow.d5d214d0.png';
-}
 
 // 인기순 필터
 selectBoxBtn.addEventListener('click', function () {
@@ -177,6 +137,9 @@ checkboxes.forEach(checkbox => {
                 newItem.innerHTML = `
           <div class="SelectedItem">
             <span class="SelectedItemText">${checkBoxText.textContent}</span>
+            <button type="button" class="SelectedItemDeleteBtn">
+              <img src="../../static/imgs/cross_1line_gray054.5b1e8cb9.svg" alt="삭제" class="SelectedItemDeleteBtnImg">
+            </button>
           </div>
         `;
                 SelectItemContainer.appendChild(newItem);
@@ -212,6 +175,9 @@ checkboxes.forEach(checkbox => {
                 newItem.innerHTML = `
           <div class="SelectedItem">
             <span class="SelectedItemText">${checkBoxText.textContent}</span>
+            <button type="button" class="SelectedItemDeleteBtn">
+              <img src="../../static/imgs/cross_1line_gray054.5b1e8cb9.svg" alt="삭제" class="SelectedItemDeleteBtnImg">
+            </button>
           </div>
         `;
                 SelectItemContainer.appendChild(newItem);
@@ -294,9 +260,6 @@ areaGroupButtons.forEach(button => {
         areaGroupButtons.forEach(btn => {
             btn.classList.remove('On');
         });
-        checkboxes.forEach(checkbox => {
-            checkbox.disabled = false;
-        })
 
         // 클릭된 버튼에 'On' 클래스 추가
         button.classList.add('On');
@@ -321,3 +284,101 @@ function toggleCityContainer(targetId) {
         targetContainer.classList.add('On');
     }
 }
+
+
+
+// 좋아요 버튼
+$(`.ListItemsContainer`).on('click','.ItemBookMarkBtn',function (){
+    $(this).find('span').toggleClass('none');
+});
+
+// 동적으로 요소들 추가했을 때 이벤트확인하기 위한 코드
+test();
+function test(){
+    let text = '';
+
+    text = `
+        <div class="OneItemContainer">
+                <div class="OneItemImgContainer">
+                    <div class="swiper ImageSwiper swiper-initialized swiper-horizontal swiper-pointer-events swiper-backface-hidden">
+                        <div class="swiper-wrapper ImageLength" style="transform: translate3d(0px, 0px, 0px);">
+                            <div class="swiper-slide swiper-slide-active" style="width: 287px;">
+                                <img src="https://img.shareit.kr/tempspaceauth/img/2023-01-10/c4ee019d-1816-4b82-8138-302662a306e4_640.jpg" alt="실내체육관(낙산관)" height="1350.6666666666665px" class="ItemImg">
+                            </div>
+                            <div class="swiper-slide swiper-slide-next" style="width: 287px;">
+                                <img src="\thttps://img.shareit.kr/tempspaceauth/img/2023-01-10/6a7ba1d9-7a02-4b06-b96d-26bc33bc27ca_640.jpg" alt="실내체육관(낙산관)" height="1350.6666666666665px" class="ItemImg">
+                            </div>
+                            <div class="swiper-slide" style="width: 287px;">
+                                <img src="\thttps://img.shareit.kr/tempspaceauth/img/2023-01-10/33f564e8-4102-40e2-9b8e-19374cbf0516_640.jpg" alt="실내체육관(낙산관)" height="1350.6666666666665px" class="ItemImg">
+                            </div>
+                            <div class="swiper-slide" style="width: 287px;">
+                                <img src="https://img.shareit.kr/tempspaceauth/img/2023-01-10/78a18732-9490-4279-9e0a-d659931aa8ec_640.jpg" alt="실내체육관(낙산관)" height="1350.6666666666665px" class="ItemImg">
+                            </div>
+                            <div class="swiper-slide" style="width: 287px;">
+                                <img src="https://img.shareit.kr/tempspaceauth/img/2023-01-10/8b7ecc1d-2084-42dd-9c77-ecc5de1f442f_640.jpg" alt="실내체육관(낙산관)" height="1350.6666666666665px" class="ItemImg">
+                            </div>
+                        </div>
+                        <div class="NavigationBtnContainer">
+                            <button type="button" class="NavigationBtn RightBtn">
+                                <img src="../../static/imgs/round_arrow_right_gray024.7f7e18a3.svg" alt="다음">
+                            </button>
+                            <button type="button" class="NavigationBtn LeftBtn">
+                                <img src="../../static/imgs/round_arrow_left_gray024.707193e8.svg" alt="이전">
+                            </button>
+                        </div>
+                        <div class="ItemImgPagination">
+                            <p><span class="snapIndex">1</span>/5</p>
+                        </div>
+                    </div>
+                    <button type="button" class="ItemBookMarkBtn" >
+                        <span><i class="fa-regular fa-bookmark"></i></span>
+                        <span class="none"><i class="fa-solid fa-bookmark" style="color: white"></i></span>
+                    </button>
+                </div>
+                <div class="ItemTextContainer">
+                    <div class="ItemHostNameContainer">
+                        <span class="ItemHostName">서울 영등포구</span>
+                        <div class="ItemCountsContainer">
+                            <div class="ItemsStarCountContainer">
+                                <img src="../../static/imgs/star_filled_paintYellow056.a8eb6e44.svg" alt="후기갯수" class="ItemCountImg">
+                                <span class="ItemCountText">4.0(20)</span>
+                            </div>
+                            <div class="ItemsLikeCountContainer">
+                                <img src="../../static/imgs/heart_line_thin_gray054.1ef56fe5.svg" alt="좋아요갯수" class="ItemCountImg">
+                                <span class="ItemCountText">1724</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="ItemSpaceNameContainer">
+                        <p class="ItemSpaceName">한강뷰라니</p>
+                    </div>
+                    <div class="ItemPriceContainer">
+                        <span class="place-price">13,500원</span>
+                    </div>
+                </div>
+            </div>
+    `;
+
+    $('.ListItemsContainer').append(text);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
