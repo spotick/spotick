@@ -275,8 +275,103 @@
 
 .mpc-cards-wrap article {
     width: 33.3333%;
-    padding: 0 10px;
+    display: flex;
+    position: relative;
+    flex-direction: column;
+    align-items: flex-start;
+    min-width: 0;
+    cursor: pointer;
+}
+
+.mpc-image-con {
+    position: relative;
+    width: 100%;
+    border-radius: 4px;
+    overflow: hidden;
+    margin-bottom: 8px;
+}
+
+.mpc-image-swiperable {
+    margin-left: auto;
+    margin-right: auto;
+    position: relative;
+    overflow: hidden;
+    list-style: none;
+    padding: 0;
+    z-index: 1;
+}
+
+.mpc-swiper-wrapper {
+    position: relative;
+    width: 100%;
     height: 100%;
+    z-index: 1;
+    display: flex;
+    transition-property: transform;
+    box-sizing: content-box;
+}
+
+.mpc-slide-image-item {
+    flex-shrink: 0;
+    width: 100%;
+    height: 100%;
+    position: relative;
+    transition-property: transform;
+}
+
+.mpc-slide-image-item img {
+    width: 100%;
+    min-height: 215px;
+    height: 215px;
+    background: rgb(240, 240, 240)
+}
+
+.OneItemContainer:hover .NavigationBtnContainer{
+    display:block;
+}
+
+.NavigationBtnContainer{
+    display: none;
+}
+
+.RightBtn{
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 30px;
+    height: 30px;
+    display: flex;
+    -webkit-box-align: center;
+    align-items: center;
+    -webkit-box-pack: center;
+    justify-content: center;
+    right: 9px;
+    z-index: 1010;
+    cursor: pointer;
+}
+
+.RightBtn > img {
+    width: 100%;
+}
+
+.LeftBtn{
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 30px;
+    height: 30px;
+    display: flex;
+    -webkit-box-align: center;
+    align-items: center;
+    -webkit-box-pack: center;
+    justify-content: center;
+    left: 9px;
+    z-index: 1010;
+    cursor: pointer;
+}
+
+.LeftBtn > img {
+    width: 100%;
 }
 
 .mpc-card {
