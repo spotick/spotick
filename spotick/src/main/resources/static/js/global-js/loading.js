@@ -11,9 +11,5 @@ function showLoadingScreen() {
 function closeLoadingScreen() {
     let loadingHtml = document.getElementById('loadingBackground');
 
-    if (loadingHtml) {
-        setTimeout(() => {
-            document.body.removeChild(loadingHtml);
-        }, 300);
-    }
+    document.body.removeChild(loadingHtml);
 }

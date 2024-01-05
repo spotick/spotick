@@ -210,10 +210,12 @@
 
 .ItemPriceContainer{
     display: flex;
+    justify-content: space-between;
     -webkit-box-align: center;
     align-items: center;
     gap: 4px;
     margin-top: 6px;
+    width: 100%;
 }
 
 .ItemPrice{
@@ -280,6 +282,17 @@
 .CategoryContainer .swiper-slide {
     width: fit-content !important;
     margin-right: 28px !important;
+}
+
+.BottomButton {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 4px;
+    background-color: #007aff;
+    padding: 6px 16px;
+    color: white;
+    font-weight: 600;
 }
 
 @keyframes activateAnimation2 {
