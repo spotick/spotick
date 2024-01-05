@@ -15,6 +15,7 @@ const nicknameModal = document.getElementById('nicknameModal');
 const phoneModal = document.getElementById('phoneModal');
 
 const modalPlace = document.querySelector('.modal-place');
+const modalTicket = document.querySelector('.modal-ticket');
 const modalInquiry = document.querySelector('.modal-inquiry');
 
 modalBg.addEventListener("click", (e) => {

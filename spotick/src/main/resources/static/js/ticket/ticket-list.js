@@ -17,9 +17,14 @@ document.querySelectorAll('.OneItemContainer').forEach(function (container, inde
         on: {
             slideChange: function () {
                 handleSlideChange(this);
+
             },
         },
     });
+
+    // 슬라이드 index최대값
+    page(swiper);
+
 
     // 초기 페이지네이션 업데이트
     updatePagination(swiper);
@@ -30,6 +35,35 @@ function handleSlideChange(swiper) {
     if (snapIndexElement) {
         snapIndexElement.textContent = swiper.snapIndex + 1;
     }
+}
+
+function page(swiper){
+    var pageIndex = swiper.el.querySelector(".slideIndex");
+    if (pageIndex) {
+        pageIndex.textContent = swiper.slides.length;
+    }
+    // 슬라이드가 1개일 경우 hover 없애기
+    if(swiper.slides.length === 1){
+        // 부모 노드를 탐색하면서 hover 클래스를 가진 부모를 찾습니다.
+        let parentWithHoverClass = null;
+        let parentNode = pageIndex.parentElement;
+        let parentContainer = pageIndex.parentElement.parentElement;
+        console.log(parentContainer)
+
+        while (parentNode) {
+            if (parentNode.classList.contains("hover")) {
+                parentWithHoverClass = parentNode;
+                break;
+            }
+            parentNode = parentNode.parentElement;
+        }
+
+        if (parentWithHoverClass) {
+            parentContainer.style.display = "none";
+            parentWithHoverClass.classList.remove("hover");
+        }
+    }
+
 }
 
 function updatePagination(swiper) {
@@ -143,9 +177,6 @@ checkboxes.forEach(checkbox => {
                 newItem.innerHTML = `
           <div class="SelectedItem">
             <span class="SelectedItemText">${checkBoxText.textContent}</span>
-            <button type="button" class="SelectedItemDeleteBtn">
-              <img src="../../static/imgs/cross_1line_gray054.5b1e8cb9.svg" alt="삭제" class="SelectedItemDeleteBtnImg">
-            </button>
           </div>
         `;
                 SelectItemContainer.appendChild(newItem);
@@ -181,9 +212,6 @@ checkboxes.forEach(checkbox => {
                 newItem.innerHTML = `
           <div class="SelectedItem">
             <span class="SelectedItemText">${checkBoxText.textContent}</span>
-            <button type="button" class="SelectedItemDeleteBtn">
-              <img src="../../static/imgs/cross_1line_gray054.5b1e8cb9.svg" alt="삭제" class="SelectedItemDeleteBtnImg">
-            </button>
           </div>
         `;
                 SelectItemContainer.appendChild(newItem);
@@ -266,6 +294,9 @@ areaGroupButtons.forEach(button => {
         areaGroupButtons.forEach(btn => {
             btn.classList.remove('On');
         });
+        checkboxes.forEach(checkbox => {
+            checkbox.disabled = false;
+        })
 
         // 클릭된 버튼에 'On' 클래스 추가
         button.classList.add('On');

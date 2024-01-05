@@ -26,7 +26,7 @@
     </div>
     <div class="modal-inquiry">
         <div class="modal-place-input-con" style="margin-bottom: 20px">
-            <input class="mpc-inquiry-title" type="text" value="문의 제목 내용" readonly>
+            <input class="mpc-inquiry-title" readonly type="text" value="문의 제목 내용">
         </div>
         <div class="modal-place-content-container">
             <div class="modal-place-con-box">
@@ -37,7 +37,8 @@
                 </div>
                 <div class="modal-place-title">답변</div>
                 <div class="modal-place-input-con">
-                    <textarea class="modal-place-txarea" cols="30" placeholder="아직 답변받지 못했습니다!" rows="10" readonly></textarea>
+                    <textarea class="modal-place-txarea" cols="30" placeholder="아직 답변받지 못했습니다!" readonly
+                              rows="10"></textarea>
                 </div>
             </div>
         </div>
@@ -48,39 +49,41 @@
 
 <main id="my-page-main">
     <div class="mp-left-menu">
-        <section>
-            <div class="mplm-section-title">계정관리</div>
-            <ul>
-                <li class="mplm-nav-item">
-                    <a href="#">개인정보 수정</a>
-                </li>
-            </ul>
-        </section>
-        <section>
-            <div class="mplm-section-title">My활동</div>
-            <ul>
-                <li class="mplm-nav-item">
-                    <a href="#">북마크</a>
-                </li>
-                <li class="mplm-nav-item">
-                    <a href="#">예약내역</a>
-                </li>
-                <li class="mplm-nav-item active">
-                    <a href="#">문의 내역</a>
-                </li>
-                <li class="mplm-nav-item">
-                    <a href="#">후기관리</a>
-                </li>
-            </ul>
-        </section>
-        <section>
-            <div class="mplm-section-title">장소 관리</div>
-            <ul>
-                <li class="mplm-nav-item">
-                    <a href="#">장소 관리</a>
-                </li>
-            </ul>
-        </section>
+        <div class="mplm-sticky">
+            <section>
+                <div class="mplm-section-title">계정관리</div>
+                <ul>
+                    <li class="mplm-nav-item">
+                        <a href="#">개인정보 수정</a>
+                    </li>
+                </ul>
+            </section>
+            <section>
+                <div class="mplm-section-title">My활동</div>
+                <ul>
+                    <li class="mplm-nav-item">
+                        <a href="#">북마크</a>
+                    </li>
+                    <li class="mplm-nav-item">
+                        <a href="#">예약내역</a>
+                    </li>
+                    <li class="mplm-nav-item active">
+                        <a href="#">문의 내역</a>
+                    </li>
+                    <li class="mplm-nav-item">
+                        <a href="#">후기관리</a>
+                    </li>
+                </ul>
+            </section>
+            <section>
+                <div class="mplm-section-title">장소 관리</div>
+                <ul>
+                    <li class="mplm-nav-item">
+                        <a href="#">장소 관리</a>
+                    </li>
+                </ul>
+            </section>
+        </div>
     </div>
     <div class="mp-content">
         <article>
@@ -123,7 +126,7 @@
                             </div>
                             <div class="mpccc-row">
                                 <a class="mpccc-title-font general-ellipsis-1" href="#">
-                                    제목 테스트 제목 테스트 제목 테스트 제목 테스트 제목 테스트
+                                    제목 테스트 1번
                                 </a>
                             </div>
                             <div class="mpccc-row" style="margin-top: 10px;">
@@ -142,7 +145,13 @@
                             <div class="mpcri-title">문의 내용</div>
                             <div class="mpcriq-title">문의 제목 테스트문의 제목 테스트문의 제목 테스트문의 제목 테스트문의 제목 테스트문의 제목 테스트</div>
                             <div class="mpcriq-content">
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin condimentum ante id urna condimentum imperdiet. Donec iaculis ipsum sit amet maximus sagittis. Sed id urna eget mi hendrerit eleifend. Vivamus ullamcorper purus nec lectus mattis ornare. Nam pharetra tristique sapien, quis convallis purus convallis ac. Praesent feugiat nec tortor at maximus. Donec sed metus nec nisl commodo semper pharetra in libero. Etiam et dapibus quam. Cras sed gravida urna. Nunc semper ultricies tellus, non sodales nunc efficitur in. Donec vitae magna blandit, ultrices libero et, accumsan nisi. Aliquam erat volutpat.
+                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin condimentum ante id urna
+                                condimentum imperdiet. Donec iaculis ipsum sit amet maximus sagittis. Sed id urna eget
+                                mi hendrerit eleifend. Vivamus ullamcorper purus nec lectus mattis ornare. Nam pharetra
+                                tristique sapien, quis convallis purus convallis ac. Praesent feugiat nec tortor at
+                                maximus. Donec sed metus nec nisl commodo semper pharetra in libero. Etiam et dapibus
+                                quam. Cras sed gravida urna. Nunc semper ultricies tellus, non sodales nunc efficitur
+                                in. Donec vitae magna blandit, ultrices libero et, accumsan nisi. Aliquam erat volutpat.
                             </div>
                         </div>
                     </div>

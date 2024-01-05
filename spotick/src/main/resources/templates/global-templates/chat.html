@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.0/css/all.min.css" rel="stylesheet"/>
+    <link href="../../static/css/global-css/root.css" rel="stylesheet">
+    <link href="../../static/css/global-css/chat.css" rel="stylesheet">
+</head>
+<body>
+
+<div id="chat--screen" th:fragment="chat">
+    <div class="chatbot" id="chatbot">
+        <!--채팅창 내용-->
+        <div class="chat-room-detail-wrap">
+            <div class="chatbot-header" id="chatbot-header">
+                <div class="chat-title-box">
+                    <div class="chat-room-title">
+                        고객센터 챗봇
+                    </div>
+                    <button class="chatbot-close chat-close chat-screen-close">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="chatbot-body" id="chatbot-body">
+                <div class="bot-message message">
+                    <div class="message-text">
+                        안녕하세요 저는 Spotick 사이트의 챗봇입니다. <br>
+                        저화 대화한 내용은 로그아웃하거나 브라우저를 종료하면 사라지게 됩니다
+                        무엇을 도와드릴까요?
+                    </div>
+                </div>
+
+            </div>
+            <div class="chatbot-footer" id="chatbot-footer">
+                <div class="chatbot-input-container">
+                    <textarea id="chatbot-textarea" placeholder="궁금한것을 물어보세요!"></textarea>
+                </div>
+                <button id="chatbot-send" onclick="sendMessage()">전송</button>
+            </div>
+        </div>
+
+    </div>
+
+    <button class="chatbot-button" id="chatbot-open">
+        <!-- Font Awesome 채팅 아이콘 -->
+        <img alt="" class="chat--open-btn-img"
+             src="../../static/imgs/chatbot.svg">
+    </button>
+    <span class="chat-notice-icon">
+      21
+    </span>
+
+</div>
+<script src="https://code.jquery.com/jquery-3.6.4.js"></script>
+<script src="../../static/js/global-js/chat.js"></script>
+
+</body>
+</html>
