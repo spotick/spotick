@@ -139,17 +139,30 @@
                 </div>
                 <div class="input-wrap hour-price-wrap">
                     <div class="input-guide flex">
-                        <p class="input-title">기본인원</p>
+                        <p class="input-title">할증금액</p>
                         <img src="//s3.hourplace.co.kr/web/images/icon/invalid.svg" alt="필수입력">
-                        <p class="guide-msg">게스트가 예약할 때 기본 인원을 초과하면 할증이 붙어요</p>
+                        <p class="guide-msg">기본 인원을 초과하면 해당 금액만큼 할증이 붙어요</p>
                         <p class="invalid-msg"></p>
                     </div>
                     <div class="input-box">
-                        <input id="placeDefaultPeople" min="1" type="number" name="placeDefaultPeople"
-                               placeholder="기본 인원을 입력해주세요"
+                        <input id="placeSurcharge" min="1" type="number" name="placeSurcharge"
+                               placeholder="할증 금액을 입력해주세요"
                                required>
-                        <p class="unit">명</p>
+                        <p class="unit">원</p>
                     </div>
+                </div>
+            </div>
+
+            <div class="input-wrap default-people-container">
+                <div class="input-guide flex">
+                    <p class="input-title">기본 인원</p>
+                    <img src="//s3.hourplace.co.kr/web/images/icon/invalid.svg" alt="필수입력">
+                    <p class="invalid-msg"></p>
+                </div>
+                <div class="input-box">
+                    <input id="placeDefaultPeople" min="1" type="number" name="placeDefaultPeople"
+                           placeholder="장소의 기본 이용인원을 적어주세요" required>
+                    <p class="unit">명</p>
                 </div>
             </div>
 
