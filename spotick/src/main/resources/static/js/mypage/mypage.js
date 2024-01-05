@@ -28,7 +28,9 @@ modalBg.addEventListener("click", (e) => {
         }
     }
 });
-
+document.addEventListener("DOMContentLoaded", function() {
+    // code...
+});
 // 모달타입을 전달하여 특정 모달창 on
 function openModal(modalType) {
     modalBg.classList.add('show');
