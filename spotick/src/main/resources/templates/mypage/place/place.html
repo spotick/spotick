@@ -8,6 +8,7 @@
     <link href="../../../static/css/global-css/root.css" rel="stylesheet">
     <link href="../../../static/css/mypage/mypage.css" rel="stylesheet">
     <link href="../../../static/css/mypage/mypage-modal.css" rel="stylesheet">
+    <link href="../../../static/css/global-css/post-list-card-item.css" rel="stylesheet">
     <link href="../../../static/css/place/register.css" rel="stylesheet"/>
     <script crossorigin="anonymous" src="https://kit.fontawesome.com/2364e2b536.js"></script>
 </head>
@@ -272,28 +273,27 @@
             <div class="mpcp-wrap" style="width: 80%">
                 <article>
                     <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
-                        <div class="mpcre-card-content">
-                            <div class="mpccc-row">
-                                <p class="mpccc-top-font" href="#">
-                                    <a href="#">대전</a>
-                                    <span style="margin: 0 2px;">·</span>
-                                    <a href="#">서구</a>
-                                </p>
-                            </div>
-                            <div class="mpccc-row">
-                                <a class="mpccc-title-font general-ellipsis-1" href="#">
-                                    장소 1 테스트
-                                </a>
-                            </div>
-                            <div class="mpccc-row" style="margin-top: 10px;">
-                                <p class="mpccc-price">16,500원</p>
-                                <div class="mpccc-eval">
-                                    <img src="../../imgs/gold_star.svg">
-                                    <p class="mpccc-eval-num"> 5.0 </p>
-                                    <a class="mpccc-review-count" href="#">리뷰
-                                        <span>149</span>
-                                    </a>
+                        <div class="ItemTextContainer" style="max-width: 400px">
+                            <div class="ItemHostNameContainer">
+                                <span class="ItemHostName">서울 성북구</span>
+                                <div class="ItemCountsContainer">
+                                    <div class="ItemsStarCountContainer">
+                                        <img alt="후기갯수" class="ItemCountImg"
+                                             src="../../../static/imgs/star_filled_paintYellow056.a8eb6e44.svg">
+                                        <span class="ItemCountText">4.0(20)</span>
+                                    </div>
+                                    <div class="ItemsLikeCountContainer">
+                                        <img alt="북마크갯수" class="ItemCountImg bookmark"
+                                             src="../../../static/imgs/bookmark_thin.svg">
+                                        <span class="ItemCountText">1724</span>
+                                    </div>
                                 </div>
+                            </div>
+                            <div class="ItemSpaceNameContainer">
+                                <p class="ItemSpaceName">낙산관 실내체육관(낙산관)</p>
+                            </div>
+                            <div class="ItemPriceContainer">
+                                <span class="ItemPrice">2023.12.30 ~ 2024.01.30</span>
                             </div>
                         </div>
                         <div class="mpcre-img-con" style="margin-right: 0;">
@@ -344,28 +344,27 @@
                 </article>
                 <article>
                     <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
-                        <div class="mpcre-card-content">
-                            <div class="mpccc-row">
-                                <p class="mpccc-top-font" href="#">
-                                    <a href="#">대전</a>
-                                    <span style="margin: 0 2px;">·</span>
-                                    <a href="#">서구</a>
-                                </p>
-                            </div>
-                            <div class="mpccc-row">
-                                <a class="mpccc-title-font general-ellipsis-1" href="#">
-                                    장소 1 테스트
-                                </a>
-                            </div>
-                            <div class="mpccc-row" style="margin-top: 10px;">
-                                <p class="mpccc-price">16,500원</p>
-                                <div class="mpccc-eval">
-                                    <img src="../../imgs/gold_star.svg">
-                                    <p class="mpccc-eval-num"> 5.0 </p>
-                                    <a class="mpccc-review-count" href="#">리뷰
-                                        <span>149</span>
-                                    </a>
+                        <div class="ItemTextContainer" style="max-width: 400px">
+                            <div class="ItemHostNameContainer">
+                                <span class="ItemHostName">서울 성북구</span>
+                                <div class="ItemCountsContainer">
+                                    <div class="ItemsStarCountContainer">
+                                        <img alt="후기갯수" class="ItemCountImg"
+                                             src="../../../static/imgs/star_filled_paintYellow056.a8eb6e44.svg">
+                                        <span class="ItemCountText">4.0(20)</span>
+                                    </div>
+                                    <div class="ItemsLikeCountContainer">
+                                        <img alt="북마크갯수" class="ItemCountImg bookmark"
+                                             src="../../../static/imgs/bookmark_thin.svg">
+                                        <span class="ItemCountText">1724</span>
+                                    </div>
                                 </div>
+                            </div>
+                            <div class="ItemSpaceNameContainer">
+                                <p class="ItemSpaceName">낙산관 실내체육관(낙산관)</p>
+                            </div>
+                            <div class="ItemPriceContainer">
+                                <span class="ItemPrice">2023.12.30 ~ 2024.01.30</span>
                             </div>
                         </div>
                         <div class="mpcre-img-con" style="margin-right: 0;">
@@ -403,7 +402,7 @@
                                         <span>장소 대여 재개</span>
                                     </div>
                                     <div class="action-item"
-                                         onclick="placeManageService.editPlace('장소 1 테스트', '테스트 정보', 36.34783681541046, 127.38439277024877, '대전광역시 서구 대덕대로 211', '312', '테스트2', '이거는 다르다', 10000, 4, '조남호', '국민', '740101-45-123419')">
+                                         onclick="placeManageService.editPlace('장소 1 테스트', '테스트 정보', 36.35181504357576, 127.37817628873198, '대전광역시 서구 대덕대로 211', '312', '테스트', '테스트1234', 10000, 4, '조남호', '우리', '740101-45-123419')">
                                         <span>장소 정보 수정</span>
                                     </div>
                                     <div class="action-item" onclick="placeManageService.showGsForRemovePlace(5)">

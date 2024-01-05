@@ -23,21 +23,19 @@
 }
 
 .calendar-body tr .date {
-    font-family: 'Montserrat', sans-serif;
     border-radius: 100%;
-    box-shadow: rgba(96, 96, 96, 0.22) 0px 2px 8px 0px;
 }
 
 .calendar-body tr .today {
-    font-family: 'Montserrat', sans-serif;
     border-radius: 100%;
-    box-shadow: rgba(96, 96, 96, 0.22) 0px 2px 8px 0px;
+    box-shadow: rgba(96, 96, 96, 0.22) 0 2px 8px 0;
     background-color: #F5D042;            
     color: #fff;
     font-weight: 600;
 }
 
 .calendar-body tr .event-date {
+    box-shadow: rgba(96, 96, 96, 0.22) 0 2px 8px 0;
     background-color: #2a7de1;
     color: white;
     font-weight: 600;
