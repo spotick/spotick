@@ -41,7 +41,7 @@ function checkTypeCounts() {
 
 // 후기 등록 재확인
 function recheckReviewForm(postId) {
-    globalSelectionContainer.classList.add('show');
+    globalSelection.classList.add('show');
     globalSelectionQuestion.innerHTML = "후기를 작성하시겠습니까?"
     globalSelectionConfirm.onclick = () => postReview(postId);
 }
