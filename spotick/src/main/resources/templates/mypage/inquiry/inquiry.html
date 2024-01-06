@@ -26,15 +26,12 @@
         </div>
     </div>
     <div class="modal-inquiry">
-        <div class="modal-place-input-con" style="margin-bottom: 20px">
-            <input class="mpc-inquiry-title" readonly type="text" value="문의 제목 내용">
-        </div>
         <div class="modal-place-content-container">
             <div class="modal-place-con-box">
                 <div class="modal-place-title">문의 내용</div>
                 <div class="modal-place-input-con">
-                            <textarea class="modal-place-txarea" cols="30" readonly
-                                      rows="10">테스트 요청사항 테스트 요청사항 테스트 요청사항 테스트 요청사항 테스트 요청사항 테스트 요청사항 테스트 요청사항 테스트 요청사항 </textarea>
+                    <textarea class="modal-place-txarea" cols="30" readonly
+                              rows="10">테스트 요청사항 테스트 요청사항 테스트 요청사항 테스트 요청사항 테스트 요청사항 테스트 요청사항 테스트 요청사항 테스트 요청사항 </textarea>
                 </div>
                 <div class="modal-place-title">답변</div>
                 <div class="modal-place-input-con">
@@ -73,6 +70,14 @@
                     </li>
                     <li class="mplm-nav-item">
                         <a href="#">후기관리</a>
+                    </li>
+                </ul>
+            </section>
+            <section>
+                <div class="mplm-section-title">티켓팅 관리</div>
+                <ul>
+                    <li class="mplm-nav-item">
+                        <a href="#">티켓팅 관리</a>
                     </li>
                 </ul>
             </section>
@@ -138,6 +143,56 @@
                             </div>
                             <div class="ItemPriceContainer">
                                 <span class="ItemPrice">2023.12.30 ~ 2024.01.30</span>
+                            </div>
+                        </div>
+                        <div class="mpcr-divider"></div>
+                        <div class="mpcr-info" onclick="popupInquiryModal()">
+                            <div class="mpcri-title">문의 내용</div>
+                            <div class="mpcriq-title">문의 제목 테스트문의 제목 테스트문의 제목 테스트문의 제목 테스트문의 제목 테스트문의 제목 테스트</div>
+                            <div class="mpcriq-content">
+                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin condimentum ante id urna
+                                condimentum imperdiet. Donec iaculis ipsum sit amet maximus sagittis. Sed id urna eget
+                                mi hendrerit eleifend. Vivamus ullamcorper purus nec lectus mattis ornare. Nam pharetra
+                                tristique sapien, quis convallis purus convallis ac. Praesent feugiat nec tortor at
+                                maximus. Donec sed metus nec nisl commodo semper pharetra in libero. Etiam et dapibus
+                                quam. Cras sed gravida urna. Nunc semper ultricies tellus, non sodales nunc efficitur
+                                in. Donec vitae magna blandit, ultrices libero et, accumsan nisi. Aliquam erat volutpat.
+                            </div>
+                        </div>
+                    </div>
+                </article>
+                <article>
+                    <div class="mpcr-item-container">
+                        <div class="mpcr-action-btn">
+                            <button onclick="toggleDropdown(this)" type="button">
+                                <i aria-hidden="true" class="fa-solid fa-ellipsis"></i>
+                                <div class="mpc-dropdown">
+                                    <div class="action-item" onclick="showGSForInquiryDeletion(5)">
+                                        <span>문의 내역 삭제</span>
+                                    </div>
+                                </div>
+                            </button>
+                        </div>
+                        <a class="mpc-ticket-img-con" href="#">
+                            <img alt="테스트"
+                                 src="//t.011st.com/imgUpload/Down/Perf/202310/e6b237ab-f274-4d50-aa75-75e881859c68.jpg">
+                        </a>
+                        <div class="mpct-card-content" style="min-width: 40%">
+                            <div class="mpccc-row">
+                                <p class="mpccc-ticket-title general-ellipsis-1">
+                                    <a href="#">제목 테스트 제목 테스트 제목 테스트 제목 테스트 제목 테스트</a>
+                                </p>
+                            </div>
+                            <div class="mpccc-row">
+                                <a class="mpccc-title-font general-ellipsis-1" href="#">
+                                    서울특별시 서초구 서초대로 240 111111111111111111111
+                                </a>
+                            </div>
+                            <div class="mpccc-row" style="margin-top: 10px;">
+                                <p class="mpccc-price">40,000원</p>
+                            </div>
+                            <div class="mpccc-row" style="margin-top: 10px;">
+                                <p class="mpccc-general-font">2024년 1월 24일 ~ 2024년 1월 26일</p>
                             </div>
                         </div>
                         <div class="mpcr-divider"></div>
