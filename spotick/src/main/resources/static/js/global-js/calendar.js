@@ -32,7 +32,7 @@ const calendarService = (function () {
 
         let calendarBody = document.querySelector(".calendar-body");
         document.getElementById("calYear").innerText = currentCalenderPage.getFullYear();
-        document.getElementById("calMonth").innerText = putZero(currentCalenderPage.getMonth() + 1);
+        document.getElementById("calMonth").innerText = currentCalenderPage.getMonth() + 1;
 
         while (calendarBody.rows.length > 0) {                        // 이전 출력결과가 남아있는 경우 초기화
             calendarBody.deleteRow(calendarBody.rows.length - 1);
@@ -47,11 +47,11 @@ const calendarService = (function () {
         for (let nowDay = firstDate; nowDay <= lastDate; nowDay.setDate(nowDay.getDate() + 1)) {
 
             let nowColumn = nowRow.insertCell();
-            nowColumn.innerText = putZero(nowDay.getDate());
+            nowColumn.innerText = nowDay.getDate();
             nowColumn.className = 'date';
 
             // 토요일 출력 이후 새로운 행으로 교체
-            if (nowDay.getDay() == 6) {
+            if (nowDay.getDay() === 6) {
                 nowRow = calendarBody.insertRow();
             }
 
