@@ -1,41 +1,4 @@
-// 아이템 이미지 슬라이드
-// 모든 OneItemContainer에 대해 반복
-document.querySelectorAll('.OneItemContainer').forEach(function (container, index) {
-    // 현재 container의 ImageSwiper 클래스를 가진 요소를 찾음
-    let swiperContainer = container.querySelector('.ImageSwiper');
 
-    // Swiper 초기화
-    let swiper = new Swiper(swiperContainer, {
-        pagination: {
-            el: swiperContainer.querySelector('.swiper-pagination'),
-            clickable: true,
-        },
-        navigation: {
-            nextEl: swiperContainer.querySelector('.RightBtn'),
-            prevEl: swiperContainer.querySelector('.LeftBtn'),
-        },
-        on: {
-            slideChange: function () {
-                handleSlideChange(this);
-            },
-        },
-    });
-
-    // 초기 페이지네이션 업데이트
-    updatePagination(swiper);
-});
-
-function handleSlideChange(swiper) {
-    let snapIndexElement = swiper.el.querySelector(".snapIndex");
-    if (snapIndexElement) {
-        snapIndexElement.textContent = swiper.snapIndex + 1;
-    }
-}
-
-function updatePagination(swiper) {
-    swiper.pagination.update(); // Swiper에게 페이지네이션을 다시 그리도록 알림
-}
-// ===================================================================================================================
 // 필터쪽 체크박스
 const checkboxes = document.querySelectorAll('input[type="checkbox"]');
 const allCheckboxes = document.querySelectorAll('input[name="전체"]');
@@ -298,7 +261,7 @@ function test(){
     let text = '';
 
     text = `
-        <div class="OneItemContainer">
+        <div class="OneItemContainer hover">
                 <div class="OneItemImgContainer">
                     <div class="swiper ImageSwiper swiper-initialized swiper-horizontal swiper-pointer-events swiper-backface-hidden">
                         <div class="swiper-wrapper ImageLength" style="transform: translate3d(0px, 0px, 0px);">
@@ -306,10 +269,10 @@ function test(){
                                 <img src="https://img.shareit.kr/tempspaceauth/img/2023-01-10/c4ee019d-1816-4b82-8138-302662a306e4_640.jpg" alt="실내체육관(낙산관)" height="1350.6666666666665px" class="ItemImg">
                             </div>
                             <div class="swiper-slide swiper-slide-next" style="width: 287px;">
-                                <img src="\thttps://img.shareit.kr/tempspaceauth/img/2023-01-10/6a7ba1d9-7a02-4b06-b96d-26bc33bc27ca_640.jpg" alt="실내체육관(낙산관)" height="1350.6666666666665px" class="ItemImg">
+                                <img src="https://img.shareit.kr/tempspaceauth/img/2023-01-10/6a7ba1d9-7a02-4b06-b96d-26bc33bc27ca_640.jpg" alt="실내체육관(낙산관)" height="1350.6666666666665px" class="ItemImg">
                             </div>
                             <div class="swiper-slide" style="width: 287px;">
-                                <img src="\thttps://img.shareit.kr/tempspaceauth/img/2023-01-10/33f564e8-4102-40e2-9b8e-19374cbf0516_640.jpg" alt="실내체육관(낙산관)" height="1350.6666666666665px" class="ItemImg">
+                                <img src="https://img.shareit.kr/tempspaceauth/img/2023-01-10/33f564e8-4102-40e2-9b8e-19374cbf0516_640.jpg" alt="실내체육관(낙산관)" height="1350.6666666666665px" class="ItemImg">
                             </div>
                             <div class="swiper-slide" style="width: 287px;">
                                 <img src="https://img.shareit.kr/tempspaceauth/img/2023-01-10/78a18732-9490-4279-9e0a-d659931aa8ec_640.jpg" alt="실내체육관(낙산관)" height="1350.6666666666665px" class="ItemImg">
@@ -344,7 +307,7 @@ function test(){
                                 <span class="ItemCountText">4.0(20)</span>
                             </div>
                             <div class="ItemsLikeCountContainer">
-                                <img src="../../static/imgs/heart_line_thin_gray054.1ef56fe5.svg" alt="좋아요갯수" class="ItemCountImg">
+                                <img src="../../static/imgs/bookmark_thin.svg" alt="북마크갯수" class="bookmark-img">
                                 <span class="ItemCountText">1724</span>
                             </div>
                         </div>

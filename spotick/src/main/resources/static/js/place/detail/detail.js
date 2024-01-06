@@ -241,11 +241,13 @@ function convertToAmPmFormat(hour) {
 // 문의 모달창 띄우기
 $('.inquiry-write-btn').on('click', function () {
     $('.inquiry-modal-container').removeClass('none');
+    $('body').css('overflow', 'hidden');
 });
 
 // 문의 모달창 취소
 $('.inquiry-cancel').on('click', function () {
     $('.inquiry-modal-container').addClass('none');
+    $('body').css('overflow', 'unset');
     clearInquiry();
 });
 
@@ -263,6 +265,7 @@ $('.inquiry-modal-wrap').on('click', '.inquiry-submit.on', function () {
 //    ajax로 문의 작성 처리
     alert('문의작성 완료');
     $('.inquiry-modal-container').addClass('none');
+    $('body').css('overflow', 'unset');
     clearInquiry();
 });
 

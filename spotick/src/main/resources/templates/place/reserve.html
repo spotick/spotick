@@ -17,6 +17,17 @@
 
     <div class="reservation-container">
         <form action="#" method="get">
+
+            <!--예약할 장소 번호-->
+            <input type="hidden" name="placeId" id="placeId" value="1">
+            <!--체크인 시간-->
+            <input type="hidden" name="reservationCheckIn"
+                   id="reservationCheckIn" value="2024-01-23 20:00:00">
+            <!--체크아웃 시간-->
+            <input type="hidden" name="reservationCheckOut"
+                   id="reservationCheckOut" value="2024-01-24 03:00:00">
+<!--            장소 기본인원-->
+            <input type="hidden" id="defaultPeople" value="4">
             <p class="reserve-receipt">예약접수</p>
 
             <div class="place-info-wrap flex-column">
@@ -45,8 +56,7 @@
                         <div class="time-choice-wrap flex-column">
                             <div>
                                 <p class="time-guide">시작 시간</p>
-                                <select class="checkInOut" name="reservationCheckIn" id="checkIn">
-                                    <option selected disabled>선택안함</option>
+                                <select onchange="setCheckOutTimes()" class="checkInOut" name="reservationCheckIn" id="checkIn">
                                     <option value="0">오전 12시</option>
                                     <option value="1">오전 1시</option>
                                     <option value="2">오전 2시</option>
@@ -75,33 +85,7 @@
                             </div>
                             <div>
                                 <p class="time-guide">종료 시간</p>
-                                <select class="checkInOut" disabled name="reservationCheckOut" id="checkOut">
-                                    <option value="0">오전 12시</option>
-                                    <option disabled value="1">
-                                        <del>오전 1시</del>
-                                    </option>
-                                    <option value="2">오전 2시</option>
-                                    <option value="3">오전 3시</option>
-                                    <option value="4">오전 4시</option>
-                                    <option value="5">오전 5시</option>
-                                    <option value="6">오전 6시</option>
-                                    <option value="7">오전 7시</option>
-                                    <option value="8">오전 8시</option>
-                                    <option value="9">오전 9시</option>
-                                    <option value="10">오전 10시</option>
-                                    <option value="11">오전 11시</option>
-                                    <option value="12">오후 12시</option>
-                                    <option value="13">오후 1시</option>
-                                    <option value="14">오후 2시</option>
-                                    <option value="15">오후 3시</option>
-                                    <option value="16">오후 4시</option>
-                                    <option value="17">오후 5시</option>
-                                    <option value="18">오후 6시</option>
-                                    <option value="19">오후 7시</option>
-                                    <option value="20">오후 8시</option>
-                                    <option value="21">오후 9시</option>
-                                    <option value="22">오후 10시</option>
-                                    <option value="23">오후 11시</option>
+                                <select class="checkInOut" name="reservationCheckOut" id="checkOut">
                                 </select>
                             </div>
 
@@ -122,7 +106,7 @@
                             <img src="https://shareit.kr/_next/static/media/btn-minus-bluegray.2b4551aa.svg" alt="">
                         </button>
                         <div class="reservation-visitors flex-align-center">
-                            <input class="visitors" max="99" min="1" type="number" value="1">
+                            <input class="visitors" name="reservationVisitors" max="99" min="1" type="number" value="6">
                         </div>
                         <button class="plus flex-align-center" type="button">
                             <img src="https://shareit.kr/_next/static/media/btn-plus-bluegray.d442947d.svg" alt="">
@@ -148,7 +132,7 @@
 
                 <div class="reservation-content-wrap">
                     <textarea name="reservationContent" id="reserve-content"
-                    placeholder="호스트에게 전달하고 싶은 내용을 적어주세요"></textarea>
+                              placeholder="호스트에게 전달하고 싶은 내용을 적어주세요"></textarea>
                 </div>
             </div>
 
@@ -159,14 +143,14 @@
                     <section class="total-reserve-amount-box">
                         <p class="info-title">대여 총 금액</p>
                         <div class="flex-column">
-                            <p class="amount"><span >0</span>원</p>
+                            <p class="amount"><span>0</span>원</p>
                             <p class="payment-guide">시간을 선택해 주세요</p>
                         </div>
                     </section>
                     <section class="people-amount-box">
                         <p class="info-title">인원 추가 금액</p>
                         <div class="flex-column">
-                            <p class="amount">+ <span>5500</span>  원</p>
+                            <p class="amount">+ <span>5500</span> 원</p>
                             <p class="payment-guide">4명</p>
                         </div>
                     </section>
@@ -195,7 +179,7 @@
 <script src="https://code.jquery.com/jquery-3.6.4.js"></script>
 <!-- 달력-->
 <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
-<script src="../../static/js/place/detail/calendar.js"></script>
+<script src="../../static/js/place/reserve/calendar.js"></script>
 <script src="../../static/js/place/reserve/resereve.js"></script>
 </body>
 </html>

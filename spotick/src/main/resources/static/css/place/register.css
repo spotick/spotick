@@ -299,7 +299,9 @@ input[type="file"] {
     margin-right: 10px;
 }
 
-
+.default-people-container>.input-box{
+    width: 350px;
+}
 
 
 
