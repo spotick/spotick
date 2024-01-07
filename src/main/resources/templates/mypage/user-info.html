@@ -8,10 +8,13 @@
     <link href="/css/global-css/root.css" rel="stylesheet">
     <link href="/css/mypage/mypage.css" rel="stylesheet">
     <link href="/css/mypage/mypage-modal.css" rel="stylesheet">
+    <link href="/css/global-css/chat.css" rel="stylesheet">
     <script crossorigin="anonymous" src="https://kit.fontawesome.com/2364e2b536.js"></script>
 </head>
 
 <body>
+
+<div th:replace="~{global-templates/chat :: chat}"></div>
 
 <div class="modal-bg">
     <div th:replace="~{global-templates/global-dialogue-modal :: global-dialogue}"></div>
@@ -188,5 +191,7 @@
 <script src="/js/mypage/mypage.js"></script>
 <script src="/js/global-js/loading.js"></script>
 <script src="/js/mypage/user-info.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.4.js"></script>
+<script src="/js/global-js/chat.js"></script>
 
 </html>
