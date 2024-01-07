@@ -1,50 +1,41 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <title>Document</title>
-    <link href="../../../static/css/global-css/root.css" rel="stylesheet">
-    <link href="../../../static/css/mypage/mypage.css" rel="stylesheet">
-    <link href="../../../static/css/mypage/mypage-modal.css" rel="stylesheet">
+    <link href="/css/global-css/root.css" rel="stylesheet">
+    <link href="/css/mypage/mypage.css" rel="stylesheet">
+    <link href="/css/mypage/mypage-modal.css" rel="stylesheet">
     <script crossorigin="anonymous" src="https://kit.fontawesome.com/2364e2b536.js"></script>
 </head>
 
 <body>
 
 <div class="modal-bg">
-    <div class="global-dialogue-container">
-        <p class="gd-content"></p>
-        <div class="gd-confirm" onclick="closeModal()">확인</div>
-    </div>
-    <div class="global-selection-container">
-        <p class="gs-question"></p>
-        <div style="display: flex;">
-            <div class="gs-select-btn" onclick="closeGlobalSelection()">취소</div>
-            <div class="gs-select-btn gs-confirm" style="color: rgb(0, 117, 235);">확인</div>
-        </div>
-    </div>
+    <div th:replace="~{global-templates/global-dialogue-modal :: global-dialogue}"></div>
+    <div th:replace="~{global-templates/global-dialogue-modal :: global-selection}"></div>
     <div class="mypage-modal" id="profileModal">
         <div class="modal-row">
             <p style="font-weight: bold; font-size: 14px; line-height: 14px; color: rgb(158, 164, 170);">프로필 사진</p>
         </div>
         <div class="modal-row" style="margin-top: 20px">
-            <img class="default-profile-con" src="../../../static/imgs/defaultProfileImgs/1.jpg">
-            <img class="default-profile-con" src="../../../static/imgs/defaultProfileImgs/2.jpg">
-            <img class="default-profile-con" src="../../../static/imgs/defaultProfileImgs/3.jpg">
-            <img class="default-profile-con" src="../../../static/imgs/defaultProfileImgs/4.jpg">
+            <img class="default-profile-con" src="/imgs/defaultProfileImgs/1.jpg">
+            <img class="default-profile-con" src="/imgs/defaultProfileImgs/2.jpg">
+            <img class="default-profile-con" src="/imgs/defaultProfileImgs/3.jpg">
+            <img class="default-profile-con" src="/imgs/defaultProfileImgs/4.jpg">
         </div>
         <div class="modal-row" style="margin-top: 24px">
-            <img class="default-profile-con" src="../../../static/imgs/defaultProfileImgs/5.jpg">
-            <img class="default-profile-con" src="../../../static/imgs/defaultProfileImgs/6.jpg">
-            <img class="default-profile-con" src="../../../static/imgs/defaultProfileImgs/7.jpg">
-            <img class="default-profile-con" src="../../../static/imgs/defaultProfileImgs/8.jpg">
+            <img class="default-profile-con" src="/imgs/defaultProfileImgs/5.jpg">
+            <img class="default-profile-con" src="/imgs/defaultProfileImgs/6.jpg">
+            <img class="default-profile-con" src="/imgs/defaultProfileImgs/7.jpg">
+            <img class="default-profile-con" src="/imgs/defaultProfileImgs/8.jpg">
         </div>
         <div class="modal-row" style="margin-top: 24px">
-            <img class="default-profile-con" src="../../../static/imgs/defaultProfileImgs/9.jpg">
-            <img class="default-profile-con" src="../../../static/imgs/defaultProfileImgs/10.jpg">
-            <img class="default-profile-con" src="../../../static/imgs/defaultProfileImgs/11.jpg">
+            <img class="default-profile-con" src="/imgs/defaultProfileImgs/9.jpg">
+            <img class="default-profile-con" src="/imgs/defaultProfileImgs/10.jpg">
+            <img class="default-profile-con" src="/imgs/defaultProfileImgs/11.jpg">
             <label for="imageUploadInput">
                 <div class="default-profile-con">
                     <svg height="54" viewBox="0 0 256 256" width="54" xmlns="http://www.w3.org/2000/svg">
@@ -99,7 +90,7 @@
             </div>
         </div>
         <div class="modal-input-container disable" id="authNumInputCon" style="margin-top: 20px;">
-            <input id="authNumInput" id="authNo" maxlength="6" oninput="this.value=this.value.replace(/[^0-9]/g,'');"
+            <input id="authNumInput" maxlength="6" oninput="this.value=this.value.replace(/[^0-9]/g,'');"
                    pattern="[0-9]*" placeholder="문자로 받은 인증번호를 알려주세요"
                    required="required" style="width: calc(100% - 80px);" type="text">
             <div class="modal-timer-container" id="timerContainer">
@@ -117,54 +108,10 @@
     </div>
 </div>
 
-<header></header>
+<header th:replace="~{global-templates/header-footer :: header}"></header>
 
-<main id="my-page-main">
-    <div class="mp-left-menu">
-        <div class="mplm-sticky">
-            <section>
-                <div class="mplm-section-title">계정관리</div>
-                <ul>
-                    <li class="mplm-nav-item active">
-                        <a href="#">개인정보 수정</a>
-                    </li>
-                </ul>
-            </section>
-            <section>
-                <div class="mplm-section-title">My활동</div>
-                <ul>
-                    <li class="mplm-nav-item">
-                        <a href="#">북마크</a>
-                    </li>
-                    <li class="mplm-nav-item">
-                        <a href="#">예약내역</a>
-                    </li>
-                    <li class="mplm-nav-item">
-                        <a href="#">문의 내역</a>
-                    </li>
-                    <li class="mplm-nav-item">
-                        <a href="#">후기관리</a>
-                    </li>
-                </ul>
-            </section>
-            <section>
-                <div class="mplm-section-title">티켓팅 관리</div>
-                <ul>
-                    <li class="mplm-nav-item">
-                        <a href="#">티켓팅 관리</a>
-                    </li>
-                </ul>
-            </section>
-            <section>
-                <div class="mplm-section-title">장소 관리</div>
-                <ul>
-                    <li class="mplm-nav-item">
-                        <a href="#">장소 관리</a>
-                    </li>
-                </ul>
-            </section>
-        </div>
-    </div>
+<main id="page-body" class="my-page-main">
+    <div th:replace="~{global-templates/mypage :: mypage-menu}"></div>
     <div class="mp-content">
         <article>
             <div class="mpc-title">
@@ -189,7 +136,7 @@
                 <figure class="mpc-user-info-user">
                     <div onclick="openModal(profileModal)" style="position: relative">
                         <img alt="테스트 유저" class="mpc-user-info-user-img"
-                             src="../../../static/imgs/defaultProfileImgs/3.jpg">
+                             src="/imgs/defaultProfileImgs/3.jpg">
                         <div class="mpc-edit-icon" style="right: 38px; bottom: 2px">
                             <svg class="feather feather-edit-2" fill="none" height="16" stroke="currentColor"
                                  stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"
@@ -234,9 +181,12 @@
     </div>
 </main>
 
+<footer th:replace="~{global-templates/header-footer :: footer}"></footer>
+
 </body>
-<script src="../../../static/js/mypage/mypage.js"></script>
-<script src="../../../static/js/global-js/loading.js"></script>
-<script src="../../../static/js/mypage/user-info.js"></script>
+<script src="/js/global-js/global.js"></script>
+<script src="/js/mypage/mypage.js"></script>
+<script src="/js/global-js/loading.js"></script>
+<script src="/js/mypage/user-info.js"></script>
 
 </html>

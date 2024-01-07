@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <meta charset="UTF-8">
@@ -12,12 +12,12 @@
 
 <body>
 <main id="my-page-main">
-    <div class="mp-left-menu">
+    <div class="mp-left-menu" th:fragment="mypage-menu">
         <div class="mplm-sticky">
             <section>
                 <div class="mplm-section-title">계정관리</div>
                 <ul>
-                    <li class="mplm-nav-item active">
+                    <li class="mplm-nav-item">
                         <a href="#">개인정보 수정</a>
                     </li>
                 </ul>
@@ -56,9 +56,6 @@
                 </ul>
             </section>
         </div>
-    </div>
-    <div class="mp-content">
-
     </div>
 </main>
 </body>
