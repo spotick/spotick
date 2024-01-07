@@ -69,3 +69,19 @@ function toggleDropdown(button) {
     console.log(dropdown);
     dropdown.classList.toggle('show');
 }
+
+
+const topNavigationButtons = document.querySelectorAll('.mpc-top-nav-button');
+
+
+topNavigationButtons.forEach(button => {
+    button.addEventListener('click', (e) => {
+        // Remove "active" class from all buttons
+        topNavigationButtons.forEach(btn => {
+            btn.classList.remove('active');
+        });
+
+        // Add "active" class to the clicked button
+        button.classList.add('active');
+    });
+});
