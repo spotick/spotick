@@ -71,3 +71,21 @@ function toggleFooterHome(button) {
     let popover = button.nextElementSibling;
     popover.classList.toggle('show');
 }
+
+let prevScrollpos = window.scrollY;
+const header = document.getElementById("page-header");
+const scrollThreshold = 200; // 스크롤다운 트리거 값
+
+window.onscroll = function() {
+    let currentScrollPos = window.scrollY;
+
+    if (prevScrollpos > currentScrollPos) {
+        header.classList.remove("hide");
+    } else {
+        if (currentScrollPos > scrollThreshold) {
+            header.classList.add("hide");
+        }
+    }
+
+    prevScrollpos = currentScrollPos;
+};

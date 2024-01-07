@@ -1,4 +1,4 @@
-#my-page-main {
+.my-page-main {
     display: flex;
     width: 1200px;
     margin-left: auto;
@@ -25,7 +25,7 @@
 
 .mplm-sticky {
     position: sticky;
-    top: 136px;
+    top: 231px;
 }
 
 .mp-left-menu section {
@@ -376,7 +376,7 @@
 
 .ItemImgPagination{
     position: absolute;
-    bottom: 0px;
+    bottom: 0;
     margin-bottom: 14px;
     z-index: 1010;
     -webkit-box-pack: center;
@@ -392,7 +392,7 @@
     opacity: 0.5;
     background: rgba(0, 0, 0, 0.8);
     width: 58px;
-    padding: 3px 0px;
+    padding: 3px 0;
     color: rgb(255, 255, 255);
     text-align: center;
 
