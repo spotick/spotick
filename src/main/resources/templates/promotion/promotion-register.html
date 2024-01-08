@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>프로모션 등록</title>
@@ -10,9 +10,9 @@
           crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 <body>
-<div class="header"></div>
 
 <div class="body">
+    <div th:replace="~{fragments/header :: header}"></div>
     <div class="place-register-container">
         <form action="" method="post" class="register-form" enctype="multipart/form-data">
             <div class="guide-title-box">
