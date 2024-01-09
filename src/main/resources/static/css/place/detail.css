@@ -329,7 +329,8 @@
 
 
 .inquiry-write-btn,
-.review-write-btn {
+.review-write-btn,
+.place-modify-btn{
     display: flex;
     align-items: center;
     width: fit-content;

@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport"
@@ -64,42 +64,47 @@
                     <span>서울 종로구 창덕궁길 106 2층</span>
                 </div>
 
-                <div class="review-box">
-                    <div class="star-box">
-                        <!--리뷰 평점%-->
-                        <div class="filled-stars" style="width: 70%">
-                            <img class="filled-star"
-                                 src="https://shareit.kr/_next/static/media/star_filled_paintYellow056.a8eb6e44.svg"
-                                 alt="평점" width="17">
-                            <img class="filled-star"
-                                 src="https://shareit.kr/_next/static/media/star_filled_paintYellow056.a8eb6e44.svg"
-                                 alt="평점" width="17">
-                            <img class="filled-star"
-                                 src="https://shareit.kr/_next/static/media/star_filled_paintYellow056.a8eb6e44.svg"
-                                 alt="평점" width="17">
-                            <img class="filled-star"
-                                 src="https://shareit.kr/_next/static/media/star_filled_paintYellow056.a8eb6e44.svg"
-                                 alt="평점" width="17">
-                            <img class="filled-star"
-                                 src="https://shareit.kr/_next/static/media/star_filled_paintYellow056.a8eb6e44.svg"
-                                 alt="평점" width="17">
+                <div class="review-box flex-between-align">
+                    <div class="flex">
+                        <div class="star-box">
+                            <!--리뷰 평점%-->
+                            <div class="filled-stars" style="width: 70%">
+                                <img class="filled-star"
+                                     src="https://shareit.kr/_next/static/media/star_filled_paintYellow056.a8eb6e44.svg"
+                                     alt="평점" width="17">
+                                <img class="filled-star"
+                                     src="https://shareit.kr/_next/static/media/star_filled_paintYellow056.a8eb6e44.svg"
+                                     alt="평점" width="17">
+                                <img class="filled-star"
+                                     src="https://shareit.kr/_next/static/media/star_filled_paintYellow056.a8eb6e44.svg"
+                                     alt="평점" width="17">
+                                <img class="filled-star"
+                                     src="https://shareit.kr/_next/static/media/star_filled_paintYellow056.a8eb6e44.svg"
+                                     alt="평점" width="17">
+                                <img class="filled-star"
+                                     src="https://shareit.kr/_next/static/media/star_filled_paintYellow056.a8eb6e44.svg"
+                                     alt="평점" width="17">
+                            </div>
+                            <div class="default-stars">
+                                <img class="default-star"
+                                     src="https://shareit.kr/_next/static/media/star_filled_gray084.e69177ff.svg" alt="">
+                                <img class="default-star"
+                                     src="https://shareit.kr/_next/static/media/star_filled_gray084.e69177ff.svg" alt="">
+                                <img class="default-star"
+                                     src="https://shareit.kr/_next/static/media/star_filled_gray084.e69177ff.svg" alt="">
+                                <img class="default-star"
+                                     src="https://shareit.kr/_next/static/media/star_filled_gray084.e69177ff.svg" alt="">
+                                <img class="default-star"
+                                     src="https://shareit.kr/_next/static/media/star_filled_gray084.e69177ff.svg" alt="">
+                            </div>
                         </div>
-                        <div class="default-stars">
-                            <img class="default-star"
-                                 src="https://shareit.kr/_next/static/media/star_filled_gray084.e69177ff.svg" alt="">
-                            <img class="default-star"
-                                 src="https://shareit.kr/_next/static/media/star_filled_gray084.e69177ff.svg" alt="">
-                            <img class="default-star"
-                                 src="https://shareit.kr/_next/static/media/star_filled_gray084.e69177ff.svg" alt="">
-                            <img class="default-star"
-                                 src="https://shareit.kr/_next/static/media/star_filled_gray084.e69177ff.svg" alt="">
-                            <img class="default-star"
-                                 src="https://shareit.kr/_next/static/media/star_filled_gray084.e69177ff.svg" alt="">
-                        </div>
+                        <span class="review-score">0.0</span>
+                        <span>|</span>
+                        <span>후기(0)</span>
                     </div>
-                    <span class="review-score">0.0</span>
-                    <span>|</span>
-                    <span>후기(0)</span>
+
+                    <!--장소 수정하기 -->
+                    <a href="#" class="place-modify-btn">수정하기</a>
 
                 </div>
             </div>
@@ -368,11 +373,11 @@
                 <p class="title">포인트, 원서 2호점</p> <!--장소 이름-->
                 <div class="flex-align">
                     <p class="title">55,000원</p>
-<!--                    장소기본 요금-->
+                    <!--                    장소기본 요금-->
                     <input type="hidden" value="55000" id="placePrice">
-<!--                    인원 초과시 인당 추가 요금-->
+                    <!--                    인원 초과시 인당 추가 요금-->
                     <input type="hidden" value="5500" id="placeSurcharge">
-<!--                    장소 기본 인원 -->
+                    <!--                    장소 기본 인원 -->
                     <input type="hidden" value="4" id="placeDefaultPeople">
                     <p class="hour"> / 시간</p>
                 </div>
@@ -424,10 +429,10 @@
                                     <p class="time-guide">종료 시간</p>
                                     <select class="checkInOut" disabled name="reservationCheckOut" id="checkOut">
                                         <option selected disabled>종료 시간</option>
-<!--                                        <option disabled value="0">-->
-<!--                                           <del>오전 12시</del>-->
-<!--                                        </option>-->
-<!--                                        <option value="23">오후 11시</option>-->
+                                        <!--                                        <option disabled value="0">-->
+                                        <!--                                           <del>오전 12시</del>-->
+                                        <!--                                        </option>-->
+                                        <!--                                        <option value="23">오후 11시</option>-->
                                     </select>
                                 </div>
                                 <button class="flex-align-center" type="button">
@@ -466,7 +471,7 @@
                 <div class="calculate-box">
 
                 </div>
-<!--                장소 예약하기 폼-->
+                <!--                장소 예약하기 폼-->
                 <form id="reservationForm" action="#" method="get">
                     <input type="hidden" name="placeId" id="placeId" value="1">
                     <input type="hidden" name="reservationCheckIn" id="reservationCheckIn">
@@ -502,19 +507,23 @@
             <div class="modal-img-box">
                 <!-- 모달 이미지   -->
                 <div class="modal-img-item">
-                    <img class="modal-img" src="https://img.shareit.kr/prod/img/2023-12-07/ef66f2a8-d103-499d-8928-8aa1b786fbb0.jpg"
+                    <img class="modal-img"
+                         src="https://img.shareit.kr/prod/img/2023-12-07/ef66f2a8-d103-499d-8928-8aa1b786fbb0.jpg"
                          alt="">
                 </div>
                 <div class="modal-img-item">
-                    <img class="modal-img" src="https://img.shareit.kr/prod/img/2023-12-07/b80ed218-b885-4f65-8c82-df1249442559.jpg"
+                    <img class="modal-img"
+                         src="https://img.shareit.kr/prod/img/2023-12-07/b80ed218-b885-4f65-8c82-df1249442559.jpg"
                          alt="">
                 </div>
                 <div class="modal-img-item">
-                    <img class="modal-img" src="https://img.shareit.kr/prod/img/2023-12-07/fc869766-a2d5-4afa-b7a1-0105795afe66.jpg"
+                    <img class="modal-img"
+                         src="https://img.shareit.kr/prod/img/2023-12-07/fc869766-a2d5-4afa-b7a1-0105795afe66.jpg"
                          alt="">
                 </div>
                 <div class="modal-img-item">
-                    <img class="modal-img" src="https://img.shareit.kr/prod/img/2023-12-07/bdb34031-1ca4-4856-99ee-58dc3f868401.jpg"
+                    <img class="modal-img"
+                         src="https://img.shareit.kr/prod/img/2023-12-07/bdb34031-1ca4-4856-99ee-58dc3f868401.jpg"
                          alt="">
                 </div>
 
@@ -541,9 +550,9 @@
         <div class="inquiry-content-box flex-between-align">
             <p class="inquiry-guide">문의 제목</p>
         </div>
-<!--        <div class="inquiry-title-box ">-->
-<!--        </div>-->
-            <input type="text" id="inquiryTitle" name="inquiryTitle" placeholder="문의 제목을 입력해주세요">
+        <!--        <div class="inquiry-title-box ">-->
+        <!--        </div>-->
+        <input type="text" id="inquiryTitle" name="inquiryTitle" placeholder="문의 제목을 입력해주세요">
 
         <div class="inquiry-content-box flex-between-align">
             <p class="inquiry-guide">내용</p>
