@@ -142,7 +142,6 @@ button{
   display: flex;
   -webkit-box-align: center;
   align-items: center;
-  font-family: Medium, sans-serif;
   font-size: 18px;
   line-height: 27px;
   color: rgb(255, 255, 255);
@@ -172,7 +171,6 @@ button{
 }
 
 .BasicInformationHostName{
-  font-family: Medium, sans-serif;
   font-size: 14px;
   line-height: 20px;
   color: rgb(163, 163, 163);
@@ -188,7 +186,6 @@ button{
 }
 
 .BasicInformationSpaceName{
-  font-family: Bold, sans-serif;
   font-size: 28px;
   line-height: 54px;
   color: rgb(61, 61, 61);
@@ -263,7 +260,6 @@ button{
 }
 
 .BasicInformationAverage{
-  font-family: Bold, sans-serif;
   font-size: 14px;
   line-height: 20px;
   color: rgb(36, 36, 36);
@@ -277,7 +273,6 @@ button{
 }
 
 .BasicInformationTotalCount{
-  font-family: Medium, sans-serif;
   font-size: 14px;
   line-height: 20px;
   color: rgb(36, 36, 36);
@@ -285,7 +280,7 @@ button{
 
 .InfoTabs{
   position: sticky;
-  top: 100px;
+  top: 95px;
   width: 100%;
   display: flex;
   -webkit-box-align: center;
@@ -300,7 +295,6 @@ button{
   position: relative;
   padding: 16px 0px 20px;
   width: 100%;
-  font-family: Bold, sans-serif;
   font-size: 15px;
   line-height: 22px;
   color: rgb(36, 36, 36);
@@ -311,7 +305,6 @@ button{
   position: relative;
   padding: 16px 0px 20px;
   width: 100%;
-  font-family: Bold, sans-serif;
   font-size: 15px;
   line-height: 22px;
   color: rgb(138, 138, 138);
@@ -341,7 +334,6 @@ button{
 }
 
 .TransactionGuideTitle{
-  font-family: Bold, sans-serif;
   font-size: 15px;
   line-height: 24px;
   color: rgb(36, 36, 36);
@@ -370,7 +362,6 @@ button{
 }
 
 .TitleText{
-  font-family: Medium, sans-serif;
   font-size: 20px;
   line-height: 24px;
   color: rgb(36, 36, 36);
@@ -421,7 +412,6 @@ button{
   height: 100%;
   padding: 0px 13px;
   background: rgb(243, 245, 247);
-  font-family: Bold, sans-serif;
   font-size: 14px;
   line-height: 32px;
   color: rgb(36, 36, 36);
@@ -466,7 +456,6 @@ button{
 }
 
 .SummariesTitle{
-  font-family: Bold, sans-serif;
   font-size: 14px;
   line-height: 34px;
   color: rgb(36, 36, 36);
@@ -566,7 +555,6 @@ button{
 }
 
 .SummariesModalDetailTabBtn{
-  font-family: Bold, sans-serif;
   font-size: 20px;
   line-height: 30px;
   color: rgb(61, 61, 61);
@@ -602,7 +590,6 @@ button{
 }
 
 .AmenitiesTitle{
-  font-family: Medium, sans-serif;
   font-size: 18px;
   line-height: 30px;
   color: rgb(61, 61, 61);
@@ -632,7 +619,6 @@ button{
 }
 
 .EquipmentListTitle{
-  font-family: Medium, sans-serif;
   font-size: 16px;
   line-height: 30px;
   color: rgb(61, 61, 61);
@@ -665,7 +651,6 @@ button{
 }
 
 .EquipmentListTitle{
-  font-family: Medium, sans-serif;
   font-size: 16px;
   line-height: 30px;
   color: rgb(189, 189, 189);
@@ -688,7 +673,6 @@ button{
 }
 
 .AmenitiesEquipmentListTitle{
-  font-family: Medium, sans-serif;
   font-size: 16px;
   line-height: 30px;
   color: rgb(189, 189, 189);
@@ -740,7 +724,6 @@ button{
 }
 
 .ReviewTitleCount{
-  font-family: Medium, sans-serif;
   font-size: 20px;
   line-height: 30px;
   color: rgb(0, 117, 235);
@@ -799,7 +782,6 @@ button{
 }
 
 .ReviewAverageStarCountText{
-  font-family: Bold, sans-serif;
   font-size: 32px;
   line-height: 40px;
   color: rgb(61, 61, 61);
@@ -807,14 +789,12 @@ button{
 }
 
 .ReviewAverageTexts{
-  font-family: Medium, sans-serif;
   font-size: 15px;
   line-height: 20px;
   color: rgb(112, 112, 112);
 }
 
 .ReviewAverageTexts > span{
-  font-family: Bold, sans-serif;
 }
 
 .ReviewFiltersContainer{
@@ -834,7 +814,6 @@ button{
 .ReviewFiltersBtnOn{
   display: flex;
   gap: 2px;
-  font-family: Medium, sans-serif;
   font-size: 13px;
   line-height: 20px;
   color: rgb(36, 36, 36);
@@ -847,7 +826,6 @@ button{
 .ReviewFiltersBtnOff{
   display: flex;
   gap: 2px;
-  font-family: Medium, sans-serif;
   font-size: 13px;
   line-height: 20px;
   color: rgb(163, 163, 163);
@@ -955,7 +933,6 @@ button{
 }
 
 .ReviewItemRating{
-  font-family: Bold, sans-serif;
   font-size: 14px;
   line-height: 19px;
   color: rgb(36, 36, 36);
@@ -1001,7 +978,6 @@ button{
   align-items: center;
   -webkit-box-pack: center;
   justify-content: center;
-  font-family: Medium, sans-serif;
   font-size: 10px;
   line-height: 10px;
   border-radius: 1px;
@@ -1051,7 +1027,6 @@ button{
   padding: 7px 14px 7px 12px;
   border: 1px solid rgb(240, 240, 240);
   border-radius: 18px;
-  font-family: Medium, sans-serif;
   font-size: 12px;
   line-height: 18px;
   color: rgb(36, 36, 36);
@@ -1082,7 +1057,6 @@ button{
     min-height: 46px;
     padding: 0px 15px;
     font-size: 15px;
-    font-family: Medium, sans-serif;
     line-height: 26px;
     border-radius: 4px;
     white-space: nowrap;
@@ -1115,7 +1089,6 @@ button{
 }
 
 .QnaTitleCount{
-  font-family: Medium, sans-serif;
   font-size: 20px;
   line-height: 30px;
   color: rgb(0, 117, 235);
@@ -1132,7 +1105,6 @@ button{
   min-height: 40px;
   padding: 0px 15px;
   font-size: 14px;
-  font-family: Medium, sans-serif;
   line-height: 20px;
   border-radius: 4px;
   white-space: nowrap;
@@ -1304,7 +1276,6 @@ align-items: center;
   -webkit-box-pack: center;
   justify-content: center;
   border: 1px solid rgb(0, 117, 235);
-  font-family: Bold, sans-serif;
   font-size: 14px;
   line-height: 24px;
   color: rgb(0, 117, 235);
@@ -1348,7 +1319,6 @@ align-items: center;
 }
 
 .PostQnaModalTitle{
-  font-family: Medium, sans-serif;
   font-size: 16px;
   line-height: 24px;
   color: rgb(61, 61, 61);
@@ -1383,7 +1353,6 @@ align-items: center;
 }
 
 .PostQnaModalHostName{
-  font-family: Medium, sans-serif;
   font-size: 13px;
   line-height: 20px;
   color: rgb(138, 138, 138);
@@ -1391,7 +1360,6 @@ align-items: center;
 }
 
 .PostQnaModalSpaceName{
-  font-family: Medium, sans-serif;
   font-size: 13px;
   line-height: 20px;
   color: rgb(36, 36, 36);
@@ -1405,7 +1373,6 @@ align-items: center;
 }
 
 .PostQnaModalContentSubTitle{
-  font-family: Medium, sans-serif;
   font-size: 18px;
   line-height: 24px;
   color: rgb(61, 61, 61);
@@ -1595,7 +1562,6 @@ align-items: center;
   min-height: 50px;
   padding: 0px 15px;
   font-size: 16px;
-  font-family: Medium, sans-serif;
   line-height: 27px;
   border-radius: 4px;
   white-space: nowrap;
@@ -1614,7 +1580,6 @@ align-items: center;
   min-height: 50px;
   padding: 0px 15px;
   font-size: 16px;
-  font-family: Medium, sans-serif;
   line-height: 27px;
   border-radius: 4px;
   white-space: nowrap;
@@ -1651,7 +1616,6 @@ align-items: center;
 }
 
 .RefundPoliciesTitle{
-  font-family: Bold, sans-serif;
   font-size: 14px;
   line-height: 30px;
   margin-bottom: 6px;
@@ -1701,7 +1665,6 @@ align-items: center;
 }
 
 .ReservationPrice{
-  font-family: Bold, sans-serif;
   font-size: 23px;
   line-height: 26px;
   color: rgb(36, 36, 36);
@@ -1793,7 +1756,6 @@ align-items: center;
   align-items: center;
   -webkit-box-pack: center;
   justify-content: center;
-  font-family: Medium, sans-serif;
   font-size: 10px;
   line-height: 10px;
   border-radius: 1px;
@@ -1817,7 +1779,6 @@ align-items: center;
 }
 
 .GoodsInfoDiscountedPrice{
-  font-family: Bold, sans-serif;
   font-size: 16px;
   line-height: 22px;
   color: rgb(61, 61, 61);
@@ -1867,7 +1828,6 @@ align-items: center;
   min-height: 50px;
   padding: 0px 15px;
   font-size: 16px;
-  font-family: Medium, sans-serif;
   line-height: 27px;
   border-radius: 4px;
   white-space: nowrap;
@@ -1896,7 +1856,6 @@ align-items: center;
 }
 
 .SideTitleSideTitle{
-  font-family: Bold, sans-serif;
   font-size: 16px;
   line-height: 24px;
   color: rgb(36, 36, 36);
@@ -2044,7 +2003,6 @@ align-items: center;
 }
 
 .SpaceItemHostName{
-  font-family: Medium, sans-serif;
   font-size: 13px;
   line-height: 20px;
   color: rgb(138, 138, 138);
@@ -2087,7 +2045,6 @@ align-items: center;
 }
 
 .SpaceItemSpaceName{
-  font-family: Medium, sans-serif;
     font-size: 13px;
     line-height: 20px;
     color: rgb(36, 36, 36);
@@ -2119,7 +2076,6 @@ align-items: center;
 }
 
 .SpaceItemPrice{
-  font-family: Bold, sans-serif;
   font-size: 16px;
   line-height: 24px;
   color: rgb(36, 36, 36);
@@ -2179,14 +2135,12 @@ align-items: center;
   padding: 5px 27px 7px;
   background: rgba(0, 0, 0, 0.5);
   border-radius: 24px;
-  font-family: Medium, sans-serif;
   font-size: 18px;
   line-height: 27px;
   color: rgb(255, 255, 255);
 }
 
 .ImageModalSpaceName{
-  font-family: Medium, sans-serif;
   font-size: 18px;
   line-height: 30px;
   color: rgb(255, 255, 255);
@@ -2203,7 +2157,6 @@ align-items: center;
   gap: 10px;
   border: 1px solid rgb(255, 255, 255);
   border-radius: 4px;
-  font-family: Medium, sans-serif;
   font-size: 16px;
   line-height: 26px;
   color: rgb(255, 255, 255);

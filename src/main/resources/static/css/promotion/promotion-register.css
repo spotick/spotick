@@ -1,6 +1,5 @@
-.header {
-    height: 100px;
-    background-color: #ffa200;
+.header-back {
+    height: 95px;
 }
 
 /* 헤더부분(프레그먼트 만들어지면 삭제) */
