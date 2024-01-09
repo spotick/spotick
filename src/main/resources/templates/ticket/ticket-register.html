@@ -1,20 +1,21 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>티켓팅 등록</title>
-    <link rel="stylesheet" href="../../static/css/global-css/root.css">
-    <!--    <link rel="stylesheet" href="../../static/css/global-css/datepicker.css">-->
-    <link rel="stylesheet" href="../../static/css/ticket/ticket-register.css"/>
+    <link rel="stylesheet" href="/css/global-css/root.css">
+    <!--    <link rel="stylesheet" href="/css/global-css/datepicker.css">-->
+    <link rel="stylesheet" href="/css/ticket/ticket-register.css"/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css"
           integrity="sha512-aOG0c6nPNzGk+5zjwyJaoRUgCdOrfSDhmMID2u4+OIslr0GjpLKo7Xm0Ao3xmpM4T8AmIouRkqwj1nrdVsLKEQ=="
           crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link rel="stylesheet" href="../../static/css/ticket/register-datepicker.css">
+    <link rel="stylesheet" href="/css/ticket/register-datepicker.css">
 
 </head>
 <body>
-<div class="header"></div>
+<div th:replace="~{/global-templates/header-footer :: header}"></div>
 
+<div class="header-back"></div>
 <div class="body">
     <div class="place-register-container">
         <form action="" method="post" class="register-form" enctype="multipart/form-data">
@@ -259,15 +260,16 @@
         </form>
     </div>
 </div>
+<div th:replace="~{/global-templates/header-footer :: footer}"></div>
+</body>
 <script src="https://code.jquery.com/jquery-3.6.4.js"></script>
 <!-- datepicker js-->
 <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
-<script src="../../static/js/ticket/register/calendar.js"></script>
+<script src="/js/ticket/register/calendar.js"></script>
 
 <script src="https://kit.fontawesome.com/c6992f5b12.js" crossorigin="anonymous"></script>
 <script type="text/javascript"
         src="//dapi.kakao.com/v2/maps/sdk.js?appkey=3dc12d7c2624483dc7c019a0a91b727f&libraries=services"></script>
-<script src="../../static/js/ticket/register/register.js"></script>
-<script src="../../static/js/ticket/register/kakaoMapApi.js"></script>
-</body>
+<script src="/js/ticket/register/register.js"></script>
+<script src="/js/ticket/register/kakaoMapApi.js"></script>
 </html>

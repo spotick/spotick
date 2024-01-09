@@ -102,7 +102,6 @@ img {
 }
 
 .BookMarkCount{
-    font-family: Regular, sans-serif;
     font-size: 15px;
     line-height: 30px;
     color: rgb(112, 112, 112);
@@ -139,7 +138,6 @@ img {
 
 .MainContentContainerHeaderTitle{
     margin-top: -120px;
-    font-family: Bold, sans-serif;
     font-size: 40px;
     line-height: 64px;
     letter-spacing: -0.04em;
@@ -148,7 +146,6 @@ img {
 
 .MainContentContainerHeaderSubTitle{
     margin-top: 16px;
-    font-family: Regular, sans-serif;
     font-size: 22px;
     line-height: 33px;
     letter-spacing: -0.04em;
@@ -157,7 +154,6 @@ img {
 
 .MainContentContainerHeaderDate{
     margin-top: 9px;
-    font-family: Regular, sans-serif;
     font-size: 16px;
     line-height: 18px;
     color: rgb(189, 189, 189);
@@ -211,7 +207,6 @@ img {
     border-top: 3px solid rgb(0, 0, 0);
     border-bottom: 3px solid rgb(0, 0, 0);
     padding: 0px 18px;
-    font-family: Medium, sans-serif;
     font-size: 22px;
     line-height: 36px;
     letter-spacing: -0.04em;
@@ -257,7 +252,6 @@ img {
 }
 
 .PlaceExpositionTitle{
-    font-family: Medium, sans-serif;
     font-size: 25px;
     line-height: 28px;
     color: rgb(61, 61, 61);
@@ -289,7 +283,6 @@ img {
     -webkit-box-align: center;
     align-items: center;
     cursor: pointer;
-    font-family: Regular, sans-serif;
     font-size: 18px;
     line-height: 20px;
     letter-spacing: -0.04em;
@@ -316,14 +309,12 @@ img {
 }
 
 .SpaceSpecItemLabel{
-    font-family: Medium, sans-serif;
     font-size: 20px;
     line-height: 30px;
     color: rgb(61, 61, 61);
 }
 
 .SpaceSpecItemContent{
-    font-family: Regular, sans-serif;
     font-size: 20px;
     line-height: 30px;
     color: rgb(138, 138, 138);
@@ -343,7 +334,6 @@ img {
 }
 
 .TemplateContent{
-    font-family: Regular, sans-serif;
     font-size: 18px;
     color: rgb(61, 61, 61);
     line-height: 32px;
@@ -365,7 +355,6 @@ img {
 }
 
 .CategoryContentsText{
-    font-family: Bold, sans-serif;
     font-size: 20px;
     line-height: 27px;
     letter-spacing: -0.02em;
@@ -381,7 +370,6 @@ img {
 }
 
 .CategoryContentItem > p {
-    font-family: Bold, sans-serif;
     font-size: 15px;
     line-height: 22px;
     letter-spacing: -0.04em;
@@ -401,7 +389,6 @@ img {
 
 .Cleia{
     border-radius: 4px;
-    font-family: Medium, sans-serif;
     width: 100%;
     font-size: 16px;
     height: 50px;
