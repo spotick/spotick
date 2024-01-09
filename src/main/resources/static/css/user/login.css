@@ -16,23 +16,12 @@ button {
     cursor: pointer;
 }
 
-/* 헤더,푸터부분(프레그먼트 만들어지면 삭제) */
-.header {
-    height: 100px;
-    background-color: #007aff;
-}
-
-.footer {
-    height: 100px;
-    background-color: #FFA200;
-}
-
-/* 헤더부분(프레그먼트 만들어지면 삭제) */
 
 .body {
     display: flex;
     justify-content: center;
     align-items: center;
+    margin-top: 95px;
 }
 
 .main {

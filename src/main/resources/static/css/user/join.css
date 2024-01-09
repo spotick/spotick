@@ -21,20 +21,6 @@ input{
     border: none;
 }
 
-/* 헤더,푸터부분(프레그먼트 만들어지면 삭제) */
-.header {
-    height: 100px;
-    background-color: #FFA200;
-
-}
-
-.footer {
-    height: 100px;
-    background-color: #007aff;
-}
-
-/* 헤더부분(프레그먼트 만들어지면 삭제) */
-
 .flex-center {
     display: flex;
     justify-content: center;
@@ -58,7 +44,7 @@ input{
     border-radius: 10px;
     border: 1px solid rgb(223, 226, 231);
     width: 640px;
-    margin: 0 auto;
+    margin: 95px auto 0 auto;
     padding: 50px 70px;
 }
 

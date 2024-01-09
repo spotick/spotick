@@ -4,11 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>회원가입</title>
-    <link rel="stylesheet" href="../../static/css/global-css/root.css">
-    <link rel="stylesheet" href="../../static/css/user/join.css"/>
+    <link rel="stylesheet" th:href="@{/css/global-css/root.css}">
+    <link rel="stylesheet" th:href="@{/css/user/join.css}"/>
 </head>
 <body>
-<header class="header"></header>
+
+<header th:replace="~{global-templates/header-footer :: header}"></header>
 <div class="body flex-align-center">
     <div class="main-container">
 
@@ -90,8 +91,11 @@
 
 
 </div>
-<footer class="footer"></footer>
+<footer th:replace="~{global-templates/header-footer :: footer}"></footer>
+
 <script src="https://code.jquery.com/jquery-3.6.4.js"></script>
-<script src="../../static/js/user/join.js"></script>
+<script th:src="@{/js/global-js/global.js}"></script>
+<script th:src="@{/js/global-js/loading.js}"></script>
+<script th:src="@{/js/user/join.js}"></script>
 </body>
 </html>

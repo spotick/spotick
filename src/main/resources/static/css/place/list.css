@@ -48,6 +48,11 @@ input[type=checkbox] {
     cursor: pointer;
 }
 
+#PageContainer{
+    top: 95px;
+    position: relative;
+}
+
 .CategoryContainer{
     display: block;
     width: 100%;

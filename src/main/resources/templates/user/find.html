@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>아이디/비밀번호 찾기</title>
-    <link rel="stylesheet" href="../../static/css/global-css/root.css">
-    <link rel="stylesheet" href="../../static/css/user/find.css"/>
+    <link rel="stylesheet" th:href="@{/css/global-css/root.css}">
+    <link rel="stylesheet" th:href="@{/css/user/find.css}"/>
 </head>
 
 <body>
@@ -93,7 +93,7 @@
 
 
 <script src="https://code.jquery.com/jquery-3.6.4.js"></script>
-<script src="../../static/js/user/find.js"></script>
+<script th:src="@{/js/user/find.js}"></script>
 </body>
 
 </html>
