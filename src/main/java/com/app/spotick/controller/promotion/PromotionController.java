@@ -8,17 +8,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/promotion")
 public class PromotionController {
 
-    @GetMapping("/promotion-list")
+    @GetMapping("/list")
     public void goToList(){
 
     }
 
-    @GetMapping("/promotion-detail")
+    @GetMapping("/detail")
     public void goToDetail(){
 
     }
 
-    @GetMapping("/promotion-register")
+    @GetMapping("/register")
     public void goToRegister(){
 
     }
