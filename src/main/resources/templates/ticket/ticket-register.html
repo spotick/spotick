@@ -13,7 +13,8 @@
 
 </head>
 <body>
-<div class="header"></div>
+<div th:replace="~{/global-templates/header-footer :: header}"></div>
+
 
 <div class="body">
     <div class="place-register-container">
@@ -259,6 +260,8 @@
         </form>
     </div>
 </div>
+<div th:replace="~{/global-templates/header-footer :: footer}"></div>
+</body>
 <script src="https://code.jquery.com/jquery-3.6.4.js"></script>
 <!-- datepicker js-->
 <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
@@ -269,5 +272,4 @@
         src="//dapi.kakao.com/v2/maps/sdk.js?appkey=3dc12d7c2624483dc7c019a0a91b727f&libraries=services"></script>
 <script src="../../static/js/ticket/register/register.js"></script>
 <script src="../../static/js/ticket/register/kakaoMapApi.js"></script>
-</body>
 </html>

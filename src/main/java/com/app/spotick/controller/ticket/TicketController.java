@@ -1,24 +1,24 @@
-package com.app.spotick.controller.promotion;
+package com.app.spotick.controller.ticket;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping("/promotion")
-public class PromotionController {
+@RequestMapping("/ticket")
+public class TicketController {
 
-    @GetMapping("/promotion-list")
+    @GetMapping("/ticket-list")
     public void goToList(){
 
     }
 
-    @GetMapping("/promotion-detail")
+    @GetMapping("/ticket-detail")
     public void goToDetail(){
 
     }
 
-    @GetMapping("/promotion-register")
+    @GetMapping("/ticket-register")
     public void goToRegister(){
 
     }

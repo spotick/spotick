@@ -21,7 +21,7 @@
 </head>
 <body>
   <div id="PageContainer">
-      <div class="header"></div>
+    <div th:replace="~{/global-templates/header-footer :: header}"></div>
     <div class="SpaceDetailPageContainer">
 <!--        <div class="ImagesContainer">-->
 <!--            <button type="button" class="ImagesBtn PlaceImagesBtn BigImage">-->
@@ -766,6 +766,7 @@
         </div>
     </div>
   </div>
+  <div th:replace="~{/global-templates/header-footer :: footer}"></div>
 </body>
 <script src="https://code.jquery.com/jquery-3.6.4.js"></script>
 <!-- 데이트 피커 -->
