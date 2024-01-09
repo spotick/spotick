@@ -4,32 +4,26 @@
 <head>
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
-    <title>Document</title>
-    <link href="../../../../static/css/global-css/root.css" rel="stylesheet">
-    <link href="../../../../static/css/mypage/mypage.css" rel="stylesheet">
-    <link href="../../../../static/css/mypage/mypage-modal.css" rel="stylesheet">
-    <link href="../../../../static/css/ticket/ticket-register.css" rel="stylesheet"/>
+    <title>Spotick | 티켓팅 > 문의</title>
+    <link href="/css/global-css/root.css" rel="stylesheet">
+    <link href="/css/global-css/chat.css" rel="stylesheet">
+    <link href="/css/mypage/mypage.css" rel="stylesheet">
+    <link href="/css/mypage/mypage-modal.css" rel="stylesheet">
+    <link href="/css/ticket/ticket-register.css" rel="stylesheet"/>
     <script crossorigin="anonymous" src="https://kit.fontawesome.com/2364e2b536.js"></script>
 </head>
 
 <body>
+
+<div th:replace="~{global-templates/chat :: chat}"></div>
+
 <div class="modal-bg">
-    <div class="global-dialogue-container">
-        <p class="gd-content"></p>
-        <div class="gd-btn" onclick="closeModal()">확인</div>
-    </div>
-    <div class="global-selection-container">
-        <p class="gs-question"></p>
-        <div style="display: flex;">
-            <div class="gs-select-btn" onclick="closeGlobalSelection()">취소</div>
-            <div class="gs-select-btn gs-confirm" style="color: rgb(0, 117, 235);">확인</div>
-        </div>
-    </div>
+    <div th:replace="~{global-templates/global-dialogue-modal :: global-dialogue}"></div>
+    <div th:replace="~{global-templates/global-dialogue-modal :: global-selection}"></div>
     <div class="modal-place">
         <div class="modal-place-user-con">
             <div class="modal-user-icon">
-                <img
-                        src="https://img.hourplace.co.kr/image/user/109990/2023/12/05/79a6f8ac-6b84-4977-a2da-baa111bcd54d?s=2000x2000&amp;amp;t=inside&amp;amp;q=80&amp;amp;f=jpeg&amp;amp;">
+                <img src="https://img.hourplace.co.kr/image/user/109990/2023/12/05/79a6f8ac-6b84-4977-a2da-baa111bcd54d?s=2000x2000&amp;amp;t=inside&amp;amp;q=80&amp;amp;f=jpeg&amp;amp;">
             </div>
             <span class="modal-user-name">your name here</span>
         </div>
@@ -37,8 +31,7 @@
             <div class="modal-place-con-box">
                 <div class="modal-place-title">요청 사항</div>
                 <div class="modal-place-input-con">
-                            <textarea class="modal-place-txarea" cols="30" readonly
-                                      rows="10">테스트 요청사항 테스트 요청사항 테스트 요청사항 테스트 요청사항 테스트 요청사항 테스트 요청사항 테스트 요청사항 테스트 요청사항 </textarea>
+                    <textarea class="modal-place-txarea" cols="30" rows="10" readonly>테스트 요청사항 테스트 요청사항 테스트 요청사항 테스트 요청사항 테스트 요청사항 테스트 요청사항 테스트 요청사항 테스트 요청사항 </textarea>
                 </div>
                 <div class="modal-place-title">답변 작성</div>
                 <div class="modal-place-input-con">
@@ -54,54 +47,10 @@
     </div>
 </div>
 
-<header></header>
+<header th:replace="~{global-templates/header-footer :: header}"></header>
 
-<main id="my-page-main">
-    <div class="mp-left-menu">
-        <div class="mplm-sticky">
-            <section>
-                <div class="mplm-section-title">계정관리</div>
-                <ul>
-                    <li class="mplm-nav-item">
-                        <a href="#">개인정보 수정</a>
-                    </li>
-                </ul>
-            </section>
-            <section>
-                <div class="mplm-section-title">My활동</div>
-                <ul>
-                    <li class="mplm-nav-item">
-                        <a href="#">북마크</a>
-                    </li>
-                    <li class="mplm-nav-item">
-                        <a href="#">예약내역</a>
-                    </li>
-                    <li class="mplm-nav-item">
-                        <a href="#">문의 내역</a>
-                    </li>
-                    <li class="mplm-nav-item">
-                        <a href="#">후기관리</a>
-                    </li>
-                </ul>
-            </section>
-            <section>
-                <div class="mplm-section-title">티켓팅 관리</div>
-                <ul>
-                    <li class="mplm-nav-item active">
-                        <a href="#">티켓팅 관리</a>
-                    </li>
-                </ul>
-            </section>
-            <section>
-                <div class="mplm-section-title">장소 관리</div>
-                <ul>
-                    <li class="mplm-nav-item">
-                        <a href="#">장소 관리</a>
-                    </li>
-                </ul>
-            </section>
-        </div>
-    </div>
+<main id="page-body" class="my-page-main">
+    <div th:replace="~{global-templates/mypage :: mypage-menu}"></div>
     <div class="mp-content">
         <article>
             <div class="mpc-title">
@@ -232,8 +181,17 @@
         </article>
     </div>
 </main>
+
+<footer th:replace="~{global-templates/header-footer :: footer}"></footer>
+
 </body>
-<script src="../../../../static/js/mypage/mypage.js"></script>
-<script src="../../../../static/js/mypage/place.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.4.js"></script>
+<script src="/js/global-js/global.js"></script>
+<script src="/js/mypage/mypage.js"></script>
+<script src="/js/mypage/place.js"></script>
+<script src="/js/global-js/chat.js"></script>
+<script>
+    document.getElementById('tickets').classList.add('active');
+</script>
 
 </html>
