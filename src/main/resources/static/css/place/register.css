@@ -1,9 +1,4 @@
-.header {
-    height: 100px;
-    background-color: #ffa200;
-}
 
-/* 헤더부분(프레그먼트 만들어지면 삭제) */
 
 .flex {
     display: flex;
@@ -30,7 +25,7 @@
     border: 1px solid #ebeff3;
     border-radius: 0.75rem;
     width: 700px;
-    margin: 80px auto;
+    margin: 160px auto 80px auto;
     padding: 40px 50px;
 }
 

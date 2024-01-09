@@ -25,7 +25,7 @@ selectBoxBtn.addEventListener('click', function () {
     selectBoxList.style.display = (selectBoxList.style.display === 'block') ? 'none' : 'block';
 
     // 이미지 변경
-    selectBoxBtnImg.src = (selectBoxList.style.display === 'block') ? '../../static/imgs/arrow_up_gray014.75d8599e.svg' : '../../static/imgs/arrow_down_gray014.f502da9d.svg';
+    selectBoxBtnImg.src = (selectBoxList.style.display === 'block') ? '/imgs/arrow_up_gray014.75d8599e.svg' : '/imgs/arrow_down_gray014.f502da9d.svg';
 });
 
 // 각 리스트 아이템에 대한 이벤트 리스너 추가
@@ -45,7 +45,7 @@ listItems.forEach(item => {
         selectBoxList.style.display = 'none';
 
         // 이미지 변경
-        selectBoxBtnImg.src = '../../static/imgs/arrow_down_gray014.f502da9d.svg';
+        selectBoxBtnImg.src = '/imgs/arrow_down_gray014.f502da9d.svg';
     });
 });
 
@@ -83,7 +83,7 @@ checkboxes.forEach(checkbox => {
                 });
 
                 checkboxImages.forEach(img => {
-                    img.src = '../../static/imgs/rectangle_line_rainyBlue086.76bf0d5f.svg';
+                    img.src = '/imgs/rectangle_line_rainyBlue086.76bf0d5f.svg';
                 });
 
                 // 선택된 지역 리스트 초기화
@@ -91,7 +91,7 @@ checkboxes.forEach(checkbox => {
 
                 changeSize(405);
 
-                checkBoxImg.src = '../../static/imgs/checkRectangle_filled_sweetBlue046.0cd80fee.svg';
+                checkBoxImg.src = '/imgs/checkRectangle_filled_sweetBlue046.0cd80fee.svg';
                 selectedListContainer.classList.add('On');
 
                 // 선택된 지역 리스트에 아이템 추가
@@ -101,7 +101,7 @@ checkboxes.forEach(checkbox => {
           <div class="SelectedItem">
             <span class="SelectedItemText">${checkBoxText.textContent}</span>
             <button type="button" class="SelectedItemDeleteBtn">
-              <img src="../../static/imgs/cross_1line_gray054.5b1e8cb9.svg" alt="삭제" class="SelectedItemDeleteBtnImg">
+              <img src="/imgs/cross_1line_gray054.5b1e8cb9.svg" alt="삭제" class="SelectedItemDeleteBtnImg">
             </button>
           </div>
         `;
@@ -116,7 +116,7 @@ checkboxes.forEach(checkbox => {
                     const checkBoxImg = checkBoxContainer.querySelector('.CheckBoxImg');
                     const checkBoxText = checkBoxContainer.querySelector('.CheckBoxText');
 
-                    checkBoxImg.src = '../../static/imgs/rectangle_line_rainyBlue086.76bf0d5f.svg';
+                    checkBoxImg.src = '/imgs/rectangle_line_rainyBlue086.76bf0d5f.svg';
 
                     // 선택된 지역 리스트에서 아이템 삭제
                     const itemsToRemove = SelectItemContainer.querySelectorAll('.SelectedItemText');
@@ -129,7 +129,7 @@ checkboxes.forEach(checkbox => {
 
                 changeSize(405);
 
-                checkBoxImg.src = '../../static/imgs/checkRectangle_filled_sweetBlue046.0cd80fee.svg';
+                checkBoxImg.src = '/imgs/checkRectangle_filled_sweetBlue046.0cd80fee.svg';
                 selectedListContainer.classList.add('On');
 
                 // 선택된 지역 리스트에 아이템 추가
@@ -139,7 +139,7 @@ checkboxes.forEach(checkbox => {
           <div class="SelectedItem">
             <span class="SelectedItemText">${checkBoxText.textContent}</span>
             <button type="button" class="SelectedItemDeleteBtn">
-              <img src="../../static/imgs/cross_1line_gray054.5b1e8cb9.svg" alt="삭제" class="SelectedItemDeleteBtnImg">
+              <img src="/imgs/cross_1line_gray054.5b1e8cb9.svg" alt="삭제" class="SelectedItemDeleteBtnImg">
             </button>
           </div>
         `;
@@ -147,7 +147,7 @@ checkboxes.forEach(checkbox => {
             }
 
         } else {
-            checkBoxImg.src = '../../static/imgs/rectangle_line_rainyBlue086.76bf0d5f.svg';
+            checkBoxImg.src = '/imgs/rectangle_line_rainyBlue086.76bf0d5f.svg';
 
             // 선택된 지역 리스트에서 아이템 삭제
             const itemsToRemove = SelectItemContainer.querySelectorAll('.SelectedItemText');
@@ -206,7 +206,7 @@ function reset(){
     });
 
     checkboxImages.forEach(img => {
-        img.src = '../../static/imgs/rectangle_line_rainyBlue086.76bf0d5f.svg';
+        img.src = '/imgs/rectangle_line_rainyBlue086.76bf0d5f.svg';
     });
 
     // 선택된 지역 리스트 초기화
@@ -283,10 +283,10 @@ function test(){
                         </div>
                         <div class="NavigationBtnContainer">
                             <button type="button" class="NavigationBtn RightBtn">
-                                <img src="../../static/imgs/round_arrow_right_gray024.7f7e18a3.svg" alt="다음">
+                                <img src="/imgs/round_arrow_right_gray024.7f7e18a3.svg" alt="다음">
                             </button>
                             <button type="button" class="NavigationBtn LeftBtn">
-                                <img src="../../static/imgs/round_arrow_left_gray024.707193e8.svg" alt="이전">
+                                <img src="/imgs/round_arrow_left_gray024.707193e8.svg" alt="이전">
                             </button>
                         </div>
                         <div class="ItemImgPagination">
@@ -303,11 +303,11 @@ function test(){
                         <span class="ItemHostName">서울 영등포구</span>
                         <div class="ItemCountsContainer">
                             <div class="ItemsStarCountContainer">
-                                <img src="../../static/imgs/star_filled_paintYellow056.a8eb6e44.svg" alt="후기갯수" class="ItemCountImg">
+                                <img src="/imgs/star_filled_paintYellow056.a8eb6e44.svg" alt="후기갯수" class="ItemCountImg">
                                 <span class="ItemCountText">4.0(20)</span>
                             </div>
                             <div class="ItemsLikeCountContainer">
-                                <img src="../../static/imgs/bookmark_thin.svg" alt="북마크갯수" class="bookmark-img">
+                                <img src="/imgs/bookmark_thin.svg" alt="북마크갯수" class="bookmark-img">
                                 <span class="ItemCountText">1724</span>
                             </div>
                         </div>
