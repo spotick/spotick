@@ -44,7 +44,7 @@ $("input").on('change',function (){
 });
 
 // 이벤트 위임으로 회원가입 폼 제출처리
-$(".submit-box").on("click", ".on", function () {
+$(".submit-box").on("click", ".submit-btn.on", function () {
     $(".join-wrap").submit();
 });
 
@@ -135,9 +135,10 @@ function isValidTelNumber(){
 }
 
 function isInputOk(){
-    let $inputArr = $('input');
+    let $inputArr = $('.main-container input');
     for (let i = 0; i < $inputArr.length; i++) {
-        if (!$inputArr[i].classList.contains("ok")) {
+        let $input = $($inputArr[i]);
+        if (!$input.hasClass('ok')) {
             return false;
         }
     }

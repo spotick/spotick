@@ -3,11 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <title>장소 등록</title>
-    <link rel="stylesheet" href="../../static/css/global-css/root.css">
-    <link rel="stylesheet" href="../../static/css/place/register.css"/>
+    <link rel="stylesheet" th:href="@{/css/global-css/root.css}">
+    <link rel="stylesheet" th:href="@{/css/place/register.css}"/>
 </head>
 <body>
-<div class="header"></div>
+
+<header th:replace="~{global-templates/header-footer :: header}"></header>
 
 <div class="body">
     <div class="place-register-container">
@@ -217,11 +218,17 @@
         </form>
     </div>
 </div>
+
+
+<footer th:replace="~{global-templates/header-footer :: footer}"></footer>
+
 <script src="https://kit.fontawesome.com/c6992f5b12.js" crossorigin="anonymous"></script>
 <script src="https://code.jquery.com/jquery-3.6.4.js"></script>
 <script type="text/javascript"
         src="//dapi.kakao.com/v2/maps/sdk.js?appkey=3dc12d7c2624483dc7c019a0a91b727f&libraries=services"></script>
-<script src="../../static/js/place/register/register.js"></script>
-<script src="../../static/js/place/register/kakaoMapApi.js"></script>
+<script th:src="@{/js/global-js/global.js}"></script>
+<script th:src="@{/js/global-js/loading.js}"></script>
+<script th:src="@{/js/place/register/register.js}"></script>
+<script th:src="@{/js/place/register/kakaoMapApi.js}"></script>
 </body>
 </html>
