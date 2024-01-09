@@ -8,17 +8,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/ticket")
 public class TicketController {
 
-    @GetMapping("/ticket-list")
+    @GetMapping("/list")
     public void goToList(){
 
     }
 
-    @GetMapping("/ticket-detail")
+    @GetMapping("/detail")
     public void goToDetail(){
 
     }
 
-    @GetMapping("/ticket-register")
+    @GetMapping("/register")
     public void goToRegister(){
 
     }
