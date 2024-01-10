@@ -19,6 +19,7 @@
     height: 60px;
     border-radius: 100%;
     background-color: #68a5fe;
+    z-index: 9999;
 }
 
 #chat--screen .chat--open-btn-img {

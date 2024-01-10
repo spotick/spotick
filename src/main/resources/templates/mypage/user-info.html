@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
-    <title>Document</title>
+    <title>Spotick | 마이페이지</title>
     <link href="/css/global-css/root.css" rel="stylesheet">
     <link href="/css/mypage/mypage.css" rel="stylesheet">
     <link href="/css/mypage/mypage-modal.css" rel="stylesheet">
@@ -187,11 +187,15 @@
 <footer th:replace="~{global-templates/header-footer :: footer}"></footer>
 
 </body>
+<script src="https://code.jquery.com/jquery-3.6.4.js"></script>
 <script src="/js/global-js/global.js"></script>
 <script src="/js/mypage/mypage.js"></script>
 <script src="/js/global-js/loading.js"></script>
 <script src="/js/mypage/user-info.js"></script>
-<script src="https://code.jquery.com/jquery-3.6.4.js"></script>
 <script src="/js/global-js/chat.js"></script>
+<script>
+    document.getElementById('userInfo').classList.add('active');
+</script>
+
 
 </html>
