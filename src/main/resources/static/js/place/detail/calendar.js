@@ -10,7 +10,6 @@ $.datepicker.setDefaults({
     dayNamesMin: ['일', '월', '화', '수', '목', '금', '토'],
     showMonthAfterYear: true,
     yearSuffix: '년'
-
 });
 
 // 페이지가 로드될 때 실행할 함수
