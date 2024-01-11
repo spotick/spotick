@@ -2,6 +2,7 @@ package com.app.spotick.domain.entity.ticket;
 
 
 import com.app.spotick.domain.base.Period;
+import com.app.spotick.domain.base.post.InquiryBase;
 import com.app.spotick.domain.entity.user.User;
 import jakarta.persistence.*;
 import lombok.*;
@@ -11,26 +12,23 @@ import lombok.*;
 @SequenceGenerator(name = "SEQ_TICKET_INQUIRY_GENERATOR", sequenceName = "SEQ_TICKET_INQUIRY",allocationSize = 1)
 @Getter
 @ToString(callSuper = true) @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class TicketInquiry extends Period {
+public class TicketInquiry extends InquiryBase {
     @Id @GeneratedValue(generator = "SEQ_TICKET_INQUIRY_GENERATOR")
     @Column(name = "TICKET_INQUIRY_ID")
     private Long id;
-    String title;
-    String content;
-    String response;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "TICKET_ID")
-    Ticket ticket;
+    private Ticket ticket;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "USER_ID")
-    User user;
+    private User user;
 
     @Builder
-    public TicketInquiry(Long id, String title, String content, String response, Ticket ticket, User user) {
+    public TicketInquiry(String title, String content, String response, Long id, Ticket ticket, User user) {
+        super(title, content, response);
         this.id = id;
-        this.title = title;
-        this.content = content;
-        this.response = response;
         this.ticket = ticket;
         this.user = user;
     }

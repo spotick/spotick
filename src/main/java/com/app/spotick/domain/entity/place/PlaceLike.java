@@ -11,14 +11,14 @@ import lombok.*;
 public class PlaceLike extends Period {
     @Id @GeneratedValue(generator = "SEQ_PLACE_LIKE_GENERATOR")
     @Column(name = "PLACE_LIKE_ID")
-    Long id;
+    private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "USER_ID")
-    User user;
+    private User user;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "PLACE_ID")
-    Place place;
+    private Place place;
 
     @Builder
     public PlaceLike(Long id, User user, Place place) {
