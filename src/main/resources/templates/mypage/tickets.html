@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>Spotick | 티켓팅 관리</title>
+    <link href="/css/global-css/root.css" rel="stylesheet">
+    <link href="/css/mypage/mypage.css" rel="stylesheet">
+    <link href="/css/mypage/mypage-modal.css" rel="stylesheet">
+    <link href="/css/ticket/ticket-register.css" rel="stylesheet"/>
+    <link href="/css/global-css/chat.css" rel="stylesheet">
+    <script crossorigin="anonymous" src="https://kit.fontawesome.com/2364e2b536.js"></script>
+</head>
+
+<body>
+
+<div th:replace="~{global-templates/chat :: chat}"></div>
+
+<div class="modal-bg">
+    <div th:replace="~{global-templates/global-dialogue-modal :: global-dialogue}"></div>
+    <div th:replace="~{global-templates/global-dialogue-modal :: global-selection}"></div>
+    <div class="modal-ticket" style="height: 80%; overflow-y: auto">
+        <form action="" class="register-form" enctype="multipart/form-data" method="post">
+            <div class="guide-title-box">
+                <p>티켓팅 등록 신청</p>
+            </div>
+
+            <div class="input-wrap">
+                <div class="input-guide flex">
+                    <p class="input-title">행사 이름</p>
+                    <img alt="필수입력" src="//s3.hourplace.co.kr/web/images/icon/invalid.svg">
+                    <p class="invalid-msg"></p>
+                </div>
+                <div class="input-box">
+                    <input id="placeName" name="placeName" placeholder="행사를 대표하는 이름을 입력해 주세요" required type="text">
+                </div>
+            </div>
+
+            <div class="input-wrap">
+                <div class="input-guide flex">
+                    <p class="input-title">행사 소제목</p>
+                    <img alt="필수입력" src="//s3.hourplace.co.kr/web/images/icon/invalid.svg">
+                    <p class="invalid-msg"></p>
+                </div>
+                <div class="input-box">
+                    <input id="placeSubTitle" name="placeSubTitle" placeholder="행사를 짧게 나타내는 소제목을 입력해주세요" required
+                           type="text">
+                </div>
+            </div>
+
+
+            <div class="map-box">
+                <div class="input-guide flex">
+                    <p class="input-title">위치 검색</p>
+                    <p class="guide-msg">장소를 검색하신 후 클릭하여 핀을 찍어주세요</p>
+                </div>
+                <div class="search-wrap">
+                    <div class="input-box search-box">
+                        <input id="search" placeholder="장소를 검색해주세요" required type="text">
+                    </div>
+
+                    <div class="flex-align-center">
+                        <button class="search-btn" type="button">
+                            <i class="fa-solid fa-magnifying-glass" style="color: #343434;"></i>
+                        </button>
+                    </div>
+                </div>
+                <div id="map"></div>
+                <input id="placeLat" name="placeLat" type="hidden">
+                <input id="placeLng" name="placeLng" type="hidden">
+            </div>
+
+            <div class="input-wrap">
+                <div class="input-guide flex">
+                    <p class="input-title">행사 장소 주소</p>
+                    <img alt="필수입력" src="//s3.hourplace.co.kr/web/images/icon/invalid.svg">
+                    <p class="invalid-msg"></p>
+                </div>
+                <div class="input-box">
+                    <input id="placeAddress" name="placeAddress" placeholder="행사 장소 주소를 입력해 주세요" required type="text">
+                </div>
+                <div class="input-box">
+                    <input id="placeAddressDetail" name="placeAddressDetail" placeholder="장소의 상세 주소를 입력해 주세요"
+                           required type="text">
+                </div>
+            </div>
+
+            <div class="img-wrap">
+                <input accept="image/*" id="placeFile" multiple name="placeFile" type="file">
+                <label class="file-label flex-align-center" for="placeFile">
+                    <i class="fa-regular fa-image"></i>
+                    <p>행사 사진 또는 장소 사진을 넣어주세요</p>
+                </label>
+                <div class="file-container none">
+                    <ul class="file-wrap">
+                    </ul>
+
+                    <div class="img-button-box">
+                        <button class="prev" type="button">
+                            <i class="fa-solid fa-circle-chevron-left"></i>
+                        </button>
+                        <div></div>
+                        <button class="next" type="button">
+                            <i class="fa-solid fa-circle-chevron-right"></i>
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="input-wrap">
+                <div class="input-guide flex">
+                    <p class="input-title">행사 설명</p>
+                    <img alt="필수입력" src="//s3.hourplace.co.kr/web/images/icon/invalid.svg">
+                    <p class="invalid-msg"></p>
+                </div>
+                <label class="input-box textarea-box" for="placeInfo">
+                    <textarea id="placeInfo" name="placeInfo"
+                              placeholder="행사에 대해서 자세하게 설명해주세요" required></textarea>
+                </label>
+            </div>
+            <div>
+                <div class="input-guide flex">
+                    <p class="input-title price-title">행사 기간</p>
+                    <img alt="필수입력" src="//s3.hourplace.co.kr/web/images/icon/invalid.svg">
+                    <p class="invalid-msg"></p>
+                </div>
+                <div class="calendar-wrap">
+                    <div class="choice-box">
+                        <div class="calendar-box">
+                            <input id="selectedDate" type="hidden">
+                            <div id="datepicker"></div>
+                        </div>
+                        <div class="time-choice-wrap"></div>
+                    </div>
+                    <div class="calendar-ctr-box"></div>
+                </div>
+            </div>
+
+            <div class="price-people-container no-flex" style="width: 100%">
+                <div class="input-wrap hour-price-wrap width">
+                    <div class="input-guide flex">
+                        <p class="input-title price-title">등급 별 금액</p>
+                        <img alt="필수입력" src="//s3.hourplace.co.kr/web/images/icon/invalid.svg">
+                        <p class="invalid-msg"></p>
+                    </div>
+                    <div class="price-input-container">
+                        <div class="price-input-box">
+                            <div class="input-box">
+                                <input class="placeDefaultPrice" min="0" name="placeDefaultPrice"
+                                       placeholder="등급을 입력해주세요"
+                                       required
+                                       type="text">
+                            </div>
+                            <div class="input-box">
+                                <input class="placeDefaultPrice" min="0" name="placeDefaultPrice"
+                                       placeholder="금액을 입력해주세요"
+                                       required
+                                       type="number">
+                                <p class="unit">원</p>
+                            </div>
+                            <button class="delete-button" type="button">x</button>
+                        </div>
+                    </div>
+                    <button class="price-add-button" type="button">추가</button>
+                </div>
+                <div class="input-wrap hour-price-wrap width">
+                    <div class="input-guide flex">
+                        <p class="input-title">기본인원</p>
+                        <img alt="필수입력" src="//s3.hourplace.co.kr/web/images/icon/invalid.svg">
+                        <p class="guide-msg">등급별 최대 인원수를 알려주세요.</p>
+                        <p class="invalid-msg"></p>
+                    </div>
+                    <div class="headcount-input-box">
+                        <div class="input-box">
+                            <input class="placeDefaultPrice" disabled min="0" name="placeDefaultPrice"
+                                   placeholder="등급을 입력해주세요"
+                                   required type="text">
+                        </div>
+                        <div class="input-box">
+                            <input class="placeDefaultPrice" min="0" name="placeDefaultPrice"
+                                   placeholder="최대 인원을 입력해주세요"
+                                   required
+                                   type="number">
+                            <p class="unit">명</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="guide-title-box">
+                <p>호스트 정보</p>
+            </div>
+
+            <div class="price-people-container">
+                <div class="input-wrap">
+                    <div class="input-guide flex">
+                        <p class="input-title">예금주</p>
+                        <img alt="필수입력" src="//s3.hourplace.co.kr/web/images/icon/invalid.svg">
+                        <p class="invalid-msg"></p>
+                    </div>
+                    <div class="input-box">
+                        <input id="accountHolder" name="accountHolder" placeholder="예금주를 입력해주세요"
+                               required
+                               type="text">
+                    </div>
+                </div>
+                <div class="input-wrap">
+                    <div class="input-guide flex">
+                        <p class="input-title">은행명</p>
+                        <img alt="필수입력" src="//s3.hourplace.co.kr/web/images/icon/invalid.svg">
+                        <p class="invalid-msg"></p>
+                    </div>
+                    <div class="input-box select-box">
+                        <select class="select" id="bankName" name="bankName">
+                            <option value="국민">국민</option>
+                            <option value="우리">우리</option>
+                            <option value="농협">농협</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="input-wrap">
+                <div class="input-guide flex">
+                    <p class="input-title">계좌번호</p>
+                    <img alt="필수입력" src="//s3.hourplace.co.kr/web/images/icon/invalid.svg">
+                    <p class="invalid-msg"></p>
+                </div>
+                <div class="input-box">
+                    <input id="accountNumber" name="accountNumber" placeholder="계좌번호를 입력해주세요" required
+                           type="text">
+                </div>
+            </div>
+            <div class="flex-center start">
+                <button class="cancel" type="button">취소</button>
+                <button class="submit-btn flex-align-center" type="button">신청하기</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<header th:replace="~{global-templates/header-footer :: header}"></header>
+
+<main class="my-page-main" id="page-body">
+    <div th:replace="~{global-templates/mypage :: mypage-menu}"></div>
+    <div class="mp-content">
+        <article>
+            <div class="mpc-title not-with-line">
+                <h2>티켓팅 관리</h2>
+            </div>
+            <nav class="mpc-top-nav">
+                <button class="mpc-top-nav-button active" type="button">
+                    전체(<span>0</span>)
+                </button>
+                <button class="mpc-top-nav-button" type="button">
+                    예정된 티켓팅(<span>0</span>)
+                </button>
+                <button class="mpc-top-nav-button" type="button">
+                    종료된 티켓팅(<span>0</span>)
+                </button>
+            </nav>
+            <div class="mpct-content-wrap">
+                <div class="mpc-ticket-list">
+                    <article
+                            onclick="openTicketDetail(this, '테스트1', '서브 제목', '서울특별시 서초구 서초대로 240', '111', ticketTypes);">
+                        <div class="mpc-ticket-con">
+                            <a class="mpc-ticket-img-con" href="#">
+                                <img alt="테스트"
+                                     src="//t.011st.com/imgUpload/Down/Perf/202310/e6b237ab-f274-4d50-aa75-75e881859c68.jpg">
+                            </a>
+                            <div class="mpct-card-content">
+                                <div class="mpccc-row">
+                                    <p class="mpccc-ticket-title general-ellipsis-1">
+                                        <a href="#">제목 테스트 제목 테스트 제목 테스트 제목 테스트 제목 테스트</a>
+                                    </p>
+                                </div>
+                                <div class="mpccc-row">
+                                    <a class="mpccc-title-font general-ellipsis-1" href="#">
+                                        서울특별시 서초구 서초대로 240 111111111111111111111
+                                    </a>
+                                </div>
+                                <div class="mpccc-row" style="margin-top: 10px;">
+                                    <p class="mpccc-price">40,000원</p>
+                                </div>
+                                <div class="mpccc-row" style="margin-top: 10px;">
+                                    <p class="mpccc-general-font">2024년 1월 24일 ~ 2024년 1월 26일</p>
+                                </div>
+                                <div class="mpccc-row">
+                                    <a class="mpccc-line-btn" href="#">
+                                        <span>문의 관리</span>
+                                        <div class="mpccc-alarm">
+                                            <span>9</span>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mpc-slide-con">
+                            <div class="mpc-slide-item" onclick="editTicket()">
+                                <span>티켓 정보 수정 하기</span>
+                            </div>
+                        </div>
+                    </article>
+                    <article
+                            onclick="openTicketDetail(this, '테스트2', '서브 제목2', '서울특별시 서초구 서초대로 24444', '111', ticketTypes);">
+                        <div class="mpc-ticket-con">
+                            <a class="mpc-ticket-img-con" href="#">
+                                <img alt="테스트"
+                                     src="//t.011st.com/imgUpload/Down/Perf/202310/e6b237ab-f274-4d50-aa75-75e881859c68.jpg">
+                            </a>
+                            <div class="mpct-card-content">
+                                <div class="mpccc-row">
+                                    <p class="mpccc-ticket-title general-ellipsis-1">
+                                        <a href="#">제목 테스트 제목 테스트 제목 테스트 제목 테스트 제목 테스트</a>
+                                    </p>
+                                </div>
+                                <div class="mpccc-row">
+                                    <a class="mpccc-title-font general-ellipsis-1" href="#">
+                                        서울특별시 서초구 서초대로 240 111111111111111111111
+                                    </a>
+                                </div>
+                                <div class="mpccc-row" style="margin-top: 10px;">
+                                    <p class="mpccc-price">40,000원</p>
+                                </div>
+                                <div class="mpccc-row" style="margin-top: 10px;">
+                                    <p class="mpccc-general-font">2024년 1월 24일 ~ 2024년 1월 26일</p>
+                                </div>
+                                <div class="mpccc-row">
+                                    <a class="mpccc-line-btn" href="#">
+                                        <span>문의 관리</span>
+                                        <div class="mpccc-alarm">
+                                            <span>9</span>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mpc-slide-con">
+                            <div class="mpc-slide-item" onclick="editTicket()">
+                                <span>티켓 정보 수정 하기</span>
+                            </div>
+                        </div>
+
+                    </article>
+                    <article
+                            onclick="openTicketDetail(this, '테스트1', '서브 제목', '서울특별시 서초구 서초대로 240', '111', ticketTypes);">
+                        <div class="mpc-ticket-con">
+                            <a class="mpc-ticket-img-con" href="#">
+                                <img alt="테스트"
+                                     src="//t.011st.com/imgUpload/Down/Perf/202310/e6b237ab-f274-4d50-aa75-75e881859c68.jpg">
+                            </a>
+                            <div class="mpct-card-content">
+                                <div class="mpccc-row">
+                                    <p class="mpccc-ticket-title general-ellipsis-1">
+                                        <a href="#">제목 테스트 제목 테스트 제목 테스트 제목 테스트 제목 테스트</a>
+                                    </p>
+                                </div>
+                                <div class="mpccc-row">
+                                    <a class="mpccc-title-font general-ellipsis-1" href="#">
+                                        서울특별시 서초구 서초대로 240 111111111111111111111
+                                    </a>
+                                </div>
+                                <div class="mpccc-row" style="margin-top: 10px;">
+                                    <p class="mpccc-price">40,000원</p>
+                                </div>
+                                <div class="mpccc-row" style="margin-top: 10px;">
+                                    <p class="mpccc-general-font">2024년 1월 24일 ~ 2024년 1월 26일</p>
+                                </div>
+                                <div class="mpccc-row">
+                                    <a class="mpccc-line-btn" href="#">
+                                        <span>문의 관리</span>
+                                        <div class="mpccc-alarm">
+                                            <span>9</span>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mpc-slide-con">
+                            <div class="mpc-slide-item" onclick="editTicket()">
+                                <span>티켓 정보 수정 하기</span>
+                            </div>
+                        </div>
+                    </article>
+                    <article
+                            onclick="openTicketDetail(this, '테스트2', '서브 제목2', '서울특별시 서초구 서초대로 24444', '111', ticketTypes);">
+                        <div class="mpc-ticket-con">
+                            <a class="mpc-ticket-img-con" href="#">
+                                <img alt="테스트"
+                                     src="//t.011st.com/imgUpload/Down/Perf/202310/e6b237ab-f274-4d50-aa75-75e881859c68.jpg">
+                            </a>
+                            <div class="mpct-card-content">
+                                <div class="mpccc-row">
+                                    <p class="mpccc-ticket-title general-ellipsis-1">
+                                        <a href="#">제목 테스트 제목 테스트 제목 테스트 제목 테스트 제목 테스트</a>
+                                    </p>
+                                </div>
+                                <div class="mpccc-row">
+                                    <a class="mpccc-title-font general-ellipsis-1" href="#">
+                                        서울특별시 서초구 서초대로 240 111111111111111111111
+                                    </a>
+                                </div>
+                                <div class="mpccc-row" style="margin-top: 10px;">
+                                    <p class="mpccc-price">40,000원</p>
+                                </div>
+                                <div class="mpccc-row" style="margin-top: 10px;">
+                                    <p class="mpccc-general-font">2024년 1월 24일 ~ 2024년 1월 26일</p>
+                                </div>
+                                <div class="mpccc-row">
+                                    <a class="mpccc-line-btn" href="#">
+                                        <span>문의 관리</span>
+                                        <div class="mpccc-alarm">
+                                            <span>9</span>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mpc-slide-con">
+                            <div class="mpc-slide-item" onclick="editTicket()">
+                                <span>티켓 정보 수정 하기</span>
+                            </div>
+                        </div>
+
+                    </article>
+                </div>
+                <div class="mpc-ticket-detail-con" id="ticketDetail">
+                    <div class="mpctd-none">선택된 티켓이 없습니다.<br>좌측에서 선택해주세요.</div>
+                </div>
+            </div>
+        </article>
+    </div>
+</main>
+
+<footer th:replace="~{global-templates/header-footer :: footer}"></footer>
+
+</body>
+<script src="https://code.jquery.com/jquery-3.6.4.js"></script>
+<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=3dc12d7c2624483dc7c019a0a91b727f&libraries=services"></script>
+<script src="/js/global-js/global.js"></script>
+<script src="/js/mypage/mypage.js"></script>
+<script src="/js/place/register/register.js"></script>
+<script src="/js/mypage/kakaoMapApi.js"></script>
+<script src="/js/mypage/ticket.js"></script>
+<script src="/js/global-js/chat.js"></script>
+<script>
+    document.getElementById('tickets').classList.add('active');
+</script>
+
+</html>

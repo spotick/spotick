@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>Spotick | 장소 관리 > 문의</title>
+    <link href="/css/global-css/root.css" rel="stylesheet">
+    <link href="/css/mypage/mypage.css" rel="stylesheet">
+    <link href="/css/mypage/mypage-modal.css" rel="stylesheet">
+    <link href="/css/global-css/post-list-card-item.css" rel="stylesheet">
+    <link href="/css/global-css/chat.css" rel="stylesheet">
+    <script crossorigin="anonymous" src="https://kit.fontawesome.com/2364e2b536.js"></script>
+</head>
+
+<body>
+
+<div th:replace="~{global-templates/chat :: chat}"></div>
+
+<div class="modal-bg">
+    <div th:replace="~{global-templates/global-dialogue-modal :: global-dialogue}"></div>
+    <div th:replace="~{global-templates/global-dialogue-modal :: global-selection}"></div>
+    <div class="modal-place">
+        <div class="modal-place-user-con">
+            <div class="modal-user-icon">
+                <img
+                        src="https://img.hourplace.co.kr/image/user/109990/2023/12/05/79a6f8ac-6b84-4977-a2da-baa111bcd54d?s=2000x2000&amp;amp;t=inside&amp;amp;q=80&amp;amp;f=jpeg&amp;amp;">
+            </div>
+            <span class="modal-user-name">your name here</span>
+        </div>
+        <div class="modal-place-content-container">
+            <div class="modal-place-con-box">
+                <div class="modal-place-title">요청 사항</div>
+                <div class="modal-place-input-con">
+                            <textarea class="modal-place-txarea" cols="30" readonly
+                                      rows="10">테스트 요청사항 테스트 요청사항 테스트 요청사항 테스트 요청사항 테스트 요청사항 테스트 요청사항 테스트 요청사항 테스트 요청사항 </textarea>
+                </div>
+                <div class="modal-place-title">답변 작성</div>
+                <div class="modal-place-input-con">
+                    <textarea class="modal-place-txarea" cols="30" placeholder="여기에 입력하세요." rows="10"></textarea>
+                </div>
+            </div>
+        </div>
+        <div class="modal-place-btn-wrap" style="justify-content: center;">
+            <button class="modal-place-btn" style="background-color: rgb(40, 184, 40);" type="button">
+                <span>작성 완료</span>
+            </button>
+        </div>
+    </div>
+</div>
+
+<header th:replace="~{global-templates/header-footer :: header}"></header>
+
+<main class="my-page-main" id="page-body">
+    <div th:replace="~{global-templates/mypage :: mypage-menu}"></div>
+    <div class="mp-content">
+        <article>
+            <div class="mpc-title">
+                <h2>장소 관리</h2>
+                <i class="fa-solid fa-angle-right"></i>
+                <h2>문의</h2>
+            </div>
+            <div class="mpcp-wrap">
+                <div class="mpcp-main">
+                    <div class="mpcp-target">
+                        <div style="display: flex; justify-content: space-between;">
+                            <div class="ItemTextContainer" style="max-width: 400px">
+                                <div class="ItemHostNameContainer">
+                                    <span class="ItemHostName">서울 성북구</span>
+                                    <div class="ItemCountsContainer">
+                                        <div class="ItemsStarCountContainer">
+                                            <img alt="후기갯수" class="ItemCountImg"
+                                                 src="/imgs/star_filled_paintYellow056.a8eb6e44.svg">
+                                            <span class="ItemCountText">4.0(20)</span>
+                                        </div>
+                                        <div class="ItemsLikeCountContainer">
+                                            <img alt="북마크갯수" class="ItemCountImg bookmark"
+                                                 src="/imgs/bookmark_thin.svg">
+                                            <span class="ItemCountText">1724</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="ItemSpaceNameContainer">
+                                    <p class="ItemSpaceName">낙산관 실내체육관(낙산관)</p>
+                                </div>
+                                <div class="ItemPriceContainer">
+                                    <span class="ItemPrice">2023.12.30 ~ 2024.01.30</span>
+                                </div>
+                            </div>
+                            <div class="mpcre-img-con" style="margin-right: 0;">
+                                <img
+                                        src="//img.hourplace.co.kr/place/user/47919/2022/05/29/74f9815f-fc9d-4dec-8037-41861f43cae9?s=550x364&amp;t=cover&amp;q=80">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mpcp-list">
+                        <div class="mpcp-item">
+                            <div class="mpcpi-top">
+                                <div class="mpcpi-request-user-con">
+                                    <div class="mpcpi-ruser-icon">
+                                        <img
+                                                src="https://img.hourplace.co.kr/image/user/109990/2023/12/05/79a6f8ac-6b84-4977-a2da-baa111bcd54d?s=2000x2000&amp;amp;t=inside&amp;amp;q=80&amp;amp;f=jpeg&amp;amp;">
+                                    </div>
+                                    <span class="mpcp-ruser-name">testuser111111111111111111111111</span>
+                                </div>
+                            </div>
+                            <div class="mpcp-body">
+                                <div class="mpcp-content" style="font-size: 18px;">
+                                    <span>문의사항 제목</span>
+                                </div>
+                                <div class="mpcp-btn" onclick="openModal(modalPlace)">
+                                    <span>상세보기</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </article>
+    </div>
+</main>
+
+<footer th:replace="~{global-templates/header-footer :: footer}"></footer>
+
+</body>
+<script src="https://code.jquery.com/jquery-3.6.4.js"></script>
+<script src="/js/global-js/global.js"></script>
+<script src="/js/mypage/mypage.js"></script>
+<script src="/js/mypage/place.js"></script>
+<script src="/js/global-js/chat.js"></script>
+<script>
+    document.getElementById('places').classList.add('active');
+</script>
+
+</html>

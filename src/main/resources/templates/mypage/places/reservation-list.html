@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>Spotick | 장소 관리 > 예약</title>
+    <link href="/css/global-css/root.css" rel="stylesheet">
+    <link href="/css/mypage/mypage.css" rel="stylesheet">
+    <link href="/css/mypage/mypage-modal.css" rel="stylesheet">
+    <link href="/css/global-css/post-list-card-item.css" rel="stylesheet">
+    <link href="/css/global-css/calendar.css" rel="stylesheet">
+    <link href="/css/global-css/chat.css" rel="stylesheet">
+    <script crossorigin="anonymous" src="https://kit.fontawesome.com/2364e2b536.js"></script>
+</head>
+
+<body>
+
+<div th:replace="~{global-templates/chat :: chat}"></div>
+
+<div class="modal-bg">
+    <div th:replace="~{global-templates/global-dialogue-modal :: global-dialogue}"></div>
+    <div th:replace="~{global-templates/global-dialogue-modal :: global-selection}"></div>
+    <div class="modal-place">
+        <div class="modal-place-user-con">
+            <div class="modal-user-icon">
+                <img
+                        src="https://img.hourplace.co.kr/image/user/109990/2023/12/05/79a6f8ac-6b84-4977-a2da-baa111bcd54d?s=2000x2000&amp;amp;t=inside&amp;amp;q=80&amp;amp;f=jpeg&amp;amp;">
+            </div>
+            <span class="modal-user-name">your name here</span>
+        </div>
+        <div class="modal-place-content-container">
+            <div class="modal-place-con-box">
+                <div class="modal-place-title">사용 인원</div>
+                <div class="modal-place-input-con" style="width: 100px; margin-bottom: 20px;">
+                    <input readonly type="text" value="2">
+                    <span>명</span>
+                </div>
+                <div class="modal-place-title">요청 사항</div>
+                <div class="modal-place-input-con">
+                            <textarea class="mri-textarea" cols="30" readonly
+                                      rows="10">테스트 요청사항 테스트 요청사항 테스트 요청사항 테스트 요청사항 테스트 요청사항 테스트 요청사항 테스트 요청사항 테스트 요청사항 </textarea>
+                </div>
+            </div>
+            <div class="modal-place-con-box">
+                <table class="calendar">
+                    <thead class="calendar-head">
+                    <tr class="ch-title">
+                        <td onClick="calendarService.prevCalendar()" style="cursor:pointer;">&#60;</td>
+                        <td colspan="5">
+                            <span id="calYear"></span>년
+                            <span id="calMonth"></span>월
+                        </td>
+                        <td onClick="calendarService.nextCalendar()" style="cursor:pointer;">&#62;</td>
+                    </tr>
+                    <tr class="ch-day">
+                        <td>일</td>
+                        <td>월</td>
+                        <td>화</td>
+                        <td>수</td>
+                        <td>목</td>
+                        <td>금</td>
+                        <td>토</td>
+                    </tr>
+                    </thead>
+                    <tbody class="calendar-body">
+                    </tbody>
+                </table>
+                <div class="mri-input-title">대여 시작시간</div>
+                <div class="mri-input-container" style="margin-bottom: 10px;">
+                    <input readonly type="text" value="2023년 12월 17일 17시">
+                </div>
+                <div class="mri-input-title">대여 시작시간</div>
+                <div class="mri-input-container">
+                    <input readonly type="text" value="2023년 12월 18일 10시">
+                </div>
+            </div>
+        </div>
+        <div class="modal-place-btn-wrap">
+            <button class="modal-place-btn" style="background-color: #007aff; margin-right: 20px;"
+                    type="button">
+                <span>승인</span>
+            </button>
+            <button class="modal-place-btn" style="background-color: #ffa200;" type="button">
+                <span>거절</span>
+            </button>
+        </div>
+    </div>
+</div>
+
+<header th:replace="~{global-templates/header-footer :: header}"></header>
+
+<main class="my-page-main" id="page-body">
+    <div th:replace="~{global-templates/mypage :: mypage-menu}"></div>
+    <div class="mp-content">
+        <article>
+            <div class="mpc-title">
+                <h2>장소 관리</h2>
+                <i class="fa-solid fa-angle-right"></i>
+                <h2>예약 요청</h2>
+            </div>
+            <div class="mpcp-wrap" style="flex-direction: row">
+                <div class="mpcp-main">
+                    <div class="mpcp-target">
+                        <div style="display: flex; justify-content: space-between;">
+                            <div class="ItemTextContainer" style="max-width: 400px">
+                                <div class="ItemHostNameContainer">
+                                    <span class="ItemHostName">서울 성북구</span>
+                                    <div class="ItemCountsContainer">
+                                        <div class="ItemsStarCountContainer">
+                                            <img alt="후기갯수" class="ItemCountImg"
+                                                 src="/imgs/star_filled_paintYellow056.a8eb6e44.svg">
+                                            <span class="ItemCountText">4.0(20)</span>
+                                        </div>
+                                        <div class="ItemsLikeCountContainer">
+                                            <img alt="북마크갯수" class="ItemCountImg bookmark"
+                                                 src="/imgs/bookmark_thin.svg">
+                                            <span class="ItemCountText">1724</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="ItemSpaceNameContainer">
+                                    <p class="ItemSpaceName">낙산관 실내체육관(낙산관)</p>
+                                </div>
+                                <div class="ItemPriceContainer">
+                                    <span class="ItemPrice">2023.12.30 ~ 2024.01.30</span>
+                                </div>
+                            </div>
+                            <div class="mpcre-img-con" style="margin-right: 0;">
+                                <img
+                                        src="//img.hourplace.co.kr/place/user/47919/2022/05/29/74f9815f-fc9d-4dec-8037-41861f43cae9?s=550x364&amp;t=cover&amp;q=80">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mpcp-list">
+                        <div class="mpcp-item">
+                            <div class="mpcpi-top">
+                                <div class="mpcpi-request-user-con">
+                                    <div class="mpcpi-ruser-icon">
+                                        <img
+                                                src="https://img.hourplace.co.kr/image/user/109990/2023/12/05/79a6f8ac-6b84-4977-a2da-baa111bcd54d?s=2000x2000&amp;amp;t=inside&amp;amp;q=80&amp;amp;f=jpeg&amp;amp;">
+                                    </div>
+                                    <span class="mpcp-ruser-name">testuser111111111111111111111111</span>
+                                </div>
+                            </div>
+                            <div class="mpcp-body">
+                                <div class="mpcp-content">
+                                    <span>2023년 12월 24일 10시</span>
+                                    <span style="margin: 0 10px;">~</span>
+                                    <span>2023년 12월 25일 10시</span>
+                                </div>
+                                <div class="mpcp-btn" onclick="openModal(modalPlace)">
+                                    <span>상세보기</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mpcp-item">
+                            <div class="mpcpi-top">
+                                <div class="mpcpi-request-user-con">
+                                    <div class="mpcpi-ruser-icon">
+                                        <img
+                                                src="https://img.hourplace.co.kr/image/user/109990/2023/12/05/79a6f8ac-6b84-4977-a2da-baa111bcd54d?s=2000x2000&amp;amp;t=inside&amp;amp;q=80&amp;amp;f=jpeg&amp;amp;">
+                                    </div>
+                                    <span class="mpcp-ruser-name">testuser111111111111111111111111</span>
+                                </div>
+                            </div>
+                            <div class="mpcp-body">
+                                <div class="mpcp-content">
+                                    <span>2023년 12월 24일 10시</span>
+                                    <span style="margin: 0 10px;">~</span>
+                                    <span>2023년 12월 25일 10시</span>
+                                </div>
+                                <div class="mpcp-btn">
+                                    <span>상세보기</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </article>
+    </div>
+</main>
+
+<footer th:replace="~{global-templates/header-footer :: footer}"></footer>
+
+</body>
+<script src="https://code.jquery.com/jquery-3.6.4.js"></script>
+<script src="/js/global-js/global.js"></script>
+<script src="/js/mypage/mypage.js"></script>
+<script src="/js/mypage/place.js"></script>
+<script src="/js/global-js/calendar.js"></script>
+<script src="/js/global-js/chat.js"></script>
+<script>
+    document.getElementById('places').classList.add('active');
+
+
+    window.onload = function () {
+        let testDate1 = new Date("2023-12-17 18:57:54.253000 +09:00");
+        let testDate2 = new Date("2023-12-19 18:57:54.253000 +09:00");
+        calendarService.setEventDates(testDate1, testDate2);
+        calendarService.buildCalendar();
+    }
+</script>
+
+</html>

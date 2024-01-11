@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>프로모션 등록</title>
+    <link rel="stylesheet" href="/css/global-css/root.css">
+    <link rel="stylesheet" href="/css/promotion/promotion-register.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css"
+          integrity="sha512-aOG0c6nPNzGk+5zjwyJaoRUgCdOrfSDhmMID2u4+OIslr0GjpLKo7Xm0Ao3xmpM4T8AmIouRkqwj1nrdVsLKEQ=="
+          crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+<body>
+
+<div th:replace="~{/global-templates/header-footer :: header}"></div>
+<div class="header-back"></div>
+<div class="body">
+    <div class="place-register-container">
+        <form action="" method="post" class="register-form" enctype="multipart/form-data">
+            <div class="guide-title-box">
+                <p>티켓팅 등록 신청</p>
+            </div>
+
+            <div class="input-wrap">
+                <div class="input-guide flex">
+                    <p class="input-title">행사 이름</p>
+                    <img src="//s3.hourplace.co.kr/web/images/icon/invalid.svg" alt="필수입력">
+                    <p class="invalid-msg"></p>
+                </div>
+                <div class="input-box">
+                    <input id="placeName" type="text" name="placeName" placeholder="행사를 대표하는 이름을 입력해 주세요" required>
+                </div>
+            </div>
+
+            <div class="input-wrap">
+                <div class="input-guide flex">
+                    <p class="input-title">행사 소제목</p>
+                    <img src="//s3.hourplace.co.kr/web/images/icon/invalid.svg" alt="필수입력">
+                    <p class="invalid-msg"></p>
+                </div>
+                <div class="input-box">
+                    <input id="placeSubTitle" type="text" name="placeSubTitle" placeholder="행사를 짧게 나타내는 소제목을 입력해주세요"
+                           required>
+                </div>
+            </div>
+
+
+            <div class="map-box">
+                <div class="input-guide flex">
+                    <p class="input-title">위치 검색</p>
+                    <p class="guide-msg">장소를 검색하신 후 클릭하여 핀을 찍어주세요</p>
+                </div>
+                <div class="search-wrap">
+                    <div class="input-box search-box">
+                        <input id="search" type="text" placeholder="장소를 검색해주세요" required>
+                    </div>
+
+                    <div class="flex-align-center">
+                        <button type="button" class="search-btn">
+                            <i class="fa-solid fa-magnifying-glass" style="color: #343434;"></i>
+                        </button>
+                    </div>
+                </div>
+                <div id="map"></div>
+                <input id="placeLat" type="hidden" name="placeLat">
+                <input id="placeLng" type="hidden" name="placeLng">
+            </div>
+
+            <div class="input-wrap">
+                <div class="input-guide flex">
+                    <p class="input-title">행사 장소 주소</p>
+                    <img src="//s3.hourplace.co.kr/web/images/icon/invalid.svg" alt="필수입력">
+                    <p class="invalid-msg"></p>
+                </div>
+                <div class="input-box">
+                    <input id="placeAddress" type="text" name="placeAddress" placeholder="행사 장소 주소를 입력해 주세요" required>
+                </div>
+                <div class="input-box">
+                    <input id="placeAddressDetail" type="text" name="placeAddressDetail"
+                           placeholder="장소의 상세 주소를 입력해 주세요" required>
+                </div>
+            </div>
+            <div class="img-wrap">
+                <input type="file" id="placeFile" accept="image/*" name="placeFile" multiple>
+                <label for="placeFile" class="file-label flex-align-center">
+                    <i class="fa-regular fa-image"></i>
+                    <p>대표 행사 사진 또는 장소 사진을 넣어주세요</p>
+                </label>
+                <div class="file-container none">
+                    <ul class="file-wrap">
+                    </ul>
+
+                    <div class="img-button-box">
+                        <button type="button" class="prev">
+                            <i class="fa-solid fa-circle-chevron-left"></i>
+                        </button>
+                        <div></div>
+                        <button type="button" class="next">
+                            <i class="fa-solid fa-circle-chevron-right"></i>
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+            <div class="input-wrap">
+                <div class="input-guide flex">
+                    <p class="input-title">행사 카테고리</p>
+                    <img src="//s3.hourplace.co.kr/web/images/icon/invalid.svg" alt="필수입력">
+                    <p class="invalid-msg"></p>
+                </div>
+                <div class="input-box category-box">
+                    <select class="select" name="category" id="category">
+                        <option value="뮤지컬">뮤지컬</option>
+                        <option value="콘서트">콘서트</option>
+                        <option value="클래식/무용">클래식/무용</option>
+                        <option value="스포츠">스포츠</option>
+                        <option value="전시/행사">전시/행사</option>
+                        <option value="기타">기타</option>
+                    </select>
+                </div>
+            </div>
+            <div class="input-wrap">
+                <div class="input-guide flex">
+                    <p class="input-title">행사 내용</p>
+                    <img src="//s3.hourplace.co.kr/web/images/icon/invalid.svg" alt="필수입력">
+                    <p class="invalid-msg"></p>
+                </div>
+                <div style="min-height: 500px">
+                    <textarea class="summernote" name="editordata"></textarea>
+                </div>
+            </div>
+            <div class="flex-center start">
+                <button type="button" class="cancel">취소</button>
+                <button type="button" class="submit-btn flex-align-center">신청하기</button>
+            </div>
+        </form>
+    </div>
+</div>
+<div th:replace="~{/global-templates/header-footer :: footer}"></div>
+</body>
+<script src="https://code.jquery.com/jquery-3.6.4.js"></script>
+<!-- datepicker js-->
+<script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+<script src="/js/ticket/register/calendar.js"></script>
+
+<script src="https://kit.fontawesome.com/c6992f5b12.js" crossorigin="anonymous"></script>
+<script type="text/javascript"
+        src="//dapi.kakao.com/v2/maps/sdk.js?appkey=3dc12d7c2624483dc7c019a0a91b727f&libraries=services"></script>
+<script src="/js/ticket/register/register.js"></script>
+<script src="/js/ticket/register/kakaoMapApi.js"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+<!-- 서머노트를 위해 추가해야할 부분 -->
+<script src="/js/promotion/summernote-lite.js"></script>
+<script src="/js/promotion/summernote-ko-KR.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.css" rel="stylesheet">
+<script>
+    $('.summernote').summernote({
+        height: 500,
+        lang: "ko-KR",
+        minHeight:500,
+    });
+</script>
+</html>

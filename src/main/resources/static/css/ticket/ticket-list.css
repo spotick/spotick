@@ -56,6 +56,10 @@ input[type=checkbox] {
   padding: 16px 0px;
 }
 
+.header-back{
+  height: 95px;
+}
+
 .CategoryContainer .swiper-slide {
   width: fit-content !important;
 }
@@ -237,7 +241,6 @@ input[type=checkbox] {
 }
 
 .FilterModalHeaderTitle{
-  font-family: Medium, sans-serif;
   font-size: 16px;
   line-height: 24px;
   color: rgb(61, 61, 61);
@@ -276,14 +279,12 @@ input[type=checkbox] {
   justify-content: center;
   font-size: 15px;
   line-height: 24px;
-  font-family: Regular, sans-serif;
   color: rgb(112, 112, 112);
   border-bottom: 2px solid transparent;
   cursor: pointer;
 }
 
 .FilterTitleText.On{
-  font-family: Medium, sans-serif;
   color: rgb(0, 117, 235);
   border-bottom: 2px solid rgb(0, 117, 235);
   cursor: pointer;
@@ -314,7 +315,6 @@ input[type=checkbox] {
   -webkit-box-align: center;
   align-items: center;
   background: rgb(243, 245, 247);
-  font-family: Regular, sans-serif;
   font-size: 15px;
   line-height: 26px;
   color: rgb(163, 163, 163);
@@ -381,7 +381,6 @@ input[type=checkbox] {
   line-height: 27px;
   border-radius: 4px;
   white-space: nowrap;
-  font-family: Regular, sans-serif;
   color: rgb(87, 87, 87);
   background-color: rgb(255, 255, 255);
   border: 1px solid rgb(212, 219, 226);
@@ -401,7 +400,6 @@ input[type=checkbox] {
   min-height: 50px;
   padding: 0px 15px;
   font-size: 16px;
-  font-family: Medium, sans-serif;
   line-height: 27px;
   border-radius: 4px;
   white-space: nowrap;
@@ -434,7 +432,6 @@ input[type=checkbox] {
 }
 
 .SelectedItemText{
-  font-family: Regular, sans-serif;
   font-size: 13px;
   line-height: 20px;
   color: rgb(0, 117, 235);
@@ -478,7 +475,6 @@ input[type=checkbox] {
 }
 
 .PriceTitle{
-  font-family: Regular, sans-serif;
   font-size: 18px;
   line-height: 30px;
   color: rgb(36, 36, 36);
@@ -640,7 +636,7 @@ input[type=checkbox] {
 }
 
 .ItemHostName{
-  font-family: Medium, SCDream7;
+  font-weight: 700;
   font-size: 13px;
   line-height: 20px;
   color: rgb(138, 138, 138);

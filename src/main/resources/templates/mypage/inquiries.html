@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>Spotick | 문의내역</title>
+    <link href="/css/global-css/root.css" rel="stylesheet">
+    <link href="/css/mypage/mypage.css" rel="stylesheet">
+    <link href="/css/mypage/mypage-modal.css" rel="stylesheet">
+    <link href="/css/global-css/post-list-card-item.css" rel="stylesheet">
+    <link href="/css/global-css/chat.css" rel="stylesheet">
+    <script crossorigin="anonymous" src="https://kit.fontawesome.com/2364e2b536.js"></script>
+</head>
+
+<body>
+
+<div th:replace="~{global-templates/chat :: chat}"></div>
+
+<div class="modal-bg">
+    <div th:replace="~{global-templates/global-dialogue-modal :: global-dialogue}"></div>
+    <div th:replace="~{global-templates/global-dialogue-modal :: global-selection}"></div>
+    <div class="modal-inquiry">
+        <div class="modal-place-content-container">
+            <div class="modal-place-con-box">
+                <div class="modal-place-title">문의 내용</div>
+                <div class="modal-place-input-con">
+                    <textarea class="modal-place-txarea" cols="30" readonly
+                              rows="10">테스트 요청사항 테스트 요청사항 테스트 요청사항 테스트 요청사항 테스트 요청사항 테스트 요청사항 테스트 요청사항 테스트 요청사항 </textarea>
+                </div>
+                <div class="modal-place-title">답변</div>
+                <div class="modal-place-input-con">
+                    <textarea class="modal-place-txarea" cols="30" placeholder="아직 답변받지 못했습니다!" readonly
+                              rows="10"></textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<header th:replace="~{global-templates/header-footer :: header}"></header>
+
+<main class="my-page-main" id="page-body">
+    <div th:replace="~{global-templates/mypage :: mypage-menu}"></div>
+    <div class="mp-content">
+        <article>
+            <div class="mpc-title not-with-line">
+                <h2>문의 내역</h2>
+            </div>
+            <nav class="mpc-top-nav">
+                <button class="mpc-top-nav-button active" type="button">
+                    장소 문의(<span>0</span>)
+                </button>
+                <button class="mpc-top-nav-button" type="button">
+                    티켓 문의(<span>0</span>)
+                </button>
+            </nav>
+            <div class="mpcr-container">
+                <article>
+                    <div class="mpcr-item-container">
+                        <div class="mpcr-action-btn">
+                            <button onclick="toggleDropdown(this)" type="button">
+                                <i aria-hidden="true" class="fa-solid fa-ellipsis"></i>
+                                <div class="mpc-dropdown">
+                                    <div class="action-item" onclick="showGSForInquiryDeletion(5)">
+                                        <span>문의 내역 삭제</span>
+                                    </div>
+                                </div>
+                            </button>
+                        </div>
+                        <div class="mpcr-img-con">
+                            <img height="100px"
+                                 src="//img.hourplace.co.kr/place/user/47919/2022/05/29/74f9815f-fc9d-4dec-8037-41861f43cae9?s=550x364&amp;t=cover&amp;q=80"
+                                 style="width: 180px;">
+                        </div>
+                        <div class="ItemTextContainer">
+                            <div class="ItemHostNameContainer">
+                                <span class="ItemHostName">서울 성북구</span>
+                                <div class="ItemCountsContainer">
+                                    <div class="ItemsStarCountContainer">
+                                        <img alt="후기갯수" class="ItemCountImg"
+                                             src="/imgs/star_filled_paintYellow056.a8eb6e44.svg">
+                                        <span class="ItemCountText">4.0(20)</span>
+                                    </div>
+                                    <div class="ItemsLikeCountContainer">
+                                        <img alt="북마크갯수" class="ItemCountImg bookmark"
+                                             src="/imgs/bookmark_thin.svg">
+                                        <span class="ItemCountText">1724</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="ItemSpaceNameContainer">
+                                <p class="ItemSpaceName">낙산관 실내체육관(낙산관)</p>
+                            </div>
+                            <div class="ItemPriceContainer">
+                                <span class="ItemPrice">2023.12.30 ~ 2024.01.30</span>
+                            </div>
+                        </div>
+                        <div class="mpcr-divider"></div>
+                        <div class="mpcr-info" onclick="popupInquiryModal()">
+                            <div class="mpcri-title">문의 내용</div>
+                            <div class="mpcriq-title">문의 제목 테스트문의 제목 테스트문의 제목 테스트문의 제목 테스트문의 제목 테스트문의 제목 테스트</div>
+                            <div class="mpcriq-content">
+                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin condimentum ante id urna
+                                condimentum imperdiet. Donec iaculis ipsum sit amet maximus sagittis. Sed id urna eget
+                                mi hendrerit eleifend. Vivamus ullamcorper purus nec lectus mattis ornare. Nam pharetra
+                                tristique sapien, quis convallis purus convallis ac. Praesent feugiat nec tortor at
+                                maximus. Donec sed metus nec nisl commodo semper pharetra in libero. Etiam et dapibus
+                                quam. Cras sed gravida urna. Nunc semper ultricies tellus, non sodales nunc efficitur
+                                in. Donec vitae magna blandit, ultrices libero et, accumsan nisi. Aliquam erat volutpat.
+                            </div>
+                        </div>
+                    </div>
+                </article>
+                <article>
+                    <div class="mpcr-item-container">
+                        <div class="mpcr-action-btn">
+                            <button onclick="toggleDropdown(this)" type="button">
+                                <i aria-hidden="true" class="fa-solid fa-ellipsis"></i>
+                                <div class="mpc-dropdown">
+                                    <div class="action-item" onclick="showGSForInquiryDeletion(5)">
+                                        <span>문의 내역 삭제</span>
+                                    </div>
+                                </div>
+                            </button>
+                        </div>
+                        <a class="mpc-ticket-img-con" href="#">
+                            <img alt="테스트"
+                                 src="//t.011st.com/imgUpload/Down/Perf/202310/e6b237ab-f274-4d50-aa75-75e881859c68.jpg">
+                        </a>
+                        <div class="mpct-card-content" style="min-width: 40%">
+                            <div class="mpccc-row">
+                                <p class="mpccc-ticket-title general-ellipsis-1">
+                                    <a href="#">제목 테스트 제목 테스트 제목 테스트 제목 테스트 제목 테스트</a>
+                                </p>
+                            </div>
+                            <div class="mpccc-row">
+                                <a class="mpccc-title-font general-ellipsis-1" href="#">
+                                    서울특별시 서초구 서초대로 240 111111111111111111111
+                                </a>
+                            </div>
+                            <div class="mpccc-row" style="margin-top: 10px;">
+                                <p class="mpccc-price">40,000원</p>
+                            </div>
+                            <div class="mpccc-row" style="margin-top: 10px;">
+                                <p class="mpccc-general-font">2024년 1월 24일 ~ 2024년 1월 26일</p>
+                            </div>
+                        </div>
+                        <div class="mpcr-divider"></div>
+                        <div class="mpcr-info" onclick="popupInquiryModal()">
+                            <div class="mpcri-title">문의 내용</div>
+                            <div class="mpcriq-title">문의 제목 테스트문의 제목 테스트문의 제목 테스트문의 제목 테스트문의 제목 테스트문의 제목 테스트</div>
+                            <div class="mpcriq-content">
+                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin condimentum ante id urna
+                                condimentum imperdiet. Donec iaculis ipsum sit amet maximus sagittis. Sed id urna eget
+                                mi hendrerit eleifend. Vivamus ullamcorper purus nec lectus mattis ornare. Nam pharetra
+                                tristique sapien, quis convallis purus convallis ac. Praesent feugiat nec tortor at
+                                maximus. Donec sed metus nec nisl commodo semper pharetra in libero. Etiam et dapibus
+                                quam. Cras sed gravida urna. Nunc semper ultricies tellus, non sodales nunc efficitur
+                                in. Donec vitae magna blandit, ultrices libero et, accumsan nisi. Aliquam erat volutpat.
+                            </div>
+                        </div>
+                    </div>
+                </article>
+            </div>
+        </article>
+    </div>
+</main>
+
+<footer th:replace="~{global-templates/header-footer :: footer}"></footer>
+
+</body>
+<script src="https://code.jquery.com/jquery-3.6.4.js"></script>
+<script src="/js/global-js/global.js"></script>
+<script src="/js/mypage/mypage.js"></script>
+<script src="/js/mypage/inquiry.js"></script>
+<script src="/js/global-js/chat.js"></script>
+<script>
+    document.getElementById('inquiries').classList.add('active');
+</script>
+
+</html>
