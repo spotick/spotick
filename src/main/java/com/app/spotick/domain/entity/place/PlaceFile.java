@@ -11,15 +11,20 @@ import lombok.*;
 public class PlaceFile extends ImageBase {
     @Id @GeneratedValue(generator = "SEQ_PLACE_FILE_GENERATOR")
     @Column(name = "PLACE_FILE_ID")
-    Long id;
+    private Long id;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "USER_ID")
-    User user;
+    private User user;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "PLACE_ID")
+    private Place place;
 
     @Builder
-    public PlaceFile(String fileName, String uuid, String uploadPath, Long id, User user) {
+    public PlaceFile(String fileName, String uuid, String uploadPath, Long id, User user, Place place) {
         super(fileName, uuid, uploadPath);
         this.id = id;
         this.user = user;
+        this.place = place;
     }
 }

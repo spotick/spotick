@@ -1,9 +1,9 @@
-package com.app.spotick.domain.type.place;
+package com.app.spotick.domain.type.post;
 
 import lombok.Getter;
 
 @Getter
-public enum PlaceStatus {
+public enum PostStatus {
     REGISTRATION_PENDING("등록 대기중"), // 등록 대기중
     APPROVED("승인"),             // 승인
     REJECTED("거절"),             // 거절
@@ -12,7 +12,7 @@ public enum PlaceStatus {
     ;
 
     private final String displayName;
-    PlaceStatus(String displayName) {
+    PostStatus(String displayName) {
         this.displayName = displayName;
     }
 

@@ -1,7 +1,7 @@
 package com.app.spotick.domain.entity.place;
 
 import com.app.spotick.domain.base.Period;
-import com.app.spotick.domain.type.place.PlaceModifyStatus;
+import com.app.spotick.domain.type.post.PostModifyStatus;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -19,10 +19,10 @@ public class PlaceModifyRequest extends Period {
     @JoinColumn(name = "CHANGED_PLACE_ID")
     private Place changedPlace;     //승인 후 변경될 장소아이디
     @Enumerated(EnumType.STRING)
-    private PlaceModifyStatus placeModifyStatus;
+    private PostModifyStatus placeModifyStatus;
 
     @Builder
-    public PlaceModifyRequest(Long id, Place originalPlace, Place changedPlace, PlaceModifyStatus placeModifyStatus) {
+    public PlaceModifyRequest(Long id, Place originalPlace, Place changedPlace, PostModifyStatus placeModifyStatus) {
         this.id = id;
         this.originalPlace = originalPlace;
         this.changedPlace = changedPlace;

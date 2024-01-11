@@ -3,7 +3,7 @@ package com.app.spotick.domain.entity.place;
 import com.app.spotick.domain.base.post.PostBase;
 import com.app.spotick.domain.embedded.post.PostAddress;
 import com.app.spotick.domain.entity.user.User;
-import com.app.spotick.domain.type.place.PlaceStatus;
+import com.app.spotick.domain.type.post.PostStatus;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -28,14 +28,14 @@ public class Place extends PostBase {
     private String accountNumber; //계좌번호
     private String accountHolder; //예금주
     @Enumerated(EnumType.STRING)
-    private PlaceStatus placeStatus;
+    private PostStatus placeStatus;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "USER_ID")
     private User user;
 
     @Builder
-    public Place(String title, int viewCount, Double lat, Double lng, Long id, String subTitle, String info, String rule, Integer defaultPeople, PostAddress placeAddress, Integer price, Integer surcharge, String bankName, String accountNumber, String accountHolder, PlaceStatus placeStatus, User user) {
+    public Place(String title, int viewCount, Double lat, Double lng, Long id, String subTitle, String info, String rule, Integer defaultPeople, PostAddress placeAddress, Integer price, Integer surcharge, String bankName, String accountNumber, String accountHolder, PostStatus placeStatus, User user) {
         super(title, viewCount, lat, lng);
         this.id = id;
         this.subTitle = subTitle;

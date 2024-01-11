@@ -63,7 +63,7 @@ class EntityTest {
                 .content("test내용")
                 .lat(0.123)
                 .lng(0.123)
-                .postAddress(new PostAddress("서울시","강남구"))
+                .promotionAddress(new PostAddress("서울시","강남구"))
                 .startDate(LocalDate.of(2023,12,3))
                 .endDate(LocalDate.of(2024,12,3))
                 .build();
