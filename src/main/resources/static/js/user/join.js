@@ -50,7 +50,7 @@ $(".submit-box").on("click", ".submit-btn.on", function () {
 
 function isValidFields(){
     return (
-    isInputOk() &&
+    // isInputOk() &&
         requiredCheckOk()
     );
 }
