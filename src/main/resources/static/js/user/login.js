@@ -30,12 +30,13 @@ function isValid(email,password){
 
 // 이메일 유효성 검사
 function isValidEmailFormat(email){
-    const regex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
-    return regex.test(email);
+    // const regex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+    // return regex.test(email);
+    return email.length>0;
 }
 // 비밀번호 유효성 검사
 function isValidPasswordLength(password){
-    return password.length>=8;
+    return password.length>0;
 }
 
 
