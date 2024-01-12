@@ -48,7 +48,8 @@ dependencies {
     // Spring Security
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6:3.1.1.RELEASE'
-
+    // 썸네일레이터
+    implementation 'net.coobird:thumbnailator:0.4.8'
 }
 
 tasks.named('test') {
