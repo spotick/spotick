@@ -45,6 +45,8 @@ dependencies {
     annotationProcessor "jakarta.persistence:jakarta.persistence-api"
     // h2
     runtimeOnly 'com.h2database:h2'
+    // 썸네일레이터
+    implementation 'net.coobird:thumbnailator:0.4.8'
 }
 
 tasks.named('test') {
