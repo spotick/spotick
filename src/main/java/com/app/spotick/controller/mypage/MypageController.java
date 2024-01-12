@@ -1,5 +1,8 @@
 package com.app.spotick.controller.mypage;
 
+import com.app.spotick.domain.entity.user.User;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -8,8 +11,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/mypage")
 public class MypageController {
 
+
     @GetMapping("/user-info")
-    public void goToUserInfo(){}
+    public void goToUserInfo(HttpServletRequest request) {
+    }
 
     @GetMapping("/bookmarks")
     public void goToBookmarks(){}

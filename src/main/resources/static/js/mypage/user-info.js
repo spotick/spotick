@@ -1,3 +1,5 @@
+const profileImg = document.getElementById('profileImg');
+
 // 개인정보 수정 =========================================================
 
 // 프로필 사진 수정
@@ -15,8 +17,42 @@ function checkFileSize(inputElement) {
 }
 
 function performUpload(file) {
-    // todo = 서버측으로 파일 post
-    console.log('업로드할 파일:', file);
+    const formData = new FormData();
+    formData.append("uploadFile", file)
+
+    // /file/upload 엔드포인트에 POST 요청
+    fetch('/file/upload', {
+        method: 'POST',
+        body: formData
+    })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('파일 업로드 실패');
+            }
+            return response.json();
+        })
+        .then(uuids => {
+            updateProfileImage(uuids[0], file.name);
+        })
+        .catch(error => {
+            console.error('파일 업로드 에러:', error);
+            showGlobalDialogue("오류가 발생했습니다.<br>다시 시도해 주세요.")
+        });
+}
+
+function updateProfileImage(uuid, fileName) {
+    let now = new Date();
+    let year = now.getFullYear();
+    let month = now.getMonth() + 1;
+    let date = now.getDate();
+    month = month < 10 ? '0' + month : month;
+    date = date < 10 ? '0' + date : date;
+
+    let uploadPath = `${year}/${month}/${date}`;
+
+    profileImg.src = "/file/display?fileName=" + uploadPath + "/t_" + uuid + "_" + fileName;
+
+//     todo = user정보 update 필요
 }
 
 // 닉네임 수정
