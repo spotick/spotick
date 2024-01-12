@@ -4,12 +4,12 @@
   <meta charset="UTF-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>로그인</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap" rel="stylesheet">
   <link rel="stylesheet" th:href="@{/css/global-css/root.css}">
   <link rel="stylesheet" th:href="@{/css/user/login.css}"/>
+  <title>로그인</title>
 
 </head>
 
@@ -20,7 +20,7 @@
   <div class="main">
     <div class="main-container">
       <div class="sign-wrap">
-        <form action="#" method="post" class="login-form">
+        <form th:action="@{/user/login}" method="post" class="login-form">
           <div class="signin">
 
             <h1 class="flex-center">Spotic</h1>
@@ -28,7 +28,7 @@
 
             <div class="login-box">
               <div class="input_container bottom">
-                <input type="email" name="email" placeholder="이메일" id="email" required="required">
+                <input type="email" name="username" placeholder="이메일" id="email" required="required">
               </div>
 
               <div class="input_container bottom">
@@ -77,8 +77,8 @@
               <span>or</span>
             </div>
             <div class="join flex-center">
-              <a href="#" class="find-id">아이디/비밀번호 찾기</a>
-              <a href="/user/join">이메일로 회원가입</a>
+              <a th:href="@{/user/find}" class="find-id">아이디/비밀번호 찾기</a>
+              <a th:href="@{/user/join}">이메일로 회원가입</a>
             </div>
 
           </div>
@@ -90,6 +90,7 @@
 
 <footer th:replace="~{global-templates/header-footer :: footer}"></footer>
 
+<script src="https://kit.fontawesome.com/c6992f5b12.js" crossorigin="anonymous"></script>
 <script src="https://code.jquery.com/jquery-3.6.4.js"></script>
 <script th:src="@{/js/global-js/global.js}"></script>
 <script th:src="@{/js/global-js/loading.js}"></script>
