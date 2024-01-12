@@ -53,7 +53,7 @@
                         </a>
                     </div>
                 </div>
-                <div class="hc-afterlogin">
+                <div class="hc-afterlogin" sec:authorize="isAuthenticated()">
                     <div class="hc-contents-list">
                         <a class="hc-content" href="/place/register">
                             <span class="hc-content-font-small">장소 등록</span>
@@ -102,7 +102,7 @@
                     <p>로그아웃</p>
                 </a>
             </div>
-            <div class="hd-notification">
+            <div class="hd-notification" sec:authorize="isAuthenticated()">
                 <div class="hdn-item">
                     <div style="display: flex;">
                         <div style="min-width: 40px;">

@@ -1,5 +1,3 @@
-const profileImg = document.getElementById('profileImg');
-
 // 개인정보 수정 =========================================================
 
 // 프로필 사진 수정
@@ -17,6 +15,8 @@ function checkFileSize(inputElement) {
 }
 
 function performUpload(file) {
+    const profileImgForm = document.querySelector("form[name='file-form']");
+
     const formData = new FormData();
     formData.append("uploadFile", file)
 
@@ -31,8 +31,14 @@ function performUpload(file) {
             }
             return response.json();
         })
-        .then(uuids => {
-            updateProfileImage(uuids[0], file.name);
+        .then(uuid => {
+            let input = document.createElement("input");
+            input.name = "uuid";
+            input.value = uuid[0];
+            input.type = "hidden";
+            profileImgForm.append(input);
+
+            profileImgForm.submit();
         })
         .catch(error => {
             console.error('파일 업로드 에러:', error);
@@ -50,9 +56,35 @@ function updateProfileImage(uuid, fileName) {
 
     let uploadPath = `${year}/${month}/${date}`;
 
-    profileImg.src = "/file/display?fileName=" + uploadPath + "/t_" + uuid + "_" + fileName;
+    // JSON 데이터를 body에 담아 POST 요청 보내기
+    fetch('/mypage/updatePersonalImg', {
+        method: 'POST',
+        headers: {
+            'Content-Type': '/json'
+        },
+        body: JSON.stringify({
+            fileName: fileName,
+            uuid: uuid,
+            uploadPath: uploadPath
+        })
+    })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('파일 업데이트 실패');
+            }
+            return response.json();
+        })
+        .catch(error => {
+            console.error('파일 업데이트 에러:', error);
+            showGlobalDialogue("업데이트중 오류가 발생했습니다.<br>다시 시도해 주세요.")
+        });
+}
 
-//     todo = user정보 update 필요
+
+// 디폴트 사진 선택
+function updateDefaultImg(imgName) {
+    document.getElementById('selectedImageNumber').value = imgName;
+    document.getElementById('imageForm').submit();
 }
 
 // 닉네임 수정

@@ -1,7 +1,9 @@
 package com.app.spotick.repository.user;
 
+import com.app.spotick.domain.dto.user.UserProfileDto;
 import com.app.spotick.domain.entity.user.User;
 import com.app.spotick.domain.entity.user.UserAuthority;
+import com.app.spotick.domain.entity.user.UserProfileFile;
 import com.app.spotick.domain.type.user.AuthorityType;
 import com.app.spotick.domain.type.user.UserStatus;
 import jakarta.persistence.EntityManager;
@@ -27,15 +29,19 @@ class UserRepositoryTest {
     private UserRepository userRepository;
     @Autowired
     private UserAuthorityRepository authorityRepository;
+    @Autowired
+    private UserProfileFileRepository userProfileFileRepository;
 
     @PersistenceContext
     private EntityManager em;
 
     private User user;
+    private UserProfileFile file;
 
     @BeforeEach
     void setUp() {
         user = User.builder()
+                .id(1L)
                 .email("aaa")
                 .password("1234")
                 .nickName("홍길동")
@@ -43,6 +49,15 @@ class UserRepositoryTest {
                 .userStatus(UserStatus.ACTIVATE)
                 .build();
         userRepository.save(user);
+
+        file = UserProfileFile.builder()
+                .id(1L)
+                .user(user)
+                .uploadPath("test")
+                .fileName("testName")
+                .uuid("12345678")
+                .build();
+        userProfileFileRepository.save(file);
 
         authorityRepository.save(UserAuthority.builder()
                 .user(user)
@@ -73,5 +88,17 @@ class UserRepositoryTest {
         System.out.println("userAuthorityByUser = " + userAuthorityByUser);
     }
 
+
+    @Test
+    @DisplayName("회원 프로필 정보 테스트")
+    void findUserProfileById() {
+        Optional<UserProfileDto> userProfileDto = userRepository.findUserProfileById(user.getId());
+
+        if (userProfileDto.isPresent()) {
+            System.out.println("userProfileDto = " + userProfileDto.get());
+        } else {
+            System.out.println("프로필이 존재하지 않습니다.");
+        }
+    }
 
 }
