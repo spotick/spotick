@@ -16,4 +16,10 @@ public abstract class ImageBase extends Period {
         this.uuid = uuid;
         this.uploadPath = uploadPath;
     }
+
+    public void updateImage(String fileName, String uuid, String uploadPath) {
+        this.fileName = fileName;
+        this.uuid = uuid;
+        this.uploadPath = uploadPath;
+    }
 }

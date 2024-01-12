@@ -26,7 +26,7 @@ public class WebSecurityConfig {
 
                 .authorizeHttpRequests((requests) -> requests
 //                        해당  url로 들어온 요청은 인증을 해야한다
-//                                .requestMatchers("/hello").authenticated()
+                                .requestMatchers("/mypage/*").authenticated()
 //                        해당  url로 들어온 요청은 인증과 권한확인을 해야한다
 //                                .requestMatchers("/admin")
 //                                .hasAnyRole("USER", "ADMIN")

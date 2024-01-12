@@ -8,7 +8,7 @@ import java.util.UUID;
 
 @Entity @Table(name = "TBL_USER_PROFILE_FILE")
 @SequenceGenerator(name = "SEQ_USER_PROFILE_FILE_GENERATOR", sequenceName = "SEQ_USER_PROFILE_FILE",allocationSize = 1)
-@Getter @ToString(callSuper = true) @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Getter @Setter @ToString(callSuper = true) @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class UserProfileFile extends ImageBase {
     @Id @GeneratedValue(generator = "SEQ_USER_PROFILE_FILE_GENERATOR")
     @Column(name = "USER_PROFILE_FILE_ID")

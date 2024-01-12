@@ -2,6 +2,7 @@ package com.app.spotick.service.user;
 
 import com.app.spotick.domain.dto.user.UserDetailsDto;
 import com.app.spotick.domain.dto.user.UserJoinDto;
+import com.app.spotick.domain.dto.user.UserProfileDto;
 import com.app.spotick.domain.entity.user.User;
 import com.app.spotick.domain.entity.user.UserAuthority;
 import com.app.spotick.domain.type.user.AuthorityType;
@@ -14,6 +15,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -38,6 +41,11 @@ public class UserServiceImpl implements UserService, UserDetailsService {
                 .authorityType(AuthorityType.ROLE_USER)
                 .user(savedUser)
                 .build());
+    }
+
+    @Override
+    public Optional<UserProfileDto> getUserProfile(Long userId) {
+        return userRepository.findUserProfileById(userId);
     }
 
     @Override
