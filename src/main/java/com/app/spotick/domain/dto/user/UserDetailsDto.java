@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -33,7 +34,13 @@ public class UserDetailsDto implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        Collection<GrantedAuthority> grantedAuthorities = new ArrayList<>();
+
+        userAuthorities.forEach(auth -> grantedAuthorities.add(
+                (GrantedAuthority) () -> auth.getAuthorityType().name())
+        );
+
+        return grantedAuthorities;
     }
 
     @Override
