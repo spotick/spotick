@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
 
 <head>
     <meta charset="UTF-8">
@@ -15,7 +16,7 @@
         <div class="header-grid h-content-container">
             <div class="hc-main">
                 <button class="hc-logo" type="button">
-                    <img alt="로고" src="/imgs/logo/spotick-logo.svg">
+                    <img alt="로고" th:src="@{/imgs/logo/spotick-logo.svg}">
                 </button>
                 <div class="hc-types-selector">
                     <button class="hc-content-type" onclick="toggleContent(0)" type="button">장소</button>
@@ -45,9 +46,9 @@
                     <i class="fa-solid fa-location-dot"></i>
                 </a>
                 <hr class="hc-divider">
-                <div class="hc-beforelogin">
+                <div class="hc-beforelogin" sec:authorize="!isAuthenticated()">
                     <div class="hc-contents-list">
-                        <a class="hc-content" href="/user/login">
+                        <a class="hc-content" th:href="@{/user/login}">
                             <span class="hc-content-font">로그인</span>
                         </a>
                     </div>
@@ -68,36 +69,36 @@
                     <div class="hc-content-icon" onclick="toggleNotification()">
                         <i class="fa-regular fa-bell"></i>
                     </div>
-                    <a class="hc-content-icon" href="/mypage/bookmarks">
+                    <a class="hc-content-icon" th:href="@{/mypage/bookmarks}">
                         <i class="fa-regular fa-bookmark"></i>
                     </a>
                 </div>
             </div>
-            <div class="hd-usermenu">
-                <div class="hd-user-name">testuser111111111111111111111111</div>
+            <div class="hd-usermenu" sec:authorize="isAuthenticated()">
+                <div class="hd-user-name" sec:authentication="principal.nickName"></div>
                 <hr class="hd-divider">
-                <a class="hd-content" href="/mypage/user-info">
+                <a class="hd-content" th:href="@{/mypage/user-info}">
                     <p>개인정보 수정</p>
                 </a>
-                <a class="hd-content" href="/mypage/bookmarks">
+                <a class="hd-content" th:href="@{/mypage/bookmarks}">
                     <p>북마크</p>
                 </a>
-                <a class="hd-content" href="/mypage/reservations">
+                <a class="hd-content" th:href="@{/mypage/reservations}">
                     <p>예약내역</p>
                 </a>
-                <a class="hd-content" href="/mypage/reviews">
+                <a class="hd-content" th:href="@{/mypage/reviews}">
                     <p>후기관리</p>
                 </a>
                 <hr class="hd-divider">
-                <a class="hd-content" href="/mypage/tickets">
+                <a class="hd-content" th:href="@{/mypage/tickets}">
                     <p>장소 관리</p>
                 </a>
                 <hr class="hd-divider">
-                <a class="hd-content" href="/mypage/places">
+                <a class="hd-content" th:href="@{/mypage/places}">
                     <p>장소 관리</p>
                 </a>
                 <hr class="hd-divider">
-                <a class="hd-content" href="#">
+                <a class="hd-content" th:href="@{/logout}">
                     <p>로그아웃</p>
                 </a>
             </div>
@@ -150,24 +151,24 @@
             </div>
             <ul class="fc-popover-homes">
                 <li class="fcph-item">
-                    <a href="/place/list">장소</a>
+                    <a th:href="@{/place/list}">장소</a>
                 </li>
                 <li class="fcph-item">
-                    <a href="/ticket/list">티켓</a>
+                    <a th:href="@{/ticket/list}">티켓</a>
                 </li>
             </ul>
         </li>
         <li class="footer-content-item">
-            <a href="/promotion/list">홍보 게시판</a>
+            <a th:href="@{/promotion/list}">홍보 게시판</a>
         </li>
         <li class="footer-content-item">
-            <a href="#">지도 서비스</a>
+            <a th:href="@{#}">지도 서비스</a>
         </li>
         <li class="footer-content-item">
-            <a href="/mypage/user-info">마이 페이지</a>
+            <a th:href="@{/mypage/user-info}">마이 페이지</a>
         </li>
         <li class="footer-content-item">
-            <a href="/mypage/bookmarks">북마크</a>
+            <a th:href="@{/mypage/bookmarks}">북마크</a>
         </li>
         <li class="footer-content-item">© Spotick, Inc.</li>
     </ul>

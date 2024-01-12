@@ -1,5 +1,7 @@
 package com.app.spotick.controller.place;
 
+import com.app.spotick.domain.dto.user.UserDetailsDto;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,7 +16,12 @@ public class PlaceController {
     }
 
     @GetMapping("/list")
-    public String placeList(){
+    public String placeList(@AuthenticationPrincipal UserDetailsDto userDetailsDto){
+
+        System.out.println("======================");
+        System.out.println(userDetailsDto.getId());
+        System.out.println("======================");
+
         return "place/list";
     }
 
