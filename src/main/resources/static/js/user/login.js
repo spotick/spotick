@@ -4,7 +4,7 @@
 // $('#submit').addClass('on');
 
 // 작업 빨리 완성해야할 때는 주석처리
-$('input').on('change',function(){
+$('input').on('input',function(){
   let email = $('#email').val();
   let password = $('#password').val();
   $('#submit').toggleClass('on', isValid(email, password));

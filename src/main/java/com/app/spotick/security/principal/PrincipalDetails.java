@@ -1,6 +1,6 @@
 package com.app.spotick.security.principal;
 
-import com.app.spotick.domain.entity.user.User;
+import com.app.spotick.domain.dto.user.UserDetailsDto;
 import com.app.spotick.domain.entity.user.UserAuthority;
 import com.app.spotick.domain.type.user.UserStatus;
 import org.springframework.security.core.GrantedAuthority;
@@ -10,13 +10,13 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-public class UserPrincipal implements UserDetails {
+public class PrincipalDetails implements UserDetails {
 
-    private final User user;
+    private final UserDetailsDto user;
     private final List<UserAuthority> userAuthorities;
 
-    public UserPrincipal(User user, List<UserAuthority> userAuthorities) {
-        this.user = user;
+    public PrincipalDetails(UserDetailsDto userDetailsDto, List<UserAuthority> userAuthorities) {
+        this.user = userDetailsDto;
         this.userAuthorities = userAuthorities;
     }
 
@@ -34,7 +34,9 @@ public class UserPrincipal implements UserDetails {
     public Long getId(){
         return user.getId();
     }
-
+    public String getEmail() {
+        return user.getEmail();
+    }
     public String getNickName(){
         return user.getNickName();
     }

@@ -1,12 +1,13 @@
 package com.app.spotick.service.user;
 
+import com.app.spotick.domain.dto.user.UserDetailsDto;
 import com.app.spotick.domain.dto.user.UserJoinDto;
 import com.app.spotick.domain.entity.user.User;
 import com.app.spotick.domain.entity.user.UserAuthority;
 import com.app.spotick.domain.type.user.AuthorityType;
 import com.app.spotick.repository.user.UserAuthorityRepository;
 import com.app.spotick.repository.user.UserRepository;
-import com.app.spotick.security.principal.UserPrincipal;
+import com.app.spotick.security.principal.PrincipalDetails;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -47,7 +48,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         if (foundUser == null) {
             throw new UsernameNotFoundException("해당 이메일로 등록된 회원 없음");
         }
-        return new UserPrincipal(foundUser, authorityRepository.findUserAuthorityByUser(foundUser));
+        return new PrincipalDetails(new UserDetailsDto(foundUser), authorityRepository.findUserAuthorityByUser(foundUser));
     }
 
     private String encodePassword(String password) {
