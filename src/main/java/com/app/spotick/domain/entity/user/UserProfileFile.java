@@ -18,11 +18,14 @@ public class UserProfileFile extends ImageBase {
     @JoinColumn(name = "USER_ID")
     private User user;
 
+    private boolean isDefaultImage;
+
     @Builder
     public UserProfileFile(String fileName, String uuid, String uploadPath, Long id, User user) {
         super(fileName, uuid, uploadPath);
         this.id = id;
         this.user = user;
+        this.isDefaultImage = true;
     }
 }
 
