@@ -13,7 +13,7 @@ let width = $('.file-container').width();
 let idx = 0;
 let length = 0;
 
-$('#placeFile').on('change', function (event) {
+$('#placeFiles').on('change', function (event) {
     let files = Array.from(event.target.files);
 
     // 미리보기 이미지 목록을 비웁니다.
@@ -55,7 +55,7 @@ $('.prev').on('click', function() {
 });
 
 $('.file-wrap').on('click','.delete',function (){
-    let files = $('#placeFile')[0].files;
+    let files = $('#placeFiles')[0].files;
 
     // 삭제된 이미지의 인덱스를 찾습니다.
     let deletedIndex = $(this).parent().index();
@@ -71,7 +71,7 @@ $('.file-wrap').on('click','.delete',function (){
     }
 
     files = dt.files;
-    $('#placeFile')[0].files = files;
+    $('#placeFiles')[0].files = files;
 
     length = $('.file-item').length;
 

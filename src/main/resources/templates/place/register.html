@@ -12,7 +12,8 @@
 
 <div class="body">
     <div class="place-register-container">
-        <form action="" method="post" class="register-form" enctype="multipart/form-data">
+        <form th:action="@{/place/register}" method="post"
+              class="register-form" enctype="multipart/form-data" th:object="${placeRegisterDto}">
             <div class="guide-title-box">
                 <p>장소 등록 신청</p>
             </div>
@@ -24,7 +25,7 @@
                     <p class="invalid-msg"></p>
                 </div>
                 <div class="input-box">
-                    <input id="placeName" type="text" name="placeName" placeholder="장소를 대표하는 이름을 입력해 주세요" required>
+                    <input type="text" th:field="*{placeName}" placeholder="장소를 대표하는 이름을 입력해 주세요" required>
                 </div>
             </div>
 
@@ -35,7 +36,7 @@
                     <p class="invalid-msg"></p>
                 </div>
                 <div class="input-box">
-                    <input id="placeSubTitle" type="text" name="placeSubTitle" placeholder="장소를 짧게 나타내는 소제목을 입력해주세요"
+                    <input type="text" th:field="*{placeSubTitle}" placeholder="장소를 짧게 나타내는 소제목을 입력해주세요"
                            required>
                 </div>
             </div>
@@ -58,8 +59,8 @@
                     </div>
                 </div>
                 <div id="map"></div>
-                <input id="placeLat" type="hidden" name="placeLat">
-                <input id="placeLng" type="hidden" name="placeLng">
+                <input th:field="*{placeLat}" type="hidden" name="placeLat">
+                <input th:field="*{placeLng}" type="hidden" name="placeLng">
             </div>
 
             <div class="input-wrap">
@@ -69,17 +70,17 @@
                     <p class="invalid-msg"></p>
                 </div>
                 <div class="input-box">
-                    <input id="placeAddress" type="text" name="placeAddress" placeholder="장소 주소를 입력해 주세요" required>
+                    <input type="text" th:field="*{placeAddress}" placeholder="장소 주소를 입력해 주세요" required>
                 </div>
                 <div class="input-box">
-                    <input id="placeAddressDetail" type="text" name="placeAddressDetail"
+                    <input type="text" th:field="*{placeAddressDetail}"
                            placeholder="장소의 상세 주소를 입력해 주세요" required>
                 </div>
             </div>
 
             <div class="img-wrap">
-                <input type="file" id="placeFile" accept="image/*" name="placeFile" multiple>
-                <label for="placeFile" class="file-label flex-align-center">
+                <input type="file" th:field="*{placeFiles}" accept="image/*" multiple>
+                <label for="placeFiles" class="file-label flex-align-center">
                     <i class="fa-regular fa-image"></i>
                     <p>장소 사진을 넣어주세요</p>
                 </label>
@@ -107,7 +108,7 @@
                     <p class="invalid-msg"></p>
                 </div>
                 <label for="placeInfo" class="input-box textarea-box">
-                    <textarea id="placeInfo" name="placeInfo"
+                    <textarea th:field="*{placeInfo}"
                               placeholder="장소에 대해서 자세하게 설명해주세요" required></textarea>
                 </label>
             </div>
@@ -119,7 +120,7 @@
                     <p class="invalid-msg"></p>
                 </div>
                 <label for="placeRule" class="input-box textarea-box">
-                    <textarea id="placeRule" name="placeInfo"
+                    <textarea th:field="*{placeRule}"
                               placeholder="장소 이용규칙에 대해서 적어주세요" required></textarea>
                 </label>
             </div>
@@ -132,7 +133,7 @@
                         <p class="invalid-msg"></p>
                     </div>
                     <div class="input-box">
-                        <input id="placeDefaultPrice" min="0" type="number" name="placeDefaultPrice"
+                        <input th:field="*{placeDefaultPrice}" min="0" type="number"
                                placeholder="금액을 입력해주세요"
                                required>
                         <p class="unit">원</p>
@@ -146,9 +147,8 @@
                         <p class="invalid-msg"></p>
                     </div>
                     <div class="input-box">
-                        <input id="placeSurcharge" min="1" type="number" name="placeSurcharge"
-                               placeholder="할증 금액을 입력해주세요"
-                               required>
+                        <input th:field="*{placeSurcharge}" min="1" type="number"
+                               placeholder="할증 금액을 입력해주세요">
                         <p class="unit">원</p>
                     </div>
                 </div>
@@ -161,7 +161,7 @@
                     <p class="invalid-msg"></p>
                 </div>
                 <div class="input-box">
-                    <input id="placeDefaultPeople" min="1" type="number" name="placeDefaultPeople"
+                    <input th:field="*{placeDefaultPeople}" min="1" type="number"
                            placeholder="장소의 기본 이용인원을 적어주세요" required>
                     <p class="unit">명</p>
                 </div>
@@ -179,7 +179,7 @@
                         <p class="invalid-msg"></p>
                     </div>
                     <div class="input-box">
-                        <input id="accountHolder" type="text" name="accountHolder"
+                        <input th:field="*{accountHolder}" type="text"
                                placeholder="예금주를 입력해주세요"
                                required>
                     </div>
@@ -191,7 +191,7 @@
                         <p class="invalid-msg"></p>
                     </div>
                     <div class="input-box select-box">
-                        <select class="select" name="bankName" id="bankName">
+                        <select class="select" th:field="*{bankName}">
                             <option value="국민">국민</option>
                             <option value="우리">우리</option>
                             <option value="농협">농협</option>
@@ -207,13 +207,13 @@
                     <p class="invalid-msg"></p>
                 </div>
                 <div class="input-box">
-                    <input id="accountNumber" type="text" name="accountNumber" placeholder="계좌번호를 입력해주세요"
+                    <input th:field="*{accountNumber}" type="text"  placeholder="계좌번호를 입력해주세요"
                            required>
                 </div>
             </div>
             <div class="flex-center start">
-                <button type="button" class="cancel">취소</button>
-                <button type="button" class="submit-btn flex-align-center">신청하기</button>
+                <a th:href="@{/place/list}" class="cancel flex-align-center">취소</a>
+                <button class="submit-btn flex-align-center on">신청하기</button>
             </div>
         </form>
     </div>
