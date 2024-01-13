@@ -18,8 +18,9 @@ public class UserProfileDto {
     private String fileName;
     private String uuid;
     private String uploadPath;
+    private boolean isDefaultImage;
 
-    public UserProfileDto(Long id, String email, String nickName, String tel, UserStatus userStatus, LocalDateTime createdDate, String fileName, String uuid, String uploadPath) {
+    public UserProfileDto(Long id, String email, String nickName, String tel, UserStatus userStatus, LocalDateTime createdDate, String fileName, String uuid, String uploadPath, boolean isDefaultImage) {
         this.id = id;
         this.email = email;
         this.nickName = nickName;
@@ -29,5 +30,6 @@ public class UserProfileDto {
         this.fileName = fileName;
         this.uuid = uuid;
         this.uploadPath = uploadPath;
+        this.isDefaultImage = isDefaultImage;
     }
 }

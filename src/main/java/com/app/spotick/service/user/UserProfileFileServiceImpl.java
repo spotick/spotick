@@ -23,7 +23,6 @@ public class UserProfileFileServiceImpl implements UserProfileFileService {
     @Value("${default.profileFileDir}")
     private String DEFAULT_UPLOAD_PATH;
 
-
     @Override
     public void updateDefaultImg(String imgName, Long fileId) {
         UserProfileFile userProfileFile = em.find(UserProfileFile.class, fileId);

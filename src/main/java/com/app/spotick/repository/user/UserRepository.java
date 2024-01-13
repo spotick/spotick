@@ -18,7 +18,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     //    프로필 사진 및 유저 정보 조회(비밀번호 제외)
     @Query("select new com.app.spotick.domain.dto.user.UserProfileDto(" +
-            "u.id, u.email, u.nickName, u.tel, u.userStatus, f.createdDate, f.fileName, f.uuid, f.uploadPath) " +
+            "u.id, u.email, u.nickName, u.tel, u.userStatus, f.createdDate, f.fileName, f.uuid, f.uploadPath, f.isDefaultImage) " +
             "from UserProfileFile f join f.user u where u.id = :id")
     Optional<UserProfileDto> findUserProfileById(@Param("id") Long id);
 

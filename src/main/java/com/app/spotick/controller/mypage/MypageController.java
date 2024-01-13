@@ -60,10 +60,6 @@ public class MypageController {
         return new RedirectView("/mypage/user-info");
     }
 
-    private String getPath() {
-        return LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd"));
-    }
-
     @GetMapping("/bookmarks")
     public void goToBookmarks(){}
 
@@ -94,5 +90,9 @@ public class MypageController {
     private String getMaskedEmail(String email) {
         // 이메일 주소의 처음 4글자와 마지막 @ 이전 부분을 유지하고 나머지를 *로 마스킹
         return email.substring(0, 4) + "****@" + email.substring(email.indexOf('@') + 1);
+    }
+
+    private String getPath() {
+        return LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd"));
     }
 }
