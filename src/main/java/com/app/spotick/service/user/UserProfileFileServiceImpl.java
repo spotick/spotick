@@ -6,6 +6,7 @@ import com.app.spotick.repository.user.UserProfileFileRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.Random;
@@ -17,9 +18,10 @@ public class UserProfileFileServiceImpl implements UserProfileFileService {
     private final UserProfileFileRepository userProfileFileRepository;
 
     private final EntityManager em;
-    private Random random = new Random();
-//    이 부분은 yml 등록 고려
-    private final String DEFAULT_UPLOAD_PATH = "/imgs/defaultProfileImgs/";
+    private final Random random = new Random();
+
+    @Value("${default.profileFileDir}")
+    private String DEFAULT_UPLOAD_PATH;
 
 
     @Override

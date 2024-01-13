@@ -148,7 +148,7 @@
                     <div onclick="openModal(profileModal)" style="position: relative">
                         <th:block th:if="*{uuid == null}">
                             <img class="mpc-user-info-user-img"
-                                 th:alt="*{nickName}" th:src="*{uploadPath + fileName}">
+                                 th:alt="*{nickName}" th:src="@{/file/default/display(fileName=*{fileName})}">
                         </th:block>
                         <th:block th:unless="*{uuid == null}">
                             <img class="mpc-user-info-user-img"
