@@ -16,11 +16,7 @@ public class PlaceController {
     }
 
     @GetMapping("/list")
-    public String placeList(@AuthenticationPrincipal UserDetailsDto userDetailsDto){
-
-        System.out.println("======================");
-        System.out.println(userDetailsDto.getId());
-        System.out.println("======================");
+    public String placeList(){
 
         return "place/list";
     }
