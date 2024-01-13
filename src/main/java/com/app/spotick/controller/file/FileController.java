@@ -2,6 +2,8 @@ package com.app.spotick.controller.file;
 
 import lombok.RequiredArgsConstructor;
 import net.coobird.thumbnailator.Thumbnailator;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -20,6 +22,9 @@ import java.util.UUID;
 @RequestMapping("/file/*")
 @RequiredArgsConstructor
 public class FileController {
+
+    @Value("${default.profileFileDir}")
+    private String DEFAULT_UPLOAD_PATH;
 
     //    파일 업로드
     @PostMapping("upload")
@@ -68,6 +73,13 @@ public class FileController {
     public byte[] display(String fileName) throws IOException {
         // 임시 테스트 경로 유지
         return FileCopyUtils.copyToByteArray(new File("C:/spotickFilesTest/uploadFiles/", fileName));
+    }
+
+    // 기본이미지 display
+    @GetMapping("/default/display")
+    public byte[] defaultDisplay(@RequestParam("fileName") String fileName) throws IOException {
+        ClassPathResource resource = new ClassPathResource(DEFAULT_UPLOAD_PATH + fileName);
+        return FileCopyUtils.copyToByteArray(resource.getInputStream());
     }
 
     //    파일 경로에 연 월 일로 구분하여 파일 저장

@@ -5,8 +5,10 @@ import com.app.spotick.domain.dto.user.UserJoinDto;
 import com.app.spotick.domain.dto.user.UserProfileDto;
 import com.app.spotick.domain.entity.user.User;
 import com.app.spotick.domain.entity.user.UserAuthority;
+import com.app.spotick.domain.entity.user.UserProfileFile;
 import com.app.spotick.domain.type.user.AuthorityType;
 import com.app.spotick.repository.user.UserAuthorityRepository;
+import com.app.spotick.repository.user.UserProfileFileRepository;
 import com.app.spotick.repository.user.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -26,21 +28,20 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
     private final UserAuthorityRepository authorityRepository;
+    private final UserProfileFileService profileFileService;
 
     @Override
     public void join(UserJoinDto userJoinDto) {
-        User savedUser = userRepository.save(User.builder()
-                .email(userJoinDto.getEmail())
-                .password(encodePassword(userJoinDto.getPassword()))
-                .nickName(userJoinDto.getNickName())
-                .tel(userJoinDto.getTel())
-                .build()
-        );
+        userJoinDto.setPassword(encodePassword(userJoinDto.getPassword()));
 
+        User savedUser = userRepository.save(userJoinDto.toEntity());
+//      권한 추가
         authorityRepository.save(UserAuthority.builder()
                 .authorityType(AuthorityType.ROLE_USER)
                 .user(savedUser)
                 .build());
+//        랜덤 사진 추가
+        profileFileService.saveDefaultRandomImgByUser(savedUser);
     }
 
     @Override

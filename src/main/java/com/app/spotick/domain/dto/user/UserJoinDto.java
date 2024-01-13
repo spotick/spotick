@@ -19,4 +19,16 @@ public class UserJoinDto {
         this.nickName = user.getNickName();
         this.tel = user.getTel();
     }
+
+    public User toEntity(){
+        return User.builder()
+                .email(email)
+                .password(password)
+                .nickName(nickName)
+                .tel(tel)
+                .build();
+    }
+
+
+
 }
