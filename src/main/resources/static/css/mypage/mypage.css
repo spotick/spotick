@@ -224,6 +224,11 @@
     cursor: pointer;
 }
 
+.mpc-edit-error {
+    color: red;
+    font-size: 13px;
+}
+
 .mpc-user-info-container {
     height: 75px;
     display: flex;
