@@ -77,6 +77,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         foundUser.updateNickName(newNickName);
     }
 
+    // 전화번호 SMS 인증 <- SMS API는 coolsms로 선택함.
     @Override
     public void sendAuthCodeToTel(String tel) {
         String code = createKey();
@@ -91,16 +92,18 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         message.setTo(tel);
         message.setText("인증번호는 " + code + "입니다. 1분 이내로 인증해주세요.");
 
-        try {
-            messageService.send(message);
-        } catch (NurigoMessageNotReceivedException exception) {
-            // 발송에 실패한 메시지 목록을 확인할 수 있습니다!
-            System.out.println(exception.getFailedMessageList());
-            System.out.println(exception.getMessage());
-        } catch (Exception exception) {
-            System.out.println(exception.getMessage());
-        }
+//        해당부분은 실행되면 돈나가므로 주석처리함. 인증코드 확인은 서버콘솔창 확인하거나 redis콘솔창 확인하여 사용할 것.
+//        try {
+//            messageService.send(message);
+//        } catch (NurigoMessageNotReceivedException exception) {
+//            // 발송에 실패한 메시지 목록을 확인할 수 있습니다!
+//            System.out.println(exception.getFailedMessageList());
+//            System.out.println(exception.getMessage());
+//        } catch (Exception exception) {
+//            System.out.println(exception.getMessage());
+//        }
 
+//        redis 키: 전화번호 / 밸류: 인증코드 / 지속시간 1분 설정
         redisService.setValues(tel, code, Duration.ofMinutes(1));
     }
 
