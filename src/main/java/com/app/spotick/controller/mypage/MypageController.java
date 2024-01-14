@@ -3,21 +3,32 @@ package com.app.spotick.controller.mypage;
 import com.app.spotick.domain.dto.user.UserDetailsDto;
 import com.app.spotick.domain.dto.user.UserProfileDto;
 import com.app.spotick.domain.entity.user.User;
+import com.app.spotick.service.redis.RedisService;
 import com.app.spotick.service.user.UserProfileFileService;
 import com.app.spotick.service.user.UserService;
 import com.app.spotick.service.user.UserServiceImpl;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Objects;
 import java.util.Optional;
 
 @Controller
@@ -26,6 +37,7 @@ import java.util.Optional;
 public class MypageController {
     private final UserService userService;
     private final UserProfileFileService profileFileService;
+    private final RedisService redisService;
 
 
     @GetMapping("/user-info")
@@ -33,12 +45,14 @@ public class MypageController {
 
         System.out.println("userDetailsDto = " + userDetailsDto);
 
+//        가려진 이메일 값
         String maskedEmail = getMaskedEmail(userDetailsDto.getEmail());
         model.addAttribute("maskedEmail", maskedEmail);
 
-        Optional<UserProfileDto> userProfile = userService.getUserProfile(userDetailsDto.getId());
-        System.out.println("userProfile = " + userProfile);
-        model.addAttribute("userProfile", userProfile.get());
+//        유저프로필 정보
+        UserProfileDto userProfileDto = userService.getUserProfile(userDetailsDto.getId());
+        System.out.println("userProfileDto = " + userProfileDto);
+        model.addAttribute("userProfile", userProfileDto);
     }
 
     @PostMapping("/updateDefaultImg")
@@ -60,32 +74,84 @@ public class MypageController {
         return new RedirectView("/mypage/user-info");
     }
 
+    @PostMapping("/updateNickName")
+    public String updateNickName(@RequestParam("nickName") String nickName,
+                                 @AuthenticationPrincipal UserDetailsDto userDetailsDto,
+                                 RedirectAttributes redirectAttributes) {
+
+        // 검증
+        if (nickName == null || nickName.length() < 2 || nickName.length() > 10) {
+            redirectAttributes.addFlashAttribute("errorName", "닉네임은 최소 2자에서 최대 10자까지 가능합니다.");
+            return "redirect:/mypage/user-info";
+        }
+
+        userService.updateNickName(userDetailsDto.getId(), nickName);
+
+        return "redirect:/mypage/user-info";
+    }
+
+    @PostMapping("/authenticateTelStart")
+    @ResponseBody
+    public ResponseEntity<Void> sendAuthenticatingCode(@RequestParam("tel") String tel) {
+        userService.sendAuthCodeToTel(tel);
+
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/authenticateTel")
+    @ResponseBody
+    public ResponseEntity<Void> authenticateTel(@RequestParam("tel") String tel,
+                                                @RequestParam("code") String code,
+                                                @AuthenticationPrincipal UserDetailsDto userDetailsDto) {
+        if (Objects.equals(redisService.getValues(tel), code)) {
+            System.out.println("인증 성공");
+
+            userService.updateTel(userDetailsDto.getId(), tel);
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.add("Location", "/mypage/user-info");
+
+            return new ResponseEntity<>(headers, HttpStatus.OK);
+        }
+
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+    }
+
     @GetMapping("/bookmarks")
-    public void goToBookmarks(){}
+    public void goToBookmarks() {
+    }
 
     @GetMapping("/reservations")
-    public void goToReservations(){}
+    public void goToReservations() {
+    }
 
     @GetMapping("/inquiries")
-    public void goToInquiries(){}
+    public void goToInquiries() {
+    }
 
     @GetMapping("/reviews")
-    public void goToReviews(){}
+    public void goToReviews() {
+    }
 
     @GetMapping("/tickets")
-    public void goToTickets(){}
+    public void goToTickets() {
+    }
 
     @GetMapping("/tickets/inquiry-list")
-    public void goToTicketsInquiryList(){}
+    public void goToTicketsInquiryList() {
+    }
 
     @GetMapping("/places")
-    public void goToPlaces(){}
+    public void goToPlaces() {
+    }
 
     @GetMapping("/places/inquiry-list")
-    public void goToPlacesInquiryList(){}
+    public void goToPlacesInquiryList() {
+    }
 
     @GetMapping("/places/reservation-list")
-    public void goToPlacesReservationList(){}
+    public void goToPlacesReservationList() {
+    }
 
     private String getMaskedEmail(String email) {
         // 이메일 주소의 처음 4글자와 마지막 @ 이전 부분을 유지하고 나머지를 *로 마스킹

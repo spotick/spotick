@@ -65,24 +65,24 @@
             </form>
         </div>
     </div>
-    <div class="mypage-modal" id="nicknameModal">
+    <form class="mypage-modal" id="nicknameModal" method="post" th:action="@{/mypage/updateNickName}"
+          th:object="${userProfile}">
         <div class="modal-row" style="margin-top: 20px;">
             <p style="font-weight: bold; font-size: 12px; line-height: 14px; color: rgb(158, 164, 170);">
                 새 닉네임
             </p>
         </div>
         <div class="modal-input-container" style="margin-top: 8px">
-            <input id="newNickname" maxlength="10" oninput="checkInputLength()" placeholder="새 닉네임을 입력해주세요."
+            <input id="newNickname" maxlength="12" oninput="checkInputLength()" placeholder="새 닉네임을 입력해주세요."
+                   th:field="*{nickName}"
                    type="text">
         </div>
         <div style="display: flex; justify-content: center;">
-            <button class="modal-confirm-btn" disabled="disabled" id="nicknameChangeButton" type="button">
-                <p>
-                    닉네임 저장
-                </p>
+            <button class="modal-confirm-btn" disabled="disabled" id="nicknameChangeButton" type="submit">
+                <span>닉네임 저장</span>
             </button>
         </div>
-    </div>
+    </form>
     <div class="mypage-modal" id="phoneModal">
         <div class="modal-row" style="margin-top: 20px;">
             <p style="font-weight: bold; font-size: 12px; line-height: 14px; color: rgb(158, 164, 170);">
@@ -110,10 +110,9 @@
         </div>
         <p class="modal-alert-text"></p>
         <div style="display: flex; justify-content: center;">
-            <button class="modal-confirm-btn" disabled="disabled" id="authConfirmButton" type="button">
-                <p>
-                    인증 완료
-                </p>
+            <button class="modal-confirm-btn" disabled="disabled" id="authConfirmButton"
+                    type="button" onclick="authenticate()">
+                <span>인증 완료</span>
             </button>
         </div>
     </div>
@@ -146,15 +145,16 @@
             <div style="width: 750px;">
                 <figure class="mpc-user-info-user">
                     <div onclick="openModal(profileModal)" style="position: relative">
-                        <th:block th:if="*{uuid == null}">
-                            <img class="mpc-user-info-user-img"
-                                 th:alt="*{nickName}" th:src="@{/file/default/display(fileName=*{fileName})}">
-                        </th:block>
-                        <th:block th:unless="*{uuid == null}">
-                            <img class="mpc-user-info-user-img"
-                                 th:alt="*{nickName}"
-                                 th:src="@{/file/display(fileName=*{uploadPath} + '/t_' + *{uuid} + '_' + *{fileName})}">
-                        </th:block>
+                        <img class="mpc-user-info-user-img"
+                             th:alt="*{nickName}"
+                             th:if="*{isDefaultImage}"
+                             th:src="@{/file/default/display(fileName=*{fileName})}">
+
+                        <img class="mpc-user-info-user-img"
+                             th:alt="*{nickName}"
+                             th:src="@{/file/display(fileName=*{uploadPath} + '/t_' + *{uuid} + '_' + *{fileName})}"
+                             th:unless="*{isDefaultImage}">
+
                         <div class="mpc-edit-icon" style="right: 38px; bottom: 2px">
                             <svg class="feather feather-edit-2" fill="none" height="16" stroke="currentColor"
                                  stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"
@@ -163,7 +163,7 @@
                             </svg>
                         </div>
                     </div>
-                    <figcaption onclick="openNicknameModal(nicknameModal)" style="display: flex">
+                    <figcaption onclick="openNicknameModal(nicknameModal)" style="display: flex; margin-right: 20px">
                         <b style="cursor:pointer;" th:text="*{nickName}"></b>님
                         <div class="mpc-edit-icon" style="position: relative">
                             <svg class="feather feather-edit-2" fill="none" height="16" stroke="currentColor"
@@ -173,6 +173,7 @@
                             </svg>
                         </div>
                     </figcaption>
+                    <div th:if="${errorName}" class="mpc-edit-error" th:text="${errorName}"></div>
                 </figure>
                 <div>
                     <div class="mpc-user-info-container">
