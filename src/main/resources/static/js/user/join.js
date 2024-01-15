@@ -1,4 +1,6 @@
 
+
+
 $(".all-check").on("click", function () {
     $(this).toggleClass("on");
 
