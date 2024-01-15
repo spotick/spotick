@@ -8,6 +8,8 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.servlet.mvc.support.RedirectAttributesModelMap;
 
 @Configuration
 @EnableWebSecurity
@@ -48,14 +50,18 @@ public class WebSecurityConfig {
 
                 )
 
-                .logout((logout) -> logout
-                                .logoutUrl("/logout")
-                                .logoutSuccessUrl("/")
-                                .invalidateHttpSession(true)
+                .logout(logout -> logout
+                        .logoutUrl("/logout")
+                        .logoutSuccessUrl("/")
+                        .invalidateHttpSession(true)
                 )
-                .exceptionHandling(exceptionHandling->
-                        exceptionHandling.accessDeniedPage("/")
-                );
+                .exceptionHandling(exceptionHandling -> exceptionHandling
+                        .accessDeniedPage("/")
+                        .authenticationEntryPoint((request, response, authException) -> {
+                            response.sendRedirect("/user/login?gm=true");
+                        })
+                )
+        ;
 
         return http.build();
     }

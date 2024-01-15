@@ -19,7 +19,7 @@ import org.springframework.test.annotation.Commit;
 import java.util.List;
 import java.util.Optional;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.*;
 
 @SpringBootTest
 @Transactional
@@ -40,6 +40,13 @@ class UserRepositoryTest {
 
     @BeforeEach
     void setUp() {
+        file = UserProfileFile.builder()
+                .uploadPath("test")
+                .fileName("testName")
+                .uuid("12345678")
+                .isDefaultImage(false)
+                .build();
+
         user = User.builder()
                 .id(1L)
                 .email("aaa")
@@ -47,17 +54,10 @@ class UserRepositoryTest {
                 .nickName("홍길동")
                 .tel("0101111111")
                 .userStatus(UserStatus.ACTIVATE)
+                .userProfileFile(file)
                 .build();
-        userRepository.save(user);
 
-        file = UserProfileFile.builder()
-                .id(1L)
-                .user(user)
-                .uploadPath("test")
-                .fileName("testName")
-                .uuid("12345678")
-                .build();
-        userProfileFileRepository.save(file);
+        userRepository.save(user);
 
         authorityRepository.save(UserAuthority.builder()
                 .user(user)
@@ -92,13 +92,10 @@ class UserRepositoryTest {
     @Test
     @DisplayName("회원 프로필 정보 테스트")
     void findUserProfileById() {
-        Optional<UserProfileDto> userProfileDto = userRepository.findUserProfileById(user.getId());
+        UserProfileDto userProfileDto = userRepository.findUserProfileById(user.getId()).get();
 
-        if (userProfileDto.isPresent()) {
-            System.out.println("userProfileDto = " + userProfileDto.get());
-        } else {
-            System.out.println("프로필이 존재하지 않습니다.");
-        }
+        assertThat(userProfileDto).isNotNull();
+        System.out.println("userProfileDto = " + userProfileDto);
     }
 
 }

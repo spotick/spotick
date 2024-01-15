@@ -15,9 +15,9 @@
     <div class="header-content">
         <div class="header-grid h-content-container">
             <div class="hc-main">
-                <button class="hc-logo" type="button">
+                <a th:href="@{/}" class="hc-logo" type="button">
                     <img alt="로고" th:src="@{/imgs/logo/spotick-logo.svg}">
-                </button>
+                </a>
                 <div class="hc-types-selector">
                     <button class="hc-content-type" onclick="toggleContent(0)" type="button">장소</button>
                     <button class="hc-content-type" onclick="toggleContent(1)" type="button">티켓</button>

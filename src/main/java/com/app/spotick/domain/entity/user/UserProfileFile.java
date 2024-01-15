@@ -14,17 +14,13 @@ public class UserProfileFile extends ImageBase {
     @Column(name = "USER_PROFILE_FILE_ID")
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "USER_ID")
-    private User user;
 
     private boolean isDefaultImage = true;
 
     @Builder
-    public UserProfileFile(String fileName, String uuid, String uploadPath, Long id, User user, boolean isDefaultImage) {
+    public UserProfileFile(String fileName, String uuid, String uploadPath, Long id, boolean isDefaultImage) {
         super(fileName, uuid, uploadPath);
         this.id = id;
-        this.user = user;
         this.isDefaultImage = isDefaultImage;
     }
 }

@@ -3,7 +3,6 @@ package com.app.spotick.service.user;
 import com.app.spotick.domain.entity.user.User;
 import com.app.spotick.domain.entity.user.UserProfileFile;
 import com.app.spotick.repository.user.UserProfileFileRepository;
-import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -12,7 +11,6 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.NoSuchElementException;
-import java.util.Optional;
 import java.util.Random;
 
 @Service
@@ -46,11 +44,11 @@ public class UserProfileFileServiceImpl implements UserProfileFileService {
     }
 
     @Override
-    public void saveDefaultRandomImgByUser(User user) {
-        userProfileFileRepository.save(UserProfileFile.builder()
-                .user(user)
-                .uploadPath(null)
+    public UserProfileFile saveDefaultRandomImgByUser() {
+        return userProfileFileRepository.save(UserProfileFile.builder()
                 .fileName((random.nextInt(11) + 1) + ".jpg")
+                .uuid(null)
+                .uploadPath(DEFAULT_UPLOAD_PATH)
                 .isDefaultImage(true)
                 .build());
     }
