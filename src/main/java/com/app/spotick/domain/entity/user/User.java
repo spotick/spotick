@@ -26,8 +26,12 @@ public class User extends Period {
     private UserStatus userStatus;
     private LocalDate suspensionEndDate;    // 정지 종료일
 
+    @OneToOne(fetch = FetchType.LAZY,cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "USER_PROFILE_FILE_ID")
+    private UserProfileFile userProfileFile;
+
     @Builder
-    public User(Long id, String email, String password, String nickName, String tel, UserStatus userStatus, LocalDate suspensionEndDate) {
+    public User(Long id, String email, String password, String nickName, String tel, UserStatus userStatus, LocalDate suspensionEndDate, UserProfileFile userProfileFile) {
         this.id = id;
         this.email = email;
         this.password = password;
@@ -35,6 +39,7 @@ public class User extends Period {
         this.tel = tel;
         this.userStatus = userStatus;
         this.suspensionEndDate = suspensionEndDate;
+        this.userProfileFile = userProfileFile;
     }
 
     public void updateNickName(String nickName) {
@@ -47,6 +52,10 @@ public class User extends Period {
 
     public void updatePassword(String password) {
         this.password = password;
+    }
+
+    public void updateUserProfile(UserProfileFile userProfileFile){
+        this.userProfileFile = userProfileFile;
     }
 }
 

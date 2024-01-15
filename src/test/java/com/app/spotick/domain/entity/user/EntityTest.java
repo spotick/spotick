@@ -45,11 +45,6 @@ class EntityTest {
                 .uuid(UUID.randomUUID().toString())
                 .fileName("testFileName")
                 .uploadPath("testPah")
-                .user(User.builder()
-                        .email("aaa@naver.com")
-                        .password("1234")
-                        .nickName("홍길동")
-                        .build())
                 .build();
         System.out.println(userProfileFile);
 

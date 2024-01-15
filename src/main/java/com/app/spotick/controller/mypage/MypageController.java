@@ -44,7 +44,7 @@ public class MypageController {
     @GetMapping("/user-info")
     public void goToUserInfo(Model model, @AuthenticationPrincipal UserDetailsDto userDetailsDto) {
 
-        System.out.println("userDetailsDto = " + userDetailsDto);
+//        System.out.println("userDetailsDto = " + userDetailsDto);
 
 //        가려진 이메일 값
         String maskedEmail = getMaskedEmail(userDetailsDto.getEmail());

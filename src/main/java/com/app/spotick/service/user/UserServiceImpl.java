@@ -5,6 +5,7 @@ import com.app.spotick.domain.dto.user.UserJoinDto;
 import com.app.spotick.domain.dto.user.UserProfileDto;
 import com.app.spotick.domain.entity.user.User;
 import com.app.spotick.domain.entity.user.UserAuthority;
+import com.app.spotick.domain.entity.user.UserProfileFile;
 import com.app.spotick.domain.type.user.AuthorityType;
 import com.app.spotick.repository.user.UserAuthorityRepository;
 import com.app.spotick.repository.user.UserRepository;
@@ -38,15 +39,15 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     public void join(UserJoinDto userJoinDto) {
         userJoinDto.setPassword(encodePassword(userJoinDto.getPassword()));
+//        랜덤 사진 추가
+        UserProfileFile userProfileFile = profileFileService.saveDefaultRandomImgByUser();
 
-        User savedUser = userRepository.save(userJoinDto.toEntity());
+        User savedUser = userRepository.save(userJoinDto.toEntity(userProfileFile));
 //      권한 추가
         authorityRepository.save(UserAuthority.builder()
                 .authorityType(AuthorityType.ROLE_USER)
                 .user(savedUser)
                 .build());
-//        랜덤 사진 추가
-        profileFileService.saveDefaultRandomImgByUser(savedUser);
     }
 
     @Override

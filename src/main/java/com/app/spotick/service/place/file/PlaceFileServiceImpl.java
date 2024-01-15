@@ -5,6 +5,7 @@ import com.app.spotick.domain.entity.place.PlaceFile;
 import com.app.spotick.repository.place.PlaceFileRepository;
 import lombok.RequiredArgsConstructor;
 import net.coobird.thumbnailator.Thumbnailator;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -25,7 +26,8 @@ import java.util.UUID;
 public class PlaceFileServiceImpl implements PlaceFileService{
     private final PlaceFileRepository placeFileRepository;
 
-    private final String ROOT_DIR = "C:/spotickFilesTest/uploadFiles/";
+    @Value("${root.dir}")
+    private String ROOT_DIR;
     @Override
     public void registerAndSavePlaceFile(List<MultipartFile> placeFiles, Place place) throws IOException {
         for(MultipartFile file:placeFiles){
@@ -68,10 +70,6 @@ public class PlaceFileServiceImpl implements PlaceFileService{
                 .uploadPath(getUploadPath())
                 .build();
     }
-
-
-
-
 
     private String getUploadPath() {
         return LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd"));
