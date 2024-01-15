@@ -22,4 +22,8 @@ public abstract class PostBase extends Period {
         this.lng = lng;
     }
 
+    public void increaseViewCount(){
+        this.viewCount++;
+    }
+
 }

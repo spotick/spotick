@@ -51,6 +51,18 @@ public class Place extends PostBase {
         this.placeStatus = placeStatus;
         this.user = user;
     }
+
+//    장소 호스트 설정 메소드
+    public void setHost(User user){
+        this.user = user;
+    }
+
+//    장소 상태 설정 메소드
+    public void setPlaceStatus(PostStatus placeStatus){
+        this.placeStatus = placeStatus;
+    }
+
+
 }
 
 

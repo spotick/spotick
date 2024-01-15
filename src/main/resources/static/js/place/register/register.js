@@ -121,7 +121,9 @@ $('body').on('click',function (){
     console.log(`length : ${length}`);
 })
 
-
+function disableSubmitBtn(){
+    $('#submit').attr('disabled',true);
+}
 
 
 

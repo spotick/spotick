@@ -12,7 +12,7 @@
 
 <div class="body">
     <div class="place-register-container">
-        <form th:action="@{/place/register}" method="post"
+        <form th:action="@{/place/register}" method="post" onsubmit="disableSubmitBtn()"
               class="register-form" enctype="multipart/form-data" th:object="${placeRegisterDto}">
             <div class="guide-title-box">
                 <p>장소 등록 신청</p>
@@ -22,7 +22,7 @@
                 <div class="input-guide flex">
                     <p class="input-title">장소 이름</p>
                     <img src="//s3.hourplace.co.kr/web/images/icon/invalid.svg" alt="필수입력">
-                    <p class="invalid-msg"></p>
+                    <p class="invalid-msg" th:if="${#fields.hasErrors()}" th:errors="*{placeName}"></p>
                 </div>
                 <div class="input-box">
                     <input type="text" th:field="*{placeName}" placeholder="장소를 대표하는 이름을 입력해 주세요" required>
@@ -33,7 +33,7 @@
                 <div class="input-guide flex">
                     <p class="input-title">장소 소제목</p>
                     <img src="//s3.hourplace.co.kr/web/images/icon/invalid.svg" alt="필수입력">
-                    <p class="invalid-msg"></p>
+                    <p class="invalid-msg" th:if="${#fields.hasErrors()}" th:errors="*{placeSubTitle}"></p>
                 </div>
                 <div class="input-box">
                     <input type="text" th:field="*{placeSubTitle}" placeholder="장소를 짧게 나타내는 소제목을 입력해주세요"
@@ -47,6 +47,7 @@
                     <p class="input-title">위치 검색</p>
                     <p class="guide-msg">장소를 검색하신 후 클릭하여 핀을 찍어주세요</p>
                 </div>
+                <p class="invalid-msg" th:if="${#fields.hasErrors()}" th:errors="*{placeLat}"></p>
                 <div class="search-wrap">
                     <div class="input-box search-box">
                         <input id="search" type="text" placeholder="장소를 검색해주세요" required>
@@ -67,7 +68,7 @@
                 <div class="input-guide flex">
                     <p class="input-title">장소 주소</p>
                     <img src="//s3.hourplace.co.kr/web/images/icon/invalid.svg" alt="필수입력">
-                    <p class="invalid-msg"></p>
+                    <p class="invalid-msg" th:if="${#fields.hasErrors()}" th:errors="*{placeAddressDetail}"></p>
                 </div>
                 <div class="input-box">
                     <input type="text" th:field="*{placeAddress}" placeholder="장소 주소를 입력해 주세요" required>
@@ -78,6 +79,7 @@
                 </div>
             </div>
 
+            <p class="invalid-msg" th:if="${#fields.hasErrors()}" th:errors="*{placeFiles}"></p>
             <div class="img-wrap">
                 <input type="file" th:field="*{placeFiles}" accept="image/*" multiple>
                 <label for="placeFiles" class="file-label flex-align-center">
@@ -105,7 +107,7 @@
                 <div class="input-guide flex">
                     <p class="input-title">장소 설명</p>
                     <img src="//s3.hourplace.co.kr/web/images/icon/invalid.svg" alt="필수입력">
-                    <p class="invalid-msg"></p>
+                    <p class="invalid-msg" th:if="${#fields.hasErrors()}" th:errors="*{placeInfo}"></p>
                 </div>
                 <label for="placeInfo" class="input-box textarea-box">
                     <textarea th:field="*{placeInfo}"
@@ -117,7 +119,7 @@
                 <div class="input-guide flex">
                     <p class="input-title">장소 이용규칙</p>
                     <img src="//s3.hourplace.co.kr/web/images/icon/invalid.svg" alt="필수입력">
-                    <p class="invalid-msg"></p>
+                    <p class="invalid-msg" th:if="${#fields.hasErrors()}" th:errors="*{placeRule}"></p>
                 </div>
                 <label for="placeRule" class="input-box textarea-box">
                     <textarea th:field="*{placeRule}"
@@ -130,7 +132,7 @@
                     <div class="input-guide flex">
                         <p class="input-title price-title">시간당 대여 금액</p>
                         <img src="//s3.hourplace.co.kr/web/images/icon/invalid.svg" alt="필수입력">
-                        <p class="invalid-msg"></p>
+                        <p class="invalid-msg" th:if="${#fields.hasErrors()}" th:errors="*{placeDefaultPrice}"></p>
                     </div>
                     <div class="input-box">
                         <input th:field="*{placeDefaultPrice}" min="0" type="number"
@@ -144,7 +146,7 @@
                         <p class="input-title">할증금액</p>
                         <img src="//s3.hourplace.co.kr/web/images/icon/invalid.svg" alt="필수입력">
                         <p class="guide-msg">기본 인원을 초과하면 해당 금액만큼 할증이 붙어요</p>
-                        <p class="invalid-msg"></p>
+                        <p class="invalid-msg" th:if="${#fields.hasErrors()}" th:errors="*{placeSurcharge}"></p>
                     </div>
                     <div class="input-box">
                         <input th:field="*{placeSurcharge}" min="1" type="number"
@@ -158,7 +160,7 @@
                 <div class="input-guide flex">
                     <p class="input-title">기본 인원</p>
                     <img src="//s3.hourplace.co.kr/web/images/icon/invalid.svg" alt="필수입력">
-                    <p class="invalid-msg"></p>
+                    <p class="invalid-msg" th:if="${#fields.hasErrors()}" th:errors="*{placeDefaultPeople}"></p>
                 </div>
                 <div class="input-box">
                     <input th:field="*{placeDefaultPeople}" min="1" type="number"
@@ -176,7 +178,7 @@
                     <div class="input-guide flex">
                         <p class="input-title">예금주</p>
                         <img src="//s3.hourplace.co.kr/web/images/icon/invalid.svg" alt="필수입력">
-                        <p class="invalid-msg"></p>
+                        <p class="invalid-msg" th:if="${#fields.hasErrors()}" th:errors="*{accountHolder}"></p>
                     </div>
                     <div class="input-box">
                         <input th:field="*{accountHolder}" type="text"
@@ -192,7 +194,7 @@
                     </div>
                     <div class="input-box select-box">
                         <select class="select" th:field="*{bankName}">
-                            <option value="국민">국민</option>
+                            <option selected value="국민">국민</option>
                             <option value="우리">우리</option>
                             <option value="농협">농협</option>
                         </select>
@@ -204,7 +206,7 @@
                 <div class="input-guide flex">
                     <p class="input-title">계좌번호</p>
                     <img src="//s3.hourplace.co.kr/web/images/icon/invalid.svg" alt="필수입력">
-                    <p class="invalid-msg"></p>
+                    <p class="invalid-msg" th:if="${#fields.hasErrors()}" th:errors="*{accountNumber}"></p>
                 </div>
                 <div class="input-box">
                     <input th:field="*{accountNumber}" type="text"  placeholder="계좌번호를 입력해주세요"
@@ -213,7 +215,7 @@
             </div>
             <div class="flex-center start">
                 <a th:href="@{/place/list}" class="cancel flex-align-center">취소</a>
-                <button class="submit-btn flex-align-center on">신청하기</button>
+                <button id="submit" class="submit-btn flex-align-center on">신청하기</button>
             </div>
         </form>
     </div>
