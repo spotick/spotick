@@ -47,6 +47,7 @@ public class UserProfileFileServiceImpl implements UserProfileFileService {
                 .fileName((random.nextInt(11) + 1) + ".jpg")
                 .uuid(null)
                 .uploadPath(DEFAULT_UPLOAD_PATH)
+                .isDefaultImage(true)
                 .build());
     }
 }
