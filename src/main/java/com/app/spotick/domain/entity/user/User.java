@@ -36,6 +36,18 @@ public class User extends Period {
         this.userStatus = userStatus;
         this.suspensionEndDate = suspensionEndDate;
     }
+
+    public void updateNickName(String nickName) {
+        this.nickName = nickName;
+    }
+
+    public void updateTel(String tel) {
+        this.tel = tel;
+    }
+
+    public void updatePassword(String password) {
+        this.password = password;
+    }
 }
 
 

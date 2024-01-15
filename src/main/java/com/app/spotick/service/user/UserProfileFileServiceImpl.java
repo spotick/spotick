@@ -9,6 +9,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.Random;
 
 @Service
@@ -16,8 +18,6 @@ import java.util.Random;
 @RequiredArgsConstructor
 public class UserProfileFileServiceImpl implements UserProfileFileService {
     private final UserProfileFileRepository userProfileFileRepository;
-
-    private final EntityManager em;
     private final Random random = new Random();
 
     @Value("${default.profileFileDir}")
@@ -25,24 +25,31 @@ public class UserProfileFileServiceImpl implements UserProfileFileService {
 
     @Override
     public void updateDefaultImg(String imgName, Long fileId) {
-        UserProfileFile userProfileFile = em.find(UserProfileFile.class, fileId);
+        UserProfileFile userProfileFile = userProfileFileRepository.findById(fileId).orElseThrow(
+                NoSuchElementException::new
+        );
 
-        userProfileFile.updateImage(imgName, null, DEFAULT_UPLOAD_PATH);
+        userProfileFile.updateImage(imgName, null, null);
+        userProfileFile.setDefaultImage(true);
     }
 
     @Override
     public void updatePersonalImg(String fileName, String uuid, String uploadPath, Long fileId) {
-        UserProfileFile userProfileFile = em.find(UserProfileFile.class, fileId);
+        UserProfileFile userProfileFile = userProfileFileRepository.findById(fileId).orElseThrow(
+                NoSuchElementException::new
+        );
 
         userProfileFile.updateImage(fileName, uuid, uploadPath);
+        userProfileFile.setDefaultImage(false);
     }
 
     @Override
     public void saveDefaultRandomImgByUser(User user) {
         userProfileFileRepository.save(UserProfileFile.builder()
                 .user(user)
-                .uploadPath(DEFAULT_UPLOAD_PATH)
-                .fileName((random.nextInt(11)+1)+".jpg")
+                .uploadPath(null)
+                .fileName((random.nextInt(11) + 1) + ".jpg")
+                .isDefaultImage(true)
                 .build());
     }
 }

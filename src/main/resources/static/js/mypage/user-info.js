@@ -113,6 +113,7 @@ const modalAlertText = document.querySelector('.modal-alert-text');
 const authConfirmBtn = document.getElementById('authConfirmButton');
 
 function openPhoneModal(modalPhone) {
+    newPhoneNumCon.classList.remove('disable')
     newPhoneInput.value = "";
     newPhoneEraseBtn.classList.remove('show');
     newPhoneAuthBtn.classList.add('disable');
@@ -160,7 +161,7 @@ newPhoneAuthBtn.addEventListener("click", () => {
 authNumInput.addEventListener("input", () => {
     let authNumValue = authNumInput.value;
 
-    if (authNumValue.length === 6){
+    if (authNumValue.length === 6) {
         authConfirmBtn.removeAttribute('disabled');
     } else {
         authConfirmBtn.setAttribute('disabled', "true");
@@ -168,18 +169,61 @@ authNumInput.addEventListener("input", () => {
 })
 
 function startVerification() {
-    // 인증번호 발송 로직 필요(서버)
+    let tel = document.getElementById("newPhone").value;
+
+    fetch("/mypage/authenticateTelStart?tel=" + tel, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        // body에는 이제 JSON 문자열이 직접 들어갑니다.
+        body: JSON.stringify({tel: tel})
+    })
+        .then(function (response) {
+            if (!response.ok) {
+                showGlobalDialogue("서버와의 통신에 오류가 있습니다.<br>나중에 다시 시도해 주세요.")
+                throw new Error("서버 통신 오류");
+            }
+            startTimer();
+        })
+        .catch(function (error) {
+            console.error("인증번호 요청 실패", error);
+            showGlobalDialogue("오류가 발생했습니다.<br>다시 시도해주세요.")
+        });
 
     newPhoneAuthBtn.classList.add('disable');
-
-    startTimer();
 }
 
 // 인증번호 전송 로직
-function authenticate() {}
+function authenticate() {
+    let tel = document.getElementById("newPhone").value;
+    let code = document.getElementById("authNumInput").value;
+
+    fetch("/mypage/authenticateTel?tel=" + tel + "&code=" + code, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        }
+    })
+        .then(function (response) {
+            if (!response.ok) {
+                throw new Error("서버 통신 오류");
+            }
+
+            const redirectUrl = response.headers.get('Location');
+
+            if (redirectUrl) {
+                window.location.href = redirectUrl
+            }
+        })
+        .catch(function (error) {
+            console.error("인증 확인 실패", error);
+            modalAlertText.innerHTML = "인증에 실패했습니다. 올바른 값을 입력해주세요."
+        });
+}
 
 let verificationTimer;
-const timerDuration = 10; // 디폴트 타이머 시간
+const timerDuration = 60; // 디폴트 타이머 시간
 const timerContainer = document.getElementById('timerContainer');
 const timerText = document.getElementById('timerText');
 
@@ -219,7 +263,6 @@ function handleTimerExpiration() {
     authNumInputCon.classList.add('disable');
 }
 
-
 // 비밀번호 수정관련
 const pwChangeConfirmBtn = document.getElementById('pwChangeConfirm');
 
@@ -230,7 +273,7 @@ function isValidPassword(password) {
     return passwordRegex.test(password);
 }
 
-function confirmChangingPassword(){
+function confirmChangingPassword() {
     let password = document.getElementById('newPw').value;
     let passwordCheck = document.getElementById('newPwCheck').value;
 
@@ -245,6 +288,12 @@ function confirmChangingPassword(){
         return;
     }
 
-//     todo : 모든 조건식 일치시 비밀번호 업데이트
+    let newPassword = document.getElementById("newPw").value;
+    let newPasswordCheck = document.getElementById("newPwCheck").value;
 
+    let form = document.getElementById("changePasswordForm");
+    form.querySelector('[name="password"]').value = newPassword;
+    form.querySelector('[name="passwordCheck"]').value = newPasswordCheck;
+
+    form.submit();
 }
