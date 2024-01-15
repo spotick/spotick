@@ -1,4 +1,6 @@
 
+
+
 $(".all-check").on("click", function () {
     $(this).toggleClass("on");
 
@@ -44,8 +46,14 @@ $("input").on('change',function (){
 });
 
 // 이벤트 위임으로 회원가입 폼 제출처리
-$(".submit-box").on("click", ".submit-btn.on", function () {
-    $(".join-wrap").submit();
+$(".submit-box").on("click", ".submit-btn.on", function (e) {
+    e.preventDefault();
+    let $submitBtn = $(this);
+    if ($submitBtn.hasClass('disabled')) {
+        return;
+    }
+    $(".join-wrap").submit(); // 폼 제출
+    $submitBtn.addClass('disabled'); // 버튼을 비활성화하여 추가 클릭 방지
 });
 
 function isValidFields(){

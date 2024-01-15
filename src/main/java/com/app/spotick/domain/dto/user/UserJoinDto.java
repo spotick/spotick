@@ -1,6 +1,7 @@
 package com.app.spotick.domain.dto.user;
 
 import com.app.spotick.domain.entity.user.User;
+import com.app.spotick.domain.entity.user.UserProfileFile;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -20,12 +21,13 @@ public class UserJoinDto {
         this.tel = user.getTel();
     }
 
-    public User toEntity(){
+    public User toEntity(UserProfileFile userProfileFile){
         return User.builder()
                 .email(email)
                 .password(password)
                 .nickName(nickName)
                 .tel(tel)
+                .userProfileFile(userProfileFile)
                 .build();
     }
 
