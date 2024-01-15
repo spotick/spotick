@@ -5,12 +5,12 @@ import com.app.spotick.domain.entity.user.User;
 import jakarta.persistence.*;
 import lombok.*;
 
-@Entity @Table(name = "TBL_PLACE_LIKE")
-@SequenceGenerator(name = "SEQ_PLACE_LIKE_GENERATOR", sequenceName = "SEQ_PLACE_LIKE",allocationSize = 1)
+@Entity @Table(name = "TBL_PLACE_BOOKMARK")
+@SequenceGenerator(name = "SEQ_PLACE_BOOKMARK_GENERATOR", sequenceName = "SEQ_PLACE_BOOKMARK",allocationSize = 1)
 @Getter @ToString(callSuper = true) @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class PlaceLike extends Period {
-    @Id @GeneratedValue(generator = "SEQ_PLACE_LIKE_GENERATOR")
-    @Column(name = "PLACE_LIKE_ID")
+public class PlaceBookmark extends Period {
+    @Id @GeneratedValue(generator = "SEQ_PLACE_BOOKMARK_GENERATOR")
+    @Column(name = "PLACE_BOOKMARK_ID")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -21,7 +21,7 @@ public class PlaceLike extends Period {
     private Place place;
 
     @Builder
-    public PlaceLike(Long id, User user, Place place) {
+    public PlaceBookmark(Long id, User user, Place place) {
         this.id = id;
         this.user = user;
         this.place = place;
