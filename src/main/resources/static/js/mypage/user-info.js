@@ -161,7 +161,7 @@ newPhoneAuthBtn.addEventListener("click", () => {
 authNumInput.addEventListener("input", () => {
     let authNumValue = authNumInput.value;
 
-    if (authNumValue.length === 6){
+    if (authNumValue.length === 6) {
         authConfirmBtn.removeAttribute('disabled');
     } else {
         authConfirmBtn.setAttribute('disabled', "true");
@@ -177,11 +177,11 @@ function startVerification() {
             "Content-Type": "application/json"
         },
         // body에는 이제 JSON 문자열이 직접 들어갑니다.
-        body: JSON.stringify({ tel: tel })
+        body: JSON.stringify({tel: tel})
     })
         .then(function (response) {
             if (!response.ok) {
-                showGlobalDialogue("통신에 오류가 있습니다.<br>나중에 다시 시도해 주세요.")
+                showGlobalDialogue("서버와의 통신에 오류가 있습니다.<br>나중에 다시 시도해 주세요.")
                 throw new Error("서버 통신 오류");
             }
             startTimer();
@@ -207,19 +207,18 @@ function authenticate() {
     })
         .then(function (response) {
             if (!response.ok) {
-                showGlobalDialogue("통신에 오류가 있습니다.<br>나중에 다시 시도해 주세요.")
                 throw new Error("서버 통신 오류");
             }
 
             const redirectUrl = response.headers.get('Location');
 
             if (redirectUrl) {
-                window.location.href = redirectUrl;
+                window.location.href = redirectUrl
             }
         })
         .catch(function (error) {
             console.error("인증 확인 실패", error);
-            showGlobalDialogue("인증에 실패했습니다.<br>다시 시도해주세요.")
+            modalAlertText.innerHTML = "인증에 실패했습니다. 올바른 값을 입력해주세요."
         });
 }
 
@@ -274,7 +273,7 @@ function isValidPassword(password) {
     return passwordRegex.test(password);
 }
 
-function confirmChangingPassword(){
+function confirmChangingPassword() {
     let password = document.getElementById('newPw').value;
     let passwordCheck = document.getElementById('newPwCheck').value;
 
@@ -289,6 +288,12 @@ function confirmChangingPassword(){
         return;
     }
 
-//     todo : 모든 조건식 일치시 비밀번호 업데이트
+    let newPassword = document.getElementById("newPw").value;
+    let newPasswordCheck = document.getElementById("newPwCheck").value;
 
+    let form = document.getElementById("changePasswordForm");
+    form.querySelector('[name="password"]').value = newPassword;
+    form.querySelector('[name="passwordCheck"]').value = newPasswordCheck;
+
+    form.submit();
 }

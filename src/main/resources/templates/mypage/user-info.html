@@ -73,7 +73,7 @@
             </p>
         </div>
         <div class="modal-input-container" style="margin-top: 8px">
-            <input id="newNickname" maxlength="12" oninput="checkInputLength()" placeholder="새 닉네임을 입력해주세요."
+            <input id="newNickname" maxlength="10" oninput="checkInputLength()" placeholder="새 닉네임을 입력해주세요."
                    th:field="*{nickName}"
                    type="text">
         </div>
@@ -173,7 +173,9 @@
                             </svg>
                         </div>
                     </figcaption>
-                    <div th:if="${errorName}" class="mpc-edit-error" th:text="${errorName}"></div>
+                    <div th:if="${successProfile}" class="mpc-edit-line success" th:text="${successProfile}"></div>
+                    <div th:if="${errorName}" class="mpc-edit-line error" th:text="${errorName}"></div>
+                    <div th:if="${successName}" class="mpc-edit-line success" th:text="${successName}"></div>
                 </figure>
                 <div>
                     <div class="mpc-user-info-container">
@@ -184,15 +186,23 @@
                         <span>휴대 전화</span>
                         <input class="input-readonly" readonly th:placeholder="*{tel}">
                         <button onclick="openPhoneModal(phoneModal)" type="submit">전화번호 변경</button>
+                        <div th:if="${successTel}" class="mpc-edit-line success absolute" th:text="${successTel}"></div>
+                        <div th:if="${errorTel}" class="mpc-edit-line error absolute" th:text="${errorTel}"></div>
                     </div>
                     <div class="mpc-user-info-container">
                         <span>새 비밀번호</span>
                         <input id="newPw" placeholder="영문, 숫자, 특수문자 2가지 이상 포함 6~15자리" type="password">
+                        <div th:if="${successPassword}" class="mpc-edit-line success absolute" th:text="${successPassword}"></div>
+                        <div th:if="${errorPassword}" class="mpc-edit-line error absolute" th:text="${errorPassword}"></div>
                     </div>
                     <div class="mpc-user-info-container">
                         <span>새 비밀번호 확인</span>
                         <input id="newPwCheck" placeholder="영문, 숫자, 특수문자 2가지 이상 포함 6~15자리" type="password">
                         <button id="pwChangeConfirm" onclick="confirmChangingPassword()">비밀번호 변경</button>
+                        <form th:action="@{/mypage/changePassword}" method="post" id="changePasswordForm">
+                            <input name="password" hidden="hidden">
+                            <input name="passwordCheck" hidden="hidden">
+                        </form>
                     </div>
                 </div>
             </div>
