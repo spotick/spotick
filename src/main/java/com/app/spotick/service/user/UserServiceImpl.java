@@ -116,6 +116,15 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         foundUser.updateTel(newTel);
     }
 
+    @Override
+    public void updatePassword(Long userId, String newPassword) {
+        User foundUser = userRepository.findById(userId).orElseThrow(
+                NoSuchElementException::new
+        );
+
+        foundUser.updatePassword(encodePassword(newPassword));
+    }
+
 
     private String encodePassword(String password) {
         return passwordEncoder.encode(password);

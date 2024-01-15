@@ -224,14 +224,29 @@
     cursor: pointer;
 }
 
-.mpc-edit-error {
+.mpc-edit-line {
+    font-size: 14px;
+}
+
+.mpc-edit-line.absolute {
+    position: absolute;
+    left: 120px;
+    bottom: 50%;
+    transform: translateY(50%);
+}
+
+.mpc-edit-line.error {
     color: red;
-    font-size: 13px;
+}
+
+.mpc-edit-line.success {
+    color: #007aff;
 }
 
 .mpc-user-info-container {
     height: 75px;
     display: flex;
+    position: relative;
     border-bottom: 1px solid rgb(240, 240, 240);
     -webkit-box-align: center;
     align-items: center;

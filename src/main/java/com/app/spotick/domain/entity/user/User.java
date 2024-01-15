@@ -44,6 +44,10 @@ public class User extends Period {
     public void updateTel(String tel) {
         this.tel = tel;
     }
+
+    public void updatePassword(String password) {
+        this.password = password;
+    }
 }
 
 

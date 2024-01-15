@@ -13,4 +13,6 @@ public interface UserService {
     void sendAuthCodeToTel(String tel);
 
     void updateTel(Long userId, String newTel);
+
+    void updatePassword(Long userId, String newPassword);
 }

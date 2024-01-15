@@ -40,6 +40,7 @@ public class MypageController {
     private final RedisService redisService;
 
 
+    /* ================================================유저정보수정=================================================== */
     @GetMapping("/user-info")
     public void goToUserInfo(Model model, @AuthenticationPrincipal UserDetailsDto userDetailsDto) {
 
@@ -56,38 +57,43 @@ public class MypageController {
     }
 
     @PostMapping("/updateDefaultImg")
-    public RedirectView updateDefaultImg(@RequestParam("imgName") String imgName, @AuthenticationPrincipal UserDetailsDto userDetailsDto) {
+    public RedirectView updateDefaultImg(@RequestParam("imgName") String imgName,
+                                         @AuthenticationPrincipal UserDetailsDto userDetailsDto,
+                                         RedirectAttributes redirectAttributes) {
         System.out.println("imgName = " + imgName);
 
         profileFileService.updateDefaultImg(imgName, userDetailsDto.getId());
 
+        redirectAttributes.addFlashAttribute("successProfile", "프로필 사진이 수정되었습니다.");
         return new RedirectView("/mypage/user-info");
     }
 
     @PostMapping("/updatePersonalImg")
     public RedirectView updatePersonalImg(@RequestParam("uuid") String uuid,
                                           @RequestParam("uploadFile") MultipartFile uploadFile,
-                                          @AuthenticationPrincipal UserDetailsDto userDetailsDto) {
+                                          @AuthenticationPrincipal UserDetailsDto userDetailsDto,
+                                          RedirectAttributes redirectAttributes) {
 
         profileFileService.updatePersonalImg(uploadFile.getOriginalFilename(), uuid, getPath(), userDetailsDto.getId());
 
+        redirectAttributes.addFlashAttribute("successProfile", "프로필 사진이 수정되었습니다.");
         return new RedirectView("/mypage/user-info");
     }
 
     @PostMapping("/updateNickName")
-    public String updateNickName(@RequestParam("nickName") String nickName,
+    public RedirectView updateNickName(@RequestParam("nickName") String nickName,
                                  @AuthenticationPrincipal UserDetailsDto userDetailsDto,
                                  RedirectAttributes redirectAttributes) {
 
         // 검증
         if (nickName == null || nickName.length() < 2 || nickName.length() > 10) {
             redirectAttributes.addFlashAttribute("errorName", "닉네임은 최소 2자에서 최대 10자까지 가능합니다.");
-            return "redirect:/mypage/user-info";
+            return new RedirectView("/mypage/user-info");
         }
 
         userService.updateNickName(userDetailsDto.getId(), nickName);
-
-        return "redirect:/mypage/user-info";
+        redirectAttributes.addFlashAttribute("successName", "닉네임이 수정되었습니다.");
+        return new RedirectView("/mypage/user-info");
     }
 
     @PostMapping("/authenticateTelStart")
@@ -102,7 +108,8 @@ public class MypageController {
     @ResponseBody
     public ResponseEntity<Void> authenticateTel(@RequestParam("tel") String tel,
                                                 @RequestParam("code") String code,
-                                                @AuthenticationPrincipal UserDetailsDto userDetailsDto) {
+                                                @AuthenticationPrincipal UserDetailsDto userDetailsDto,
+                                                RedirectAttributes redirectAttributes) {
         if (Objects.equals(redisService.getValues(tel), code)) {
             System.out.println("인증 성공");
 
@@ -117,6 +124,25 @@ public class MypageController {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
 
+    @PostMapping("/changePassword")
+    public RedirectView changePassword(@RequestParam("password") String password,
+                                       @RequestParam("passwordCheck") String passwordCheck,
+                                       @AuthenticationPrincipal UserDetailsDto userDetailsDto,
+                                       RedirectAttributes redirectAttributes) {
+        String passwordRegex = "^(?=.*[a-zA-Z])(?=.*[0-9!@#$%^&*()-+=<>]).{6,15}$";
+
+        if (password != null && Objects.equals(password, passwordCheck) && password.matches(passwordRegex)) {
+            userService.updatePassword(userDetailsDto.getId(), password);
+
+            redirectAttributes.addFlashAttribute("successPassword", "비밀번호가 수정되었습니다.");
+            return new RedirectView("/mypage/user-info");
+        }
+
+        redirectAttributes.addFlashAttribute("errorPassword", "비밀번호 수정에 실패했습니다.");
+        return new RedirectView("/mypage/user-info");
+    }
+
+    /* =================================================북마크====================================================== */
     @GetMapping("/bookmarks")
     public void goToBookmarks() {
     }
