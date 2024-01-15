@@ -264,5 +264,12 @@ input {
     display: none;
 }
 
+.login-logo{
+    margin-bottom: 30px;
+    justify-content: left;
+}
 
+.login-logo>img{
+    width: 250px;
+}
 
