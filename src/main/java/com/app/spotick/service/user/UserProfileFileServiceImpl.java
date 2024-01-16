@@ -8,6 +8,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.NoSuchElementException;
 import java.util.Random;
 
@@ -32,12 +34,12 @@ public class UserProfileFileServiceImpl implements UserProfileFileService {
     }
 
     @Override
-    public void updatePersonalImg(String fileName, String uuid, String uploadPath, Long fileId) {
+    public void updatePersonalImg(String fileName, String uuid, Long fileId) {
         UserProfileFile userProfileFile = userProfileFileRepository.findById(fileId).orElseThrow(
                 NoSuchElementException::new
         );
 
-        userProfileFile.updateImage(fileName, uuid, uploadPath);
+        userProfileFile.updateImage(fileName, uuid, getFilePath());
         userProfileFile.setDefaultImage(false);
     }
 
@@ -49,5 +51,9 @@ public class UserProfileFileServiceImpl implements UserProfileFileService {
                 .uploadPath(DEFAULT_UPLOAD_PATH)
                 .isDefaultImage(true)
                 .build());
+    }
+
+    private String getFilePath() {
+        return LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd"));
     }
 }

@@ -13,12 +13,13 @@ public class PlaceListDto {
     private String title;
     private Integer price;
     private PostAddress placeAddress;
-    private List<ImageBase> placeFiles;
-    private double evalAvg;
-    private int evalCount;
-    private int bookmarkCount;
+    private List<PlaceFileDto> placeFiles;
+    private Double evalAvg;
+    private Long evalCount;
+    private Long bookmarkCount;
 
-    public PlaceListDto(Long id, String title, Integer price, PostAddress placeAddress, List<ImageBase> placeFiles, double evalAvg, int evalCount, int bookmarkCount) {
+
+    public PlaceListDto(Long id, String title, Integer price, PostAddress placeAddress, List<PlaceFileDto> placeFiles, Double evalAvg, Long evalCount, Long bookmarkCount) {
         this.id = id;
         this.title = title;
         this.price = price;

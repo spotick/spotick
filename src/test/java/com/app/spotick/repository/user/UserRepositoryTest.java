@@ -29,8 +29,6 @@ class UserRepositoryTest {
     private UserRepository userRepository;
     @Autowired
     private UserAuthorityRepository authorityRepository;
-    @Autowired
-    private UserProfileFileRepository userProfileFileRepository;
 
     @PersistenceContext
     private EntityManager em;

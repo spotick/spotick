@@ -2,16 +2,9 @@ package com.app.spotick.controller.mypage;
 
 import com.app.spotick.domain.dto.user.UserDetailsDto;
 import com.app.spotick.domain.dto.user.UserProfileDto;
-import com.app.spotick.domain.entity.user.User;
 import com.app.spotick.service.redis.RedisService;
 import com.app.spotick.service.user.UserProfileFileService;
 import com.app.spotick.service.user.UserService;
-import com.app.spotick.service.user.UserServiceImpl;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -19,8 +12,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.StringUtils;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -29,7 +20,6 @@ import org.springframework.web.servlet.view.RedirectView;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Objects;
-import java.util.Optional;
 
 @Controller
 @RequestMapping("/mypage")
@@ -43,14 +33,10 @@ public class MypageController {
     /* ================================================유저정보수정=================================================== */
     @GetMapping("/user-info")
     public void goToUserInfo(Model model, @AuthenticationPrincipal UserDetailsDto userDetailsDto) {
-
-//        System.out.println("userDetailsDto = " + userDetailsDto);
-
-//        가려진 이메일 값
+        // 가려진 이메일 정보
         String maskedEmail = getMaskedEmail(userDetailsDto.getEmail());
         model.addAttribute("maskedEmail", maskedEmail);
-
-//        유저프로필 정보
+        // 유저 프로필 정보
         UserProfileDto userProfileDto = userService.getUserProfile(userDetailsDto.getId());
         System.out.println("userProfileDto = " + userProfileDto);
         model.addAttribute("userProfile", userProfileDto);
@@ -60,7 +46,6 @@ public class MypageController {
     public RedirectView updateDefaultImg(@RequestParam("imgName") String imgName,
                                          @AuthenticationPrincipal UserDetailsDto userDetailsDto,
                                          RedirectAttributes redirectAttributes) {
-        System.out.println("imgName = " + imgName);
 
         profileFileService.updateDefaultImg(imgName, userDetailsDto.getId());
 
@@ -74,7 +59,7 @@ public class MypageController {
                                           @AuthenticationPrincipal UserDetailsDto userDetailsDto,
                                           RedirectAttributes redirectAttributes) {
 
-        profileFileService.updatePersonalImg(uploadFile.getOriginalFilename(), uuid, getPath(), userDetailsDto.getId());
+        profileFileService.updatePersonalImg(uploadFile.getOriginalFilename(), uuid, userDetailsDto.getId());
 
         redirectAttributes.addFlashAttribute("successProfile", "프로필 사진이 수정되었습니다.");
         return new RedirectView("/mypage/user-info");
@@ -82,8 +67,8 @@ public class MypageController {
 
     @PostMapping("/updateNickName")
     public RedirectView updateNickName(@RequestParam("nickName") String nickName,
-                                 @AuthenticationPrincipal UserDetailsDto userDetailsDto,
-                                 RedirectAttributes redirectAttributes) {
+                                       @AuthenticationPrincipal UserDetailsDto userDetailsDto,
+                                       RedirectAttributes redirectAttributes) {
 
         // 검증
         if (nickName == null || nickName.length() < 2 || nickName.length() > 10) {
@@ -99,9 +84,14 @@ public class MypageController {
     @PostMapping("/authenticateTelStart")
     @ResponseBody
     public ResponseEntity<Void> sendAuthenticatingCode(@RequestParam("tel") String tel) {
-        userService.sendAuthCodeToTel(tel);
+        // 검증
+        if (tel != null) {
+            userService.sendAuthCodeToTel(tel);
 
-        return ResponseEntity.ok().build();
+            return ResponseEntity.ok().build();
+        }
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
 
     @PostMapping("/authenticateTel")
@@ -110,6 +100,7 @@ public class MypageController {
                                                 @RequestParam("code") String code,
                                                 @AuthenticationPrincipal UserDetailsDto userDetailsDto,
                                                 RedirectAttributes redirectAttributes) {
+        // 검증
         if (Objects.equals(redisService.getValues(tel), code)) {
             System.out.println("인증 성공");
 
@@ -121,7 +112,7 @@ public class MypageController {
             return new ResponseEntity<>(headers, HttpStatus.OK);
         }
 
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
 
     @PostMapping("/changePassword")
