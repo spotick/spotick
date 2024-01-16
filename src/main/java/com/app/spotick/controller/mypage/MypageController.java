@@ -48,7 +48,8 @@ public class MypageController {
                                          RedirectAttributes redirectAttributes) {
 
         profileFileService.updateDefaultImg(imgName, userDetailsDto.getId());
-
+//        프로필사진 수정이 완료된 후 현재로그인 된 사용자정보에 있는 프로필사진정보도 업데이트
+        userDetailsDto.updateProfileImage(imgName,null,null,true);
         redirectAttributes.addFlashAttribute("successProfile", "프로필 사진이 수정되었습니다.");
         return new RedirectView("/mypage/user-info");
     }
@@ -60,6 +61,8 @@ public class MypageController {
                                           RedirectAttributes redirectAttributes) {
 
         profileFileService.updatePersonalImg(uploadFile.getOriginalFilename(), uuid, userDetailsDto.getId());
+        //        프로필사진 수정이 완료된 후 현재로그인 된 사용자정보에 있는 프로필사진정보도 업데이트
+//        userDetailsDto.updateProfileImage(uploadFile.getOriginalFilename(),uuid,사진경로,false);
 
         redirectAttributes.addFlashAttribute("successProfile", "프로필 사진이 수정되었습니다.");
         return new RedirectView("/mypage/user-info");

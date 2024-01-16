@@ -1,14 +1,7 @@
-package com.app.spotick.repository.place;
+package com.app.spotick.repository.place.bookmark;
 
-import com.app.spotick.domain.dto.place.PlaceFileDto;
 import com.app.spotick.domain.dto.place.PlaceListDto;
-import com.app.spotick.domain.entity.place.QPlace;
-import com.app.spotick.domain.entity.place.QPlaceBookmark;
-import com.app.spotick.domain.entity.place.QPlaceFile;
-import com.app.spotick.domain.entity.place.QPlaceReview;
-import com.app.spotick.domain.entity.user.QUser;
 import com.app.spotick.domain.type.post.PostStatus;
-import com.querydsl.core.Tuple;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.JPQLQuery;
@@ -16,13 +9,11 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static com.app.spotick.domain.entity.place.QPlace.*;
 import static com.app.spotick.domain.entity.place.QPlaceBookmark.*;
 import static com.app.spotick.domain.entity.place.QPlaceFile.*;
 import static com.app.spotick.domain.entity.place.QPlaceReview.*;
-import static com.app.spotick.domain.entity.user.QUser.*;
 
 @RequiredArgsConstructor
 public class PlaceBookmarkQDSLRepositoryImpl implements PlaceBookmarkQDSLRepository {
