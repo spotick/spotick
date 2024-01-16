@@ -14,6 +14,10 @@ import lombok.RequiredArgsConstructor;
 import net.nurigo.sdk.NurigoApp;
 import net.nurigo.sdk.message.model.Message;
 import net.nurigo.sdk.message.service.DefaultMessageService;
+import org.springframework.context.annotation.Bean;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -69,6 +73,8 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     public void updateNickName(Long userId, String newNickName) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
         User foundUser = userRepository.findById(userId).orElseThrow(
                 NoSuchElementException::new
         );
