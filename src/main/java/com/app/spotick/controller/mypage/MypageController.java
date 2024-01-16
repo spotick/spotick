@@ -9,7 +9,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -47,9 +51,8 @@ public class MypageController {
                                          @AuthenticationPrincipal UserDetailsDto userDetailsDto,
                                          RedirectAttributes redirectAttributes) {
 
-        profileFileService.updateDefaultImg(imgName, userDetailsDto.getId());
-//        프로필사진 수정이 완료된 후 현재로그인 된 사용자정보에 있는 프로필사진정보도 업데이트
         userDetailsDto.updateProfileImage(imgName,null,null,true);
+        profileFileService.updateDefaultImg(imgName, userDetailsDto.getId());
         redirectAttributes.addFlashAttribute("successProfile", "프로필 사진이 수정되었습니다.");
         return new RedirectView("/mypage/user-info");
     }
@@ -60,9 +63,8 @@ public class MypageController {
                                           @AuthenticationPrincipal UserDetailsDto userDetailsDto,
                                           RedirectAttributes redirectAttributes) {
 
+        userDetailsDto.updateProfileImage(uploadFile.getOriginalFilename(), uuid, getPath(),false);
         profileFileService.updatePersonalImg(uploadFile.getOriginalFilename(), uuid, userDetailsDto.getId());
-        //        프로필사진 수정이 완료된 후 현재로그인 된 사용자정보에 있는 프로필사진정보도 업데이트
-//        userDetailsDto.updateProfileImage(uploadFile.getOriginalFilename(),uuid,사진경로,false);
 
         redirectAttributes.addFlashAttribute("successProfile", "프로필 사진이 수정되었습니다.");
         return new RedirectView("/mypage/user-info");
@@ -79,7 +81,9 @@ public class MypageController {
             return new RedirectView("/mypage/user-info");
         }
 
+        userDetailsDto.updateNickName(nickName);
         userService.updateNickName(userDetailsDto.getId(), nickName);
+
         redirectAttributes.addFlashAttribute("successName", "닉네임이 수정되었습니다.");
         return new RedirectView("/mypage/user-info");
     }

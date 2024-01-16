@@ -91,4 +91,8 @@ public class UserDetailsDto implements UserDetails {
     public boolean isEnabled() {
         return userStatus ==UserStatus.ACTIVATE;
     }
+
+    public void updateNickName(String nickName) {
+        this.nickName = nickName;
+    }
 }
