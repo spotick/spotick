@@ -13,7 +13,6 @@ import java.util.List;
 public class UserProfileDto {
     private Long id;
     private String email;
-    @Size(min = 2, max = 10, message = "다시해")
     private String nickName;
     private String tel;
     private UserStatus userStatus;

@@ -7,6 +7,9 @@ import com.app.spotick.domain.type.post.PostStatus;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity @Table(name = "TBL_PLACE")
 @SequenceGenerator(name = "SEQ_PLACE_GENERATOR", sequenceName = "SEQ_PLACE",allocationSize = 1)
 @Getter @ToString(callSuper = true) @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -34,8 +37,11 @@ public class Place extends PostBase {
     @JoinColumn(name = "USER_ID")
     private User user;
 
+    @OneToMany(mappedBy = "place", fetch = FetchType.LAZY)
+    private List<PlaceReview> placeReview = new ArrayList<>();
+
     @Builder
-    public Place(String title, int viewCount, Double lat, Double lng, Long id, String subTitle, String info, String rule, Integer defaultPeople, PostAddress placeAddress, Integer price, Integer surcharge, String bankName, String accountNumber, String accountHolder, PostStatus placeStatus, User user) {
+    public Place(String title, int viewCount, Double lat, Double lng, Long id, String subTitle, String info, String rule, Integer defaultPeople, PostAddress placeAddress, Integer price, Integer surcharge, String bankName, String accountNumber, String accountHolder, PostStatus placeStatus, User user, List<PlaceReview> placeReview) {
         super(title, viewCount, lat, lng);
         this.id = id;
         this.subTitle = subTitle;
@@ -50,7 +56,9 @@ public class Place extends PostBase {
         this.accountHolder = accountHolder;
         this.placeStatus = placeStatus;
         this.user = user;
+        this.placeReview = placeReview;
     }
+
 
 //    장소 호스트 설정 메소드
     public void setHost(User user){
