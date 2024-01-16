@@ -62,9 +62,13 @@
                             <span class="hc-content-font-small">티켓 등록</span>
                         </a>
                     </div>
-                    <div class="h-user-icon" onclick="toggleUsermenu()">
-                        <img
-                                src="https://img.hourplace.co.kr/image/user/109990/2023/12/05/79a6f8ac-6b84-4977-a2da-baa111bcd54d?s=2000x2000&amp;amp;t=inside&amp;amp;q=80&amp;amp;f=jpeg&amp;amp;">
+                    <div class="h-user-icon" onclick="toggleUsermenu()" th:object="${#authentication.principal}">
+                        <!-- src="https://img.hourplace.co.kr/image/user/109990/2023/12/05/79a6f8ac-6b84-4977-a2da-baa111bcd54d?s=2000x2000&amp;amp;t=inside&amp;amp;q=80&amp;amp;f=jpeg&amp;amp;"-->
+                        <img th:src="*{isDefaultImage
+                        ? '/file/default/display?fileName=' + profileFileName
+                        : '/file/display?fileName=' + profileUploadPath + '/t_' + profileUUID + '_' + profileFileName}"
+                             th:alt="*{nickName}">
+
                     </div>
                     <div class="hc-content-icon" onclick="toggleNotification()">
                         <i class="fa-regular fa-bell"></i>

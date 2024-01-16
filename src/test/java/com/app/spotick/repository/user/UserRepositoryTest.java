@@ -17,7 +17,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Commit;
 
 import java.util.List;
-import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -70,7 +69,7 @@ class UserRepositoryTest {
     @Test
     @DisplayName("이메일로 회원정보 가져오기")
     void findUserByEmailTest() {
-        User foundUser = userRepository.findUserByEmail(user.getEmail());
+        User foundUser = userRepository.findUserAndProfileByEmail(user.getEmail());
         assertThat(foundUser).isNotNull().extracting("id")
                 .isNotNull();
         System.out.println("foundUser = " + foundUser);
