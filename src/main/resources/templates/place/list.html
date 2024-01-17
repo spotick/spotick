@@ -2244,32 +2244,17 @@
         <!-- 리스트 -->
         <div class="ListItemsContainer">
             <!-- 리스트 아이템 한칸 -->
-            <div class="OneItemContainer hover">
+            <div class="OneItemContainer hover" th:each="place : ${placeList}">
                 <div class="OneItemImgContainer">
                     <div class="swiper ImageSwiper swiper-initialized swiper-horizontal swiper-pointer-events swiper-backface-hidden">
                         <div class="swiper-wrapper ImageLength" style="transform: translate3d(0px, 0px, 0px);">
                             <!-- 이미지 한칸 -->
-                            <div class="swiper-slide swiper-slide-active" style="width: 287px;">
-                                <img src="https://img.shareit.kr/prod/img/2022-07-18/b9c77882-e895-42e5-988a-85a7d5c4f0e0.jpg"
-                                     alt="실내체육관(낙산관)" height="1350.6666666666665px" class="ItemImg">
+                            <div class="swiper-slide swiper-slide-active" style="width: 287px;" th:each="placeImg :${place.placeFiles}">
+                                <img th:src="@{/file/display(fileName=${placeImg.uploadPath+'/t_'+placeImg.uuid+'_'+placeImg.fileName})}"
+                                     th:alt="${place.title}" height="1350.6666666666665px" class="ItemImg">
                             </div>
                             <!-- 이미지 한칸 -->
-                            <div class="swiper-slide swiper-slide-next" style="width: 287px;">
-                                <img src="https://img.shareit.kr/prod/img/2022-07-18/b7cf013c-5714-4891-8459-785516154830.jpg"
-                                     alt="실내체육관(낙산관)" height="1350.6666666666665px" class="ItemImg">
-                            </div>
-                            <div class="swiper-slide" style="width: 287px;">
-                                <img src="https://img.shareit.kr/prod/img/2022-07-18/f66fbf97-3357-4c71-b367-c2dd750510d4.jpg"
-                                     alt="실내체육관(낙산관)" height="1350.6666666666665px" class="ItemImg">
-                            </div>
-                            <div class="swiper-slide" style="width: 287px;">
-                                <img src="https://img.shareit.kr/prod/img/2022-07-18/71de7186-c3a1-4983-8c55-a71c3ab94458.jpg"
-                                     alt="실내체육관(낙산관)" height="1350.6666666666665px" class="ItemImg">
-                            </div>
-                            <div class="swiper-slide" style="width: 287px;">
-                                <img src="https://img.shareit.kr/prod/img/2022-07-18/dc4e5592-b3ec-4b42-abed-c780e1fb3a59.jpg"
-                                     alt="실내체육관(낙산관)" height="1350.6666666666665px" class="ItemImg">
-                            </div>
+
                         </div>
                         <div class="NavigationBtnContainer">
                             <button type="button" class="NavigationBtn RightBtn">
@@ -2290,24 +2275,24 @@
                 </div>
                 <div class="ItemTextContainer">
                     <div class="ItemHostNameContainer">
-                        <span class="ItemHostName">서울 성북구</span>
+                        <span class="ItemHostName" th:text="${place.placeAddress.address}"></span>
                         <div class="ItemCountsContainer">
                             <div class="ItemsStarCountContainer">
                                 <img th:src="@{/imgs/star_filled_paintYellow056.a8eb6e44.svg}" alt="후기갯수"
                                      class="ItemCountImg">
-                                <span class="ItemCountText">4.0(20)</span>
+                                <span class="ItemCountText" th:text="${place.evalAvg+'('+place.evalCount+')'}"></span>
                             </div>
                             <div class="ItemsLikeCountContainer">
                                 <img th:src="@{/imgs/bookmark_thin.svg}" alt="북마크갯수" class="bookmark-img">
-                                <span class="ItemCountText">1724</span>
+                                <span class="ItemCountText" th:text="${place.bookmarkCount}"></span>
                             </div>
                         </div>
                     </div>
                     <div class="ItemSpaceNameContainer">
-                        <p class="ItemSpaceName">낙산관 실내체육관(낙산관)</p>
+                        <p class="ItemSpaceName" th:text="${place.title}"></p>
                     </div>
                     <div class="ItemPriceContainer">
-                        <span class="place-price">30,000원</span>
+                        <span class="place-price" th:text="${#numbers.formatInteger(place.price,1,'COMMA')+'원'}"></span>
                     </div>
                 </div>
             </div>

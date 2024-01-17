@@ -1,4 +1,4 @@
-package com.app.spotick.repository.place.bookmark;
+package com.app.spotick.repository.place;
 
 import com.app.spotick.domain.dto.place.PlaceFileDto;
 import com.app.spotick.domain.dto.place.PlaceListDto;
@@ -8,21 +8,31 @@ import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 import java.util.Optional;
 
-import static com.app.spotick.domain.entity.place.QPlace.*;
-import static com.app.spotick.domain.entity.place.QPlaceBookmark.*;
-import static com.app.spotick.domain.entity.place.QPlaceFile.*;
-import static com.app.spotick.domain.entity.place.QPlaceReview.*;
+import static com.app.spotick.domain.entity.place.QPlace.place;
+import static com.app.spotick.domain.entity.place.QPlaceBookmark.placeBookmark;
+import static com.app.spotick.domain.entity.place.QPlaceFile.placeFile;
+import static com.app.spotick.domain.entity.place.QPlaceReview.placeReview;
 
 @RequiredArgsConstructor
-public class PlaceBookmarkQDSLRepositoryImpl implements PlaceBookmarkQDSLRepository {
+public class PlaceQDSLRepositoryImpl implements PlaceQDSLRepository {
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public List<PlaceListDto> findBookmarkedPlacesByUserId(Long userId) {
+    public Page<PlaceListDto> findPlaceListPaging(Pageable pageable) {
+        List<PlaceListDto> content = getPlaceListDTOs(pageable);
+        Long count = getPlaceListDTOsCount();
+
+        return new PageImpl<>(content, pageable, count);
+    }
+
+    private List<PlaceListDto> getPlaceListDTOs(Pageable pageable) {
         JPQLQuery<Double> reviewAvg = JPAExpressions.select(placeReview.score.avg())
                 .from(placeReview)
                 .where(placeReview.place.eq(place));
@@ -35,10 +45,7 @@ public class PlaceBookmarkQDSLRepositoryImpl implements PlaceBookmarkQDSLReposit
                 .from(placeBookmark)
                 .where(placeBookmark.place.eq(place));
 
-        /*
-            리스트 생성 쿼리, (생성자에서 placeFileDto 리스트는 제외하여 Projections.constructor 사용에 걸림이 없게 한다.
-            혹은 생성자에 모든 필드를 다 밀어 넣고 쿼리에서 null 값을 넣도록 설정하여도 무방.
-         */
+
         List<PlaceListDto> placeListDtos = queryFactory.select(
                         Projections.constructor(PlaceListDto.class,
                                 place.id,
@@ -50,24 +57,19 @@ public class PlaceBookmarkQDSLRepositoryImpl implements PlaceBookmarkQDSLReposit
                                 bookmarkCount
                         )
                 )
-                .from(placeBookmark)
-                .join(placeBookmark.place, place)
-                .where(placeBookmark.user.id.eq(userId), place.placeStatus.eq(PostStatus.APPROVED))
+                .from(place)
+                .where(place.placeStatus.eq(PostStatus.APPROVED))
+                .orderBy(place.id.desc())
+                .offset(pageable.getOffset())   //페이지 번호
+                .limit(pageable.getPageSize())  //페이지 사이즈
                 .fetch();
 
-            /*
-                화면DTO리스트 각각에 파일 리스트를 꽂아줘야 하므로 리스트을 가져온 뒤 그 id를 통해 파일을 전체 조회하여
-                화면DTO에 파일리스트를 업데이트 시켜준다.
-             */
         placeListDtos.forEach(placeListDto -> {
-            // 평가결과가 null일 시 0.0으로 교체
             placeListDto.updateEvalAvg(Optional.ofNullable(placeListDto.getEvalAvg()).orElse(0.0));
 
-            // 화면에서 뿌릴 주소값 가공
             placeListDto.getPlaceAddress().cutAddress();
 
-            // 파일 결과값 찾기
-            List<PlaceFileDto> placeFileDtos = queryFactory.select(
+            placeListDto.updatePlaceFiles(queryFactory.select(
                             Projections.constructor(PlaceFileDto.class,
                                     placeFile.id,
                                     placeFile.fileName,
@@ -77,14 +79,41 @@ public class PlaceBookmarkQDSLRepositoryImpl implements PlaceBookmarkQDSLReposit
                     )
                     .from(placeFile)
                     .where(placeFile.place.id.eq(placeListDto.getId()))
-                    .fetch();
-
-            // 화면Dto의 파일리스트에 결과값 저장
-            placeListDto.updatePlaceFiles(placeFileDtos);
+                    .limit(5)
+                    .fetch());
         });
 
         return placeListDtos;
     }
+
+    private Long getPlaceListDTOsCount() {
+        return queryFactory.select(place.count())
+                .from(place)
+                .where(place.placeStatus.eq(PostStatus.APPROVED))
+                .fetchOne();
+    }
+
+
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 

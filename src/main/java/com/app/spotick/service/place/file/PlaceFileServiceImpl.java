@@ -2,7 +2,7 @@ package com.app.spotick.service.place.file;
 
 import com.app.spotick.domain.entity.place.Place;
 import com.app.spotick.domain.entity.place.PlaceFile;
-import com.app.spotick.repository.place.PlaceFileRepository;
+import com.app.spotick.repository.place.file.PlaceFileRepository;
 import lombok.RequiredArgsConstructor;
 import net.coobird.thumbnailator.Thumbnailator;
 import org.springframework.beans.factory.annotation.Value;

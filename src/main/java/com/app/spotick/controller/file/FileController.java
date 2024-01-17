@@ -1,6 +1,7 @@
 package com.app.spotick.controller.file;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import net.coobird.thumbnailator.Thumbnailator;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
@@ -17,7 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
-
+@Slf4j
 @RestController
 @RequestMapping("/file/*")
 @RequiredArgsConstructor
@@ -25,12 +26,15 @@ public class FileController {
 
     @Value("${default.profileFileDir}")
     private String DEFAULT_UPLOAD_PATH;
+    @Value("${root.dir}")
+    private String ROOT_PATH;
+
 
     //    파일 업로드
     @PostMapping("upload")
     public List<String> uploadFile(@RequestParam("uploadFile") List<MultipartFile> uploadFiles) {
         // 해당 부분은 일시적으로 개인의 c드라이브에 경로 설정하여 테스트 한다.
-        String rootPath = "C:/spotickFilesTest/uploadFiles/" + getPath();
+        String rootPath = ROOT_PATH + getPath();
         List<String> uuids = new ArrayList<>();
         File file = new File(rootPath);
 
@@ -70,9 +74,9 @@ public class FileController {
 
     //    파일 display 함수
     @GetMapping("display")
-    public byte[] display(String fileName) throws IOException {
+    public byte[] display(@RequestParam("fileName") String fileName) throws IOException {
         // 임시 테스트 경로 유지
-        return FileCopyUtils.copyToByteArray(new File("C:/spotickFilesTest/uploadFiles/", fileName));
+        return FileCopyUtils.copyToByteArray(new File(ROOT_PATH, fileName));
     }
 
     // 기본이미지 display

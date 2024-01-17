@@ -1,5 +1,6 @@
 package com.app.spotick.service.place;
 
+import com.app.spotick.domain.dto.place.PlaceListDto;
 import com.app.spotick.domain.dto.place.PlaceRegisterDto;
 import com.app.spotick.domain.entity.place.Place;
 import com.app.spotick.domain.entity.user.User;
@@ -7,6 +8,8 @@ import com.app.spotick.repository.place.PlaceRepository;
 import com.app.spotick.repository.user.UserRepository;
 import com.app.spotick.service.place.file.PlaceFileService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -21,6 +24,7 @@ public class PlaceServiceImpl implements PlaceService{
     private final PlaceRepository placeRepository;
     private final UserRepository userRepository;
     private final PlaceFileService placeFileService;
+    private final int PAGE_SIZE = 12;
 
     @Override
     public void registerPlace(PlaceRegisterDto placeRegisterDto,Long userId) throws IOException {
@@ -35,4 +39,24 @@ public class PlaceServiceImpl implements PlaceService{
 
         placeFileService.registerAndSavePlaceFile(placeFiles,place);
     }
+
+    @Override
+    public Page<PlaceListDto> findPlaceListPagination(int pageRequest) {
+        return placeRepository.findPlaceListPaging(PageRequest.of(pageRequest,PAGE_SIZE));
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

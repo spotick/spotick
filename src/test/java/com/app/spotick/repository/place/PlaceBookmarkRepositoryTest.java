@@ -1,6 +1,5 @@
 package com.app.spotick.repository.place;
 
-import com.app.spotick.domain.dto.place.PlaceFileDto;
 import com.app.spotick.domain.dto.place.PlaceListDto;
 import com.app.spotick.domain.embedded.post.PostAddress;
 import com.app.spotick.domain.entity.place.*;
@@ -8,12 +7,9 @@ import com.app.spotick.domain.entity.user.User;
 import com.app.spotick.domain.type.post.PostStatus;
 import com.app.spotick.domain.type.user.UserStatus;
 import com.app.spotick.repository.place.bookmark.PlaceBookmarkRepository;
+import com.app.spotick.repository.place.file.PlaceFileRepository;
 import com.app.spotick.repository.user.UserAuthorityRepository;
 import com.app.spotick.repository.user.UserRepository;
-import com.querydsl.core.types.ExpressionUtils;
-import com.querydsl.core.types.Projections;
-import com.querydsl.jpa.JPAExpressions;
-import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -28,11 +24,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-
-import static com.app.spotick.domain.entity.place.QPlace.place;
-import static com.app.spotick.domain.entity.place.QPlaceBookmark.placeBookmark;
-import static com.app.spotick.domain.entity.place.QPlaceFile.placeFile;
-import static com.app.spotick.domain.entity.place.QPlaceReview.placeReview;
 
 @SpringBootTest
 @Transactional
@@ -117,56 +108,6 @@ class PlaceBookmarkRepositoryTest {
         System.out.println("bookmarkedPlacesByUserId = " + bookmarkedPlacesByUserId);
     }
 
-    @Test
-    @DisplayName("북마크 리스트 테스트2")
-    void bookmarkListTest2() {
-        QPlace subPlace = new QPlace("subPlace");
-        QPlace qPlace = new QPlace("p");
-
-
-        JPQLQuery<Double> reviewAvg = JPAExpressions.select(placeReview.score.avg())
-                .from(placeReview)
-                .where(placeReview.place.eq(place));
-
-
-        JPQLQuery<Long> reviewCount = JPAExpressions.select(placeReview.count())
-                .from(placeReview)
-                .where(placeReview.place.eq(place));
-
-        JPQLQuery<Long> bookmarkCount = JPAExpressions.select(placeBookmark.count())
-                .from(placeBookmark)
-                .where(placeBookmark.place.eq(place));
-
-        JPQLQuery<PlaceFileDto> placeFiles = JPAExpressions.select(
-                        Projections.constructor(PlaceFileDto.class,
-                                placeFile.id,
-                                placeFile.fileName,
-                                placeFile.uuid,
-                                placeFile.uploadPath
-                        )
-                ).from(placeFile)
-                .where(placeFile.place.eq(place));
-
-        List<PlaceListDto> placeListDtoList = queryFactory.select(
-                        Projections.bean(PlaceListDto.class,
-                                place.id,
-                                place.title,
-                                place.price,
-                                place.placeAddress,
-                                ExpressionUtils.as(reviewAvg,"evalAvg"),
-                                ExpressionUtils.as(reviewCount,"evalCount"),
-                                ExpressionUtils.as(bookmarkCount,"bookmarkCount")
-                        )
-                )
-                .from(place)
-                .join(placeBookmark).on(place.eq(placeBookmark.place))
-                .leftJoin(place).on(place.eq(placeFile.place))
-                .where(placeBookmark.user.id.eq(user2.getId()), place.placeStatus.eq(PostStatus.APPROVED))
-                .fetch();
-
-        placeListDtoList.forEach(System.out::println);
-
-    }
 
 }
 

@@ -4,9 +4,9 @@ $('input,textarea').on('focus', function () {
     $(this).closest('.input-box').css('border-color', '#dfe2e7');
 });
 
-$('.start').on('click', '.submit-btn.on', function () {
-    $(".register-form").submit();
-});
+// $('.start').on('click', '.submit-btn.on', function () {
+//     $(".register-form").submit();
+// });
 
 let $fileList = $('.file-wrap');
 let width = $('.file-container').width();

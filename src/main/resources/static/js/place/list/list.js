@@ -256,7 +256,7 @@ $(`.ListItemsContainer`).on('click','.ItemBookMarkBtn',function (){
 });
 
 // 동적으로 요소들 추가했을 때 이벤트확인하기 위한 코드
-test();
+// test();
 function test(){
     let text = '';
 
