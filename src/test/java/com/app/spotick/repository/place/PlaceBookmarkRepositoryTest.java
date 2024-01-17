@@ -1,17 +1,16 @@
 package com.app.spotick.repository.place;
 
+import com.app.spotick.domain.dto.place.PlaceFileDto;
 import com.app.spotick.domain.dto.place.PlaceListDto;
 import com.app.spotick.domain.embedded.post.PostAddress;
-import com.app.spotick.domain.entity.place.Place;
-import com.app.spotick.domain.entity.place.PlaceBookmark;
-import com.app.spotick.domain.entity.place.PlaceFile;
-import com.app.spotick.domain.entity.place.QPlace;
+import com.app.spotick.domain.entity.place.*;
 import com.app.spotick.domain.entity.user.User;
 import com.app.spotick.domain.type.post.PostStatus;
 import com.app.spotick.domain.type.user.UserStatus;
 import com.app.spotick.repository.place.bookmark.PlaceBookmarkRepository;
 import com.app.spotick.repository.user.UserAuthorityRepository;
 import com.app.spotick.repository.user.UserRepository;
+import com.querydsl.core.types.ExpressionUtils;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.JPQLQuery;
@@ -36,7 +35,8 @@ import static com.app.spotick.domain.entity.place.QPlaceFile.placeFile;
 import static com.app.spotick.domain.entity.place.QPlaceReview.placeReview;
 
 @SpringBootTest
-@Transactional @Commit
+@Transactional
+@Commit
 class PlaceBookmarkRepositoryTest {
     @Autowired
     private UserRepository userRepository;
@@ -84,7 +84,7 @@ class PlaceBookmarkRepositoryTest {
                 .subTitle("테스트 부제목")
                 .price(10000)
                 .placeStatus(PostStatus.APPROVED)
-                .placeAddress( new PostAddress("서울특별시 강남구 테헤란로 202", "1111"))
+                .placeAddress(new PostAddress("서울특별시 강남구 테헤란로 202", "1111"))
                 .user(user2)
                 .build();
         placeRepository.save(placeOf2);
@@ -93,15 +93,14 @@ class PlaceBookmarkRepositoryTest {
         for (int i = 0; i < 6; i++) {
             placeFileList.add(PlaceFile.builder()
                     .uuid(UUID.randomUUID().toString())
-                    .fileName("사진이름"+i)
-                    .uploadPath("사진경로"+i)
+                    .fileName("사진이름" + i)
+                    .uploadPath("사진경로" + i)
                     .place(placeOf2).build());
         }
         placeFileRepository.saveAll(placeFileList);
 
         PlaceBookmark user1Bookmark = PlaceBookmark.builder()
-                .id(1L)
-                .user(user1)
+                .user(user2)
                 .place(placeOf2)
                 .build();
         placeBookmarkRepository.save(user1Bookmark);
@@ -112,10 +111,61 @@ class PlaceBookmarkRepositoryTest {
 
     @Test
     @DisplayName("북마크 리스트 테스트")
-    void bookmarkListTest(){
+    void bookmarkListTest() {
         List<PlaceListDto> bookmarkedPlacesByUserId = placeBookmarkRepository.findBookmarkedPlacesByUserId(user1.getId());
 
         System.out.println("bookmarkedPlacesByUserId = " + bookmarkedPlacesByUserId);
+    }
+
+    @Test
+    @DisplayName("북마크 리스트 테스트2")
+    void bookmarkListTest2() {
+        QPlace subPlace = new QPlace("subPlace");
+        QPlace qPlace = new QPlace("p");
+
+
+        JPQLQuery<Double> reviewAvg = JPAExpressions.select(placeReview.score.avg())
+                .from(placeReview)
+                .where(placeReview.place.eq(place));
+
+
+        JPQLQuery<Long> reviewCount = JPAExpressions.select(placeReview.count())
+                .from(placeReview)
+                .where(placeReview.place.eq(place));
+
+        JPQLQuery<Long> bookmarkCount = JPAExpressions.select(placeBookmark.count())
+                .from(placeBookmark)
+                .where(placeBookmark.place.eq(place));
+
+        JPQLQuery<PlaceFileDto> placeFiles = JPAExpressions.select(
+                        Projections.constructor(PlaceFileDto.class,
+                                placeFile.id,
+                                placeFile.fileName,
+                                placeFile.uuid,
+                                placeFile.uploadPath
+                        )
+                ).from(placeFile)
+                .where(placeFile.place.eq(place));
+
+        List<PlaceListDto> placeListDtoList = queryFactory.select(
+                        Projections.bean(PlaceListDto.class,
+                                place.id,
+                                place.title,
+                                place.price,
+                                place.placeAddress,
+                                ExpressionUtils.as(reviewAvg,"evalAvg"),
+                                ExpressionUtils.as(reviewCount,"evalCount"),
+                                ExpressionUtils.as(bookmarkCount,"bookmarkCount")
+                        )
+                )
+                .from(place)
+                .join(placeBookmark).on(place.eq(placeBookmark.place))
+                .leftJoin(place).on(place.eq(placeFile.place))
+                .where(placeBookmark.user.id.eq(user2.getId()), place.placeStatus.eq(PostStatus.APPROVED))
+                .fetch();
+
+        placeListDtoList.forEach(System.out::println);
+
     }
 
 }
