@@ -54,13 +54,17 @@ public class PlaceBookmarkQDSLRepositoryImpl implements PlaceBookmarkQDSLReposit
                 .join(placeBookmark.place, place)
                 .where(placeBookmark.user.id.eq(userId), place.placeStatus.eq(PostStatus.APPROVED))
                 .fetch();
-        /*
-            화면DTO리스트 각각에 파일 리스트를 꽂아줘야 하므로 리스트을 가져온 뒤 그 id를 통해 파일을 전체 조회하여
-            화면DTO에 파일리스트를 업데이트 시켜준다.
-         */
+
+            /*
+                화면DTO리스트 각각에 파일 리스트를 꽂아줘야 하므로 리스트을 가져온 뒤 그 id를 통해 파일을 전체 조회하여
+                화면DTO에 파일리스트를 업데이트 시켜준다.
+             */
         placeListDtos.forEach(placeListDto -> {
             // 평가결과가 null일 시 0.0으로 교체
             placeListDto.updateEvalAvg(Optional.ofNullable(placeListDto.getEvalAvg()).orElse(0.0));
+
+            // 화면에서 뿌릴 주소값 가공
+            placeListDto.getPlaceAddress().cutAddress();
 
             // 파일 결과값 찾기
             List<PlaceFileDto> placeFileDtos = queryFactory.select(

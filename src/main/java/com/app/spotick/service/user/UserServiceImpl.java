@@ -1,5 +1,6 @@
 package com.app.spotick.service.user;
 
+import com.app.spotick.domain.dto.place.PlaceListDto;
 import com.app.spotick.domain.dto.user.UserDetailsDto;
 import com.app.spotick.domain.dto.user.UserJoinDto;
 import com.app.spotick.domain.dto.user.UserProfileDto;
@@ -7,6 +8,7 @@ import com.app.spotick.domain.entity.user.User;
 import com.app.spotick.domain.entity.user.UserAuthority;
 import com.app.spotick.domain.entity.user.UserProfileFile;
 import com.app.spotick.domain.type.user.AuthorityType;
+import com.app.spotick.repository.place.bookmark.PlaceBookmarkRepository;
 import com.app.spotick.repository.user.UserAuthorityRepository;
 import com.app.spotick.repository.user.UserRepository;
 import com.app.spotick.service.redis.RedisService;
@@ -26,6 +28,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Duration;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Random;
 
@@ -38,6 +41,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     private final UserRepository userRepository;
     private final UserAuthorityRepository authorityRepository;
     private final UserProfileFileService profileFileService;
+    private final PlaceBookmarkRepository placeBookmarkRepository;
     private final RedisService redisService;
 
     @Override
@@ -128,6 +132,12 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         );
 
         foundUser.updatePassword(encodePassword(newPassword));
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<PlaceListDto> findBookmarkedPlacesByUserId(Long userId) {
+        return placeBookmarkRepository.findBookmarkedPlacesByUserId(userId);
     }
 
 
