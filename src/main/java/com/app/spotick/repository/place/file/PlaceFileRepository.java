@@ -1,4 +1,4 @@
-package com.app.spotick.repository.place;
+package com.app.spotick.repository.place.file;
 
 import com.app.spotick.domain.entity.place.PlaceFile;
 import org.springframework.data.jpa.repository.JpaRepository;

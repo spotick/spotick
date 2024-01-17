@@ -6,4 +6,9 @@ import java.util.List;
 
 public interface PlaceBookmarkQDSLRepository {
     List<PlaceListDto> findBookmarkedPlacesByUserId(Long userId);
+
+
+
+
+
 }
