@@ -88,6 +88,7 @@ class PlaceBookmarkRepositoryTest {
                 .user(user2)
                 .build();
         placeRepository.save(placeOf2);
+
         List<PlaceFile> placeFileList = new ArrayList<>();
         for (int i = 0; i < 6; i++) {
             placeFileList.add(PlaceFile.builder()
@@ -116,53 +117,6 @@ class PlaceBookmarkRepositoryTest {
 
         System.out.println("bookmarkedPlacesByUserId = " + bookmarkedPlacesByUserId);
     }
-
-    @Test
-    @DisplayName("북마크 리스트 테스트2")
-
-    void bookmarkListTest2(){
-    QPlace subPlace = new QPlace("subPlace");
-
-        JPQLQuery<Double> reviewAvg = JPAExpressions.select(placeReview.score.avg())
-                .from(placeReview)
-                .where(placeReview.place.eq(subPlace));
-
-
-        JPQLQuery<Long> reviewCount = JPAExpressions.select(placeReview.count())
-                .from(placeReview)
-                .where(placeReview.place.eq(subPlace));
-
-        JPQLQuery<Long> bookmarkCount = JPAExpressions.select(placeBookmark.count())
-                .from(placeBookmark)
-                .where(placeBookmark.place.eq(subPlace));
-
-
-
-//        queryFactory.select(
-//                        Projections.bean(PlaceListDto.class,
-//                                place.id,
-//                                place.title,
-//                                place.price,
-//                                place.placeAddress,
-////                                게시글의 사진 리스트를 도대체 어떤 방식으로 가져와야 하는가?
-//                                reviewAvg,
-//                                reviewCount,
-//                                bookmarkCount
-//                        )
-//                )
-//                .from(placeBookmark)
-//                .join(placeBookmark.place, place)
-//                .leftJoin(placeFile.place, place)
-//                .where(placeBookmark.user.id.eq(user2.getId()), place.placeStatus.eq(PostStatus.APPROVED))
-//                .fetch();
-
-
-    }
-
-
-
-
-
 
 }
 
