@@ -152,8 +152,8 @@
 
                         <img class="mpc-user-info-user-img"
                              th:alt="*{nickName}"
-                             th:src="@{/file/display(fileName=*{uploadPath} + '/t_' + *{uuid} + '_' + *{fileName})}"
-                             th:unless="*{isDefaultImage}">
+                             th:unless="*{isDefaultImage}"
+                             th:src="@{/file/display(fileName=*{uploadPath} + '/t_' + *{uuid} + '_' + *{fileName})}">
 
                         <div class="mpc-edit-icon" style="right: 38px; bottom: 2px">
                             <svg class="feather feather-edit-2" fill="none" height="16" stroke="currentColor"

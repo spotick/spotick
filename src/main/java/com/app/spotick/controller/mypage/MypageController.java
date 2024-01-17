@@ -1,5 +1,6 @@
 package com.app.spotick.controller.mypage;
 
+import com.app.spotick.domain.dto.place.PlaceListDto;
 import com.app.spotick.domain.dto.user.UserDetailsDto;
 import com.app.spotick.domain.dto.user.UserProfileDto;
 import com.app.spotick.service.redis.RedisService;
@@ -23,6 +24,7 @@ import org.springframework.web.servlet.view.RedirectView;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.Objects;
 
 @Controller
@@ -107,6 +109,8 @@ public class MypageController {
                                                 @RequestParam("code") String code,
                                                 @AuthenticationPrincipal UserDetailsDto userDetailsDto,
                                                 RedirectAttributes redirectAttributes) {
+//        todo : 결과값을 화면으로 반환할 수 있도록 강구하여야 함.
+
         // 검증
         if (Objects.equals(redisService.getValues(tel), code)) {
             System.out.println("인증 성공");
@@ -142,7 +146,12 @@ public class MypageController {
 
     /* =================================================북마크====================================================== */
     @GetMapping("/bookmarks")
-    public void goToBookmarks() {
+    public void goToBookmarks(Model model, @AuthenticationPrincipal UserDetailsDto userDetailsDto) {
+        List<PlaceListDto> bookmarkedPlaces = userService.findBookmarkedPlacesByUserId(userDetailsDto.getId());
+
+        System.out.println("bookmarkedPlaces = " + bookmarkedPlaces);
+
+        model.addAttribute("placeDtoList", bookmarkedPlaces);
     }
 
     @GetMapping("/reservations")
