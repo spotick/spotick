@@ -10,7 +10,7 @@ import java.time.format.DateTimeFormatter;
 
 @Entity @Table(name = "TBL_PLACE_FILE")
 @SequenceGenerator(name = "SEQ_PLACE_FILE_GENERATOR", sequenceName = "SEQ_PLACE_FILE",allocationSize = 1)
-@Getter @ToString(callSuper = true) @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Getter @ToString(callSuper = true,exclude = "place") @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class PlaceFile extends ImageBase {
     @Id @GeneratedValue(generator = "SEQ_PLACE_FILE_GENERATOR")
     @Column(name = "PLACE_FILE_ID")

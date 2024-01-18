@@ -2243,6 +2243,8 @@
         <!-- 필터 모달창 -->
         <!-- 리스트 -->
         <div class="ListItemsContainer">
+<!--            로그인 되어있는지 정보 저장-->
+            <input type="hidden" id="isLoggedIn" th:value="${#authorization.expression('isAuthenticated()')}"/>
             <!-- 리스트 아이템 한칸 -->
             <div class="OneItemContainer hover" th:each="place : ${placeList}">
                 <div class="OneItemImgContainer">
@@ -2268,9 +2270,9 @@
                             <p><span class="snapIndex">1</span>/5</p>
                         </div>
                     </div>
-                    <button type="button" class="ItemBookMarkBtn">
-                        <span><i class="fa-regular fa-bookmark"></i></span>
-                        <span class="none"><i class="fa-solid fa-bookmark" style="color: white"></i></span>
+                    <button type="button" class="ItemBookMarkBtn"  th:data-placeid="${place.id}">
+                        <span th:class="${!place.isBookmarkChecked?'':'none'}"><i class="fa-regular fa-bookmark"></i></span>
+                        <span th:class="${place.isBookmarkChecked?'':'none'}"><i class="fa-solid fa-bookmark" style="color: white"></i></span>
                     </button>
                 </div>
                 <div class="ItemTextContainer">
@@ -2284,7 +2286,7 @@
                             </div>
                             <div class="ItemsLikeCountContainer">
                                 <img th:src="@{/imgs/bookmark_thin.svg}" alt="북마크갯수" class="bookmark-img">
-                                <span class="ItemCountText" th:text="${place.bookmarkCount}"></span>
+                                <span class="ItemCountText bookmark-count" th:text="${place.bookmarkCount}"></span>
                             </div>
                         </div>
                     </div>

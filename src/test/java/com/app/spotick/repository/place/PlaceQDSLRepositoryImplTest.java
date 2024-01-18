@@ -1,9 +1,9 @@
 package com.app.spotick.repository.place;
 
-import com.app.spotick.domain.dto.place.PlaceFileDto;
-import com.app.spotick.domain.dto.place.PlaceListDto;
 import com.app.spotick.domain.embedded.post.PostAddress;
-import com.app.spotick.domain.entity.place.*;
+import com.app.spotick.domain.entity.place.Place;
+import com.app.spotick.domain.entity.place.PlaceFile;
+import com.app.spotick.domain.entity.place.QPlaceFile;
 import com.app.spotick.domain.entity.user.User;
 import com.app.spotick.domain.type.post.PostStatus;
 import com.app.spotick.domain.type.user.UserStatus;
@@ -11,8 +11,7 @@ import com.app.spotick.repository.place.bookmark.PlaceBookmarkRepository;
 import com.app.spotick.repository.place.file.PlaceFileRepository;
 import com.app.spotick.repository.user.UserAuthorityRepository;
 import com.app.spotick.repository.user.UserRepository;
-import com.querydsl.core.types.ExpressionUtils;
-import com.querydsl.core.types.Projections;
+import com.querydsl.core.Tuple;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -27,7 +26,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 import static com.app.spotick.domain.entity.place.QPlace.place;
@@ -58,6 +56,7 @@ class PlaceQDSLRepositoryImplTest {
     User user1;
     User user2;
     Place placeOf2;
+
     @BeforeEach
     void setUp() {
         user1 = User.builder()
@@ -85,7 +84,6 @@ class PlaceQDSLRepositoryImplTest {
                     .title("테스트 제목" + i)
                     .subTitle("테스트 부제목" + i)
                     .price(10000)
-                    .placeStatus(PostStatus.APPROVED)
                     .placeAddress(new PostAddress("서울특별시 강남구 테헤란로 " + i, "" + i))
                     .user(user2)
                     .placeStatus(PostStatus.APPROVED)
@@ -95,8 +93,8 @@ class PlaceQDSLRepositoryImplTest {
             for (int j = 0; j < 5; j++) {
                 placeFileList.add(PlaceFile.builder()
                         .uuid(UUID.randomUUID().toString())
-                        .fileName(placeOf2.getId()+"사진이름" + j)
-                        .uploadPath(placeOf2.getId()+"사진경로" + j)
+                        .fileName(placeOf2.getId() + "사진이름" + j)
+                        .uploadPath(placeOf2.getId() + "사진경로" + j)
                         .place(placeOf2).build());
             }
             placeFileRepository.saveAll(placeFileList);
@@ -110,11 +108,12 @@ class PlaceQDSLRepositoryImplTest {
 
         em.flush();
         em.clear();
+        System.out.println("===================================================");
     }
 
     @Test
     void findPlaceListPaging() {
-
+        QPlaceFile subPlaceFile = new QPlaceFile("subPlaceFile");
         JPQLQuery<Double> reviewAvg = JPAExpressions.select(placeReview.score.avg())
                 .from(placeReview)
                 .where(placeReview.place.eq(place));
@@ -128,46 +127,38 @@ class PlaceQDSLRepositoryImplTest {
                 .from(placeBookmark)
                 .where(placeBookmark.place.eq(place));
 
+        JPAExpressions.select(placeFile.id)
+                .from(placeFile)
+                .where(placeFile.place.eq(place))
+                .orderBy(placeFile.id.asc())
+                .limit(5);
 
-        List<PlaceListDto> placeListDtos = queryFactory.select(
-                        Projections.constructor(PlaceListDto.class,
-                                place.id,
-                                place.title,
-                                place.price,
-                                place.placeAddress,
-                                reviewAvg,
-                                reviewCount,
-                                bookmarkCount
-                        )
+
+        List<Tuple> tupleList = queryFactory.select(
+                        place.id, place.title, place.price, place.placeAddress, placeFile
                 )
                 .from(place)
+                .leftJoin(placeFile).on(placeFile.place.eq(place).and(placeFile.id.in(
+                        JPAExpressions.select(placeFile.id)
+                                .from(placeFile)
+                                .where(placeFile.place.eq(place))
+                                .orderBy(placeFile.id.asc())
+                                .limit(5)
+                )))
                 .where(place.placeStatus.eq(PostStatus.APPROVED))
+//                .groupBy(place.id, place.title, place.price, place.placeAddress,placeFile)
                 .orderBy(place.id.desc())
                 .offset(0)
-                .limit(12)
+                .limit(5)
                 .fetch();
 
-        placeListDtos.forEach(placeListDto -> {
-            placeListDto.updateEvalAvg(Optional.ofNullable(placeListDto.getEvalAvg()).orElse(0.0));
-
-            placeListDto.getPlaceAddress().cutAddress();
-
-            placeListDto.updatePlaceFiles(queryFactory.select(
-                            Projections.constructor(PlaceFileDto.class,
-                                    placeFile.id,
-                                    placeFile.fileName,
-                                    placeFile.uuid,
-                                    placeFile.uploadPath
-                            )
-                    )
-                    .from(placeFile)
-                    .where(placeFile.place.id.eq(placeListDto.getId()))
-                    .fetch());
+        tupleList.forEach(tuple -> {
+            System.out.println("place.id : "+tuple.get(place.id));
+            System.out.println("place.title : "+tuple.get(place.title));
+            System.out.println("place.price : "+tuple.get(place.price));
+            System.out.println("place.placeAddress : "+tuple.get(place.placeAddress));
+            System.out.println("placeFile : "+tuple.get(placeFile));
         });
-
-
-        placeListDtos.forEach(System.out::println);
-
 
 
     }
