@@ -15,6 +15,8 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
+import static com.app.spotick.domain.entity.user.QUser.user;
+
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -25,20 +27,16 @@ public class PlaceBookmarkServiceImpl implements PlaceBookmarkService {
 
     @Override
     public boolean bookmark(Long placeId, Long userId) {
-        Place place = placeRepository.findById(placeId).orElseThrow(
-                NoSuchElementException::new
-        );
+        // 프록시 객체를 활용하여 쿼리 수 단축
+        Place tmpPlace = placeRepository.getReferenceById(placeId);
+        User tmpuser = userRepository.getReferenceById(userId);
 
-        User user = userRepository.findById(userId).orElseThrow(
-                NoSuchElementException::new
-        );
-
-        Optional<PlaceBookmark> bookmark = placeBookmarkRepository.findByPlaceAndUser(place, user);
+        Optional<PlaceBookmark> bookmark = placeBookmarkRepository.findByPlaceAndUser(tmpPlace, tmpuser);
 
         if (bookmark.isEmpty()) {
             PlaceBookmark placeBookmark = PlaceBookmark.builder()
-                    .place(place)
-                    .user(user)
+                    .place(tmpPlace)
+                    .user(tmpuser)
                     .build();
             placeBookmarkRepository.save(placeBookmark);
             return true;
@@ -51,15 +49,11 @@ public class PlaceBookmarkServiceImpl implements PlaceBookmarkService {
 
     @Override
     public boolean bookmarkCheck(Long placeId, Long userId) {
-        Place place = placeRepository.findById(placeId).orElseThrow(
-                NoSuchElementException::new
-        );
+        // 프록시 객체를 활용하여 쿼리 수 단축
+        Place tmpPlace = placeRepository.getReferenceById(placeId);
+        User tmpuser = userRepository.getReferenceById(userId);
 
-        User user = userRepository.findById(userId).orElseThrow(
-                NoSuchElementException::new
-        );
-
-        Optional<PlaceBookmark> bookmark = placeBookmarkRepository.findByPlaceAndUser(place, user);
+        Optional<PlaceBookmark> bookmark = placeBookmarkRepository.findByPlaceAndUser(tmpPlace, tmpuser);
 
         return bookmark.isPresent();
     }
