@@ -25,10 +25,10 @@
             <div class="mpc-title">
                 <h2>북마크</h2>
             </div>
-            <th:block th:if="${#lists.size(placeDtoList)}">
-                <th:block th:each="placeDto:${placeDtoList}">
-                    <div class="mpc-cards-wrap" th:object="${placeDto}">
-                        <div class="OneItemContainer hover mybookmark">
+            <div class="mpc-cards-wrap">
+                <th:block th:if="${#lists.size(placeDtoList)}">
+                    <th:block th:each="placeDto:${placeDtoList}">
+                        <div class="OneItemContainer hover mybookmark" th:object="${placeDto}">
                             <div class="OneItemImgContainer">
                                 <div class="swiper ImageSwiper swiper-initialized swiper-horizontal swiper-pointer-events swiper-backface-hidden">
                                     <div class="swiper-wrapper ImageLength"
@@ -54,7 +54,8 @@
                                         <p><span class="snapIndex">1</span>/<span class="slideIndex">5</span></p>
                                     </div>
                                 </div>
-                                <button class="ItemBookMarkBtn" onclick="toggleBookmark(this, 1)" type="button">
+                                <button class="ItemBookMarkBtn active" onclick="toggleBookmark(this)"
+                                        th:data-id="*{id}" type="button">
                                     <img alt="북마크" src="/imgs/bookmark_line_white_shadow_48.png">
                                 </button>
                             </div>
@@ -66,7 +67,7 @@
                                             <img alt="후기갯수" class="ItemCountImg"
                                                  src="/imgs/star_filled_paintYellow056.a8eb6e44.svg">
                                             <span class="ItemCountText"
-                                                  th:text="*{evalAvg} + '(' + *{evalCount} + ')'"></span>
+                                                  th:text="|*{evalAvg}(*{evalCount})|"></span>
                                         </div>
                                         <div class="ItemsLikeCountContainer">
                                             <img alt="북마크갯수" class="ItemCountImg bookmark"
@@ -84,9 +85,9 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </th:block>
                 </th:block>
-            </th:block>
+            </div>
             <th:block th:unless="${#lists.size(placeDtoList)}">
                 <div class="mp-no-list">
                     <span>저장된 북마크가 없습니다.</span>

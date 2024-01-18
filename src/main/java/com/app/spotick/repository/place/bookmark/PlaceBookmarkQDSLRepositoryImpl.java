@@ -53,6 +53,7 @@ public class PlaceBookmarkQDSLRepositoryImpl implements PlaceBookmarkQDSLReposit
                 .from(placeBookmark)
                 .join(placeBookmark.place, place)
                 .where(placeBookmark.user.id.eq(userId), place.placeStatus.eq(PostStatus.APPROVED))
+                .orderBy(place.id.desc())
                 .fetch();
 
             /*

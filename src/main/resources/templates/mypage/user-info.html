@@ -147,13 +147,10 @@
                     <div onclick="openModal(profileModal)" style="position: relative">
                         <img class="mpc-user-info-user-img"
                              th:alt="*{nickName}"
-                             th:if="*{isDefaultImage}"
-                             th:src="@{/file/default/display(fileName=*{fileName})}">
+                             th:src="*{isDefaultImage
+                                ? '/file/default/display?fileName=' + fileName
+                                : '/file/display?fileName=' + uploadPath + '/t_' + uuid + '_' + fileName}">
 
-                        <img class="mpc-user-info-user-img"
-                             th:alt="*{nickName}"
-                             th:unless="*{isDefaultImage}"
-                             th:src="@{/file/display(fileName=*{uploadPath} + '/t_' + *{uuid} + '_' + *{fileName})}">
 
                         <div class="mpc-edit-icon" style="right: 38px; bottom: 2px">
                             <svg class="feather feather-edit-2" fill="none" height="16" stroke="currentColor"
