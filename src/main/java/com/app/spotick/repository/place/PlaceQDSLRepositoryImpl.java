@@ -76,6 +76,8 @@ public class PlaceQDSLRepositoryImpl implements PlaceQDSLRepository {
                 .limit(pageable.getPageSize())  //페이지 사이즈
                 .fetch();
 
+
+
         placeListDtos.forEach(placeListDto -> {
             placeListDto.updateEvalAvg(Optional.ofNullable(placeListDto.getEvalAvg()).orElse(0.0));
 

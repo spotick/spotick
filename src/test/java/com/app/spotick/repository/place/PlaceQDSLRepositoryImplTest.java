@@ -1,5 +1,7 @@
 package com.app.spotick.repository.place;
 
+import com.app.spotick.domain.dto.place.PlaceFileDto;
+import com.app.spotick.domain.dto.place.PlaceListDto;
 import com.app.spotick.domain.embedded.post.PostAddress;
 import com.app.spotick.domain.entity.place.Place;
 import com.app.spotick.domain.entity.place.PlaceFile;
@@ -12,6 +14,8 @@ import com.app.spotick.repository.place.file.PlaceFileRepository;
 import com.app.spotick.repository.user.UserAuthorityRepository;
 import com.app.spotick.repository.user.UserRepository;
 import com.querydsl.core.Tuple;
+import com.querydsl.core.types.Projections;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -24,9 +28,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Commit;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import static com.app.spotick.domain.entity.place.QPlace.place;
 import static com.app.spotick.domain.entity.place.QPlaceBookmark.placeBookmark;
@@ -59,6 +62,7 @@ class PlaceQDSLRepositoryImplTest {
 
     @BeforeEach
     void setUp() {
+        Random random = new Random();
         user1 = User.builder()
                 .id(1L)
                 .email("aaa")
@@ -79,7 +83,7 @@ class PlaceQDSLRepositoryImplTest {
                 .build();
         userRepository.save(user2);
 
-        for (int i = 0; i < 50; i++) {
+        for (int i = 0; i < 100; i++) {
             placeOf2 = Place.builder()
                     .title("테스트 제목" + i)
                     .subTitle("테스트 부제목" + i)
@@ -90,7 +94,8 @@ class PlaceQDSLRepositoryImplTest {
                     .build();
             placeRepository.save(placeOf2);
             List<PlaceFile> placeFileList = new ArrayList<>();
-            for (int j = 0; j < 5; j++) {
+
+            for (int j = 0; j < random.nextInt(15) + 5; j++) {
                 placeFileList.add(PlaceFile.builder()
                         .uuid(UUID.randomUUID().toString())
                         .fileName(placeOf2.getId() + "사진이름" + j)
@@ -153,15 +158,80 @@ class PlaceQDSLRepositoryImplTest {
                 .fetch();
 
         tupleList.forEach(tuple -> {
-            System.out.println("place.id : "+tuple.get(place.id));
-            System.out.println("place.title : "+tuple.get(place.title));
-            System.out.println("place.price : "+tuple.get(place.price));
-            System.out.println("place.placeAddress : "+tuple.get(place.placeAddress));
-            System.out.println("placeFile : "+tuple.get(placeFile));
+            System.out.println("place.id : " + tuple.get(place.id));
+            System.out.println("place.title : " + tuple.get(place.title));
+            System.out.println("place.price : " + tuple.get(place.price));
+            System.out.println("place.placeAddress : " + tuple.get(place.placeAddress));
+            System.out.println("placeFile : " + tuple.get(placeFile));
+        });
+    }
+
+    @Test
+    void test() {
+        JPQLQuery<Double> reviewAvg = JPAExpressions.select(placeReview.score.avg())
+                .from(placeReview)
+                .where(placeReview.place.eq(place));
+
+        JPQLQuery<Long> reviewCount = JPAExpressions.select(placeReview.count())
+                .from(placeReview)
+                .where(placeReview.place.eq(place));
+
+        JPQLQuery<Long> bookmarkCount = JPAExpressions.select(placeBookmark.count())
+                .from(placeBookmark)
+                .where(placeBookmark.place.eq(place));
+
+        //        로그인 되어있지 않으면 쿼리 실행 x
+        BooleanExpression isBookmarkChecked = JPAExpressions.select(placeBookmark.id.isNotNull())
+                .from(placeBookmark)
+                .where(placeBookmark.place.eq(place).and(placeBookmark.user.id.eq(user2.getId())))
+                .exists();
+
+        List<PlaceListDto> placeListDtos = queryFactory.select(
+                        Projections.constructor(PlaceListDto.class,
+                                place.id,
+                                place.title,
+                                place.price,
+                                place.placeAddress,
+                                reviewAvg,
+                                reviewCount,
+                                bookmarkCount,
+                                isBookmarkChecked
+                        )
+                )
+                .from(place)
+                .where(place.placeStatus.eq(PostStatus.APPROVED))
+                .orderBy(place.id.desc())
+                .offset(0)   //페이지 번호
+                .limit(12)  //페이지 사이즈
+                .fetch();
+
+        List<Long> placeIdList = placeListDtos.stream().map(PlaceListDto::getId).toList();
+
+        List<PlaceFileDto> fileDtoList = queryFactory.select(
+                        Projections.constructor(PlaceFileDto.class,
+                                placeFile.id,
+                                placeFile.fileName,
+                                placeFile.uuid,
+                                placeFile.uploadPath,
+                                placeFile.place.id
+                        ))
+                .from(placeFile)
+                .where(placeFile.place.id.in(placeIdList))
+                .orderBy(placeFile.id.asc(),placeFile.place.id.desc())
+                .fetch();
+
+        Map<Long, List<PlaceFileDto>> fileListMap = fileDtoList.stream().collect(Collectors.groupingBy(PlaceFileDto::getPlaceId));
+        System.out.println("fileListMap = " + fileListMap);
+        placeListDtos.forEach(place->{
+            place.updatePlaceFiles(fileListMap.get(place.getId())
+                    .stream().limit(5L).toList());
         });
 
+        placeListDtos.forEach(System.out::println);
 
     }
+
+
 }
 
 
