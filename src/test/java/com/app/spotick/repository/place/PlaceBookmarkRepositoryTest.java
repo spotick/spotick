@@ -18,6 +18,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.test.annotation.Commit;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -103,7 +105,7 @@ class PlaceBookmarkRepositoryTest {
     @Test
     @DisplayName("북마크 리스트 테스트")
     void bookmarkListTest() {
-        List<PlaceListDto> bookmarkedPlacesByUserId = placeBookmarkRepository.findBookmarkedPlacesByUserId(user1.getId());
+        List<PlaceListDto> bookmarkedPlacesByUserId = placeBookmarkRepository.findBookmarkedPlacesByUserId(user1.getId(), PageRequest.of(0, 6));
 
         System.out.println("bookmarkedPlacesByUserId = " + bookmarkedPlacesByUserId);
     }

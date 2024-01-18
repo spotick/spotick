@@ -17,6 +17,7 @@ import net.nurigo.sdk.NurigoApp;
 import net.nurigo.sdk.message.model.Message;
 import net.nurigo.sdk.message.service.DefaultMessageService;
 import org.springframework.context.annotation.Bean;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -136,8 +137,8 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<PlaceListDto> findBookmarkedPlacesByUserId(Long userId) {
-        return placeBookmarkRepository.findBookmarkedPlacesByUserId(userId);
+    public List<PlaceListDto> findBookmarkedPlacesByUserId(Long userId, int pageRequest) {
+        return placeBookmarkRepository.findBookmarkedPlacesByUserId(userId, PageRequest.of(pageRequest, 6));
     }
 
 

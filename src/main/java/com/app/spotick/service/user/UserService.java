@@ -20,5 +20,5 @@ public interface UserService {
 
     void updatePassword(Long userId, String newPassword);
 
-    List<PlaceListDto> findBookmarkedPlacesByUserId(Long userId);
+    List<PlaceListDto> findBookmarkedPlacesByUserId(Long userId, int pageRequest);
 }

@@ -8,6 +8,7 @@ import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 import java.util.Optional;
@@ -22,7 +23,7 @@ public class PlaceBookmarkQDSLRepositoryImpl implements PlaceBookmarkQDSLReposit
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public List<PlaceListDto> findBookmarkedPlacesByUserId(Long userId) {
+    public List<PlaceListDto> findBookmarkedPlacesByUserId(Long userId, Pageable pageable) {
         JPQLQuery<Double> reviewAvg = JPAExpressions.select(placeReview.score.avg())
                 .from(placeReview)
                 .where(placeReview.place.eq(place));
@@ -54,6 +55,8 @@ public class PlaceBookmarkQDSLRepositoryImpl implements PlaceBookmarkQDSLReposit
                 .join(placeBookmark.place, place)
                 .where(placeBookmark.user.id.eq(userId), place.placeStatus.eq(PostStatus.APPROVED))
                 .orderBy(place.id.desc())
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
                 .fetch();
 
             /*
