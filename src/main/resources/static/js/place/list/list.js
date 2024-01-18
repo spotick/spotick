@@ -252,6 +252,20 @@ function toggleCityContainer(targetId) {
 
 // 좋아요 버튼
 $(`.ListItemsContainer`).on('click','.ItemBookMarkBtn',function (){
+    let isLoggedIn = $('#isLoggedIn').val();
+    if(isLoggedIn==='false'){
+        alert('로그인이 필요한 서비스 입니다');
+        location.href = '/user/login';
+        return ;
+    }
+    let placeId = $(this).data('placeid');
+    let target = $(this).closest('.OneItemContainer').find('.bookmark-count');
+    let bookmarkCnt = Number(target.text());
+    fetch(`/bookmark?placeId=${placeId}`)
+        .then(response=>response.json())
+        .then(isAdded=>
+            target.text(isAdded?++bookmarkCnt:--bookmarkCnt)
+        );
     $(this).find('span').toggleClass('none');
 });
 

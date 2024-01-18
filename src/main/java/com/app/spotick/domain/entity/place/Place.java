@@ -37,10 +37,12 @@ public class Place extends PostBase {
     @JoinColumn(name = "USER_ID")
     private User user;
 
+//    todo 1:N 양방향 관계 편의메소드 설정하기
     @OneToMany(mappedBy = "place", fetch = FetchType.LAZY)
     private List<PlaceReview> placeReview = new ArrayList<>();
 
-//    todo 1:N 양방향 관계 편의메소드 설정하기
+//    @OneToMany(mappedBy = "place", fetch = FetchType.LAZY)
+//    private List<PlaceFile> placeFiles = new ArrayList<>();
 
     @Builder
     public Place(String title, int viewCount, Double lat, Double lng, Long id, String subTitle, String info, String rule, Integer defaultPeople, PostAddress placeAddress, Integer price, Integer surcharge, String bankName, String accountNumber, String accountHolder, PostStatus placeStatus, User user, List<PlaceReview> placeReview) {

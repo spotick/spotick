@@ -11,6 +11,6 @@ public interface PlaceService {
 
     void registerPlace(PlaceRegisterDto placeRegisterDto,Long userId) throws IOException;
 
-    Page<PlaceListDto> findPlaceListPagination(int pageRequest);
+    Page<PlaceListDto> findPlaceListPagination(int pageRequest,Long userId);
 
 }

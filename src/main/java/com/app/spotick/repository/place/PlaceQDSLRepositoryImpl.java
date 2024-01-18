@@ -4,6 +4,8 @@ import com.app.spotick.domain.dto.place.PlaceFileDto;
 import com.app.spotick.domain.dto.place.PlaceListDto;
 import com.app.spotick.domain.type.post.PostStatus;
 import com.querydsl.core.types.Projections;
+import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -25,14 +27,16 @@ public class PlaceQDSLRepositoryImpl implements PlaceQDSLRepository {
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public Page<PlaceListDto> findPlaceListPaging(Pageable pageable) {
-        List<PlaceListDto> content = getPlaceListDTOs(pageable);
+    public Page<PlaceListDto> findPlaceListPaging(Pageable pageable, Long userId) {
+        System.out.println("============================================");
+        System.out.println(userId);
+        System.out.println("============================================");
+        List<PlaceListDto> content = getPlaceListDTOs(pageable, userId);
         Long count = getPlaceListDTOsCount();
-
         return new PageImpl<>(content, pageable, count);
     }
 
-    private List<PlaceListDto> getPlaceListDTOs(Pageable pageable) {
+    private List<PlaceListDto> getPlaceListDTOs(Pageable pageable, Long userId) {
         JPQLQuery<Double> reviewAvg = JPAExpressions.select(placeReview.score.avg())
                 .from(placeReview)
                 .where(placeReview.place.eq(place));
@@ -45,6 +49,13 @@ public class PlaceQDSLRepositoryImpl implements PlaceQDSLRepository {
                 .from(placeBookmark)
                 .where(placeBookmark.place.eq(place));
 
+        //        로그인 되어있지 않으면 쿼리 실행 x
+        BooleanExpression isBookmarkChecked = userId == null ?
+                Expressions.asBoolean(false)
+                : JPAExpressions.select(placeBookmark.id.isNotNull())
+                .from(placeBookmark)
+                .where(placeBookmark.place.eq(place).and(placeBookmark.user.id.eq(userId)))
+                .exists();
 
         List<PlaceListDto> placeListDtos = queryFactory.select(
                         Projections.constructor(PlaceListDto.class,
@@ -54,7 +65,8 @@ public class PlaceQDSLRepositoryImpl implements PlaceQDSLRepository {
                                 place.placeAddress,
                                 reviewAvg,
                                 reviewCount,
-                                bookmarkCount
+                                bookmarkCount,
+                                isBookmarkChecked
                         )
                 )
                 .from(place)

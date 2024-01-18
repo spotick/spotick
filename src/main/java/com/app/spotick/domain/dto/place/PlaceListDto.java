@@ -4,10 +4,10 @@ import com.app.spotick.domain.embedded.post.PostAddress;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.ArrayList;
 import java.util.List;
 
-@Data @NoArgsConstructor
+@Data
+@NoArgsConstructor
 public class PlaceListDto {
     private Long id;
     private String title;
@@ -17,9 +17,10 @@ public class PlaceListDto {
     private Double evalAvg;
     private Long evalCount;
     private Long bookmarkCount;
+    private boolean isBookmarkChecked;
 
 
-    public PlaceListDto(Long id, String title, Integer price, PostAddress placeAddress, Double evalAvg, Long evalCount, Long bookmarkCount) {
+    public PlaceListDto(Long id, String title, Integer price, PostAddress placeAddress, Double evalAvg, Long evalCount, Long bookmarkCount,boolean isBookmarkChecked) {
         this.id = id;
         this.title = title;
         this.price = price;
@@ -27,6 +28,8 @@ public class PlaceListDto {
         this.evalAvg = evalAvg;
         this.evalCount = evalCount;
         this.bookmarkCount = bookmarkCount;
+//        해당값 쿼리통해서 가져오게 해야함
+        this.isBookmarkChecked = isBookmarkChecked;
     }
 
     public void updatePlaceFiles(List<PlaceFileDto> placeFiles) {
