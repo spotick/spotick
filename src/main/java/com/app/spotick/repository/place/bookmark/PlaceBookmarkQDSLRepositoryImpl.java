@@ -55,6 +55,8 @@ public class PlaceBookmarkQDSLRepositoryImpl implements PlaceBookmarkQDSLReposit
                 .join(placeBookmark.place, place)
                 .where(placeBookmark.user.id.eq(userId), place.placeStatus.eq(PostStatus.APPROVED))
                 .orderBy(place.id.desc())
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
                 .fetch();
 
             /*

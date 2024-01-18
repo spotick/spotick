@@ -146,8 +146,10 @@ public class MypageController {
 
     /* =================================================북마크====================================================== */
     @GetMapping("/bookmarks")
-    public void goToBookmarks(Model model, @AuthenticationPrincipal UserDetailsDto userDetailsDto) {
-        List<PlaceListDto> bookmarkedPlaces = userService.findBookmarkedPlacesByUserId(userDetailsDto.getId());
+    public void goToBookmarks(@RequestParam(value = "page", defaultValue = "1") int page,
+                              @AuthenticationPrincipal UserDetailsDto userDetailsDto,
+                              Model model) {
+        List<PlaceListDto> bookmarkedPlaces = userService.findBookmarkedPlacesByUserId(userDetailsDto.getId(), page - 1);
 
         System.out.println("bookmarkedPlaces = " + bookmarkedPlaces);
 
