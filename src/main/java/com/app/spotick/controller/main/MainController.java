@@ -13,6 +13,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.util.List;
+
 @Controller
 @RequiredArgsConstructor
 public class MainController {
@@ -24,7 +26,7 @@ public class MainController {
     public String goToMain(Model model,@AuthenticationPrincipal UserDetailsDto userDetailsDto){
         Long userId = userDetailsDto==null? null: userDetailsDto.getId();
 
-        Page<PlaceListDto> placeList = placeService.findPlaceListPagination(0,userId);
+        List<PlaceListDto> placeList = placeService.findPlaceListPagination(0, userId);
         model.addAttribute("placeList",placeList);
         return "place/list";
     }
