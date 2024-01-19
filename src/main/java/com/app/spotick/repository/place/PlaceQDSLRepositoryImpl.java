@@ -63,8 +63,8 @@ public class PlaceQDSLRepositoryImpl implements PlaceQDSLRepository {
                 .from(place)
                 .where(place.placeStatus.eq(PostStatus.APPROVED))
                 .orderBy(place.id.desc())
-                .offset(0)   //페이지 번호
-                .limit(12)  //페이지 사이즈
+                .offset(pageable.getOffset())   //페이지 번호
+                .limit(pageable.getPageSize())  //페이지 사이즈
                 .fetch();
 
 //        포스트의 id만 list로 가져온다
