@@ -14,6 +14,7 @@ import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static com.app.spotick.domain.entity.place.QPlace.place;
@@ -87,9 +88,13 @@ public class PlaceQDSLRepositoryImpl implements PlaceQDSLRepository {
         Map<Long, List<PlaceFileDto>> fileListMap = fileDtoList.stream().collect(Collectors.groupingBy(PlaceFileDto::getPlaceId));
 
 //        장소 id별로 구분된 사진들을 각각 게시글 번호에 맞게 추가한다
-        placeListDtos.forEach(place->{
-            place.updatePlaceFiles(fileListMap.get(place.getId())
+        placeListDtos.forEach(placeListDto->{
+            placeListDto.updatePlaceFiles(fileListMap.get(placeListDto.getId())
                     .stream().limit(5L).toList());
+            // 평가결과가 null일 시 0.0으로 교체
+            placeListDto.updateEvalAvg(Optional.ofNullable(placeListDto.getEvalAvg()).orElse(0.0));
+            // 화면에서 뿌릴 주소값 가공
+            placeListDto.getPlaceAddress().cutAddress();
         });
 
         return placeListDtos;
