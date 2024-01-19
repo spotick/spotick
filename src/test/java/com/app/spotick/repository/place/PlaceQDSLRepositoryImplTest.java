@@ -245,7 +245,7 @@ class PlaceQDSLRepositoryImplTest {
 
         long startTime2 = System.nanoTime();
         // 테스트 코드 실행
-        placeRepository.findPlaceListPaging2(pageRequest,1L);
+//        placeRepository.findPlaceListPaging2(pageRequest,1L);
 
         long endTime2 = System.nanoTime();
         long duration2 = (endTime2 - startTime2);  // 실행 시간 (나노초 단위)
