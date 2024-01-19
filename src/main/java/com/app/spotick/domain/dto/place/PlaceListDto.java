@@ -19,7 +19,6 @@ public class PlaceListDto {
     private Long bookmarkCount;
     private boolean isBookmarkChecked;
 
-
     public PlaceListDto(Long id, String title, Integer price, PostAddress placeAddress, Double evalAvg, Long evalCount, Long bookmarkCount,boolean isBookmarkChecked) {
         this.id = id;
         this.title = title;
@@ -28,7 +27,6 @@ public class PlaceListDto {
         this.evalAvg = evalAvg;
         this.evalCount = evalCount;
         this.bookmarkCount = bookmarkCount;
-//        해당값 쿼리통해서 가져오게 해야함
         this.isBookmarkChecked = isBookmarkChecked;
     }
 

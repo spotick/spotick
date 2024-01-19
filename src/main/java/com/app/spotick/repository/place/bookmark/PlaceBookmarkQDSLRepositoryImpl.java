@@ -4,11 +4,15 @@ import com.app.spotick.domain.dto.place.PlaceFileDto;
 import com.app.spotick.domain.dto.place.PlaceListDto;
 import com.app.spotick.domain.type.post.PostStatus;
 import com.querydsl.core.types.Projections;
+import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.JPQLQuery;
+import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.support.PageableExecutionUtils;
 
 import java.util.List;
 import java.util.Optional;
@@ -23,7 +27,14 @@ public class PlaceBookmarkQDSLRepositoryImpl implements PlaceBookmarkQDSLReposit
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public List<PlaceListDto> findBookmarkedPlacesByUserId(Long userId, Pageable pageable) {
+    public Page<PlaceListDto> findBookmarkedPlacesByUserId(Long userId, Pageable pageable) {
+        // 게시글 전체 갯수 확인
+        JPAQuery<Long> totalCountQuery = queryFactory.select(place.count())
+                .from(placeBookmark)
+                .join(placeBookmark.place, place)
+                .where(placeBookmark.user.id.eq(userId), place.placeStatus.eq(PostStatus.APPROVED));
+
+
         JPQLQuery<Double> reviewAvg = JPAExpressions.select(placeReview.score.avg())
                 .from(placeReview)
                 .where(placeReview.place.eq(place));
@@ -48,7 +59,9 @@ public class PlaceBookmarkQDSLRepositoryImpl implements PlaceBookmarkQDSLReposit
                                 place.placeAddress,
                                 reviewAvg,
                                 reviewCount,
-                                bookmarkCount
+                                bookmarkCount,
+                                // 북마크 리스트에서 북마크 체크는 필요없음. 이미되어있기때문에 가져와지기 때문.
+                                Expressions.constant(true)
                         )
                 )
                 .from(placeBookmark)
@@ -59,10 +72,10 @@ public class PlaceBookmarkQDSLRepositoryImpl implements PlaceBookmarkQDSLReposit
                 .limit(pageable.getPageSize())
                 .fetch();
 
-            /*
-                화면DTO리스트 각각에 파일 리스트를 꽂아줘야 하므로 리스트을 가져온 뒤 그 id를 통해 파일을 전체 조회하여
-                화면DTO에 파일리스트를 업데이트 시켜준다.
-             */
+        /*
+            화면DTO리스트 각각에 파일 리스트를 꽂아줘야 하므로 리스트을 가져온 뒤 그 id를 통해 파일을 전체 조회하여
+            화면DTO에 파일리스트를 업데이트 시켜준다.
+         */
         placeListDtos.forEach(placeListDto -> {
             // 평가결과가 null일 시 0.0으로 교체
             placeListDto.updateEvalAvg(Optional.ofNullable(placeListDto.getEvalAvg()).orElse(0.0));
@@ -87,7 +100,7 @@ public class PlaceBookmarkQDSLRepositoryImpl implements PlaceBookmarkQDSLReposit
             placeListDto.updatePlaceFiles(placeFileDtos);
         });
 
-        return placeListDtos;
+        return PageableExecutionUtils.getPage(placeListDtos, pageable, totalCountQuery::fetchOne);
     }
 }
 

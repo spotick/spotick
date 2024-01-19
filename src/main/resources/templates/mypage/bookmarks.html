@@ -88,12 +88,15 @@
                     </th:block>
                 </th:block>
             </div>
-            <th:block th:unless="${#lists.size(placeDtoList)}">
+            <th:block th:if="${placeDtoList.empty}">
                 <div class="mp-no-list">
                     <span>저장된 북마크가 없습니다.</span>
                 </div>
             </th:block>
         </article>
+
+        <div th:replace="~{global-templates/pagination-v1.html :: pagination-v1}"></div>
+
     </div>
 </main>
 
@@ -106,8 +109,5 @@
 <script src="/js/global-js/image-slide.js"></script>
 <script src="/js/global-js/chat.js"></script>
 <script src="/js/mypage/bookmarks.js"></script>
-<script>
-    document.getElementById('bookmarks').classList.add('active');
-</script>
 
 </html>

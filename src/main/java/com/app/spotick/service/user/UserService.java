@@ -3,9 +3,8 @@ package com.app.spotick.service.user;
 import com.app.spotick.domain.dto.place.PlaceListDto;
 import com.app.spotick.domain.dto.user.UserJoinDto;
 import com.app.spotick.domain.dto.user.UserProfileDto;
-import org.springframework.security.core.userdetails.UserDetails;
-
-import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface UserService {
     void join(UserJoinDto userJoinDto);
@@ -20,5 +19,7 @@ public interface UserService {
 
     void updatePassword(Long userId, String newPassword);
 
-    List<PlaceListDto> findBookmarkedPlacesByUserId(Long userId, int pageRequest);
+    Page<PlaceListDto> findBookmarkedPlacesByUserId(Long userId, Pageable pageable);
+
+    int getTotalBookmarkedPlaces(Long userId);
 }
