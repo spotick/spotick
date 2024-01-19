@@ -10,12 +10,12 @@ import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static com.app.spotick.domain.entity.place.QPlace.place;
 import static com.app.spotick.domain.entity.place.QPlaceBookmark.placeBookmark;
@@ -27,16 +27,7 @@ public class PlaceQDSLRepositoryImpl implements PlaceQDSLRepository {
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public Page<PlaceListDto> findPlaceListPaging(Pageable pageable, Long userId) {
-        System.out.println("============================================");
-        System.out.println(userId);
-        System.out.println("============================================");
-        List<PlaceListDto> content = getPlaceListDTOs(pageable, userId);
-        Long count = getPlaceListDTOsCount();
-        return new PageImpl<>(content, pageable, count);
-    }
-
-    private List<PlaceListDto> getPlaceListDTOs(Pageable pageable, Long userId) {
+    public List<PlaceListDto> findPlaceListPaging(Pageable pageable, Long userId) {
         JPQLQuery<Double> reviewAvg = JPAExpressions.select(placeReview.score.avg())
                 .from(placeReview)
                 .where(placeReview.place.eq(place));
@@ -76,36 +67,38 @@ public class PlaceQDSLRepositoryImpl implements PlaceQDSLRepository {
                 .limit(pageable.getPageSize())  //페이지 사이즈
                 .fetch();
 
-        placeListDtos.forEach(placeListDto -> {
+//        포스트의 id만 list로 가져온다
+        List<Long> placeIdList = placeListDtos.stream().map(PlaceListDto::getId).toList();
+
+//        가져온 id리스트를 in절의 조건으로 사진정보들을 가져온다.
+        List<PlaceFileDto> fileDtoList = queryFactory.select(
+                        Projections.constructor(PlaceFileDto.class,
+                                placeFile.id,
+                                placeFile.fileName,
+                                placeFile.uuid,
+                                placeFile.uploadPath,
+                                placeFile.place.id
+                        ))
+                .from(placeFile)
+                .where(placeFile.place.id.in(placeIdList))
+                .orderBy(placeFile.id.asc(),placeFile.place.id.desc())
+                .fetch();
+
+//        사진정보를 장소 id별로 묶는다
+        Map<Long, List<PlaceFileDto>> fileListMap = fileDtoList.stream().collect(Collectors.groupingBy(PlaceFileDto::getPlaceId));
+
+//        장소 id별로 구분된 사진들을 각각 게시글 번호에 맞게 추가한다
+        placeListDtos.forEach(placeListDto->{
+            placeListDto.updatePlaceFiles(fileListMap.get(placeListDto.getId())
+                    .stream().limit(5L).toList());
+            // 평가결과가 null일 시 0.0으로 교체
             placeListDto.updateEvalAvg(Optional.ofNullable(placeListDto.getEvalAvg()).orElse(0.0));
-
+            // 화면에서 뿌릴 주소값 가공
             placeListDto.getPlaceAddress().cutAddress();
-
-            placeListDto.updatePlaceFiles(queryFactory.select(
-                            Projections.constructor(PlaceFileDto.class,
-                                    placeFile.id,
-                                    placeFile.fileName,
-                                    placeFile.uuid,
-                                    placeFile.uploadPath
-                            )
-                    )
-                    .from(placeFile)
-                    .where(placeFile.place.id.eq(placeListDto.getId()))
-                    .limit(5)
-                    .fetch());
         });
 
         return placeListDtos;
     }
-
-    private Long getPlaceListDTOsCount() {
-        return queryFactory.select(place.count())
-                .from(place)
-                .where(place.placeStatus.eq(PostStatus.APPROVED))
-                .fetchOne();
-    }
-
-
 }
 
 

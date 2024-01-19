@@ -41,7 +41,7 @@ public class PlaceServiceImpl implements PlaceService{
     }
 
     @Override
-    public Page<PlaceListDto> findPlaceListPagination(int pageRequest,Long userId) {
+    public List<PlaceListDto> findPlaceListPagination(int pageRequest,Long userId) {
         return placeRepository.findPlaceListPaging(PageRequest.of(pageRequest,PAGE_SIZE),userId);
     }
 }
