@@ -21,10 +21,13 @@ import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.test.annotation.Commit;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,6 +39,7 @@ import static com.app.spotick.domain.entity.place.QPlaceBookmark.placeBookmark;
 import static com.app.spotick.domain.entity.place.QPlaceFile.placeFile;
 import static com.app.spotick.domain.entity.place.QPlaceReview.placeReview;
 
+@Slf4j
 @SpringBootTest
 @Transactional
 @Commit
@@ -83,7 +87,7 @@ class PlaceQDSLRepositoryImplTest {
                 .build();
         userRepository.save(user2);
 
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < 10000; i++) {
             placeOf2 = Place.builder()
                     .title("테스트 제목" + i)
                     .subTitle("테스트 부제목" + i)
@@ -167,7 +171,7 @@ class PlaceQDSLRepositoryImplTest {
     }
 
     @Test
-    void test() {
+    void findPlaceListPaging2() {
         JPQLQuery<Double> reviewAvg = JPAExpressions.select(placeReview.score.avg())
                 .from(placeReview)
                 .where(placeReview.place.eq(place));
@@ -205,8 +209,10 @@ class PlaceQDSLRepositoryImplTest {
                 .limit(12)  //페이지 사이즈
                 .fetch();
 
+//        포스트의 id만 list로 가져온다
         List<Long> placeIdList = placeListDtos.stream().map(PlaceListDto::getId).toList();
 
+//        가져온 id리스트를 in절의 조건으로 사진정보들을 가져온다.
         List<PlaceFileDto> fileDtoList = queryFactory.select(
                         Projections.constructor(PlaceFileDto.class,
                                 placeFile.id,
@@ -220,14 +226,49 @@ class PlaceQDSLRepositoryImplTest {
                 .orderBy(placeFile.id.asc(),placeFile.place.id.desc())
                 .fetch();
 
+//        사진정보를 장소 id별로 묶는다
         Map<Long, List<PlaceFileDto>> fileListMap = fileDtoList.stream().collect(Collectors.groupingBy(PlaceFileDto::getPlaceId));
-        System.out.println("fileListMap = " + fileListMap);
+
+//        장소 id별로 구분된 사진들을 각각 게시글 번호에 맞게 추가한다
         placeListDtos.forEach(place->{
             place.updatePlaceFiles(fileListMap.get(place.getId())
                     .stream().limit(5L).toList());
         });
 
-        placeListDtos.forEach(System.out::println);
+    }
+    
+    @Test
+    @DisplayName("실행속도 비교 테스트")
+    void comparisonTest(){
+        //given
+        PageRequest pageRequest = PageRequest.of(0,12);
+
+        long startTime2 = System.nanoTime();
+        // 테스트 코드 실행
+        placeRepository.findPlaceListPaging2(pageRequest,1L);
+
+        long endTime2 = System.nanoTime();
+        long duration2 = (endTime2 - startTime2);  // 실행 시간 (나노초 단위)
+
+        em.flush();
+        em.clear();
+
+//        ----------------------------------------------------------------------
+        long startTime1 = System.nanoTime();
+        // 테스트 코드 실행
+        placeRepository.findPlaceListPaging(pageRequest,1L);
+
+        long endTime1 = System.nanoTime();
+        long duration1 = (endTime1 - startTime1);  // 실행 시간 (나노초 단위)
+
+        double durationInSeconds1 = (double)duration1 / 1_000_000_000.0; // 초 단위로 변환
+        double durationInSeconds2 = (double)duration2 / 1_000_000_000.0; // 초 단위로 변환
+
+        log.info("duration1 : {}", duration1);
+        log.info("durationInSeconds1 : {}", durationInSeconds1);
+        System.out.println("===============================================");
+        log.info("duration2 : {}", duration2);
+        log.info("durationInSeconds2 : {}", durationInSeconds2);
 
     }
 

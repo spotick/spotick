@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.view.RedirectView;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Optional;
 
 @Slf4j
@@ -38,7 +39,7 @@ public class PlaceController {
     public String placeList(Model model,@AuthenticationPrincipal UserDetailsDto userDetailsDto){
         Long userId = userDetailsDto==null? null: userDetailsDto.getId();
 
-        Page<PlaceListDto> placeList = placeService.findPlaceListPagination(0,userId);
+        List<PlaceListDto> placeList = placeService.findPlaceListPagination(0,userId);
         model.addAttribute("placeList",placeList);
         return "place/list";
     }
