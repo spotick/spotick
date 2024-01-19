@@ -1,5 +1,6 @@
 <!doctype html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport"
@@ -50,9 +51,9 @@
     <div class="content-global-wrap">
         <div class="content-wrap">
             <div class="basic-info-box">
-                <p class="sub-title">포인트, 원서 2호점</p>
+                <p class="sub-title" th:text="${place.placeSubTitle}"></p>
                 <div class="flex-between-align">
-                    <span class="place-name">포인트, 원서 2호점</span>
+                    <span class="place-name" th:text="${place.placeTitle}"></span>
                     <button class="place-like-btn" type="button">
                         <span><i class="fa-regular fa-bookmark"></i></span>
                         <span class="none"><i class="fa-solid fa-bookmark" style="color: #007AFF"></i></span>
@@ -60,14 +61,14 @@
                 </div>
                 <div class="place-address-box">
                     <img src="https://shareit.kr/_next/static/media/location_filled_sweetBlue046.de36d6ce.svg" alt="">
-                    <span>서울 종로구 창덕궁길 106 2층</span>
+                    <span th:text="${place.placeAddress+' '+place.placeAddressDetail}"></span>
                 </div>
 
                 <div class="review-box flex-between-align">
                     <div class="flex">
                         <div class="star-box">
                             <!--리뷰 평점%-->
-                            <div class="filled-stars" style="width: 70%">
+                            <div class="filled-stars" th:style="${'width: '+(place.evalAvg*20)+'%'}">
                                 <img class="filled-star"
                                      src="https://shareit.kr/_next/static/media/star_filled_paintYellow056.a8eb6e44.svg"
                                      alt="평점" width="17">
@@ -97,13 +98,15 @@
                                      src="https://shareit.kr/_next/static/media/star_filled_gray084.e69177ff.svg" alt="">
                             </div>
                         </div>
-                        <span class="review-score">0.0</span>
+                        <span class="review-score" th:text="${place.evalAvg}"></span>
                         <span>|</span>
-                        <span>후기(0)</span>
+                        <span th:text="${'후기('+place.evalCount+')'}"></span>
                     </div>
 
                     <!--장소 수정하기 -->
-                    <a href="#" class="place-modify-btn">수정하기</a>
+                    <th:block sec:authorize="isAuthenticated()">
+                        <a href="#" class="place-modify-btn" th:if="${#authentication.principal != null and #authentication.principal.id == place.hostId}">수정하기</a>
+                    </th:block>
 
                 </div>
             </div>
@@ -116,10 +119,10 @@
                     <p>이용규칙</p>
                 </div>
                 <div class="nav-item">
-                    <p>리뷰3</p>
+                    <p>리뷰<span th:text="${place.evalCount}"></span></p>
                 </div>
                 <div class="nav-item">
-                    <p>문의21</p>
+                    <p>문의<span th:text="${place.inquiryCount}"></span></p>
                 </div>
             </div>
 
@@ -137,38 +140,7 @@
             <div class="place-content-wrap">
                 <div class="place-info-box">
                     <p class="title">공간 정보</p>
-                    <p class="content">*연말 예약 진행 중
-                        **네이버 예약을 접수하시면 빠른 일정 확인이 가능합니다 : )
-
-                        처음 와보는 공간과 낯가리는 분들에게 이 공간을 바쳐요. ′포인트 원서2′와는 누구나 금방 친해질 수 있습니다. 겨울과 어울리지만 따뜻하고, 아늑하지만 탁 트인 뷰가
-                        있어요. 창덕궁 후원을 바라보고, 원서동의 고즈넉함을 한껏 느껴보기 좋은 곳입니다.
-
-                        크리스마스로 꾸며진 공간은 아래 인스타그램 계정에서 확인해주세요!
-                        @point_space_kr
-
-
-                        1. Living room(안실)
-                        : 빈백 3개, 쿠션&담요, 침구류, 창덕궁 후원(비원)뷰 통창, 테이블, 빔프로젝터, 수납장, 난방, 헤어드라이기
-
-                        2. Dining room(식당)
-                        : 테이블&의자(4인), 옷장, 수납장, 에어컨, 와이파이, 블루투스 스피커
-
-                        3. Kitchen(주방)
-                        : 싱크대, 냉장고, 조리대, 오븐 겸 전자레인지, 인덕션, 각종 접시 및 커트러리, 와인잔 및 각종 술잔, 머그컵, 조리기구, 전기포트, 정수기
-
-                        4. 전용 루프탑
-                        : 창덕궁 후원과 원서동이 펼쳐져 보이는 아담한 루프탑 공간을 준비 중이에요. 따뜻해질 때 만나요 : )
-
-                        5. 실내 전용 화장실
-                        : 샤워기, 세면대, 변기, 온수 (어메니티는 제공되지 않음)
-
-                        7. 편의시설 & 즐길거리
-                        : 편의점(도보 3분거리 GS, CU), 북촌한옥마을(북촌, 계동, 원서동), 한국 전통 문화체험(원서동 빨래터, 고희동 미술관 등), 갤러리, 북촌 맛집,
-                        런던베이글뮤지엄, 소금집 등 유명 베이커리
-
-
-                        *해당 공간은 전문숙박시설이 아닌 쉼, 워케이션, 그리고 각종 모임을 위한 공간으로도 운영 중입니다.
-                        따라서 어메니티(욕실용품)가 제공되지 않습니다.</p>
+                    <p class="content" th:text="${place.placeInfo}"></p>
                 </div>
 
                 <div class="place-map-box">
@@ -177,13 +149,13 @@
                     <div class="place-address-box">
                         <img src="https://shareit.kr/_next/static/media/location_filled_sweetBlue046.de36d6ce.svg"
                              alt="">
-                        <span>서울 종로구 창덕궁길 106 2층</span>
+                        <span th:text="${place.placeAddress +' '+place.placeAddressDetail}"></span>
                     </div>
                 </div>
 
                 <div class="place-rule-box">
                     <p class="title">이용규칙</p>
-                    <p class="content">- 대여 시간보다 적게 사용 하더라도 대관비는 환불되지 않습니다.
+                    <p class="content" th:text="${place.placeRule}">- 대여 시간보다 적게 사용 하더라도 대관비는 환불되지 않습니다.
 
                         - 기물 파손 및 청소 등의 사유로 보증금을 호스트에게 입금하여야 합니다.
 
@@ -199,13 +171,13 @@
 
                 <div class="review-wrap">
                     <div class="flex-between-align">
-                        <p class="title">후기 <span class="review-count">3</span></p>
+                        <p class="title">후기 <span class="review-count" th:text="${place.evalCount}"></span></p>
                         <!--                        <button type="button" class="review-write-btn">후기작성</button>-->
                     </div>
                     <div class="review-summary-box">
                         <div class="flex-center">
                             <div class="star-box">
-                                <div class="filled-stars" style="width: 70%">
+                                <div class="filled-stars" th:style="${'width: '+(place.evalAvg*20)+'%'}">
                                     <img class="filled-star"
                                          src="https://shareit.kr/_next/static/media/star_filled_paintYellow056.a8eb6e44.svg"
                                          alt="평점" width="17">
@@ -240,7 +212,7 @@
                                          alt="">
                                 </div>
                             </div>
-                            <span class="review-score">3.5</span>
+                            <span class="review-score" th:text="${place.evalAvg}"></span>
                         </div>
                         <p>74%의 고객이 5점을 주었어요.</p>
                     </div>

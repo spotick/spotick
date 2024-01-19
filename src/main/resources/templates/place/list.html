@@ -2246,7 +2246,7 @@
             <!--            로그인 되어있는지 정보 저장-->
             <input id="isLoggedIn" th:value="${#authorization.expression('isAuthenticated()')}" type="hidden"/>
             <!-- 리스트 아이템 한칸 -->
-            <div class="OneItemContainer hover" th:each="place : ${placeList}">
+            <a th:href="@{/place/detail/{placeId}(placeId = ${place.id})}" class="OneItemContainer hover" th:each="place : ${placeList}">
                 <div class="OneItemImgContainer">
                     <div class="swiper ImageSwiper swiper-initialized swiper-horizontal swiper-pointer-events swiper-backface-hidden">
                         <div class="swiper-wrapper ImageLength" style="transform: translate3d(0px, 0px, 0px);">
@@ -2300,7 +2300,7 @@
                         <span class="place-price" th:text="${#numbers.formatInteger(place.price,1,'COMMA')+'원'}"></span>
                     </div>
                 </div>
-            </div>
+            </a>
 
         </div>
     </div>
