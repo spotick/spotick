@@ -7,14 +7,13 @@ import com.app.spotick.service.redis.RedisService;
 import com.app.spotick.service.user.UserProfileFileService;
 import com.app.spotick.service.user.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -24,7 +23,6 @@ import org.springframework.web.servlet.view.RedirectView;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
 import java.util.Objects;
 
 @Controller
@@ -53,7 +51,7 @@ public class MypageController {
                                          @AuthenticationPrincipal UserDetailsDto userDetailsDto,
                                          RedirectAttributes redirectAttributes) {
 
-        userDetailsDto.updateProfileImage(imgName,null,null,true);
+        userDetailsDto.updateProfileImage(imgName, null, null, true);
         profileFileService.updateDefaultImg(imgName, userDetailsDto.getId());
         redirectAttributes.addFlashAttribute("successProfile", "프로필 사진이 수정되었습니다.");
         return new RedirectView("/mypage/user-info");
@@ -65,7 +63,7 @@ public class MypageController {
                                           @AuthenticationPrincipal UserDetailsDto userDetailsDto,
                                           RedirectAttributes redirectAttributes) {
 
-        userDetailsDto.updateProfileImage(uploadFile.getOriginalFilename(), uuid, getPath(),false);
+        userDetailsDto.updateProfileImage(uploadFile.getOriginalFilename(), uuid, getPath(), false);
         profileFileService.updatePersonalImg(uploadFile.getOriginalFilename(), uuid, userDetailsDto.getId());
 
         redirectAttributes.addFlashAttribute("successProfile", "프로필 사진이 수정되었습니다.");
@@ -149,9 +147,13 @@ public class MypageController {
     public void goToBookmarks(@RequestParam(value = "page", defaultValue = "1") int page,
                               @AuthenticationPrincipal UserDetailsDto userDetailsDto,
                               Model model) {
-        List<PlaceListDto> bookmarkedPlaces = userService.findBookmarkedPlacesByUserId(userDetailsDto.getId(), page - 1);
+        Pageable pageable = PageRequest.of(page - 1, 6);
 
-        System.out.println("bookmarkedPlaces = " + bookmarkedPlaces);
+        Page<PlaceListDto> bookmarkedPlaces = userService.findBookmarkedPlacesByUserId(userDetailsDto.getId(), pageable);
+
+        System.out.println("bookmarkedPlaces.getTotalPages() = " + bookmarkedPlaces.getTotalPages());
+        System.out.println("pageable.getPageNumber() = " + pageable.getPageNumber());
+        System.out.println("pageableSize = " + pageable.getPageSize());
 
         model.addAttribute("placeDtoList", bookmarkedPlaces);
     }

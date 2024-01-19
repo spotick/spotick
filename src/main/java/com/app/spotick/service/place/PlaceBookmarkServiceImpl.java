@@ -1,6 +1,5 @@
 package com.app.spotick.service.place;
 
-import com.app.spotick.domain.dto.place.PlaceListDto;
 import com.app.spotick.domain.entity.place.Place;
 import com.app.spotick.domain.entity.place.PlaceBookmark;
 import com.app.spotick.domain.entity.user.User;
@@ -11,11 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Optional;
-
-import static com.app.spotick.domain.entity.user.QUser.user;
 
 @Service
 @Transactional
@@ -51,9 +46,9 @@ public class PlaceBookmarkServiceImpl implements PlaceBookmarkService {
     public boolean bookmarkCheck(Long placeId, Long userId) {
         // 프록시 객체를 활용하여 쿼리 수 단축
         Place tmpPlace = placeRepository.getReferenceById(placeId);
-        User tmpuser = userRepository.getReferenceById(userId);
+        User tmpUser = userRepository.getReferenceById(userId);
 
-        Optional<PlaceBookmark> bookmark = placeBookmarkRepository.findByPlaceAndUser(tmpPlace, tmpuser);
+        Optional<PlaceBookmark> bookmark = placeBookmarkRepository.findByPlaceAndUser(tmpPlace, tmpUser);
 
         return bookmark.isPresent();
     }

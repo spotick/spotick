@@ -868,3 +868,52 @@ img {
     width: 100%;
     height: 100%;
 }
+
+.pagination-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 50px;
+    height: 30px;
+    font-size: 20px;
+    color: #818181;
+}
+
+.pagination-previous, .pagination-next {
+    display: flex;
+}
+
+.pagination-btns {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    text-align: center;
+    margin: 0 5px;
+}
+
+.pagination-btns:hover {
+    color: #000;
+}
+
+.pagination-btns.first {
+    margin-right: 20px;
+}
+
+.pagination-btns.end {
+    margin-left: 20px;
+}
+
+.pagination-body {
+    display: flex;
+    margin: 0 10px;
+}
+
+.pagination-btns > .active {
+    color: #007aff;
+    width: 30px;
+    height: 30px;
+    border-radius: 8px;
+    border: 1px solid #007aff;
+}

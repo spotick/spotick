@@ -16,11 +16,8 @@ import lombok.RequiredArgsConstructor;
 import net.nurigo.sdk.NurigoApp;
 import net.nurigo.sdk.message.model.Message;
 import net.nurigo.sdk.message.service.DefaultMessageService;
-import org.springframework.context.annotation.Bean;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -29,7 +26,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Duration;
-import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Random;
 
@@ -78,8 +74,6 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     public void updateNickName(Long userId, String newNickName) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
         User foundUser = userRepository.findById(userId).orElseThrow(
                 NoSuchElementException::new
         );
@@ -137,8 +131,15 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<PlaceListDto> findBookmarkedPlacesByUserId(Long userId, int pageRequest) {
-        return placeBookmarkRepository.findBookmarkedPlacesByUserId(userId, PageRequest.of(pageRequest, 6));
+    public Page<PlaceListDto> findBookmarkedPlacesByUserId(Long userId, Pageable pageable) {
+        return placeBookmarkRepository.findBookmarkedPlacesByUserId(userId, pageable);
+    }
+
+    @Override
+    public int getTotalBookmarkedPlaces(Long userId) {
+        User tmpUser = userRepository.getReferenceById(userId);
+
+        return placeBookmarkRepository.getCountOfBookmarkedPlaceByUserId(tmpUser);
     }
 
 

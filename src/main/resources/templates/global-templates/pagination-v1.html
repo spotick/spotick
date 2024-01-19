@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+          name="viewport">
+    <title></title>
+</head>
+<body>
+<div class="pagination-container" th:if="${placeDtoList.totalPages > 1}" th:fragment="pagination-v1">
+    <span class="pagination-previous" th:if="${placeDtoList.hasPrevious()}">
+        <a class="pagination-btns first" th:href="@{/mypage/bookmarks(page=1)}" title="맨 처음">
+            <i class="fa-solid fa-chevron-left"></i>
+            <i class="fa-solid fa-chevron-left"></i>
+        </a>
+        <a class="pagination-btns" th:href="@{/mypage/bookmarks(page=${placeDtoList.number})}" title="이전">
+            <i class="fa-solid fa-chevron-left"></i>
+        </a>
+    </span>
+
+    <span class="pagination-body">
+        <span class="pagination-btns"
+              th:each="pageNumber : ${#numbers.sequence(placeDtoList.number - 2, placeDtoList.number + 2)}"
+              th:if="${pageNumber >= 0 and pageNumber < placeDtoList.totalPages}">
+            <a th:href="@{/mypage/bookmarks(page=${pageNumber + 1})}"
+               th:text="${pageNumber + 1}"
+               th:title="${pageNumber + 1}" th:unless="${pageNumber + 1 == placeDtoList.number + 1}">
+            </a>
+            <span class="active" th:if="${pageNumber + 1 == placeDtoList.number + 1}">
+                <span th:text="${pageNumber + 1}" th:title="${pageNumber + 1}"></span>
+            </span>
+        </span>
+    </span>
+
+    <span class="pagination-next" th:if="${placeDtoList.hasNext()}">
+        <a class="pagination-btns" th:href="@{/mypage/bookmarks(page=${placeDtoList.number + 2})}" title="다음">
+            <i class="fa-solid fa-chevron-right"></i>
+        </a>
+        <a class="pagination-btns end" th:href="@{/mypage/bookmarks(page=${placeDtoList.totalPages})}"
+           title="맨 끝">
+            <i class="fa-solid fa-chevron-right"></i>
+            <i class="fa-solid fa-chevron-right"></i>
+        </a>
+    </span>
+</div>
+</body>
+</html>
