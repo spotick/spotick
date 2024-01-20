@@ -19,7 +19,7 @@ public class PlaceListDto {
     private Long bookmarkCount;
     private boolean isBookmarkChecked;
 
-    public PlaceListDto(Long id, String title, Integer price, PostAddress placeAddress, Double evalAvg, Long evalCount, Long bookmarkCount,boolean isBookmarkChecked) {
+    public PlaceListDto(Long id, String title, Integer price, PostAddress placeAddress, Double evalAvg, Long evalCount, Long bookmarkCount, boolean isBookmarkChecked) {
         this.id = id;
         this.title = title;
         this.price = price;
