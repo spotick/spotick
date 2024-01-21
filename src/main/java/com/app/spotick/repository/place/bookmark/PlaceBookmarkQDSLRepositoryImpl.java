@@ -16,6 +16,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.support.PageableExecutionUtils;
 
 import java.util.List;
+import java.util.Optional;
 
 import static com.app.spotick.domain.entity.place.QPlace.*;
 import static com.app.spotick.domain.entity.place.QPlaceBookmark.*;
@@ -130,6 +131,11 @@ public class PlaceBookmarkQDSLRepositoryImpl implements PlaceBookmarkQDSLReposit
                                 Expressions.constant(true)
                         ))
                 );
+
+        placeListDtos.forEach(dto -> {
+            dto.getPlaceAddress().cutAddress();
+            dto.updateEvalAvg(Optional.ofNullable(dto.getEvalAvg()).orElse(0.0));
+        });
 
         return PageableExecutionUtils.getPage(placeListDtos, pageable, totalCountQuery::fetchOne);
     }

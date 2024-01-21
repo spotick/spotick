@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
+import java.util.Optional;
 
 import static com.app.spotick.domain.entity.place.QPlace.place;
 import static com.app.spotick.domain.entity.place.QPlaceBookmark.placeBookmark;
@@ -76,6 +77,11 @@ public class PlaceQDSLRepositoryImpl implements PlaceQDSLRepository {
                                 isBookmarkChecked
                         ))
                 );
+
+        placeListDtos.forEach(dto -> {
+            dto.getPlaceAddress().cutAddress();
+            dto.updateEvalAvg(Optional.ofNullable(dto.getEvalAvg()).orElse(0.0));
+        });
 
 //        List<PlaceListDto> placeListDtos = queryFactory.select(
 //                        Projections.constructor(PlaceListDto.class,
