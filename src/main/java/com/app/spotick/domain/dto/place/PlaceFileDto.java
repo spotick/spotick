@@ -16,6 +16,6 @@ public class PlaceFileDto {
         this.fileName = fileName;
         this.uuid = uuid;
         this.uploadPath = uploadPath;
-        this.placeId =placeId;
+        this.placeId = placeId;
     }
 }

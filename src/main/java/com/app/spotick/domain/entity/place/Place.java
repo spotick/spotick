@@ -13,8 +13,7 @@ import java.util.List;
 @Entity
 @Table(name = "TBL_PLACE")
 @SequenceGenerator(name = "SEQ_PLACE_GENERATOR", sequenceName = "SEQ_PLACE", allocationSize = 1)
-@Getter
-@ToString(callSuper = true)
+@Getter @ToString(callSuper = true)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Place extends PostBase {
     @Id
@@ -43,13 +42,10 @@ public class Place extends PostBase {
 
     //    todo 1:N 양방향 관계 편의메소드 설정하기
     @OneToMany(mappedBy = "place", fetch = FetchType.LAZY)
-    private List<PlaceReview> placeReview = new ArrayList<>();
+    private List<PlaceReview> placeReviewList = new ArrayList<>();
 
     @Builder
-    public Place(String title, int viewCount, Double lat, Double lng, Long id, String subTitle, String info,
-                 String rule, Integer defaultPeople, PostAddress placeAddress, Integer price,
-                 Integer surcharge, String bankName, String accountNumber, String accountHolder,
-                 PostStatus placeStatus, User user, List<PlaceReview> placeReview) {
+    public Place(String title, int viewCount, Double lat, Double lng, Long id, String subTitle, String info, String rule, Integer defaultPeople, PostAddress placeAddress, Integer price, Integer surcharge, String bankName, String accountNumber, String accountHolder, PostStatus placeStatus, User user, List<PlaceReview> placeReviewList) {
         super(title, viewCount, lat, lng);
         this.id = id;
         this.subTitle = subTitle;
@@ -64,7 +60,7 @@ public class Place extends PostBase {
         this.accountHolder = accountHolder;
         this.placeStatus = placeStatus;
         this.user = user;
-        this.placeReview = placeReview;
+        this.placeReviewList = placeReviewList;
     }
 
 
