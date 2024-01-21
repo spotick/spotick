@@ -40,6 +40,9 @@ public class Place extends PostBase {
     @JoinColumn(name = "USER_ID")
     private User user;
 
+    @OneToMany(mappedBy = "place", fetch = FetchType.LAZY)
+    private List<PlaceFile> placeFileList = new ArrayList<>();
+
     //    todo 1:N 양방향 관계 편의메소드 설정하기
     @OneToMany(mappedBy = "place", fetch = FetchType.LAZY)
     private List<PlaceReview> placeReviewList = new ArrayList<>();
