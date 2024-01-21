@@ -19,11 +19,13 @@ public class PlaceListDto {
     private Long bookmarkCount;
     private boolean isBookmarkChecked;
 
-    public PlaceListDto(Long id, String title, Integer price, PostAddress placeAddress, Double evalAvg, Long evalCount, Long bookmarkCount, boolean isBookmarkChecked) {
+
+    public PlaceListDto(Long id, String title, Integer price, PostAddress placeAddress, List<PlaceFileDto> placeFiles, Double evalAvg, Long evalCount, Long bookmarkCount, boolean isBookmarkChecked) {
         this.id = id;
         this.title = title;
         this.price = price;
         this.placeAddress = placeAddress;
+        this.placeFiles = placeFiles;
         this.evalAvg = evalAvg;
         this.evalCount = evalCount;
         this.bookmarkCount = bookmarkCount;
