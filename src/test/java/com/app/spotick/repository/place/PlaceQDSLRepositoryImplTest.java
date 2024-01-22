@@ -226,13 +226,13 @@ class PlaceQDSLRepositoryImplTest {
                 .fetch();
 
 //        사진정보를 장소 id별로 묶는다
-        Map<Long, List<PlaceFileDto>> fileListMap = fileDtoList.stream().collect(Collectors.groupingBy(PlaceFileDto::getPlaceId));
-
-//        장소 id별로 구분된 사진들을 각각 게시글 번호에 맞게 추가한다
-        placeListDtos.forEach(place -> {
-            place.updatePlaceFiles(fileListMap.get(place.getId())
-                    .stream().limit(5L).toList());
-        });
+//        Map<Long, List<PlaceFileDto>> fileListMap = fileDtoList.stream().collect(Collectors.groupingBy(PlaceFileDto::getPlaceId));
+//
+////        장소 id별로 구분된 사진들을 각각 게시글 번호에 맞게 추가한다
+//        placeListDtos.forEach(place -> {
+//            place.updatePlaceFiles(fileListMap.get(place.getId())
+//                    .stream().limit(5L).toList());
+//        });
 
     }
 
