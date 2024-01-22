@@ -46,6 +46,7 @@ public class PromotionController {
         if (result.hasErrors()){
             return "promotion/register";
         }
+        log.info(promotionRegisterDto.toString());
 
         try {
             promotionService.registerPromotion(promotionRegisterDto, promotionRegisterDto.getUserId());
