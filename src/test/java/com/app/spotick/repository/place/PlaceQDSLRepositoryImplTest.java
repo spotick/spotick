@@ -14,19 +14,23 @@ import com.app.spotick.repository.place.file.PlaceFileRepository;
 import com.app.spotick.repository.user.UserAuthorityRepository;
 import com.app.spotick.repository.user.UserRepository;
 import com.querydsl.core.Tuple;
+import com.querydsl.core.group.GroupBy;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.test.annotation.Commit;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -37,8 +41,10 @@ import static com.app.spotick.domain.entity.place.QPlace.place;
 import static com.app.spotick.domain.entity.place.QPlaceBookmark.placeBookmark;
 import static com.app.spotick.domain.entity.place.QPlaceFile.placeFile;
 import static com.app.spotick.domain.entity.place.QPlaceReview.placeReview;
+import static com.querydsl.core.group.GroupBy.list;
 
 
+@Slf4j
 @SpringBootTest
 @Transactional
 @Commit
@@ -135,13 +141,6 @@ class PlaceQDSLRepositoryImplTest {
                 .from(placeBookmark)
                 .where(placeBookmark.place.eq(place));
 
-        JPAExpressions.select(placeFile.id)
-                .from(placeFile)
-                .where(placeFile.place.eq(place))
-                .orderBy(placeFile.id.asc())
-                .limit(5);
-
-
         List<Tuple> tupleList = queryFactory.select(
                         place.id, place.title, place.price, place.placeAddress, placeFile
                 )
@@ -227,8 +226,8 @@ class PlaceQDSLRepositoryImplTest {
 
 //        사진정보를 장소 id별로 묶는다
 //        Map<Long, List<PlaceFileDto>> fileListMap = fileDtoList.stream().collect(Collectors.groupingBy(PlaceFileDto::getPlaceId));
-//
-////        장소 id별로 구분된 사진들을 각각 게시글 번호에 맞게 추가한다
+
+//        장소 id별로 구분된 사진들을 각각 게시글 번호에 맞게 추가한다
 //        placeListDtos.forEach(place -> {
 //            place.updatePlaceFiles(fileListMap.get(place.getId())
 //                    .stream().limit(5L).toList());
@@ -242,34 +241,217 @@ class PlaceQDSLRepositoryImplTest {
         //given
         PageRequest pageRequest = PageRequest.of(0, 12);
 
-        long startTime2 = System.nanoTime();
+        long startTime1 = System.nanoTime();
         // 테스트 코드 실행
-//        placeRepository.findPlaceListPaging2(pageRequest,1L);
+        List<PlaceListDto> listLegacyCase = findListLegacyCase(pageRequest, 1L);
 
-        long endTime2 = System.nanoTime();
-        long duration2 = (endTime2 - startTime2);  // 실행 시간 (나노초 단위)
+        long endTime1 = System.nanoTime();
+        long duration1 = (endTime1 - startTime1);  // 실행 시간 (나노초 단위)
 
         em.flush();
         em.clear();
 
 //        ----------------------------------------------------------------------
-        long startTime1 = System.nanoTime();
+        long startTime2 = System.nanoTime();
         // 테스트 코드 실행
-        placeRepository.findPlaceListPaging(pageRequest, 1L);
+        List<PlaceListDto> listTransFormCase = findListTransFormCase(pageRequest, 1L);
 
-        long endTime1 = System.nanoTime();
-        long duration1 = (endTime1 - startTime1);  // 실행 시간 (나노초 단위)
+        long endTime2 = System.nanoTime();
+        long duration2 = (endTime2 - startTime2);  // 실행 시간 (나노초 단위)
 
         double durationInSeconds1 = (double) duration1 / 1_000_000_000.0; // 초 단위로 변환
         double durationInSeconds2 = (double) duration2 / 1_000_000_000.0; // 초 단위로 변환
 
-//        log.info("duration1 : {}", duration1);
-//        log.info("durationInSeconds1 : {}", durationInSeconds1);
-//        System.out.println("===============================================");
-//        log.info("duration2 : {}", duration2);
-//        log.info("durationInSeconds2 : {}", durationInSeconds2);
+        log.info("duration1 : {}", duration1);
+        log.info("durationInSeconds1 : {}", durationInSeconds1);
+        System.out.println("=======================================================================================");
+        log.info("duration2 : {}", duration2);
+        log.info("durationInSeconds2 : {}", durationInSeconds2);
+
+        listTransFormCase.forEach(dto -> log.info("{}", dto));
+        listLegacyCase.forEach(dto -> log.info("{}", dto));
 
     }
+
+
+    public List<PlaceListDto> findListTransFormCase(Pageable pageable, Long userId) {
+        JPQLQuery<Double> reviewAvg = JPAExpressions.select(placeReview.score.avg())
+                .from(placeReview)
+                .where(placeReview.place.eq(place));
+
+        JPQLQuery<Long> reviewCount = JPAExpressions.select(placeReview.count())
+                .from(placeReview)
+                .where(placeReview.place.eq(place));
+
+        JPQLQuery<Long> bookmarkCount = JPAExpressions.select(placeBookmark.count())
+                .from(placeBookmark)
+                .where(placeBookmark.place.eq(place));
+
+        //        로그인 되어있지 않으면 쿼리 실행 x
+        BooleanExpression isBookmarkChecked = userId == null ?
+                Expressions.asBoolean(false)
+                : JPAExpressions.select(placeBookmark.id.isNotNull())
+                .from(placeBookmark)
+                .where(placeBookmark.place.eq(place).and(placeBookmark.user.id.eq(userId)))
+                .exists();
+
+        List<PlaceListDto> placeListDtos = queryFactory.select(place)
+                .from(place)
+                .innerJoin(placeFile)
+                .on(place.id.eq(placeFile.place.id))
+                .where(place.placeStatus.eq(PostStatus.APPROVED))
+                .orderBy(place.id.desc())
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .transform(GroupBy.groupBy(place.id)
+                        .list(Projections.constructor(PlaceListDto.class,
+                                place.id,
+                                place.title,
+                                place.price,
+                                place.placeAddress,
+                                list(
+                                        Projections.constructor(PlaceFileDto.class,
+                                                placeFile.id,
+                                                placeFile.fileName,
+                                                placeFile.uuid,
+                                                placeFile.uploadPath
+                                        )
+                                ),
+                                reviewAvg,
+                                reviewCount,
+                                bookmarkCount,
+                                isBookmarkChecked
+                        ))
+                );
+
+        placeListDtos.forEach(dto -> {
+            dto.getPlaceAddress().cutAddress();
+            dto.updateEvalAvg(Optional.ofNullable(dto.getEvalAvg()).orElse(0.0));
+        });
+        return placeListDtos;
+    }
+
+    public List<PlaceListDto> findListLegacyCase(Pageable pageable, Long userId) {
+        JPQLQuery<Double> reviewAvg = JPAExpressions.select(placeReview.score.avg())
+                .from(placeReview)
+                .where(placeReview.place.eq(place));
+
+        JPQLQuery<Long> reviewCount = JPAExpressions.select(placeReview.count())
+                .from(placeReview)
+                .where(placeReview.place.eq(place));
+
+        JPQLQuery<Long> bookmarkCount = JPAExpressions.select(placeBookmark.count())
+                .from(placeBookmark)
+                .where(placeBookmark.place.eq(place));
+
+        //        로그인 되어있지 않으면 쿼리 실행 x
+        BooleanExpression isBookmarkChecked = userId == null ?
+                Expressions.asBoolean(false)
+                : JPAExpressions.select(placeBookmark.id.isNotNull())
+                .from(placeBookmark)
+                .where(placeBookmark.place.eq(place).and(placeBookmark.user.id.eq(userId)))
+                .exists();
+
+        List<PlaceListDto> placeListDtos = queryFactory.select(
+                        Projections.constructor(PlaceListDto.class,
+                                place.id,
+                                place.title,
+                                place.price,
+                                place.placeAddress,
+                                reviewAvg,
+                                reviewCount,
+                                bookmarkCount,
+                                isBookmarkChecked
+                        )
+                )
+                .from(place)
+                .where(place.placeStatus.eq(PostStatus.APPROVED))
+                .orderBy(place.id.desc())
+                .offset(pageable.getOffset())   //페이지 번호
+                .limit(pageable.getPageSize())  //페이지 사이즈
+                .fetch();
+
+//        포스트의 id만 list로 가져온다
+        List<Long> placeIdList = placeListDtos.stream().map(PlaceListDto::getId).toList();
+
+//        가져온 id리스트를 in절의 조건으로 사진정보들을 가져온다.
+        List<PlaceFileDto> fileDtoList = queryFactory.select(
+                        Projections.constructor(PlaceFileDto.class,
+                                placeFile.id,
+                                placeFile.fileName,
+                                placeFile.uuid,
+                                placeFile.uploadPath,
+                                placeFile.place.id
+                        ))
+                .from(placeFile)
+                .where(placeFile.place.id.in(placeIdList))
+                .orderBy(placeFile.id.asc(), placeFile.place.id.desc())
+                .fetch();
+
+//        사진정보를 장소 id별로 묶는다
+//        Map<Long, List<PlaceFileDto>> fileListMap = fileDtoList.stream().collect(Collectors.groupingBy(PlaceFileDto::getPlaceId));
+//
+////        장소 id별로 구분된 사진들을 각각 게시글 번호에 맞게 추가한다
+        placeListDtos.forEach(placeListDto -> {
+//            placeListDto.updatePlaceFiles(fileListMap.get(placeListDto.getId())
+//                    .stream().limit(5L).toList());
+            // 평가결과가 null일 시 0.0으로 교체
+            placeListDto.updateEvalAvg(Optional.ofNullable(placeListDto.getEvalAvg()).orElse(0.0));
+            // 화면에서 뿌릴 주소값 가공
+            placeListDto.getPlaceAddress().cutAddress();
+        });
+
+        return placeListDtos;
+    }
+
+    @Test
+    @DisplayName("실행속도 비교 테스트")
+    void comparisonTest2() {
+        PageRequest pageRequest = PageRequest.of(700, 12);
+        int iterations = 100; // 반복 횟수
+
+        // JVM 워밍업
+        for (int i = 0; i < iterations; i++) {
+            findListLegacyCase(pageRequest, 1L);
+            findListTransFormCase(pageRequest, 1L);
+        }
+
+        em.flush();
+        em.clear();
+
+        // 성능 테스트
+        long totalDuration1 = 0;
+        long totalDuration2 = 0;
+
+        for (int i = 0; i < iterations; i++) {
+            long startTime1 = System.nanoTime();
+            findListTransFormCase(pageRequest, 1L);
+            long endTime1 = System.nanoTime();
+            totalDuration1 += (endTime1 - startTime1);
+
+            em.flush();
+            em.clear();
+
+            long startTime2 = System.nanoTime();
+            findListLegacyCase(pageRequest, 1L);
+            long endTime2 = System.nanoTime();
+            totalDuration2 += (endTime2 - startTime2);
+
+            em.flush();
+            em.clear();
+        }
+
+        double avgDurationInSeconds1 = (double) totalDuration1 / iterations / 1_000_000_000.0;
+        double avgDurationInSeconds2 = (double) totalDuration2 / iterations / 1_000_000_000.0;
+
+        log.info("transform Case : {}", avgDurationInSeconds1);
+        log.info("Legacy Case : {}", avgDurationInSeconds2);
+    }
+
+
+
+
+
 
 
 }

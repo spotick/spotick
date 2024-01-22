@@ -39,4 +39,9 @@ public class PlaceListDto {
     public void updateEvalAvg(Double evalAvg) {
         this.evalAvg = evalAvg;
     }
+
+    public void cutPlaceFilesForListPage(){
+        placeFiles = placeFiles.stream().limit(5).toList();
+    }
+
 }
