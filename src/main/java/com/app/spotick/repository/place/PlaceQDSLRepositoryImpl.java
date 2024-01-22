@@ -5,6 +5,7 @@ import com.app.spotick.domain.dto.place.PlaceFileDto;
 import com.app.spotick.domain.dto.place.PlaceListDto;
 import com.app.spotick.domain.entity.place.QPlace;
 import com.app.spotick.domain.type.post.PostStatus;
+import com.querydsl.core.group.GroupBy;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Expressions;
@@ -24,6 +25,7 @@ import static com.app.spotick.domain.entity.place.QPlaceBookmark.placeBookmark;
 import static com.app.spotick.domain.entity.place.QPlaceFile.placeFile;
 import static com.app.spotick.domain.entity.place.QPlaceInquiry.placeInquiry;
 import static com.app.spotick.domain.entity.place.QPlaceReview.placeReview;
+import static com.querydsl.core.group.GroupBy.list;
 
 @RequiredArgsConstructor
 public class PlaceQDSLRepositoryImpl implements PlaceQDSLRepository {
@@ -31,55 +33,48 @@ public class PlaceQDSLRepositoryImpl implements PlaceQDSLRepository {
 
     @Override
     public List<PlaceListDto> findPlaceListPaging(Pageable pageable, Long userId) {
-        List<PlaceListDto> placeListDtos = queryFactory.select(
-                        Projections.constructor(PlaceListDto.class,
+
+        JPQLQuery<Double> reviewAvg = createReviewAvgSub(place);
+
+        JPQLQuery<Long> reviewCount = createReviewCountSub(place);
+
+        JPQLQuery<Long> bookmarkCount = createBookmarkCountSub(place);
+
+        //        로그인 되어있지 않으면 쿼리 실행 x
+        BooleanExpression isBookmarkChecked = isBookmarkCheckedSub(place,userId);
+
+        List<PlaceListDto> placeListDtos = queryFactory.select(place)
+                .from(place)
+                .innerJoin(placeFile)
+                .on(place.id.eq(placeFile.place.id))
+                .where(place.placeStatus.eq(PostStatus.APPROVED))
+                .orderBy(place.id.desc())
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .transform(GroupBy.groupBy(place.id)
+                        .list(Projections.constructor(PlaceListDto.class,
                                 place.id,
                                 place.title,
                                 place.price,
                                 place.placeAddress,
-                                createReviewAvgSub(place),
-                                createReviewCountSub(place),
-                                createBookmarkCountSub(place),
-                                isBookmarkCheckedSub(place, userId)
-                        )
-                )
-                .from(place)
-                .where(place.placeStatus.eq(PostStatus.APPROVED))
-                .orderBy(place.id.desc())
-                .offset(pageable.getOffset())   //페이지 번호
-                .limit(pageable.getPageSize())  //페이지 사이즈
-                .fetch();
-
-//        포스트의 id만 list로 가져온다
-        List<Long> placeIdList = placeListDtos.stream().map(PlaceListDto::getId).toList();
-
-//        가져온 id리스트를 in절의 조건으로 사진정보들을 가져온다.
-        List<PlaceFileDto> fileDtoList = queryFactory.select(
-                        Projections.constructor(PlaceFileDto.class,
-                                placeFile.id,
-                                placeFile.fileName,
-                                placeFile.uuid,
-                                placeFile.uploadPath,
-                                placeFile.place.id
+                                list(
+                                        Projections.constructor(PlaceFileDto.class,
+                                                placeFile.id,
+                                                placeFile.fileName,
+                                                placeFile.uuid,
+                                                placeFile.uploadPath
+                                        )
+                                ),
+                                reviewAvg,
+                                reviewCount,
+                                bookmarkCount,
+                                isBookmarkChecked
                         ))
-                .from(placeFile)
-                .where(placeFile.place.id.in(placeIdList))
-                .orderBy(placeFile.id.asc(), placeFile.place.id.desc())
-                .fetch();
+                );
 
-//        사진정보를 장소 id별로 묶는다
-        Map<Long, List<PlaceFileDto>> fileListMap = fileDtoList.stream().collect(Collectors.groupingBy(PlaceFileDto::getPlaceId));
-
-        placeListDtos.forEach(placeListDto -> {
-//        장소 id별로 구분된 사진들을 각각 게시글 번호에 맞게 추가한다
-            placeListDto.updatePlaceFiles(fileListMap.get(placeListDto.getId())
-                    .stream().limit(5L).toList());
-
-            // 평가결과가 null일 시 0.0으로 교체
-            placeListDto.updateEvalAvg(Optional.ofNullable(placeListDto.getEvalAvg()).orElse(0.0));
-
-            // 화면에서 뿌릴 주소값 가공
-            placeListDto.getPlaceAddress().cutAddress();
+        placeListDtos.forEach(dto -> {
+            dto.getPlaceAddress().cutAddress();
+            dto.cutPlaceFilesForListPage();
         });
         return placeListDtos;
     }

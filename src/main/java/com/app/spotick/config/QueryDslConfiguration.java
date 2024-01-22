@@ -13,6 +13,6 @@ public class QueryDslConfiguration {
 
     @Bean
     public JPAQueryFactory jpaQueryFactory() {
-        return new JPAQueryFactory(em);
+        return new JPAQueryFactory(new CustomHibernate5Templates(), em);
     }
 }
