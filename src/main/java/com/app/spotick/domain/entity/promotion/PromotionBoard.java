@@ -15,6 +15,7 @@ public class PromotionBoard extends PostBase {
     @Id @GeneratedValue(generator = "SEQ_PROMOTION_BOARD_GENERATOR")
     @Column(name = "PROMOTION_ID")
     private Long id;
+    private String subTitle;
     @Column(length = 2000)
     private String content;
     private LocalDate startDate;
@@ -26,13 +27,20 @@ public class PromotionBoard extends PostBase {
     private User user;
 
     @Builder
-    public PromotionBoard(String title, int viewCount, Double lat, Double lng, Long id, String content, LocalDate startDate, LocalDate endDate, PostAddress promotionAddress, User user) {
+    public PromotionBoard(String title, int viewCount, Double lat, Double lng, Long id, String subTitle, String content, LocalDate startDate, LocalDate endDate, PostAddress promotionAddress, User user) {
         super(title, viewCount, lat, lng);
         this.id = id;
+        this.subTitle = subTitle;
         this.content = content;
         this.startDate = startDate;
         this.endDate = endDate;
         this.promotionAddress = promotionAddress;
         this.user = user;
     }
+
+    public void setWriter(User user){
+        this.user = user;
+    }
+
+
 }

@@ -1,6 +1,7 @@
 package com.app.spotick.domain.entity.promotion;
 
 import com.app.spotick.domain.base.image.ImageBase;
+import com.app.spotick.domain.entity.place.Place;
 import com.app.spotick.domain.entity.user.User;
 import jakarta.persistence.*;
 import lombok.*;
@@ -24,6 +25,10 @@ public class PromotionFile extends ImageBase {
         super(fileName, uuid, uploadPath);
         this.id = id;
         this.user = user;
+        this.promotionBoard = promotionBoard;
+    }
+
+    public void setPromotionBoard(PromotionBoard promotionBoard){
         this.promotionBoard = promotionBoard;
     }
 }
