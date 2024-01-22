@@ -15,7 +15,7 @@ public class PlaceReservationListDto {
     private Integer price;
     private PostAddress placeAddress;
     private PlaceFileDto placeFileDto;
-    private Double evalAvg;
+    private double evalAvg;
     private Long evalCount;
     private Long bookmarkCount;
     private Integer visitors;
@@ -24,7 +24,7 @@ public class PlaceReservationListDto {
     private String content;
     private PlaceReservationStatus reservationStatus;
 
-    public PlaceReservationListDto(Long id, String title, Integer price, PostAddress placeAddress, PlaceFileDto placeFileDto, Double evalAvg, Long evalCount, Long bookmarkCount, Integer visitors, LocalDateTime checkIn, LocalDateTime checkOut, String content, PlaceReservationStatus reservationStatus) {
+    public PlaceReservationListDto(Long id, String title, Integer price, PostAddress placeAddress, PlaceFileDto placeFileDto, double evalAvg, Long evalCount, Long bookmarkCount, Integer visitors, LocalDateTime checkIn, LocalDateTime checkOut, String content, PlaceReservationStatus reservationStatus) {
         this.id = id;
         this.title = title;
         this.price = price;

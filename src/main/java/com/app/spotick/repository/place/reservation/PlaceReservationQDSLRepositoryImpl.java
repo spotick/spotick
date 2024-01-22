@@ -92,7 +92,6 @@ public class PlaceReservationQDSLRepositoryImpl implements PlaceReservationQDSLR
 
         placeReservationListDtos.forEach(dto -> {
             dto.getPlaceAddress().cutAddress();
-            dto.updateEvalAvg(Optional.ofNullable(dto.getEvalAvg()).orElse(0.0));
         });
 
 //        return placeReservationListDtos;

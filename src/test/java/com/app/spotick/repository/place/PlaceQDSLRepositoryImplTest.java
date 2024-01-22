@@ -326,7 +326,6 @@ class PlaceQDSLRepositoryImplTest {
 
         placeListDtos.forEach(dto -> {
             dto.getPlaceAddress().cutAddress();
-            dto.updateEvalAvg(Optional.ofNullable(dto.getEvalAvg()).orElse(0.0));
         });
         return placeListDtos;
     }
@@ -395,8 +394,6 @@ class PlaceQDSLRepositoryImplTest {
         placeListDtos.forEach(placeListDto -> {
 //            placeListDto.updatePlaceFiles(fileListMap.get(placeListDto.getId())
 //                    .stream().limit(5L).toList());
-            // 평가결과가 null일 시 0.0으로 교체
-            placeListDto.updateEvalAvg(Optional.ofNullable(placeListDto.getEvalAvg()).orElse(0.0));
             // 화면에서 뿌릴 주소값 가공
             placeListDto.getPlaceAddress().cutAddress();
         });
