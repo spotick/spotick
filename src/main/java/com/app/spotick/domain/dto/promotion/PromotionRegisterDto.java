@@ -34,14 +34,14 @@ public class PromotionRegisterDto {
 
     @NotBlank(message = "주소 및 상세주소는 필수 입력사항입니다")
     private String placeAddressDetail;
-    @NotNull(message = "카테고리를 선택해주세요")
-    private PromotionCategory promotionCategory;
+//    @NotNull(message = "카테고리를 선택해주세요")
+//    private PromotionCategory promotionCategory;
     @NotNull(message = "지도에 장소의 위치를 찍어주세요")
     private Double placeLat;
     @NotNull(message = "지도에 장소의 위치를 찍어주세요")
     private Double placeLng;
     @Size(min=1, max = 1,message = "대표 사진을 선택해주세요")
-    private MultipartFile promotionMainFile;
+    private MultipartFile placeFile;
 
     private List<MultipartFile> promotionFiles = new ArrayList<>();
 
@@ -54,7 +54,7 @@ public class PromotionRegisterDto {
                 .title(promotionTitle)
                 .subTitle(promotionSubTitle)
                 .promotionAddress(new PostAddress(placeAddress,placeAddressDetail))
-                .promotionCategory(promotionCategory)
+//                .promotionCategory(promotionCategory)
                 .lat(placeLat)
                 .lng(placeLng)
                 .build();

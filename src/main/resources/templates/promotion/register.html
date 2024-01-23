@@ -74,7 +74,7 @@
                 </div>
             </div>
             <div class="img-wrap">
-                <input type="file" id="placeFile" th:field="*{promotionMainFile}" accept="image/*" name="placeFile" required value>
+                <input type="file" th:field="*{placeFile}" accept="image/*" required value>
                 <label for="placeFile" class="file-label flex-align-center">
                     <i class="fa-regular fa-image"></i>
                     <p>대표 행사 사진 또는 장소 사진을 넣어주세요</p>
@@ -100,7 +100,7 @@
                 </div>
                 <div class="input-box category-box">
                     <label for="category"></label>
-                    <select class="select" th:field="*{promotionCategory}" name="category" id="category">
+                    <select class="select" name="category" id="category">
                         <option value="EDUCATION">강연/교육/세미나</option>
                         <option value="WORKSHOP">컨퍼런스/워크숍</option>
                         <option value="TEST_PBT">시험_P.B.T</option>
@@ -132,7 +132,7 @@
             </div>
             <div class="flex-center start">
                 <button type="button" class="cancel">취소</button>
-                <button type="button" class="submit-btn flex-align-center">신청하기</button>
+                <button type="button" class="submit-btn on flex-align-center">신청하기</button>
             </div>
         </form>
     </div>

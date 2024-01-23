@@ -3,6 +3,7 @@ package com.app.spotick.domain.entity.promotion;
 import com.app.spotick.domain.base.post.PostBase;
 import com.app.spotick.domain.embedded.post.PostAddress;
 import com.app.spotick.domain.entity.user.User;
+import com.app.spotick.domain.type.post.PostStatus;
 import com.app.spotick.domain.type.promotion.PromotionCategory;
 import jakarta.persistence.*;
 import lombok.*;
@@ -23,14 +24,14 @@ public class PromotionBoard extends PostBase {
     private LocalDate endDate;
     @Embedded
     private PostAddress promotionAddress;
-    @Enumerated(EnumType.STRING)
-    private PromotionCategory promotionCategory;
+//    @Enumerated(EnumType.STRING)
+//    private PromotionCategory promotionCategory;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "USER_ID")
     private User user;
 
     @Builder
-    public PromotionBoard(String title, int viewCount, Double lat, Double lng, Long id, String subTitle, String content, LocalDate startDate, LocalDate endDate, PostAddress promotionAddress,PromotionCategory promotionCategory ,User user) {
+    public PromotionBoard(String title, int viewCount, Double lat, Double lng, Long id, String subTitle, String content, LocalDate startDate, LocalDate endDate, PostAddress promotionAddress ,User user) {
         super(title, viewCount, lat, lng);
         this.id = id;
         this.subTitle = subTitle;
@@ -38,7 +39,6 @@ public class PromotionBoard extends PostBase {
         this.startDate = startDate;
         this.endDate = endDate;
         this.promotionAddress = promotionAddress;
-        this.promotionCategory = promotionCategory;
         this.user = user;
     }
 
