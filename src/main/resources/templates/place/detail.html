@@ -145,6 +145,8 @@
 
                 <div class="place-map-box">
                     <p class="title">위치</p>
+                    <input type="hidden" id="placeLat" th:value="${place.placeLat}">
+                    <input type="hidden" id="placeLng" th:value="${place.placeLng}">
                     <div id="map"></div>
                     <div class="place-address-box">
                         <img src="https://shareit.kr/_next/static/media/location_filled_sweetBlue046.de36d6ce.svg"
@@ -341,15 +343,15 @@
             <div class="reservation-wrap">
                 <p class="pay-guide-msg">결제하면 예약이 확정돼요.</p>
                 <!--                <p class="pay-guide-msg">현재 단계에서는 요금이 청구되지 않습니다.</p>-->
-                <p class="title">포인트, 원서 2호점</p> <!--장소 이름-->
+                <p class="title" th:text="${place.placeTitle}"></p> <!--장소 이름-->
                 <div class="flex-align">
-                    <p class="title">55,000원</p>
+                    <p class="title" th:text="${#numbers.formatInteger(place.placePrice,1,'COMMA')+'원'}">55,000원</p>
                     <!--                    장소기본 요금-->
-                    <input type="hidden" value="55000" id="placePrice">
+                    <input type="hidden" th:value="${place.placePrice}" id="placePrice">
                     <!--                    인원 초과시 인당 추가 요금-->
-                    <input type="hidden" value="5500" id="placeSurcharge">
+                    <input type="hidden" th:value="${place.placeSurcharge}" id="placeSurcharge">
                     <!--                    장소 기본 인원 -->
-                    <input type="hidden" value="4" id="placeDefaultPeople">
+                    <input type="hidden" th:value="${place.placeDefaultPeople}" id="placeDefaultPeople">
                     <p class="hour"> / 시간</p>
                 </div>
                 <div class="line"></div>
@@ -416,7 +418,9 @@
 
                 <p class="small-title">총인원</p>
                 <div class="people-wrap">
-                    <p class="people-guide">기본 인원인 <span>4</span>명을 넘으면 인당 5,500원이 추가돼요</p>
+                    <p class="people-guide"
+                    th:text="${'기본 인원인 '+place.placeDefaultPeople+'명을 넘으면 인당 '+
+                    #numbers.formatInteger(place.placeSurcharge,1,'COMMA')+'원이 추가돼요'}"></p>
                     <div class="people-box flex-align">
                         <p>총인원 수를 입력하세요</p>
                     </div>
@@ -444,7 +448,7 @@
                 </div>
                 <!--                장소 예약하기 폼-->
                 <form id="reservationForm" action="#" method="get">
-                    <input type="hidden" name="placeId" id="placeId" value="1">
+                    <input type="hidden" name="placeId" id="placeId" th:value="${place.placeId}">
                     <input type="hidden" name="reservationCheckIn" id="reservationCheckIn">
                     <input type="hidden" name="reservationCheckOut" id="reservationCheckOut">
                     <input type="hidden" name="reservationVisitors" id="reservationVisitors">
