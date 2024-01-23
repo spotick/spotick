@@ -14,13 +14,12 @@ public class PlaceListDto {
     private Integer price;
     private PostAddress placeAddress;
     private List<PlaceFileDto> placeFiles;
-    private double evalAvg;
+    private Double evalAvg;
     private Long evalCount;
     private Long bookmarkCount;
     private boolean isBookmarkChecked;
 
-
-    public PlaceListDto(Long id, String title, Integer price, PostAddress placeAddress, List<PlaceFileDto> placeFiles, double evalAvg, Long evalCount, Long bookmarkCount, boolean isBookmarkChecked) {
+    public PlaceListDto(Long id, String title, Integer price, PostAddress placeAddress, List<PlaceFileDto> placeFiles, Double evalAvg, Long evalCount, Long bookmarkCount, boolean isBookmarkChecked) {
         this.id = id;
         this.title = title;
         this.price = price;
@@ -34,10 +33,6 @@ public class PlaceListDto {
 
     public void updatePlaceFiles(List<PlaceFileDto> placeFiles) {
         this.placeFiles = placeFiles;
-    }
-
-    public void updateEvalAvg(Double evalAvg) {
-        this.evalAvg = evalAvg;
     }
 
     public void cutPlaceFilesForListPage(){

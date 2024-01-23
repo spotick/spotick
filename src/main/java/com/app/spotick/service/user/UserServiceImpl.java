@@ -1,6 +1,7 @@
 package com.app.spotick.service.user;
 
 import com.app.spotick.domain.dto.place.PlaceListDto;
+import com.app.spotick.domain.dto.place.PlaceReservationListDto;
 import com.app.spotick.domain.dto.user.UserDetailsDto;
 import com.app.spotick.domain.dto.user.UserJoinDto;
 import com.app.spotick.domain.dto.user.UserProfileDto;
@@ -9,6 +10,7 @@ import com.app.spotick.domain.entity.user.UserAuthority;
 import com.app.spotick.domain.entity.user.UserProfileFile;
 import com.app.spotick.domain.type.user.AuthorityType;
 import com.app.spotick.repository.place.bookmark.PlaceBookmarkRepository;
+import com.app.spotick.repository.place.reservation.PlaceReservationRepository;
 import com.app.spotick.repository.user.UserAuthorityRepository;
 import com.app.spotick.repository.user.UserRepository;
 import com.app.spotick.service.redis.RedisService;
@@ -39,6 +41,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     private final UserAuthorityRepository authorityRepository;
     private final UserProfileFileService profileFileService;
     private final PlaceBookmarkRepository placeBookmarkRepository;
+    private final PlaceReservationRepository placeReservationRepository;
     private final RedisService redisService;
 
     @Override
@@ -136,12 +139,10 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public int getTotalBookmarkedPlaces(Long userId) {
-        User tmpUser = userRepository.getReferenceById(userId);
-
-        return placeBookmarkRepository.getCountOfBookmarkedPlaceByUserId(tmpUser);
+    @Transactional(readOnly = true)
+    public Page<PlaceReservationListDto> findReservationsByUserId(Long userId, Pageable pageable) {
+        return placeReservationRepository.findReservationsByUserId(userId, pageable);
     }
-
 
     private String encodePassword(String password) {
         return passwordEncoder.encode(password);

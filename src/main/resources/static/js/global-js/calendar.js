@@ -82,11 +82,11 @@ const calendarService = (function () {
     }
 
     function setEventDates(startDate, endDate) {
-        currentCalenderPage = startDate;
-        eventStartDate = startDate;
-        eventStartDate.setHours(0,0,0,0);
-        eventEndDate = endDate;
-        eventEndDate.setHours(0,0,0,0);
+        currentCalenderPage = new Date(startDate);
+        eventStartDate = new Date(startDate);
+        eventStartDate.setHours(0, 0, 0, 0);
+        eventEndDate = new Date(endDate);
+        eventEndDate.setHours(0, 0, 0, 0);
     }
 
     // 날짜가 1일 ~ 9일 까지는 '01'과 같은 형식으로 출력되게 해줌. 아닐시 그냥 반환
