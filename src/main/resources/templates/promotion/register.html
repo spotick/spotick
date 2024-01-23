@@ -15,11 +15,10 @@
 <div class="header-back"></div>
 <div class="body">
     <div class="place-register-container">
-        <form action="" method="post" class="register-form" enctype="multipart/form-data">
+        <form th:action="@{/promotion/register}" method="post" class="register-form" th:object="${promotionRegisterDto}">
             <div class="guide-title-box">
                 <p>행사 등록 신청</p>
             </div>
-
             <div class="input-wrap">
                 <div class="input-guide flex">
                     <p class="input-title">행사 이름</p>
@@ -27,10 +26,9 @@
                     <p class="invalid-msg"></p>
                 </div>
                 <div class="input-box">
-                    <input id="placeName" type="text" name="placeName" placeholder="행사를 대표하는 이름을 입력해 주세요" required>
+                    <input th:field="*{promotionTitle}" type="text" name="promotionTitle" placeholder="행사를 대표하는 이름을 입력해 주세요" required>
                 </div>
             </div>
-
             <div class="input-wrap">
                 <div class="input-guide flex">
                     <p class="input-title">행사 소제목</p>
@@ -38,12 +36,10 @@
                     <p class="invalid-msg"></p>
                 </div>
                 <div class="input-box">
-                    <input id="placeSubTitle" type="text" name="placeSubTitle" placeholder="행사를 짧게 나타내는 소제목을 입력해주세요"
+                    <input th:field="*{promotionSubTitle}" type="text" name="promotionSubTitle" placeholder="행사를 짧게 나타내는 소제목을 입력해주세요"
                            required>
                 </div>
             </div>
-
-
             <div class="map-box">
                 <div class="input-guide flex">
                     <p class="input-title">위치 검색</p>
@@ -53,7 +49,6 @@
                     <div class="input-box search-box">
                         <input id="search" type="text" placeholder="장소를 검색해주세요" required>
                     </div>
-
                     <div class="flex-align-center">
                         <button type="button" class="search-btn">
                             <i class="fa-solid fa-magnifying-glass" style="color: #343434;"></i>
@@ -61,8 +56,8 @@
                     </div>
                 </div>
                 <div id="map"></div>
-                <input id="placeLat" type="hidden" name="placeLat">
-                <input id="placeLng" type="hidden" name="placeLng">
+                <input id="placeLat" th:field="*{placeLat}" type="hidden" name="placeLat">
+                <input id="placeLng" th:field="*{placeLng}" type="hidden" name="placeLng">
             </div>
 
             <div class="input-wrap">
@@ -72,23 +67,20 @@
                     <p class="invalid-msg"></p>
                 </div>
                 <div class="input-box">
-                    <input id="placeAddress" type="text" name="placeAddress" placeholder="행사 장소 주소를 입력해 주세요" required>
+                    <input th:field="*{placeAddress}" type="text" placeholder="행사 장소 주소를 입력해 주세요" required>
                 </div>
                 <div class="input-box">
-                    <input id="placeAddressDetail" type="text" name="placeAddressDetail"
-                           placeholder="장소의 상세 주소를 입력해 주세요" required>
+                    <input  th:field="*{placeAddressDetail}" type="text" placeholder="장소의 상세 주소를 입력해 주세요" required>
                 </div>
             </div>
             <div class="img-wrap">
-                <input type="file" id="placeFile" accept="image/*" name="placeFile" required value>
+                <input type="file" th:field="*{placeFile}" accept="image/*" required value>
                 <label for="placeFile" class="file-label flex-align-center">
                     <i class="fa-regular fa-image"></i>
                     <p>대표 행사 사진 또는 장소 사진을 넣어주세요</p>
                 </label>
                 <div class="file-container none">
-                    <ul class="file-wrap">
-                    </ul>
-
+                    <ul class="file-wrap"></ul>
                     <div class="img-button-box">
                         <button type="button" class="prev">
                             <i class="fa-solid fa-circle-chevron-left"></i>
@@ -99,7 +91,6 @@
                         </button>
                     </div>
                 </div>
-
             </div>
             <div class="input-wrap">
                 <div class="input-guide flex">
@@ -108,13 +99,24 @@
                     <p class="invalid-msg"></p>
                 </div>
                 <div class="input-box category-box">
+                    <label for="category"></label>
                     <select class="select" name="category" id="category">
-                        <option value="뮤지컬">뮤지컬</option>
-                        <option value="콘서트">콘서트</option>
-                        <option value="클래식/무용">클래식/무용</option>
-                        <option value="스포츠">스포츠</option>
-                        <option value="전시/행사">전시/행사</option>
-                        <option value="기타">기타</option>
+                        <option value="EDUCATION">강연/교육/세미나</option>
+                        <option value="WORKSHOP">컨퍼런스/워크숍</option>
+                        <option value="TEST_PBT">시험_P.B.T</option>
+                        <option value="MOVIE_FILMING">드라마/영화/MV촬영</option>
+                        <option value="CF_FILMING">화보/제품/CF촬영</option>
+                        <option value="POP_UP_STORE">팝업 스토어</option>
+                        <option value="ADVERTISEMENT">옥외광고</option>
+                        <option value="CAMP">캠프/연수</option>
+                        <option value="ATHLETICS_CONTEST">체육/경연대회</option>
+                        <option value="CONCERT">공연/콘서트</option>
+                        <option value="EXHIBITION_EVENT">박람회/전시</option>
+                        <option value="ETC_WORK">기타(work)</option>
+                        <option value="STUDIO_FILMING">스튜디오 촬영</option>
+                        <option value="SOCIAL_GATHERING">친목모임</option>
+                        <option value="DANCE">댄스 연습</option>
+                        <option value="ONE_DAY_CLASS">원데이클래스/레슨</option>
                     </select>
                 </div>
             </div>
@@ -130,7 +132,7 @@
             </div>
             <div class="flex-center start">
                 <button type="button" class="cancel">취소</button>
-                <button type="button" class="submit-btn flex-align-center">신청하기</button>
+                <button type="button" class="submit-btn on flex-align-center">신청하기</button>
             </div>
         </form>
     </div>

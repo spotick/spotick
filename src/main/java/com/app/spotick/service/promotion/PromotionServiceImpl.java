@@ -1,5 +1,7 @@
 package com.app.spotick.service.promotion;
 
+import com.app.spotick.domain.dto.promotion.PromotionDetailDto;
+import com.app.spotick.domain.dto.promotion.PromotionListDto;
 import com.app.spotick.domain.dto.promotion.PromotionRegisterDto;
 import com.app.spotick.domain.entity.place.Place;
 import com.app.spotick.domain.entity.promotion.PromotionBoard;
@@ -10,6 +12,8 @@ import com.app.spotick.repository.user.UserRepository;
 import com.app.spotick.service.place.file.PlaceFileService;
 import com.app.spotick.service.promotion.file.PromotionFileService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -36,11 +40,28 @@ public class PromotionServiceImpl implements PromotionService {
 //        사진파일 넣기
         List<MultipartFile> promotionFiles = new ArrayList<>();
 //        인덱스 0번에 메인사진
-        promotionFiles.add(promotionRegisterDto.getPromotionMainFile());
+        promotionFiles.add(promotionRegisterDto.getPlaceFile());
 //        나머지 게시글에 들어간 사진들
-        promotionFiles.addAll(promotionRegisterDto.getPromotionFiles());
+        if(promotionRegisterDto.getPromotionFiles().isEmpty()){
+            promotionFiles.addAll(promotionRegisterDto.getPromotionFiles());
+        }
 
 
         promotionFileService.registerAndSavePromotionFile(promotionFiles,promotionBoard);
+    }
+
+    @Override
+    public void removePromotion(Long promotionId) {
+
+    }
+
+    @Override
+    public PromotionDetailDto promotionDetail(Long promotionId) {
+        return null;
+    }
+
+    @Override
+    public Page<PromotionListDto> findPromotionList(Pageable pageable) {
+        return null;
     }
 }

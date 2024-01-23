@@ -5,6 +5,7 @@ $('input,textarea').on('focus', function () {
 });
 
 $('.start').on('click', '.submit-btn.on', function () {
+    console.log("눌림")
     $(".register-form").submit();
 });
 
@@ -115,60 +116,60 @@ function updatePreviewVisibility(isTrue) {
     $('.file-container').toggleClass('none', !isTrue);
 }
 
-function checkInputs() {
-    const allInputs = $('.price-input-box .placeDefaultPrice');
-    const isAllInputsFilled = allInputs.toArray().every(input => $(input).val().trim() !== '');
+// function checkInputs() {
+//     const allInputs = $('.price-input-box .placeDefaultPrice');
+//     const isAllInputsFilled = allInputs.toArray().every(input => $(input).val().trim() !== '');
+//
+//     $('.price-add-button').prop('disabled', !isAllInputsFilled);
+// }
+//
+// $('.placeDefaultPrice').blur(function (){
+//     checkInputs()
+// })
 
-    $('.price-add-button').prop('disabled', !isAllInputsFilled);
-}
-
-$('.placeDefaultPrice').blur(function (){
-    checkInputs()
-})
-
-$(document).ready(function() {
-    $(".price-add-button").on("click", function() {
-        // 값을 가져와서 새로운 티켓을 만듭니다.
-        var ticketClass = $(".ticket-class").val();
-        var ticketPrice = $(".ticket-price").val();
-        var ticketHeadcount = $(".ticket-headcount").val();
-
-        // 값이 비어있지 않은 경우에만 추가합니다.
-        if (ticketClass && ticketPrice && ticketHeadcount) {
-            var newTicket = `
-                <div class="headcount-input-box">
-                    <div class="input-box">
-                        <input class="placeDefaultPrice ticket-class" type="text" value="${ticketClass}" readonly>
-                    </div>
-                    <button type="button" class="delete-button">x</button>
-                    <div class="input-box">
-                        <input class="placeDefaultPrice ticket-price" type="number" value="${ticketPrice}" readonly>
-                        <p class="unit">원</p>
-                    </div>
-                    <div class="input-box">
-                        <input class="placeDefaultPrice ticket-headcount" type="number" value="${ticketHeadcount}" readonly>
-                        <p class="unit">명</p>
-                    </div>
-                </div>
-            `;
-
-            $(".headcount-input-box-none").removeClass("On"); // 등록된 티켓이 있으므로 클래스를 제거합니다.
-            $(".headcount-input-box-container").append(newTicket);
-
-            // 추가 후에 입력값 초기화
-            $(".price-input-container .ticket-class").val("");
-            $(".price-input-container .ticket-price").val("");
-            $(".price-input-container .ticket-headcount").val("");
-        }
-    });
-
-    // 동적으로 생성된 요소에 대한 이벤트 처리
-    $(".headcount-input-box-container").on("click", ".delete-button", function() {
-        $(this).closest(".headcount-input-box").remove();
-
-        // 모든 티켓이 삭제되면 클래스를 추가하여 메시지를 표시합니다.
-        if ($(".headcount-input-box").length === 0) {
-            $(".headcount-input-box-none").addClass("On");
-        }
-    });
-});
+// $(document).ready(function() {
+//     $(".price-add-button").on("click", function() {
+//         // 값을 가져와서 새로운 티켓을 만듭니다.
+//         var ticketClass = $(".ticket-class").val();
+//         var ticketPrice = $(".ticket-price").val();
+//         var ticketHeadcount = $(".ticket-headcount").val();
+//
+//         // 값이 비어있지 않은 경우에만 추가합니다.
+//         if (ticketClass && ticketPrice && ticketHeadcount) {
+//             var newTicket = `
+//                 <div class="headcount-input-box">
+//                     <div class="input-box">
+//                         <input class="placeDefaultPrice ticket-class" type="text" value="${ticketClass}" readonly>
+//                     </div>
+//                     <button type="button" class="delete-button">x</button>
+//                     <div class="input-box">
+//                         <input class="placeDefaultPrice ticket-price" type="number" value="${ticketPrice}" readonly>
+//                         <p class="unit">원</p>
+//                     </div>
+//                     <div class="input-box">
+//                         <input class="placeDefaultPrice ticket-headcount" type="number" value="${ticketHeadcount}" readonly>
+//                         <p class="unit">명</p>
+//                     </div>
+//                 </div>
+//             `;
+//
+//             $(".headcount-input-box-none").removeClass("On"); // 등록된 티켓이 있으므로 클래스를 제거합니다.
+//             $(".headcount-input-box-container").append(newTicket);
+//
+//             // 추가 후에 입력값 초기화
+//             $(".price-input-container .ticket-class").val("");
+//             $(".price-input-container .ticket-price").val("");
+//             $(".price-input-container .ticket-headcount").val("");
+//         }
+//     });
+//
+//     // 동적으로 생성된 요소에 대한 이벤트 처리
+//     $(".headcount-input-box-container").on("click", ".delete-button", function() {
+//         $(this).closest(".headcount-input-box").remove();
+//
+//         // 모든 티켓이 삭제되면 클래스를 추가하여 메시지를 표시합니다.
+//         if ($(".headcount-input-box").length === 0) {
+//             $(".headcount-input-box-none").addClass("On");
+//         }
+//     });
+// });

@@ -53,6 +53,10 @@ public class Ticket extends PostBase {
         this.accountHolder = accountHolder;
         this.user = user;
     }
+
+    public void setUser(User user){
+        this.user = user;
+    }
 }
 
 

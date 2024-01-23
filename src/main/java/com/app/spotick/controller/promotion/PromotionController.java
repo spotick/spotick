@@ -1,10 +1,12 @@
 package com.app.spotick.controller.promotion;
 
 import com.app.spotick.domain.dto.promotion.PromotionRegisterDto;
+import com.app.spotick.domain.dto.user.UserDetailsDto;
 import com.app.spotick.service.promotion.PromotionService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -42,13 +44,19 @@ public class PromotionController {
     @PostMapping("/register")
     public String promotionRegister(@Valid PromotionRegisterDto promotionRegisterDto,
                                     BindingResult result,
-                                    Model model){
+                                    Model model,
+                                    @AuthenticationPrincipal UserDetailsDto userDetailsDto){
+        log.info("================================================================");
+        log.info("들어옴");
+        log.info(promotionRegisterDto.toString());
+        log.info("================================================================");
         if (result.hasErrors()){
             return "promotion/register";
         }
+        log.info(promotionRegisterDto.toString());
 
         try {
-            promotionService.registerPromotion(promotionRegisterDto, promotionRegisterDto.getUserId());
+            promotionService.registerPromotion(promotionRegisterDto, 2L);
         } catch (IOException e) {
             e.printStackTrace();
             return  "promotion/register";
