@@ -278,6 +278,8 @@ function clearInquiry() {
 
 // 북마크 버튼
 $('.place-like-btn').on('click', function () {
+    let placeId = $('#placeId').val();
+
     $(this).find('span').toggleClass('none');
 });
 

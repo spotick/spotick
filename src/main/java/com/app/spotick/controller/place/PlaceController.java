@@ -31,8 +31,9 @@ public class PlaceController {
     public String placeDetail(@PathVariable("placeId")Long placeId,
                               @AuthenticationPrincipal UserDetailsDto userDetailsDto,
                               Model model) {
+        Long userId = userDetailsDto==null? null: userDetailsDto.getId();
         model.addAttribute("place",
-                placeService.findPlaceDetailById(placeId,userDetailsDto.getId()));
+                placeService.findPlaceDetailById(placeId,userId));
         return "place/detail";
     }
 

@@ -3,8 +3,10 @@ package com.app.spotick.repository.place;
 import com.app.spotick.domain.dto.place.PlaceDetailDto;
 import com.app.spotick.domain.dto.place.PlaceFileDto;
 import com.app.spotick.domain.dto.place.PlaceListDto;
+import com.app.spotick.domain.entity.place.Place;
 import com.app.spotick.domain.entity.place.QPlace;
 import com.app.spotick.domain.type.post.PostStatus;
+import com.querydsl.core.Tuple;
 import com.querydsl.core.group.GroupBy;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
@@ -39,7 +41,7 @@ public class PlaceQDSLRepositoryImpl implements PlaceQDSLRepository {
         JPQLQuery<Long> bookmarkCount = createBookmarkCountSub(place);
 
         //        로그인 되어있지 않으면 쿼리 실행 x
-        BooleanExpression isBookmarkChecked = isBookmarkCheckedSub(place,userId);
+        BooleanExpression isBookmarkChecked = isBookmarkCheckedSub(place, userId);
 
         List<PlaceListDto> placeListDtos = queryFactory.select(place)
                 .from(place)
@@ -79,31 +81,31 @@ public class PlaceQDSLRepositoryImpl implements PlaceQDSLRepository {
 
     @Override
     public Optional<PlaceDetailDto> findPlaceDetailById(Long placeId, Long userId) {
-        PlaceDetailDto placeDetailDto = queryFactory.select(
-                        Projections.constructor(PlaceDetailDto.class,
-                                place.id,
-                                place.title,
-                                place.subTitle,
-                                place.info,
-                                place.rule,
-                                place.defaultPeople,
-                                place.placeAddress.address,
-                                place.placeAddress.addressDetail,
-                                place.price,
-                                place.surcharge,
-                                place.user.id,
-                                place.lat,
-                                place.lng,
-                                createReviewAvgSub(place),
-                                createReviewCountSub(place),
-                                createInquiryCountSub(place),
-                                isBookmarkCheckedSub(place, userId)
-                        )
-                ).from(place)
-                .where(place.id.eq(placeId))
-                .fetchOne();
+        JPQLQuery<Double> reviewAvgSub = createReviewAvgSub(place);
+        JPQLQuery<Long> reviewCountSub = createReviewCountSub(place);
+        JPQLQuery<Long> inquiryCountSub = createInquiryCountSub(place);
+        BooleanExpression bookmarkCheckedSub = isBookmarkCheckedSub(place, userId);
 
-        placeDetailDto.setEvalAvg(Optional.ofNullable(placeDetailDto.getEvalAvg()).orElse(0.0));
+        List<Tuple> tupleList = queryFactory.select(
+                        place,
+                        reviewAvgSub,
+                        reviewCountSub,
+                        inquiryCountSub,
+                        bookmarkCheckedSub
+                ).from(place)
+                .join(place.placeFileList).fetchJoin()
+                .where(place.id.eq(placeId))
+                .fetch();
+        PlaceDetailDto placeDetailDto = tupleList.stream().map(tuple -> {
+            Place foundPlace = tuple.get(place);
+            PlaceDetailDto placeDetail = PlaceDetailDto.from(foundPlace);
+            placeDetail.setPlaceFileList(foundPlace.getPlaceFileList().stream().map(PlaceFileDto::from).toList());
+            placeDetail.setEvalAvg(tuple.get(reviewAvgSub)==null?0.0:tuple.get(reviewAvgSub));
+            placeDetail.setEvalCount(tuple.get(reviewCountSub));
+            placeDetail.setInquiryCount(tuple.get(inquiryCountSub));
+            placeDetail.setBookmarkChecked(tuple.get(bookmarkCheckedSub));
+            return placeDetail;
+        }).findFirst().orElseThrow(() -> new IllegalStateException("잘못된 게시글"));
 
         return Optional.ofNullable(placeDetailDto);
     }

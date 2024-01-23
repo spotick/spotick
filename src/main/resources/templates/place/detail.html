@@ -18,36 +18,31 @@
 </head>
 <body>
 <header th:replace="~{global-templates/header-footer :: header}"></header>
+<input id="isLoggedIn" th:value="${#authorization.expression('isAuthenticated()')}" type="hidden"/>
 <div class="global-container">
 
     <!--   장소 대표사진-->
     <div class="place-img-container">
         <button type="button" class="grid-item main-img" data-imgidx="1">
-            <img src="https://img.shareit.kr/prod/img/2023-12-07/ef66f2a8-d103-499d-8928-8aa1b786fbb0.jpg"
+            <img th:src="${'/file/display?fileName=' + place.placeFileList[0].uploadPath +
+            '/' + place.placeFileList[0].uuid + '_' + place.placeFileList[0].fileName}"
+                 th:alt="${'장소 이미지'+0}"
                  alt="장소 메인이미지">
         </button>
-        <button type="button" class="grid-item grid2" data-imgidx="2">
-            <img src="https://img.shareit.kr/prod/img/2023-12-07/b80ed218-b885-4f65-8c82-df1249442559.jpg"
-                 alt="장소 이미지2">
+        <button type="button" th:class="${'grid-item grid'+(i+1)}" th:data-imgidx="${i+1}"
+                th:each="i : ${#numbers.sequence(1,4)}">
+            <img th:src="${'/file/display?fileName=' + place.placeFileList[i].uploadPath +
+            '/' + place.placeFileList[i].uuid + '_' + place.placeFileList[i].fileName}"
+                 th:alt="${'장소 이미지'+i}">
         </button>
-        <button type="button" class="grid-item grid3" data-imgidx="3">
-            <img src="https://img.shareit.kr/prod/img/2023-12-07/fc869766-a2d5-4afa-b7a1-0105795afe66.jpg"
-                 alt="장소 이미지3">
-        </button>
-        <button type="button" class="grid-item grid4" data-imgidx="4">
-            <img src="https://img.shareit.kr/prod/img/2023-12-07/bdb34031-1ca4-4856-99ee-58dc3f868401.jpg"
-                 alt="장소 이미지4">
-        </button>
-        <button type="button" class="grid-item grid5" data-imgidx="5">
-            <img src="https://img.shareit.kr/prod/img/2023-12-07/685e2d60-8ca8-45b9-accc-99c8530377aa.jpg"
-                 alt="장소 이미지5">
-        </button>
+
         <button type="button" class="more-img-btn flex-align-center">
-            +14
+            <th:block th:if="${place.placeFileList.size() - 5 > 0}">
+                <span th:text="${'+' + (place.placeFileList.size() - 5)}"></span>
+            </th:block>
             <img src="https://shareit.kr/_next/static/media/plus_ractangle_repeated_white.e641653f.svg" alt="">
         </button>
     </div>
-
     <div class="content-global-wrap">
         <div class="content-wrap">
             <div class="basic-info-box">
@@ -55,8 +50,8 @@
                 <div class="flex-between-align">
                     <span class="place-name" th:text="${place.placeTitle}"></span>
                     <button class="place-like-btn" type="button">
-                        <span><i class="fa-regular fa-bookmark"></i></span>
-                        <span class="none"><i class="fa-solid fa-bookmark" style="color: #007AFF"></i></span>
+                        <span th:class="${!place.isBookmarkChecked()?'':'none'}"><i class="fa-regular fa-bookmark"></i></span>
+                        <span th:class="${place.isBookmarkChecked()?'':'none'}"><i class="fa-solid fa-bookmark" style="color: #007AFF"></i></span>
                     </button>
                 </div>
                 <div class="place-address-box">
@@ -87,15 +82,20 @@
                             </div>
                             <div class="default-stars">
                                 <img class="default-star"
-                                     src="https://shareit.kr/_next/static/media/star_filled_gray084.e69177ff.svg" alt="">
+                                     src="https://shareit.kr/_next/static/media/star_filled_gray084.e69177ff.svg"
+                                     alt="">
                                 <img class="default-star"
-                                     src="https://shareit.kr/_next/static/media/star_filled_gray084.e69177ff.svg" alt="">
+                                     src="https://shareit.kr/_next/static/media/star_filled_gray084.e69177ff.svg"
+                                     alt="">
                                 <img class="default-star"
-                                     src="https://shareit.kr/_next/static/media/star_filled_gray084.e69177ff.svg" alt="">
+                                     src="https://shareit.kr/_next/static/media/star_filled_gray084.e69177ff.svg"
+                                     alt="">
                                 <img class="default-star"
-                                     src="https://shareit.kr/_next/static/media/star_filled_gray084.e69177ff.svg" alt="">
+                                     src="https://shareit.kr/_next/static/media/star_filled_gray084.e69177ff.svg"
+                                     alt="">
                                 <img class="default-star"
-                                     src="https://shareit.kr/_next/static/media/star_filled_gray084.e69177ff.svg" alt="">
+                                     src="https://shareit.kr/_next/static/media/star_filled_gray084.e69177ff.svg"
+                                     alt="">
                             </div>
                         </div>
                         <span class="review-score" th:text="${place.evalAvg}"></span>
@@ -105,7 +105,8 @@
 
                     <!--장소 수정하기 -->
                     <th:block sec:authorize="isAuthenticated()">
-                        <a href="#" class="place-modify-btn" th:if="${#authentication.principal != null and #authentication.principal.id == place.hostId}">수정하기</a>
+                        <a href="#" class="place-modify-btn"
+                           th:if="${#authentication.principal != null and #authentication.principal.id == place.hostId}">수정하기</a>
                     </th:block>
 
                 </div>
@@ -419,7 +420,7 @@
                 <p class="small-title">총인원</p>
                 <div class="people-wrap">
                     <p class="people-guide"
-                    th:text="${'기본 인원인 '+place.placeDefaultPeople+'명을 넘으면 인당 '+
+                       th:text="${'기본 인원인 '+place.placeDefaultPeople+'명을 넘으면 인당 '+
                     #numbers.formatInteger(place.placeSurcharge,1,'COMMA')+'원이 추가돼요'}"></p>
                     <div class="people-box flex-align">
                         <p>총인원 수를 입력하세요</p>
@@ -468,38 +469,25 @@
 <div class="img-modal-container none">
     <div class="modal-wrap">
         <div class="place-img-info-wrap flex-between-align">
-            <div class="place-img-info-box flex-between-align">
+            <div class="place-img-info-box flex-center">
                 <div class="img-count">
-                    <span class="current-img-num">1</span>/4
+                    <span class="current-img-num">1</span>/<th:block th:text="${place.placeFileList.size()}"></th:block>
                 </div>
-                <p>포인트, 원서 2호점</p>
-            </div>
+                <p th:text="${place.placeTitle}"></p>
 
+            </div>
             <button class="flex-align-center modal-close" type="button">닫기 X</button>
         </div>
 
         <div class="modal-img-wrap flex-center">
             <div class="modal-img-box">
                 <!-- 모달 이미지   -->
-                <div class="modal-img-item">
+                <div class="modal-img-item"
+                     th:each="file :${place.placeFileList}">
                     <img class="modal-img"
-                         src="https://img.shareit.kr/prod/img/2023-12-07/ef66f2a8-d103-499d-8928-8aa1b786fbb0.jpg"
-                         alt="">
-                </div>
-                <div class="modal-img-item">
-                    <img class="modal-img"
-                         src="https://img.shareit.kr/prod/img/2023-12-07/b80ed218-b885-4f65-8c82-df1249442559.jpg"
-                         alt="">
-                </div>
-                <div class="modal-img-item">
-                    <img class="modal-img"
-                         src="https://img.shareit.kr/prod/img/2023-12-07/fc869766-a2d5-4afa-b7a1-0105795afe66.jpg"
-                         alt="">
-                </div>
-                <div class="modal-img-item">
-                    <img class="modal-img"
-                         src="https://img.shareit.kr/prod/img/2023-12-07/bdb34031-1ca4-4856-99ee-58dc3f868401.jpg"
-                         alt="">
+                         th:src="${'/file/display?fileName=' + file.uploadPath +
+                '/' + file.uuid + '_' + file.fileName}"
+                         th:alt="${file.fileName}">
                 </div>
 
             </div>

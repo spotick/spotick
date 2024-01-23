@@ -99,7 +99,7 @@ class PlaceReservationRepositoryTest {
                 .checkIn(LocalDateTime.of(2024, 1, 5, 19, 0, 0))
                 .checkOut(LocalDateTime.of(2024, 1, 6, 7, 0,0))
                 .content("테스트")
-                .reservationStatus(PlaceReservationStatus.WATINGPAYMENT)
+                .reservationStatus(PlaceReservationStatus.WAITINGPAYMENT)
                 .place(placeOf2)
                 .user(user1)
                 .build();

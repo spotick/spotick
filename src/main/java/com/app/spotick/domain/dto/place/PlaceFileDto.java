@@ -1,5 +1,6 @@
 package com.app.spotick.domain.dto.place;
 
+import com.app.spotick.domain.entity.place.PlaceFile;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -15,5 +16,15 @@ public class PlaceFileDto {
         this.fileName = fileName;
         this.uuid = uuid;
         this.uploadPath = uploadPath;
+    }
+
+    public static PlaceFileDto from(PlaceFile placeFile){
+        PlaceFileDto placeFileDto = new PlaceFileDto();
+        placeFileDto.setPlaceFileId(placeFile.getId());
+        placeFileDto.setFileName(placeFile.getFileName());
+        placeFileDto.setUuid(placeFile.getUuid());
+        placeFileDto.setUploadPath(placeFile.getUploadPath());
+
+        return placeFileDto;
     }
 }
