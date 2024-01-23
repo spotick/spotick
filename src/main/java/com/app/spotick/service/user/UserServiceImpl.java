@@ -139,6 +139,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Page<PlaceReservationListDto> findReservationsByUserId(Long userId, Pageable pageable) {
         return placeReservationRepository.findReservationsByUserId(userId, pageable);
     }

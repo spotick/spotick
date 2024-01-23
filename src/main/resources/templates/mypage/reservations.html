@@ -18,45 +18,40 @@
 
 <div th:replace="~{global-templates/chat :: chat}"></div>
 
-<div class="modal-bg show">
+<div class="modal-bg">
     <div th:replace="~{global-templates/global-dialogue-modal :: global-dialogue}"></div>
     <div th:replace="~{global-templates/global-dialogue-modal :: global-selection}"></div>
-    <div class="modal-reservation-info show">
+    <div class="modal-reservation-info">
         <div style="display: flex; margin-bottom: 20px;">
             <div class="mpcr-img-con">
-                <img height="100px"
-                     src="//img.hourplace.co.kr/place/user/47919/2022/05/29/74f9815f-fc9d-4dec-8037-41861f43cae9?s=550x364&amp;t=cover&amp;q=80"
-                     style="width: 180px;">
+                <img id="detailImg" style="width: 180px;">
             </div>
             <div class="ItemTextContainer">
                 <div class="ItemHostNameContainer">
-                    <span class="ItemHostName">서울 성북구</span>
+                    <span class="ItemHostName" id="detailAddress"></span>
                     <div class="ItemCountsContainer">
                         <div class="ItemsStarCountContainer">
                             <img alt="후기갯수" class="ItemCountImg"
                                  src="/imgs/star_filled_paintYellow056.a8eb6e44.svg">
-                            <span class="ItemCountText">4.0(20)</span>
+                            <span class="ItemCountText" id="detailEval"></span>
                         </div>
                         <div class="ItemsLikeCountContainer">
                             <img alt="북마크갯수" class="ItemCountImg bookmark"
                                  src="/imgs/bookmark_thin.svg">
-                            <span class="ItemCountText">1724</span>
+                            <span class="ItemCountText" id="detailBookmark"></span>
                         </div>
                     </div>
                 </div>
                 <div class="ItemSpaceNameContainer">
-                    <p class="ItemSpaceName">낙산관 실내체육관(낙산관)</p>
+                    <p class="ItemSpaceName" id="detailTitle"></p>
                 </div>
                 <div class="ItemPriceContainer">
-                    <span class="ItemPrice">2023.12.30 ~ 2024.01.30</span>
+                    <span class="ItemPrice" id="detailPrice"></span>
                 </div>
                 <div class="mpccc-row content-between" style="margin-top: 10px;">
                     <div class="mpccc-status">
-                        <span>결제 대기 중</span>
+                        <span id="detailStatus"></span>
                     </div>
-                    <button class="mpccc-btn" onclick="payItem()" type="button">
-                        <span>결제 하기</span>
-                    </button>
                 </div>
             </div>
         </div>
@@ -65,13 +60,13 @@
             <div>
                 <div class="mri-input-title">사용 인원</div>
                 <div class="mri-input-container" style="width: 100px; margin-bottom: 20px;">
-                    <input readonly type="text" value="2">
+                    <input id="detailVisitors" readonly type="text">
                     <span>명</span>
                 </div>
                 <div class="mri-input-title">내 요청 사항</div>
                 <div class="mri-input-container">
-                            <textarea class="mri-textarea" cols="30" readonly
-                                      rows="10">테스트 요청사항 테스트 요청사항 테스트 요청사항 테스트 요청사항 테스트 요청사항 테스트 요청사항 테스트 요청사항 테스트 요청사항 </textarea>
+                            <textarea class="mri-textarea" cols="30" id="detailContent" readonly
+                                      rows="10"></textarea>
                 </div>
             </div>
             <div class="mri-divider"></div>
@@ -101,11 +96,11 @@
                 </table>
                 <div class="mri-input-title">대여 시작시간</div>
                 <div class="mri-input-container" style="margin-bottom: 10px;">
-                    <input readonly type="text" value="2023년 12월 17일 17시">
+                    <input id="detailCheckIn" readonly type="text" value="">
                 </div>
                 <div class="mri-input-title">대여 시작시간</div>
                 <div class="mri-input-container">
-                    <input readonly type="text" value="2023년 12월 18일 10시">
+                    <input id="detailCheckOut" readonly type="text" value="2023년 12월 18일 10시">
                 </div>
             </div>
         </div>
@@ -136,9 +131,10 @@
                                     </div>
                                 </div>
                                 <div class="mpcr-img-con">
-                                    <img height="100px"
-                                         src="//img.hourplace.co.kr/place/user/47919/2022/05/29/74f9815f-fc9d-4dec-8037-41861f43cae9?s=550x364&amp;t=cover&amp;q=80"
-                                         style="width: 180px;">
+                                    <img style="width: 180px;"
+                                         th:alt="*{title}"
+                                         th:src="*{'/file/display?fileName='
+                                         + placeFileDto.uploadPath + '/t_' + placeFileDto.uuid + '_' + placeFileDto.fileName}">
                                 </div>
                                 <div class="ItemTextContainer">
                                     <div class="ItemHostNameContainer">
@@ -165,15 +161,32 @@
                                     </div>
                                     <div class="mpccc-row content-between" style="margin-top: 10px;">
                                         <div class="mpccc-status">
-                                            <span th:text="*{reservationStatus}">결제 대기 중</span>
+                                            <span th:text="*{reservationStatus.displayName}"></span>
                                         </div>
-                                        <button th:if="*{reservationStatus == 'WATINGPAYMENT'}" class="mpccc-btn" onclick="payItem()" type="button">
+                                        <button class="mpccc-btn"
+                                                onclick="payItem()"
+                                                th:if="*{reservationStatus == reservationStatus.WAITINGPAYMENT}"
+                                                type="button">
                                             <span>결제 하기</span>
                                         </button>
                                     </div>
                                 </div>
                                 <div class="mpcr-divider"></div>
-                                <div class="mpcr-info">
+                                <div class="mpcr-info" onclick="showDetail(this)"
+                                     th:data-address="*{placeAddress.address}"
+                                     th:data-bookmarkCount="*{bookmarkCount}"
+                                     th:data-checkIn="*{checkIn}"
+                                     th:data-checkOut="*{checkOut}"
+                                     th:data-content="*{content}"
+                                     th:data-display-checkIn="*{#temporals.format(checkIn, 'yyyy년 MM월 dd일 HH시')}"
+                                     th:data-display-checkOut="*{#temporals.format(checkOut, 'yyyy년 MM월 dd일 HH시')}"
+                                     th:data-evalAvg="*{evalAvg}"
+                                     th:data-evalCount="*{evalCount}"
+                                     th:data-img="*{'/file/display?fileName='
+                                         + placeFileDto.uploadPath + '/t_' + placeFileDto.uuid + '_' + placeFileDto.fileName}"
+                                     th:data-price="${#numbers.formatInteger(reservationDto.price, 3, 'COMMA')} + '원'"
+                                     th:data-status="*{reservationStatus.displayName}" th:data-title="*{title}"
+                                     th:data-visitors="*{visitors}">
                                     <div class="mpcri-title">예약 정보</div>
                                     <div class="mpcri-date">
                                         <span th:text="*{#temporals.format(checkIn, 'yyyy년 MM월dd일 HH시')}"></span>
@@ -185,7 +198,7 @@
                                             사용 인원: <span th:text="*{visitors}"></span>명
                                         </div>
                                     </div>
-                                    <div class="mpcri-content" th:utext="'요청사항: ' + *{content}"> </div>
+                                    <div class="mpcri-content" th:utext="'요청사항: ' + *{content}"></div>
                                 </div>
                             </div>
                         </article>
@@ -209,17 +222,6 @@
 <script src="/js/global-js/chat.js"></script>
 <script>
     document.getElementById('reservations').classList.add('active');
-
-
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-
-    window.onload = function () {
-        let testDate1 = new Date("2023-12-17 18:57:54.253000 +09:00");
-        let testDate2 = new Date("2023-12-18 18:57:54.253000 +09:00");
-        calendarService.setEventDates(testDate1, testDate2);
-        calendarService.buildCalendar();
-    }
 </script>
 <script th:inline="javascript">
     console.log([[${reservationDtoList}]])
