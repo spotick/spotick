@@ -19,7 +19,6 @@ public class PlaceListDto {
     private Long bookmarkCount;
     private boolean isBookmarkChecked;
 
-
     public PlaceListDto(Long id, String title, Integer price, PostAddress placeAddress, List<PlaceFileDto> placeFiles, Double evalAvg, Long evalCount, Long bookmarkCount, boolean isBookmarkChecked) {
         this.id = id;
         this.title = title;
@@ -36,7 +35,8 @@ public class PlaceListDto {
         this.placeFiles = placeFiles;
     }
 
-    public void updateEvalAvg(Double evalAvg) {
-        this.evalAvg = evalAvg;
+    public void cutPlaceFilesForListPage(){
+        placeFiles = placeFiles.stream().limit(5).toList();
     }
+
 }

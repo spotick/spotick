@@ -4,10 +4,10 @@ import lombok.Getter;
 
 @Getter
 public enum PlaceReservationStatus {
-    PENDING("대기중"),
-    WATINGPAYMENT("결제 대기중"),
-    APPROVED("승인"),
-    REJECTED("거절"),
+    PENDING("승인 대기중"),
+    WAITINGPAYMENT("결제 대기 중"),
+    APPROVED("승인됨"),
+    REJECTED("거절됨"),
     CANCELLED("취소")
     ;
 

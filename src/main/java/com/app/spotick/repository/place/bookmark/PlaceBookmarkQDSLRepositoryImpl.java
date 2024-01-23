@@ -134,7 +134,6 @@ public class PlaceBookmarkQDSLRepositoryImpl implements PlaceBookmarkQDSLReposit
 
         placeListDtos.forEach(dto -> {
             dto.getPlaceAddress().cutAddress();
-            dto.updateEvalAvg(Optional.ofNullable(dto.getEvalAvg()).orElse(0.0));
         });
 
         return PageableExecutionUtils.getPage(placeListDtos, pageable, totalCountQuery::fetchOne);
