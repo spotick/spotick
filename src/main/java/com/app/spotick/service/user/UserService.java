@@ -1,6 +1,7 @@
 package com.app.spotick.service.user;
 
 import com.app.spotick.domain.dto.place.PlaceListDto;
+import com.app.spotick.domain.dto.place.PlaceReservationListDto;
 import com.app.spotick.domain.dto.user.UserJoinDto;
 import com.app.spotick.domain.dto.user.UserProfileDto;
 import org.springframework.data.domain.Page;
@@ -21,5 +22,6 @@ public interface UserService {
 
     Page<PlaceListDto> findBookmarkedPlacesByUserId(Long userId, Pageable pageable);
 
-    int getTotalBookmarkedPlaces(Long userId);
+    Page<PlaceReservationListDto> findReservationsByUserId(Long userId, Pageable pageable);
+
 }

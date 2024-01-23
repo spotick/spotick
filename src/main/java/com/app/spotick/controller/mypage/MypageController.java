@@ -158,8 +158,15 @@ public class MypageController {
         model.addAttribute("placeDtoList", bookmarkedPlaces);
     }
 
+    /* =================================================예약내역====================================================== */
     @GetMapping("/reservations")
-    public void goToReservations() {
+    public void goToReservations(@RequestParam(value = "page", defaultValue = "1") int page,
+                                 @AuthenticationPrincipal UserDetailsDto userDetailsDto,
+                                 Model model) {
+        Pageable pageable = PageRequest.of(page - 1, 6);
+
+        model.addAttribute("reservationDtoList",
+                userService.findReservationsByUserId(userDetailsDto.getId(), pageable));
     }
 
     @GetMapping("/inquiries")
