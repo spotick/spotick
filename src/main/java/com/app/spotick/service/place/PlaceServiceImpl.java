@@ -1,5 +1,6 @@
 package com.app.spotick.service.place;
 
+import com.app.spotick.domain.dto.place.PlaceDetailDto;
 import com.app.spotick.domain.dto.place.PlaceListDto;
 import com.app.spotick.domain.dto.place.PlaceRegisterDto;
 import com.app.spotick.domain.entity.place.Place;
@@ -41,8 +42,20 @@ public class PlaceServiceImpl implements PlaceService{
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<PlaceListDto> findPlaceListPagination(int pageRequest,Long userId) {
         return placeRepository.findPlaceListPaging(PageRequest.of(pageRequest,PAGE_SIZE),userId);
+    }
+
+    @Override
+    public PlaceDetailDto findPlaceDetailById(Long placeId,Long userId) {
+        Place place = placeRepository.findById(placeId)
+                .orElseThrow(() -> new IllegalStateException("존재하지 않는 장소 게시글"));
+
+        place.increaseViewCount();
+
+        return placeRepository.findPlaceDetailById(placeId, userId)
+                .orElseThrow(() -> new IllegalStateException("존재하지 않는 장소 게시글"));
     }
 }
 

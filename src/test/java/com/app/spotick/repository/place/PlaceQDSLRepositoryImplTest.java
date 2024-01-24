@@ -1,5 +1,6 @@
 package com.app.spotick.repository.place;
 
+import com.app.spotick.domain.dto.place.PlaceDetailDto;
 import com.app.spotick.domain.dto.place.PlaceFileDto;
 import com.app.spotick.domain.dto.place.PlaceListDto;
 import com.app.spotick.domain.embedded.post.PostAddress;
@@ -67,7 +68,6 @@ class PlaceQDSLRepositoryImplTest {
 
     User user1;
     User user2;
-    Place placeOf2;
 
     @BeforeEach
     void setUp() {
@@ -92,14 +92,16 @@ class PlaceQDSLRepositoryImplTest {
                 .build();
         userRepository.save(user2);
 
-        for (int i = 0; i < 10000; i++) {
-            placeOf2 = Place.builder()
+        for (int i = 0; i < 100; i++) {
+            Place placeOf2 = Place.builder()
                     .title("테스트 제목" + i)
                     .subTitle("테스트 부제목" + i)
                     .price(10000)
                     .placeAddress(new PostAddress("서울특별시 강남구 테헤란로 " + i, "" + i))
                     .user(user2)
                     .placeStatus(PostStatus.APPROVED)
+                    .lat(0.123)
+                    .lng(0.453)
                     .build();
             placeRepository.save(placeOf2);
             List<PlaceFile> placeFileList = new ArrayList<>();
@@ -445,6 +447,13 @@ class PlaceQDSLRepositoryImplTest {
         log.info("Legacy Case : {}", avgDurationInSeconds2);
     }
 
+    @Test
+    @DisplayName("장소 상세보기")
+    void findPlaceDetailByIdTest(){
+        PlaceDetailDto placeDetailDto = placeRepository.findPlaceDetailById(1L, null).get();
+
+        placeDetailDto.getPlaceFileList().forEach(file-> log.info("file : {}", file));
+    }
 
 
 

@@ -2249,7 +2249,8 @@
             <div class="OneItemContainer hover" th:each="place : ${placeList}">
                 <div class="OneItemImgContainer">
                     <div class="swiper ImageSwiper swiper-initialized swiper-horizontal swiper-pointer-events swiper-backface-hidden">
-                        <div class="swiper-wrapper ImageLength" style="transform: translate3d(0px, 0px, 0px);">
+                        <a th:href="@{/place/detail/{placeId}(placeId = ${place.id})}"
+                           class="swiper-wrapper ImageLength" style="transform: translate3d(0px, 0px, 0px);" >
                             <!-- 이미지 한칸 -->
                             <div class="swiper-slide swiper-slide-active" style="width: 287px;"
                                  th:each="placeImg :${place.placeFiles}">
@@ -2258,7 +2259,7 @@
                             </div>
                             <!-- 이미지 한칸 -->
 
-                        </div>
+                        </a>
                         <div class="NavigationBtnContainer">
                             <button class="NavigationBtn RightBtn" type="button">
                                 <img alt="다음" th:src="@{/imgs/round_arrow_right_gray024.7f7e18a3.svg}">
@@ -2294,7 +2295,9 @@
                         </div>
                     </div>
                     <div class="ItemSpaceNameContainer">
-                        <p class="ItemSpaceName" th:text="${place.title}"></p>
+                        <p class="ItemSpaceName" >
+                            <a th:href="@{/place/detail/{placeId}(placeId = ${place.id})}" th:text="${place.title}"></a>
+                        </p>
                     </div>
                     <div class="ItemPriceContainer">
                         <span class="place-price" th:text="${#numbers.formatInteger(place.price,1,'COMMA')+'원'}"></span>
