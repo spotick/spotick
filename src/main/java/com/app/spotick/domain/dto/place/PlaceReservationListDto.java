@@ -11,6 +11,7 @@ import java.util.List;
 @Data @NoArgsConstructor
 public class PlaceReservationListDto {
     private Long id;
+    private Long reservationId;
     private String title;
     private Integer price;
     private PostAddress placeAddress;
@@ -24,8 +25,9 @@ public class PlaceReservationListDto {
     private String content;
     private PlaceReservationStatus reservationStatus;
 
-    public PlaceReservationListDto(Long id, String title, Integer price, PostAddress placeAddress, PlaceFileDto placeFileDto, double evalAvg, Long evalCount, Long bookmarkCount, Integer visitors, LocalDateTime checkIn, LocalDateTime checkOut, String content, PlaceReservationStatus reservationStatus) {
+    public PlaceReservationListDto(Long id, Long reservationId, String title, Integer price, PostAddress placeAddress, PlaceFileDto placeFileDto, double evalAvg, Long evalCount, Long bookmarkCount, Integer visitors, LocalDateTime checkIn, LocalDateTime checkOut, String content, PlaceReservationStatus reservationStatus) {
         this.id = id;
+        this.reservationId = reservationId;
         this.title = title;
         this.price = price;
         this.placeAddress = placeAddress;

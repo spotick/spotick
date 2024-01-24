@@ -10,36 +10,76 @@ actionBtns.forEach(actionBtn => {
 });
 
 
-
-function showGSForCancelingReservation(placeId) {
-    showGlobalSelection("예약을 취소하시겠습니까?", () => cancelReservation(placeId))
+function showGSForCancelingReservation(reservationId) {
+    showGlobalSelection("예약을 취소하시겠습니까?", () => cancelReservation(reservationId))
 }
 
-function cancelReservation(placeId) {
-    console.log(placeId);
+function cancelReservation(reservationId) {
+    closeModal();
+
+    fetch('/mypage/reservation/' + reservationId + '/cancel', {
+        method: 'GET'
+    })
+        .then(response => {
+            if (response.ok) {
+                return response.text();
+            } else {
+                throw response
+            }
+        })
+        .then(message => {
+            alert(message);
+            window.location.reload();
+        })
+        .catch(error => {
+            console.error('Error:', error);
+
+            error.text().then(message => showGlobalDialogue(message))
+        });
 }
 
-function showGSForRemoveHistory(placeId) {
-    showGlobalSelection("예약내역을<br>삭제하시겠습니까?", () => removeHistory(placeId))
+function showGSForRemoveHistory(reservationId) {
+    showGlobalSelection("예약내역을<br>삭제하시겠습니까?", () => removeHistory(reservationId))
 }
 
-function removeHistory(placeId) {
-    console.log(placeId);
+function removeHistory(reservationId) {
+    closeModal();
+
+    fetch('/mypage/reservation/' + reservationId + '/delete', {
+        method: 'GET'
+    })
+        .then(response => {
+            if (response.ok) {
+                return response.text();
+            } else {
+                throw response
+            }
+        })
+        .then(message => {
+            alert(message);
+            window.location.reload();
+        })
+        .catch(error => {
+            console.error('Error:', error);
+
+            error.text().then(message => showGlobalDialogue(message))
+        });
 }
 
 
-    const address = document.getElementById('detailAddress');
-    const eval = document.getElementById('detailEval');
-    const bookmark = document.getElementById('detailBookmark');
-    const title = document.getElementById('detailTitle');
-    const price = document.getElementById('detailPrice');
-    const status = document.getElementById('detailStatus');
-    const visitors = document.getElementById('detailVisitors');
-    const content = document.getElementById('detailContent');
-    const checkInC = document.getElementById('detailCheckIn');
-    const checkOutC = document.getElementById('detailCheckOut');
-    const img = document.getElementById('detailImg');
-function showDetail(item){
+const address = document.getElementById('detailAddress');
+const eval = document.getElementById('detailEval');
+const bookmark = document.getElementById('detailBookmark');
+const title = document.getElementById('detailTitle');
+const price = document.getElementById('detailPrice');
+const status = document.getElementById('detailStatus');
+const visitors = document.getElementById('detailVisitors');
+const content = document.getElementById('detailContent');
+const checkInC = document.getElementById('detailCheckIn');
+const checkOutC = document.getElementById('detailCheckOut');
+const img = document.getElementById('detailImg');
+
+function showDetail(item) {
     openModal(modalReservation);
 
     const evalAvg = item.getAttribute('data-evalAvg');

@@ -742,7 +742,7 @@
     position: absolute;
     right: 0;
     top: 20px;
-    z-index: 9999;
+    z-index: 9000;
     border-radius: 8px;
     box-shadow: rgba(0, 0, 0, 0.1) 2px 2px 8px 0;
     border: 1px solid rgb(239, 243, 245);
@@ -758,6 +758,7 @@
 .mpcra-item {
     white-space: nowrap;
     padding: 10px 8px;
+    text-align: center;
 }
 
 .mpc-dropdown {

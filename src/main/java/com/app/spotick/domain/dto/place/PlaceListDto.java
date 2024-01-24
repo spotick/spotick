@@ -14,12 +14,12 @@ public class PlaceListDto {
     private Integer price;
     private PostAddress placeAddress;
     private List<PlaceFileDto> placeFiles;
-    private Double evalAvg;
+    private double evalAvg;
     private Long evalCount;
     private Long bookmarkCount;
     private boolean isBookmarkChecked;
 
-    public PlaceListDto(Long id, String title, Integer price, PostAddress placeAddress, List<PlaceFileDto> placeFiles, Double evalAvg, Long evalCount, Long bookmarkCount, boolean isBookmarkChecked) {
+    public PlaceListDto(Long id, String title, Integer price, PostAddress placeAddress, List<PlaceFileDto> placeFiles, double evalAvg, Long evalCount, Long bookmarkCount, boolean isBookmarkChecked) {
         this.id = id;
         this.title = title;
         this.price = price;

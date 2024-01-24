@@ -95,7 +95,36 @@
             </th:block>
         </article>
 
-        <div th:replace="~{global-templates/pagination-v1.html :: pagination-v1}"></div>
+
+        <section class="pagination-container">
+            <span class="pagination-previous" th:if="${pagination.hasPrevBlock()}">
+                <a class="pagination-btns first" th:href="@{/mypage/bookmarks(page=1)}" title="맨 처음">
+                    <i class="fa-solid fa-chevron-left"></i>
+                    <i class="fa-solid fa-chevron-left"></i>
+                </a>
+                <a class="pagination-btns" th:href="@{/mypage/bookmarks(page=${pagination.startPage - 1})}" title="이전">
+                    <i class="fa-solid fa-chevron-left"></i>
+                </a>
+            </span>
+
+                    <span class="pagination-body">
+                <span class="pagination-btns" th:each="i : ${#numbers.sequence(pagination.startPage, pagination.endPage)}">
+                    <a th:class="${i == pagination.currentPage ? 'active' : ''}" th:href="@{/mypage/bookmarks(page=${i})}"
+                       th:text="${i}"></a>
+                </span>
+            </span>
+
+                    <span class="pagination-next" th:if="${pagination.hasNextBlock()}">
+                <a class="pagination-btns" th:href="@{/mypage/bookmarks(page=${pagination.endPage+1})}" title="다음">
+                    <i class="fa-solid fa-chevron-right"></i>
+                </a>
+                <a class="pagination-btns end" th:href="@{/mypage/bookmarks(page=${pagination.lastPage})}"
+                   title="맨 끝">
+                    <i class="fa-solid fa-chevron-right"></i>
+                    <i class="fa-solid fa-chevron-right"></i>
+                </a>
+            </span>
+        </section>
 
     </div>
 </main>
