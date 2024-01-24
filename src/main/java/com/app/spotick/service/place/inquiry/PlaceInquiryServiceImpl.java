@@ -1,0 +1,36 @@
+package com.app.spotick.service.place.inquiry;
+
+import com.app.spotick.api.dto.place.PlaceInquiryDto;
+import com.app.spotick.domain.entity.place.Place;
+import com.app.spotick.domain.entity.place.PlaceInquiry;
+import com.app.spotick.domain.entity.user.User;
+import com.app.spotick.repository.place.PlaceRepository;
+import com.app.spotick.repository.place.inquiry.PlaceInquiryRepository;
+import com.app.spotick.repository.user.UserRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+@Service
+@Transactional
+@RequiredArgsConstructor
+public class PlaceInquiryServiceImpl implements PlaceInquiryService {
+    private final PlaceInquiryRepository inquiryRepository;
+    private final UserRepository userRepository;
+    private final PlaceRepository placeRepository;
+    @Override
+    public PlaceInquiryDto.Response register(PlaceInquiryDto.Request inquiryReq,Long userId) {
+        User userProxy = userRepository.getReferenceById(userId);
+        Place placeProxy = placeRepository.getReferenceById(inquiryReq.getPlaceId());
+
+        PlaceInquiry placeInquiry = PlaceInquiry.builder()
+                .user(userProxy)
+                .place(placeProxy)
+                .title(inquiryReq.getInquiryTitle())
+                .content(inquiryReq.getInquiryContent())
+                .build();
+        PlaceInquiry savedInquiry = inquiryRepository.save(placeInquiry);
+
+        return PlaceInquiryDto.Response.from(savedInquiry);
+    }
+}

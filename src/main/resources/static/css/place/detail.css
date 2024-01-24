@@ -390,12 +390,20 @@
     white-space: pre-line;
 }
 
+.inquiry-title{
+    margin-top: 16px;
+    margin-bottom: 8px;
+    color: rgb(36, 36, 36);
+    font-size: 15px;
+    font-weight: bold;
+}
+
 .inquiry-question {
     font-size: 15px;
     line-height: 22px;
     color: rgb(36, 36, 36);
     white-space: pre-line;
-    margin: 16px 0;
+    margin-bottom: 16px;
 }
 
 .inquiry-more {
@@ -645,7 +653,7 @@
     left: 0;
     bottom: 0;
     background-color: rgba(0, 0, 0, 0.8);
-    z-index: 1050;
+    z-index: 3000;
     touch-action: none;
 }
 
@@ -680,9 +688,10 @@
 
 .place-img-info-box p {
     font-size: 18px;
-    line-height: 30px;
+    line-height: 38px;
     font-weight: bold;
     color: rgb(255, 255, 255);
+    margin-left: 12px;
 }
 
 .img-count {
@@ -703,19 +712,17 @@
     transition-property: transform;
     transform: translate3d(0px, 0px, 0px);
     transition: 0.5s;
+    width: 728px;
     display: flex;
-    width: 700px;
-    height: 472px;
 }
 
 .modal-img-item {
     display: flex;
-    width: 700px;
-    height: 100%;
+    width: 728px;
 }
 
 .modal-img{
-    width: 700px;
+    width: 728px;
     object-fit: contain;
 }
 
@@ -946,7 +953,7 @@ textarea::-webkit-scrollbar {
 }
 
 .place-like-btn {
-    border: 1px solid #9ea4aa;
+    /*border: 1px solid #9ea4aa;*/
     font-size: 30px;
     border-radius: 50%;
     width: 50px;

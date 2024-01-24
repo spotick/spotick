@@ -101,7 +101,6 @@ $('.calendar-wrap button').on('click', function () {
 });
 
 function calculateAmountAndShow() {
-    // Todo 사용시간과 예약 인원에 따라 계산해서 화면에 보여주기
     let usageTime = getUsageTime($('#checkIn').val(),$('#checkOut').val());
     let placeSurcharge = $('#placeSurcharge').val();
     let visitors = $('.visitors').val();
@@ -240,6 +239,12 @@ function convertToAmPmFormat(hour) {
 
 // 문의 모달창 띄우기
 $('.inquiry-write-btn').on('click', function () {
+    let isLoggedIn = $('#isLoggedIn').val();
+    if(isLoggedIn==='false'){
+        alert('로그인이 필요한 서비스 입니다');
+        location.href = '/user/login';
+        return ;
+    }
     $('.inquiry-modal-container').removeClass('none');
     $('body').css('overflow', 'hidden');
 });
@@ -263,7 +268,23 @@ $('#inquiryContent').on('input', function () {
 
 $('.inquiry-modal-wrap').on('click', '.inquiry-submit.on', function () {
 //    ajax로 문의 작성 처리
-    alert('문의작성 완료');
+    let inquiryTitle = $('#inquiryTitle').val();
+    let inquiryContent = $('#inquiryContent').val();
+    let placeId = $('#placeId').val();
+
+    fetch(`/places/inquiry/v1/register`,{
+        method: 'POST',
+        headers:{
+            "Content-Type":"application/json",
+        },
+        body :JSON.stringify({
+            placeId: placeId,
+            inquiryTitle : inquiryTitle,
+            inquiryContent: inquiryContent
+        }),
+    }).then(e=>e.json())
+        .then(e=>console.log(e));
+
     $('.inquiry-modal-container').addClass('none');
     $('body').css('overflow', 'unset');
     clearInquiry();
@@ -276,8 +297,20 @@ function clearInquiry() {
     $('.inquiry-submit').removeClass('on');
 }
 
+
 // 북마크 버튼
 $('.place-like-btn').on('click', function () {
+    let isLoggedIn = $('#isLoggedIn').val();
+    if(isLoggedIn==='false'){
+        alert('로그인이 필요한 서비스 입니다');
+        location.href = '/user/login';
+        return ;
+    }
+    let placeId = $('#placeId').val();
+    fetch(`/bookmark?placeId=${placeId}`)
+        .then(r => r.json())
+        .then(isAdded=>console.log(isAdded));
+
     $(this).find('span').toggleClass('none');
 });
 
