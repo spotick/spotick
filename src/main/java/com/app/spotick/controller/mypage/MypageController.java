@@ -1,8 +1,13 @@
 package com.app.spotick.controller.mypage;
 
 import com.app.spotick.domain.dto.place.PlaceListDto;
+import com.app.spotick.domain.dto.place.PlaceReservationListDto;
 import com.app.spotick.domain.dto.user.UserDetailsDto;
 import com.app.spotick.domain.dto.user.UserProfileDto;
+import com.app.spotick.domain.entity.place.PlaceReservation;
+import com.app.spotick.domain.pagination.Pagination;
+import com.app.spotick.domain.type.place.PlaceReservationStatus;
+import com.app.spotick.service.place.PlaceReservationService;
 import com.app.spotick.service.redis.RedisService;
 import com.app.spotick.service.user.UserProfileFileService;
 import com.app.spotick.service.user.UserService;
@@ -21,7 +26,9 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 
+import java.net.URI;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
@@ -31,6 +38,7 @@ import java.util.Objects;
 public class MypageController {
     private final UserService userService;
     private final UserProfileFileService profileFileService;
+    private final PlaceReservationService placeReservationService;
     private final RedisService redisService;
 
 
@@ -150,12 +158,10 @@ public class MypageController {
         Pageable pageable = PageRequest.of(page - 1, 6);
 
         Page<PlaceListDto> bookmarkedPlaces = userService.findBookmarkedPlacesByUserId(userDetailsDto.getId(), pageable);
-
-        System.out.println("bookmarkedPlaces.getTotalPages() = " + bookmarkedPlaces.getTotalPages());
-        System.out.println("pageable.getPageNumber() = " + pageable.getPageNumber());
-        System.out.println("pageableSize = " + pageable.getPageSize());
+        Pagination<PlaceListDto> pagination = new Pagination<>(5, pageable, bookmarkedPlaces);
 
         model.addAttribute("placeDtoList", bookmarkedPlaces);
+        model.addAttribute("pagination", pagination);
     }
 
     /* =================================================예약내역====================================================== */
@@ -165,8 +171,85 @@ public class MypageController {
                                  Model model) {
         Pageable pageable = PageRequest.of(page - 1, 6);
 
-        model.addAttribute("reservationDtoList",
-                userService.findReservationsByUserId(userDetailsDto.getId(), pageable));
+        Page<PlaceReservationListDto> reservations = userService.findReservationsByUserId(userDetailsDto.getId(), pageable);
+        Pagination<PlaceReservationListDto> pagination = new Pagination<>(5, pageable, reservations);
+
+        model.addAttribute("reservationDtoList", reservations);
+        model.addAttribute("pagination", pagination);
+    }
+
+    @GetMapping("/reservation/{reservationId}/cancel")
+    @ResponseBody
+    public ResponseEntity<String> cancelReservation(@PathVariable("reservationId") Long reservationId,
+                                                    @AuthenticationPrincipal UserDetailsDto userDetailsDto) {
+        // reservationId검증: userId 동일한지 검증 필요 -> 시간정보 찾아와서 checkIn시간 체크하여 지나지 않았는지 검증 -> accepted 검증(아닐 시 취소 불가능)
+        PlaceReservation reservation = placeReservationService
+                .findReservationByIdAndUser(reservationId, userDetailsDto.getId()).orElse(null);
+
+        // if문 여러개보다는 하나하나씩 필터링하여 성능 문제를 최대한 개선하고자 else if로 이어감.
+        if (reservation == null) {
+            // 예약 정보를 찾을 수 없을 시
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("예약 정보를 찾을 수 없습니다.");
+
+        } else if (!Objects.equals(reservation.getUser().getId(), userDetailsDto.getId())) {
+            // 조회를 하여도 user의 정보가 해당 로그인 유저와 다를 시
+            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                    .body("예약 정보에 접근할 권한이 없습니다.");
+
+        } else if (reservation.getCheckIn().isBefore(LocalDateTime.now())) {
+            // checkIn시간이 현재 시간보다 이전일 경우, 이미 승인된 예약일 경우
+            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                    .body("예약 시간이 지나간 예약은<br>취소할 수 없습니다.");
+
+        } else if (reservation.getReservationStatus().equals(PlaceReservationStatus.APPROVED)) {
+            // 승인된 예약은 취소 불가
+            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                    .body("이미 승인된 예약은<br>취소할 수 없습니다.");
+        }
+
+        placeReservationService.cancelReservation(reservationId);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body("예약이 취소되었습니다.");
+    }
+
+    @GetMapping("/reservation/{reservationId}/delete")
+    @ResponseBody
+    public ResponseEntity<String> deleteReservation(@PathVariable("reservationId") Long reservationId,
+                                                    @AuthenticationPrincipal UserDetailsDto userDetailsDto,
+                                                    RedirectAttributes redirectAttributes) {
+        // reservationId검증: userId 동일한지 검증 필요 -> 시간정보 찾아와서 checkOut시간 체크하여 지나갔는지 검증 -> accepted, rejected, cancled아닐 시 삭제 불가.
+        PlaceReservation reservation = placeReservationService
+                .findReservationByIdAndUser(reservationId, userDetailsDto.getId()).orElse(null);
+
+        // if문 여러개보다는 하나하나씩 필터링하여 성능 문제를 최대한 개선하고자 else if로 이어감.
+        if (reservation == null) {
+            // 예약 정보를 찾을 수 없을 시
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("예약 정보를 찾을 수 없습니다.");
+
+        } else if (!Objects.equals(reservation.getUser().getId(), userDetailsDto.getId())) {
+            // 조회를 하여도 user의 정보가 해당 로그인 유저와 다를 시
+            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                    .body("예약 정보에 접근할 권한이 없습니다.");
+
+        } else if (reservation.getCheckOut().isAfter(LocalDateTime.now())) {
+            // checkIn시간이 현재 시간보다 이전일 경우, 이미 승인된 예약일 경우
+            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                    .body("예약시간이 지나지 않은 예약은<br>삭제할 수 없습니다.");
+
+        } else if (reservation.getReservationStatus().equals(PlaceReservationStatus.PENDING)
+                || reservation.getReservationStatus().equals(PlaceReservationStatus.WAITINGPAYMENT)) {
+            // 예약이 해지되지 못하고 유효한 상태일 시 삭제불가
+            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                    .body("예약이 해지되어있지 않습니다.<br>예약을 취소하고 삭제를 시도하여주십시오.");
+        }
+
+        placeReservationService.deleteReservation(reservationId);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body("예약내역이 삭제되었습니다.");
     }
 
     @GetMapping("/inquiries")

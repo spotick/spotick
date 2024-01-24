@@ -41,4 +41,8 @@ public class PlaceReservation extends Period {
         this.place = place;
         this.user = user;
     }
+
+    public void updateStatus(PlaceReservationStatus reservationStatus) {
+        this.reservationStatus = reservationStatus;
+    }
 }

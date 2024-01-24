@@ -69,6 +69,7 @@ public class PlaceReservationQDSLRepositoryImpl implements PlaceReservationQDSLR
                 .select(
                         Projections.constructor(PlaceReservationListDto.class,
                                 place.id,
+                                placeReservation.id,
                                 place.title,
                                 place.price,
                                 place.placeAddress,

@@ -126,8 +126,15 @@
                                         <i class="fa-solid fa-ellipsis-vertical"></i>
                                     </button>
                                     <div class="mpcr-action-dropdown">
-                                        <div class="mpcra-item" onclick="showGSForCancelingReservation(4)">예약 취소</div>
-                                        <div class="mpcra-item" onclick="showGSForRemoveHistory(3)">기록 삭제</div>
+                                        <div class="mpcra-item">
+                                            해당 게시글로 이동
+                                        </div>
+                                        <div class="mpcra-item" th:if="*{reservationStatus == reservationStatus.PENDING
+                                            or reservationStatus == reservationStatus.WAITINGPAYMENT}"
+                                             th:onclick="'showGSForCancelingReservation(\'' + *{reservationId} + '\')'">예약 취소</div>
+                                        <div class="mpcra-item" th:unless="*{reservationStatus == reservationStatus.PENDING
+                                            or reservationStatus == reservationStatus.WAITINGPAYMENT}"
+                                             th:onclick="'showGSForRemoveHistory(\'' + *{reservationId} + '\')'">기록 삭제</div>
                                     </div>
                                 </div>
                                 <div class="mpcr-img-con">
@@ -205,7 +212,44 @@
                     </th:block>
                 </th:block>
             </div>
+            <th:block th:if="${reservationDtoList.empty}">
+                <div class="mp-no-list">
+                    <span>예약내역이 없습니다.</span>
+                </div>
+            </th:block>
         </article>
+
+
+        <section class="pagination-container" th:fragment="pagination-v2">
+            <span class="pagination-previous" th:if="${pagination.hasPrevBlock()}">
+                <a class="pagination-btns first" th:href="@{/mypage/reservations(page=1)}" title="맨 처음">
+                    <i class="fa-solid fa-chevron-left"></i>
+                    <i class="fa-solid fa-chevron-left"></i>
+                </a>
+                <a class="pagination-btns" th:href="@{/mypage/reservations(page=${pagination.startPage - 1})}" title="이전">
+                    <i class="fa-solid fa-chevron-left"></i>
+                </a>
+            </span>
+
+                    <span class="pagination-body">
+                <span class="pagination-btns" th:each="i : ${#numbers.sequence(pagination.startPage, pagination.endPage)}">
+                    <a th:href="@{/mypage/reservations(page=${i})}" th:text="${i}"
+                       th:class="${i == pagination.currentPage ? 'active' : ''}"></a>
+                </span>
+            </span>
+
+                    <span class="pagination-next" th:if="${pagination.hasNextBlock()}">
+                <a class="pagination-btns" th:href="@{/mypage/reservations(page=${pagination.endPage+1})}" title="다음">
+                    <i class="fa-solid fa-chevron-right"></i>
+                </a>
+                <a class="pagination-btns end" th:href="@{/mypage/reservations(page=${pagination.lastPage})}"
+                   title="맨 끝">
+                    <i class="fa-solid fa-chevron-right"></i>
+                    <i class="fa-solid fa-chevron-right"></i>
+                </a>
+            </span>
+        </section>
+
     </div>
 </main>
 
@@ -223,6 +267,7 @@
 <script>
     document.getElementById('reservations').classList.add('active');
 </script>
+<!-- todo: 완성 시 삭제 -->
 <script th:inline="javascript">
     console.log([[${reservationDtoList}]])
 </script>

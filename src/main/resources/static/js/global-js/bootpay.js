@@ -1,4 +1,5 @@
 function payItem() {
+    // todo: 부트페이 시스템 구축 필요
     const response = Bootpay.requestPayment({
         "application_id": "59a4d323396fa607cbe75de4",
         "price": 1000,
