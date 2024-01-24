@@ -353,7 +353,7 @@ function inquiryDisplay(data) {
     console.log(data);
     let $target = $('.inquiry-list-wrap');
     let text = '';
-    if (data.empty) {
+    if (data.inquiryPage.empty) {
         text = `<div class="flex-center empty-inquiry">
                             등록된 문의가 없습니다.
                         </div>`;
@@ -389,7 +389,7 @@ function inquiryDisplay(data) {
                        `;
         }
         text += `    </div>
-                        </div>
+                    </div>
             `;
     });
     text += `
@@ -414,7 +414,7 @@ function inquiryDisplay(data) {
     }
         text+=`</div>`;
 
-    $('.inquiry-count').text(data.inquiryPage.totalElements);
+    $('.inquiry-cnt').text(data.inquiryPage.totalElements);
     $target.html(text);
 }
 

@@ -43,11 +43,8 @@ public class PlaceInquiryRestController {
 
         Pagination<PlaceInquiryDto.Response> pageBlock = new Pagination<>(5,pageRequest,inquiryPage);
 
-        Map<String, Object> resultMap = new HashMap<>();
-        resultMap.put("inquiryPage", inquiryPage);
-        resultMap.put("pageBlock", pageBlock);
-
-        return ResponseEntity.ok().body(resultMap);
+        return ResponseEntity.ok()
+                .body(Map.of("inquiryPage", inquiryPage,"pageBlock", pageBlock));
     }
 
 

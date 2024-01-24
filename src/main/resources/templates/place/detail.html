@@ -124,7 +124,7 @@
                     <p>리뷰<span th:text="${place.evalCount}"></span></p>
                 </div>
                 <div class="nav-item">
-                    <p>문의<span th:text="${place.inquiryCount}"></span></p>
+                    <p>문의<span class="inquiry-cnt" th:text="${place.inquiryCount}"></span></p>
                 </div>
             </div>
 
@@ -291,7 +291,7 @@
 
                 <div class="place-inquiry-box">
                     <div class="flex-between-align">
-                        <p class="title">문의 <span class="inquiry-count" th:text="${place.inquiryCount}"></span></p>
+                        <p class="title">문의 <span class="inquiry-count inquiry-cnt" th:text="${place.inquiryCount}"></span></p>
                         <button type="button" class="inquiry-write-btn">문의하기</button>
                     </div>
 
