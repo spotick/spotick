@@ -335,7 +335,7 @@
 
 .inquiry-item-box {
     border-bottom: 1px solid rgb(240, 240, 240);
-    padding: 24px 0;
+    padding: 12px 0;
 }
 
 .inquiry-question-box {
@@ -429,6 +429,17 @@
     font-size: 14px;
     margin: 0 2px;
 }
+
+.empty-inquiry{
+    font-size: 16px;
+    line-height: 24px;
+    color: rgb(212, 215, 226);
+    text-align: center;
+    padding: 20px 0;
+}
+
+
+
 
 .page-num.focus,
 .review-more-btn:hover {

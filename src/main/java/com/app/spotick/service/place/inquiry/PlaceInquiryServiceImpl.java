@@ -8,6 +8,8 @@ import com.app.spotick.repository.place.PlaceRepository;
 import com.app.spotick.repository.place.inquiry.PlaceInquiryRepository;
 import com.app.spotick.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,4 +35,20 @@ public class PlaceInquiryServiceImpl implements PlaceInquiryService {
 
         return PlaceInquiryDto.Response.from(savedInquiry);
     }
+    @Override
+    public Page<PlaceInquiryDto.Response> inquiryListWithPage(Long placeId, Pageable pageable) {
+        return inquiryRepository.inquiryListWithPage(placeId,pageable)
+                .map(PlaceInquiryDto.Response::from);
+    }
 }
+
+
+
+
+
+
+
+
+
+
+

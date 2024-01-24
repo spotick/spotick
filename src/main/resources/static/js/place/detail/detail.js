@@ -1,10 +1,13 @@
+let placeId = $('#placeId').val();
+
+
 $('.nav-item').on('click', function () {
     $('.nav-item').not(this).removeClass('nav-focus');
     $(this).addClass('nav-focus');
 });
 
 // 문의 답변 내용 숨기기, 보이기
-$('.answer-ctr-box').on('click', function () {
+$('.inquiry-list-wrap').on('click', '.answer-ctr-box', function () {
     $(this).find('img').toggleClass('none');
     $(this).siblings('.answer-box').toggleClass('none');
 });
@@ -101,14 +104,14 @@ $('.calendar-wrap button').on('click', function () {
 });
 
 function calculateAmountAndShow() {
-    let usageTime = getUsageTime($('#checkIn').val(),$('#checkOut').val());
+    let usageTime = getUsageTime($('#checkIn').val(), $('#checkOut').val());
     let placeSurcharge = $('#placeSurcharge').val();
     let visitors = $('.visitors').val();
     let defaultPeople = $('#placeDefaultPeople').val();
-    let surcharge = defaultPeople<visitors
-        ?placeSurcharge*(visitors-defaultPeople):0;
+    let surcharge = defaultPeople < visitors
+        ? placeSurcharge * (visitors - defaultPeople) : 0;
     let placePrice = $('#placePrice').val();
-    let totalAmount = placePrice*usageTime;
+    let totalAmount = placePrice * usageTime;
     let text = `
         <div class="reservation-time-box">
             <div class="flex-between-align">
@@ -120,8 +123,8 @@ function calculateAmountAndShow() {
                 <p class="sub-title reservation-amount">${totalAmount.toLocaleString()}원</p>
             </div> `;
 
-            if (surcharge>0){
-                text+=`
+    if (surcharge > 0) {
+        text += `
                     <div class="reservation-people-box">
                         <div class="flex-between-align">
                             <p class="small-title">총인원</p>
@@ -134,8 +137,8 @@ function calculateAmountAndShow() {
                             </div>
                         </div>
                     </div>`;
-            }
-        text +=`        
+    }
+    text += `        
             <div class="line"></div>
             <div class="total-reserve-amount-box">
                 <div class="flex-between-align">
@@ -240,10 +243,10 @@ function convertToAmPmFormat(hour) {
 // 문의 모달창 띄우기
 $('.inquiry-write-btn').on('click', function () {
     let isLoggedIn = $('#isLoggedIn').val();
-    if(isLoggedIn==='false'){
+    if (isLoggedIn === 'false') {
         alert('로그인이 필요한 서비스 입니다');
         location.href = '/user/login';
-        return ;
+        return;
     }
     $('.inquiry-modal-container').removeClass('none');
     $('body').css('overflow', 'hidden');
@@ -270,20 +273,19 @@ $('.inquiry-modal-wrap').on('click', '.inquiry-submit.on', function () {
 //    ajax로 문의 작성 처리
     let inquiryTitle = $('#inquiryTitle').val();
     let inquiryContent = $('#inquiryContent').val();
-    let placeId = $('#placeId').val();
 
-    fetch(`/places/inquiry/v1/register`,{
+    fetch(`/places/inquiry/v1/register`, {
         method: 'POST',
-        headers:{
-            "Content-Type":"application/json",
+        headers: {
+            "Content-Type": "application/json",
         },
-        body :JSON.stringify({
+        body: JSON.stringify({
             placeId: placeId,
-            inquiryTitle : inquiryTitle,
+            inquiryTitle: inquiryTitle,
             inquiryContent: inquiryContent
         }),
-    }).then(e=>e.json())
-        .then(e=>console.log(e));
+    }).then(e => e.json())
+        .then(e=>getInquiryList(1));
 
     $('.inquiry-modal-container').addClass('none');
     $('body').css('overflow', 'unset');
@@ -293,6 +295,7 @@ $('.inquiry-modal-wrap').on('click', '.inquiry-submit.on', function () {
 
 function clearInquiry() {
     $('#inquiryContent').val('');
+    $('#inquiryTitle').val('');
     $('.letter-count span').text(0);
     $('.inquiry-submit').removeClass('on');
 }
@@ -301,15 +304,15 @@ function clearInquiry() {
 // 북마크 버튼
 $('.place-like-btn').on('click', function () {
     let isLoggedIn = $('#isLoggedIn').val();
-    if(isLoggedIn==='false'){
+    if (isLoggedIn === 'false') {
         alert('로그인이 필요한 서비스 입니다');
         location.href = '/user/login';
-        return ;
+        return;
     }
-    let placeId = $('#placeId').val();
+
     fetch(`/bookmark?placeId=${placeId}`)
         .then(r => r.json())
-        .then(isAdded=>console.log(isAdded));
+        .then(isAdded => console.log(isAdded));
 
     $(this).find('span').toggleClass('none');
 });
@@ -329,6 +332,91 @@ function reservationFormOk() {
     return isTrue;
 }
 
+getInquiryList(1);
+
+$('.inquiry-list-wrap').on('click','.pagination-box button',function (){
+    let page = $(this).data('page')
+    getInquiryList(page);
+});
+
+
+
+
+function getInquiryList(page) {
+
+    fetch(`/places/inquiry/v1/${placeId}/list?page=${page}`)
+        .then(response => response.json())
+        .then(inquiryDisplay);
+}
+
+function inquiryDisplay(data) {
+    console.log(data);
+    let $target = $('.inquiry-list-wrap');
+    let text = '';
+    if (data.empty) {
+        text = `<div class="flex-center empty-inquiry">
+                            등록된 문의가 없습니다.
+                        </div>`;
+        $target.html(text);
+        return;
+    }
+
+    data.inquiryPage.content.forEach(item => {
+        text += `
+       <div class="inquiry-item-box ">
+           <div class="inquiry-question-box flex-column">
+               <div class="question-info">
+                   <p class="questioner">${item.questionerNickname}</p>
+                   <p class="dot">・</p>
+                   <p class="question-date">${item.questionDate}</p>
+               </div>
+               <p class="inquiry-title">${item.inquiryTitle}</p>
+               <p class="inquiry-question">${item.inquiryContent}</p>`;
+
+        if (item.inquiryResponse != null) {
+            text += `
+                            <div class="answer-ctr-box">
+                                  <p>답변보기</p>
+                                  <img src="https://s3.hourplace.co.kr/web/images/icon/chevron_down_grey.svg" alt="">
+                                  <img class="none"
+                                       src="https://s3.hourplace.co.kr/web/images/icon/chevron_up_grey.svg" alt="">
+                               </div>
+                               <div class="answer-box none">
+                                   <p class="answer-info">호스트 답변 ・ ${item.inquiryReplyDate}</p>
+                                   <p class="answer-content">${item.inquiryResponse}</p>
+                               </div>
+                               
+                       `;
+        }
+        text += `    </div>
+                        </div>
+            `;
+    });
+    text += `
+        <div class="pagination-box flex-center">`;
+            if(data.pageBlock.startPage>1){
+            text +=`<button data-page="${data.pageBlock.startPage-1}" type="button" class="page-prev">
+                        <img src="https://shareit.kr/_next/static/media/arrow_left_gray074.fa695002.svg" alt="">
+                    </button>`;
+            }
+    for (let i = data.pageBlock.startPage; i <= data.pageBlock.endPage; i++) {
+        text += `<button data-page="${i}" class="page-num ${data.pageBlock.currentPage == i ? 'focus' : ''}" type="button">
+                ${i}
+            </button>`
+    }
+
+    if(data.pageBlock.endPage<data.pageBlock.lastPage){
+        text += `
+            <button data-page="${data.pageBlock.endPage+1}" type="button" class="page-next">
+                <img src="https://shareit.kr/_next/static/media/arrow_right_gray074.86c7e872.svg"
+                     alt="">
+            </button>`;
+    }
+        text+=`</div>`;
+
+    $('.inquiry-count').text(data.inquiryPage.totalElements);
+    $target.html(text);
+}
 
 
 

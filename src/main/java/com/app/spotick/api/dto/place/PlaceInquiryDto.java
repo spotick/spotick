@@ -8,33 +8,39 @@ import java.time.format.DateTimeFormatter;
 
 public class PlaceInquiryDto {
 
-    @Data @NoArgsConstructor
-    public static class Request{
+    @Data
+    @NoArgsConstructor
+    public static class Request {
         private Long placeId;
         private String inquiryTitle;
         private String inquiryContent;
     }
 
 
-    @Data @NoArgsConstructor
-    public static class Response{
+    @Data
+    @NoArgsConstructor
+    public static class Response {
         private Long placeId;
         private String inquiryTitle;
         private String inquiryContent;
-        private String userNickname;
+        private Long questionerId;
+        private String questionerNickname;
         private String questionDate;
         private String inquiryResponse;
         private String inquiryReplyDate;
-        public Response(Long placeId, String inquiryTitle, String inquiryContent, String userNickname, String questionDate, String inquiryResponse, String inquiryReplyDate) {
+
+        public Response(Long placeId, String inquiryTitle, String inquiryContent, Long questionerId, String questionerNickname, String questionDate, String inquiryResponse, String inquiryReplyDate) {
             this.placeId = placeId;
             this.inquiryTitle = inquiryTitle;
             this.inquiryContent = inquiryContent;
-            this.userNickname = userNickname;
+            this.questionerId = questionerId;
+            this.questionerNickname = questionerNickname;
             this.questionDate = questionDate;
             this.inquiryResponse = inquiryResponse;
             this.inquiryReplyDate = inquiryReplyDate;
         }
-        public static Response from(PlaceInquiry placeInquiry){
+
+        public static Response from(PlaceInquiry placeInquiry) {
             Response resp = new Response();
             resp.setPlaceId(placeInquiry.getPlace().getId());
             resp.setInquiryTitle(placeInquiry.getTitle());
@@ -44,6 +50,11 @@ public class PlaceInquiryDto {
             resp.setInquiryResponse(placeInquiry.getResponse());
             resp.setInquiryReplyDate(placeInquiry.getModifiedDate()
                     .format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+            if (placeInquiry.getUser() != null) {
+                resp.setQuestionerId(placeInquiry.getUser().getId());
+                resp.setQuestionerNickname(placeInquiry.getUser().getNickName());
+            }
+
             return resp;
         }
 
