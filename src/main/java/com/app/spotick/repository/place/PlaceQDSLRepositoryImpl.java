@@ -5,6 +5,7 @@ import com.app.spotick.domain.dto.place.PlaceFileDto;
 import com.app.spotick.domain.dto.place.PlaceListDto;
 import com.app.spotick.domain.entity.place.Place;
 import com.app.spotick.domain.entity.place.QPlace;
+import com.app.spotick.domain.entity.place.QPlaceReview;
 import com.app.spotick.domain.type.post.PostStatus;
 import com.querydsl.core.Tuple;
 import com.querydsl.core.group.GroupBy;
@@ -51,6 +52,7 @@ public class PlaceQDSLRepositoryImpl implements PlaceQDSLRepository {
                 .orderBy(place.id.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
+
                 .transform(GroupBy.groupBy(place.id)
                         .list(Projections.constructor(PlaceListDto.class,
                                 place.id,
@@ -85,13 +87,19 @@ public class PlaceQDSLRepositoryImpl implements PlaceQDSLRepository {
         JPQLQuery<Long> reviewCountSub = createReviewCountSub(place);
         JPQLQuery<Long> inquiryCountSub = createInquiryCountSub(place);
         BooleanExpression bookmarkCheckedSub = isBookmarkCheckedSub(place, userId);
+        QPlaceReview subReview = new QPlaceReview("pr");
+        JPQLQuery<Long> review5scoreCount = JPAExpressions.select(subReview.id.count())
+                .from(subReview)
+                .where(subReview.place.id.eq(placeId), subReview.score.eq(5));
+
 
         List<Tuple> tupleList = queryFactory.select(
                         place,
                         reviewAvgSub,
                         reviewCountSub,
                         inquiryCountSub,
-                        bookmarkCheckedSub
+                        bookmarkCheckedSub,
+                        review5scoreCount
                 ).from(place)
                 .join(place.placeFileList).fetchJoin()
                 .where(place.id.eq(placeId))
@@ -104,6 +112,7 @@ public class PlaceQDSLRepositoryImpl implements PlaceQDSLRepository {
             placeDetail.setEvalCount(tuple.get(reviewCountSub));
             placeDetail.setInquiryCount(tuple.get(inquiryCountSub));
             placeDetail.setBookmarkChecked(tuple.get(bookmarkCheckedSub));
+            placeDetail.setEval5ScoreCount(tuple.get(review5scoreCount));
             return placeDetail;
         }).findFirst().orElseThrow(() -> new IllegalStateException("잘못된 게시글"));
 

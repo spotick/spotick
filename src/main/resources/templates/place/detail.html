@@ -37,8 +37,9 @@
         </button>
 
         <button type="button" class="more-img-btn flex-align-center">
+            +
             <th:block th:if="${place.placeFileList.size() - 5 > 0}">
-                <span th:text="${'+' + (place.placeFileList.size() - 5)}"></span>
+                <span th:text="${(place.placeFileList.size() - 5)}"></span>
             </th:block>
             <img src="https://shareit.kr/_next/static/media/plus_ractangle_repeated_white.e641653f.svg" alt="">
         </button>
@@ -217,7 +218,9 @@
                             </div>
                             <span class="review-score" th:text="${place.evalAvg}"></span>
                         </div>
-                        <p>74%의 고객이 5점을 주었어요.</p>
+                        <p>
+                            <span th:text="${place.eval5ScoreCount != 0 ? (place.evalCount / place.eval5ScoreCount) : 0}"></span>%의 고객이 5점을 주었어요.
+                        </p>
                     </div>
 
                     <div class="review-list">
@@ -288,7 +291,7 @@
 
                 <div class="place-inquiry-box">
                     <div class="flex-between-align">
-                        <p class="title">문의 <span class="inquiry-count">21</span></p>
+                        <p class="title">문의 <span class="inquiry-count" th:text="${place.inquiryCount}"></span></p>
                         <button type="button" class="inquiry-write-btn">문의하기</button>
                     </div>
 
@@ -301,8 +304,8 @@
                                     <p class="dot">・</p>
                                     <p class="question-date">2023-12-12</p>
                                 </div>
-                                <p class="inquiry-question">문의질문 내용
-                                    문의질문 내용 문의질문 내용 문의질문 내용 문의질문 내용 문의질문 내용 문의질문 내용 문의질문 내용 문의질문 내용 문의질문 내용 문의질문 내용 문의질문
+                                <p class="inquiry-title">문의 제목</p>
+                                <p class="inquiry-question">문의질문 내용 문의질문 내용 문의질문 내용 문의질문 내용 문의질문 내용 문의질문 내용 문의질문 내용 문의질문 내용 문의질문 내용 문의질문 내용 문의질문
                                     내용 문의질문 내용
                                 </p>
                                 <div class="answer-ctr-box">

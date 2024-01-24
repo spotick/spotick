@@ -390,12 +390,20 @@
     white-space: pre-line;
 }
 
+.inquiry-title{
+    margin-top: 16px;
+    margin-bottom: 8px;
+    color: rgb(36, 36, 36);
+    font-size: 15px;
+    font-weight: bold;
+}
+
 .inquiry-question {
     font-size: 15px;
     line-height: 22px;
     color: rgb(36, 36, 36);
     white-space: pre-line;
-    margin: 16px 0;
+    margin-bottom: 16px;
 }
 
 .inquiry-more {

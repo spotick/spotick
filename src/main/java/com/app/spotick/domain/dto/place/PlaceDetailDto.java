@@ -25,12 +25,13 @@ public class PlaceDetailDto {
 
     private double evalAvg;
     private long evalCount;
+    private long eval5ScoreCount;
     private long inquiryCount;
     private boolean isBookmarkChecked;
 
     private List<PlaceFileDto> placeFileList;
 
-    public PlaceDetailDto(Long placeId, String placeTitle, String placeSubTitle, String placeInfo, String placeRule, Integer placeDefaultPeople, String placeAddress, String placeAddressDetail, Integer placePrice, Integer placeSurcharge, Long hostId, double placeLat, double placeLng, double evalAvg, long evalCount, long inquiryCount, boolean isBookmarkChecked, List<PlaceFileDto> placeFileList) {
+    public PlaceDetailDto(Long placeId, String placeTitle, String placeSubTitle, String placeInfo, String placeRule, Integer placeDefaultPeople, String placeAddress, String placeAddressDetail, Integer placePrice, Integer placeSurcharge, Long hostId, double placeLat, double placeLng, double evalAvg, long evalCount,long eval5ScoreCount, long inquiryCount, boolean isBookmarkChecked, List<PlaceFileDto> placeFileList) {
         this.placeId = placeId;
         this.placeTitle = placeTitle;
         this.placeSubTitle = placeSubTitle;
@@ -48,6 +49,7 @@ public class PlaceDetailDto {
         this.evalCount = evalCount;
         this.inquiryCount = inquiryCount;
         this.isBookmarkChecked = isBookmarkChecked;
+        this.eval5ScoreCount = eval5ScoreCount;
     }
 
     public static PlaceDetailDto from(Place place) {
