@@ -455,6 +455,22 @@ class PlaceQDSLRepositoryImplTest {
         placeDetailDto.getPlaceFileList().forEach(file-> log.info("file : {}", file));
     }
 
+    @Test
+    void transFormTest2(){
+        PageRequest pageRequest = PageRequest.of(0, 12);
+        List<PlaceListDto> placeListPaging = placeRepository.findPlaceListPaging(pageRequest, null);
+
+        placeListPaging.forEach(place->{
+            System.out.println("place = " + place);
+            System.out.println("place.getPlaceFiles() = " + place.getPlaceFiles());
+            System.out.println("사진 갯수 = " + place.getPlaceFiles().size());
+            System.out.println("===============================");
+        });
+
+
+
+    }
+
 
 
 

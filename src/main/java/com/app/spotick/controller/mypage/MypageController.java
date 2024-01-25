@@ -26,7 +26,6 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 
-import java.net.URI;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -240,7 +239,7 @@ public class MypageController {
                     .body("예약시간이 지나지 않은 예약은<br>삭제할 수 없습니다.");
 
         } else if (reservation.getReservationStatus().equals(PlaceReservationStatus.PENDING)
-                || reservation.getReservationStatus().equals(PlaceReservationStatus.WAITINGPAYMENT)) {
+                || reservation.getReservationStatus().equals(PlaceReservationStatus.WAITING_PAYMENT)) {
             // 예약이 해지되지 못하고 유효한 상태일 시 삭제불가
             return ResponseEntity.status(HttpStatus.FORBIDDEN)
                     .body("예약이 해지되어있지 않습니다.<br>예약을 취소하고 삭제를 시도하여주십시오.");
