@@ -29,7 +29,7 @@
                 <th:block th:if="${#lists.size(placeDtoList)}">
                     <th:block th:each="placeDto:${placeDtoList}">
                         <div class="OneItemContainer hover mybookmark" th:object="${placeDto}">
-                            <div class="OneItemImgContainer">
+                            <a class="OneItemImgContainer" th:href="@{/place/detail/{placeId}(placeId = ${placeDto.id})}">
                                 <div class="swiper ImageSwiper swiper-initialized swiper-horizontal swiper-pointer-events swiper-backface-hidden">
                                     <div class="swiper-wrapper ImageLength"
                                          style="transform: translate3d(0px, 0px, 0px);">
@@ -41,6 +41,7 @@
                                                      th:src="*{'/file/display?fileName=' + uploadPath + '/t_' + uuid + '_' + fileName}">
                                             </div>
                                         </th:block>
+                                        <!-- 이미지 한칸 -->
                                     </div>
                                     <div class="NavigationBtnContainer">
                                         <button class="NavigationBtn RightBtn" type="button">
@@ -58,8 +59,8 @@
                                         th:data-id="*{id}" type="button">
                                     <img alt="북마크" src="/imgs/bookmark_line_white_shadow_48.png">
                                 </button>
-                            </div>
-                            <div class="ItemTextContainer">
+                            </a>
+                            <a class="ItemTextContainer" th:href="@{/place/detail/{placeId}(placeId = ${placeDto.id})}">
                                 <div class="ItemHostNameContainer">
                                     <span class="ItemHostName" th:text="*{placeAddress.address}"></span>
                                     <div class="ItemCountsContainer">
@@ -83,7 +84,7 @@
                                     <span class="ItemPrice"
                                           th:text="${#numbers.formatInteger(placeDto.price, 3, 'COMMA')} + '원'"></span>
                                 </div>
-                            </div>
+                            </a>
                         </div>
                     </th:block>
                 </th:block>
@@ -107,14 +108,16 @@
                 </a>
             </span>
 
-                    <span class="pagination-body">
-                <span class="pagination-btns" th:each="i : ${#numbers.sequence(pagination.startPage, pagination.endPage)}">
-                    <a th:class="${i == pagination.currentPage ? 'active' : ''}" th:href="@{/mypage/bookmarks(page=${i})}"
+            <span class="pagination-body">
+                <span class="pagination-btns"
+                      th:each="i : ${#numbers.sequence(pagination.startPage, pagination.endPage)}">
+                    <a th:class="${i == pagination.currentPage ? 'active' : ''}"
+                       th:href="@{/mypage/bookmarks(page=${i})}"
                        th:text="${i}"></a>
                 </span>
             </span>
 
-                    <span class="pagination-next" th:if="${pagination.hasNextBlock()}">
+            <span class="pagination-next" th:if="${pagination.hasNextBlock()}">
                 <a class="pagination-btns" th:href="@{/mypage/bookmarks(page=${pagination.endPage+1})}" title="다음">
                     <i class="fa-solid fa-chevron-right"></i>
                 </a>

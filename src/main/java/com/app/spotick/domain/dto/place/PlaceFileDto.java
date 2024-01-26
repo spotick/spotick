@@ -12,13 +12,6 @@ public class PlaceFileDto {
     private String uploadPath;
     private Long placeId;
 
-    public PlaceFileDto(Long placeFileId,String fileName, String uuid, String uploadPath) {
-        this.placeFileId = placeFileId;
-        this.fileName = fileName;
-        this.uuid = uuid;
-        this.uploadPath = uploadPath;
-    }
-
     public PlaceFileDto(Long placeFileId, String fileName, String uuid, String uploadPath, Long placeId) {
         this.placeFileId = placeFileId;
         this.fileName = fileName;
