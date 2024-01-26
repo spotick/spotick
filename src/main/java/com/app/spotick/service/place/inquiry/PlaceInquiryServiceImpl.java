@@ -14,6 +14,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.NoSuchElementException;
+import java.util.Optional;
+
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -46,6 +49,22 @@ public class PlaceInquiryServiceImpl implements PlaceInquiryService {
     @Transactional(readOnly = true)
     public Page<PlaceInquiryListDto> getInquiriesByUserId(Long userId, Pageable pageable) {
         return inquiryRepository.findInquiriesByUserId(userId, pageable);
+    }
+
+    @Override
+    public Optional<PlaceInquiry> findInquiryByIdAndUser(Long placeInquiryId, Long userId) {
+        User tmpUser = userRepository.getReferenceById(userId);
+
+        return inquiryRepository.findByIdAndUser(placeInquiryId, tmpUser);
+    }
+
+    @Override
+    public void deleteInquiryById(Long placeInquiryId) {
+        PlaceInquiry foundInquiry = inquiryRepository.findById(placeInquiryId).orElseThrow(
+                NoSuchElementException::new
+        );
+
+        inquiryRepository.delete(foundInquiry);
     }
 }
 

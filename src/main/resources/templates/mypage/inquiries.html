@@ -25,12 +25,13 @@
             <div class="modal-place-con-box">
                 <div class="modal-place-title">문의 내용</div>
                 <div class="modal-place-input-con">
-                    <textarea class="modal-place-txarea" cols="30" readonly
-                              rows="10">테스트 요청사항 테스트 요청사항 테스트 요청사항 테스트 요청사항 테스트 요청사항 테스트 요청사항 테스트 요청사항 테스트 요청사항 </textarea>
+                    <textarea class="modal-place-txarea" cols="30" id="detailContent" readonly
+                              rows="10"></textarea>
                 </div>
                 <div class="modal-place-title">답변</div>
                 <div class="modal-place-input-con">
-                    <textarea class="modal-place-txarea" cols="30" placeholder="아직 답변받지 못했습니다!" readonly
+                    <textarea class="modal-place-txarea" cols="30" id="detailResponse" placeholder="아직 답변받지 못했습니다!"
+                              readonly
                               rows="10"></textarea>
                 </div>
             </div>
@@ -57,7 +58,7 @@
                     티켓 문의(<span>0</span>)
                 </button>
             </nav>
-            <div id="inquiryContainer" class="mpcr-container">
+            <div class="mpcr-container" id="inquiryContainer">
                 <div>확인하고 싶은 내역을 상단 바에서 클릭해주세요.</div>
             </div>
             <article>

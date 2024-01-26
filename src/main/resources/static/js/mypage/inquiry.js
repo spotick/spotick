@@ -1,5 +1,15 @@
-function popupInquiryModal() {
+const content = document.getElementById('detailContent');
+const response = document.getElementById('detailResponse');
+function popupInquiryModal(item) {
     openModal(modalInquiry)
+
+    content.value = item.getAttribute('data-content');
+
+    const responseString = item.getAttribute('data-response');
+
+    if (responseString !== null) {
+        response.value = responseString;
+    }
 }
 
 function showGSForInquiryDeletion(inquiryId) {
@@ -86,7 +96,8 @@ const inquiryService = (function () {
                             </div>
                         </div>
                         <div class="mpcr-divider"></div>
-                        <div class="mpcr-info" onclick="popupInquiryModal()">
+                        <div class="mpcr-info" onclick="popupInquiryModal(this)" 
+                            data-content="${inquiry.content}" data-response="${inquiry.response}">
                             <div class="mpcri-title">문의 내용</div>
                             <div class="mpcriq-title">${inquiry.inquiryTitle}</div>
                             <div class="mpcriq-content">${inquiry.content}</div>
