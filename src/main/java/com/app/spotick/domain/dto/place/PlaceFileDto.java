@@ -10,12 +10,14 @@ public class PlaceFileDto {
     private String fileName;
     private String uuid;
     private String uploadPath;
+    private Long placeId;
 
-    public PlaceFileDto(Long placeFileId,String fileName, String uuid, String uploadPath) {
+    public PlaceFileDto(Long placeFileId, String fileName, String uuid, String uploadPath, Long placeId) {
         this.placeFileId = placeFileId;
         this.fileName = fileName;
         this.uuid = uuid;
         this.uploadPath = uploadPath;
+        this.placeId = placeId;
     }
 
     public static PlaceFileDto from(PlaceFile placeFile){
