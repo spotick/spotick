@@ -130,13 +130,13 @@
                                                     게시글로 이동</a>
                                             </div>
                                             <div class="action-item" th:if="*{reservationStatus == reservationStatus.PENDING
-                                                or reservationStatus == reservationStatus.WAITINGPAYMENT}"
+                                                or reservationStatus == reservationStatus.WAITING_PAYMENT}"
                                                  th:onclick="'showGSForCancelingReservation(\'' + *{reservationId} + '\')'">
                                                 예약 취소
                                             </div>
                                             <div class="action-item" th:onclick="'showGSForRemoveHistory(\'' + *{reservationId} + '\')'"
                                                  th:unless="*{reservationStatus == reservationStatus.PENDING
-                                                or reservationStatus == reservationStatus.WAITINGPAYMENT}">기록
+                                                or reservationStatus == reservationStatus.WAITING_PAYMENT}">기록
                                                 삭제
                                             </div>
                                         </div>
@@ -177,7 +177,7 @@
                                         </div>
                                         <button class="mpccc-btn"
                                                 onclick="payItem()"
-                                                th:if="*{reservationStatus == reservationStatus.WAITINGPAYMENT}"
+                                                th:if="*{reservationStatus == reservationStatus.WAITING_PAYMENT}"
                                                 type="button">
                                             <span>결제 하기</span>
                                         </button>
