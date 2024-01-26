@@ -15,5 +15,9 @@ public interface PromotionRepository extends JpaRepository<PromotionBoard, Long>
 //    행사 리스트(페이징)
 //    행사 수정
 //    행사 삭제
-
+    @Query("select new com.app.spotick.domain.dto.promotion.PromotionListDto(" +
+            "p.id, p.title, p.subTitle, p.promotionCategory, f" +
+            ") " +
+            "from PromotionBoard p left join PromotionFile f on p.id = f.promotionBoard.id")
+    Page<PromotionListDto> findListWithPage(Pageable pageable);
 }

@@ -99,8 +99,8 @@
                     <p class="invalid-msg"></p>
                 </div>
                 <div class="input-box category-box">
-                    <label for="category"></label>
-                    <select class="select" name="category" id="category">
+                    <label for="promotionCategory"></label>
+                    <select class="select" th:field="*{promotionCategory}">
                         <option value="EDUCATION">강연/교육/세미나</option>
                         <option value="WORKSHOP">컨퍼런스/워크숍</option>
                         <option value="TEST_PBT">시험_P.B.T</option>
@@ -127,7 +127,7 @@
                     <p class="invalid-msg"></p>
                 </div>
                 <div style="min-height: 500px">
-                    <textarea class="summernote" name="editordata"></textarea>
+                    <textarea th:field="*{promotionContent}"></textarea>
                 </div>
             </div>
             <div class="flex-center start">
@@ -159,7 +159,7 @@
 <script src="/js/promotion/summernote-ko-KR.js"></script>
 <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.css" rel="stylesheet">
 <script>
-    $('.summernote').summernote({
+    $('#promotionContent').summernote({
         height: 500,
         lang: "ko-KR",
         minHeight:500,
