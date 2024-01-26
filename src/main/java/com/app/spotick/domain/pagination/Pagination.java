@@ -12,6 +12,8 @@ public class Pagination<T> {
     private int startPage; // 블록의 시작 번호
     private int endPage; // 블록의 마지막 번호
     private int lastPage; // 전체 페이지 중 마지막 번호
+    private boolean hasNextBlock;
+    private boolean hasPrevBlock;
 
     public Pagination(int blockSize, Pageable pageable, Page<T> page){
         this.blockSize = blockSize;
@@ -22,6 +24,9 @@ public class Pagination<T> {
         this.lastPage = page.getTotalPages() == 0 ? 1 : page.getTotalPages();
 
         this.endPage = Math.min(endPage, lastPage);
+
+        this.hasNextBlock = endPage < lastPage;
+        this.hasPrevBlock = startPage > 1;
     }
 
     public boolean hasNextBlock(){
