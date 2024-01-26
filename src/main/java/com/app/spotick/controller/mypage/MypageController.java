@@ -1,5 +1,6 @@
 package com.app.spotick.controller.mypage;
 
+import com.app.spotick.domain.dto.place.PlaceInquiryListDto;
 import com.app.spotick.domain.dto.place.PlaceListDto;
 import com.app.spotick.domain.dto.place.PlaceReservationListDto;
 import com.app.spotick.domain.dto.user.UserDetailsDto;
@@ -7,7 +8,9 @@ import com.app.spotick.domain.dto.user.UserProfileDto;
 import com.app.spotick.domain.entity.place.PlaceReservation;
 import com.app.spotick.domain.pagination.Pagination;
 import com.app.spotick.domain.type.place.PlaceReservationStatus;
+import com.app.spotick.repository.place.inquiry.PlaceInquiryRepository;
 import com.app.spotick.service.place.PlaceReservationService;
+import com.app.spotick.service.place.inquiry.PlaceInquiryService;
 import com.app.spotick.service.redis.RedisService;
 import com.app.spotick.service.user.UserProfileFileService;
 import com.app.spotick.service.user.UserService;
@@ -30,6 +33,7 @@ import java.net.URI;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.Objects;
 
 @Controller
@@ -155,10 +159,14 @@ public class MypageController {
     public void goToBookmarks(@RequestParam(value = "page", defaultValue = "1") int page,
                               @AuthenticationPrincipal UserDetailsDto userDetailsDto,
                               Model model) {
-        Pageable pageable = PageRequest.of(page - 1, 6);
+        PageRequest pageRequest = PageRequest.of(page - 1, 6);
 
-        Page<PlaceListDto> bookmarkedPlaces = userService.findBookmarkedPlacesByUserId(userDetailsDto.getId(), pageable);
-        Pagination<PlaceListDto> pagination = new Pagination<>(5, pageable, bookmarkedPlaces);
+        Page<PlaceListDto> bookmarkedPlaces = userService.findBookmarkedPlacesByUserId(userDetailsDto.getId(), pageRequest);
+        Pagination<PlaceListDto> pagination = new Pagination<>(5, pageRequest, bookmarkedPlaces);
+
+        System.out.println("bookmarkedPlaces = " + bookmarkedPlaces.getContent());
+        System.out.println("bookmarkedPlaces = " + bookmarkedPlaces.getSize());
+        System.out.println("pagination = " + pagination);
 
         model.addAttribute("placeDtoList", bookmarkedPlaces);
         model.addAttribute("pagination", pagination);
@@ -169,7 +177,7 @@ public class MypageController {
     public void goToReservations(@RequestParam(value = "page", defaultValue = "1") int page,
                                  @AuthenticationPrincipal UserDetailsDto userDetailsDto,
                                  Model model) {
-        Pageable pageable = PageRequest.of(page - 1, 6);
+        Pageable pageable = PageRequest.of(page - 1, 10);
 
         Page<PlaceReservationListDto> reservations = userService.findReservationsByUserId(userDetailsDto.getId(), pageable);
         Pagination<PlaceReservationListDto> pagination = new Pagination<>(5, pageable, reservations);
@@ -251,7 +259,7 @@ public class MypageController {
         return ResponseEntity.status(HttpStatus.OK)
                 .body("예약내역이 삭제되었습니다.");
     }
-
+private final PlaceInquiryRepository placeInquiryRepository;
     @GetMapping("/inquiries")
     public void goToInquiries() {
     }

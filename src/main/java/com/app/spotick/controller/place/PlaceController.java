@@ -1,5 +1,6 @@
 package com.app.spotick.controller.place;
 
+import com.app.spotick.domain.dto.place.PlaceDetailDto;
 import com.app.spotick.domain.dto.place.PlaceListDto;
 import com.app.spotick.domain.dto.place.PlaceRegisterDto;
 import com.app.spotick.domain.dto.user.UserDetailsDto;
@@ -32,8 +33,11 @@ public class PlaceController {
                               @AuthenticationPrincipal UserDetailsDto userDetailsDto,
                               Model model) {
         Long userId = userDetailsDto==null? null: userDetailsDto.getId();
-        model.addAttribute("place",
-                placeService.findPlaceDetailById(placeId,userId));
+        PlaceDetailDto place = placeService.findPlaceDetailById(placeId, userId);
+
+        System.out.println("place = " + place);
+
+        model.addAttribute("place", place);
         return "place/detail";
     }
 

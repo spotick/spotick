@@ -1,6 +1,7 @@
 package com.app.spotick.service.place.inquiry;
 
 import com.app.spotick.api.dto.place.PlaceInquiryDto;
+import com.app.spotick.domain.dto.place.PlaceInquiryListDto;
 import com.app.spotick.domain.entity.place.Place;
 import com.app.spotick.domain.entity.place.PlaceInquiry;
 import com.app.spotick.domain.entity.user.User;
@@ -39,6 +40,12 @@ public class PlaceInquiryServiceImpl implements PlaceInquiryService {
     public Page<PlaceInquiryDto.Response> inquiryListWithPage(Long placeId, Pageable pageable) {
         return inquiryRepository.inquiryListWithPage(placeId,pageable)
                 .map(PlaceInquiryDto.Response::from);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Page<PlaceInquiryListDto> getInquiriesByUserId(Long userId, Pageable pageable) {
+        return inquiryRepository.findInquiriesByUserId(userId, pageable);
     }
 }
 

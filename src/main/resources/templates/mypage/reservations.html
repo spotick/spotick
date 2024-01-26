@@ -122,20 +122,25 @@
                         <article th:object="${reservationDto}">
                             <div class="mpcr-item-container">
                                 <div class="mpcr-action-btn">
-                                    <button type="button">
+                                    <button onclick="toggleDropdown(this)" type="button">
                                         <i class="fa-solid fa-ellipsis-vertical"></i>
-                                    </button>
-                                    <div class="mpcr-action-dropdown">
-                                        <div class="mpcra-item">
-                                            해당 게시글로 이동
+                                        <div class="mpc-dropdown">
+                                            <div class="action-item">
+                                                <a th:href="@{/place/detail/{placeId}(placeId = ${reservationDto.id})}">해당
+                                                    게시글로 이동</a>
+                                            </div>
+                                            <div class="action-item" th:if="*{reservationStatus == reservationStatus.PENDING
+                                                or reservationStatus == reservationStatus.WAITINGPAYMENT}"
+                                                 th:onclick="'showGSForCancelingReservation(\'' + *{reservationId} + '\')'">
+                                                예약 취소
+                                            </div>
+                                            <div class="action-item" th:onclick="'showGSForRemoveHistory(\'' + *{reservationId} + '\')'"
+                                                 th:unless="*{reservationStatus == reservationStatus.PENDING
+                                                or reservationStatus == reservationStatus.WAITINGPAYMENT}">기록
+                                                삭제
+                                            </div>
                                         </div>
-                                        <div class="mpcra-item" th:if="*{reservationStatus == reservationStatus.PENDING
-                                            or reservationStatus == reservationStatus.WAITINGPAYMENT}"
-                                             th:onclick="'showGSForCancelingReservation(\'' + *{reservationId} + '\')'">예약 취소</div>
-                                        <div class="mpcra-item" th:unless="*{reservationStatus == reservationStatus.PENDING
-                                            or reservationStatus == reservationStatus.WAITINGPAYMENT}"
-                                             th:onclick="'showGSForRemoveHistory(\'' + *{reservationId} + '\')'">기록 삭제</div>
-                                    </div>
+                                    </button>
                                 </div>
                                 <div class="mpcr-img-con">
                                     <img style="width: 180px;"
@@ -266,10 +271,6 @@
 <script src="/js/global-js/chat.js"></script>
 <script>
     document.getElementById('reservations').classList.add('active');
-</script>
-<!-- todo: 완성 시 삭제 -->
-<script th:inline="javascript">
-    console.log([[${reservationDtoList}]])
 </script>
 
 </html>

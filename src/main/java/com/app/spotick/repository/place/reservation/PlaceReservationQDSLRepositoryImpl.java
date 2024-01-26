@@ -35,10 +35,9 @@ public class PlaceReservationQDSLRepositoryImpl implements PlaceReservationQDSLR
     @Override
     public Page<PlaceReservationListDto> findReservationsByUserId(Long userId, Pageable pageable) {
         // 게시글 전체 갯수 확인
-        JPAQuery<Long> totalCountQuery = queryFactory.select(place.count())
+        JPAQuery<Long> totalCountQuery = queryFactory.select(placeReservation.count())
                 .from(placeReservation)
-                .join(placeReservation.place, place)
-                .where(placeReservation.user.id.eq(userId), place.placeStatus.eq(PostStatus.APPROVED));
+                .where(placeReservation.user.id.eq(userId));
 
         JPQLQuery<Double> reviewAvg = JPAExpressions.select(placeReview.score.avg())
                 .from(placeReview)
@@ -56,14 +55,14 @@ public class PlaceReservationQDSLRepositoryImpl implements PlaceReservationQDSLR
                 .from(placeReservation)
                 .join(placeReservation.place, place)
                 .leftJoin(place.placeFileList, placeFile)
-                .where(placeReservation.user.id.eq(userId), place.placeStatus.eq(PostStatus.APPROVED),
+                .where(placeReservation.user.id.eq(userId),
                         placeFile.id.eq(
                                 JPAExpressions.select(placeFile.id.min())
                                         .from(placeFile)
                                         .where(placeFile.place.id.eq(place.id))
                         )
                 )
-                .orderBy(place.id.desc())
+                .orderBy(placeReservation.id.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .select(
@@ -77,7 +76,8 @@ public class PlaceReservationQDSLRepositoryImpl implements PlaceReservationQDSLR
                                         placeFile.id,
                                         placeFile.fileName,
                                         placeFile.uuid,
-                                        placeFile.uploadPath
+                                        placeFile.uploadPath,
+                                        place.id
                                 ),
                                 reviewAvg,
                                 reviewCount,
@@ -95,7 +95,6 @@ public class PlaceReservationQDSLRepositoryImpl implements PlaceReservationQDSLR
             dto.getPlaceAddress().cutAddress();
         });
 
-//        return placeReservationListDtos;
         return PageableExecutionUtils.getPage(placeReservationListDtos, pageable, totalCountQuery::fetchOne);
     }
 }
