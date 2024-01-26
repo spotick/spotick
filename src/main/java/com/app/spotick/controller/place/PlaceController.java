@@ -3,23 +3,22 @@ package com.app.spotick.controller.place;
 import com.app.spotick.domain.dto.place.PlaceDetailDto;
 import com.app.spotick.domain.dto.place.PlaceListDto;
 import com.app.spotick.domain.dto.place.PlaceRegisterDto;
+import com.app.spotick.domain.dto.place.reservation.PlaceReserveBasicInfoDto;
+import com.app.spotick.domain.dto.place.reservation.PlaceReserveRegisterDto;
 import com.app.spotick.domain.dto.user.UserDetailsDto;
 import com.app.spotick.service.place.PlaceService;
-import jakarta.servlet.http.HttpServletRequest;
+import com.app.spotick.service.place.reservation.PlaceReservationService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.view.RedirectView;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Optional;
 
 @Slf4j
 @Controller
@@ -27,6 +26,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class PlaceController {
     private final PlaceService placeService;
+    private final PlaceReservationService reservationService;
 
     @GetMapping("/detail/{placeId}")
     public String placeDetail(@PathVariable("placeId")Long placeId,
@@ -74,10 +74,31 @@ public class PlaceController {
         return "redirect:/place/list";
     }
 
-    @GetMapping("/reserve")
-    public String placeReserve(){
+    @GetMapping("/check/reserve")
+    public String placeReserve(@ModelAttribute PlaceReserveRegisterDto registerDto,Model model){
+        PlaceReserveBasicInfoDto placeReserveDefaultInfo = placeService
+                .findPlaceReserveDefaultInfo(registerDto.getPlaceId());
+
+        model.addAttribute("place",placeReserveDefaultInfo);
         return "place/reserve";
     }
+
+    @PostMapping("/reserve/register")
+    public String placeReservationRegister(PlaceReserveRegisterDto placeReserveRegisterDto,
+                       @AuthenticationPrincipal UserDetailsDto userDetailsDto  ){
+//        todo 이미 등록된 예약시간중간에 예약했을 경우 다시 설정하게 만드는 로직 만들기
+
+        log.info("checkIn : {}",placeReserveRegisterDto.getReservationCheckIn());
+        log.info("checkOut : {}",placeReserveRegisterDto.getReservationCheckOut());
+
+        System.out.println("placeReserveRegisterDto = " + placeReserveRegisterDto);
+
+        reservationService.registerPlaceReservation(
+                placeReserveRegisterDto,userDetailsDto.getId());
+
+        return "redirect:/place/detail/"+placeReserveRegisterDto.getPlaceId();
+    }
+
 }
 
 

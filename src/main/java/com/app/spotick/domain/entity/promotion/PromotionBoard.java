@@ -18,20 +18,19 @@ public class PromotionBoard extends PostBase {
     @Column(name = "PROMOTION_ID")
     private Long id;
     private String subTitle;
-    @Column(length = 2000)
+    @Lob
     private String content;
     private LocalDate startDate;
     private LocalDate endDate;
     @Embedded
     private PostAddress promotionAddress;
-//    @Enumerated(EnumType.STRING)
-//    private PromotionCategory promotionCategory;
+    private PromotionCategory promotionCategory;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "USER_ID")
     private User user;
 
     @Builder
-    public PromotionBoard(String title, int viewCount, Double lat, Double lng, Long id, String subTitle, String content, LocalDate startDate, LocalDate endDate, PostAddress promotionAddress ,User user) {
+    public PromotionBoard(String title, int viewCount, Double lat, Double lng, Long id, String subTitle, String content, LocalDate startDate, LocalDate endDate, PostAddress promotionAddress,PromotionCategory promotionCategory, User user) {
         super(title, viewCount, lat, lng);
         this.id = id;
         this.subTitle = subTitle;
@@ -39,6 +38,7 @@ public class PromotionBoard extends PostBase {
         this.startDate = startDate;
         this.endDate = endDate;
         this.promotionAddress = promotionAddress;
+        this.promotionCategory = promotionCategory;
         this.user = user;
     }
 

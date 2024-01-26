@@ -8,6 +8,6 @@ import java.io.IOException;
 import java.util.List;
 
 public interface PromotionFileService {
-    void registerAndSavePromotionFile(List<MultipartFile> promotionFiles, PromotionBoard promotionBoard) throws IOException;
+    void registerAndSavePromotionFile(MultipartFile promotionFile, PromotionBoard promotionBoard) throws IOException;
 
 }

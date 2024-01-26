@@ -38,16 +38,11 @@ public class PromotionServiceImpl implements PromotionService {
 
         promotionBoard = promotionRepository.save(promotionBoard);
 //        사진파일 넣기
-        List<MultipartFile> promotionFiles = new ArrayList<>();
-//        인덱스 0번에 메인사진
-        promotionFiles.add(promotionRegisterDto.getPlaceFile());
-//        나머지 게시글에 들어간 사진들
-        if(promotionRegisterDto.getPromotionFiles().isEmpty()){
-            promotionFiles.addAll(promotionRegisterDto.getPromotionFiles());
-        }
+        MultipartFile promotionFile = promotionRegisterDto.getPlaceFile();
 
 
-        promotionFileService.registerAndSavePromotionFile(promotionFiles,promotionBoard);
+
+        promotionFileService.registerAndSavePromotionFile(promotionFile,promotionBoard);
     }
 
     @Override
@@ -62,6 +57,6 @@ public class PromotionServiceImpl implements PromotionService {
 
     @Override
     public Page<PromotionListDto> findPromotionList(Pageable pageable) {
-        return null;
+        return promotionRepository.findListWithPage(pageable);
     }
 }

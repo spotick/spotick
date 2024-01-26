@@ -451,8 +451,8 @@
                 <div class="calculate-box">
 
                 </div>
-                <!--                장소 예약하기 폼-->
-                <form id="reservationForm" action="#" method="get">
+                <!--                장소 예약하기 확인 폼-->
+                <form id="reservationForm" th:action="@{/place/check/reserve}" method="get">
                     <input type="hidden" name="placeId" id="placeId" th:value="${place.placeId}">
                     <input type="hidden" name="reservationCheckIn" id="reservationCheckIn">
                     <input type="hidden" name="reservationCheckOut" id="reservationCheckOut">
@@ -541,7 +541,7 @@
 <script src="https://code.jquery.com/jquery-3.6.4.js"></script>
 <!-- 달력-->
 <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
-<script th:src="@{/js/place/reserve/calendar.js}"></script>
+<script th:src="@{/js/place/detail/calendar.js}"></script>
 
 <script type="text/javascript"
         src="//dapi.kakao.com/v2/maps/sdk.js?appkey=3dc12d7c2624483dc7c019a0a91b727f&libraries=services"></script>
