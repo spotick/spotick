@@ -1,5 +1,15 @@
-function popupInquiryModal() {
+const content = document.getElementById('detailContent');
+const response = document.getElementById('detailResponse');
+function popupInquiryModal(item) {
     openModal(modalInquiry)
+
+    content.value = item.getAttribute('data-content');
+
+    const responseString = item.getAttribute('data-response');
+
+    if (responseString !== null) {
+        response.value = responseString;
+    }
 }
 
 function showGSForInquiryDeletion(inquiryId) {
@@ -11,6 +21,7 @@ function deleteInquiry(inquiryId) {
 }
 
 const container = document.getElementById('inquiryContainer')
+const paginationContainer = document.querySelector('.pagination-container')
 const inquiryService = (function () {
 
     function requestPlaceInquiries(page, callback) {
@@ -38,8 +49,8 @@ const inquiryService = (function () {
 
         container.innerHTML = '';
 
-        data.content.forEach(inquiry => {
-            let article =
+        data.data.content.forEach(inquiry => {
+            let articleHtml =
                 `<article>
                     <div class="mpcr-item-container">
                         <div class="mpcr-action-btn">
@@ -85,7 +96,8 @@ const inquiryService = (function () {
                             </div>
                         </div>
                         <div class="mpcr-divider"></div>
-                        <div class="mpcr-info" onclick="popupInquiryModal()">
+                        <div class="mpcr-info" onclick="popupInquiryModal(this)" 
+                            data-content="${inquiry.content}" data-response="${inquiry.response}">
                             <div class="mpcri-title">문의 내용</div>
                             <div class="mpcriq-title">${inquiry.inquiryTitle}</div>
                             <div class="mpcriq-content">${inquiry.content}</div>
@@ -93,9 +105,62 @@ const inquiryService = (function () {
                     </div>
                 </article>`
 
-            container.insertAdjacentHTML("beforeend", article);
+            container.insertAdjacentHTML("beforeend", articleHtml);
         })
 
+        paginationReload(data)
+    }
+
+    function paginationReload(data) {
+        let paginationHtml = "";
+
+        if (data.pagination.hasPrevBlock) {
+            paginationHtml +=
+                `<span class="pagination-previous">
+                    <a class="pagination-btns first" onclick="inquiryService.requestPlaceInquiries(1, inquiryService.reloadPlaceInquiries)"
+                        title="맨 처음">
+                        <i class="fa-solid fa-chevron-left"></i>
+                        <i class="fa-solid fa-chevron-left"></i>
+                    </a>
+                    <a class="pagination-btns"
+                        onclick="inquiryService.requestPlaceInquiries(${data.pagination.startPage - 1}, inquiryService.reloadPlaceInquiries)"
+                        title="이전">
+                        <i class="fa-solid fa-chevron-left"></i>
+                    </a>
+                </span>`
+        }
+
+        for (let i = data.pagination.startPage; i <= data.pagination.endPage; i++) {
+            paginationHtml += "<span class=\"pagination-body\">";
+
+            paginationHtml +=
+                `<span class="pagination-btns">
+                    <a class="${i === data.pagination.currentPage ? 'active' : ''}"
+                       onclick="inquiryService.requestPlaceInquiries(${i}, inquiryService.reloadPlaceInquiries)">
+                       ${i}
+                    </a>
+                </span>`
+
+            paginationHtml += "</span>";
+        }
+
+        if (data.pagination.hasNextBlock) {
+            paginationHtml +=
+                `<span class="pagination-next">
+                    <a class="pagination-btns"
+                        onclick="inquiryService.requestPlaceInquiries(${data.pagination.endPage + 1}, inquiryService.reloadPlaceInquiries)"
+                        title="다음">
+                        <i class="fa-solid fa-chevron-right"></i>
+                    </a>
+                    <a class="pagination-btns end" onclick="inquiryService.requestPlaceInquiries(${data.pagination.lastPage}, inquiryService.reloadPlaceInquiries)"
+                       title="맨 끝">
+                        <i class="fa-solid fa-chevron-right"></i>
+                        <i class="fa-solid fa-chevron-right"></i>
+                    </a>
+                </span>`;
+        }
+
+        paginationContainer.innerHTML = paginationHtml;
     }
 
     return {

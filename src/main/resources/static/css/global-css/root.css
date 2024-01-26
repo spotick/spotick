@@ -891,6 +891,7 @@ img {
     height: 30px;
     text-align: center;
     margin: 0 5px;
+    cursor: pointer;
 }
 
 .pagination-btns:hover {
