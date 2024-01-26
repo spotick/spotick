@@ -10,7 +10,6 @@ import com.app.spotick.domain.type.place.PlaceReservationStatus;
 import com.app.spotick.domain.type.post.PostStatus;
 import com.app.spotick.domain.type.user.UserStatus;
 import com.app.spotick.repository.place.PlaceRepository;
-import com.app.spotick.repository.place.bookmark.PlaceBookmarkRepository;
 import com.app.spotick.repository.place.file.PlaceFileRepository;
 import com.app.spotick.repository.user.UserAuthorityRepository;
 import com.app.spotick.repository.user.UserRepository;
@@ -22,7 +21,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.test.annotation.Commit;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,8 +28,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @Transactional @Commit
@@ -99,7 +95,7 @@ class PlaceReservationRepositoryTest {
                 .checkIn(LocalDateTime.of(2024, 1, 5, 19, 0, 0))
                 .checkOut(LocalDateTime.of(2024, 1, 6, 7, 0,0))
                 .content("테스트")
-                .reservationStatus(PlaceReservationStatus.WAITINGPAYMENT)
+                .reservationStatus(PlaceReservationStatus.WAITING_PAYMENT)
                 .place(placeOf2)
                 .user(user1)
                 .build();

@@ -43,12 +43,11 @@ public class Place extends PostBase {
     @OneToMany(mappedBy = "place", fetch = FetchType.LAZY)
     private List<PlaceFile> placeFileList = new ArrayList<>();
 
-    //    todo 1:N 양방향 관계 편의메소드 설정하기
-    @OneToMany(mappedBy = "place", fetch = FetchType.LAZY)
-    private List<PlaceReview> placeReviewList = new ArrayList<>();
+//    @OneToMany(mappedBy = "place", fetch = FetchType.LAZY)
+//    private List<PlaceReview> placeReviewList = new ArrayList<>();
 
     @Builder
-    public Place(String title, int viewCount, Double lat, Double lng, Long id, String subTitle, String info, String rule, Integer defaultPeople, PostAddress placeAddress, Integer price, Integer surcharge, String bankName, String accountNumber, String accountHolder, PostStatus placeStatus, User user, List<PlaceReview> placeReviewList, List<PlaceFile> placeFileList) {
+    public Place(String title, int viewCount, Double lat, Double lng, Long id, String subTitle, String info, String rule, Integer defaultPeople, PostAddress placeAddress, Integer price, Integer surcharge, String bankName, String accountNumber, String accountHolder, PostStatus placeStatus, User user,  List<PlaceFile> placeFileList) {
         super(title, viewCount, lat, lng);
         this.id = id;
         this.subTitle = subTitle;
@@ -63,7 +62,6 @@ public class Place extends PostBase {
         this.accountHolder = accountHolder;
         this.placeStatus = placeStatus;
         this.user = user;
-        this.placeReviewList = placeReviewList;
         this.placeFileList = placeFileList;
     }
 

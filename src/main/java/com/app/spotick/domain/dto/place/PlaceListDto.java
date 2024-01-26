@@ -31,6 +31,17 @@ public class PlaceListDto {
         this.isBookmarkChecked = isBookmarkChecked;
     }
 
+    public PlaceListDto(Long id, String title, Integer price, PostAddress placeAddress, double evalAvg, Long evalCount, Long bookmarkCount, boolean isBookmarkChecked) {
+        this.id = id;
+        this.title = title;
+        this.price = price;
+        this.placeAddress = placeAddress;
+        this.evalAvg = evalAvg;
+        this.evalCount = evalCount;
+        this.bookmarkCount = bookmarkCount;
+        this.isBookmarkChecked = isBookmarkChecked;
+    }
+
     public void updatePlaceFiles(List<PlaceFileDto> placeFiles) {
         this.placeFiles = placeFiles;
     }

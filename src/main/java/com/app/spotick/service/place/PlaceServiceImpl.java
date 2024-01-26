@@ -3,6 +3,7 @@ package com.app.spotick.service.place;
 import com.app.spotick.domain.dto.place.PlaceDetailDto;
 import com.app.spotick.domain.dto.place.PlaceListDto;
 import com.app.spotick.domain.dto.place.PlaceRegisterDto;
+import com.app.spotick.domain.dto.place.reservation.PlaceReserveBasicInfoDto;
 import com.app.spotick.domain.entity.place.Place;
 import com.app.spotick.domain.entity.user.User;
 import com.app.spotick.repository.place.PlaceRepository;
@@ -56,6 +57,13 @@ public class PlaceServiceImpl implements PlaceService{
 
         return placeRepository.findPlaceDetailById(placeId, userId)
                 .orElseThrow(() -> new IllegalStateException("존재하지 않는 장소 게시글"));
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public PlaceReserveBasicInfoDto findPlaceReserveDefaultInfo(Long placeId) {
+        return placeRepository.findPlaceReserveBasicInfo(placeId)
+                .orElseThrow(()->new IllegalStateException("존재하지 않는 장소 게시글"));
     }
 }
 

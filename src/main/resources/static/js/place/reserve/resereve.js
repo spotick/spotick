@@ -1,12 +1,13 @@
 
-
+$('select ,#reservationDate').on('change',calculateAmountAndShow);
 
 $('.visitor-ctr-box button').on('click',function (){
     let $visitors = $('.visitors');
     let visitNum= Number($visitors.val());
     let number = visitNum+Number($(this).val());
     $visitors.val(number>99?99:number);
-    updateSelectedPeople()
+    updateSelectedPeople();
+    calculateAmountAndShow();
 });
 
 $('.plus').on('click',function (){
@@ -17,7 +18,8 @@ $('.plus').on('click',function (){
         return;
     }
     $visitors.val(++visitNum);
-    updateSelectedPeople()
+    updateSelectedPeople();
+    calculateAmountAndShow();
 });
 
 $('.minus').on('click',function (){
@@ -29,11 +31,12 @@ $('.minus').on('click',function (){
     }
     $visitors.val(--visitNum);
     updateSelectedPeople();
+    calculateAmountAndShow();
 });
 updateSelectedPeople();
 function updateSelectedPeople(){
-    let selectedCount = $('.visitors').val();
-    let defaultPeople = $('#defaultPeople').val()
+    let selectedCount =  Number($('#reservationVisitors').val());
+    let defaultPeople = Number($('#placeDefaultPeople').val());
     let additionMsg = selectedCount>defaultPeople? ` (${selectedCount-defaultPeople}명 추가)`:``;
 
     $('.selected-count').text(`${selectedCount}명${additionMsg}`);
@@ -103,12 +106,43 @@ function convertToAmPmFormat(hour) {
     return `${amPm} ${hour.toString()}`;
 }
 
+// 초기 결제금액 세팅
+calculateAmountAndShow();
+function calculateAmountAndShow() {
+    let usageTime = getUsageTime($('#checkIn').val(), $('#checkOut').val());
+    let placeSurcharge = $('#placeSurcharge').val();
+    let visitors = Number($('.visitors').val());
+    let defaultPeople = Number($('#placeDefaultPeople').val());
+    let surcharge = defaultPeople < visitors
+        ? placeSurcharge * (visitors - defaultPeople) : 0;
+    let placePrice = $('#placePrice').val();
+    let totalAmount = placePrice * usageTime;
+    let $peopleAmountBox = $('.people-amount-box');
 
+    let reservationAmount = totalAmount+surcharge;
 
+    $('.reservation-amount').text(totalAmount.toLocaleString());
+    if (surcharge>0){
+        $peopleAmountBox.html(`
+             <p class="info-title">인원 추가 금액</p>
+             <div class="flex-column">
+                 <p class="amount">+ <span>${surcharge.toLocaleString()}</span> 원</p>
+                 <p class="payment-guide">${visitors-defaultPeople}명 추가(인당${placeSurcharge}원)</p>
+             </div>
+        `);
+    }else{
+        $peopleAmountBox.html('');
+    }
+    $('.total-amount').text(`${reservationAmount.toLocaleString()}원`);
+    $('#reservationAmount').val(reservationAmount);
+}
 
+function getUsageTime(checkInTime, checkOutTime) {
+    let usageTime = checkOutTime - checkInTime;
+    return usageTime <= 0 ? usageTime + 24 : usageTime;
+}
 
-
-
+// 추가로 변경한 날짜, 시간에 따라 checkIn, checkout 변경
 
 
 
