@@ -3,6 +3,7 @@ package com.app.spotick.repository.place;
 import com.app.spotick.domain.dto.place.PlaceDetailDto;
 import com.app.spotick.domain.dto.place.PlaceFileDto;
 import com.app.spotick.domain.dto.place.PlaceListDto;
+import com.app.spotick.domain.dto.place.reservation.PlaceReserveBasicInfoDto;
 import com.app.spotick.domain.embedded.post.PostAddress;
 import com.app.spotick.domain.entity.place.Place;
 import com.app.spotick.domain.entity.place.PlaceFile;
@@ -35,8 +36,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.test.annotation.Commit;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+import java.util.UUID;
 
 import static com.app.spotick.domain.entity.place.QPlace.place;
 import static com.app.spotick.domain.entity.place.QPlaceBookmark.placeBookmark;
@@ -132,12 +135,12 @@ class PlaceQDSLRepositoryImplTest {
         QPlaceFile subPlaceFile = new QPlaceFile("subPlaceFile");
         JPQLQuery<Double> reviewAvg = JPAExpressions.select(placeReview.score.avg())
                 .from(placeReview)
-                .where(placeReview.place.eq(place));
+                .where(placeReview.placeReservation.place.eq(place));
 
 
         JPQLQuery<Long> reviewCount = JPAExpressions.select(placeReview.count())
                 .from(placeReview)
-                .where(placeReview.place.eq(place));
+                .where(placeReview.placeReservation.place.eq(place));
 
         JPQLQuery<Long> bookmarkCount = JPAExpressions.select(placeBookmark.count())
                 .from(placeBookmark)
@@ -174,11 +177,11 @@ class PlaceQDSLRepositoryImplTest {
     void findPlaceListPaging2() {
         JPQLQuery<Double> reviewAvg = JPAExpressions.select(placeReview.score.avg())
                 .from(placeReview)
-                .where(placeReview.place.eq(place));
+                .where(placeReview.placeReservation.place.eq(place));
 
         JPQLQuery<Long> reviewCount = JPAExpressions.select(placeReview.count())
                 .from(placeReview)
-                .where(placeReview.place.eq(place));
+                .where(placeReview.placeReservation.place.eq(place));
 
         JPQLQuery<Long> bookmarkCount = JPAExpressions.select(placeBookmark.count())
                 .from(placeBookmark)
@@ -279,11 +282,11 @@ class PlaceQDSLRepositoryImplTest {
     public List<PlaceListDto> findListTransFormCase(Pageable pageable, Long userId) {
         JPQLQuery<Double> reviewAvg = JPAExpressions.select(placeReview.score.avg())
                 .from(placeReview)
-                .where(placeReview.place.eq(place));
+                .where(placeReview.placeReservation.place.eq(place));
 
         JPQLQuery<Long> reviewCount = JPAExpressions.select(placeReview.count())
                 .from(placeReview)
-                .where(placeReview.place.eq(place));
+                .where(placeReview.placeReservation.place.eq(place));
 
         JPQLQuery<Long> bookmarkCount = JPAExpressions.select(placeBookmark.count())
                 .from(placeBookmark)
@@ -335,11 +338,11 @@ class PlaceQDSLRepositoryImplTest {
     public List<PlaceListDto> findListLegacyCase(Pageable pageable, Long userId) {
         JPQLQuery<Double> reviewAvg = JPAExpressions.select(placeReview.score.avg())
                 .from(placeReview)
-                .where(placeReview.place.eq(place));
+                .where(placeReview.placeReservation.place.eq(place));
 
         JPQLQuery<Long> reviewCount = JPAExpressions.select(placeReview.count())
                 .from(placeReview)
-                .where(placeReview.place.eq(place));
+                .where(placeReview.placeReservation.place.eq(place));
 
         JPQLQuery<Long> bookmarkCount = JPAExpressions.select(placeBookmark.count())
                 .from(placeBookmark)
@@ -449,31 +452,60 @@ class PlaceQDSLRepositoryImplTest {
 
     @Test
     @DisplayName("장소 상세보기")
-    void findPlaceDetailByIdTest(){
+    void findPlaceDetailByIdTest() {
         PlaceDetailDto placeDetailDto = placeRepository.findPlaceDetailById(1L, null).get();
 
-        placeDetailDto.getPlaceFileList().forEach(file-> log.info("file : {}", file));
+        placeDetailDto.getPlaceFileList().forEach(file -> log.info("file : {}", file));
     }
 
     @Test
-    void transFormTest2(){
+    void transFormTest2() {
         PageRequest pageRequest = PageRequest.of(0, 12);
         List<PlaceListDto> placeListPaging = placeRepository.findPlaceListPaging(pageRequest, null);
 
-        placeListPaging.forEach(place->{
+        placeListPaging.forEach(place -> {
             System.out.println("place = " + place);
             System.out.println("place.getPlaceFiles() = " + place.getPlaceFiles());
             System.out.println("사진 갯수 = " + place.getPlaceFiles().size());
             System.out.println("===============================");
         });
+    }
 
+    @Test
+    @DisplayName("예약페이지에서 장소 기본정보 가져오기")
+    void findPlaceReserveBasicInfoTest() {
+//        PlaceReserveBasicInfoDto
+        Long placeId = 1L;
+        QPlaceFile subFile = new QPlaceFile("subFile");
+
+        PlaceReserveBasicInfoDto placeReserveBasicInfoDto = queryFactory.select(
+                        Projections.constructor(PlaceReserveBasicInfoDto.class,
+                                place.id,
+                                place.title,
+                                place.subTitle,
+                                place.defaultPeople,
+                                place.price,
+                                place.surcharge,
+                                Projections.constructor(PlaceFileDto.class,
+                                        placeFile.id,
+                                        placeFile.fileName,
+                                        placeFile.uuid,
+                                        placeFile.uploadPath
+                                )
+                        )
+                ).from(place)
+                .join(place.placeFileList, placeFile)
+                .where(place.id.eq(placeId).and(placeFile.id.eq(
+                        JPAExpressions.select(subFile.id.min())
+                                .from(subFile)
+                                .where(subFile.place.id.eq(placeId)))
+                ))
+                .fetchOne();
+
+        log.info("placeReserveBasicInfoDto : {}", placeReserveBasicInfoDto);
 
 
     }
-
-
-
-
 
 
 }

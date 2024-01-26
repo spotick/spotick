@@ -17,16 +17,16 @@ public class PlaceReview extends Period {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "USER_ID")
     private User user;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "PLACE_ID")
-    private Place place;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "PLACE_RESERVATION_ID")
+    private PlaceReservation placeReservation;
 
     @Builder
-    public PlaceReview(Long id, String content, Integer score, User user, Place place) {
+    public PlaceReview(Long id, String content, Integer score, User user, PlaceReservation placeReservation) {
         this.id = id;
         this.content = content;
         this.score = score;
         this.user = user;
-        this.place = place;
+        this.placeReservation = placeReservation;
     }
 }

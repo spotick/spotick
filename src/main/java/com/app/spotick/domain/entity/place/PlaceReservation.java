@@ -18,6 +18,7 @@ public class PlaceReservation extends Period {
     private Integer visitors;
     private LocalDateTime checkIn;
     private LocalDateTime checkOut;
+    private Integer amount;
     @Column(length = 1000)
     private String content; // 예약 전달 내용
     @Enumerated(EnumType.STRING)
@@ -31,11 +32,12 @@ public class PlaceReservation extends Period {
     private User user;
 
     @Builder
-    public PlaceReservation(Long id, Integer visitors, LocalDateTime checkIn, LocalDateTime checkOut, String content, PlaceReservationStatus reservationStatus, Place place, User user) {
+    public PlaceReservation(Long id, Integer visitors, LocalDateTime checkIn, LocalDateTime checkOut, Integer amount, String content, PlaceReservationStatus reservationStatus, Place place, User user) {
         this.id = id;
         this.visitors = visitors;
         this.checkIn = checkIn;
         this.checkOut = checkOut;
+        this.amount = amount;
         this.content = content;
         this.reservationStatus = reservationStatus;
         this.place = place;

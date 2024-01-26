@@ -1,14 +1,19 @@
-package com.app.spotick.service.place;
+package com.app.spotick.service.place.reservation;
 
+import com.app.spotick.domain.dto.place.reservation.PlaceReserveRegisterDto;
+import com.app.spotick.domain.entity.place.Place;
 import com.app.spotick.domain.entity.place.PlaceReservation;
 import com.app.spotick.domain.entity.user.User;
 import com.app.spotick.domain.type.place.PlaceReservationStatus;
+import com.app.spotick.repository.place.PlaceRepository;
 import com.app.spotick.repository.place.reservation.PlaceReservationRepository;
 import com.app.spotick.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
@@ -17,6 +22,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class PlaceReservationServiceImpl implements PlaceReservationService {
     private final UserRepository userRepository;
+    private final PlaceRepository placeRepository;
     private final PlaceReservationRepository placeReservationRepository;
 
     @Override
@@ -43,4 +49,24 @@ public class PlaceReservationServiceImpl implements PlaceReservationService {
 
         placeReservationRepository.delete(foundReservation);
     }
+
+        @Override
+        public void registerPlaceReservation(PlaceReserveRegisterDto placeReserveRegisterDto, Long userId) {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+            User userProxy = userRepository.getReferenceById(userId);
+            Place placeProxy = placeRepository.getReferenceById(placeReserveRegisterDto.getPlaceId());
+
+            placeReservationRepository.save(PlaceReservation.builder()
+                    .place(placeProxy)
+                    .user(userProxy)
+                    .checkIn(LocalDateTime.parse(placeReserveRegisterDto.getReservationCheckIn(),formatter))
+                    .checkOut(LocalDateTime.parse(placeReserveRegisterDto.getReservationCheckOut(),formatter))
+                    .content(placeReserveRegisterDto.getReservationContent())
+                    .amount(placeReserveRegisterDto.getReservationAmount())
+                    .visitors(placeReserveRegisterDto.getReservationVisitors())
+                    .reservationStatus(PlaceReservationStatus.PENDING)
+                    .build());
+    }
+
+
 }

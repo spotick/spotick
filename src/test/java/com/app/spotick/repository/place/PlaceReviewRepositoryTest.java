@@ -6,6 +6,7 @@ import com.app.spotick.domain.entity.place.PlaceReview;
 import com.app.spotick.domain.entity.user.User;
 import com.app.spotick.domain.type.post.PostStatus;
 import com.app.spotick.domain.type.user.UserStatus;
+import com.app.spotick.repository.place.Review.PlaceReviewRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.junit.jupiter.api.BeforeEach;
@@ -16,8 +17,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static org.assertj.core.api.Assertions.*;
 
 @SpringBootTest
 @Transactional @Commit

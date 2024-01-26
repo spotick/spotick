@@ -3,8 +3,10 @@ package com.app.spotick.repository.place;
 import com.app.spotick.domain.dto.place.PlaceDetailDto;
 import com.app.spotick.domain.dto.place.PlaceFileDto;
 import com.app.spotick.domain.dto.place.PlaceListDto;
+import com.app.spotick.domain.dto.place.reservation.PlaceReserveBasicInfoDto;
 import com.app.spotick.domain.entity.place.Place;
 import com.app.spotick.domain.entity.place.QPlace;
+import com.app.spotick.domain.entity.place.QPlaceFile;
 import com.app.spotick.domain.entity.place.QPlaceReview;
 import com.app.spotick.domain.type.post.PostStatus;
 import com.querydsl.core.Tuple;
@@ -43,43 +45,8 @@ public class PlaceQDSLRepositoryImpl implements PlaceQDSLRepository {
 
         JPQLQuery<Long> bookmarkCount = createBookmarkCountSub(place);
 
-        //        로그인 되어있지 않으면 쿼리 실행 x
         BooleanExpression isBookmarkChecked = isBookmarkCheckedSub(place, userId);
 
-//        List<PlaceListDto> placeListDtos = queryFactory.select(place)
-//                .from(place)
-//                .join(place.placeFileList,placeFile)
-////                .on(place.id.eq(placeFile.place.id))
-//                .where(place.placeStatus.eq(PostStatus.APPROVED))
-//                .orderBy(place.id.desc())
-//                .offset(pageable.getOffset())
-//                .limit(pageable.getPageSize())
-//                .transform(GroupBy.groupBy(place.id)
-//                        .list(Projections.constructor(PlaceListDto.class,
-//                                place.id,
-//                                place.title,
-//                                place.price,
-//                                place.placeAddress,
-//                                list(
-//                                        Projections.constructor(PlaceFileDto.class,
-//                                                placeFile.id,
-//                                                placeFile.fileName,
-//                                                placeFile.uuid,
-//                                                placeFile.uploadPath
-//                                        )
-//                                ),
-//                                reviewAvg,
-//                                reviewCount,
-//                                bookmarkCount,
-//                                isBookmarkChecked
-//                        ))
-//                );
-//
-//        placeListDtos.forEach(dto -> {
-//            dto.getPlaceAddress().cutAddress();
-//            dto.cutPlaceFilesForListPage();
-//        });
-//        return placeListDtos;
         List<PlaceListDto> placeListDtos = queryFactory.select(
                         Projections.constructor(PlaceListDto.class,
                                 place.id,
@@ -139,8 +106,7 @@ public class PlaceQDSLRepositoryImpl implements PlaceQDSLRepository {
         QPlaceReview subReview = new QPlaceReview("pr");
         JPQLQuery<Long> review5scoreCount = JPAExpressions.select(subReview.id.count())
                 .from(subReview)
-                .where(subReview.place.id.eq(placeId), subReview.score.eq(5));
-
+                .where(subReview.placeReservation.place.id.eq(placeId), subReview.score.eq(5));
 
         List<Tuple> tupleList = queryFactory.select(
                         place,
@@ -168,16 +134,46 @@ public class PlaceQDSLRepositoryImpl implements PlaceQDSLRepository {
         return Optional.ofNullable(placeDetailDto);
     }
 
+    @Override
+    public Optional<PlaceReserveBasicInfoDto> findPlaceReserveBasicInfo(Long placeId) {
+        QPlaceFile subFile = new QPlaceFile("subFile");
+        PlaceReserveBasicInfoDto placeReserveBasicInfoDto = queryFactory.select(
+                        Projections.constructor(PlaceReserveBasicInfoDto.class,
+                                place.id,
+                                place.title,
+                                place.subTitle,
+                                place.defaultPeople,
+                                place.price,
+                                place.surcharge,
+                                Projections.constructor(PlaceFileDto.class,
+                                        placeFile.id,
+                                        placeFile.fileName,
+                                        placeFile.uuid,
+                                        placeFile.uploadPath
+                                )
+                        )
+                ).from(place)
+                .join(place.placeFileList, placeFile)
+                .where(place.id.eq(placeId).and(placeFile.id.eq(
+                        JPAExpressions.select(subFile.id.min())
+                                .from(subFile)
+                                .where(subFile.place.id.eq(placeId)))
+                ))
+                .fetchOne();
+
+        return Optional.ofNullable(placeReserveBasicInfoDto);
+    }
+
     private JPQLQuery<Double> createReviewAvgSub(QPlace place) {
         return JPAExpressions.select(placeReview.score.avg())
                 .from(placeReview)
-                .where(placeReview.place.eq(place));
+                .where(placeReview.placeReservation.place.eq(place));
     }
 
     private JPQLQuery<Long> createReviewCountSub(QPlace place) {
         return JPAExpressions.select(placeReview.count())
                 .from(placeReview)
-                .where(placeReview.place.eq(place));
+                .where(placeReview.placeReservation.place.eq(place));
     }
 
     private JPQLQuery<Long> createBookmarkCountSub(QPlace place) {

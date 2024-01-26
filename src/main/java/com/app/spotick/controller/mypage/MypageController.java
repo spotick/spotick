@@ -7,7 +7,7 @@ import com.app.spotick.domain.dto.user.UserProfileDto;
 import com.app.spotick.domain.entity.place.PlaceReservation;
 import com.app.spotick.domain.pagination.Pagination;
 import com.app.spotick.domain.type.place.PlaceReservationStatus;
-import com.app.spotick.service.place.PlaceReservationService;
+import com.app.spotick.service.place.reservation.PlaceReservationService;
 import com.app.spotick.service.redis.RedisService;
 import com.app.spotick.service.user.UserProfileFileService;
 import com.app.spotick.service.user.UserService;

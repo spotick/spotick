@@ -1,4 +1,4 @@
-package com.app.spotick.repository.place;
+package com.app.spotick.repository.place.Review;
 
 import com.app.spotick.domain.entity.place.PlaceReview;
 import org.springframework.data.jpa.repository.JpaRepository;

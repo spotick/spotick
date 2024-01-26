@@ -17,31 +17,35 @@
 <div class="global-container flex-center">
 
     <div class="reservation-container">
-        <form action="#" method="get">
+        <form th:action="@{/place/reserve/register}" method="post" th:object="${placeReserveRegisterDto}">
 
             <!--예약할 장소 번호-->
-            <input type="hidden" name="placeId" id="placeId" value="1">
+            <input type="hidden" th:field="*{placeId}">
             <!--체크인 시간-->
-            <input type="hidden" name="reservationCheckIn"
-                   id="reservationCheckIn" value="2024-01-23 20:00:00">
+            <input type="hidden" th:field="*{reservationCheckIn}">
             <!--체크아웃 시간-->
-            <input type="hidden" name="reservationCheckOut"
-                   id="reservationCheckOut" value="2024-01-24 03:00:00">
+            <input type="hidden" th:field="*{reservationCheckOut}">
+
 <!--            장소 기본인원-->
-            <input type="hidden" id="defaultPeople" value="4">
+            <input type="hidden" id="placeDefaultPeople" th:value="${place.placeDefaultPeople}">
+<!--            장소 시간당 기본요금-->
+            <input type="hidden" id="placePrice" th:value="${place.placePrice}">
+<!--            장소 추가요금-->
+            <input type="hidden" id="placeSurcharge" th:value="${place.placeSurcharge}">
+
             <p class="reserve-receipt">예약접수</p>
 
             <div class="place-info-wrap flex-column">
                 <p class="section-title">선택한 공간</p>
                 <div class="place-info-box flex-align">
                     <div class="place-img-box">
-                        <img src="https://img.shareit.kr/tempspaceauth/img/2022-12-12/873f9a89-8bcf-4648-9c8c-a5af837ee84c.jpg"
-                             alt="">
+                        <img th:src="@{/file/display(fileName=${place.placeFileDto.uploadPath+'/t_'+place.placeFileDto.uuid+'_'+place.placeFileDto.fileName})}"
+                             alt="장소 기본이미지">
                     </div>
                     <div class="place-info">
-                        <p class="place-number">장소 번호 <span>12345</span></p>
-                        <p class="place-name">3호 로맨틱 복층 파티</p>
-                        <p class="sub-title">강남역 파티룸 모임공간235</p>
+                        <p class="place-number">장소 번호 <span th:text="${place.placeId}"></span></p>
+                        <p class="place-name" th:text="${place.placeTitle}"></p>
+                        <p class="sub-title" th:text="${place.placeSubTitle}"></p>
                     </div>
                 </div>
             </div>
@@ -57,7 +61,7 @@
                         <div class="time-choice-wrap flex-column">
                             <div>
                                 <p class="time-guide">시작 시간</p>
-                                <select onchange="setCheckOutTimes()" class="checkInOut" name="reservationCheckIn" id="checkIn">
+                                <select onchange="setCheckOutTimes()" class="checkInOut" id="checkIn">
                                     <option value="0">오전 12시</option>
                                     <option value="1">오전 1시</option>
                                     <option value="2">오전 2시</option>
@@ -86,7 +90,7 @@
                             </div>
                             <div>
                                 <p class="time-guide">종료 시간</p>
-                                <select class="checkInOut" name="reservationCheckOut" id="checkOut">
+                                <select class="checkInOut" id="checkOut">
                                 </select>
                             </div>
 
@@ -107,7 +111,7 @@
                             <img src="https://shareit.kr/_next/static/media/btn-minus-bluegray.2b4551aa.svg" alt="">
                         </button>
                         <div class="reservation-visitors flex-align-center">
-                            <input class="visitors" name="reservationVisitors" max="99" min="1" type="number" value="6">
+                            <input class="visitors" th:field="*{reservationVisitors}" max="99" min="1" type="number">
                         </div>
                         <button class="plus flex-align-center" type="button">
                             <img src="https://shareit.kr/_next/static/media/btn-plus-bluegray.d442947d.svg" alt="">
@@ -132,7 +136,7 @@
                 </div>
 
                 <div class="reservation-content-wrap">
-                    <textarea name="reservationContent" id="reserve-content"
+                    <textarea th:field="*{reservationContent}"
                               placeholder="호스트에게 전달하고 싶은 내용을 적어주세요"></textarea>
                 </div>
             </div>
@@ -144,21 +148,21 @@
                     <section class="total-reserve-amount-box">
                         <p class="info-title">대여 총 금액</p>
                         <div class="flex-column">
-                            <p class="amount"><span>0</span>원</p>
-                            <p class="payment-guide">시간을 선택해 주세요</p>
+                            <p class="amount"><span class="reservation-amount">0</span>원</p>
+                            <p class="payment-guide"></p>
                         </div>
                     </section>
                     <section class="people-amount-box">
-                        <p class="info-title">인원 추가 금액</p>
-                        <div class="flex-column">
-                            <p class="amount">+ <span>5500</span> 원</p>
-                            <p class="payment-guide">4명</p>
-                        </div>
+<!--                        <p class="info-title">인원 추가 금액</p>-->
+<!--                        <div class="flex-column">-->
+<!--                            <p class="amount">+ <span>5500</span> 원</p>-->
+<!--                            <p class="payment-guide">4명</p>-->
+<!--                        </div>-->
                     </section>
-
                     <section class="total-amount-box flex-between-align">
                         <p>총 금액</p>
                         <p class="total-amount">170,000원</p>
+                        <input type="hidden" th:field="*{reservationAmount}">
                     </section>
 
                 </div>
@@ -166,7 +170,7 @@
             </div>
 
             <div class="flex-align-center">
-                <button class="payment-btn">결제</button>
+                <button class="payment-btn">예약</button>
             </div>
 
         </form>
