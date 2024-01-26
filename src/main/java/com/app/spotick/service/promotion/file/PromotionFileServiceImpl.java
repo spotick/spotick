@@ -2,7 +2,7 @@ package com.app.spotick.service.promotion.file;
 
 import com.app.spotick.domain.entity.promotion.PromotionBoard;
 import com.app.spotick.domain.entity.promotion.PromotionFile;
-import com.app.spotick.repository.promotion.PromotionFileRepository;
+import com.app.spotick.repository.promotion.file.PromotionFileRepository;
 import lombok.RequiredArgsConstructor;
 import net.coobird.thumbnailator.Thumbnailator;
 import org.springframework.beans.factory.annotation.Value;
@@ -29,12 +29,12 @@ public class PromotionFileServiceImpl implements PromotionFileService {
     @Value("${root.dir}")
     private String ROOT_DIR;
     @Override
-    public void registerAndSavePromotionFile(List<MultipartFile> promotionFiles, PromotionBoard promotionBoard) throws IOException {
-        for(MultipartFile file:promotionFiles){
-            PromotionFile promotionFile = saveFile(file);
-            promotionFile.setPromotionBoard(promotionBoard);
-            promotionFileRepository.save(promotionFile);
-        }
+    public void registerAndSavePromotionFile(MultipartFile promotionFile, PromotionBoard promotionBoard) throws IOException {
+
+        PromotionFile file = saveFile(promotionFile);
+        file.setPromotionBoard(promotionBoard);
+        promotionFileRepository.save(file);
+
     }
 
     private PromotionFile saveFile(MultipartFile promotionFile) throws IOException {

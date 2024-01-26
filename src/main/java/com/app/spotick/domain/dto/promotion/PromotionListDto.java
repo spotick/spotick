@@ -18,22 +18,18 @@ import java.util.List;
 @NoArgsConstructor
 public class PromotionListDto {
     private Long promotionId;
-    private Long userId;
     private String promotionTitle;
     private String promotionSubTitle;
+    private PromotionCategory promotionCategory;
+    private PromotionFile promotionMainFile;
 
 
-    private List<PromotionFile> promotionMainFile;
 
-//    @NotNull(message = "카테고리를 선택해주세요")
-//    private PromotionCategory promotionCategory;
-
-
-    public PromotionListDto(Long promotionId, Long userId, String promotionTitle, String promotionSubTitle, List<PromotionFile> promotionMainFile) {
+    public PromotionListDto(Long promotionId, String promotionTitle, String promotionSubTitle, PromotionCategory promotionCategory, PromotionFile promotionMainFile) {
         this.promotionId = promotionId;
-        this.userId = userId;
         this.promotionTitle = promotionTitle;
         this.promotionSubTitle = promotionSubTitle;
+        this.promotionCategory = promotionCategory;
         this.promotionMainFile = promotionMainFile;
     }
 
@@ -43,6 +39,7 @@ public class PromotionListDto {
                 .id(promotionId)
                 .title(promotionTitle)
                 .subTitle(promotionSubTitle)
+                .promotionCategory(promotionCategory)
                 .build();
     }
 }

@@ -56,7 +56,7 @@ public class PromotionController {
         log.info(promotionRegisterDto.toString());
 
         try {
-            promotionService.registerPromotion(promotionRegisterDto, 2L);
+            promotionService.registerPromotion(promotionRegisterDto, 1L);
         } catch (IOException e) {
             e.printStackTrace();
             return  "promotion/register";

@@ -1,4 +1,4 @@
-package com.app.spotick.repository.promotion;
+package com.app.spotick.repository.promotion.file;
 
 import com.app.spotick.domain.entity.place.PlaceFile;
 import com.app.spotick.domain.entity.promotion.PromotionFile;
