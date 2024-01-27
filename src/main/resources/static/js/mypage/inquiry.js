@@ -11,7 +11,9 @@ function popupInquiryModal(item) {
 
     const responseString = item.getAttribute('data-response');
 
-    if (responseString !== null) {
+    if (responseString === "null") {
+        response.value = "";
+    } else {
         response.value = responseString;
     }
 }
