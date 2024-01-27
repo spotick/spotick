@@ -1,12 +1,10 @@
 package com.app.spotick.controller.place;
 
 import com.app.spotick.domain.dto.place.PlaceInquiryListDto;
-import com.app.spotick.domain.dto.place.PlaceReservationListDto;
 import com.app.spotick.domain.dto.user.UserDetailsDto;
 import com.app.spotick.domain.entity.place.PlaceInquiry;
 import com.app.spotick.domain.pagination.PageResponse;
 import com.app.spotick.domain.pagination.Pagination;
-import com.app.spotick.repository.place.inquiry.PlaceInquiryRepository;
 import com.app.spotick.service.place.inquiry.PlaceInquiryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -17,12 +15,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
 @RequestMapping("/inquiries")
 @RequiredArgsConstructor
-public class InquiryController {
+public class InquiryRestController {
     private final PlaceInquiryService placeInquiryService;
 
     @GetMapping("/place")

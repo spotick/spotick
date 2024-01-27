@@ -274,7 +274,22 @@ public class MypageController {
     }
 
     @GetMapping("/reviews")
-    public void goToReviews() {
+    public String goToReviews() {
+        return "redirect:/mypage/reviews/reviewable";
+    }
+
+    @GetMapping("/reviews/reviewable")
+    public void goToReviewsReviewable(@RequestParam(value = "page", defaultValue = "1") int page,
+                                      @AuthenticationPrincipal UserDetailsDto userDetailsDto,
+                                      Model model) {
+
+        Pageable pageable = PageRequest.of(page - 1, 6);
+
+        Page<PlaceListDto> notReviewedList = userService.findPlacesNotReviewed(userDetailsDto.getId(), pageable);
+        Pagination<PlaceListDto> pagination = new Pagination<>(5, pageable, notReviewedList);
+
+        model.addAttribute("notReviewedList", notReviewedList);
+        model.addAttribute("pagination", pagination);
     }
 
     @GetMapping("/tickets")

@@ -60,8 +60,8 @@ const inquiryService = (function () {
             method: 'GET'
         })
             .then(response => {
+                loadingMarkService.hide();
                 if (response.ok) {
-                    loadingMarkService.hide();
                     return response.json();
                 } else {
                     throw response;

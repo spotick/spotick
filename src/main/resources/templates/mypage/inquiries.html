@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <meta charset="UTF-8">
@@ -58,9 +58,7 @@
                     티켓 문의(<span>0</span>)
                 </button>
             </nav>
-            <div id="mpLoadingMark" class="mypage-loading-wrap">
-                <img src="/imgs/loading.svg" alt="">
-            </div>
+            <div th:replace="~{global-templates/loading :: loading}"></div>
             <div class="mpcr-container" id="inquiryContainer">
                 <div>확인하고 싶은 내역을 상단 바에서 클릭해주세요.</div>
             </div>

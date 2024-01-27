@@ -24,4 +24,6 @@ public interface UserService {
 
     Page<PlaceReservationListDto> findReservationsByUserId(Long userId, Pageable pageable);
 
+    Page<PlaceListDto> findPlacesNotReviewed(Long userId, Pageable pageable);
+
 }

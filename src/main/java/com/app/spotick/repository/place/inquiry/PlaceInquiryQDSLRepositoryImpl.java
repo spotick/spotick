@@ -3,6 +3,7 @@ package com.app.spotick.repository.place.inquiry;
 import com.app.spotick.domain.dto.place.PlaceFileDto;
 import com.app.spotick.domain.dto.place.PlaceInquiryListDto;
 import com.app.spotick.domain.entity.place.PlaceInquiry;
+import com.app.spotick.domain.type.post.PostStatus;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.JPQLQuery;
@@ -48,7 +49,8 @@ public class PlaceInquiryQDSLRepositoryImpl implements PlaceInquiryQDSLRepositor
 
         JPQLQuery<Long> totalCountQuery = queryFactory.select(placeInquiry.count())
                 .from(placeInquiry)
-                .where(placeInquiry.user.id.eq(userId));
+                .join(placeInquiry.place, place)
+                .where(placeInquiry.user.id.eq(userId), place.placeStatus.eq(PostStatus.APPROVED));
 
         JPQLQuery<Double> reviewAvg = JPAExpressions.select(placeReview.score.avg())
                 .from(placeReview)

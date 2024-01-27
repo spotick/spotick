@@ -5,6 +5,8 @@ import com.app.spotick.domain.dto.place.PlaceListDto;
 import com.app.spotick.domain.dto.place.PlaceRegisterDto;
 import com.app.spotick.domain.dto.place.reservation.PlaceReserveBasicInfoDto;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 
 import java.io.IOException;
 import java.util.List;
@@ -18,5 +20,5 @@ public interface PlaceService {
     PlaceDetailDto findPlaceDetailById(Long placeId,Long userId);
 
     PlaceReserveBasicInfoDto findPlaceReserveDefaultInfo(Long placeId);
-
+    
 }

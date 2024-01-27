@@ -9,6 +9,7 @@ import com.app.spotick.domain.entity.user.User;
 import com.app.spotick.domain.entity.user.UserAuthority;
 import com.app.spotick.domain.entity.user.UserProfileFile;
 import com.app.spotick.domain.type.user.AuthorityType;
+import com.app.spotick.repository.place.PlaceRepository;
 import com.app.spotick.repository.place.bookmark.PlaceBookmarkRepository;
 import com.app.spotick.repository.place.reservation.PlaceReservationRepository;
 import com.app.spotick.repository.user.UserAuthorityRepository;
@@ -40,6 +41,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     private final UserRepository userRepository;
     private final UserAuthorityRepository authorityRepository;
     private final UserProfileFileService profileFileService;
+    private final PlaceRepository placeRepository;
     private final PlaceBookmarkRepository placeBookmarkRepository;
     private final PlaceReservationRepository placeReservationRepository;
     private final RedisService redisService;
@@ -142,6 +144,12 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Transactional(readOnly = true)
     public Page<PlaceReservationListDto> findReservationsByUserId(Long userId, Pageable pageable) {
         return placeReservationRepository.findReservationsByUserId(userId, pageable);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Page<PlaceListDto> findPlacesNotReviewed(Long userId, Pageable pageable) {
+        return placeRepository.findPlaceListNotRelatedToReview(userId, pageable);
     }
 
     private String encodePassword(String password) {
