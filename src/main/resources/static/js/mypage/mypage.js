@@ -56,7 +56,7 @@ function showGlobalSelection(dialogueString, callback) {
     openModal(globalSelection);
 }
 
-function closeGlobalSelection(){
+function closeGlobalSelection() {
     globalSelection.classList.remove('show')
 
     if (!(modalReservation?.classList.contains('show') || modalReviewForm?.classList.contains('show'))) {
@@ -85,3 +85,44 @@ topNavigationButtons.forEach(button => {
         button.classList.add('active');
     });
 });
+
+function scrollToTop() {
+    const duration = 300;
+    const start = window.scrollY;
+    const target = 0;
+    const startTime = performance.now();
+
+    function animateScroll() {
+        const currentTime = performance.now();
+        const elapsed = currentTime - startTime;
+
+        const easedTime = (elapsed / duration) < 0.5
+            ? 2 * Math.pow(elapsed / duration, 2)
+            : -1 + (4 - 2 * elapsed / duration) * (elapsed / duration);
+
+        window.scrollTo(0, start + (target - start) * easedTime);
+
+        if (elapsed < duration) {
+            requestAnimationFrame(animateScroll);
+        }
+    }
+
+    animateScroll();
+}
+
+const loadingMarkService = (function () {
+    const loadingMark = document.getElementById('mpLoadingMark');
+
+    function show() {
+        loadingMark.classList.add('show');
+    }
+
+    function hide() {
+        loadingMark.classList.remove('show')
+    }
+
+    return {
+        show:show,
+        hide:hide
+    }
+})();

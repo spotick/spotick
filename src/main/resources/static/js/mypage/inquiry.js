@@ -1,5 +1,9 @@
 const content = document.getElementById('detailContent');
 const response = document.getElementById('detailResponse');
+4
+
+let currentPage = 0;
+
 function popupInquiryModal(item) {
     openModal(modalInquiry)
 
@@ -17,7 +21,26 @@ function showGSForInquiryDeletion(inquiryId) {
 }
 
 function deleteInquiry(inquiryId) {
-    console.log(inquiryId)
+    fetch(`/inquiries/${inquiryId}/delete`, {
+        method: 'GET'
+    })
+        .then(response => {
+            if (response.ok) {
+                return response.text();
+            } else {
+                throw response
+            }
+        })
+        .then(message => {
+            alert(message);
+            closeModal();
+            inquiryService.requestPlaceInquiries(currentPage, inquiryService.reloadPlaceInquiries);
+        })
+        .catch(error => {
+            console.error('Error:', error);
+
+            error.text().then(message => showGlobalDialogue(message))
+        });
 }
 
 const container = document.getElementById('inquiryContainer')
@@ -25,22 +48,31 @@ const paginationContainer = document.querySelector('.pagination-container')
 const inquiryService = (function () {
 
     function requestPlaceInquiries(page, callback) {
+        container.innerHTML = '';
+        loadingMarkService.show();
+
+        // todo : 제거 -> 로딩 스크린 테스트 용
+        setTimeout(() => {
+
         fetch('/inquiries/place?page=' + page, {
             method: 'GET'
         })
             .then(response => {
                 if (response.ok) {
+                    loadingMarkService.hide();
                     return response.json();
                 } else {
-                    throw response
+                    throw response;
                 }
             })
             .then(data => {
                 callback(data);
+                currentPage = page;
             })
             .catch(error => {
                 console.error('Error:', error);
             });
+        }, 500)
     }
 
     function reloadPlaceInquiries(data) {
@@ -61,7 +93,7 @@ const inquiryService = (function () {
                                         <a href="/place/detail/${inquiry.id}">해당
                                                     게시글로 이동</a>
                                     </div>
-                                    <div class="action-item" onclick="showGSForInquiryDeletion(5)">
+                                    <div class="action-item" onclick="showGSForInquiryDeletion(${inquiry.id})">
                                         <span>문의 내역 삭제</span>
                                     </div>
                                 </div>
@@ -117,13 +149,13 @@ const inquiryService = (function () {
         if (data.pagination.hasPrevBlock) {
             paginationHtml +=
                 `<span class="pagination-previous">
-                    <a class="pagination-btns first" onclick="inquiryService.requestPlaceInquiries(1, inquiryService.reloadPlaceInquiries)"
+                    <a class="pagination-btns first" onclick="inquiryService.requestPlaceInquiries(1, inquiryService.reloadPlaceInquiries), scrollToTop()"
                         title="맨 처음">
                         <i class="fa-solid fa-chevron-left"></i>
                         <i class="fa-solid fa-chevron-left"></i>
                     </a>
                     <a class="pagination-btns"
-                        onclick="inquiryService.requestPlaceInquiries(${data.pagination.startPage - 1}, inquiryService.reloadPlaceInquiries)"
+                        onclick="inquiryService.requestPlaceInquiries(${data.pagination.startPage - 1}, inquiryService.reloadPlaceInquiries), scrollToTop()"
                         title="이전">
                         <i class="fa-solid fa-chevron-left"></i>
                     </a>
@@ -136,7 +168,7 @@ const inquiryService = (function () {
             paginationHtml +=
                 `<span class="pagination-btns">
                     <a class="${i === data.pagination.currentPage ? 'active' : ''}"
-                       onclick="inquiryService.requestPlaceInquiries(${i}, inquiryService.reloadPlaceInquiries)">
+                       onclick="inquiryService.requestPlaceInquiries(${i}, inquiryService.reloadPlaceInquiries), scrollToTop()">
                        ${i}
                     </a>
                 </span>`
@@ -148,11 +180,11 @@ const inquiryService = (function () {
             paginationHtml +=
                 `<span class="pagination-next">
                     <a class="pagination-btns"
-                        onclick="inquiryService.requestPlaceInquiries(${data.pagination.endPage + 1}, inquiryService.reloadPlaceInquiries)"
+                        onclick="inquiryService.requestPlaceInquiries(${data.pagination.endPage + 1}, inquiryService.reloadPlaceInquiries), scrollToTop()"
                         title="다음">
                         <i class="fa-solid fa-chevron-right"></i>
                     </a>
-                    <a class="pagination-btns end" onclick="inquiryService.requestPlaceInquiries(${data.pagination.lastPage}, inquiryService.reloadPlaceInquiries)"
+                    <a class="pagination-btns end" onclick="inquiryService.requestPlaceInquiries(${data.pagination.lastPage}, inquiryService.reloadPlaceInquiries), scrollToTop()"
                        title="맨 끝">
                         <i class="fa-solid fa-chevron-right"></i>
                         <i class="fa-solid fa-chevron-right"></i>

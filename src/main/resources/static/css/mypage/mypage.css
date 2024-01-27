@@ -1334,3 +1334,12 @@
     justify-content: space-between;
     gap: 15px;
 }
+
+.mypage-loading-wrap {
+    display: none;
+    justify-content: center;
+}
+
+.mypage-loading-wrap.show {
+    display: flex;
+}
