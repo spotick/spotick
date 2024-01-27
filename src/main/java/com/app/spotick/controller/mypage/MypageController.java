@@ -26,7 +26,6 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 
-import java.net.URI;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -40,7 +39,6 @@ public class MypageController {
     private final UserProfileFileService profileFileService;
     private final PlaceReservationService placeReservationService;
     private final RedisService redisService;
-
 
     /* ================================================유저정보수정=================================================== */
     @GetMapping("/user-info")
@@ -227,8 +225,7 @@ public class MypageController {
     @GetMapping("/reservation/{reservationId}/delete")
     @ResponseBody
     public ResponseEntity<String> deleteReservation(@PathVariable("reservationId") Long reservationId,
-                                                    @AuthenticationPrincipal UserDetailsDto userDetailsDto,
-                                                    RedirectAttributes redirectAttributes) {
+                                                    @AuthenticationPrincipal UserDetailsDto userDetailsDto) {
         if (reservationId == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body("잘못된 요청입니다.");
@@ -277,7 +274,22 @@ public class MypageController {
     }
 
     @GetMapping("/reviews")
-    public void goToReviews() {
+    public String goToReviews() {
+        return "redirect:/mypage/reviews/reviewable";
+    }
+
+    @GetMapping("/reviews/reviewable")
+    public void goToReviewsReviewable(@RequestParam(value = "page", defaultValue = "1") int page,
+                                      @AuthenticationPrincipal UserDetailsDto userDetailsDto,
+                                      Model model) {
+
+        Pageable pageable = PageRequest.of(page - 1, 6);
+
+        Page<PlaceListDto> notReviewedList = userService.findPlacesNotReviewed(userDetailsDto.getId(), pageable);
+        Pagination<PlaceListDto> pagination = new Pagination<>(5, pageable, notReviewedList);
+
+        model.addAttribute("notReviewedList", notReviewedList);
+        model.addAttribute("pagination", pagination);
     }
 
     @GetMapping("/tickets")

@@ -20,7 +20,7 @@ public class BookmarkController {
      */
     @GetMapping("/bookmark")
     public boolean bookmark(@RequestParam("placeId") Long placeId,
-                         @AuthenticationPrincipal UserDetailsDto userDetailsDto) {
+                            @AuthenticationPrincipal UserDetailsDto userDetailsDto) {
         return placeBookmarkService.bookmark(placeId, userDetailsDto.getId());
     }
 
@@ -33,7 +33,7 @@ public class BookmarkController {
      */
     @GetMapping("/bookmarkCheck")
     public boolean bookmarkCheck(@RequestParam("placeId") Long placeId,
-                              @AuthenticationPrincipal UserDetailsDto userDetailsDto) {
+                                 @AuthenticationPrincipal UserDetailsDto userDetailsDto) {
         return placeBookmarkService.bookmarkCheck(placeId, userDetailsDto.getId());
     }
 }

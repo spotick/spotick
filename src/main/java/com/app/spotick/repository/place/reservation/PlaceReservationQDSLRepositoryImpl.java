@@ -37,7 +37,8 @@ public class PlaceReservationQDSLRepositoryImpl implements PlaceReservationQDSLR
         // 게시글 전체 갯수 확인
         JPAQuery<Long> totalCountQuery = queryFactory.select(placeReservation.count())
                 .from(placeReservation)
-                .where(placeReservation.user.id.eq(userId));
+                .join(placeReservation.place, place)
+                .where(placeReservation.user.id.eq(userId), place.placeStatus.eq(PostStatus.APPROVED));
 
         JPQLQuery<Double> reviewAvg = JPAExpressions.select(placeReview.score.avg())
                 .from(placeReview)

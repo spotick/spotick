@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <meta charset="UTF-8">
@@ -116,192 +116,59 @@
                 </button>
             </nav>
             <div class="mpc-review-wrap">
-                <div class="OneItemContainer hover mybookmark">
-                    <div class="OneItemImgContainer">
-                        <div class="swiper ImageSwiper swiper-initialized swiper-horizontal swiper-pointer-events swiper-backface-hidden">
-                            <div class="swiper-wrapper ImageLength" style="transform: translate3d(0px, 0px, 0px);">
-                                <!-- 이미지 한칸 -->
-                                <div class="swiper-slide swiper-slide-next">
-                                    <img alt="실내체육관(낙산관)"
-                                         class="ItemImg" src="https://img.shareit.kr/prod/img/2022-07-18/b7cf013c-5714-4891-8459-785516154830.jpg">
-                                </div>
-                                <div class="swiper-slide">
-                                    <img alt="실내체육관(낙산관)"
-                                         class="ItemImg" src="https://img.shareit.kr/prod/img/2022-07-18/f66fbf97-3357-4c71-b367-c2dd750510d4.jpg">
-                                </div>
-                                <div class="swiper-slide">
-                                    <img alt="실내체육관(낙산관)"
-                                         class="ItemImg" src="https://img.shareit.kr/prod/img/2022-07-18/71de7186-c3a1-4983-8c55-a71c3ab94458.jpg">
-                                </div>
-                                <div class="swiper-slide">
-                                    <img alt="실내체육관(낙산관)"
-                                         class="ItemImg" src="https://img.shareit.kr/prod/img/2022-07-18/dc4e5592-b3ec-4b42-abed-c780e1fb3a59.jpg">
-                                </div>
-                            </div>
-                            <div class="NavigationBtnContainer">
-                                <button class="NavigationBtn RightBtn" type="button">
-                                    <img alt="다음" src="/imgs/round_arrow_right_gray024.7f7e18a3.svg">
-                                </button>
-                                <button class="NavigationBtn LeftBtn" type="button">
-                                    <img alt="이전" src="/imgs/round_arrow_left_gray024.707193e8.svg">
-                                </button>
-                            </div>
-                            <div class="ItemImgPagination">
-                                <p><span class="snapIndex">1</span>/<span class="slideIndex">5</span></p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="ItemTextContainer">
-                        <div class="ItemHostNameContainer">
-                            <span class="ItemHostName">서울 성북구</span>
-                            <div class="ItemCountsContainer">
-                                <div class="ItemsStarCountContainer">
-                                    <img alt="후기갯수" class="ItemCountImg"
-                                         src="/imgs/star_filled_paintYellow056.a8eb6e44.svg">
-                                    <span class="ItemCountText">4.0(20)</span>
-                                </div>
-                                <div class="ItemsLikeCountContainer">
-                                    <img alt="북마크갯수" class="ItemCountImg bookmark"
-                                         src="/imgs/bookmark_thin.svg">
-                                    <span class="ItemCountText">1724</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="ItemSpaceNameContainer">
-                            <p class="ItemSpaceName">낙산관 실내체육관(낙산관)</p>
-                        </div>
-                        <div class="ItemPriceContainer">
-                            <span class="ItemPrice">2023.12.30 ~ 2024.01.30</span>
-                            <button class="BottomButton">
-                                <span onclick="popupReviewFrom(2)">작성하기</span>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-                <div class="OneItemContainer hover mybookmark">
-                    <div class="OneItemImgContainer">
-                        <div class="swiper ImageSwiper swiper-initialized swiper-horizontal swiper-pointer-events swiper-backface-hidden">
-                            <div class="swiper-wrapper ImageLength" style="transform: translate3d(0px, 0px, 0px);">
-                                <!-- 이미지 한칸 -->
-                                <div class="swiper-slide swiper-slide-next">
-                                    <img alt="실내체육관(낙산관)"
-                                         class="ItemImg" src="https://img.shareit.kr/prod/img/2022-07-18/b7cf013c-5714-4891-8459-785516154830.jpg">
-                                </div>
-                                <div class="swiper-slide">
-                                    <img alt="실내체육관(낙산관)"
-                                         class="ItemImg" src="https://img.shareit.kr/prod/img/2022-07-18/f66fbf97-3357-4c71-b367-c2dd750510d4.jpg">
-                                </div>
-                                <div class="swiper-slide">
-                                    <img alt="실내체육관(낙산관)"
-                                         class="ItemImg" src="https://img.shareit.kr/prod/img/2022-07-18/71de7186-c3a1-4983-8c55-a71c3ab94458.jpg">
-                                </div>
-                                <div class="swiper-slide">
-                                    <img alt="실내체육관(낙산관)"
-                                         class="ItemImg" src="https://img.shareit.kr/prod/img/2022-07-18/dc4e5592-b3ec-4b42-abed-c780e1fb3a59.jpg">
-                                </div>
-                            </div>
-                            <div class="NavigationBtnContainer">
-                                <button class="NavigationBtn RightBtn" type="button">
-                                    <img alt="다음" src="/imgs/round_arrow_right_gray024.7f7e18a3.svg">
-                                </button>
-                                <button class="NavigationBtn LeftBtn" type="button">
-                                    <img alt="이전" src="/imgs/round_arrow_left_gray024.707193e8.svg">
-                                </button>
-                            </div>
-                            <div class="ItemImgPagination">
-                                <p><span class="snapIndex">1</span>/<span class="slideIndex">5</span></p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="ItemTextContainer">
-                        <div class="ItemHostNameContainer">
-                            <span class="ItemHostName">서울 성북구</span>
-                            <div class="ItemCountsContainer">
-                                <div class="ItemsStarCountContainer">
-                                    <img alt="후기갯수" class="ItemCountImg"
-                                         src="/imgs/star_filled_paintYellow056.a8eb6e44.svg">
-                                    <span class="ItemCountText">4.0(20)</span>
-                                </div>
-                                <div class="ItemsLikeCountContainer">
-                                    <img alt="북마크갯수" class="ItemCountImg bookmark"
-                                         src="/imgs/bookmark_thin.svg">
-                                    <span class="ItemCountText">1724</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="ItemSpaceNameContainer">
-                            <p class="ItemSpaceName">낙산관 실내체육관(낙산관)</p>
-                        </div>
-                        <div class="ItemPriceContainer">
-                            <span class="ItemPrice">2023.12.30 ~ 2024.01.30</span>
-                            <button class="BottomButton">
-                                <span onclick="popupReviewFrom(2)">작성하기</span>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-                <div class="OneItemContainer hover mybookmark">
-                    <div class="OneItemImgContainer">
-                        <div class="swiper ImageSwiper swiper-initialized swiper-horizontal swiper-pointer-events swiper-backface-hidden">
-                            <div class="swiper-wrapper ImageLength" style="transform: translate3d(0px, 0px, 0px);">
-                                <!-- 이미지 한칸 -->
-                                <div class="swiper-slide swiper-slide-next">
-                                    <img alt="실내체육관(낙산관)"
-                                         class="ItemImg" src="https://img.shareit.kr/prod/img/2022-07-18/b7cf013c-5714-4891-8459-785516154830.jpg">
-                                </div>
-                                <div class="swiper-slide">
-                                    <img alt="실내체육관(낙산관)"
-                                         class="ItemImg" src="https://img.shareit.kr/prod/img/2022-07-18/f66fbf97-3357-4c71-b367-c2dd750510d4.jpg">
-                                </div>
-                                <div class="swiper-slide">
-                                    <img alt="실내체육관(낙산관)"
-                                         class="ItemImg" src="https://img.shareit.kr/prod/img/2022-07-18/71de7186-c3a1-4983-8c55-a71c3ab94458.jpg">
-                                </div>
-                                <div class="swiper-slide">
-                                    <img alt="실내체육관(낙산관)"
-                                         class="ItemImg" src="https://img.shareit.kr/prod/img/2022-07-18/dc4e5592-b3ec-4b42-abed-c780e1fb3a59.jpg">
-                                </div>
-                            </div>
-                            <div class="NavigationBtnContainer">
-                                <button class="NavigationBtn RightBtn" type="button">
-                                    <img alt="다음" src="/imgs/round_arrow_right_gray024.7f7e18a3.svg">
-                                </button>
-                                <button class="NavigationBtn LeftBtn" type="button">
-                                    <img alt="이전" src="/imgs/round_arrow_left_gray024.707193e8.svg">
-                                </button>
-                            </div>
-                            <div class="ItemImgPagination">
-                                <p><span class="snapIndex">1</span>/<span class="slideIndex">5</span></p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="ItemTextContainer">
-                        <div class="ItemHostNameContainer">
-                            <span class="ItemHostName">서울 성북구</span>
-                            <div class="ItemCountsContainer">
-                                <div class="ItemsStarCountContainer">
-                                    <img alt="후기갯수" class="ItemCountImg"
-                                         src="/imgs/star_filled_paintYellow056.a8eb6e44.svg">
-                                    <span class="ItemCountText">4.0(20)</span>
-                                </div>
-                                <div class="ItemsLikeCountContainer">
-                                    <img alt="북마크갯수" class="ItemCountImg bookmark"
-                                         src="/imgs/bookmark_thin.svg">
-                                    <span class="ItemCountText">1724</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="ItemSpaceNameContainer">
-                            <p class="ItemSpaceName">낙산관 실내체육관(낙산관)</p>
-                        </div>
-                        <div class="ItemPriceContainer">
-                            <span class="ItemPrice">2023.12.30 ~ 2024.01.30</span>
-                            <button class="BottomButton">
-                                <span onclick="popupReviewFrom(2)">작성하기</span>
-                            </button>
-                        </div>
-                    </div>
-                </div>
+<!--                <article>-->
+<!--                    <div class="mpcr-item-container">-->
+<!--                        <div class="mpcr-action-btn">-->
+<!--                            <button onclick="toggleDropdown(this)" type="button">-->
+<!--                                <i aria-hidden="true" class="fa-solid fa-ellipsis"></i>-->
+<!--                                <div class="mpc-dropdown">-->
+<!--                                    <div class="action-item">-->
+<!--                                        <a href="/place/detail/${inquiry.id}">해당-->
+<!--                                            게시글로 이동</a>-->
+<!--                                    </div>-->
+<!--                                    <div class="action-item" onclick="showGSForInquiryDeletion(${inquiry.id})">-->
+<!--                                        <span>문의 내역 삭제</span>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                            </button>-->
+<!--                        </div>-->
+<!--                        <div class="mpcr-img-con">-->
+<!--                            <img height="100px"-->
+<!--                                 src="/file/display?fileName=${inquiry.placeFileDto.uploadPath}/t_${inquiry.placeFileDto.uuid}_${inquiry.placeFileDto.fileName}">-->
+<!--                            style="width: 180px;">-->
+<!--                        </div>-->
+<!--                        <div class="ItemTextContainer">-->
+<!--                            <div class="ItemHostNameContainer">-->
+<!--                                <span class="ItemHostName">${inquiry.placeAddress.address}</span>-->
+<!--                                <div class="ItemCountsContainer">-->
+<!--                                    <div class="ItemsStarCountContainer">-->
+<!--                                        <img alt="후기갯수" class="ItemCountImg"-->
+<!--                                             src="/imgs/star_filled_paintYellow056.a8eb6e44.svg">-->
+<!--                                        <span class="ItemCountText">${inquiry.evalAvg.toFixed(1)}(${inquiry.evalCount})</span>-->
+<!--                                    </div>-->
+<!--                                    <div class="ItemsLikeCountContainer">-->
+<!--                                        <img alt="북마크갯수" class="ItemCountImg bookmark"-->
+<!--                                             src="/imgs/bookmark_thin.svg">-->
+<!--                                        <span class="ItemCountText">${inquiry.bookmarkCount}</span>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                            <div class="ItemSpaceNameContainer">-->
+<!--                                <p class="ItemSpaceName">${inquiry.placeTitle}</p>-->
+<!--                            </div>-->
+<!--                            <div class="ItemPriceContainer">-->
+<!--                                <span class="ItemPrice">${inquiry.price.toLocaleString()}원</span>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                        <div class="mpcr-divider"></div>-->
+<!--                        <div class="mpcr-info" onclick="popupInquiryModal(this)"-->
+<!--                             data-content="${inquiry.content}" data-response="${inquiry.response}">-->
+<!--                            <div class="mpcri-title">문의 내용</div>-->
+<!--                            <div class="mpcriq-title">${inquiry.inquiryTitle}</div>-->
+<!--                            <div class="mpcriq-content">${inquiry.content}</div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </article>-->
             </div>
             <div class="mpc-wrote-review-container">
                 <article>
@@ -511,6 +378,9 @@
 <script src="/js/global-js/image-slide.js"></script>
 <script>
     document.getElementById('reviews').classList.add('active');
+</script>
+<script th:inline="javascript">
+    console.log([[${notReviewedList}]]);
 </script>
 
 </html>

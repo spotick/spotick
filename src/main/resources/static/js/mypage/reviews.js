@@ -12,14 +12,18 @@ function popupReviewFrom(postId) {
     mrContent.value = '';
     typeCounter.innerHTML = '0';
     reviewRating.value = 1
-    stars.forEach(star => {star === stars[0] ? star.classList.add('on') : star.classList.remove('on')})
+    stars.forEach(star => {
+        star === stars[0] ? star.classList.add('on') : star.classList.remove('on')
+    })
     mrConfirmBtn.disabled = true;
 }
 
 // 평점 작동
 
 function setReviewScore(score) {
-    stars.forEach(star => {star.classList.remove('on')})
+    stars.forEach(star => {
+        star.classList.remove('on')
+    })
     for (let i = 0; i < score; i++) {
         stars[i].classList.add('on');
     }
