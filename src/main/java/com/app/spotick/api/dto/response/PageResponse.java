@@ -1,5 +1,6 @@
-package com.app.spotick.domain.pagination;
+package com.app.spotick.api.dto.response;
 
+import com.app.spotick.domain.pagination.Pagination;
 import lombok.Data;
 import org.springframework.data.domain.Page;
 
