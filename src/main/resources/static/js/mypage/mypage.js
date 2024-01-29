@@ -45,6 +45,10 @@ function closeModal() {
     });
 }
 
+function closeOnlyThisModal(target) {
+    target.classList.remove('show');
+}
+
 function showGlobalDialogue(dialogueString) {
     globalDialogueContent.innerHTML = dialogueString;
     openModal(globalDialogue);
@@ -126,3 +130,11 @@ const loadingMarkService = (function () {
         hide:hide
     }
 })();
+
+function vibrateTarget(target) {
+    target.classList.add('vibration');
+
+    setTimeout(function() {
+        target.classList.remove("vibration");
+    }, 200);
+}

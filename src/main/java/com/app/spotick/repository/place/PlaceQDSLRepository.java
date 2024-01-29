@@ -3,6 +3,7 @@ package com.app.spotick.repository.place;
 import com.app.spotick.domain.dto.place.PlaceDetailDto;
 import com.app.spotick.domain.dto.place.PlaceListDto;
 import com.app.spotick.domain.dto.place.reservation.PlaceReserveBasicInfoDto;
+import com.app.spotick.domain.dto.place.reservation.PlaceReservedNotReviewedDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
@@ -19,6 +20,6 @@ public interface PlaceQDSLRepository {
 //    장소예약페이지에서  장소에대한 기본정보
     Optional<PlaceReserveBasicInfoDto> findPlaceReserveBasicInfo(Long placeId);
 
-    Page<PlaceListDto> findPlaceListNotRelatedToReview(Long userId, Pageable pageable);
+    Page<PlaceReservedNotReviewedDto> findPlaceListNotRelatedToReview(Long userId, Pageable pageable);
 
 }

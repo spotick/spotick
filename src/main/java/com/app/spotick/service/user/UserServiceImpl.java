@@ -2,6 +2,7 @@ package com.app.spotick.service.user;
 
 import com.app.spotick.domain.dto.place.PlaceListDto;
 import com.app.spotick.domain.dto.place.PlaceReservationListDto;
+import com.app.spotick.domain.dto.place.reservation.PlaceReservedNotReviewedDto;
 import com.app.spotick.domain.dto.user.UserDetailsDto;
 import com.app.spotick.domain.dto.user.UserJoinDto;
 import com.app.spotick.domain.dto.user.UserProfileDto;
@@ -148,7 +149,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     @Transactional(readOnly = true)
-    public Page<PlaceListDto> findPlacesNotReviewed(Long userId, Pageable pageable) {
+    public Page<PlaceReservedNotReviewedDto> findPlacesNotReviewed(Long userId, Pageable pageable) {
         return placeRepository.findPlaceListNotRelatedToReview(userId, pageable);
     }
 

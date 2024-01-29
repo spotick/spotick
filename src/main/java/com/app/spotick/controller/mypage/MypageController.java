@@ -2,6 +2,8 @@ package com.app.spotick.controller.mypage;
 
 import com.app.spotick.domain.dto.place.PlaceListDto;
 import com.app.spotick.domain.dto.place.PlaceReservationListDto;
+import com.app.spotick.domain.dto.place.reservation.PlaceReservedNotReviewedDto;
+import com.app.spotick.domain.dto.place.reservation.PlaceReviewRegisterDto;
 import com.app.spotick.domain.dto.user.UserDetailsDto;
 import com.app.spotick.domain.dto.user.UserProfileDto;
 import com.app.spotick.domain.entity.place.PlaceReservation;
@@ -279,17 +281,45 @@ public class MypageController {
     }
 
     @GetMapping("/reviews/reviewable")
-    public void goToReviewsReviewable(@RequestParam(value = "page", defaultValue = "1") int page,
+    public void goToReviewsReviewable(@ModelAttribute("reviewRegisterDto")PlaceReviewRegisterDto placeReviewRegisterDto,
+                                      @RequestParam(value = "page", defaultValue = "1") int page,
                                       @AuthenticationPrincipal UserDetailsDto userDetailsDto,
                                       Model model) {
 
         Pageable pageable = PageRequest.of(page - 1, 6);
 
-        Page<PlaceListDto> notReviewedList = userService.findPlacesNotReviewed(userDetailsDto.getId(), pageable);
-        Pagination<PlaceListDto> pagination = new Pagination<>(5, pageable, notReviewedList);
+        Page<PlaceReservedNotReviewedDto> notReviewedList
+                = userService.findPlacesNotReviewed(userDetailsDto.getId(), pageable);
+        Pagination<PlaceReservedNotReviewedDto> pagination
+                = new Pagination<>(5, pageable, notReviewedList);
 
         model.addAttribute("notReviewedList", notReviewedList);
         model.addAttribute("pagination", pagination);
+    }
+
+    @PatchMapping("/reviews/notReviewing/{reservationId}")
+    @ResponseBody
+    public ResponseEntity<String> updateNotReviewing(@PathVariable("reservationId") Long reservationId,
+                                                     @AuthenticationPrincipal UserDetailsDto userDetailsDto) {
+
+        if (reservationId == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("잘못된 요청입니다.");
+        }
+
+        PlaceReservation reservation = placeReservationService
+                .findReservationByIdAndUser(reservationId, userDetailsDto.getId()).orElse(null);
+
+        if (reservation == null) {
+            // 예약 정보를 찾을 수 없을 시
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("예약 정보를 찾을 수 없습니다.<br>문제가 지속될 시 문의해주세요.");
+        }
+
+        placeReservationService.updateNotReviewing(reservationId);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body("작성가능한 후기에서 삭제되었습니다.");
     }
 
     @GetMapping("/tickets")

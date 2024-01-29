@@ -4,6 +4,7 @@ import com.app.spotick.domain.dto.place.PlaceDetailDto;
 import com.app.spotick.domain.dto.place.PlaceFileDto;
 import com.app.spotick.domain.dto.place.PlaceListDto;
 import com.app.spotick.domain.dto.place.reservation.PlaceReserveBasicInfoDto;
+import com.app.spotick.domain.dto.place.reservation.PlaceReservedNotReviewedDto;
 import com.app.spotick.domain.entity.place.*;
 import com.app.spotick.domain.type.place.PlaceReservationStatus;
 import com.app.spotick.domain.type.post.PostStatus;
@@ -170,12 +171,12 @@ public class PlaceQDSLRepositoryImpl implements PlaceQDSLRepository {
     }
 
     @Override
-    public Page<PlaceListDto> findPlaceListNotRelatedToReview(Long userId, Pageable pageable) {
+    public Page<PlaceReservedNotReviewedDto> findPlaceListNotRelatedToReview(Long userId, Pageable pageable) {
         JPAQuery<Long> totalCountQuery = queryFactory.select(placeReservation.count())
                 .from(placeReservation)
                 .join(placeReservation.place, place)
                 .where(placeReservation.user.id
-                        .eq(userId), placeReservation.notReviewable.eq(false), place.placeStatus.eq(PostStatus.APPROVED));
+                        .eq(userId), placeReservation.notReviewing.eq(false), place.placeStatus.eq(PostStatus.APPROVED));
 
         JPQLQuery<Double> reviewAvg = createReviewAvgSub(place);
 
@@ -185,32 +186,40 @@ public class PlaceQDSLRepositoryImpl implements PlaceQDSLRepository {
 
         BooleanExpression isBookmarkChecked = isBookmarkCheckedSub(place, userId);
 
-        List<PlaceListDto> placeListDtos = queryFactory.select(
-                        Projections.constructor(PlaceListDto.class,
+        List<PlaceReservedNotReviewedDto> notReviewListDtos = queryFactory.select(
+                        Projections.constructor(PlaceReservedNotReviewedDto.class,
                                 place.id,
+                                placeReservation.id,
                                 place.title,
                                 place.price,
                                 place.placeAddress,
                                 reviewAvg,
                                 reviewCount,
                                 bookmarkCount,
-                                isBookmarkChecked
+                                isBookmarkChecked,
+                                placeReservation.visitors,
+                                placeReservation.checkIn,
+                                placeReservation.checkOut,
+                                placeReservation.content,
+                                placeReservation.reservationStatus
                         )
                 )
                 .from(placeReservation)
                 .join(placeReservation.place, place)
+                .leftJoin(placeReservation.placeReview, placeReview)
                 .where(
                         place.placeStatus.eq(PostStatus.APPROVED),
                         placeReservation.reservationStatus.eq(PlaceReservationStatus.COMPLETED),
                         placeReservation.checkOut.lt(LocalDateTime.now()),
-                        placeReservation.notReviewable.eq(false)
+                        placeReservation.notReviewing.eq(false),
+                        placeReview.isNull()
                 )
                 .orderBy(place.id.desc())
                 .offset(pageable.getOffset())
-                .limit(pageable.getPageSize() + 1)
+                .limit(pageable.getPageSize())
                 .fetch();
 
-        List<Long> placeIdList = placeListDtos.stream().map(PlaceListDto::getId).toList();
+        List<Long> placeIdList = notReviewListDtos.stream().map(PlaceReservedNotReviewedDto::getId).toList();
 
 //        가져온 id리스트를 in절의 조건으로 사진정보들을 가져온다.
         List<PlaceFileDto> fileDtoList = queryFactory.select(
@@ -229,14 +238,14 @@ public class PlaceQDSLRepositoryImpl implements PlaceQDSLRepository {
         Map<Long, List<PlaceFileDto>> fileListMap = fileDtoList.stream().collect(Collectors.groupingBy(PlaceFileDto::getPlaceId));
 
 //        장소 id별로 구분된 사진들을 각각 게시글 번호에 맞게 추가한다
-        placeListDtos.forEach(placeListDto -> {
+        notReviewListDtos.forEach(placeListDto -> {
             placeListDto.updatePlaceFiles(fileListMap.get(placeListDto.getId())
                     .stream().limit(5L).toList());
             // 화면에서 뿌릴 주소값 가공
             placeListDto.getPlaceAddress().cutAddress();
         });
 
-        return PageableExecutionUtils.getPage(placeListDtos, pageable, totalCountQuery::fetchOne);
+        return PageableExecutionUtils.getPage(notReviewListDtos, pageable, totalCountQuery::fetchOne);
     }
 
     private JPQLQuery<Double> createReviewAvgSub(QPlace place) {
