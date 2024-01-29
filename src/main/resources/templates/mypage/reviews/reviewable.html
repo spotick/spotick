@@ -23,53 +23,54 @@
     <div class="modal-review-form-container">
         <div style="display: flex; margin-bottom: 20px;">
             <div class="mpcr-img-con">
-                <img height="100px"
-                     src="//img.hourplace.co.kr/place/user/47919/2022/05/29/74f9815f-fc9d-4dec-8037-41861f43cae9?s=550x364&amp;t=cover&amp;q=80"
-                     style="width: 180px;">
+                <img height="100px" id="detailImage" style="width: 180px;">
             </div>
             <div class="ItemTextContainer" style="min-width: 300px; max-width: 300px">
                 <div class="ItemHostNameContainer">
-                    <span class="ItemHostName">서울 성북구</span>
+                    <span class="ItemHostName" id="detailAddress"></span>
                     <div class="ItemCountsContainer">
                         <div class="ItemsStarCountContainer">
                             <img alt="후기갯수" class="ItemCountImg"
                                  src="/imgs/star_filled_paintYellow056.a8eb6e44.svg">
-                            <span class="ItemCountText">4.0(20)</span>
+                            <span class="ItemCountText" id="detailEval"></span>
                         </div>
                         <div class="ItemsLikeCountContainer">
                             <img alt="북마크갯수" class="ItemCountImg bookmark"
                                  src="/imgs/bookmark_thin.svg">
-                            <span class="ItemCountText">1724</span>
+                            <span class="ItemCountText" id="detailBookmark"></span>
                         </div>
                     </div>
                 </div>
                 <div class="ItemSpaceNameContainer">
-                    <p class="ItemSpaceName">낙산관 실내체육관(낙산관)</p>
+                    <p class="ItemSpaceName" id="detailTitle">)</p>
                 </div>
                 <div class="ItemPriceContainer">
-                    <span class="ItemPrice">2023.12.30 ~ 2024.01.30</span>
+                    <span class="ItemPrice" id="detailPrice"></span>
+                </div>
+                <div class="mpccc-row content-between" style="margin-top: 10px;">
+                    <div class="mpccc-status">
+                        <span id="detailStatus"></span>
+                    </div>
                 </div>
             </div>
             <div class="mpcr-divider"></div>
             <div class="mpcr-info">
                 <div class="mpcri-title">예약 정보</div>
                 <div class="mpcri-date">
-                    <span>2022.12.22 17시</span>
+                    <span id="detailCheckIn"></span>
                     <span style="margin: 0 4px; color: #868686;">~</span>
-                    <span>2022.12.23.10시</span>
+                    <span id="detailCheckOut"></span>
                 </div>
                 <div class="mpcri-people-count">
                     <div>
-                        사용 인원: <span>0</span>명
+                        사용 인원: <span id="detailVisitors"></span>명
                     </div>
                 </div>
-                <div class="mpcri-content">
-                    <span>요청 사항: </span>테스트 요청사항 테스트 요청사항 테스트 요청사항 테스트 요청사항 테스트 요청사항 테스트 요청사항 테스트 요청사항
-                    테스트 요청사항
-                </div>
+                <div class="mpcri-content" id="detailContent"></div>
             </div>
         </div>
         <h2 class="mri-title">후기작성</h2>
+        <input th:field="${reviewRegisterDto.reservationId}" type="hidden">
         <div class="mrf-star-rating-con">
             <span class="mrf-star on" onclick="setReviewScore(1)" value="1"></span>
             <span class="mrf-star" onclick="setReviewScore(2)" value="2"></span>
@@ -77,18 +78,23 @@
             <span class="mrf-star" onclick="setReviewScore(4)" value="4"></span>
             <span class="mrf-star" onclick="setReviewScore(5)" value="5"></span>
             <div class="mrf-rating-count-con">
-                <input id="reviewRating" readonly type="text" value="1">점
+                <input readonly th:field="${reviewRegisterDto.score}" type="text">점
             </div>
+            <div id="errorScore" class="error-score"></div>
         </div>
         <div class="mr-form">
-                    <textarea cols="30" id="mrContent" maxlength="200" name="" oninput="checkTypeCounts()"
-                              placeholder="최소 10자 이상 입력해주세요"
-                              rows="10"></textarea>
+            <textarea cols="30" maxlength="200" name="" oninput="checkTypeCounts()"
+                      placeholder="최소 10자 이상 입력해주세요"
+                      rows="10" spellcheck="false"
+                      th:field="${reviewRegisterDto.content}"></textarea>
         </div>
-        <div class="mr-type-counter">
-            <span>글자수</span>
-            <span id="typeCounter">0</span>
-            <span>/ 200</span>
+        <div class="space-between">
+            <div id="errorContent" class="error-content"></div>
+            <div class="mr-type-counter">
+                <span>글자수</span>
+                <span id="typeCounter">0</span>
+                <span>/ 200</span>
+            </div>
         </div>
         <div style="display: flex; justify-content: center;">
             <button class="modal-confirm-btn" disabled id="mrConfirmBtn">
@@ -100,7 +106,7 @@
 
 <header th:replace="~{global-templates/header-footer :: header}"></header>
 
-<main id="page-body" class="my-page-main">
+<main class="my-page-main" id="page-body">
     <div th:replace="~{global-templates/mypage :: mypage-menu}"></div>
     <div class="mp-content">
         <article>
@@ -116,253 +122,321 @@
                 </button>
             </nav>
             <div class="mpc-review-wrap">
-<!--                <article>-->
-<!--                    <div class="mpcr-item-container">-->
-<!--                        <div class="mpcr-action-btn">-->
-<!--                            <button onclick="toggleDropdown(this)" type="button">-->
-<!--                                <i aria-hidden="true" class="fa-solid fa-ellipsis"></i>-->
-<!--                                <div class="mpc-dropdown">-->
-<!--                                    <div class="action-item">-->
-<!--                                        <a href="/place/detail/${inquiry.id}">해당-->
-<!--                                            게시글로 이동</a>-->
-<!--                                    </div>-->
-<!--                                    <div class="action-item" onclick="showGSForInquiryDeletion(${inquiry.id})">-->
-<!--                                        <span>문의 내역 삭제</span>-->
-<!--                                    </div>-->
-<!--                                </div>-->
-<!--                            </button>-->
-<!--                        </div>-->
-<!--                        <div class="mpcr-img-con">-->
-<!--                            <img height="100px"-->
-<!--                                 src="/file/display?fileName=${inquiry.placeFileDto.uploadPath}/t_${inquiry.placeFileDto.uuid}_${inquiry.placeFileDto.fileName}">-->
-<!--                            style="width: 180px;">-->
-<!--                        </div>-->
-<!--                        <div class="ItemTextContainer">-->
-<!--                            <div class="ItemHostNameContainer">-->
-<!--                                <span class="ItemHostName">${inquiry.placeAddress.address}</span>-->
-<!--                                <div class="ItemCountsContainer">-->
-<!--                                    <div class="ItemsStarCountContainer">-->
-<!--                                        <img alt="후기갯수" class="ItemCountImg"-->
-<!--                                             src="/imgs/star_filled_paintYellow056.a8eb6e44.svg">-->
-<!--                                        <span class="ItemCountText">${inquiry.evalAvg.toFixed(1)}(${inquiry.evalCount})</span>-->
-<!--                                    </div>-->
-<!--                                    <div class="ItemsLikeCountContainer">-->
-<!--                                        <img alt="북마크갯수" class="ItemCountImg bookmark"-->
-<!--                                             src="/imgs/bookmark_thin.svg">-->
-<!--                                        <span class="ItemCountText">${inquiry.bookmarkCount}</span>-->
-<!--                                    </div>-->
-<!--                                </div>-->
-<!--                            </div>-->
-<!--                            <div class="ItemSpaceNameContainer">-->
-<!--                                <p class="ItemSpaceName">${inquiry.placeTitle}</p>-->
-<!--                            </div>-->
-<!--                            <div class="ItemPriceContainer">-->
-<!--                                <span class="ItemPrice">${inquiry.price.toLocaleString()}원</span>-->
-<!--                            </div>-->
-<!--                        </div>-->
-<!--                        <div class="mpcr-divider"></div>-->
-<!--                        <div class="mpcr-info" onclick="popupInquiryModal(this)"-->
-<!--                             data-content="${inquiry.content}" data-response="${inquiry.response}">-->
-<!--                            <div class="mpcri-title">문의 내용</div>-->
-<!--                            <div class="mpcriq-title">${inquiry.inquiryTitle}</div>-->
-<!--                            <div class="mpcriq-content">${inquiry.content}</div>-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                </article>-->
+                <th:block th:if="${#lists.size(notReviewedList)}">
+                    <th:block th:each="reviewableItem:${notReviewedList}">
+                        <div class="OneItemContainer hover mybookmark" th:object="${reviewableItem}">
+                            <div class="OneItemImgContainer">
+                                <div class="swiper ImageSwiper swiper-initialized swiper-horizontal swiper-pointer-events swiper-backface-hidden">
+                                    <a class="swiper-wrapper ImageLength"
+                                       th:href="@{/place/detail/{placeId}(placeId = ${reviewableItem.id})}">
+                                        <!-- 이미지 한칸 -->
+                                        <th:block th:each="placeFile:${reviewableItem.placeFiles}">
+                                            <div class="swiper-slide swiper-slide-next" th:object="${placeFile}">
+                                                <img class="ItemImg"
+                                                     th:alt="${reviewableItem.title}"
+                                                     th:src="*{'/file/display?fileName=' + uploadPath + '/t_' + uuid + '_' + fileName}">
+                                            </div>
+                                        </th:block>
+                                        <!-- 이미지 한칸 -->
+                                    </a>
+                                    <div class="NavigationBtnContainer">
+                                        <button class="NavigationBtn RightBtn" type="button">
+                                            <img alt="다음" src="/imgs/round_arrow_right_gray024.7f7e18a3.svg">
+                                        </button>
+                                        <button class="NavigationBtn LeftBtn" type="button">
+                                            <img alt="이전" src="/imgs/round_arrow_left_gray024.707193e8.svg">
+                                        </button>
+                                    </div>
+                                    <div class="ItemImgPagination">
+                                        <p><span class="snapIndex">1</span>/<span class="slideIndex">5</span></p>
+                                    </div>
+                                </div>
+                                <button onclick="toggleBookmark(this)"
+                                        th:class="${reviewableItem.isBookmarkChecked?'ItemBookMarkBtn active':'ItemBookMarkBtn'}"
+                                        th:data-id="*{id}" type="button">
+                                    <img alt="북마크" src="/imgs/bookmark_line_white_shadow_48.png">
+                                </button>
+                            </div>
+                            <a class="ItemTextContainer"
+                               th:href="@{/place/detail/{placeId}(placeId = ${reviewableItem.id})}">
+                                <div class="ItemHostNameContainer">
+                                    <span class="ItemHostName" th:text="*{placeAddress.address}"></span>
+                                    <div class="ItemCountsContainer">
+                                        <div class="ItemsStarCountContainer">
+                                            <img alt="후기갯수" class="ItemCountImg"
+                                                 src="/imgs/star_filled_paintYellow056.a8eb6e44.svg">
+                                            <span class="ItemCountText"
+                                                  th:text="|*{evalAvg}(*{evalCount})|"></span>
+                                        </div>
+                                        <div class="ItemsLikeCountContainer">
+                                            <img alt="북마크갯수" class="ItemCountImg bookmark"
+                                                 src="/imgs/bookmark_thin.svg">
+                                            <span class="ItemCountText" th:text="*{bookmarkCount}"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="ItemSpaceNameContainer">
+                                    <p class="ItemSpaceName" th:text="*{title}"></p>
+                                </div>
+                                <div class="ItemPriceContainer">
+                                    <span class="ItemPrice"
+                                          th:text="${#numbers.formatInteger(reviewableItem.price, 3, 'COMMA')} + '원'"></span>
+                                </div>
+                            </a>
+                            <div class="ItemBtnWrap">
+                                <button class="BottomButton red reservationDelete"
+                                        th:data-reservation-id="*{reservationId}"
+                                        type="button">
+                                    <span>삭제하기</span>
+                                </button>
+                                <button class="BottomButton blue reservationWrite"
+                                        th:data-address="*{placeAddress.address}"
+                                        th:data-bookmark-count="*{bookmarkCount}"
+                                        th:data-check-in="*{#temporals.format(checkIn, 'yyyy년 MM월 dd일 HH시')}"
+                                        th:data-check-out="*{#temporals.format(checkOut, 'yyyy년 MM월 dd일 HH시')}"
+                                        th:data-content="*{content}"
+                                        th:data-eval="|*{evalAvg}(*{evalCount})|"
+                                        th:data-image="|*{placeFiles[0].uploadPath}/t_*{placeFiles[0].uuid}_*{placeFiles[0].fileName}|"
+                                        th:data-price="${#numbers.formatInteger(reviewableItem.price, 3, 'COMMA')} + '원'"
+                                        th:data-reservation-id="*{reservationId}"
+                                        th:data-status="*{reservationStatus.displayName}"
+                                        th:data-title="*{title}" th:data-visitors="*{visitors}"
+                                        type="button">
+                                    <span>작성하기</span>
+                                </button>
+                            </div>
+                        </div>
+                    </th:block>
+                </th:block>
             </div>
-            <div class="mpc-wrote-review-container">
-                <article>
-                    <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
-                        <div class="ItemTextContainer" style="max-width: 300px">
-                            <div class="ItemHostNameContainer">
-                                <span class="ItemHostName">서울 성북구</span>
-                                <div class="ItemCountsContainer">
-                                    <div class="ItemsStarCountContainer">
-                                        <img alt="후기갯수" class="ItemCountImg"
-                                             src="/imgs/star_filled_paintYellow056.a8eb6e44.svg">
-                                        <span class="ItemCountText">4.0(20)</span>
-                                    </div>
-                                    <div class="ItemsLikeCountContainer">
-                                        <img alt="북마크갯수" class="ItemCountImg bookmark"
-                                             src="/imgs/bookmark_thin.svg">
-                                        <span class="ItemCountText">1724</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="ItemSpaceNameContainer">
-                                <p class="ItemSpaceName">낙산관 실내체육관(낙산관)</p>
-                            </div>
-                            <div class="ItemPriceContainer">
-                                <span class="ItemPrice">2023.12.30 ~ 2024.01.30</span>
-                            </div>
-                        </div>
-                        <div class="mpcre-img-con">
-                            <img
-                                    src="//img.hourplace.co.kr/place/user/47919/2022/05/29/74f9815f-fc9d-4dec-8037-41861f43cae9?s=550x364&amp;t=cover&amp;q=80">
-                        </div>
-                    </div>
-                    <div class="mpcwre-container">
-                        <div class="mpcwre-line">
-                            <span class="mpcwre-star"></span>
-                            <span class="mpcwre-rating">5</span>
-                            <span class="mpcwre-line-divider"></span>
-                            <span class="mpcwre-nickname">testNickname1234</span>
-                            <span class="mpcwre-line-divider"></span>
-                            <span class="mpcwre-date">2023-12-23</span>
-                        </div>
-                        <a href="#">
-                            <p class="mpcwre-content">테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용
-                                테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용
-                                테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 </p>
-                        </a>
-                    </div>
-                </article>
-                <article>
-                    <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
-                        <div class="ItemTextContainer" style="max-width: 300px">
-                            <div class="ItemHostNameContainer">
-                                <span class="ItemHostName">서울 성북구</span>
-                                <div class="ItemCountsContainer">
-                                    <div class="ItemsStarCountContainer">
-                                        <img alt="후기갯수" class="ItemCountImg"
-                                             src="/imgs/star_filled_paintYellow056.a8eb6e44.svg">
-                                        <span class="ItemCountText">4.0(20)</span>
-                                    </div>
-                                    <div class="ItemsLikeCountContainer">
-                                        <img alt="북마크갯수" class="ItemCountImg bookmark"
-                                             src="/imgs/bookmark_thin.svg">
-                                        <span class="ItemCountText">1724</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="ItemSpaceNameContainer">
-                                <p class="ItemSpaceName">낙산관 실내체육관(낙산관)</p>
-                            </div>
-                            <div class="ItemPriceContainer">
-                                <span class="ItemPrice">2023.12.30 ~ 2024.01.30</span>
-                            </div>
-                        </div>
-                        <div class="mpcre-img-con">
-                            <img
-                                    src="//img.hourplace.co.kr/place/user/47919/2022/05/29/74f9815f-fc9d-4dec-8037-41861f43cae9?s=550x364&amp;t=cover&amp;q=80">
-                        </div>
-                    </div>
-                    <div class="mpcwre-container">
-                        <div class="mpcwre-line">
-                            <span class="mpcwre-star"></span>
-                            <span class="mpcwre-rating">5</span>
-                            <span class="mpcwre-line-divider"></span>
-                            <span class="mpcwre-nickname">testNickname1234</span>
-                            <span class="mpcwre-line-divider"></span>
-                            <span class="mpcwre-date">2023-12-23</span>
-                        </div>
-                        <a href="#">
-                            <p class="mpcwre-content">테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용
-                                테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용
-                                테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 </p>
-                        </a>
-                    </div>
-                </article>
-                <article>
-                    <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
-                        <div class="ItemTextContainer" style="max-width: 300px">
-                            <div class="ItemHostNameContainer">
-                                <span class="ItemHostName">서울 성북구</span>
-                                <div class="ItemCountsContainer">
-                                    <div class="ItemsStarCountContainer">
-                                        <img alt="후기갯수" class="ItemCountImg"
-                                             src="/imgs/star_filled_paintYellow056.a8eb6e44.svg">
-                                        <span class="ItemCountText">4.0(20)</span>
-                                    </div>
-                                    <div class="ItemsLikeCountContainer">
-                                        <img alt="북마크갯수" class="ItemCountImg bookmark"
-                                             src="/imgs/bookmark_thin.svg">
-                                        <span class="ItemCountText">1724</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="ItemSpaceNameContainer">
-                                <p class="ItemSpaceName">낙산관 실내체육관(낙산관)</p>
-                            </div>
-                            <div class="ItemPriceContainer">
-                                <span class="ItemPrice">2023.12.30 ~ 2024.01.30</span>
-                            </div>
-                        </div>
-                        <div class="mpcre-img-con">
-                            <img
-                                    src="//img.hourplace.co.kr/place/user/47919/2022/05/29/74f9815f-fc9d-4dec-8037-41861f43cae9?s=550x364&amp;t=cover&amp;q=80">
-                        </div>
-                    </div>
-                    <div class="mpcwre-container">
-                        <div class="mpcwre-line">
-                            <span class="mpcwre-star"></span>
-                            <span class="mpcwre-rating">5</span>
-                            <span class="mpcwre-line-divider"></span>
-                            <span class="mpcwre-nickname">testNickname1234</span>
-                            <span class="mpcwre-line-divider"></span>
-                            <span class="mpcwre-date">2023-12-23</span>
-                        </div>
-                        <a href="#">
-                            <p class="mpcwre-content">테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용
-                                테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용
-                                테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 </p>
-                        </a>
-                    </div>
-                </article>
-                <article>
-                    <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
-                        <div class="ItemTextContainer" style="max-width: 300px">
-                            <div class="ItemHostNameContainer">
-                                <span class="ItemHostName">서울 성북구</span>
-                                <div class="ItemCountsContainer">
-                                    <div class="ItemsStarCountContainer">
-                                        <img alt="후기갯수" class="ItemCountImg"
-                                             src="/imgs/star_filled_paintYellow056.a8eb6e44.svg">
-                                        <span class="ItemCountText">4.0(20)</span>
-                                    </div>
-                                    <div class="ItemsLikeCountContainer">
-                                        <img alt="북마크갯수" class="ItemCountImg bookmark"
-                                             src="/imgs/bookmark_thin.svg">
-                                        <span class="ItemCountText">1724</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="ItemSpaceNameContainer">
-                                <p class="ItemSpaceName">낙산관 실내체육관(낙산관)</p>
-                            </div>
-                            <div class="ItemPriceContainer">
-                                <span class="ItemPrice">2023.12.30 ~ 2024.01.30</span>
-                            </div>
-                        </div>
-                        <div class="mpcre-img-con">
-                            <img
-                                    src="//img.hourplace.co.kr/place/user/47919/2022/05/29/74f9815f-fc9d-4dec-8037-41861f43cae9?s=550x364&amp;t=cover&amp;q=80">
-                        </div>
-                    </div>
-                    <div class="mpcwre-container">
-                        <div class="mpcwre-line">
-                            <span class="mpcwre-star"></span>
-                            <span class="mpcwre-rating">5</span>
-                            <span class="mpcwre-line-divider"></span>
-                            <span class="mpcwre-nickname">testNickname1234</span>
-                            <span class="mpcwre-line-divider"></span>
-                            <span class="mpcwre-date">2023-12-23</span>
-                        </div>
-                        <a href="#">
-                            <p class="mpcwre-content">테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용
-                                테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용
-                                테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 </p>
-                        </a>
-                    </div>
-                </article>
-            </div>
+            <th:block th:if="${notReviewedList.empty}">
+                <div class="mp-no-list">
+                    <span>작성가능한 후기가 없습니다.</span>
+                </div>
+            </th:block>
+            <!--            <div class="mpc-wrote-review-container">-->
+            <!--                <article>-->
+            <!--                    <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">-->
+            <!--                        <div class="ItemTextContainer" style="max-width: 300px">-->
+            <!--                            <div class="ItemHostNameContainer">-->
+            <!--                                <span class="ItemHostName">서울 성북구</span>-->
+            <!--                                <div class="ItemCountsContainer">-->
+            <!--                                    <div class="ItemsStarCountContainer">-->
+            <!--                                        <img alt="후기갯수" class="ItemCountImg"-->
+            <!--                                             src="/imgs/star_filled_paintYellow056.a8eb6e44.svg">-->
+            <!--                                        <span class="ItemCountText">4.0(20)</span>-->
+            <!--                                    </div>-->
+            <!--                                    <div class="ItemsLikeCountContainer">-->
+            <!--                                        <img alt="북마크갯수" class="ItemCountImg bookmark"-->
+            <!--                                             src="/imgs/bookmark_thin.svg">-->
+            <!--                                        <span class="ItemCountText">1724</span>-->
+            <!--                                    </div>-->
+            <!--                                </div>-->
+            <!--                            </div>-->
+            <!--                            <div class="ItemSpaceNameContainer">-->
+            <!--                                <p class="ItemSpaceName">낙산관 실내체육관(낙산관)</p>-->
+            <!--                            </div>-->
+            <!--                            <div class="ItemPriceContainer">-->
+            <!--                                <span class="ItemPrice">2023.12.30 ~ 2024.01.30</span>-->
+            <!--                            </div>-->
+            <!--                        </div>-->
+            <!--                        <div class="mpcre-img-con">-->
+            <!--                            <img-->
+            <!--                                    src="//img.hourplace.co.kr/place/user/47919/2022/05/29/74f9815f-fc9d-4dec-8037-41861f43cae9?s=550x364&amp;t=cover&amp;q=80">-->
+            <!--                        </div>-->
+            <!--                    </div>-->
+            <!--                    <div class="mpcwre-container">-->
+            <!--                        <div class="mpcwre-line">-->
+            <!--                            <span class="mpcwre-star"></span>-->
+            <!--                            <span class="mpcwre-rating">5</span>-->
+            <!--                            <span class="mpcwre-line-divider"></span>-->
+            <!--                            <span class="mpcwre-nickname">testNickname1234</span>-->
+            <!--                            <span class="mpcwre-line-divider"></span>-->
+            <!--                            <span class="mpcwre-date">2023-12-23</span>-->
+            <!--                        </div>-->
+            <!--                        <a href="#">-->
+            <!--                            <p class="mpcwre-content">테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용-->
+            <!--                                테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용-->
+            <!--                                테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 </p>-->
+            <!--                        </a>-->
+            <!--                    </div>-->
+            <!--                </article>-->
+            <!--                <article>-->
+            <!--                    <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">-->
+            <!--                        <div class="ItemTextContainer" style="max-width: 300px">-->
+            <!--                            <div class="ItemHostNameContainer">-->
+            <!--                                <span class="ItemHostName">서울 성북구</span>-->
+            <!--                                <div class="ItemCountsContainer">-->
+            <!--                                    <div class="ItemsStarCountContainer">-->
+            <!--                                        <img alt="후기갯수" class="ItemCountImg"-->
+            <!--                                             src="/imgs/star_filled_paintYellow056.a8eb6e44.svg">-->
+            <!--                                        <span class="ItemCountText">4.0(20)</span>-->
+            <!--                                    </div>-->
+            <!--                                    <div class="ItemsLikeCountContainer">-->
+            <!--                                        <img alt="북마크갯수" class="ItemCountImg bookmark"-->
+            <!--                                             src="/imgs/bookmark_thin.svg">-->
+            <!--                                        <span class="ItemCountText">1724</span>-->
+            <!--                                    </div>-->
+            <!--                                </div>-->
+            <!--                            </div>-->
+            <!--                            <div class="ItemSpaceNameContainer">-->
+            <!--                                <p class="ItemSpaceName">낙산관 실내체육관(낙산관)</p>-->
+            <!--                            </div>-->
+            <!--                            <div class="ItemPriceContainer">-->
+            <!--                                <span class="ItemPrice">2023.12.30 ~ 2024.01.30</span>-->
+            <!--                            </div>-->
+            <!--                        </div>-->
+            <!--                        <div class="mpcre-img-con">-->
+            <!--                            <img-->
+            <!--                                    src="//img.hourplace.co.kr/place/user/47919/2022/05/29/74f9815f-fc9d-4dec-8037-41861f43cae9?s=550x364&amp;t=cover&amp;q=80">-->
+            <!--                        </div>-->
+            <!--                    </div>-->
+            <!--                    <div class="mpcwre-container">-->
+            <!--                        <div class="mpcwre-line">-->
+            <!--                            <span class="mpcwre-star"></span>-->
+            <!--                            <span class="mpcwre-rating">5</span>-->
+            <!--                            <span class="mpcwre-line-divider"></span>-->
+            <!--                            <span class="mpcwre-nickname">testNickname1234</span>-->
+            <!--                            <span class="mpcwre-line-divider"></span>-->
+            <!--                            <span class="mpcwre-date">2023-12-23</span>-->
+            <!--                        </div>-->
+            <!--                        <a href="#">-->
+            <!--                            <p class="mpcwre-content">테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용-->
+            <!--                                테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용-->
+            <!--                                테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 </p>-->
+            <!--                        </a>-->
+            <!--                    </div>-->
+            <!--                </article>-->
+            <!--                <article>-->
+            <!--                    <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">-->
+            <!--                        <div class="ItemTextContainer" style="max-width: 300px">-->
+            <!--                            <div class="ItemHostNameContainer">-->
+            <!--                                <span class="ItemHostName">서울 성북구</span>-->
+            <!--                                <div class="ItemCountsContainer">-->
+            <!--                                    <div class="ItemsStarCountContainer">-->
+            <!--                                        <img alt="후기갯수" class="ItemCountImg"-->
+            <!--                                             src="/imgs/star_filled_paintYellow056.a8eb6e44.svg">-->
+            <!--                                        <span class="ItemCountText">4.0(20)</span>-->
+            <!--                                    </div>-->
+            <!--                                    <div class="ItemsLikeCountContainer">-->
+            <!--                                        <img alt="북마크갯수" class="ItemCountImg bookmark"-->
+            <!--                                             src="/imgs/bookmark_thin.svg">-->
+            <!--                                        <span class="ItemCountText">1724</span>-->
+            <!--                                    </div>-->
+            <!--                                </div>-->
+            <!--                            </div>-->
+            <!--                            <div class="ItemSpaceNameContainer">-->
+            <!--                                <p class="ItemSpaceName">낙산관 실내체육관(낙산관)</p>-->
+            <!--                            </div>-->
+            <!--                            <div class="ItemPriceContainer">-->
+            <!--                                <span class="ItemPrice">2023.12.30 ~ 2024.01.30</span>-->
+            <!--                            </div>-->
+            <!--                        </div>-->
+            <!--                        <div class="mpcre-img-con">-->
+            <!--                            <img-->
+            <!--                                    src="//img.hourplace.co.kr/place/user/47919/2022/05/29/74f9815f-fc9d-4dec-8037-41861f43cae9?s=550x364&amp;t=cover&amp;q=80">-->
+            <!--                        </div>-->
+            <!--                    </div>-->
+            <!--                    <div class="mpcwre-container">-->
+            <!--                        <div class="mpcwre-line">-->
+            <!--                            <span class="mpcwre-star"></span>-->
+            <!--                            <span class="mpcwre-rating">5</span>-->
+            <!--                            <span class="mpcwre-line-divider"></span>-->
+            <!--                            <span class="mpcwre-nickname">testNickname1234</span>-->
+            <!--                            <span class="mpcwre-line-divider"></span>-->
+            <!--                            <span class="mpcwre-date">2023-12-23</span>-->
+            <!--                        </div>-->
+            <!--                        <a href="#">-->
+            <!--                            <p class="mpcwre-content">테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용-->
+            <!--                                테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용-->
+            <!--                                테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 </p>-->
+            <!--                        </a>-->
+            <!--                    </div>-->
+            <!--                </article>-->
+            <!--                <article>-->
+            <!--                    <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">-->
+            <!--                        <div class="ItemTextContainer" style="max-width: 300px">-->
+            <!--                            <div class="ItemHostNameContainer">-->
+            <!--                                <span class="ItemHostName">서울 성북구</span>-->
+            <!--                                <div class="ItemCountsContainer">-->
+            <!--                                    <div class="ItemsStarCountContainer">-->
+            <!--                                        <img alt="후기갯수" class="ItemCountImg"-->
+            <!--                                             src="/imgs/star_filled_paintYellow056.a8eb6e44.svg">-->
+            <!--                                        <span class="ItemCountText">4.0(20)</span>-->
+            <!--                                    </div>-->
+            <!--                                    <div class="ItemsLikeCountContainer">-->
+            <!--                                        <img alt="북마크갯수" class="ItemCountImg bookmark"-->
+            <!--                                             src="/imgs/bookmark_thin.svg">-->
+            <!--                                        <span class="ItemCountText">1724</span>-->
+            <!--                                    </div>-->
+            <!--                                </div>-->
+            <!--                            </div>-->
+            <!--                            <div class="ItemSpaceNameContainer">-->
+            <!--                                <p class="ItemSpaceName">낙산관 실내체육관(낙산관)</p>-->
+            <!--                            </div>-->
+            <!--                            <div class="ItemPriceContainer">-->
+            <!--                                <span class="ItemPrice">2023.12.30 ~ 2024.01.30</span>-->
+            <!--                            </div>-->
+            <!--                        </div>-->
+            <!--                        <div class="mpcre-img-con">-->
+            <!--                            <img-->
+            <!--                                    src="//img.hourplace.co.kr/place/user/47919/2022/05/29/74f9815f-fc9d-4dec-8037-41861f43cae9?s=550x364&amp;t=cover&amp;q=80">-->
+            <!--                        </div>-->
+            <!--                    </div>-->
+            <!--                    <div class="mpcwre-container">-->
+            <!--                        <div class="mpcwre-line">-->
+            <!--                            <span class="mpcwre-star"></span>-->
+            <!--                            <span class="mpcwre-rating">5</span>-->
+            <!--                            <span class="mpcwre-line-divider"></span>-->
+            <!--                            <span class="mpcwre-nickname">testNickname1234</span>-->
+            <!--                            <span class="mpcwre-line-divider"></span>-->
+            <!--                            <span class="mpcwre-date">2023-12-23</span>-->
+            <!--                        </div>-->
+            <!--                        <a href="#">-->
+            <!--                            <p class="mpcwre-content">테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용-->
+            <!--                                테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용-->
+            <!--                                테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 </p>-->
+            <!--                        </a>-->
+            <!--                    </div>-->
+            <!--                </article>-->
+            <!--            </div>-->
         </article>
-        <div class="mp-no-list">
-            <span>작성가능한 후기가 없습니다.</span>
-        </div>
-        <div class="mp-no-list">
-            <span>작성한 후기가 없습니다.</span>
-        </div>
+
+
+        <section class="pagination-container">
+            <span class="pagination-previous" th:if="${pagination.hasPrevBlock()}">
+                <a class="pagination-btns first" th:href="@{/mypage/reviews/reviewable(page=1)}" title="맨 처음">
+                    <i class="fa-solid fa-chevron-left"></i>
+                    <i class="fa-solid fa-chevron-left"></i>
+                </a>
+                <a class="pagination-btns" th:href="@{/mypage/reviews/reviewable(page=${pagination.startPage - 1})}"
+                   title="이전">
+                    <i class="fa-solid fa-chevron-left"></i>
+                </a>
+            </span>
+
+            <span class="pagination-body">
+                <span class="pagination-btns"
+                      th:each="i : ${#numbers.sequence(pagination.startPage, pagination.endPage)}">
+                    <a th:class="${i == pagination.currentPage ? 'active' : ''}"
+                       th:href="@{/mypage/reviews/reviewable(page=${i})}"
+                       th:text="${i}"></a>
+                </span>
+            </span>
+
+            <span class="pagination-next" th:if="${pagination.hasNextBlock()}">
+                <a class="pagination-btns" th:href="@{/mypage/reviews/reviewable(page=${pagination.endPage+1})}"
+                   title="다음">
+                    <i class="fa-solid fa-chevron-right"></i>
+                </a>
+                <a class="pagination-btns end" th:href="@{/mypage/reviews/reviewable(page=${pagination.lastPage})}"
+                   title="맨 끝">
+                    <i class="fa-solid fa-chevron-right"></i>
+                    <i class="fa-solid fa-chevron-right"></i>
+                </a>
+            </span>
+        </section>
+
     </div>
 </main>
 
@@ -375,6 +449,7 @@
 <script src="/js/global-js/chat.js"></script>
 <script src="/js/mypage/mypage.js"></script>
 <script src="/js/mypage/reviews.js"></script>
+<script src="/js/mypage/bookmarks.js"></script>
 <script src="/js/global-js/image-slide.js"></script>
 <script>
     document.getElementById('reviews').classList.add('active');

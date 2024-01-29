@@ -796,6 +796,19 @@ img {
     display: block;
 }
 
+.modal-review-form-container.vibration {
+    animation: vibration .1s infinite;
+}
+
+@keyframes vibration {
+    from {
+        transform: translate(-50%, -50%) rotate(1deg);
+    }
+    to {
+        transform: translate(-50%, -50%) rotate(-1deg);
+    }
+}
+
 .mrf-star-rating-con {
     display: flex;
     flex-direction: row;
@@ -842,9 +855,22 @@ img {
     font-size: 16px;
 }
 
+.space-between {
+    display: flex;
+    justify-content: space-between;
+}
+
+.error-content, .error-score {
+    font-size: 14px;
+    color: red;
+}
+
+.error-score {
+    margin-left: 20px;
+}
+
 .mr-type-counter {
     display: flex;
-    justify-content: flex-end;
     font-size: 14px;
     color: #797979;
 }

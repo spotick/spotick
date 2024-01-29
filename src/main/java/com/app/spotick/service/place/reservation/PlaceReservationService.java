@@ -13,5 +13,7 @@ public interface PlaceReservationService {
 
     void deleteReservation(Long reservationId);
 
-    public void registerPlaceReservation(PlaceReserveRegisterDto placeReserveRegisterDto, Long userId);
+    void registerPlaceReservation(PlaceReserveRegisterDto placeReserveRegisterDto, Long userId);
+
+    void updateNotReviewing(Long reservationId);
 }
