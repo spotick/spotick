@@ -18,6 +18,9 @@ const detailVisitors = document.getElementById('detailVisitors');
 const detailContent = document.getElementById('detailContent');
 const detailStatus = document.getElementById('detailStatus');
 
+const errorContent = document.getElementById('errorContent');
+const errorScore = document.getElementById('errorScore');
+
 function popupReviewFrom(reservationId, image, address, eval, bookmarkCount, title, price, checkIn, checkOut, visitors, content, status) {
     modalBg.classList.add('show');
     modalReviewForm.classList.add('show');
@@ -39,6 +42,8 @@ function popupReviewFrom(reservationId, image, address, eval, bookmarkCount, tit
     contentTextArea.value = '';
     typeCounter.innerHTML = '0';
     reviewRating.value = 1
+    errorScore.innerHTML = '';
+    errorContent.innerHTML = '';
     stars.forEach(star => {
         star === stars[0] ? star.classList.add('on') : star.classList.remove('on')
     })
@@ -84,8 +89,6 @@ function recheckReviewForm() {
     showGlobalSelection("후기를 작성하시겠습니까?", () => postReview(reservationId, score, content))
 }
 
-const errorContent = document.getElementById('errorContent');
-const errorScore = document.getElementById('errorScore');
 // 후기 등록 비동기 통신 처리
 function postReview(reservationId, score, content) {
     closeOnlyThisModal(globalSelection);
@@ -134,7 +137,7 @@ function recheckReviewableDelete(reservationId) {
 }
 
 function deleteReviewable(reservationId) {
-    fetch('/mypage/reviews/notReviewing/' + reservationId, {
+    fetch('/reviews/notReviewing/' + reservationId, {
         method: 'PATCH'
     })
         .then(response => {

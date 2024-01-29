@@ -58,4 +58,29 @@ public class ReviewRestController {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(new ReviewResponse(true));
     }
+
+    @PatchMapping("/notReviewing/{reservationId}")
+    public ResponseEntity<String> updateNotReviewing(@PathVariable("reservationId") Long reservationId,
+                                                     @AuthenticationPrincipal UserDetailsDto userDetailsDto) {
+
+        if (reservationId == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("잘못된 요청입니다.");
+        }
+
+        PlaceReservation reservation = placeReservationService
+                .findReservationByIdAndUser(reservationId, userDetailsDto.getId()).orElse(null);
+
+        if (reservation == null) {
+            // 예약 정보를 찾을 수 없을 시
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("예약 정보를 찾을 수 없습니다.<br>문제가 지속될 시 문의해주세요.");
+        }
+
+        placeReservationService.updateNotReviewing(reservationId);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body("작성가능한 후기에서 삭제되었습니다.");
+    }
+
 }

@@ -175,8 +175,13 @@ public class PlaceQDSLRepositoryImpl implements PlaceQDSLRepository {
         JPAQuery<Long> totalCountQuery = queryFactory.select(placeReservation.count())
                 .from(placeReservation)
                 .join(placeReservation.place, place)
-                .where(placeReservation.user.id
-                        .eq(userId), placeReservation.notReviewing.eq(false), place.placeStatus.eq(PostStatus.APPROVED));
+                .leftJoin(placeReservation.placeReview, placeReview)
+                .where(placeReservation.user.id.eq(userId),
+                        place.placeStatus.eq(PostStatus.APPROVED),
+                        placeReservation.reservationStatus.eq(PlaceReservationStatus.COMPLETED),
+                        placeReservation.checkOut.lt(LocalDateTime.now()),
+                        placeReservation.notReviewing.eq(false),
+                        placeReview.isNull());
 
         JPQLQuery<Double> reviewAvg = createReviewAvgSub(place);
 
@@ -208,6 +213,7 @@ public class PlaceQDSLRepositoryImpl implements PlaceQDSLRepository {
                 .join(placeReservation.place, place)
                 .leftJoin(placeReservation.placeReview, placeReview)
                 .where(
+                        placeReservation.user.id.eq(userId),
                         place.placeStatus.eq(PostStatus.APPROVED),
                         placeReservation.reservationStatus.eq(PlaceReservationStatus.COMPLETED),
                         placeReservation.checkOut.lt(LocalDateTime.now()),

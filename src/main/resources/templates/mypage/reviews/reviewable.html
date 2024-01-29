@@ -115,10 +115,10 @@
             </div>
             <nav class="mpc-top-nav">
                 <button class="mpc-top-nav-button active" type="button">
-                    작성가능 후기(<span>0</span>)
+                    작성가능 후기(<span th:text="${notReviewedList.getTotalElements()}"></span>)
                 </button>
                 <button class="mpc-top-nav-button" type="button">
-                    작성한 후기(<span>0</span>)
+                    작성한 후기
                 </button>
             </nav>
             <div class="mpc-review-wrap">
