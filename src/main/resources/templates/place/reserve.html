@@ -14,6 +14,10 @@
 
 <header th:replace="~{global-templates/header-footer :: header}"></header>
 
+<script th:if="${invalidReservation}">
+    alert('해당시간에는 이미 예약이 되어있습니다.')
+</script>
+
 <div class="global-container flex-center">
 
     <div class="reservation-container">

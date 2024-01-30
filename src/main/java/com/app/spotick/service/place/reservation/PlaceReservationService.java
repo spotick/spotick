@@ -14,4 +14,6 @@ public interface PlaceReservationService {
     void deleteReservation(Long reservationId);
 
     public void registerPlaceReservation(PlaceReserveRegisterDto placeReserveRegisterDto, Long userId);
+
+    public boolean isReservationAvailable(PlaceReserveRegisterDto placeReserveRegisterDto);
 }

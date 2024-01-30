@@ -144,9 +144,26 @@ function getUsageTime(checkInTime, checkOutTime) {
 
 // 추가로 변경한 날짜, 시간에 따라 checkIn, checkout 변경
 
+$('#reservationDate, select').on('change',setReservationFormCheckInAndOut)
 
+function setReservationFormCheckInAndOut() {
+    let checkInDate = $('#reservationDate').val();
+    let checkInTime = $('#checkIn').val();
+    let checkOutTime = $('#checkOut').val();
+    let isNextDay = Number(checkInTime) > Number(checkOutTime);
+    let checkOutDate = isNextDay ? formatDate(getNextDay(checkInDate)) : checkInDate;
+    $('#reservationCheckIn').val(formatDateTime(checkInDate, checkInTime));
+    $('#reservationCheckOut').val(formatDateTime(checkOutDate, checkOutTime));
+    calculateAmountAndShow();
+}
 
+function formatDateTime(date, time) {
+    return date + ' ' + time.padStart(2, '0') + ':00:00';
+}
 
-
-
-
+function formatDate(date) {
+    const year = date.getFullYear();
+    const month = (date.getMonth() + 1).toString().padStart(2, '0'); // 월은 0부터 시작
+    const day = date.getDate().toString().padStart(2, '0');
+    return `${year}-${month}-${day}`;
+}

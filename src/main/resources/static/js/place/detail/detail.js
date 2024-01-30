@@ -106,8 +106,8 @@ $('.calendar-wrap button').on('click', function () {
 function calculateAmountAndShow() {
     let usageTime = getUsageTime($('#checkIn').val(), $('#checkOut').val());
     let placeSurcharge = $('#placeSurcharge').val();
-    let visitors = $('.visitors').val();
-    let defaultPeople = $('#placeDefaultPeople').val();
+    let visitors = Number($('.visitors').val());
+    let defaultPeople = Number($('#placeDefaultPeople').val());
     let surcharge = defaultPeople < visitors
         ? placeSurcharge * (visitors - defaultPeople) : 0;
     let placePrice = $('#placePrice').val();
@@ -285,7 +285,7 @@ $('.inquiry-modal-wrap').on('click', '.inquiry-submit.on', function () {
             inquiryContent: inquiryContent
         }),
     }).then(e => e.json())
-        .then(e=>getInquiryList(1));
+        .then(e => getInquiryList(1));
 
     $('.inquiry-modal-container').addClass('none');
     $('body').css('overflow', 'unset');
@@ -318,7 +318,28 @@ $('.place-like-btn').on('click', function () {
 });
 
 $('.reservation-submit-box').on('click', '.reservation-btn.on', function () {
-    $('#reservationForm').submit();
+    let placeId = $('#placeId').val();
+    let reservationCheckIn = $('#reservationCheckIn').val();
+    let reservationCheckOut = $('#reservationCheckOut').val();
+    fetch(`/reservations/v1/check`, {
+        method: 'post',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+            placeId: placeId,
+            reservationCheckIn: reservationCheckIn,
+            reservationCheckOut: reservationCheckOut
+        })
+    })
+        .then(e => e.json())
+        .then(result => {
+            if (result) {
+                alert('해당시간에 이미 예약이 존재합니다.')
+                return;
+            }
+            $('#reservationForm').submit();
+        });
+
+
 });
 
 
@@ -334,12 +355,10 @@ function reservationFormOk() {
 
 getInquiryList(1);
 
-$('.inquiry-list-wrap').on('click','.pagination-box button',function (){
+$('.inquiry-list-wrap').on('click', '.pagination-box button', function () {
     let page = $(this).data('page')
     getInquiryList(page);
 });
-
-
 
 
 function getInquiryList(page) {
@@ -394,25 +413,25 @@ function inquiryDisplay(data) {
     });
     text += `
         <div class="pagination-box flex-center">`;
-            if(data.pageBlock.startPage>1){
-            text +=`<button data-page="${data.pageBlock.startPage-1}" type="button" class="page-prev">
+    if (data.pageBlock.startPage > 1) {
+        text += `<button data-page="${data.pageBlock.startPage - 1}" type="button" class="page-prev">
                         <img src="https://shareit.kr/_next/static/media/arrow_left_gray074.fa695002.svg" alt="">
                     </button>`;
-            }
+    }
     for (let i = data.pageBlock.startPage; i <= data.pageBlock.endPage; i++) {
         text += `<button data-page="${i}" class="page-num ${data.pageBlock.currentPage == i ? 'focus' : ''}" type="button">
                 ${i}
             </button>`
     }
 
-    if(data.pageBlock.endPage<data.pageBlock.lastPage){
+    if (data.pageBlock.endPage < data.pageBlock.lastPage) {
         text += `
-            <button data-page="${data.pageBlock.endPage+1}" type="button" class="page-next">
+            <button data-page="${data.pageBlock.endPage + 1}" type="button" class="page-next">
                 <img src="https://shareit.kr/_next/static/media/arrow_right_gray074.86c7e872.svg"
                      alt="">
             </button>`;
     }
-        text+=`</div>`;
+    text += `</div>`;
 
     $('.inquiry-cnt').text(data.inquiryPage.totalElements);
     $target.html(text);

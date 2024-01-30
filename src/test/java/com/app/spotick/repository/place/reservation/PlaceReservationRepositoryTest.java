@@ -1,6 +1,5 @@
 package com.app.spotick.repository.place.reservation;
 
-import com.app.spotick.domain.dto.place.PlaceReservationListDto;
 import com.app.spotick.domain.embedded.post.PostAddress;
 import com.app.spotick.domain.entity.place.Place;
 import com.app.spotick.domain.entity.place.PlaceFile;
@@ -13,14 +12,15 @@ import com.app.spotick.repository.place.PlaceRepository;
 import com.app.spotick.repository.place.file.PlaceFileRepository;
 import com.app.spotick.repository.user.UserAuthorityRepository;
 import com.app.spotick.repository.user.UserRepository;
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.test.annotation.Commit;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,8 +29,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 @SpringBootTest
-@Transactional @Commit
+@Transactional
+@Commit
 class PlaceReservationRepositoryTest {
     @Autowired
     private UserRepository userRepository;
@@ -44,13 +47,15 @@ class PlaceReservationRepositoryTest {
     private PlaceFileRepository placeFileRepository;
     @PersistenceContext
     private EntityManager em;
+    @Autowired
+    JPAQueryFactory queryFactory;
 
     User user1;
     User user2;
+
     @BeforeEach
     void setUp() {
         user1 = User.builder()
-                .id(1L)
                 .email("aaa")
                 .password("1234")
                 .nickName("홍길동")
@@ -60,7 +65,6 @@ class PlaceReservationRepositoryTest {
         userRepository.save(user1);
 
         user2 = User.builder()
-                .id(2L)
                 .email("bbb")
                 .password("1234")
                 .nickName("컨텐츠프로바이더")
@@ -90,10 +94,9 @@ class PlaceReservationRepositoryTest {
         placeFileRepository.saveAll(placeFileList);
 
         PlaceReservation placeReservation = PlaceReservation.builder()
-                .id(1L)
                 .visitors(5)
                 .checkIn(LocalDateTime.of(2024, 1, 5, 19, 0, 0))
-                .checkOut(LocalDateTime.of(2024, 1, 6, 7, 0,0))
+                .checkOut(LocalDateTime.of(2024, 1, 6, 7, 0, 0))
                 .content("테스트")
                 .notReviewable(true)
                 .reservationStatus(PlaceReservationStatus.WAITING_PAYMENT)
@@ -106,12 +109,63 @@ class PlaceReservationRepositoryTest {
         em.clear();
     }
 
-    @Test
-    void reservationListTest() {
-        Page<PlaceReservationListDto> reservationsByUserId = placeReservationRepository.findReservationsByUserId(user1.getId(), PageRequest.of(0, 3));
+    @DisplayName("중복예약시간 테스트 예약 가능 케이스")
+    @ParameterizedTest
+    @CsvSource({
+            "5, 12, 5, 19", "5, 10, 5, 18",
+            "6, 7, 6, 10", "6, 10, 6, 17"
+    })
+    void isOverlappingReservationTestCase1(int checkInDate, int checkInTime, int checkOutDate, int checkOutTime) {
+        //given
+        Long placeId = 1L;
+        LocalDateTime checkIn = LocalDateTime.of(2024, 1, checkInDate, checkInTime, 0, 0);
+        LocalDateTime checkOut = LocalDateTime.of(2024, 1, checkOutDate, checkOutTime, 0, 0);
 
-        System.out.println("reservationsByUserId = " + reservationsByUserId);
-        List<PlaceReservationListDto> content = reservationsByUserId.getContent();
-        content.forEach(System.out::println);
+        //when
+        boolean isAvailable = placeReservationRepository.isOverlappingReservation(placeId, checkIn, checkOut);
+
+        //then
+        assertThat(isAvailable).isEqualTo(false);
     }
+
+//               .checkIn(LocalDateTime.of(2024, 1, 5, 19, 0, 0))
+//            .checkOut(LocalDateTime.of(2024, 1, 6, 7, 0, 0))
+    @DisplayName("중복예약시간 테스트 예약 불가 케이스")
+    @ParameterizedTest
+    @CsvSource({
+            "5, 18, 5, 20", // 사용자 체크아웃이 기존 체크인 후 && 사용자 체크인이 기존 체크인 전
+            "5, 18, 6, 6",  // 사용자 체크인이 기존 체크인 후 && 사용자 체크아웃이 기존 체크아웃 전
+            "5, 18, 6, 8",  // 사용자 체크인과 체크아웃이 기존 예약을 포함하는 경우
+            "6, 6, 6, 7"    // 사용자 체크인이 기존 체크아웃 전 && 사용자 체크아웃이 기존 체크아웃 후
+    })
+    void isOverlappingReservationTestCase2(int checkInDate, int checkInTime, int checkOutDate, int checkOutTime) {
+        //given
+        Long placeId = 1L;
+        LocalDateTime checkIn = LocalDateTime.of(2024, 1, checkInDate, checkInTime, 0, 0);
+        LocalDateTime checkOut = LocalDateTime.of(2024, 1, checkOutDate, checkOutTime, 0, 0);
+
+        //when
+        boolean isAvailable = placeReservationRepository.isOverlappingReservation(placeId, checkIn, checkOut);
+
+        //then
+        assertThat(isAvailable).isEqualTo(true);
+    }
+
+
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
