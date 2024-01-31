@@ -51,16 +51,17 @@ public class PromotionController {
         log.info(promotionRegisterDto.toString());
         log.info("================================================================");
         if (result.hasErrors()){
+            log.info("들어옴2");
             return "promotion/register";
         }
         log.info(promotionRegisterDto.toString());
 
         try {
-            promotionService.registerPromotion(promotionRegisterDto, 1L);
+            promotionService.registerPromotion(promotionRegisterDto, 3L);
         } catch (IOException e) {
             e.printStackTrace();
             return  "promotion/register";
         }
-        return "redirect:/prmotion/list";
+        return "redirect:/promotion/list";
     }
 }

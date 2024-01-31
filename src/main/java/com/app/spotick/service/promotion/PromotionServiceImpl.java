@@ -12,6 +12,7 @@ import com.app.spotick.repository.user.UserRepository;
 import com.app.spotick.service.place.file.PlaceFileService;
 import com.app.spotick.service.promotion.file.PromotionFileService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -23,6 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@Slf4j
 @Transactional
 @RequiredArgsConstructor
 public class PromotionServiceImpl implements PromotionService {
@@ -37,12 +39,14 @@ public class PromotionServiceImpl implements PromotionService {
         promotionBoard.setWriter(writer);
 
         promotionBoard = promotionRepository.save(promotionBoard);
+        log.info("보드 만들어짐");
 //        사진파일 넣기
         MultipartFile promotionFile = promotionRegisterDto.getPlaceFile();
 
 
-
+        log.info("사진 업로드 전");
         promotionFileService.registerAndSavePromotionFile(promotionFile,promotionBoard);
+        log.info("사진 업로드 후");
     }
 
     @Override
