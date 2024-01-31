@@ -173,3 +173,18 @@ function updatePreviewVisibility(isTrue) {
 //         }
 //     });
 // });
+
+function handleFileUpload() {
+    const placeFileInput = document.getElementById('placeFile');
+    const label = document.querySelector('label[for="placeFile"]');
+
+    const fileName = placeFileInput.value.split('\\').pop(); // 파일 이름만 추출
+
+    if (fileName) {
+        console.log(`File selected: ${fileName}`);
+        label.querySelector('p').innerText = `Selected file: ${fileName}`;
+    } else {
+        console.log('No file selected.');
+        label.querySelector('p').innerText = '대표 행사 사진 또는 장소 사진을 넣어주세요';
+    }
+}
