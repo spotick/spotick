@@ -1,6 +1,7 @@
 package com.app.spotick.service.place.review;
 
-import com.app.spotick.domain.dto.place.reservation.PlaceReviewRegisterDto;
+import com.app.spotick.domain.dto.place.review.PlaceReviewRegisterDto;
+import com.app.spotick.domain.dto.place.review.PlaceReviewUpdateDto;
 import com.app.spotick.domain.entity.place.PlaceReservation;
 import com.app.spotick.domain.entity.place.PlaceReview;
 import com.app.spotick.domain.entity.user.User;
@@ -10,6 +11,9 @@ import com.app.spotick.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.NoSuchElementException;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -32,5 +36,21 @@ public class PlaceReviewServiceImpl implements PlaceReviewService {
                 .content(placeReviewRegisterDto.getContent())
                 .build();
         placeReviewRepository.save(placeReview);
+    }
+
+    @Override
+    public void updateReview(PlaceReviewUpdateDto placeReviewUpdateDto) {
+        PlaceReview foundReview = placeReviewRepository.findById(placeReviewUpdateDto.getReviewId()).orElseThrow(
+                NoSuchElementException::new
+        );
+
+        foundReview.updateReview(placeReviewUpdateDto.getContent(), placeReviewUpdateDto.getScore());
+    }
+
+    @Override
+    public Optional<PlaceReview> findReview(Long reviewId, Long userId) {
+        User tmpUser = userRepository.getReferenceById(userId);
+
+        return placeReviewRepository.findByIdAndUser(reviewId, tmpUser);
     }
 }

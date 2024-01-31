@@ -3,6 +3,7 @@ package com.app.spotick.service.user;
 import com.app.spotick.domain.dto.place.PlaceListDto;
 import com.app.spotick.domain.dto.place.PlaceReservationListDto;
 import com.app.spotick.domain.dto.place.reservation.PlaceReservedNotReviewedDto;
+import com.app.spotick.domain.dto.place.review.MypageReviewListDto;
 import com.app.spotick.domain.dto.user.UserDetailsDto;
 import com.app.spotick.domain.dto.user.UserJoinDto;
 import com.app.spotick.domain.dto.user.UserProfileDto;
@@ -11,6 +12,7 @@ import com.app.spotick.domain.entity.user.UserAuthority;
 import com.app.spotick.domain.entity.user.UserProfileFile;
 import com.app.spotick.domain.type.user.AuthorityType;
 import com.app.spotick.repository.place.PlaceRepository;
+import com.app.spotick.repository.place.Review.PlaceReviewRepository;
 import com.app.spotick.repository.place.bookmark.PlaceBookmarkRepository;
 import com.app.spotick.repository.place.reservation.PlaceReservationRepository;
 import com.app.spotick.repository.user.UserAuthorityRepository;
@@ -45,6 +47,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     private final PlaceRepository placeRepository;
     private final PlaceBookmarkRepository placeBookmarkRepository;
     private final PlaceReservationRepository placeReservationRepository;
+    private final PlaceReviewRepository placeReviewRepository;
     private final RedisService redisService;
 
     @Override
@@ -151,6 +154,12 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Transactional(readOnly = true)
     public Page<PlaceReservedNotReviewedDto> findPlacesNotReviewed(Long userId, Pageable pageable) {
         return placeRepository.findPlaceListNotRelatedToReview(userId, pageable);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Page<MypageReviewListDto> findReviewedList(Long userId, Pageable pageable) {
+        return placeReviewRepository.findReviewsByUserId(userId, pageable);
     }
 
     private String encodePassword(String password) {

@@ -790,6 +790,7 @@ img {
     border-radius: 10px;
     box-shadow: rgba(96, 96, 96, 0.22) 0 2px 18px 0;
     padding: 40px 30px;
+    width: 940px;
 }
 
 .modal-review-form-container.show {

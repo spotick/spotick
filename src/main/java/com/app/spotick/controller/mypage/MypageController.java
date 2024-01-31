@@ -3,7 +3,8 @@ package com.app.spotick.controller.mypage;
 import com.app.spotick.domain.dto.place.PlaceListDto;
 import com.app.spotick.domain.dto.place.PlaceReservationListDto;
 import com.app.spotick.domain.dto.place.reservation.PlaceReservedNotReviewedDto;
-import com.app.spotick.domain.dto.place.reservation.PlaceReviewRegisterDto;
+import com.app.spotick.domain.dto.place.review.PlaceReviewRegisterDto;
+import com.app.spotick.domain.dto.place.review.MypageReviewListDto;
 import com.app.spotick.domain.dto.user.UserDetailsDto;
 import com.app.spotick.domain.dto.user.UserProfileDto;
 import com.app.spotick.domain.entity.place.PlaceReservation;
@@ -294,6 +295,21 @@ public class MypageController {
                 = new Pagination<>(5, pageable, notReviewedList);
 
         model.addAttribute("notReviewedList", notReviewedList);
+        model.addAttribute("pagination", pagination);
+    }
+
+    @GetMapping("/reviews/wrote")
+    public void goToReviewsWrote(@RequestParam(value = "page", defaultValue = "1") int page,
+                                 @AuthenticationPrincipal UserDetailsDto userDetailsDto,
+                                 Model model) {
+        Pageable pageable = PageRequest.of(page - 1, 5);
+
+        Page<MypageReviewListDto> reviewedList
+                = userService.findReviewedList(userDetailsDto.getId(), pageable);
+        Pagination<MypageReviewListDto> pagination
+                = new Pagination<>(5, pageable, reviewedList);
+
+        model.addAttribute("reviewedList", reviewedList);
         model.addAttribute("pagination", pagination);
     }
 

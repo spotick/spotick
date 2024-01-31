@@ -3,6 +3,7 @@ package com.app.spotick.service.user;
 import com.app.spotick.domain.dto.place.PlaceListDto;
 import com.app.spotick.domain.dto.place.PlaceReservationListDto;
 import com.app.spotick.domain.dto.place.reservation.PlaceReservedNotReviewedDto;
+import com.app.spotick.domain.dto.place.review.MypageReviewListDto;
 import com.app.spotick.domain.dto.user.UserJoinDto;
 import com.app.spotick.domain.dto.user.UserProfileDto;
 import org.springframework.data.domain.Page;
@@ -27,4 +28,5 @@ public interface UserService {
 
     Page<PlaceReservedNotReviewedDto> findPlacesNotReviewed(Long userId, Pageable pageable);
 
+    Page<MypageReviewListDto> findReviewedList(Long userId, Pageable pageable);
 }

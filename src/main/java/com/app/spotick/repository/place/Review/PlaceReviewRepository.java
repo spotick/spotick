@@ -1,11 +1,15 @@
 package com.app.spotick.repository.place.Review;
 
 import com.app.spotick.domain.entity.place.PlaceReview;
+import com.app.spotick.domain.entity.user.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
-public interface PlaceReviewRepository extends JpaRepository<PlaceReview, Long> {
+public interface PlaceReviewRepository extends JpaRepository<PlaceReview, Long>, PlaceReviewQDSLRepository {
+    Optional<PlaceReview> findByIdAndUser(Long id, User user);
 
 //    @Query("""
 //        select new com.app.spotick.domain.dto.place.PlaceReviewListDto(

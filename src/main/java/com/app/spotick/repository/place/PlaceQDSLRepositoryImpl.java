@@ -220,7 +220,7 @@ public class PlaceQDSLRepositoryImpl implements PlaceQDSLRepository {
                         placeReservation.notReviewing.eq(false),
                         placeReview.isNull()
                 )
-                .orderBy(place.id.desc())
+                .orderBy(placeReservation.id.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
