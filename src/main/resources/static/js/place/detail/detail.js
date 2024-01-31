@@ -1,5 +1,5 @@
 let placeId = $('#placeId').val();
-
+let disabledData = null;
 
 $('.nav-item').on('click', function () {
     $('.nav-item').not(this).removeClass('nav-focus');
@@ -64,26 +64,6 @@ $(`#checkIn`).on('change', function () {
     setCheckOutTimes();
 });
 
-function setCheckOutTimes() {
-    let checkIn = Number($('#checkIn').val());
-    let $checkOut = $('#checkOut');
-    $checkOut.children(':not(:first-child)').remove();
-    let text = '';
-    for (let i = 1; i < 24; i++) {
-        let time = i + checkIn;
-        time = time >= 24 ? time - 24 : time
-        if (time === 0) {
-            text += `
-               <optgroup label="${getNextDay($('#reservationDate').val()).getDate()}일">
-                </optgroup>
-            `;
-        }
-        text += `
-            <option value="${time}">${convertToAmPmFormat(time)}시</option>
-        `;
-    }
-    $checkOut.append(text);
-}
 
 function getNextDay(dateString) {
     let date = new Date(dateString);
@@ -104,7 +84,10 @@ $('.calendar-wrap button').on('click', function () {
 });
 
 function calculateAmountAndShow() {
-    let usageTime = getUsageTime($('#checkIn').val(), $('#checkOut').val());
+    let checkIn = parseInt($('#checkIn').val().split(' ')[1]);
+    let checkOut = parseInt($('#checkOut').val().split(' ')[1]);
+
+    let usageTime = getUsageTime(checkIn, checkOut);
     let placeSurcharge = $('#placeSurcharge').val();
     let visitors = Number($('.visitors').val());
     let defaultPeople = Number($('#placeDefaultPeople').val());
@@ -156,17 +139,14 @@ function calculateAmountAndShow() {
 
 // 예약 날짜에 따른 예약 폼 설정
 function setReservationFormCheckInAndOut() {
-    let checkInDate = $('#reservationDate').val();
     let checkInTime = $('#checkIn').val();
     let checkOutTime = $('#checkOut').val();
-    let isNextDay = Number(checkInTime) > Number(checkOutTime);
-    let checkOutDate = isNextDay ? formatDate(getNextDay(checkInDate)) : checkInDate;
-    $('#reservationCheckIn').val(formatDateTime(checkInDate, checkInTime));
-    $('#reservationCheckOut').val(formatDateTime(checkOutDate, checkOutTime));
+    $('#reservationCheckIn').val(checkInTime);
+    $('#reservationCheckOut').val(checkOutTime);
 }
 
 function formatDateTime(date, time) {
-    return date + ' ' + time.padStart(2, '0') + ':00:00';
+    return date + ' ' + time.padStart(2, '0');
 }
 
 function formatDate(date) {
@@ -178,8 +158,8 @@ function formatDate(date) {
 
 function getReservationDateTimeFormat() {
     let revArr = $('#reservationDate').val().split('-');
-    let checkInTime = $('#checkIn').val();
-    let checkOutTime = $('#checkOut').val();
+    let checkInTime = parseInt($('#checkIn').val().split(' ')[1]);
+    let checkOutTime = parseInt($('#checkOut').val().split(' ')[1]);
     let checkIn = convertToAmPmFormat(checkInTime);
     let checkOut = convertToAmPmFormat(checkOutTime);
     let usageTime = getUsageTime(checkInTime, checkOutTime);
@@ -318,10 +298,10 @@ $('.place-like-btn').on('click', function () {
 });
 
 $('.reservation-submit-box').on('click', '.reservation-btn.on', function () {
-    let placeId = $('#placeId').val();
     let reservationCheckIn = $('#reservationCheckIn').val();
     let reservationCheckOut = $('#reservationCheckOut').val();
-    fetch(`/reservations/v1/check`, {
+
+    fetch(`/reservations/v1/availability/check`, {
         method: 'post',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({
@@ -369,7 +349,6 @@ function getInquiryList(page) {
 }
 
 function inquiryDisplay(data) {
-    console.log(data);
     let $target = $('.inquiry-list-wrap');
     let text = '';
     if (data.inquiryPage.empty) {
@@ -437,15 +416,102 @@ function inquiryDisplay(data) {
     $target.html(text);
 }
 
+getReservedTimes();
+
+$(`#reservationDate`).on('change', getReservedTimes);
+
+function getReservedTimes() {
+    let reservationDate = $('#reservationDate').val();
+    $('#checkIn').html(`<option selected disabled>시작 시간</option>`);
+    $('#checkOut').html(`<option selected disabled>종료 시간</option>`);
+    setCheckInTimes();
+    fetch(`/reservations/v1/places/${placeId}/reserved-times?reservationDate=${reservationDate}`)
+        .then(r => r.json())
+        .then(disableReservedTime);
+
+}
+
+setCheckInTimes();
+
+function setCheckInTimes() {
+    let $checkIn = $('#checkIn');
+    let reserveDate = $('#reservationDate').val();
+
+    $checkIn.children(':not(:first-child)').remove();
+    let text = '';
+
+    for (let i = 0; i < 24; i++) {
+
+        text += `
+            <option value="${reserveDate} ${i.toString().padStart(2, '0')}:00:00">${convertToAmPmFormat(i)}시</option>
+        `;
+    }
+    $checkIn.append(text);
+}
+
+function setCheckOutTimes() {
+    let checkIn = parseInt($('#checkIn').val().split(' ')[1]);
+    let $checkOut = $('#checkOut');
+    let reserveDate = $('#reservationDate').val();
+
+    $checkOut.children(':not(:first-child)').remove();
+    let text = '';
+    for (let i = 1; i < 24; i++) {
+        let time = i + checkIn;
+        time = time >= 24 ? time - 24 : time
+        if (time === 0) {
+            text += `
+               <optgroup label="${getNextDay(reserveDate).getDate()}일">
+                </optgroup>
+            `;
+            reserveDate = getNextDateFormat(reserveDate);
+        }
+        text += `
+            <option value="${reserveDate} ${time.toString().padStart(2, '0')}:00:00">${convertToAmPmFormat(time)}시</option>
+        `;
+    }
+    $checkOut.append(text);
+
+    $('#checkOut option').each((i, opt) => {
+        let $opt = $(opt);
+        let optValue = new Date($opt.val());
+        disabledData.forEach(d => {
+            let checkIn = new Date(d.checkIn);
+            let checkOut = new Date(d.checkOut);
+            if (checkIn <= optValue && optValue < checkOut) {
+                $opt.attr('disabled', true);
+            }
+        });
+    })
+
+}
+
+function getNextDateFormat(dateString) {
+    let date = new Date(dateString);
+    date.setDate(date.getDate() + 1);
+    return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+}
+
+function disableReservedTime(data) {
+    let $checkInOpts = $('#checkIn option');
+    let $checkOutOpts = $('#checkOut option');
+    disabledData = data;
+
+    $checkInOpts.each((i, opt) => {
+        let $opt = $(opt);
+        let optValue = new Date($opt.val());
+
+        data.forEach(d => {
+            let checkIn = new Date(d.checkIn);
+            let checkOut = new Date(d.checkOut);
+            if (checkIn <= optValue && optValue < checkOut) {
+                $opt.attr('disabled', true);
+            }
+        });
+    });
 
 
-
-
-
-
-
-
-
+}
 
 
 

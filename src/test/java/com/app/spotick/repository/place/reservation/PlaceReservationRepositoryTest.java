@@ -1,5 +1,6 @@
 package com.app.spotick.repository.place.reservation;
 
+import com.app.spotick.domain.dto.place.reservation.PlaceReservationTimeDto;
 import com.app.spotick.domain.embedded.post.PostAddress;
 import com.app.spotick.domain.entity.place.Place;
 import com.app.spotick.domain.entity.place.PlaceFile;
@@ -15,8 +16,10 @@ import com.app.spotick.repository.user.UserRepository;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import org.json.JSONObject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -105,6 +108,20 @@ class PlaceReservationRepositoryTest {
                 .build();
         placeReservationRepository.save(placeReservation);
 
+        List<PlaceReservation> reservations = new ArrayList<>();
+        for (int i = 0; i < 6*3; i+=2) {
+            reservations.add(PlaceReservation.builder()
+                    .visitors(i+1)
+                    .checkIn(LocalDateTime.of(2024, 2, 1, i, 0, 0))
+                    .checkOut(LocalDateTime.of(2024, 2, 1, i+2, 0, 0))
+                    .content("테스트")
+                    .notReviewable(true)
+                    .reservationStatus(PlaceReservationStatus.PENDING)
+                    .place(placeOf2)
+                    .user(user1)
+                    .build());
+        }
+        placeReservationRepository.saveAll(reservations);
         em.flush();
         em.clear();
     }
@@ -150,6 +167,21 @@ class PlaceReservationRepositoryTest {
         //then
         assertThat(isAvailable).isEqualTo(true);
     }
+
+    @Test
+    @DisplayName("예약된 시간 리스트 조회")
+    void findReservedTimeList(){
+        Long placeId = 1L;
+        LocalDateTime startTime = LocalDateTime.of(2024, 2, 1, 0, 0, 0);
+        LocalDateTime endTime = startTime.plusDays(2);
+
+        List<PlaceReservationTimeDto> reservedTimes = placeReservationRepository.findReservedTimes(placeId, startTime, endTime);
+
+        reservedTimes.forEach(System.out::println);
+
+    }
+
+
 
 
 }

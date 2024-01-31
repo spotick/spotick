@@ -1,10 +1,13 @@
 package com.app.spotick.api.controller.place;
 
+import com.app.spotick.domain.dto.place.reservation.PlaceReservationTimeDto;
 import com.app.spotick.domain.dto.place.reservation.PlaceReserveRegisterDto;
 import com.app.spotick.service.place.reservation.PlaceReservationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -12,14 +15,17 @@ import org.springframework.web.bind.annotation.*;
 public class PlaceReservationRestController {
     private final PlaceReservationService reservationService;
 
-    @PostMapping("/v1/check")
+    @PostMapping("/v1/availability/check")
     public ResponseEntity<Boolean> reservationCheck(@RequestBody PlaceReserveRegisterDto placeReserveRegisterDto){
-
         boolean reservationAvailable = !reservationService.isReservationAvailable(placeReserveRegisterDto);
-        System.out.println("reservationAvailable = " + reservationAvailable);
         return ResponseEntity.ok(reservationAvailable);
     }
-
+    @GetMapping("/v1/places/{placeId}/reserved-times")
+    public ResponseEntity<List<PlaceReservationTimeDto>> findReservedTimes(@PathVariable("placeId")Long placeId,
+                                                                           @RequestParam("reservationDate")String reservationDate){
+        List<PlaceReservationTimeDto> reservedTimes = reservationService.findReservedTimes(placeId, reservationDate);
+        return ResponseEntity.ok(reservedTimes);
+    }
 
 
 }
