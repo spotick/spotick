@@ -114,12 +114,12 @@
                 <h2>후기관리</h2>
             </div>
             <nav class="mpc-top-nav">
-                <button class="mpc-top-nav-button active" type="button">
+                <a class="mpc-top-nav-button active">
                     작성가능 후기(<span th:text="${notReviewedList.getTotalElements()}"></span>)
-                </button>
-                <button class="mpc-top-nav-button" type="button">
+                </a>
+                <a th:href="@{/mypage/reviews/wrote}" class="mpc-top-nav-button" type="button">
                     작성한 후기
-                </button>
+                </a>
             </nav>
             <div class="mpc-review-wrap">
                 <th:block th:if="${#lists.size(notReviewedList)}">
@@ -214,192 +214,6 @@
                     <span>작성가능한 후기가 없습니다.</span>
                 </div>
             </th:block>
-            <!--            <div class="mpc-wrote-review-container">-->
-            <!--                <article>-->
-            <!--                    <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">-->
-            <!--                        <div class="ItemTextContainer" style="max-width: 300px">-->
-            <!--                            <div class="ItemHostNameContainer">-->
-            <!--                                <span class="ItemHostName">서울 성북구</span>-->
-            <!--                                <div class="ItemCountsContainer">-->
-            <!--                                    <div class="ItemsStarCountContainer">-->
-            <!--                                        <img alt="후기갯수" class="ItemCountImg"-->
-            <!--                                             src="/imgs/star_filled_paintYellow056.a8eb6e44.svg">-->
-            <!--                                        <span class="ItemCountText">4.0(20)</span>-->
-            <!--                                    </div>-->
-            <!--                                    <div class="ItemsLikeCountContainer">-->
-            <!--                                        <img alt="북마크갯수" class="ItemCountImg bookmark"-->
-            <!--                                             src="/imgs/bookmark_thin.svg">-->
-            <!--                                        <span class="ItemCountText">1724</span>-->
-            <!--                                    </div>-->
-            <!--                                </div>-->
-            <!--                            </div>-->
-            <!--                            <div class="ItemSpaceNameContainer">-->
-            <!--                                <p class="ItemSpaceName">낙산관 실내체육관(낙산관)</p>-->
-            <!--                            </div>-->
-            <!--                            <div class="ItemPriceContainer">-->
-            <!--                                <span class="ItemPrice">2023.12.30 ~ 2024.01.30</span>-->
-            <!--                            </div>-->
-            <!--                        </div>-->
-            <!--                        <div class="mpcre-img-con">-->
-            <!--                            <img-->
-            <!--                                    src="//img.hourplace.co.kr/place/user/47919/2022/05/29/74f9815f-fc9d-4dec-8037-41861f43cae9?s=550x364&amp;t=cover&amp;q=80">-->
-            <!--                        </div>-->
-            <!--                    </div>-->
-            <!--                    <div class="mpcwre-container">-->
-            <!--                        <div class="mpcwre-line">-->
-            <!--                            <span class="mpcwre-star"></span>-->
-            <!--                            <span class="mpcwre-rating">5</span>-->
-            <!--                            <span class="mpcwre-line-divider"></span>-->
-            <!--                            <span class="mpcwre-nickname">testNickname1234</span>-->
-            <!--                            <span class="mpcwre-line-divider"></span>-->
-            <!--                            <span class="mpcwre-date">2023-12-23</span>-->
-            <!--                        </div>-->
-            <!--                        <a href="#">-->
-            <!--                            <p class="mpcwre-content">테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용-->
-            <!--                                테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용-->
-            <!--                                테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 </p>-->
-            <!--                        </a>-->
-            <!--                    </div>-->
-            <!--                </article>-->
-            <!--                <article>-->
-            <!--                    <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">-->
-            <!--                        <div class="ItemTextContainer" style="max-width: 300px">-->
-            <!--                            <div class="ItemHostNameContainer">-->
-            <!--                                <span class="ItemHostName">서울 성북구</span>-->
-            <!--                                <div class="ItemCountsContainer">-->
-            <!--                                    <div class="ItemsStarCountContainer">-->
-            <!--                                        <img alt="후기갯수" class="ItemCountImg"-->
-            <!--                                             src="/imgs/star_filled_paintYellow056.a8eb6e44.svg">-->
-            <!--                                        <span class="ItemCountText">4.0(20)</span>-->
-            <!--                                    </div>-->
-            <!--                                    <div class="ItemsLikeCountContainer">-->
-            <!--                                        <img alt="북마크갯수" class="ItemCountImg bookmark"-->
-            <!--                                             src="/imgs/bookmark_thin.svg">-->
-            <!--                                        <span class="ItemCountText">1724</span>-->
-            <!--                                    </div>-->
-            <!--                                </div>-->
-            <!--                            </div>-->
-            <!--                            <div class="ItemSpaceNameContainer">-->
-            <!--                                <p class="ItemSpaceName">낙산관 실내체육관(낙산관)</p>-->
-            <!--                            </div>-->
-            <!--                            <div class="ItemPriceContainer">-->
-            <!--                                <span class="ItemPrice">2023.12.30 ~ 2024.01.30</span>-->
-            <!--                            </div>-->
-            <!--                        </div>-->
-            <!--                        <div class="mpcre-img-con">-->
-            <!--                            <img-->
-            <!--                                    src="//img.hourplace.co.kr/place/user/47919/2022/05/29/74f9815f-fc9d-4dec-8037-41861f43cae9?s=550x364&amp;t=cover&amp;q=80">-->
-            <!--                        </div>-->
-            <!--                    </div>-->
-            <!--                    <div class="mpcwre-container">-->
-            <!--                        <div class="mpcwre-line">-->
-            <!--                            <span class="mpcwre-star"></span>-->
-            <!--                            <span class="mpcwre-rating">5</span>-->
-            <!--                            <span class="mpcwre-line-divider"></span>-->
-            <!--                            <span class="mpcwre-nickname">testNickname1234</span>-->
-            <!--                            <span class="mpcwre-line-divider"></span>-->
-            <!--                            <span class="mpcwre-date">2023-12-23</span>-->
-            <!--                        </div>-->
-            <!--                        <a href="#">-->
-            <!--                            <p class="mpcwre-content">테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용-->
-            <!--                                테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용-->
-            <!--                                테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 </p>-->
-            <!--                        </a>-->
-            <!--                    </div>-->
-            <!--                </article>-->
-            <!--                <article>-->
-            <!--                    <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">-->
-            <!--                        <div class="ItemTextContainer" style="max-width: 300px">-->
-            <!--                            <div class="ItemHostNameContainer">-->
-            <!--                                <span class="ItemHostName">서울 성북구</span>-->
-            <!--                                <div class="ItemCountsContainer">-->
-            <!--                                    <div class="ItemsStarCountContainer">-->
-            <!--                                        <img alt="후기갯수" class="ItemCountImg"-->
-            <!--                                             src="/imgs/star_filled_paintYellow056.a8eb6e44.svg">-->
-            <!--                                        <span class="ItemCountText">4.0(20)</span>-->
-            <!--                                    </div>-->
-            <!--                                    <div class="ItemsLikeCountContainer">-->
-            <!--                                        <img alt="북마크갯수" class="ItemCountImg bookmark"-->
-            <!--                                             src="/imgs/bookmark_thin.svg">-->
-            <!--                                        <span class="ItemCountText">1724</span>-->
-            <!--                                    </div>-->
-            <!--                                </div>-->
-            <!--                            </div>-->
-            <!--                            <div class="ItemSpaceNameContainer">-->
-            <!--                                <p class="ItemSpaceName">낙산관 실내체육관(낙산관)</p>-->
-            <!--                            </div>-->
-            <!--                            <div class="ItemPriceContainer">-->
-            <!--                                <span class="ItemPrice">2023.12.30 ~ 2024.01.30</span>-->
-            <!--                            </div>-->
-            <!--                        </div>-->
-            <!--                        <div class="mpcre-img-con">-->
-            <!--                            <img-->
-            <!--                                    src="//img.hourplace.co.kr/place/user/47919/2022/05/29/74f9815f-fc9d-4dec-8037-41861f43cae9?s=550x364&amp;t=cover&amp;q=80">-->
-            <!--                        </div>-->
-            <!--                    </div>-->
-            <!--                    <div class="mpcwre-container">-->
-            <!--                        <div class="mpcwre-line">-->
-            <!--                            <span class="mpcwre-star"></span>-->
-            <!--                            <span class="mpcwre-rating">5</span>-->
-            <!--                            <span class="mpcwre-line-divider"></span>-->
-            <!--                            <span class="mpcwre-nickname">testNickname1234</span>-->
-            <!--                            <span class="mpcwre-line-divider"></span>-->
-            <!--                            <span class="mpcwre-date">2023-12-23</span>-->
-            <!--                        </div>-->
-            <!--                        <a href="#">-->
-            <!--                            <p class="mpcwre-content">테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용-->
-            <!--                                테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용-->
-            <!--                                테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 </p>-->
-            <!--                        </a>-->
-            <!--                    </div>-->
-            <!--                </article>-->
-            <!--                <article>-->
-            <!--                    <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">-->
-            <!--                        <div class="ItemTextContainer" style="max-width: 300px">-->
-            <!--                            <div class="ItemHostNameContainer">-->
-            <!--                                <span class="ItemHostName">서울 성북구</span>-->
-            <!--                                <div class="ItemCountsContainer">-->
-            <!--                                    <div class="ItemsStarCountContainer">-->
-            <!--                                        <img alt="후기갯수" class="ItemCountImg"-->
-            <!--                                             src="/imgs/star_filled_paintYellow056.a8eb6e44.svg">-->
-            <!--                                        <span class="ItemCountText">4.0(20)</span>-->
-            <!--                                    </div>-->
-            <!--                                    <div class="ItemsLikeCountContainer">-->
-            <!--                                        <img alt="북마크갯수" class="ItemCountImg bookmark"-->
-            <!--                                             src="/imgs/bookmark_thin.svg">-->
-            <!--                                        <span class="ItemCountText">1724</span>-->
-            <!--                                    </div>-->
-            <!--                                </div>-->
-            <!--                            </div>-->
-            <!--                            <div class="ItemSpaceNameContainer">-->
-            <!--                                <p class="ItemSpaceName">낙산관 실내체육관(낙산관)</p>-->
-            <!--                            </div>-->
-            <!--                            <div class="ItemPriceContainer">-->
-            <!--                                <span class="ItemPrice">2023.12.30 ~ 2024.01.30</span>-->
-            <!--                            </div>-->
-            <!--                        </div>-->
-            <!--                        <div class="mpcre-img-con">-->
-            <!--                            <img-->
-            <!--                                    src="//img.hourplace.co.kr/place/user/47919/2022/05/29/74f9815f-fc9d-4dec-8037-41861f43cae9?s=550x364&amp;t=cover&amp;q=80">-->
-            <!--                        </div>-->
-            <!--                    </div>-->
-            <!--                    <div class="mpcwre-container">-->
-            <!--                        <div class="mpcwre-line">-->
-            <!--                            <span class="mpcwre-star"></span>-->
-            <!--                            <span class="mpcwre-rating">5</span>-->
-            <!--                            <span class="mpcwre-line-divider"></span>-->
-            <!--                            <span class="mpcwre-nickname">testNickname1234</span>-->
-            <!--                            <span class="mpcwre-line-divider"></span>-->
-            <!--                            <span class="mpcwre-date">2023-12-23</span>-->
-            <!--                        </div>-->
-            <!--                        <a href="#">-->
-            <!--                            <p class="mpcwre-content">테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용-->
-            <!--                                테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용-->
-            <!--                                테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 테스트 내용 </p>-->
-            <!--                        </a>-->
-            <!--                    </div>-->
-            <!--                </article>-->
-            <!--            </div>-->
         </article>
 
 
@@ -453,9 +267,6 @@
 <script src="/js/global-js/image-slide.js"></script>
 <script>
     document.getElementById('reviews').classList.add('active');
-</script>
-<script th:inline="javascript">
-    console.log([[${notReviewedList}]]);
 </script>
 
 </html>

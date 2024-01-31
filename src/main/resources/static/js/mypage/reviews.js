@@ -65,14 +65,14 @@ function setReviewScore(score) {
 // 리뷰 작성시 글자수 체크 및 작성버튼 완료 검증
 function checkTypeCounts() {
     // 작성 완료 버튼 통제
-    mrConfirmBtn.disabled = content.value.length < 10
+    mrConfirmBtn.disabled = contentTextArea.value.length < 10
 
     // 글자 수 통제
     const maxCharCount = 200;
-    if (content.value.length > maxCharCount) {
-        content.value = content.value.slice(0, maxCharCount);
+    if (contentTextArea.value.length > maxCharCount) {
+        contentTextArea.value = contentTextArea.value.slice(0, maxCharCount);
     }
-    typeCounter.textContent = `${content.value.length}`;
+    typeCounter.textContent = `${contentTextArea.value.length}`;
 }
 
 // 후기 등록 재확인
@@ -86,7 +86,8 @@ function recheckReviewForm() {
     console.log(content)
 
 
-    showGlobalSelection("후기를 작성하시겠습니까?", () => postReview(reservationId, score, content))
+    showGlobalSelection("후기를 작성하시겠습니까?<br><br>후기 작성후 삭제가 불가능하나<br>작성일로부터 7일 동안 수정이<br>가능합니다.",
+        () => postReview(reservationId, score, content))
 }
 
 // 후기 등록 비동기 통신 처리

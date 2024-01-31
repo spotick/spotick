@@ -1,12 +1,13 @@
-package com.app.spotick.domain.dto.place.reservation;
+package com.app.spotick.domain.dto.place.review;
 
 import jakarta.validation.constraints.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Data @NoArgsConstructor
-public class PlaceReviewRegisterDto {
-    private Long reservationId;
+@Data
+@NoArgsConstructor
+public class PlaceReviewUpdateDto {
+    private Long reviewId;
     private Long userId;
 
     @NotNull(message = "평가 점수를 선택해주세요.")

@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:sec="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>Spotick | 후기관리</title>
+    <link href="/css/global-css/root.css" rel="stylesheet">
+    <link href="/css/global-css/chat.css" rel="stylesheet">
+    <link href="/css/mypage/mypage.css" rel="stylesheet">
+    <link href="/css/mypage/mypage-modal.css" rel="stylesheet">
+    <link href="/css/global-css/post-list-card-item.css" rel="stylesheet">
+    <script crossorigin="anonymous" src="https://kit.fontawesome.com/2364e2b536.js"></script>
+</head>
+
+<body>
+
+<div th:replace="~{global-templates/chat :: chat}"></div>
+
+<div class="modal-bg">
+    <div th:replace="~{global-templates/global-dialogue-modal :: global-dialogue}"></div>
+    <div th:replace="~{global-templates/global-dialogue-modal :: global-selection}"></div>
+    <div class="modal-review-form-container">
+        <h2 class="mri-title">후기 수정</h2>
+        <input id="idInput" type="hidden">
+        <div class="mrf-star-rating-con">
+            <span class="mrf-star on" onclick="setReviewScore(1)" value="1"></span>
+            <span class="mrf-star" onclick="setReviewScore(2)" value="2"></span>
+            <span class="mrf-star" onclick="setReviewScore(3)" value="3"></span>
+            <span class="mrf-star" onclick="setReviewScore(4)" value="4"></span>
+            <span class="mrf-star" onclick="setReviewScore(5)" value="5"></span>
+            <div class="mrf-rating-count-con">
+                <input id="scoreInput" readonly type="text">점
+            </div>
+            <div class="error-score" id="errorScore"></div>
+        </div>
+        <div class="mr-form">
+            <textarea cols="30" id="contentArea" maxlength="200" oninput="checkTypeCounts()"
+                      placeholder="최소 10자 이상 입력해주세요"
+                      rows="10" spellcheck="false"></textarea>
+        </div>
+        <div class="space-between">
+            <div class="error-content" id="errorContent"></div>
+            <div class="mr-type-counter">
+                <span>글자수</span>
+                <span id="typeCounter">0</span>
+                <span>/ 200</span>
+            </div>
+        </div>
+        <div style="display: flex; justify-content: center;">
+            <button class="modal-confirm-btn" disabled id="mrConfirmBtn">
+                <p>작성 완료</p>
+            </button>
+        </div>
+    </div>
+</div>
+
+<header th:replace="~{global-templates/header-footer :: header}"></header>
+
+<main class="my-page-main" id="page-body">
+    <div th:replace="~{global-templates/mypage :: mypage-menu}"></div>
+    <div class="mp-content">
+        <article>
+            <div class="mpc-title not-with-line">
+                <h2>후기관리</h2>
+            </div>
+            <nav class="mpc-top-nav">
+                <a class="mpc-top-nav-button" href="/mypage/reviews/reviewable">
+                    작성가능 후기
+                </a>
+                <a class="mpc-top-nav-button active" type="button">
+                    작성한 후기(<span th:text="${reviewedList.getTotalElements()}"></span>)
+                </a>
+            </nav>
+            <div class="mpc-review-wrap">
+                <div class="mpc-wrote-review-container">
+                    <th:block th:if="${#lists.size(reviewedList)}">
+                        <th:block th:each="reviewedItem:${reviewedList}">
+                            <article th:object="${reviewedItem}">
+                                <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                                    <div class="ItemTextContainer" style="max-width: 300px">
+                                        <div class="ItemHostNameContainer">
+                                            <span class="ItemHostName" th:text="*{placeAddress.address}"></span>
+                                            <div class="ItemCountsContainer">
+                                                <div class="ItemsStarCountContainer">
+                                                    <img alt="후기갯수" class="ItemCountImg"
+                                                         src="/imgs/star_filled_paintYellow056.a8eb6e44.svg">
+                                                    <span class="ItemCountText"
+                                                          th:text="|*{evalAvg}(*{evalCount})|"></span>
+                                                </div>
+                                                <div class="ItemsLikeCountContainer">
+                                                    <img alt="북마크갯수" class="ItemCountImg bookmark"
+                                                         src="/imgs/bookmark_thin.svg">
+                                                    <span class="ItemCountText" th:text="*{bookmarkCount}"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="ItemSpaceNameContainer">
+                                            <p class="ItemSpaceName" th:text="*{title}"></p>
+                                        </div>
+                                        <div class="ItemPriceContainer">
+                                            <span class="ItemPrice"
+                                                  th:text="${#numbers.formatInteger(reviewedItem.price, 3, 'COMMA')} + '원'"></span>
+                                        </div>
+                                    </div>
+                                    <div class="mpcre-img-con">
+                                        <img th:alt="*{title}"
+                                             th:src="*{'/file/display?fileName='
+                                         + placeFileDto.uploadPath + '/t_' + placeFileDto.uuid + '_' + placeFileDto.fileName}">
+                                    </div>
+                                </div>
+                                <div class="mpcwre-container">
+                                    <div class="mpcwre-line">
+                                        <span class="mpcwre-star"></span>
+                                        <span class="mpcwre-rating" th:text="*{score}"></span>
+                                        <span class="mpcwre-line-divider"></span>
+                                        <span class="mpcwre-nickname" sec:authentication="principal.nickName"></span>
+                                        <span class="mpcwre-line-divider"></span>
+                                        <span class="mpcwre-date"
+                                              th:text="*{#temporals.format(createdDate, 'yyyy-MM-dd-HH:mm')}"></span>
+                                        <div class="mpcr-action-btn">
+                                            <button onclick="toggleDropdown(this)" type="button">
+                                                <i aria-hidden="true" class="fa-solid fa-ellipsis"></i>
+                                                <div class="mpc-dropdown">
+                                                    <div class="action-item reviewUpdateBtn"
+                                                         th:data-content="*{content}"
+                                                         th:data-created-date="*{createdDate}"
+                                                         th:data-review-id="*{reviewId}"
+                                                         th:data-score="*{score}">
+                                                        <span>후기 수정</span>
+                                                    </div>
+                                                </div>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <a href="#">
+                                        <p class="mpcwre-content" th:utext="*{content}"></p>
+                                    </a>
+                                </div>
+                            </article>
+                        </th:block>
+                    </th:block>
+                </div>
+            </div>
+            <th:block th:if="${reviewedList.empty}">
+                <div class="mp-no-list">
+                    <span>작성한 후기가 없습니다.</span>
+                </div>
+            </th:block>
+        </article>
+
+        <section class="pagination-container">
+            <span class="pagination-previous" th:if="${pagination.hasPrevBlock()}">
+                <a class="pagination-btns first" th:href="@{/mypage/reviews/wrote(page=1)}" title="맨 처음">
+                    <i class="fa-solid fa-chevron-left"></i>
+                    <i class="fa-solid fa-chevron-left"></i>
+                </a>
+                <a class="pagination-btns" th:href="@{/mypage/reviews/wrote(page=${pagination.startPage - 1})}"
+                   title="이전">
+                    <i class="fa-solid fa-chevron-left"></i>
+                </a>
+            </span>
+
+            <span class="pagination-body">
+                <span class="pagination-btns"
+                      th:each="i : ${#numbers.sequence(pagination.startPage, pagination.endPage)}">
+                    <a th:class="${i == pagination.currentPage ? 'active' : ''}"
+                       th:href="@{/mypage/reviews/wrote(page=${i})}"
+                       th:text="${i}"></a>
+                </span>
+            </span>
+
+            <span class="pagination-next" th:if="${pagination.hasNextBlock()}">
+                <a class="pagination-btns" th:href="@{/mypage/reviews/wrote(page=${pagination.endPage+1})}"
+                   title="다음">
+                    <i class="fa-solid fa-chevron-right"></i>
+                </a>
+                <a class="pagination-btns end" th:href="@{/mypage/reviews/wrote(page=${pagination.lastPage})}"
+                   title="맨 끝">
+                    <i class="fa-solid fa-chevron-right"></i>
+                    <i class="fa-solid fa-chevron-right"></i>
+                </a>
+            </span>
+        </section>
+
+    </div>
+</main>
+
+<footer th:replace="~{global-templates/header-footer :: footer}"></footer>
+
+</body>
+<script src="https://code.jquery.com/jquery-3.6.4.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+<script src="/js/global-js/global.js"></script>
+<script src="/js/global-js/chat.js"></script>
+<script src="/js/mypage/mypage.js"></script>
+<script src="/js/mypage/update-review.js"></script>
+<script src="/js/mypage/bookmarks.js"></script>
+<script src="/js/global-js/image-slide.js"></script>
+<script>
+    document.getElementById('reviews').classList.add('active');
+</script>
+<script th:inline="javascript">
+    console.log([[${reviewedList}]]);
+</script>
+
+</html>
