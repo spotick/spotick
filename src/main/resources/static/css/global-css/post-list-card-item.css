@@ -289,10 +289,29 @@
     justify-content: center;
     align-items: center;
     border-radius: 4px;
-    background-color: #007aff;
+
     padding: 6px 16px;
     color: white;
     font-weight: 600;
+}
+
+.BottomButton:not(:last-child) {
+    margin-right: 10px;
+}
+
+.BottomButton.blue {
+    background-color: #007aff;
+}
+
+.BottomButton.red {
+    background-color: #ff4500;
+}
+
+.ItemBtnWrap {
+    position: absolute;
+    right: 10px;
+    bottom: 0;
+    display: flex;
 }
 
 @keyframes activateAnimation2 {

@@ -95,7 +95,7 @@ class PlaceReservationRepositoryTest {
                 .checkIn(LocalDateTime.of(2024, 1, 5, 19, 0, 0))
                 .checkOut(LocalDateTime.of(2024, 1, 6, 7, 0,0))
                 .content("테스트")
-                .notReviewable(true)
+                .notReviewing(true)
                 .reservationStatus(PlaceReservationStatus.WAITING_PAYMENT)
                 .place(placeOf2)
                 .user(user1)

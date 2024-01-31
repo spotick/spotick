@@ -29,4 +29,9 @@ public class PlaceReview extends Period {
         this.user = user;
         this.placeReservation = placeReservation;
     }
+
+    public void updateReview(String content, Integer score) {
+        this.content = content;
+        this.score = score;
+    }
 }

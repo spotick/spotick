@@ -3,7 +3,7 @@ package com.app.spotick.controller.place;
 import com.app.spotick.domain.dto.place.PlaceInquiryListDto;
 import com.app.spotick.domain.dto.user.UserDetailsDto;
 import com.app.spotick.domain.entity.place.PlaceInquiry;
-import com.app.spotick.domain.pagination.PageResponse;
+import com.app.spotick.api.dto.response.PageResponse;
 import com.app.spotick.domain.pagination.Pagination;
 import com.app.spotick.service.place.inquiry.PlaceInquiryService;
 import lombok.RequiredArgsConstructor;

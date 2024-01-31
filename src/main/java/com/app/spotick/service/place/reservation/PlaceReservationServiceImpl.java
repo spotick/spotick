@@ -68,5 +68,13 @@ public class PlaceReservationServiceImpl implements PlaceReservationService {
                     .build());
     }
 
+    @Override
+    public void updateNotReviewing(Long reservationId) {
+        PlaceReservation foundReservation = placeReservationRepository.findById(reservationId).orElseThrow(
+                NoSuchElementException::new
+        );
+
+        foundReservation.updateNotReviewing(true);
+    }
 
 }

@@ -790,10 +790,24 @@ img {
     border-radius: 10px;
     box-shadow: rgba(96, 96, 96, 0.22) 0 2px 18px 0;
     padding: 40px 30px;
+    width: 940px;
 }
 
 .modal-review-form-container.show {
     display: block;
+}
+
+.modal-review-form-container.vibration {
+    animation: vibration .1s infinite;
+}
+
+@keyframes vibration {
+    from {
+        transform: translate(-50%, -50%) rotate(1deg);
+    }
+    to {
+        transform: translate(-50%, -50%) rotate(-1deg);
+    }
 }
 
 .mrf-star-rating-con {
@@ -842,9 +856,22 @@ img {
     font-size: 16px;
 }
 
+.space-between {
+    display: flex;
+    justify-content: space-between;
+}
+
+.error-content, .error-score {
+    font-size: 14px;
+    color: red;
+}
+
+.error-score {
+    margin-left: 20px;
+}
+
 .mr-type-counter {
     display: flex;
-    justify-content: flex-end;
     font-size: 14px;
     color: #797979;
 }

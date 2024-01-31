@@ -2,6 +2,9 @@ package com.app.spotick.controller.mypage;
 
 import com.app.spotick.domain.dto.place.PlaceListDto;
 import com.app.spotick.domain.dto.place.PlaceReservationListDto;
+import com.app.spotick.domain.dto.place.reservation.PlaceReservedNotReviewedDto;
+import com.app.spotick.domain.dto.place.review.PlaceReviewRegisterDto;
+import com.app.spotick.domain.dto.place.review.MypageReviewListDto;
 import com.app.spotick.domain.dto.user.UserDetailsDto;
 import com.app.spotick.domain.dto.user.UserProfileDto;
 import com.app.spotick.domain.entity.place.PlaceReservation;
@@ -279,16 +282,34 @@ public class MypageController {
     }
 
     @GetMapping("/reviews/reviewable")
-    public void goToReviewsReviewable(@RequestParam(value = "page", defaultValue = "1") int page,
+    public void goToReviewsReviewable(@ModelAttribute("reviewRegisterDto")PlaceReviewRegisterDto placeReviewRegisterDto,
+                                      @RequestParam(value = "page", defaultValue = "1") int page,
                                       @AuthenticationPrincipal UserDetailsDto userDetailsDto,
                                       Model model) {
 
         Pageable pageable = PageRequest.of(page - 1, 6);
 
-        Page<PlaceListDto> notReviewedList = userService.findPlacesNotReviewed(userDetailsDto.getId(), pageable);
-        Pagination<PlaceListDto> pagination = new Pagination<>(5, pageable, notReviewedList);
+        Page<PlaceReservedNotReviewedDto> notReviewedList
+                = userService.findPlacesNotReviewed(userDetailsDto.getId(), pageable);
+        Pagination<PlaceReservedNotReviewedDto> pagination
+                = new Pagination<>(5, pageable, notReviewedList);
 
         model.addAttribute("notReviewedList", notReviewedList);
+        model.addAttribute("pagination", pagination);
+    }
+
+    @GetMapping("/reviews/wrote")
+    public void goToReviewsWrote(@RequestParam(value = "page", defaultValue = "1") int page,
+                                 @AuthenticationPrincipal UserDetailsDto userDetailsDto,
+                                 Model model) {
+        Pageable pageable = PageRequest.of(page - 1, 5);
+
+        Page<MypageReviewListDto> reviewedList
+                = userService.findReviewedList(userDetailsDto.getId(), pageable);
+        Pagination<MypageReviewListDto> pagination
+                = new Pagination<>(5, pageable, reviewedList);
+
+        model.addAttribute("reviewedList", reviewedList);
         model.addAttribute("pagination", pagination);
     }
 
