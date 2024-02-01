@@ -145,44 +145,44 @@ class PlaceBookmarkRepositoryTest {
         System.out.println("bookmarkedPlacesByUserId.getContent() = " + bookmarkedPlacesByUserId.getContent());
     }
 
-//    @Test
-//    @DisplayName("투플 테스트")
-//    void tupleTest(){
-//        JPQLQuery<Double> reviewAvg = JPAExpressions.select(placeReview.score.avg())
-//                .from(placeReview)
-//                .where(placeReview.place.eq(place));
-//
-//        JPQLQuery<Long> reviewCount = JPAExpressions.select(placeReview.count())
-//                .from(placeReview)
-//                .where(placeReview.place.eq(place));
-//
-//        JPQLQuery<Long> bookmarkCount = JPAExpressions.select(placeBookmark.count())
-//                .from(placeBookmark)
-//                .where(placeBookmark.place.eq(place));
-//
-//        List<Tuple> tupleList = queryFactory.select(
-//                        place.id, place.title, place.price, place.placeAddress, placeFile
-//                )
-//                .from(placeBookmark)
-//                .join(placeBookmark.place, place)
-//                .leftJoin(placeFile).on(placeFile.place.eq(place).and(placeFile.id.in(
-//                        JPAExpressions.select(placeFile.id)
-//                                .from(placeFile)
-//                                .where(placeFile.place.eq(place))
-//                                .orderBy(placeFile.id.asc())
-//                                .limit(5)
-//                )))
-//                .where(placeBookmark.user.id.eq(user1.getId()), place.placeStatus.eq(PostStatus.APPROVED))
-//                .orderBy(place.id.desc())
-//                .offset(0)
-//                .limit(5)
-//                .fetch();
-//
-//        for(Tuple tuple : tupleList) {
-//            System.out.println("tuple.get(place.id) = " + tuple.get(place.id));
-//            System.out.println("tuple.get(place.title) = " + tuple.get(place.title));
-//        }
-//    }
+    @Test
+    @DisplayName("투플 테스트")
+    void tupleTest(){
+        JPQLQuery<Double> reviewAvg = JPAExpressions.select(placeReview.score.avg())
+                .from(placeReview)
+                .where(placeReview.placeReservation.place.eq(place));
+
+        JPQLQuery<Long> reviewCount = JPAExpressions.select(placeReview.count())
+                .from(placeReview)
+                .where(placeReview.placeReservation.place.eq(place));
+
+        JPQLQuery<Long> bookmarkCount = JPAExpressions.select(placeBookmark.count())
+                .from(placeBookmark)
+                .where(placeBookmark.place.eq(place));
+
+        List<Tuple> tupleList = queryFactory.select(
+                        place.id, place.title, place.price, place.placeAddress, placeFile
+                )
+                .from(placeBookmark)
+                .join(placeBookmark.place, place)
+                .leftJoin(placeFile).on(placeFile.place.eq(place).and(placeFile.id.in(
+                        JPAExpressions.select(placeFile.id)
+                                .from(placeFile)
+                                .where(placeFile.place.eq(place))
+                                .orderBy(placeFile.id.asc())
+                                .limit(5)
+                )))
+                .where(placeBookmark.user.id.eq(user1.getId()), place.placeStatus.eq(PostStatus.APPROVED))
+                .orderBy(place.id.desc())
+                .offset(0)
+                .limit(5)
+                .fetch();
+
+        for(Tuple tuple : tupleList) {
+            System.out.println("tuple.get(place.id) = " + tuple.get(place.id));
+            System.out.println("tuple.get(place.title) = " + tuple.get(place.title));
+        }
+    }
 
 
 }

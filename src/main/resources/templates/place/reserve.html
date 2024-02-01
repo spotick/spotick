@@ -14,10 +14,14 @@
 
 <header th:replace="~{global-templates/header-footer :: header}"></header>
 
+<script th:if="${invalidReservation}">
+    alert('해당시간에는 이미 예약이 되어있습니다.')
+</script>
+
 <div class="global-container flex-center">
 
     <div class="reservation-container">
-        <form th:action="@{/place/reserve/register}" method="post" th:object="${placeReserveRegisterDto}">
+        <form th:action="@{/place/reserve/register}" id="reservationForm" method="post" th:object="${placeReserveRegisterDto}">
 
             <!--예약할 장소 번호-->
             <input type="hidden" th:field="*{placeId}">
@@ -62,30 +66,6 @@
                             <div>
                                 <p class="time-guide">시작 시간</p>
                                 <select onchange="setCheckOutTimes()" class="checkInOut" id="checkIn">
-                                    <option value="0">오전 12시</option>
-                                    <option value="1">오전 1시</option>
-                                    <option value="2">오전 2시</option>
-                                    <option value="3">오전 3시</option>
-                                    <option value="4">오전 4시</option>
-                                    <option value="5">오전 5시</option>
-                                    <option value="6">오전 6시</option>
-                                    <option value="7">오전 7시</option>
-                                    <option value="8">오전 8시</option>
-                                    <option value="9">오전 9시</option>
-                                    <option value="10">오전 10시</option>
-                                    <option value="11">오전 11시</option>
-                                    <option value="12">오후 12시</option>
-                                    <option value="13">오후 1시</option>
-                                    <option value="14">오후 2시</option>
-                                    <option value="15">오후 3시</option>
-                                    <option value="16">오후 4시</option>
-                                    <option value="17">오후 5시</option>
-                                    <option value="18">오후 6시</option>
-                                    <option value="19">오후 7시</option>
-                                    <option value="20">오후 8시</option>
-                                    <option value="21">오후 9시</option>
-                                    <option value="22">오후 10시</option>
-                                    <option value="23">오후 11시</option>
                                 </select>
                             </div>
                             <div>
@@ -170,7 +150,7 @@
             </div>
 
             <div class="flex-align-center">
-                <button class="payment-btn">예약</button>
+                <button type="button" class="payment-btn">예약</button>
             </div>
 
         </form>
@@ -188,6 +168,6 @@
 <script th:src="@{/js/global-js/global.js}"></script>
 <script th:src="@{/js/global-js/loading.js}"></script>
 <script th:src="@{/js/place/reserve/calendar.js}"></script>
-<script th:src="@{/js/place/reserve/resereve.js}"></script>
+<script th:src="@{/js/place/reserve/reserve.js}"></script>
 </body>
 </html>
