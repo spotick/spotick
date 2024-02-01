@@ -1,4 +1,4 @@
-package com.app.spotick.domain.dto.place;
+package com.app.spotick.domain.dto.place.review;
 
 import com.app.spotick.domain.entity.place.PlaceReview;
 import lombok.Data;
