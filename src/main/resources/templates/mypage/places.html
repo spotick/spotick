@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <meta charset="UTF-8">
@@ -229,151 +229,290 @@
             <div class="mpc-title">
                 <h2>장소 관리</h2>
             </div>
-            <div class="mpcp-wrap" style="width: 80%">
-                <article>
-                    <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
-                        <div class="ItemTextContainer" style="max-width: 400px">
-                            <div class="ItemHostNameContainer">
-                                <span class="ItemHostName">서울 성북구</span>
-                                <div class="ItemCountsContainer">
-                                    <div class="ItemsStarCountContainer">
-                                        <img alt="후기갯수" class="ItemCountImg"
-                                             src="/imgs/star_filled_paintYellow056.a8eb6e44.svg">
-                                        <span class="ItemCountText">4.0(20)</span>
+            <div class="mpc-cards-wrap">
+                <th:block th:if="${#lists.size(hostPlacesPage)}">
+                    <th:block th:each="hostPlace:${hostPlacesPage}">
+                        <div class="OneItemContainer hover mybookmark" th:object="${hostPlace}">
+                            <a class="OneItemImgContainer">
+                                <div class="swiper ImageSwiper swiper-initialized swiper-horizontal swiper-pointer-events swiper-backface-hidden">
+                                    <div class="swiper-wrapper ImageLength"
+                                         style="transform: translate3d(0px, 0px, 0px);">
+                                        <!-- 이미지 한칸 -->
+                                        <th:block th:each="placeFile:${hostPlace.placeFiles}">
+                                            <div class="swiper-slide swiper-slide-next" th:object="${placeFile}">
+                                                <img class="ItemImg"
+                                                     th:alt="${hostPlace.title}"
+                                                     th:src="*{'/file/display?fileName=' + uploadPath + '/t_' + uuid + '_' + fileName}">
+                                            </div>
+                                        </th:block>
+
+                                        <!-- 이미지 한칸 -->
                                     </div>
-                                    <div class="ItemsLikeCountContainer">
-                                        <img alt="북마크갯수" class="ItemCountImg bookmark"
-                                             src="/imgs/bookmark_thin.svg">
-                                        <span class="ItemCountText">1724</span>
+                                    <div class="NavigationBtnContainer">
+                                        <button class="NavigationBtn RightBtn" type="button">
+                                            <img alt="다음" src="/imgs/round_arrow_right_gray024.7f7e18a3.svg">
+                                        </button>
+                                        <button class="NavigationBtn LeftBtn" type="button">
+                                            <img alt="이전" src="/imgs/round_arrow_left_gray024.707193e8.svg">
+                                        </button>
+                                    </div>
+                                    <div class="ItemImgPagination">
+                                        <p><span class="snapIndex">1</span>/<span class="slideIndex">5</span></p>
+                                    </div>
+                                </div>
+                            </a>
+                            <div class="ItemTextContainer">
+                                <div class="ItemHostNameContainer">
+                                    <span class="ItemHostName" th:text="*{placeAddress.address}"></span>
+                                    <div class="ItemCountsContainer">
+                                        <div class="ItemsStarCountContainer">
+                                            <img alt="후기갯수" class="ItemCountImg"
+                                                 src="/imgs/star_filled_paintYellow056.a8eb6e44.svg">
+                                            <span class="ItemCountText" th:text="|*{evalAvg}(*{evalCount})|"></span>
+                                        </div>
+                                        <div class="ItemsLikeCountContainer">
+                                            <img alt="북마크갯수" class="ItemCountImg bookmark"
+                                                 src="/imgs/bookmark_thin.svg">
+                                            <span class="ItemCountText" th:text="*{bookmarkCount}"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="ItemSpaceNameContainer">
+                                    <p class="ItemSpaceName" th:text="*{title}"></p>
+                                </div>
+                                <div class="ItemPriceContainer">
+                                    <span class="ItemPrice"
+                                          th:text="${#numbers.formatInteger(hostPlace.price, 3, 'COMMA')} + '원'"></span>
+                                    <div th:text="*{postStatus.displayName}"></div>
+                                </div>
+                                <div class="mpcp-actions">
+                                    <div class="mpcpa-btn-con">
+                                        <a th:href="@{/mypage/places/reservations/{placeId}(placeId = *{id})}">
+                                            <button class="mpcpa-btn" type="button">
+                                                <span>예약 관리</span>
+                                                <div class="mpcpa-alarm" th:unless="*{reservationRequestCount == 0}">
+                                                    <span th:text="*{reservationRequestCount}"></span>
+                                                </div>
+                                            </button>
+                                        </a>
+                                        <a th:href="@{/mypage/places/inquiries/{placeId}(placeId = *{id})}">
+                                            <button class="mpcpa-btn" type="button">
+                                                <span>문의 관리</span>
+                                                <div class="mpcpa-alarm" th:unless="*{inquiriesCount == 0}">
+                                                    <span th:text="*{inquiriesCount}"></span>
+                                                </div>
+                                            </button>
+                                        </a>
+                                    </div>
+                                    <div class="mpcpa-modal-btn">
+                                        <button onclick="toggleDropdown(this)" type="button">
+                                            <i class="fa-solid fa-ellipsis"></i>
+                                            <div class="mpc-dropdown" th:data-id="*{id}">
+                                                <div class="action-item disablePlace"
+                                                     th:if="*{postStatus == postStatus.APPROVED}">
+                                                    <span>장소 대여 중지</span>
+                                                </div>
+                                                <div class="action-item enablePlace"
+                                                     th:if="*{postStatus == postStatus.DISABLED}">
+                                                    <span>장소 대여 재개</span>
+                                                </div>
+                                                <div class="action-item"
+                                                     onclick="placeManageService.editPlace('장소 1 테스트', '테스트 정보', 36.35181504357576, 127.37817628873198, '대전광역시 서구 대덕대로 211', '312', '테스트', '테스트1234', 10000, 4, '조남호', '우리', '740101-45-123419')">
+                                                    <span>장소 정보 수정</span>
+                                                </div>
+                                                <div class="action-item"
+                                                     onclick="placeManageService.showGsForRemovePlace(5)">
+                                                    <span>장소 삭제</span>
+                                                </div>
+                                            </div>
+                                        </button>
                                     </div>
                                 </div>
                             </div>
-                            <div class="ItemSpaceNameContainer">
-                                <p class="ItemSpaceName">낙산관 실내체육관(낙산관)</p>
-                            </div>
-                            <div class="ItemPriceContainer">
-                                <span class="ItemPrice">2023.12.30 ~ 2024.01.30</span>
-                            </div>
                         </div>
-                        <div class="mpcre-img-con" style="margin-right: 0;">
-                            <img
-                                    src="//img.hourplace.co.kr/place/user/47919/2022/05/29/74f9815f-fc9d-4dec-8037-41861f43cae9?s=550x364&amp;t=cover&amp;q=80">
-                        </div>
-                    </div>
-                    <div class="mpcp-actions">
-                        <div class="mpcpa-btn-con">
-                            <a href="#">
-                                <button class="mpcpa-btn" type="button">
-                                    <span>예약 관리</span>
-                                    <div class="mpcpa-alarm">
-                                        <span>99</span>
-                                    </div>
-                                </button>
-                            </a>
-                            <a href="#">
-                                <button class="mpcpa-btn" type="button">
-                                    <span>문의 관리</span>
-                                    <div class="mpcpa-alarm">
-                                        <span>99</span>
-                                    </div>
-                                </button>
-                            </a>
-                        </div>
-                        <div class="mpcpa-modal-btn">
-                            <button onclick="toggleDropdown(this)" type="button">
-                                <i class="fa-solid fa-ellipsis"></i>
-                                <div class="mpc-dropdown">
-                                    <div class="action-item" onclick="placeManageService.showGSForStopPlace(5)">
-                                        <span>장소 대여 중지</span>
-                                    </div>
-                                    <div class="action-item" onclick="placeManageService.showGsForResumePlace(5)">
-                                        <span>장소 대여 재개</span>
-                                    </div>
-                                    <div class="action-item"
-                                         onclick="placeManageService.editPlace('장소 1 테스트', '테스트 정보', 36.35181504357576, 127.37817628873198, '대전광역시 서구 대덕대로 211', '312', '테스트', '테스트1234', 10000, 4, '조남호', '우리', '740101-45-123419')">
-                                        <span>장소 정보 수정</span>
-                                    </div>
-                                    <div class="action-item" onclick="placeManageService.showGsForRemovePlace(5)">
-                                        <span>장소 삭제</span>
-                                    </div>
-                                </div>
-                            </button>
-                        </div>
-                    </div>
-                </article>
-                <article>
-                    <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
-                        <div class="ItemTextContainer" style="max-width: 400px">
-                            <div class="ItemHostNameContainer">
-                                <span class="ItemHostName">서울 성북구</span>
-                                <div class="ItemCountsContainer">
-                                    <div class="ItemsStarCountContainer">
-                                        <img alt="후기갯수" class="ItemCountImg"
-                                             src="/imgs/star_filled_paintYellow056.a8eb6e44.svg">
-                                        <span class="ItemCountText">4.0(20)</span>
-                                    </div>
-                                    <div class="ItemsLikeCountContainer">
-                                        <img alt="북마크갯수" class="ItemCountImg bookmark"
-                                             src="/imgs/bookmark_thin.svg">
-                                        <span class="ItemCountText">1724</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="ItemSpaceNameContainer">
-                                <p class="ItemSpaceName">낙산관 실내체육관(낙산관)</p>
-                            </div>
-                            <div class="ItemPriceContainer">
-                                <span class="ItemPrice">2023.12.30 ~ 2024.01.30</span>
-                            </div>
-                        </div>
-                        <div class="mpcre-img-con" style="margin-right: 0;">
-                            <img
-                                    src="//img.hourplace.co.kr/place/user/47919/2022/05/29/74f9815f-fc9d-4dec-8037-41861f43cae9?s=550x364&amp;t=cover&amp;q=80">
-                        </div>
-                    </div>
-                    <div class="mpcp-actions">
-                        <div class="mpcpa-btn-con">
-                            <a href="#">
-                                <button class="mpcpa-btn" type="button">
-                                    <span>예약 관리</span>
-                                    <div class="mpcpa-alarm">
-                                        <span>99</span>
-                                    </div>
-                                </button>
-                            </a>
-                            <a href="#">
-                                <button class="mpcpa-btn" type="button">
-                                    <span>문의 관리</span>
-                                    <div class="mpcpa-alarm">
-                                        <span>99</span>
-                                    </div>
-                                </button>
-                            </a>
-                        </div>
-                        <div class="mpcpa-modal-btn">
-                            <button onclick="toggleDropdown(this)" type="button">
-                                <i class="fa-solid fa-ellipsis"></i>
-                                <div class="mpc-dropdown">
-                                    <div class="action-item" onclick="placeManageService.showGSForStopPlace(5)">
-                                        <span>장소 대여 중지</span>
-                                    </div>
-                                    <div class="action-item" onclick="placeManageService.showGsForResumePlace(5)">
-                                        <span>장소 대여 재개</span>
-                                    </div>
-                                    <div class="action-item"
-                                         onclick="placeManageService.editPlace('장소 1 테스트', '테스트 정보', 36.35181504357576, 127.37817628873198, '대전광역시 서구 대덕대로 211', '312', '테스트', '테스트1234', 10000, 4, '조남호', '우리', '740101-45-123419')">
-                                        <span>장소 정보 수정</span>
-                                    </div>
-                                    <div class="action-item" onclick="placeManageService.showGsForRemovePlace(5)">
-                                        <span>장소 삭제</span>
-                                    </div>
-                                </div>
-                            </button>
-                        </div>
-                    </div>
-                </article>
+                    </th:block>
+                </th:block>
             </div>
+            <!--            <div class="mpcp-wrap" style="width: 80%">-->
+            <!--                <article>-->
+            <!--                    <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">-->
+            <!--                        <div class="ItemTextContainer" style="max-width: 400px">-->
+            <!--                            <div class="ItemHostNameContainer">-->
+            <!--                                <span class="ItemHostName">서울 성북구</span>-->
+            <!--                                <div class="ItemCountsContainer">-->
+            <!--                                    <div class="ItemsStarCountContainer">-->
+            <!--                                        <img alt="후기갯수" class="ItemCountImg"-->
+            <!--                                             src="/imgs/star_filled_paintYellow056.a8eb6e44.svg">-->
+            <!--                                        <span class="ItemCountText">4.0(20)</span>-->
+            <!--                                    </div>-->
+            <!--                                    <div class="ItemsLikeCountContainer">-->
+            <!--                                        <img alt="북마크갯수" class="ItemCountImg bookmark"-->
+            <!--                                             src="/imgs/bookmark_thin.svg">-->
+            <!--                                        <span class="ItemCountText">1724</span>-->
+            <!--                                    </div>-->
+            <!--                                </div>-->
+            <!--                            </div>-->
+            <!--                            <div class="ItemSpaceNameContainer">-->
+            <!--                                <p class="ItemSpaceName">낙산관 실내체육관(낙산관)</p>-->
+            <!--                            </div>-->
+            <!--                            <div class="ItemPriceContainer">-->
+            <!--                                <span class="ItemPrice">2023.12.30 ~ 2024.01.30</span>-->
+            <!--                            </div>-->
+            <!--                        </div>-->
+            <!--                        <div class="mpcre-img-con" style="margin-right: 0;">-->
+            <!--                            <img-->
+            <!--                                    src="//img.hourplace.co.kr/place/user/47919/2022/05/29/74f9815f-fc9d-4dec-8037-41861f43cae9?s=550x364&amp;t=cover&amp;q=80">-->
+            <!--                        </div>-->
+            <!--                    </div>-->
+            <!--                    <div class="mpcp-actions">-->
+            <!--                        <div class="mpcpa-btn-con">-->
+            <!--                            <a href="#">-->
+            <!--                                <button class="mpcpa-btn" type="button">-->
+            <!--                                    <span>예약 관리</span>-->
+            <!--                                    <div class="mpcpa-alarm">-->
+            <!--                                        <span>99</span>-->
+            <!--                                    </div>-->
+            <!--                                </button>-->
+            <!--                            </a>-->
+            <!--                            <a href="#">-->
+            <!--                                <button class="mpcpa-btn" type="button">-->
+            <!--                                    <span>문의 관리</span>-->
+            <!--                                    <div class="mpcpa-alarm">-->
+            <!--                                        <span>99</span>-->
+            <!--                                    </div>-->
+            <!--                                </button>-->
+            <!--                            </a>-->
+            <!--                        </div>-->
+            <!--                        <div class="mpcpa-modal-btn">-->
+            <!--                            <button onclick="toggleDropdown(this)" type="button">-->
+            <!--                                <i class="fa-solid fa-ellipsis"></i>-->
+            <!--                                <div class="mpc-dropdown">-->
+            <!--                                    <div class="action-item" onclick="placeManageService.showGSForStopPlace(5)">-->
+            <!--                                        <span>장소 대여 중지</span>-->
+            <!--                                    </div>-->
+            <!--                                    <div class="action-item" onclick="placeManageService.showGsForResumePlace(5)">-->
+            <!--                                        <span>장소 대여 재개</span>-->
+            <!--                                    </div>-->
+            <!--                                    <div class="action-item"-->
+            <!--                                         onclick="placeManageService.editPlace('장소 1 테스트', '테스트 정보', 36.35181504357576, 127.37817628873198, '대전광역시 서구 대덕대로 211', '312', '테스트', '테스트1234', 10000, 4, '조남호', '우리', '740101-45-123419')">-->
+            <!--                                        <span>장소 정보 수정</span>-->
+            <!--                                    </div>-->
+            <!--                                    <div class="action-item" onclick="placeManageService.showGsForRemovePlace(5)">-->
+            <!--                                        <span>장소 삭제</span>-->
+            <!--                                    </div>-->
+            <!--                                </div>-->
+            <!--                            </button>-->
+            <!--                        </div>-->
+            <!--                    </div>-->
+            <!--                </article>-->
+            <!--                <article>-->
+            <!--                    <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">-->
+            <!--                        <div class="ItemTextContainer" style="max-width: 400px">-->
+            <!--                            <div class="ItemHostNameContainer">-->
+            <!--                                <span class="ItemHostName">서울 성북구</span>-->
+            <!--                                <div class="ItemCountsContainer">-->
+            <!--                                    <div class="ItemsStarCountContainer">-->
+            <!--                                        <img alt="후기갯수" class="ItemCountImg"-->
+            <!--                                             src="/imgs/star_filled_paintYellow056.a8eb6e44.svg">-->
+            <!--                                        <span class="ItemCountText">4.0(20)</span>-->
+            <!--                                    </div>-->
+            <!--                                    <div class="ItemsLikeCountContainer">-->
+            <!--                                        <img alt="북마크갯수" class="ItemCountImg bookmark"-->
+            <!--                                             src="/imgs/bookmark_thin.svg">-->
+            <!--                                        <span class="ItemCountText">1724</span>-->
+            <!--                                    </div>-->
+            <!--                                </div>-->
+            <!--                            </div>-->
+            <!--                            <div class="ItemSpaceNameContainer">-->
+            <!--                                <p class="ItemSpaceName">낙산관 실내체육관(낙산관)</p>-->
+            <!--                            </div>-->
+            <!--                            <div class="ItemPriceContainer">-->
+            <!--                                <span class="ItemPrice">2023.12.30 ~ 2024.01.30</span>-->
+            <!--                            </div>-->
+            <!--                        </div>-->
+            <!--                        <div class="mpcre-img-con" style="margin-right: 0;">-->
+            <!--                            <img-->
+            <!--                                    src="//img.hourplace.co.kr/place/user/47919/2022/05/29/74f9815f-fc9d-4dec-8037-41861f43cae9?s=550x364&amp;t=cover&amp;q=80">-->
+            <!--                        </div>-->
+            <!--                    </div>-->
+            <!--                    <div class="mpcp-actions">-->
+            <!--                        <div class="mpcpa-btn-con">-->
+            <!--                            <a href="#">-->
+            <!--                                <button class="mpcpa-btn" type="button">-->
+            <!--                                    <span>예약 관리</span>-->
+            <!--                                    <div class="mpcpa-alarm">-->
+            <!--                                        <span>99</span>-->
+            <!--                                    </div>-->
+            <!--                                </button>-->
+            <!--                            </a>-->
+            <!--                            <a href="#">-->
+            <!--                                <button class="mpcpa-btn" type="button">-->
+            <!--                                    <span>문의 관리</span>-->
+            <!--                                    <div class="mpcpa-alarm">-->
+            <!--                                        <span>99</span>-->
+            <!--                                    </div>-->
+            <!--                                </button>-->
+            <!--                            </a>-->
+            <!--                        </div>-->
+            <!--                        <div class="mpcpa-modal-btn">-->
+            <!--                            <button onclick="toggleDropdown(this)" type="button">-->
+            <!--                                <i class="fa-solid fa-ellipsis"></i>-->
+            <!--                                <div class="mpc-dropdown">-->
+            <!--                                    <div class="action-item" onclick="placeManageService.showGSForStopPlace(5)">-->
+            <!--                                        <span>장소 대여 중지</span>-->
+            <!--                                    </div>-->
+            <!--                                    <div class="action-item" onclick="placeManageService.showGsForResumePlace(5)">-->
+            <!--                                        <span>장소 대여 재개</span>-->
+            <!--                                    </div>-->
+            <!--                                    <div class="action-item"-->
+            <!--                                         onclick="placeManageService.editPlace('장소 1 테스트', '테스트 정보', 36.35181504357576, 127.37817628873198, '대전광역시 서구 대덕대로 211', '312', '테스트', '테스트1234', 10000, 4, '조남호', '우리', '740101-45-123419')">-->
+            <!--                                        <span>장소 정보 수정</span>-->
+            <!--                                    </div>-->
+            <!--                                    <div class="action-item" onclick="placeManageService.showGsForRemovePlace(5)">-->
+            <!--                                        <span>장소 삭제</span>-->
+            <!--                                    </div>-->
+            <!--                                </div>-->
+            <!--                            </button>-->
+            <!--                        </div>-->
+            <!--                    </div>-->
+            <!--                </article>-->
+            <!--            </div>-->
         </article>
+
+        <section class="pagination-container">
+            <span class="pagination-previous" th:if="${pagination.hasPrevBlock()}">
+                <a class="pagination-btns first" th:href="@{/mypage/places(page=1)}" title="맨 처음">
+                    <i class="fa-solid fa-chevron-left"></i>
+                    <i class="fa-solid fa-chevron-left"></i>
+                </a>
+                <a class="pagination-btns" th:href="@{/mypage/places(page=${pagination.startPage - 1})}"
+                   title="이전">
+                    <i class="fa-solid fa-chevron-left"></i>
+                </a>
+            </span>
+
+            <span class="pagination-body">
+                <span class="pagination-btns"
+                      th:each="i : ${#numbers.sequence(pagination.startPage, pagination.endPage)}">
+                    <a th:class="${i == pagination.currentPage ? 'active' : ''}"
+                       th:href="@{/mypage/places(page=${i})}"
+                       th:text="${i}"></a>
+                </span>
+            </span>
+
+            <span class="pagination-next" th:if="${pagination.hasNextBlock()}">
+                <a class="pagination-btns" th:href="@{/mypage/places(page=${pagination.endPage+1})}"
+                   title="다음">
+                    <i class="fa-solid fa-chevron-right"></i>
+                </a>
+                <a class="pagination-btns end" th:href="@{/mypage/places(page=${pagination.lastPage})}"
+                   title="맨 끝">
+                    <i class="fa-solid fa-chevron-right"></i>
+                    <i class="fa-solid fa-chevron-right"></i>
+                </a>
+            </span>
+        </section>
+
     </div>
 </main>
 
@@ -381,16 +520,21 @@
 
 </body>
 <script src="https://code.jquery.com/jquery-3.6.4.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 <script src="//dapi.kakao.com/v2/maps/sdk.js?appkey=3dc12d7c2624483dc7c019a0a91b727f&libraries=services"
         type="text/javascript"></script>
 <script src="/js/global-js/global.js"></script>
 <script src="/js/mypage/mypage.js"></script>
 <script src="/js/place/register/register.js"></script>
+<script src="/js/global-js/image-slide.js"></script>
 <script src="/js/mypage/kakaoMapApi.js"></script>
 <script src="/js/mypage/place.js"></script>
 <script src="/js/global-js/chat.js"></script>
 <script>
     document.getElementById('places').classList.add('active');
+</script>
+<script th:inline="javascript">
+    console.log([[${hostPlacesPage}]]);
 </script>
 
 </html>

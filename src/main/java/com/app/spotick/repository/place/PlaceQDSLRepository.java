@@ -2,6 +2,7 @@ package com.app.spotick.repository.place;
 
 import com.app.spotick.domain.dto.place.PlaceDetailDto;
 import com.app.spotick.domain.dto.place.PlaceListDto;
+import com.app.spotick.domain.dto.place.PlaceManageListDto;
 import com.app.spotick.domain.dto.place.reservation.PlaceReserveBasicInfoDto;
 import com.app.spotick.domain.dto.place.reservation.PlaceReservedNotReviewedDto;
 import org.springframework.data.domain.Page;
@@ -21,5 +22,7 @@ public interface PlaceQDSLRepository {
     Optional<PlaceReserveBasicInfoDto> findPlaceReserveBasicInfo(Long placeId);
 
     Page<PlaceReservedNotReviewedDto> findPlaceListNotRelatedToReview(Long userId, Pageable pageable);
+
+    Page<PlaceManageListDto> findHostPlaceListByUserId(Long userId, Pageable pageable);
 
 }

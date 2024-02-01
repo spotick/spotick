@@ -70,7 +70,6 @@ function closeGlobalSelection() {
 
 function toggleDropdown(button) {
     let dropdown = button.querySelector('.mpc-dropdown');
-    console.log(dropdown);
     dropdown.classList.toggle('show');
 }
 

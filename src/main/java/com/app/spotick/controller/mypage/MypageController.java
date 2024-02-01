@@ -1,6 +1,7 @@
 package com.app.spotick.controller.mypage;
 
 import com.app.spotick.domain.dto.place.PlaceListDto;
+import com.app.spotick.domain.dto.place.PlaceManageListDto;
 import com.app.spotick.domain.dto.place.PlaceReservationListDto;
 import com.app.spotick.domain.dto.place.reservation.PlaceReservedNotReviewedDto;
 import com.app.spotick.domain.dto.place.review.PlaceReviewRegisterDto;
@@ -313,6 +314,21 @@ public class MypageController {
         model.addAttribute("pagination", pagination);
     }
 
+    @GetMapping("/places")
+    public void goToPlaces(@RequestParam(value = "page", defaultValue = "1") int page,
+                           @AuthenticationPrincipal UserDetailsDto userDetailsDto,
+                           Model model) {
+        Pageable pageable = PageRequest.of(page - 1, 6);
+
+        Page<PlaceManageListDto> hostPlacesPage
+                = userService.findHostPlacesPage(userDetailsDto.getId(), pageable);
+        Pagination<PlaceManageListDto> pagination
+                = new Pagination<>(5, pageable, hostPlacesPage);
+
+        model.addAttribute("hostPlacesPage", hostPlacesPage);
+        model.addAttribute("pagination", pagination);
+    }
+
     @GetMapping("/tickets")
     public void goToTickets() {
     }
@@ -321,9 +337,6 @@ public class MypageController {
     public void goToTicketsInquiryList() {
     }
 
-    @GetMapping("/places")
-    public void goToPlaces() {
-    }
 
     @GetMapping("/places/inquiry-list")
     public void goToPlacesInquiryList() {

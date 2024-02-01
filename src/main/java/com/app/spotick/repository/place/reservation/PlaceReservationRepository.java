@@ -1,6 +1,7 @@
 package com.app.spotick.repository.place.reservation;
 
 import com.app.spotick.domain.dto.place.PlaceReservationListDto;
+import com.app.spotick.domain.entity.place.Place;
 import com.app.spotick.domain.entity.place.PlaceReservation;
 import com.app.spotick.domain.entity.user.User;
 import io.lettuce.core.dynamic.annotation.Param;
@@ -15,4 +16,6 @@ import java.util.Optional;
 public interface PlaceReservationRepository extends JpaRepository<PlaceReservation, Long>, PlaceReservationQDSLRepository {
 
     Optional<PlaceReservation> findByIdAndUser(Long Id, User user);
+
+    List<PlaceReservation> findAllByPlace(Place place);
 }

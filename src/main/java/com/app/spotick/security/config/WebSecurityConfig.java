@@ -29,6 +29,7 @@ public class WebSecurityConfig {
                 .authorizeHttpRequests((requests) -> requests
 //                        해당  url로 들어온 요청은 인증을 해야한다
                                 .requestMatchers("/mypage/**").authenticated()
+                                .requestMatchers("/place/api/**").authenticated()
 
                                 .requestMatchers("/place/register").authenticated()
                                 .requestMatchers("/place/check/reserve").authenticated()
