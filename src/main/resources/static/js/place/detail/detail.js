@@ -505,9 +505,86 @@ function disableReservedTime(data) {
             }
         });
     });
+}
 
+let reviewPage=1;
+let hasNext = true;
+getReviewList();
+
+$('.review-more-btn').on('click',getReviewList);
+function getReviewList(){
+     // todo hasnext에 따라서 리뷰 더보기 버튼 처리하기
+     fetch(`/reviews/place/${placeId}/list?page=${reviewPage++}`)
+         // .then(r=>r.json())
+         .then(r=>{
+             if(!r.ok){
+                throw new Error('리뷰 리스트 조회 실패')
+             }
+             if(r.status===204){
+                 hasNext = false;
+             }
+             return r.json();
+         }).then(reviewDisplay);
+}
+
+function reviewDisplay(data){
+    let text = '';
+    console.log(data);
+    data.content.forEach(review=>{
+        text +=`
+             <div class="review-item" data-reviewid="${review.reviewId}">
+                <p class="review-writer">${review.userNickname}</p>
+                <div class="flex-align">
+                    <div class="star-box">
+                        <div class="filled-stars" style="width: ${review.score*20}%">
+                            <img class="filled-star"
+                                 src="https://shareit.kr/_next/static/media/star_filled_paintYellow056.a8eb6e44.svg"
+                                 alt="평점" width="17">
+                            <img class="filled-star"
+                                 src="https://shareit.kr/_next/static/media/star_filled_paintYellow056.a8eb6e44.svg"
+                                 alt="평점" width="17">
+                            <img class="filled-star"
+                                 src="https://shareit.kr/_next/static/media/star_filled_paintYellow056.a8eb6e44.svg"
+                                 alt="평점" width="17">
+                            <img class="filled-star"
+                                 src="https://shareit.kr/_next/static/media/star_filled_paintYellow056.a8eb6e44.svg"
+                                 alt="평점" width="17">
+                            <img class="filled-star"
+                                 src="https://shareit.kr/_next/static/media/star_filled_paintYellow056.a8eb6e44.svg"
+                                 alt="평점" width="17">
+                        </div>
+                        <div class="default-stars">
+                            <img class="default-star"
+                                 src="https://shareit.kr/_next/static/media/star_filled_gray084.e69177ff.svg"
+                                 alt="">
+                            <img class="default-star"
+                                 src="https://shareit.kr/_next/static/media/star_filled_gray084.e69177ff.svg"
+                                 alt="">
+                            <img class="default-star"
+                                 src="https://shareit.kr/_next/static/media/star_filled_gray084.e69177ff.svg"
+                                 alt="">
+                            <img class="default-star"
+                                 src="https://shareit.kr/_next/static/media/star_filled_gray084.e69177ff.svg"
+                                 alt="">
+                            <img class="default-star"
+                                 src="https://shareit.kr/_next/static/media/star_filled_gray084.e69177ff.svg"
+                                 alt="">
+                        </div>
+                    </div>
+                    <span class="review-score">${review.score}.0</span>
+                    <div>
+                        <span class="review-write-date">${review.createdDate}</span>
+                    </div>
+                </div>
+                <p class="review-content">${review.content}</p>
+             </div>
+        `;
+    });
+    $('.review-list').append(text);
 
 }
+
+
 
 
 
