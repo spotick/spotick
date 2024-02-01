@@ -116,10 +116,10 @@ function updatePreviewVisibility(isTrue) {
 }
 
 
-$('body').on('click',function (){
-    console.log(`idx : ${idx}`);
-    console.log(`length : ${length}`);
-})
+// $('body').on('click',function (){
+//     console.log(`idx : ${idx}`);
+//     console.log(`length : ${length}`);
+// })
 
 function disableSubmitBtn(){
     $('#submit').attr('disabled',true);

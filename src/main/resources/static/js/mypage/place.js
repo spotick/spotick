@@ -1,24 +1,60 @@
 const placeManageService = (function () {
     let dialogueString = "";
 
-    function showGSForStopPlace(placeId) {
+    function disablePlace(placeId) {
         dialogueString = "장소 대여를 중단하시겠습니까?<br>(대여 중지 시, 이미 들어온 대여 요청은 모두 취소 됩니다.)"
-        showGlobalSelection(dialogueString, () => stopPlace(placeId));
+        showGlobalSelection(dialogueString, () => requestDisable(placeId));
     }
 
-    // todo = 예약을 더이상 받지 않고 등록된 장소에서도 일시적으로 내려가지도록 장소 status 변경처리 요청 필요
-    // placeId 변조가능성 있으므로 백엔드 측에서 검증 필수
-    function stopPlace(placeId) {
-        console.log(placeId);
+    function requestDisable(placeId) {
+        fetch(`/place/api/disable/` + placeId, {
+            method: 'PATCH'
+        })
+            .then(response => {
+                if (response.ok) {
+                    return response.text();
+                } else {
+                    throw response
+                }
+            })
+            .then(message => {
+                alert(message);
+                window.location.reload();
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                closeOnlyThisModal(globalSelection);
+
+                error.text().then(message => showGlobalDialogue(message))
+            });
     }
 
-    function showGsForRemovePlace(placeId) {
-        dialogueString = "장소를 삭제할 시<br>다시 되돌릴 수 없습니다!<br>등록한 장소를 삭제하시겠습니까?"
-        showGlobalSelection(dialogueString, () => removePlace(placeId))
+    function enablePlace(placeId) {
+        dialogueString = "장소를 다시 활성화 시키겠습니까?";
+        showGlobalSelection(dialogueString, () => requestEnable(placeId))
     }
+    dialogueString = "장소를 삭제할 시<br>다시 되돌릴 수 없습니다!<br>등록한 장소를 삭제하시겠습니까?"
+    function requestEnable(placeId) {
+        fetch(`/place/api/approved/` + placeId, {
+            method: 'PATCH'
+        })
+            .then(response => {
+                if (response.ok) {
+                    return response.text();
+                } else {
+                    throw response
+                }
+            })
+            .then(message => {
+                alert(message);
+                window.location.reload();
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                closeOnlyThisModal(globalSelection);
 
-    function removePlace(placeId) {
-        console.log(placeId);
+                error.text().then(message => showGlobalDialogue(message))
+            });
     }
 
     function showGsForResumePlace(placeId) {
@@ -55,9 +91,26 @@ const placeManageService = (function () {
     }
 
     return {
-        showGSForStopPlace: showGSForStopPlace,
-        showGsForRemovePlace: showGsForRemovePlace,
-        showGsForResumePlace: showGsForResumePlace,
+        disablePlace: disablePlace,
+        enablePlace: enablePlace,
         editPlace: editPlace
     }
 })();
+
+/////////////////////////////////////////////////////////////
+
+document.querySelectorAll('.disablePlace').forEach(place => {
+    place.addEventListener('click', function () {
+        let placeId = this.parentElement.getAttribute('data-id');
+
+        placeManageService.disablePlace(placeId);
+    })
+})
+
+document.querySelectorAll('.enablePlace').forEach(place => {
+    place.addEventListener('click', function () {
+        let placeId = this.parentElement.getAttribute('data-id');
+
+        placeManageService.enablePlace(placeId)
+    })
+})

@@ -5,8 +5,12 @@ import com.app.spotick.domain.dto.place.PlaceListDto;
 import com.app.spotick.domain.dto.place.PlaceRegisterDto;
 import com.app.spotick.domain.dto.place.reservation.PlaceReserveBasicInfoDto;
 import com.app.spotick.domain.entity.place.Place;
+import com.app.spotick.domain.entity.place.PlaceReservation;
 import com.app.spotick.domain.entity.user.User;
+import com.app.spotick.domain.type.place.PlaceReservationStatus;
+import com.app.spotick.domain.type.post.PostStatus;
 import com.app.spotick.repository.place.PlaceRepository;
+import com.app.spotick.repository.place.reservation.PlaceReservationRepository;
 import com.app.spotick.repository.user.UserRepository;
 import com.app.spotick.service.place.file.PlaceFileService;
 import lombok.RequiredArgsConstructor;
@@ -20,12 +24,15 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 
 @Service
 @Transactional
 @RequiredArgsConstructor
 public class PlaceServiceImpl implements PlaceService{
     private final PlaceRepository placeRepository;
+    private final PlaceReservationRepository placeReservationRepository;
     private final UserRepository userRepository;
     private final PlaceFileService placeFileService;
     private final int PAGE_SIZE = 12;
@@ -66,6 +73,42 @@ public class PlaceServiceImpl implements PlaceService{
     public PlaceReserveBasicInfoDto findPlaceReserveDefaultInfo(Long placeId) {
         return placeRepository.findPlaceReserveBasicInfo(placeId)
                 .orElseThrow(()->new IllegalStateException("존재하지 않는 장소 게시글"));
+    }
+
+    @Override
+    public Optional<Place> findPlace(Long placeId, Long userId) {
+        User tmpUser = userRepository.getReferenceById(userId);
+
+        return placeRepository.findByIdAndUser(placeId, tmpUser);
+    }
+
+    @Override
+    public void updateStatusDisabled(Long placeId) {
+        Place foundPlace = placeRepository.findById(placeId).orElseThrow(
+                NoSuchElementException::new
+        );
+
+        foundPlace.setPlaceStatus(PostStatus.DISABLED);
+    }
+
+    @Override
+    public void rejectAllReservationRequests(Long placeId) {
+        Place tmpPlace = placeRepository.getReferenceById(placeId);
+
+        List<PlaceReservation> foundPlaces = placeReservationRepository.findAllByPlace(tmpPlace);
+
+        foundPlaces.forEach(foundPlace -> {
+            foundPlace.updateStatus(PlaceReservationStatus.REJECTED);
+        });
+    }
+
+    @Override
+    public void updateStatusApproved(Long placeId) {
+        Place foundPlace = placeRepository.findById(placeId).orElseThrow(
+                NoSuchElementException::new
+        );
+
+        foundPlace.setPlaceStatus(PostStatus.APPROVED);
     }
 
 }

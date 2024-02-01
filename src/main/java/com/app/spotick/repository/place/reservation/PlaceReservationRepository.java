@@ -1,5 +1,7 @@
 package com.app.spotick.repository.place.reservation;
 
+import com.app.spotick.domain.dto.place.PlaceReservationListDto;
+import com.app.spotick.domain.entity.place.Place;
 import com.app.spotick.domain.dto.place.reservation.PlaceReservationTimeDto;
 import com.app.spotick.domain.entity.place.PlaceReservation;
 import com.app.spotick.domain.entity.user.User;
@@ -16,6 +18,8 @@ import java.util.Optional;
 public interface PlaceReservationRepository extends JpaRepository<PlaceReservation, Long>, PlaceReservationQDSLRepository {
 
     Optional<PlaceReservation> findByIdAndUser(Long Id, User user);
+
+    List<PlaceReservation> findAllByPlace(Place place);
 
     /**
      * 사용자가 선택한 장소 예약이 가능한지 확인하는 메소드
@@ -44,6 +48,5 @@ public interface PlaceReservationRepository extends JpaRepository<PlaceReservati
     List<PlaceReservationTimeDto> findReservedTimes(@Param("placeId") Long placeId,
                                                     @Param("startTime") LocalDateTime startTime,
                                                     @Param("endTime") LocalDateTime endTime);
-
 
 }
