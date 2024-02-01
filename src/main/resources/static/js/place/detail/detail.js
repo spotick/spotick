@@ -145,9 +145,6 @@ function setReservationFormCheckInAndOut() {
     $('#reservationCheckOut').val(checkOutTime);
 }
 
-function formatDateTime(date, time) {
-    return date + ' ' + time.padStart(2, '0');
-}
 
 function formatDate(date) {
     const year = date.getFullYear();
@@ -158,8 +155,8 @@ function formatDate(date) {
 
 function getReservationDateTimeFormat() {
     let revArr = $('#reservationDate').val().split('-');
-    let checkInTime = parseInt($('#checkIn').val().split(' ')[1]);
-    let checkOutTime = parseInt($('#checkOut').val().split(' ')[1]);
+    let checkInTime = new Date($('#checkIn').val()).getHours();
+    let checkOutTime = new Date($('#checkOut').val()).getHours();
     let checkIn = convertToAmPmFormat(checkInTime);
     let checkOut = convertToAmPmFormat(checkOutTime);
     let usageTime = getUsageTime(checkInTime, checkOutTime);
@@ -423,7 +420,8 @@ $(`#reservationDate`).on('change', getReservedTimes);
 function getReservedTimes() {
     let reservationDate = $('#reservationDate').val();
     $('#checkIn').html(`<option selected disabled>시작 시간</option>`);
-    $('#checkOut').html(`<option selected disabled>종료 시간</option>`);
+    $('#checkOut').html(`<option selected disabled>종료 시간</option>`)
+        .attr('disabled', true);
     setCheckInTimes();
     fetch(`/reservations/v1/places/${placeId}/reserved-times?reservationDate=${reservationDate}`)
         .then(r => r.json())
@@ -431,7 +429,6 @@ function getReservedTimes() {
 
 }
 
-setCheckInTimes();
 
 function setCheckInTimes() {
     let $checkIn = $('#checkIn');
@@ -494,7 +491,6 @@ function getNextDateFormat(dateString) {
 
 function disableReservedTime(data) {
     let $checkInOpts = $('#checkIn option');
-    let $checkOutOpts = $('#checkOut option');
     disabledData = data;
 
     $checkInOpts.each((i, opt) => {

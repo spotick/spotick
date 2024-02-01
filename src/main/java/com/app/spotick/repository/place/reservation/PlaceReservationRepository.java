@@ -39,7 +39,7 @@ public interface PlaceReservationRepository extends JpaRepository<PlaceReservati
                 p.checkIn, p.checkOut
             ) from PlaceReservation p
             where p.place.id = :placeId
-            and (p.checkIn >=:startTime and p.checkOut< :endTime)
+            and (p.checkIn <:endTime and p.checkOut> :startTime)
             """)
     List<PlaceReservationTimeDto> findReservedTimes(@Param("placeId") Long placeId,
                                                     @Param("startTime") LocalDateTime startTime,
