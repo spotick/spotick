@@ -1,5 +1,6 @@
 package com.app.spotick.service.place.reservation;
 
+import com.app.spotick.domain.dto.place.reservation.PlaceReservationTimeDto;
 import com.app.spotick.domain.dto.place.reservation.PlaceReserveRegisterDto;
 import com.app.spotick.domain.entity.place.Place;
 import com.app.spotick.domain.entity.place.PlaceReservation;
@@ -14,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
@@ -37,7 +39,6 @@ public class PlaceReservationServiceImpl implements PlaceReservationService {
         PlaceReservation foundReservation = placeReservationRepository.findById(reservationId).orElseThrow(
                 NoSuchElementException::new
         );
-
         foundReservation.updateStatus(PlaceReservationStatus.CANCELLED);
     }
 
@@ -52,20 +53,27 @@ public class PlaceReservationServiceImpl implements PlaceReservationService {
 
         @Override
         public void registerPlaceReservation(PlaceReserveRegisterDto placeReserveRegisterDto, Long userId) {
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
             User userProxy = userRepository.getReferenceById(userId);
             Place placeProxy = placeRepository.getReferenceById(placeReserveRegisterDto.getPlaceId());
 
             placeReservationRepository.save(PlaceReservation.builder()
                     .place(placeProxy)
                     .user(userProxy)
-                    .checkIn(LocalDateTime.parse(placeReserveRegisterDto.getReservationCheckIn(),formatter))
-                    .checkOut(LocalDateTime.parse(placeReserveRegisterDto.getReservationCheckOut(),formatter))
+                    .checkIn(parseToLocalDateTime(placeReserveRegisterDto.getReservationCheckIn()))
+                    .checkOut(parseToLocalDateTime(placeReserveRegisterDto.getReservationCheckOut()))
                     .content(placeReserveRegisterDto.getReservationContent())
                     .amount(placeReserveRegisterDto.getReservationAmount())
                     .visitors(placeReserveRegisterDto.getReservationVisitors())
                     .reservationStatus(PlaceReservationStatus.PENDING)
+                    .notReviewing(false)
                     .build());
+    }
+    @Override
+    public boolean isReservationAvailable(PlaceReserveRegisterDto placeReserveRegisterDto) {
+        LocalDateTime checkIn = parseToLocalDateTime(placeReserveRegisterDto.getReservationCheckIn());
+        LocalDateTime checkOut = parseToLocalDateTime(placeReserveRegisterDto.getReservationCheckOut());
+        return !placeReservationRepository
+                .isOverlappingReservation(placeReserveRegisterDto.getPlaceId(), checkIn,checkOut);
     }
 
     @Override
@@ -73,8 +81,31 @@ public class PlaceReservationServiceImpl implements PlaceReservationService {
         PlaceReservation foundReservation = placeReservationRepository.findById(reservationId).orElseThrow(
                 NoSuchElementException::new
         );
-
         foundReservation.updateNotReviewing(true);
     }
+    private LocalDateTime parseToLocalDateTime(String dateString){
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        return LocalDateTime.parse(dateString,formatter);
+    }
 
+    @Override
+    public List<PlaceReservationTimeDto> findReservedTimes(Long placeId, String selectedDate) {
+
+        LocalDateTime startTime = parseToLocalDateTime(selectedDate + " 00:00:00");
+        LocalDateTime endTime = startTime.plusDays(1).plusHours(23);
+        return placeReservationRepository.findReservedTimes(placeId,startTime,endTime);
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
