@@ -155,7 +155,8 @@ public class PlaceQDSLRepositoryImpl implements PlaceQDSLRepository {
                                         placeFile.id,
                                         placeFile.fileName,
                                         placeFile.uuid,
-                                        placeFile.uploadPath
+                                        placeFile.uploadPath,
+                                        placeFile.place.id
                                 )
                         )
                 ).from(place)

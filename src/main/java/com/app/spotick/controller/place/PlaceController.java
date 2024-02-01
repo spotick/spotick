@@ -35,8 +35,6 @@ public class PlaceController {
         Long userId = userDetailsDto==null? null: userDetailsDto.getId();
         PlaceDetailDto place = placeService.findPlaceDetailById(placeId, userId);
 
-        System.out.println("place = " + place);
-
         model.addAttribute("place", place);
         return "place/detail";
     }
@@ -84,18 +82,19 @@ public class PlaceController {
     }
 
     @PostMapping("/reserve/register")
-    public String placeReservationRegister(PlaceReserveRegisterDto placeReserveRegisterDto,
-                       @AuthenticationPrincipal UserDetailsDto userDetailsDto  ){
-//        todo 이미 등록된 예약시간중간에 예약했을 경우 다시 설정하게 만드는 로직 만들기
+    public String placeReservationRegister(@ModelAttribute PlaceReserveRegisterDto placeReserveRegisterDto,
+                       @AuthenticationPrincipal UserDetailsDto userDetailsDto,Model model){
 
-        log.info("checkIn : {}",placeReserveRegisterDto.getReservationCheckIn());
-        log.info("checkOut : {}",placeReserveRegisterDto.getReservationCheckOut());
-
-        System.out.println("placeReserveRegisterDto = " + placeReserveRegisterDto);
+        if(!reservationService.isReservationAvailable(placeReserveRegisterDto)){
+            PlaceReserveBasicInfoDto placeReserveDefaultInfo = placeService
+                    .findPlaceReserveDefaultInfo(placeReserveRegisterDto.getPlaceId());
+            model.addAttribute("place",placeReserveDefaultInfo);
+            model.addAttribute("invalidReservation",true);
+            return "place/reserve";
+        }
 
         reservationService.registerPlaceReservation(
                 placeReserveRegisterDto,userDetailsDto.getId());
-
         return "redirect:/place/detail/"+placeReserveRegisterDto.getPlaceId();
     }
 
