@@ -220,7 +220,7 @@
                             <span class="review-score" th:text="${place.evalAvg}"></span>
                         </div>
                         <p>
-                            <span th:text="${place.eval5ScoreCount != 0 ? (place.evalCount / place.eval5ScoreCount) : 0}"></span>%의
+                            <span th:text="${place.eval5ScoreCount != 0 ? #numbers.formatInteger((place.eval5ScoreCount/(place.evalCount*1.0)*100),1,'COMMA') : 0}"></span>%의
                             고객이 5점을 주었어요.
                         </p>
                     </div>
