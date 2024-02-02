@@ -1,5 +1,9 @@
 let placeId = $('#placeId').val();
 let disabledData = null;
+let currentIndex = 0; // 현재 활성화된 이미지의 인덱스
+let images = $('.modal-img-item');
+let imageCount = images.length; // 이미지의 총 개수
+let imageWidth = images.width(); // 각 이미지의 너비
 
 $('.nav-item').on('click', function () {
     $('.nav-item').not(this).removeClass('nav-focus');
@@ -10,6 +14,14 @@ $('.nav-item').on('click', function () {
 $('.inquiry-list-wrap').on('click', '.answer-ctr-box', function () {
     $(this).find('img').toggleClass('none');
     $(this).siblings('.answer-box').toggleClass('none');
+});
+
+// 사진 클릭시 모달창 띄우기
+$('.grid-item').on('click',function (){
+    currentIndex = $(this).data('imgidx')-1;
+    updateSliderPosition();
+    $('.img-modal-container').removeClass('none');
+    $('body').css('overflow', 'hidden');
 });
 
 // 장소 이미지 모달창 띄우기
@@ -24,10 +36,7 @@ $('.modal-close').on('click', function () {
     $('body').css('overflow', 'unset');
 });
 
-let currentIndex = 0; // 현재 활성화된 이미지의 인덱스
-let images = $('.modal-img-item');
-let imageCount = images.length; // 이미지의 총 개수
-let imageWidth = images.width(); // 각 이미지의 너비
+
 
 // 이전 버튼 클릭 이벤트
 $('.prev').on('click', function () {
@@ -507,36 +516,43 @@ function disableReservedTime(data) {
     });
 }
 
-let reviewPage=1;
+let reviewPage = 1;
 let hasNext = true;
 getReviewList();
 
-$('.review-more-btn').on('click',getReviewList);
-function getReviewList(){
-     // todo hasnext에 따라서 리뷰 더보기 버튼 처리하기
-     fetch(`/reviews/place/${placeId}/list?page=${reviewPage++}`)
-         // .then(r=>r.json())
-         .then(r=>{
-             if(!r.ok){
+$('.review-more-btn-box').on('click','.review-more-btn', getReviewList);
+
+function getReviewList() {
+    fetch(`/reviews/place/${placeId}/list?page=${reviewPage++}`)
+        .then(r => {
+            if (!r.ok) {
                 throw new Error('리뷰 리스트 조회 실패')
-             }
-             if(r.status===204){
-                 hasNext = false;
-             }
-             return r.json();
-         }).then(reviewDisplay);
+            }
+            return r.json();
+        }).then(resp => {
+        hasNext = !resp.last;
+        reviewDisplay(resp.content);
+    });
 }
 
-function reviewDisplay(data){
+function reviewDisplay(reviewList) {
     let text = '';
-    console.log(data);
-    data.content.forEach(review=>{
-        text +=`
+    if(reviewList.length ===0&&reviewPage===2){
+        $('.review-more-btn-box').html(`
+            <div class="flex-center empty-review">
+               등록된 리뷰가 없습니다.
+            </div>
+        `);
+        return ;
+    }    
+
+    reviewList.forEach(review => {
+        text += `
              <div class="review-item" data-reviewid="${review.reviewId}">
                 <p class="review-writer">${review.userNickname}</p>
                 <div class="flex-align">
                     <div class="star-box">
-                        <div class="filled-stars" style="width: ${review.score*20}%">
+                        <div class="filled-stars" style="width: ${review.score * 20}%">
                             <img class="filled-star"
                                  src="https://shareit.kr/_next/static/media/star_filled_paintYellow056.a8eb6e44.svg"
                                  alt="평점" width="17">
@@ -582,6 +598,9 @@ function reviewDisplay(data){
     });
     $('.review-list').append(text);
 
+    if (!hasNext) {
+        $('.review-more-btn-box').html('');
+    }
 }
 
 
