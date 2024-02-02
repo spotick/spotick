@@ -1,4 +1,4 @@
-package com.app.spotick.repository.ticket;
+package com.app.spotick.repository.ticket.file;
 
 import com.app.spotick.domain.entity.ticket.TicketFile;
 import org.springframework.data.jpa.repository.JpaRepository;
