@@ -1,5 +1,9 @@
 let placeId = $('#placeId').val();
-
+let disabledData = null;
+let currentIndex = 0; // 현재 활성화된 이미지의 인덱스
+let images = $('.modal-img-item');
+let imageCount = images.length; // 이미지의 총 개수
+let imageWidth = images.width(); // 각 이미지의 너비
 
 $('.nav-item').on('click', function () {
     $('.nav-item').not(this).removeClass('nav-focus');
@@ -10,6 +14,14 @@ $('.nav-item').on('click', function () {
 $('.inquiry-list-wrap').on('click', '.answer-ctr-box', function () {
     $(this).find('img').toggleClass('none');
     $(this).siblings('.answer-box').toggleClass('none');
+});
+
+// 사진 클릭시 모달창 띄우기
+$('.grid-item').on('click',function (){
+    currentIndex = $(this).data('imgidx')-1;
+    updateSliderPosition();
+    $('.img-modal-container').removeClass('none');
+    $('body').css('overflow', 'hidden');
 });
 
 // 장소 이미지 모달창 띄우기
@@ -24,10 +36,7 @@ $('.modal-close').on('click', function () {
     $('body').css('overflow', 'unset');
 });
 
-let currentIndex = 0; // 현재 활성화된 이미지의 인덱스
-let images = $('.modal-img-item');
-let imageCount = images.length; // 이미지의 총 개수
-let imageWidth = images.width(); // 각 이미지의 너비
+
 
 // 이전 버튼 클릭 이벤트
 $('.prev').on('click', function () {
@@ -64,26 +73,6 @@ $(`#checkIn`).on('change', function () {
     setCheckOutTimes();
 });
 
-function setCheckOutTimes() {
-    let checkIn = Number($('#checkIn').val());
-    let $checkOut = $('#checkOut');
-    $checkOut.children(':not(:first-child)').remove();
-    let text = '';
-    for (let i = 1; i < 24; i++) {
-        let time = i + checkIn;
-        time = time >= 24 ? time - 24 : time
-        if (time === 0) {
-            text += `
-               <optgroup label="${getNextDay($('#reservationDate').val()).getDate()}일">
-                </optgroup>
-            `;
-        }
-        text += `
-            <option value="${time}">${convertToAmPmFormat(time)}시</option>
-        `;
-    }
-    $checkOut.append(text);
-}
 
 function getNextDay(dateString) {
     let date = new Date(dateString);
@@ -104,10 +93,13 @@ $('.calendar-wrap button').on('click', function () {
 });
 
 function calculateAmountAndShow() {
-    let usageTime = getUsageTime($('#checkIn').val(), $('#checkOut').val());
+    let checkIn = parseInt($('#checkIn').val().split(' ')[1]);
+    let checkOut = parseInt($('#checkOut').val().split(' ')[1]);
+
+    let usageTime = getUsageTime(checkIn, checkOut);
     let placeSurcharge = $('#placeSurcharge').val();
-    let visitors = $('.visitors').val();
-    let defaultPeople = $('#placeDefaultPeople').val();
+    let visitors = Number($('.visitors').val());
+    let defaultPeople = Number($('#placeDefaultPeople').val());
     let surcharge = defaultPeople < visitors
         ? placeSurcharge * (visitors - defaultPeople) : 0;
     let placePrice = $('#placePrice').val();
@@ -156,18 +148,12 @@ function calculateAmountAndShow() {
 
 // 예약 날짜에 따른 예약 폼 설정
 function setReservationFormCheckInAndOut() {
-    let checkInDate = $('#reservationDate').val();
     let checkInTime = $('#checkIn').val();
     let checkOutTime = $('#checkOut').val();
-    let isNextDay = Number(checkInTime) > Number(checkOutTime);
-    let checkOutDate = isNextDay ? formatDate(getNextDay(checkInDate)) : checkInDate;
-    $('#reservationCheckIn').val(formatDateTime(checkInDate, checkInTime));
-    $('#reservationCheckOut').val(formatDateTime(checkOutDate, checkOutTime));
+    $('#reservationCheckIn').val(checkInTime);
+    $('#reservationCheckOut').val(checkOutTime);
 }
 
-function formatDateTime(date, time) {
-    return date + ' ' + time.padStart(2, '0') + ':00:00';
-}
 
 function formatDate(date) {
     const year = date.getFullYear();
@@ -178,8 +164,8 @@ function formatDate(date) {
 
 function getReservationDateTimeFormat() {
     let revArr = $('#reservationDate').val().split('-');
-    let checkInTime = $('#checkIn').val();
-    let checkOutTime = $('#checkOut').val();
+    let checkInTime = new Date($('#checkIn').val()).getHours();
+    let checkOutTime = new Date($('#checkOut').val()).getHours();
     let checkIn = convertToAmPmFormat(checkInTime);
     let checkOut = convertToAmPmFormat(checkOutTime);
     let usageTime = getUsageTime(checkInTime, checkOutTime);
@@ -285,7 +271,7 @@ $('.inquiry-modal-wrap').on('click', '.inquiry-submit.on', function () {
             inquiryContent: inquiryContent
         }),
     }).then(e => e.json())
-        .then(e=>getInquiryList(1));
+        .then(e => getInquiryList(1));
 
     $('.inquiry-modal-container').addClass('none');
     $('body').css('overflow', 'unset');
@@ -318,7 +304,28 @@ $('.place-like-btn').on('click', function () {
 });
 
 $('.reservation-submit-box').on('click', '.reservation-btn.on', function () {
-    $('#reservationForm').submit();
+    let reservationCheckIn = $('#reservationCheckIn').val();
+    let reservationCheckOut = $('#reservationCheckOut').val();
+
+    fetch(`/reservations/v1/availability/check`, {
+        method: 'post',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+            placeId: placeId,
+            reservationCheckIn: reservationCheckIn,
+            reservationCheckOut: reservationCheckOut
+        })
+    })
+        .then(e => e.json())
+        .then(result => {
+            if (result) {
+                alert('해당시간에 이미 예약이 존재합니다.')
+                return;
+            }
+            $('#reservationForm').submit();
+        });
+
+
 });
 
 
@@ -334,12 +341,10 @@ function reservationFormOk() {
 
 getInquiryList(1);
 
-$('.inquiry-list-wrap').on('click','.pagination-box button',function (){
+$('.inquiry-list-wrap').on('click', '.pagination-box button', function () {
     let page = $(this).data('page')
     getInquiryList(page);
 });
-
-
 
 
 function getInquiryList(page) {
@@ -350,7 +355,6 @@ function getInquiryList(page) {
 }
 
 function inquiryDisplay(data) {
-    console.log(data);
     let $target = $('.inquiry-list-wrap');
     let text = '';
     if (data.inquiryPage.empty) {
@@ -394,37 +398,210 @@ function inquiryDisplay(data) {
     });
     text += `
         <div class="pagination-box flex-center">`;
-            if(data.pageBlock.startPage>1){
-            text +=`<button data-page="${data.pageBlock.startPage-1}" type="button" class="page-prev">
+    if (data.pageBlock.startPage > 1) {
+        text += `<button data-page="${data.pageBlock.startPage - 1}" type="button" class="page-prev">
                         <img src="https://shareit.kr/_next/static/media/arrow_left_gray074.fa695002.svg" alt="">
                     </button>`;
-            }
+    }
     for (let i = data.pageBlock.startPage; i <= data.pageBlock.endPage; i++) {
         text += `<button data-page="${i}" class="page-num ${data.pageBlock.currentPage == i ? 'focus' : ''}" type="button">
                 ${i}
             </button>`
     }
 
-    if(data.pageBlock.endPage<data.pageBlock.lastPage){
+    if (data.pageBlock.endPage < data.pageBlock.lastPage) {
         text += `
-            <button data-page="${data.pageBlock.endPage+1}" type="button" class="page-next">
+            <button data-page="${data.pageBlock.endPage + 1}" type="button" class="page-next">
                 <img src="https://shareit.kr/_next/static/media/arrow_right_gray074.86c7e872.svg"
                      alt="">
             </button>`;
     }
-        text+=`</div>`;
+    text += `</div>`;
 
     $('.inquiry-cnt').text(data.inquiryPage.totalElements);
     $target.html(text);
 }
 
+getReservedTimes();
+
+$(`#reservationDate`).on('change', getReservedTimes);
+
+function getReservedTimes() {
+    let reservationDate = $('#reservationDate').val();
+    $('#checkIn').html(`<option selected disabled>시작 시간</option>`);
+    $('#checkOut').html(`<option selected disabled>종료 시간</option>`)
+        .attr('disabled', true);
+    setCheckInTimes();
+    fetch(`/reservations/v1/places/${placeId}/reserved-times?reservationDate=${reservationDate}`)
+        .then(r => r.json())
+        .then(disableReservedTime);
+
+}
 
 
+function setCheckInTimes() {
+    let $checkIn = $('#checkIn');
+    let reserveDate = $('#reservationDate').val();
 
+    $checkIn.children(':not(:first-child)').remove();
+    let text = '';
 
+    for (let i = 0; i < 24; i++) {
 
+        text += `
+            <option value="${reserveDate} ${i.toString().padStart(2, '0')}:00:00">${convertToAmPmFormat(i)}시</option>
+        `;
+    }
+    $checkIn.append(text);
+}
 
+function setCheckOutTimes() {
+    let checkIn = parseInt($('#checkIn').val().split(' ')[1]);
+    let $checkOut = $('#checkOut');
+    let reserveDate = $('#reservationDate').val();
 
+    $checkOut.children(':not(:first-child)').remove();
+    let text = '';
+    for (let i = 1; i < 24; i++) {
+        let time = i + checkIn;
+        time = time >= 24 ? time - 24 : time
+        if (time === 0) {
+            text += `
+               <optgroup label="${getNextDay(reserveDate).getDate()}일">
+                </optgroup>
+            `;
+            reserveDate = getNextDateFormat(reserveDate);
+        }
+        text += `
+            <option value="${reserveDate} ${time.toString().padStart(2, '0')}:00:00">${convertToAmPmFormat(time)}시</option>
+        `;
+    }
+    $checkOut.append(text);
+
+    $('#checkOut option').each((i, opt) => {
+        let $opt = $(opt);
+        let optValue = new Date($opt.val());
+        disabledData.forEach(d => {
+            let checkIn = new Date(d.checkIn);
+            let checkOut = new Date(d.checkOut);
+            if (checkIn <= optValue && optValue < checkOut) {
+                $opt.attr('disabled', true);
+            }
+        });
+    })
+
+}
+
+function getNextDateFormat(dateString) {
+    let date = new Date(dateString);
+    date.setDate(date.getDate() + 1);
+    return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+}
+
+function disableReservedTime(data) {
+    let $checkInOpts = $('#checkIn option');
+    disabledData = data;
+
+    $checkInOpts.each((i, opt) => {
+        let $opt = $(opt);
+        let optValue = new Date($opt.val());
+
+        data.forEach(d => {
+            let checkIn = new Date(d.checkIn);
+            let checkOut = new Date(d.checkOut);
+            if (checkIn <= optValue && optValue < checkOut) {
+                $opt.attr('disabled', true);
+            }
+        });
+    });
+}
+
+let reviewPage = 1;
+let hasNext = true;
+getReviewList();
+
+$('.review-more-btn-box').on('click','.review-more-btn', getReviewList);
+
+function getReviewList() {
+    fetch(`/reviews/place/${placeId}/list?page=${reviewPage++}`)
+        .then(r => {
+            if (!r.ok) {
+                throw new Error('리뷰 리스트 조회 실패')
+            }
+            return r.json();
+        }).then(resp => {
+        hasNext = !resp.last;
+        reviewDisplay(resp.content);
+    });
+}
+
+function reviewDisplay(reviewList) {
+    let text = '';
+    if(reviewList.length ===0&&reviewPage===2){
+        $('.review-more-btn-box').html(`
+            <div class="flex-center empty-review">
+               등록된 리뷰가 없습니다.
+            </div>
+        `);
+        return ;
+    }    
+
+    reviewList.forEach(review => {
+        text += `
+             <div class="review-item" data-reviewid="${review.reviewId}">
+                <p class="review-writer">${review.userNickname}</p>
+                <div class="flex-align">
+                    <div class="star-box">
+                        <div class="filled-stars" style="width: ${review.score * 20}%">
+                            <img class="filled-star"
+                                 src="https://shareit.kr/_next/static/media/star_filled_paintYellow056.a8eb6e44.svg"
+                                 alt="평점" width="17">
+                            <img class="filled-star"
+                                 src="https://shareit.kr/_next/static/media/star_filled_paintYellow056.a8eb6e44.svg"
+                                 alt="평점" width="17">
+                            <img class="filled-star"
+                                 src="https://shareit.kr/_next/static/media/star_filled_paintYellow056.a8eb6e44.svg"
+                                 alt="평점" width="17">
+                            <img class="filled-star"
+                                 src="https://shareit.kr/_next/static/media/star_filled_paintYellow056.a8eb6e44.svg"
+                                 alt="평점" width="17">
+                            <img class="filled-star"
+                                 src="https://shareit.kr/_next/static/media/star_filled_paintYellow056.a8eb6e44.svg"
+                                 alt="평점" width="17">
+                        </div>
+                        <div class="default-stars">
+                            <img class="default-star"
+                                 src="https://shareit.kr/_next/static/media/star_filled_gray084.e69177ff.svg"
+                                 alt="">
+                            <img class="default-star"
+                                 src="https://shareit.kr/_next/static/media/star_filled_gray084.e69177ff.svg"
+                                 alt="">
+                            <img class="default-star"
+                                 src="https://shareit.kr/_next/static/media/star_filled_gray084.e69177ff.svg"
+                                 alt="">
+                            <img class="default-star"
+                                 src="https://shareit.kr/_next/static/media/star_filled_gray084.e69177ff.svg"
+                                 alt="">
+                            <img class="default-star"
+                                 src="https://shareit.kr/_next/static/media/star_filled_gray084.e69177ff.svg"
+                                 alt="">
+                        </div>
+                    </div>
+                    <span class="review-score">${review.score}.0</span>
+                    <div>
+                        <span class="review-write-date">${review.createdDate}</span>
+                    </div>
+                </div>
+                <p class="review-content">${review.content}</p>
+             </div>
+        `;
+    });
+    $('.review-list').append(text);
+
+    if (!hasNext) {
+        $('.review-more-btn-box').html('');
+    }
+}
 
 
 

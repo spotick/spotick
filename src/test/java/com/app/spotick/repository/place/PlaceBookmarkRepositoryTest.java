@@ -150,11 +150,11 @@ class PlaceBookmarkRepositoryTest {
     void tupleTest(){
         JPQLQuery<Double> reviewAvg = JPAExpressions.select(placeReview.score.avg())
                 .from(placeReview)
-                .where(placeReview.place.eq(place));
+                .where(placeReview.placeReservation.place.eq(place));
 
         JPQLQuery<Long> reviewCount = JPAExpressions.select(placeReview.count())
                 .from(placeReview)
-                .where(placeReview.place.eq(place));
+                .where(placeReview.placeReservation.place.eq(place));
 
         JPQLQuery<Long> bookmarkCount = JPAExpressions.select(placeBookmark.count())
                 .from(placeBookmark)

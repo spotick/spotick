@@ -3,6 +3,7 @@ package com.app.spotick.repository.place;
 import com.app.spotick.domain.dto.place.PlaceDetailDto;
 import com.app.spotick.domain.dto.place.PlaceFileDto;
 import com.app.spotick.domain.dto.place.PlaceListDto;
+import com.app.spotick.domain.dto.place.PlaceManageListDto;
 import com.app.spotick.domain.dto.place.reservation.PlaceReserveBasicInfoDto;
 import com.app.spotick.domain.dto.place.reservation.PlaceReservedNotReviewedDto;
 import com.app.spotick.domain.entity.place.*;
@@ -129,7 +130,7 @@ public class PlaceQDSLRepositoryImpl implements PlaceQDSLRepository {
             Place foundPlace = tuple.get(place);
             PlaceDetailDto placeDetail = PlaceDetailDto.from(foundPlace);
             placeDetail.setPlaceFileList(foundPlace.getPlaceFileList().stream().map(PlaceFileDto::from).toList());
-            placeDetail.setEvalAvg(tuple.get(reviewAvgSub)==null?0.0:tuple.get(reviewAvgSub));
+            placeDetail.setEvalAvg(tuple.get(reviewAvgSub) == null ? 0.0 : tuple.get(reviewAvgSub));
             placeDetail.setEvalCount(tuple.get(reviewCountSub));
             placeDetail.setInquiryCount(tuple.get(inquiryCountSub));
             placeDetail.setBookmarkChecked(tuple.get(bookmarkCheckedSub));
@@ -155,7 +156,8 @@ public class PlaceQDSLRepositoryImpl implements PlaceQDSLRepository {
                                         placeFile.id,
                                         placeFile.fileName,
                                         placeFile.uuid,
-                                        placeFile.uploadPath
+                                        placeFile.uploadPath,
+                                        placeFile.place.id
                                 )
                         )
                 ).from(place)
@@ -254,6 +256,86 @@ public class PlaceQDSLRepositoryImpl implements PlaceQDSLRepository {
         return PageableExecutionUtils.getPage(notReviewListDtos, pageable, totalCountQuery::fetchOne);
     }
 
+    @Override
+    public Page<PlaceManageListDto> findHostPlaceListByUserId(Long userId, Pageable pageable) {
+
+        JPAQuery<Long> totalCount = queryFactory.select(place.count())
+                .from(place)
+                .where(place.user.id.eq(userId));
+
+        JPQLQuery<Double> reviewAvg = createReviewAvgSub(place);
+
+        JPQLQuery<Long> reviewCount = createReviewCountSub(place);
+
+        JPQLQuery<Long> bookmarkCount = createBookmarkCountSub(place);
+
+        JPQLQuery<Long> reservationRequestCount = JPAExpressions.select(placeReservation.count())
+                .from(placeReservation)
+                .where(
+                        placeReservation.place.eq(place),
+                        placeReservation.reservationStatus.eq(PlaceReservationStatus.PENDING)
+                );
+
+        JPQLQuery<Long> inquiriesCount = JPAExpressions.select(placeInquiry.count())
+                .from(placeInquiry)
+                .where(
+                        placeInquiry.place.eq(place),
+                        placeInquiry.response.isNull()
+                );
+
+        List<PlaceManageListDto> placeManageListDtos = queryFactory.select(
+                        Projections.constructor(PlaceManageListDto.class,
+                                place.id,
+                                place.title,
+                                place.price,
+                                place.placeAddress,
+                                reviewAvg,
+                                reviewCount,
+                                bookmarkCount,
+                                place.placeStatus,
+                                reservationRequestCount,
+                                inquiriesCount
+                        ))
+                .from(place)
+                .where(
+                        place.user.id.eq(userId),
+                        place.placeStatus.ne(PostStatus.REPLACED)
+                )
+                .orderBy(place.id.desc())
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+
+        List<Long> placeIdList = placeManageListDtos.stream().map(PlaceManageListDto::getId).toList();
+
+//        가져온 id리스트를 in절의 조건으로 사진정보들을 가져온다.
+        List<PlaceFileDto> fileDtoList = queryFactory.select(
+                        Projections.constructor(PlaceFileDto.class,
+                                placeFile.id,
+                                placeFile.fileName,
+                                placeFile.uuid,
+                                placeFile.uploadPath,
+                                placeFile.place.id
+                        ))
+                .from(placeFile)
+                .where(placeFile.place.id.in(placeIdList))
+                .orderBy(placeFile.id.asc(), placeFile.place.id.desc())
+                .fetch();
+
+//        사진정보를 장소 id별로 묶는다
+        Map<Long, List<PlaceFileDto>> fileListMap = fileDtoList.stream().collect(Collectors.groupingBy(PlaceFileDto::getPlaceId));
+
+
+        placeManageListDtos.forEach(placeManageListDto -> {
+            placeManageListDto.updatePlaceFiles(fileListMap.get(placeManageListDto.getId())
+                    .stream().limit(5L).toList());
+
+            placeManageListDto.getPlaceAddress().cutAddress();
+        });
+
+        return PageableExecutionUtils.getPage(placeManageListDtos, pageable, totalCount::fetchOne);
+    }
+
     private JPQLQuery<Double> createReviewAvgSub(QPlace place) {
         return JPAExpressions.select(placeReview.score.avg())
                 .from(placeReview)
@@ -289,25 +371,3 @@ public class PlaceQDSLRepositoryImpl implements PlaceQDSLRepository {
 
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

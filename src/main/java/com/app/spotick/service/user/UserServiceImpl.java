@@ -1,6 +1,7 @@
 package com.app.spotick.service.user;
 
 import com.app.spotick.domain.dto.place.PlaceListDto;
+import com.app.spotick.domain.dto.place.PlaceManageListDto;
 import com.app.spotick.domain.dto.place.PlaceReservationListDto;
 import com.app.spotick.domain.dto.place.reservation.PlaceReservedNotReviewedDto;
 import com.app.spotick.domain.dto.place.review.MypageReviewListDto;
@@ -160,6 +161,11 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Transactional(readOnly = true)
     public Page<MypageReviewListDto> findReviewedList(Long userId, Pageable pageable) {
         return placeReviewRepository.findReviewsByUserId(userId, pageable);
+    }
+
+    @Override
+    public Page<PlaceManageListDto> findHostPlacesPage(Long userId, Pageable pageable) {
+        return placeRepository.findHostPlaceListByUserId(userId, pageable);
     }
 
     private String encodePassword(String password) {

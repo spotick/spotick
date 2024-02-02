@@ -19,7 +19,7 @@ $(function () {
     $("#datepicker").datepicker({
         minDate: currentDate,  // 선택할 수 있는 최소 날짜를 현재 날짜로 설정
         onSelect: function (dateText) {  // 날짜를 선택했을 때 실행할 함수
-            $("#reservationDate").val(dateText);  // 선택한 날짜를 input 요소에 표시
+            $("#reservationDate").val(dateText).trigger('change');  // 선택한 날짜를 input 요소에 표시
         },
         beforeShowDay: function (date) {  // 달력의 각 날짜를 표시하기 전에 실행할 함수
             let reservationDate = $("#reservationDate").datepicker('getDate');  // 선택한 날짜를 가져옴

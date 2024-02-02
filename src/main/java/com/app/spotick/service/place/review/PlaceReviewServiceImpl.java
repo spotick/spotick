@@ -1,5 +1,6 @@
 package com.app.spotick.service.place.review;
 
+import com.app.spotick.domain.dto.place.review.PlaceReviewListDto;
 import com.app.spotick.domain.dto.place.review.PlaceReviewRegisterDto;
 import com.app.spotick.domain.dto.place.review.PlaceReviewUpdateDto;
 import com.app.spotick.domain.entity.place.PlaceReservation;
@@ -9,6 +10,8 @@ import com.app.spotick.repository.place.Review.PlaceReviewRepository;
 import com.app.spotick.repository.place.reservation.PlaceReservationRepository;
 import com.app.spotick.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -52,5 +55,11 @@ public class PlaceReviewServiceImpl implements PlaceReviewService {
         User tmpUser = userRepository.getReferenceById(userId);
 
         return placeReviewRepository.findByIdAndUser(reviewId, tmpUser);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Slice<PlaceReviewListDto> findPlaceReviewSlice(Long placeId, Pageable pageable) {
+        return placeReviewRepository.findReviewSliceByPlaceId(placeId,pageable);
     }
 }

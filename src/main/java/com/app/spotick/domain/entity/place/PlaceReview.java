@@ -14,7 +14,7 @@ public class PlaceReview extends Period {
     private Long id;
     private String content;
     private Integer score;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY) 
     @JoinColumn(name = "USER_ID")
     private User user;
     @OneToOne(fetch = FetchType.LAZY)

@@ -1,6 +1,7 @@
 package com.app.spotick.controller.place;
 
 import com.app.spotick.api.dto.response.ReviewResponse;
+import com.app.spotick.domain.dto.place.review.PlaceReviewListDto;
 import com.app.spotick.domain.dto.place.review.PlaceReviewRegisterDto;
 import com.app.spotick.domain.dto.place.review.PlaceReviewUpdateDto;
 import com.app.spotick.domain.dto.user.UserDetailsDto;
@@ -9,6 +10,11 @@ import com.app.spotick.domain.entity.place.PlaceReview;
 import com.app.spotick.service.place.reservation.PlaceReservationService;
 import com.app.spotick.service.place.review.PlaceReviewService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -20,7 +26,6 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
-import java.util.NoSuchElementException;
 
 @RestController
 @RequestMapping("/reviews")
@@ -104,7 +109,7 @@ public class ReviewRestController {
         }
 
         if (placeReviewUpdateDto.getScore().equals(foundReview.getScore())
-                && placeReviewUpdateDto.getContent().equals(foundReview.getContent())) {
+            && placeReviewUpdateDto.getContent().equals(foundReview.getContent())) {
             ReviewResponse response = new ReviewResponse(false);
             response.addError("error", "변경된 내용이 없습니다.");
 
@@ -142,4 +147,32 @@ public class ReviewRestController {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(new ReviewResponse(true));
     }
+
+    @GetMapping("/place/{placeId}/list")
+    public ResponseEntity<Slice<PlaceReviewListDto>> getPlacesReviewList(@PathVariable("placeId") Long placeId,
+                                                                         @PageableDefault(page = 1,
+                                                                                 size = 10, sort = "id",
+                                                                                 direction = Sort.Direction.DESC
+                                                                         ) Pageable pageable) {
+        PageRequest pageRequest = PageRequest.of(pageable.getPageNumber() - 1, 1, pageable.getSort());
+        Slice<PlaceReviewListDto> placeReviewSlice = placeReviewService.findPlaceReviewSlice(placeId, pageRequest);
+        return ResponseEntity.ok(placeReviewSlice);
+    }
+
+
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
