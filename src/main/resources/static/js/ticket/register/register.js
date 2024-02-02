@@ -14,7 +14,7 @@ let width = $('.file-container').width();
 let idx = 0;
 let length = 0;
 
-$('#placeFile').on('change', function (event) {
+$('#ticketFile').on('change', function (event) {
     let files = Array.from(event.target.files);
 
     // 미리보기 이미지 목록을 비웁니다.
@@ -56,7 +56,7 @@ $('.prev').on('click', function() {
 });
 
 $('.file-wrap').on('click','.delete',function (){
-    let files = $('#placeFile')[0].files;
+    let files = $('#ticketFile')[0].files;
 
     // 삭제된 이미지의 인덱스를 찾습니다.
     let deletedIndex = $(this).parent().index();
@@ -72,7 +72,7 @@ $('.file-wrap').on('click','.delete',function (){
     }
 
     files = dt.files;
-    $('#placeFile')[0].files = files;
+    $('#ticketFile')[0].files = files;
 
     length = $('.file-item').length;
 
@@ -173,18 +173,3 @@ function updatePreviewVisibility(isTrue) {
 //         }
 //     });
 // });
-
-function handleFileUpload() {
-    const placeFileInput = document.getElementById('placeFile');
-    const label = document.querySelector('label[for="placeFile"]');
-
-    const fileName = placeFileInput.value.split('\\').pop(); // 파일 이름만 추출
-
-    if (fileName) {
-        console.log(`File selected: ${fileName}`);
-        label.querySelector('p').innerText = `Selected file: ${fileName}`;
-    } else {
-        console.log('No file selected.');
-        label.querySelector('p').innerText = '대표 행사 사진 또는 장소 사진을 넣어주세요';
-    }
-}

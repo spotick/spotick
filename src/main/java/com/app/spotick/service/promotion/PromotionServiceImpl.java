@@ -51,7 +51,7 @@ public class PromotionServiceImpl implements PromotionService {
 
     @Override
     public void removePromotion(Long promotionId) {
-
+        promotionRepository.deleteById(promotionId);
     }
 
     @Override
