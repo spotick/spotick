@@ -6,6 +6,7 @@ import com.app.spotick.domain.entity.place.PlaceFile;
 import com.app.spotick.domain.entity.promotion.PromotionBoard;
 import com.app.spotick.domain.entity.ticket.Ticket;
 import com.app.spotick.domain.entity.ticket.TicketFile;
+import com.app.spotick.domain.entity.ticket.TicketGrade;
 import com.app.spotick.domain.entity.user.User;
 import com.app.spotick.domain.type.post.PostStatus;
 import com.app.spotick.domain.type.ticket.TicketCategory;
@@ -38,6 +39,8 @@ class TicketRepositoryTest {
     TicketRepository ticketRepository;
     @Autowired
     TicketFileRepository ticketFileRepository;
+    @Autowired
+    TicketGradeRepository ticketGradeRepository;
     @Autowired
     private UserRepository userRepository;
 
@@ -80,7 +83,7 @@ class TicketRepositoryTest {
                     .ticketEventStatus(PostStatus.APPROVED)
                     .build();
             ticketRepository.save(ticket);
-        }
+
             TicketFile ticketFile = TicketFile.builder()
                     .uuid(UUID.randomUUID().toString())
                     .fileName("테스트")
@@ -88,15 +91,24 @@ class TicketRepositoryTest {
                     .ticket(ticket)
                     .build();
             ticketFileRepository.save(ticketFile);
+            List<TicketGrade> ticketGrades = new ArrayList<>();
+
+            for (int j = 0; j < 3; j++) {
+                ticketGrades.add(
+                        TicketGrade.builder()
+                                .gradeName("test" + j)
+                                .maxPeople(50)
+                                .price(10000 * j)
+                                .build());
+            }
+            ticketGradeRepository.saveAll(ticketGrades);
+        }
+
     }
 
     @Test
     @DisplayName("test")
     void save(){
-        // given
 
-        // when
-
-        // then
     }
 }

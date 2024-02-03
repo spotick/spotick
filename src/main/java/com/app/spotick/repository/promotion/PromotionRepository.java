@@ -9,7 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface PromotionRepository extends JpaRepository<PromotionBoard, Long> {
+public interface PromotionRepository extends JpaRepository<PromotionBoard, Long>, PromotionQueryDslRepository {
 //    행사 등록 (기본 save() 사용)
 //    행사 상세보기
 //    행사 리스트(페이징)

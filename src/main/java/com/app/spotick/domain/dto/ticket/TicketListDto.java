@@ -27,13 +27,5 @@ public class TicketListDto {
         this.ticketFiles = ticketFiles;
     }
 
-    //    조회수 제외됨
-    public Ticket toEntity(){
-        return Ticket.builder()
-                .id(ticketId)
-                .title(ticketTitle)
-                .content(content)
-                .ticketCategory(ticketCategory)
-                .build();
-    }
+
 }
