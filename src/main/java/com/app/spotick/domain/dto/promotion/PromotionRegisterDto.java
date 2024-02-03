@@ -43,7 +43,7 @@ public class PromotionRegisterDto {
     private Double placeLat;
     @NotNull(message = "지도에 장소의 위치를 찍어주세요")
     private Double placeLng;
-    @Size(min=1, max = 1,message = "대표 사진을 선택해주세요")
+//    @Size(min=1, max = 1,message = "대표 사진을 선택해주세요")
     private MultipartFile placeFile;
 
 //    private List<MultipartFile> promotionFiles = new ArrayList<>();

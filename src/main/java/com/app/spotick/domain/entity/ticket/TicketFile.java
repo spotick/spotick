@@ -2,6 +2,7 @@ package com.app.spotick.domain.entity.ticket;
 
 import com.app.spotick.domain.base.image.ImageBase;
 import com.app.spotick.domain.entity.place.Place;
+import com.app.spotick.domain.entity.promotion.PromotionBoard;
 import com.app.spotick.domain.entity.user.User;
 import jakarta.persistence.*;
 import lombok.*;
@@ -26,6 +27,10 @@ public class TicketFile extends ImageBase {
         super(fileName, uuid, uploadPath);
         this.id = id;
         this.user = user;
+        this.ticket = ticket;
+    }
+
+    public void setTicket(Ticket ticket){
         this.ticket = ticket;
     }
 }

@@ -1,5 +1,6 @@
 package com.app.spotick.repository.promotion;
 
+import com.app.spotick.domain.dto.promotion.PromotionDetailDto;
 import com.app.spotick.domain.dto.promotion.PromotionListDto;
 import com.app.spotick.domain.embedded.post.PostAddress;
 import com.app.spotick.domain.entity.promotion.PromotionBoard;
@@ -10,6 +11,11 @@ import com.app.spotick.domain.type.promotion.PromotionCategory;
 import com.app.spotick.domain.type.user.UserStatus;
 import com.app.spotick.repository.promotion.file.PromotionFileRepository;
 import com.app.spotick.repository.user.UserRepository;
+import com.querydsl.core.types.Projections;
+import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.Expressions;
+import com.querydsl.jpa.JPAExpressions;
+import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -31,6 +37,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+import static com.app.spotick.domain.entity.promotion.QPromotionBoard.promotionBoard;
+import static com.app.spotick.domain.entity.promotion.QPromotionFile.promotionFile;
+import static com.app.spotick.domain.entity.promotion.QPromotionLike.promotionLike;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
@@ -154,4 +163,51 @@ public class PromotionRepositoryTest {
         boardPage.getContent().forEach(System.out::println);
     }
 
+    @Test
+    @DisplayName("상세보기")
+    void selectDetail(){
+        // given
+        PromotionBoard savedPromotion = promotionRepository.save(promotion1);
+        // when
+        Optional<PromotionDetailDto> promotionOpt = promotionRepository.findPromotionDetailById(savedPromotion.getId(), savedPromotion.getUser().getId());
+        // then
+        assertThat(promotionOpt.orElse(null))
+                .extracting(PromotionDetailDto::getPromotionId)
+                .isEqualTo(savedPromotion.getId());
+
+        System.out.println("promotionOpt.orElse(null) = " + promotionOpt.orElse(null));
+    }
+
+    @Test
+    @DisplayName("상세")
+    void detailTest(){
+        JPQLQuery<Long> likeCount = JPAExpressions.select(promotionLike.count())
+                .from(promotionLike)
+                .where(promotionLike.promotionBoard.eq(promotionBoard));
+
+        JPQLQuery<PromotionFile> mainImgFile = JPAExpressions.selectFrom(promotionFile)
+                .where(promotionBoard.id.eq(promotionFile.promotionBoard.id));
+
+        BooleanExpression likeChecked = JPAExpressions.select(promotionLike.id.isNotNull())
+                .from(promotionLike)
+                .where(promotionLike.promotionBoard.eq(promotionBoard).and(promotionLike.user.id.eq(3L)))
+                .exists();
+
+
+        Optional.ofNullable(queryFactory.select(
+                        Projections.constructor(PromotionDetailDto.class,
+                                promotionBoard.id,
+                                promotionBoard.user.id,
+                                promotionBoard.title,
+                                promotionBoard.subTitle,
+                                promotionBoard.promotionAddress,
+                                mainImgFile,
+                                likeCount,
+                                likeChecked
+                        )
+                )
+                .from(promotionBoard)
+                .where(promotionBoard.id.eq(1L))
+                .fetchOne());
+    }
 }

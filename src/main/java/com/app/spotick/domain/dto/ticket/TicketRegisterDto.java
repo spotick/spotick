@@ -3,6 +3,7 @@ package com.app.spotick.domain.dto.ticket;
 import com.app.spotick.domain.embedded.post.PostAddress;
 import com.app.spotick.domain.entity.promotion.PromotionBoard;
 import com.app.spotick.domain.entity.ticket.Ticket;
+import com.app.spotick.domain.entity.ticket.TicketGrade;
 import com.app.spotick.domain.type.promotion.PromotionCategory;
 import com.app.spotick.domain.type.ticket.TicketCategory;
 import jakarta.validation.constraints.NotBlank;
@@ -56,17 +57,12 @@ public class TicketRegisterDto {
     private Double placeLat;
     @NotNull(message = "지도에 장소의 위치를 찍어주세요")
     private Double placeLng;
-    @Size(min=1, max = 5,message = "대표 사진을 선택해주세요")
-    private List<MultipartFile> ticketFiles = new ArrayList<>();
 
+    private MultipartFile ticketFile;
 
-//    private String gradeName;
-//
-//    private Integer price;
-//
-//    private Integer maxPeople;
-//
-//    private List<Map<String, Map<Integer, Integer>>> ticketGradeList = new ArrayList<>();
+//    @Size(min = 1, message = "티켓 등급은 한가지 이상 작성해주세요")
+    private List<TicketGrade> ticketGrades = new ArrayList<>();
+
 
     //    조회수 제외됨
     public Ticket toEntity(){
