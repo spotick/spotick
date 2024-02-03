@@ -603,6 +603,10 @@ function reviewDisplay(reviewList) {
     }
 }
 
+$('.test').on('click',function (){
+    let targetPoint = $('#placeRule').position().top+500;
+    window.scrollTo({top:targetPoint, left:0, behavior:'smooth'});
+});
 
 
 
