@@ -3,6 +3,8 @@ package com.app.spotick.api.controller.place;
 import com.app.spotick.api.dto.place.PlaceInquiryDto;
 import com.app.spotick.domain.dto.user.UserDetailsDto;
 import com.app.spotick.domain.pagination.Pagination;
+import com.app.spotick.domain.type.place.PlaceReservationStatus;
+import com.app.spotick.domain.type.post.PostStatus;
 import com.app.spotick.service.place.inquiry.PlaceInquiryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -26,6 +28,13 @@ public class PlaceInquiryRestController {
     @PostMapping("/v1/register")
     public ResponseEntity<PlaceInquiryDto.Response> inquiryRegister(@AuthenticationPrincipal UserDetailsDto userDetailsDto,
                                           @RequestBody PlaceInquiryDto.Request inquiryDto){
+
+        Enum<PlaceReservationStatus> completed = PlaceReservationStatus.COMPLETED;
+        Enum<PostStatus> t = PostStatus.APPROVED;
+
+
+
+
         PlaceInquiryDto.Response inquiryDtoResp = inquiryService.register(inquiryDto, userDetailsDto.getId());
         return ResponseEntity.ok()
                 .body(inquiryDtoResp);

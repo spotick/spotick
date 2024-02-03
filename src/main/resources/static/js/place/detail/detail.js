@@ -17,8 +17,8 @@ $('.inquiry-list-wrap').on('click', '.answer-ctr-box', function () {
 });
 
 // 사진 클릭시 모달창 띄우기
-$('.grid-item').on('click',function (){
-    currentIndex = $(this).data('imgidx')-1;
+$('.grid-item').on('click', function () {
+    currentIndex = $(this).data('imgidx') - 1;
     updateSliderPosition();
     $('.img-modal-container').removeClass('none');
     $('body').css('overflow', 'hidden');
@@ -35,7 +35,6 @@ $('.modal-close').on('click', function () {
     $('.img-modal-container').addClass('none');
     $('body').css('overflow', 'unset');
 });
-
 
 
 // 이전 버튼 클릭 이벤트
@@ -520,7 +519,7 @@ let reviewPage = 1;
 let hasNext = true;
 getReviewList();
 
-$('.review-more-btn-box').on('click','.review-more-btn', getReviewList);
+$('.review-more-btn-box').on('click', '.review-more-btn', getReviewList);
 
 function getReviewList() {
     fetch(`/reviews/place/${placeId}/list?page=${reviewPage++}`)
@@ -537,14 +536,14 @@ function getReviewList() {
 
 function reviewDisplay(reviewList) {
     let text = '';
-    if(reviewList.length ===0&&reviewPage===2){
+    if (reviewList.length === 0 && reviewPage === 2) {
         $('.review-more-btn-box').html(`
             <div class="flex-center empty-review">
                등록된 리뷰가 없습니다.
             </div>
         `);
-        return ;
-    }    
+        return;
+    }
 
     reviewList.forEach(review => {
         text += `
@@ -603,15 +602,35 @@ function reviewDisplay(reviewList) {
     }
 }
 
+$('.place-nav-box button').on('click', function () {
+    let targetDom = $(this).data('menu');
+    let targetPoint = $(`#${targetDom}`).position().top + 500;
+    window.scrollTo({top: targetPoint, left: 0, behavior: 'smooth'});
+});
 
+$(window).on('scroll', function () {
+    let addTop = 400;
+    let scrollTop = Math.round(document.documentElement.scrollTop);
+    let [introduceMenu, ruleMenu, reviewMenu, inquiryMenu] = $('.menu');
+    ruleMenu = Math.round($(ruleMenu).position().top+addTop);
+    reviewMenu = Math.round($(reviewMenu).position().top+addTop);
+    inquiryMenu = Math.round($(inquiryMenu).position().top+addTop);
+    let menuNav = $('.nav-item');
 
-
-
-
-
-
-
-
+    if(scrollTop < ruleMenu){
+        menuNav.removeClass('nav-focus');
+        menuNav.eq(0).addClass('nav-focus');
+    }else if(scrollTop>ruleMenu&&scrollTop<reviewMenu){
+        menuNav.removeClass('nav-focus');
+        menuNav.eq(1).addClass('nav-focus');
+    }else if(scrollTop>reviewMenu&&scrollTop<inquiryMenu){
+        menuNav.removeClass('nav-focus');
+        menuNav.eq(2).addClass('nav-focus');
+    }else{
+        menuNav.removeClass('nav-focus');
+        menuNav.eq(3).addClass('nav-focus');
+    }
+});
 
 
 
