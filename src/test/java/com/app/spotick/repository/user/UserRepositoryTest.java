@@ -69,7 +69,8 @@ class UserRepositoryTest {
     @Test
     @DisplayName("이메일로 회원정보 가져오기")
     void findUserByEmailTest() {
-        User foundUser = userRepository.findUserAndProfileByEmail(user.getEmail());
+        User foundUser = userRepository.findUserAndProfileByEmail(user.getEmail())
+                .orElseGet(null);
         assertThat(foundUser).isNotNull().extracting("id")
                 .isNotNull();
         System.out.println("foundUser = " + foundUser);

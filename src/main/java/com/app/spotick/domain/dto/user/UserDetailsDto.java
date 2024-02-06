@@ -8,13 +8,16 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
-@NoArgsConstructor @Data
-public class UserDetailsDto implements UserDetails {
+@NoArgsConstructor
+@Data
+public class UserDetailsDto implements UserDetails, OAuth2User {
     private Long id;
     private String email;
     private String password;
@@ -28,6 +31,7 @@ public class UserDetailsDto implements UserDetails {
     private String profileUploadPath;
     private boolean isDefaultImage;
 
+
     public UserDetailsDto(User user, List<UserAuthority> userAuthorities) {
         this.id = user.getId();
         this.email = user.getEmail();
@@ -36,7 +40,7 @@ public class UserDetailsDto implements UserDetails {
         this.tel = user.getTel();
         this.userStatus = user.getUserStatus();
         this.userAuthorities = userAuthorities.stream()
-                .map(auth->auth.getAuthorityType().name())
+                .map(auth -> auth.getAuthorityType().name())
                 .toList();
         UserProfileFile userProfileFile = user.getUserProfileFile();
         this.profileId = userProfileFile.getId();
@@ -46,10 +50,10 @@ public class UserDetailsDto implements UserDetails {
         this.isDefaultImage = userProfileFile.isDefaultImage();
     }
 
-    public void updateProfileImage(String fileName,String uuid,String profileUploadPath,boolean isDefaultImage){
+    public void updateProfileImage(String fileName, String uuid, String profileUploadPath, boolean isDefaultImage) {
         this.profileFileName = fileName;
         this.profileUUID = uuid;
-        this.profileUploadPath=profileUploadPath;
+        this.profileUploadPath = profileUploadPath;
         this.isDefaultImage = isDefaultImage;
     }
 
@@ -89,10 +93,22 @@ public class UserDetailsDto implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return userStatus ==UserStatus.ACTIVATE;
+        return userStatus == UserStatus.ACTIVATE;
     }
 
     public void updateNickName(String nickName) {
         this.nickName = nickName;
+    }
+
+//    ==================================
+//    OAuth2User 구현 메소드
+    @Override
+    public Map<String, Object> getAttributes() {
+        return null;
+    }
+
+    @Override
+    public String getName() {
+        return null;
     }
 }

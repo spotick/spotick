@@ -18,7 +18,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
             select u from User u join fetch u.userProfileFile
             where u.email = :email
             """)
-    User findUserAndProfileByEmail(@Param("email") String email);
+    Optional<User> findUserAndProfileByEmail(@Param("email") String email);
 
     //    프로필 사진 및 유저 정보 조회(비밀번호 제외)
     @Query("select new com.app.spotick.domain.dto.user.UserProfileDto(" +

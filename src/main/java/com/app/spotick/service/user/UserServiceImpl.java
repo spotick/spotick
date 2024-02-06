@@ -68,11 +68,9 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     @Transactional(readOnly = true)
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User foundUser = userRepository.findUserAndProfileByEmail(username);
+        User foundUser = userRepository.findUserAndProfileByEmail(username)
+                .orElseThrow(()->new UsernameNotFoundException("해당 이메일로 등록된 회원 없음"));
 
-        if (foundUser == null) {
-            throw new UsernameNotFoundException("해당 이메일로 등록된 회원 없음");
-        }
         return new UserDetailsDto(foundUser, authorityRepository.findUserAuthorityByUser(foundUser));
     }
 
