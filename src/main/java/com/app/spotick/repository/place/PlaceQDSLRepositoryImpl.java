@@ -1,11 +1,9 @@
 package com.app.spotick.repository.place;
 
-import com.app.spotick.domain.dto.place.PlaceDetailDto;
-import com.app.spotick.domain.dto.place.PlaceFileDto;
-import com.app.spotick.domain.dto.place.PlaceListDto;
-import com.app.spotick.domain.dto.place.PlaceManageListDto;
+import com.app.spotick.domain.dto.place.*;
 import com.app.spotick.domain.dto.place.reservation.PlaceReserveBasicInfoDto;
 import com.app.spotick.domain.dto.place.reservation.PlaceReservedNotReviewedDto;
+import com.app.spotick.domain.dto.place.review.ContractedPlaceDto;
 import com.app.spotick.domain.entity.place.*;
 import com.app.spotick.domain.type.place.PlaceReservationStatus;
 import com.app.spotick.domain.type.post.PostStatus;
@@ -37,6 +35,7 @@ import static com.app.spotick.domain.entity.place.QPlaceFile.placeFile;
 import static com.app.spotick.domain.entity.place.QPlaceInquiry.placeInquiry;
 import static com.app.spotick.domain.entity.place.QPlaceReservation.*;
 import static com.app.spotick.domain.entity.place.QPlaceReview.placeReview;
+import static com.querydsl.core.group.GroupBy.groupBy;
 import static com.querydsl.core.group.GroupBy.list;
 
 @RequiredArgsConstructor
@@ -299,7 +298,8 @@ public class PlaceQDSLRepositoryImpl implements PlaceQDSLRepository {
                 .from(place)
                 .where(
                         place.user.id.eq(userId),
-                        place.placeStatus.ne(PostStatus.REPLACED)
+                        place.placeStatus.ne(PostStatus.REPLACED),
+                        place.placeStatus.ne(PostStatus.DELETED)
                 )
                 .orderBy(place.id.desc())
                 .offset(pageable.getOffset())
@@ -334,6 +334,94 @@ public class PlaceQDSLRepositoryImpl implements PlaceQDSLRepository {
         });
 
         return PageableExecutionUtils.getPage(placeManageListDtos, pageable, totalCount::fetchOne);
+    }
+
+    @Override
+    public Optional<PlaceDto> findPlaceInfo(Long placeId, Long userId) {
+
+        return queryFactory
+                .from(place)
+                .leftJoin(place.placeFileList, placeFile)
+                .where(
+                        place.id.eq(placeId),
+                        place.user.id.eq(userId),
+                        place.placeStatus.ne(PostStatus.DELETED)
+                )
+                .transform(groupBy(place.id)
+                        .list(Projections.constructor(PlaceDto.class,
+                                place.id,
+                                place.title,
+                                place.subTitle,
+                                place.lat,
+                                place.lng,
+                                place.placeAddress,
+                                list(
+                                        Projections.constructor(PlaceFileDto.class,
+                                                placeFile.id,
+                                                placeFile.fileName,
+                                                placeFile.uuid,
+                                                placeFile.uploadPath,
+                                                placeFile.place.id
+                                        )
+                                ),
+                                place.info,
+                                place.rule,
+                                place.defaultPeople,
+                                place.price,
+                                place.surcharge,
+                                place.bankName,
+                                place.accountNumber,
+                                place.accountHolder
+                        ))
+                )
+                .stream()
+                .findFirst();
+    }
+
+    @Override
+    public Optional<ContractedPlaceDto> findPlaceBriefly(Long placeId, Long userId) {
+
+        JPQLQuery<Double> reviewAvg = createReviewAvgSub(place);
+
+        JPQLQuery<Long> reviewCount = createReviewCountSub(place);
+
+        JPQLQuery<Long> bookmarkCount = createBookmarkCountSub(place);
+
+        Optional<ContractedPlaceDto> contractedPlaceDto = Optional.ofNullable(queryFactory
+                .from(place)
+                .leftJoin(place.placeFileList, placeFile)
+                .where(
+                        place.id.eq(placeId),
+                        place.user.id.eq(userId),
+                        placeFile.id.eq(
+                                JPAExpressions.select(placeFile.id.min())
+                                        .from(placeFile)
+                                        .where(placeFile.place.id.eq(place.id))
+                        )
+                )
+                .select(
+                        Projections.constructor(ContractedPlaceDto.class,
+                                place.id,
+                                place.title,
+                                place.price,
+                                place.placeAddress,
+                                Projections.constructor(PlaceFileDto.class,
+                                        placeFile.id,
+                                        placeFile.fileName,
+                                        placeFile.uuid,
+                                        placeFile.uploadPath,
+                                        place.id
+                                ),
+                                reviewAvg,
+                                reviewCount,
+                                bookmarkCount
+                        )
+                )
+                .fetchOne());
+
+        contractedPlaceDto.ifPresent(placeDto -> placeDto.getPlaceAddress().cutAddress());
+
+        return contractedPlaceDto;
     }
 
     private JPQLQuery<Double> createReviewAvgSub(QPlace place) {

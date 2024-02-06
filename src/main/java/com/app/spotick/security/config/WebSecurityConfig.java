@@ -58,6 +58,7 @@ public class WebSecurityConfig {
                         .logoutSuccessUrl("/")
                         .invalidateHttpSession(true)
                 )
+
                 .exceptionHandling(exceptionHandling -> exceptionHandling
                         .accessDeniedPage("/")
                         .authenticationEntryPoint((request, response, authException) -> {

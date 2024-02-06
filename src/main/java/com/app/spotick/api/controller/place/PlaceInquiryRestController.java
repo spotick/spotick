@@ -1,22 +1,25 @@
 package com.app.spotick.api.controller.place;
 
+import com.app.spotick.api.dto.place.InquiryResponseDto;
 import com.app.spotick.api.dto.place.PlaceInquiryDto;
 import com.app.spotick.domain.dto.user.UserDetailsDto;
 import com.app.spotick.domain.pagination.Pagination;
 import com.app.spotick.service.place.inquiry.PlaceInquiryService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
+import java.util.NoSuchElementException;
 
 @RestController
 @RequestMapping("/places/inquiry")
@@ -47,7 +50,25 @@ public class PlaceInquiryRestController {
                 .body(Map.of("inquiryPage", inquiryPage,"pageBlock", pageBlock));
     }
 
+    @PatchMapping("/response")
+    public ResponseEntity<String> updateResponse(@Valid @RequestBody InquiryResponseDto inquiryResponseDto,
+                                                 BindingResult result) {
+        if (result.hasErrors()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("답변을 제대로 입력해주세요.");
+        }
 
+        try {
+            inquiryService.updateInquiryResponse(inquiryResponseDto);
+        } catch (NoSuchElementException e) {
+
+            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                    .body("오류가 발생했습니다.<br>다시 시도해주세요.");
+        }
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body("답변이 작성되었습니다.");
+    }
 
 
 

@@ -22,4 +22,8 @@ public abstract class InquiryBase extends Period {
         this.content = content;
         this.response = response;
     }
+
+    public void updateResponse(String response) {
+        this.response = response;
+    }
 }

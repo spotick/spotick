@@ -1,5 +1,6 @@
 package com.app.spotick.repository.place;
 
+import com.app.spotick.domain.dto.place.PlaceDto;
 import com.app.spotick.domain.dto.place.reservation.PlaceReserveBasicInfoDto;
 import com.app.spotick.domain.entity.place.Place;
 import com.app.spotick.domain.entity.user.User;

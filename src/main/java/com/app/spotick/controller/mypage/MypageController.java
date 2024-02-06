@@ -3,7 +3,9 @@ package com.app.spotick.controller.mypage;
 import com.app.spotick.domain.dto.place.PlaceListDto;
 import com.app.spotick.domain.dto.place.PlaceManageListDto;
 import com.app.spotick.domain.dto.place.PlaceReservationListDto;
+import com.app.spotick.domain.dto.place.inquiry.InquiryUnansweredDto;
 import com.app.spotick.domain.dto.place.reservation.PlaceReservedNotReviewedDto;
+import com.app.spotick.domain.dto.place.review.ContractedPlaceDto;
 import com.app.spotick.domain.dto.place.review.PlaceReviewRegisterDto;
 import com.app.spotick.domain.dto.place.review.MypageReviewListDto;
 import com.app.spotick.domain.dto.user.UserDetailsDto;
@@ -33,6 +35,7 @@ import org.springframework.web.servlet.view.RedirectView;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.NoSuchElementException;
 import java.util.Objects;
 
 @Controller
@@ -329,21 +332,44 @@ public class MypageController {
         model.addAttribute("pagination", pagination);
     }
 
+    @GetMapping("/places/inquiries/{placeId}")
+    public String goToPlacesInquiryList(@RequestParam(value = "page", defaultValue = "1") int page,
+                                      @PathVariable("placeId") Long placeId,
+                                      @AuthenticationPrincipal UserDetailsDto userDetailsDto,
+                                      Model model) {
+        Pageable pageable = PageRequest.of(page - 1, 6);
+
+        Page<InquiryUnansweredDto> inquiriesPage
+                = userService.findUnansweredInquiriesPage(placeId, userDetailsDto.getId(), pageable);
+        Pagination<InquiryUnansweredDto> pagination
+                = new Pagination<>(5, pageable, inquiriesPage);
+
+        model.addAttribute("inquiriesPage", inquiriesPage);
+        model.addAttribute("pagination", pagination);
+
+        return "/mypage/places/inquiries";
+    }
+
+    @GetMapping("/places/reservations/{placeId}")
+    public String goToPlacesReservationList(@PathVariable("placeId") Long placeId,
+                                          @AuthenticationPrincipal UserDetailsDto userDetailsDto,
+                                          Model model) {
+
+        ContractedPlaceDto placeDto = userService.findPlaceBriefly(placeId, userDetailsDto.getId()).orElseThrow(
+                NoSuchElementException::new
+        );
+
+        model.addAttribute("placeDto", placeDto);
+
+        return "/mypage/places/reservations";
+    }
+
     @GetMapping("/tickets")
     public void goToTickets() {
     }
 
-    @GetMapping("/tickets/inquiry-list")
+    @GetMapping("/tickets/inquiries")
     public void goToTicketsInquiryList() {
-    }
-
-
-    @GetMapping("/places/inquiry-list")
-    public void goToPlacesInquiryList() {
-    }
-
-    @GetMapping("/places/reservation-list")
-    public void goToPlacesReservationList() {
     }
 
     private String getMaskedEmail(String email) {

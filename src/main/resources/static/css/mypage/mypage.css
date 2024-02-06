@@ -1051,6 +1051,16 @@
     box-shadow: rgba(0, 0, 0, 0.1) 2px 2px 8px 0;
 }
 
+.mpcp-no-list {
+    font-size: 16px;
+    line-height: 24px;
+    text-align: center;
+    color: rgb(212, 215, 226);
+    margin: 60px 0;
+    display: flex;
+    justify-content: center;
+}
+
 .mpcp-item {
     display: block;
 }
@@ -1078,7 +1088,7 @@
     height: 30px;
     border-radius: 100%;
     overflow: hidden;
-    margin-right: 16px;
+    margin-right: 12px;
 }
 
 .mpcpi-ruser-icon img {

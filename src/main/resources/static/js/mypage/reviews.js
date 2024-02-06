@@ -103,7 +103,7 @@ function postReview(reservationId, score, content) {
     fetch('/reviews/write', {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json', // JSON 형태의 데이터를 전송한다고 명시
+            'Content-Type': 'application/json',
         },
         body: JSON.stringify(reviewRegisterDto)
     })

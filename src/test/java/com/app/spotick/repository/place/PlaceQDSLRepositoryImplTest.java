@@ -1,6 +1,7 @@
 package com.app.spotick.repository.place;
 
 import com.app.spotick.domain.dto.place.PlaceDetailDto;
+import com.app.spotick.domain.dto.place.PlaceDto;
 import com.app.spotick.domain.dto.place.PlaceFileDto;
 import com.app.spotick.domain.dto.place.PlaceListDto;
 import com.app.spotick.domain.dto.place.reservation.PlaceReserveBasicInfoDto;
@@ -45,6 +46,7 @@ import static com.app.spotick.domain.entity.place.QPlace.place;
 import static com.app.spotick.domain.entity.place.QPlaceBookmark.placeBookmark;
 import static com.app.spotick.domain.entity.place.QPlaceFile.placeFile;
 import static com.app.spotick.domain.entity.place.QPlaceReview.placeReview;
+import static com.querydsl.core.group.GroupBy.groupBy;
 import static com.querydsl.core.group.GroupBy.list;
 
 
@@ -505,6 +507,50 @@ class PlaceQDSLRepositoryImplTest {
         log.info("placeReserveBasicInfoDto : {}", placeReserveBasicInfoDto);
 
 
+    }
+
+    @Test
+    public void onePlaceInfo() {
+        PlaceDto placeDto = queryFactory.select(place)
+                .from(place)
+                .leftJoin(place.placeFileList, placeFile)
+                .where(
+                        place.id.eq(1L),
+                        place.user.id.eq(2L),
+                        place.placeStatus.ne(PostStatus.DELETED)
+                )
+                .transform(groupBy(place.id)
+                        .list(Projections.constructor(PlaceDto.class,
+                                place.id,
+                                place.title,
+                                place.subTitle,
+                                place.lat,
+                                place.lng,
+                                place.placeAddress,
+                                list(
+                                        Projections.constructor(PlaceFileDto.class,
+                                                placeFile.id,
+                                                placeFile.fileName,
+                                                placeFile.uuid,
+                                                placeFile.uploadPath,
+                                                placeFile.place.id
+                                        )
+                                ),
+                                place.info,
+                                place.rule,
+                                place.defaultPeople,
+                                place.price,
+                                place.surcharge,
+                                place.bankName,
+                                place.accountNumber,
+                                place.accountHolder
+                        ))
+                )
+                .stream()
+                .findFirst()
+                .orElse(null);
+
+        System.out.println("fetch = " + placeDto);
     }
 
 

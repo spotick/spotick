@@ -22,7 +22,7 @@
     <div th:replace="~{global-templates/global-dialogue-modal :: global-dialogue}"></div>
     <div th:replace="~{global-templates/global-dialogue-modal :: global-selection}"></div>
     <div class="modal-place" style="height: 80%; overflow-y: auto">
-        <form action="" class="register-form" enctype="multipart/form-data" method="post">
+        <div class="register-form">
             <div class="guide-title-box">
                 <p>장소 정보 수정</p>
             </div>
@@ -38,7 +38,7 @@
                     <p class="invalid-msg"></p>
                 </div>
                 <div class="input-box">
-                    <input id="placeName" name="placeName" placeholder="장소를 대표하는 이름을 입력해 주세요" required type="text">
+                    <input id="placeTitle" name="placeName" placeholder="장소를 대표하는 이름을 입력해 주세요" required type="text">
                 </div>
             </div>
 
@@ -98,7 +98,13 @@
                     <p>장소 사진을 넣어주세요</p>
                 </label>
                 <div class="file-container none">
-                    <ul class="file-wrap">
+                    <ul class="file-wrap" id="imageFileWrap">
+                        <li class="file-item">
+                            <img src="${e.target.result}" alt="">
+                            <button type="button" class="delete" data-name="${file.name}">
+                                <i class="fa-solid fa-x"></i>
+                            </button>
+                        </li>
                     </ul>
 
                     <div class="img-button-box">
@@ -216,7 +222,7 @@
                 <button class="cancel" type="button">취소</button>
                 <button class="submit-btn flex-align-center" type="button">신청하기</button>
             </div>
-        </form>
+        </div>
     </div>
 </div>
 
@@ -316,12 +322,10 @@
                                                      th:if="*{postStatus == postStatus.DISABLED}">
                                                     <span>장소 대여 재개</span>
                                                 </div>
-                                                <div class="action-item"
-                                                     onclick="placeManageService.editPlace('장소 1 테스트', '테스트 정보', 36.35181504357576, 127.37817628873198, '대전광역시 서구 대덕대로 211', '312', '테스트', '테스트1234', 10000, 4, '조남호', '우리', '740101-45-123419')">
+                                                <div class="action-item editPlace">
                                                     <span>장소 정보 수정</span>
                                                 </div>
-                                                <div class="action-item"
-                                                     onclick="placeManageService.showGsForRemovePlace(5)">
+                                                <div class="action-item deletePlace">
                                                     <span>장소 삭제</span>
                                                 </div>
                                             </div>
@@ -333,6 +337,13 @@
                     </th:block>
                 </th:block>
             </div>
+
+            <th:block th:if="${hostPlacesPage.getTotalElements() == 0}">
+                <div class="mp-no-list">
+                    <span>저장된 북마크가 없습니다.</span>
+                </div>
+            </th:block>
+
             <!--            <div class="mpcp-wrap" style="width: 80%">-->
             <!--                <article>-->
             <!--                    <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">-->

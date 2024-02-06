@@ -9,7 +9,8 @@ public enum PostStatus {
     REJECTED("거절됨"),             // 거절
     REPLACED("대체됨"),             // 대체됨
     MODIFICATION_PENDING("수정 대기중"),  // 수정 대기중
-    DISABLED("비활성화")    //비활성화(호스트가 임의로 중단할 때)
+    DISABLED("비활성화"),    //비활성화(호스트가 임의로 중단할 때)
+    DELETED("삭제됨") // 소프트딜리트
     ;
 
     private final String displayName;

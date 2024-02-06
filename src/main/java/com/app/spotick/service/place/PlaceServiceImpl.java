@@ -1,6 +1,7 @@
 package com.app.spotick.service.place;
 
 import com.app.spotick.domain.dto.place.PlaceDetailDto;
+import com.app.spotick.domain.dto.place.PlaceDto;
 import com.app.spotick.domain.dto.place.PlaceListDto;
 import com.app.spotick.domain.dto.place.PlaceRegisterDto;
 import com.app.spotick.domain.dto.place.reservation.PlaceReserveBasicInfoDto;
@@ -83,12 +84,12 @@ public class PlaceServiceImpl implements PlaceService{
     }
 
     @Override
-    public void updateStatusDisabled(Long placeId) {
+    public void updateStatus(Long placeId, PostStatus postStatus) {
         Place foundPlace = placeRepository.findById(placeId).orElseThrow(
                 NoSuchElementException::new
         );
 
-        foundPlace.setPlaceStatus(PostStatus.DISABLED);
+        foundPlace.setPlaceStatus(postStatus);
     }
 
     @Override
@@ -103,14 +104,9 @@ public class PlaceServiceImpl implements PlaceService{
     }
 
     @Override
-    public void updateStatusApproved(Long placeId) {
-        Place foundPlace = placeRepository.findById(placeId).orElseThrow(
-                NoSuchElementException::new
-        );
-
-        foundPlace.setPlaceStatus(PostStatus.APPROVED);
+    public Optional<PlaceDto> findPlaceInfo(Long placeId, Long userId) {
+        return placeRepository.findPlaceInfo(placeId, userId);
     }
-
 }
 
 

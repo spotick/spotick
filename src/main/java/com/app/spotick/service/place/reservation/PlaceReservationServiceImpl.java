@@ -2,6 +2,7 @@ package com.app.spotick.service.place.reservation;
 
 import com.app.spotick.domain.dto.place.reservation.PlaceReservationTimeDto;
 import com.app.spotick.domain.dto.place.reservation.PlaceReserveRegisterDto;
+import com.app.spotick.domain.dto.place.reservation.ReservationRequestListDto;
 import com.app.spotick.domain.entity.place.Place;
 import com.app.spotick.domain.entity.place.PlaceReservation;
 import com.app.spotick.domain.entity.user.User;
@@ -10,6 +11,8 @@ import com.app.spotick.repository.place.PlaceRepository;
 import com.app.spotick.repository.place.reservation.PlaceReservationRepository;
 import com.app.spotick.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -94,6 +97,11 @@ public class PlaceReservationServiceImpl implements PlaceReservationService {
         LocalDateTime startTime = parseToLocalDateTime(selectedDate + " 00:00:00");
         LocalDateTime endTime = startTime.plusDays(1).plusHours(23);
         return placeReservationRepository.findReservedTimes(placeId,startTime,endTime);
+    }
+
+    @Override
+    public Slice<ReservationRequestListDto> getReservationsOfPlace(Long placeId, Long userId, Pageable pageable) {
+        return placeReservationRepository.findReservationsByPlaceIdAndUserIdSlice(placeId, userId, pageable);
     }
 }
 
