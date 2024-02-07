@@ -65,6 +65,18 @@ public class UserServiceImpl implements UserService, UserDetailsService {
                 .user(savedUser)
                 .build());
     }
+    @Override
+    public void join(UserJoinDto userJoinDto, UserProfileFile userProfileFile) {
+        userJoinDto.setPassword(encodePassword(userJoinDto.getPassword()));
+
+        User savedUser = userRepository.save(userJoinDto.toEntity(userProfileFile));
+        userJoinDto.setId(savedUser.getId());
+
+        authorityRepository.save(UserAuthority.builder()
+                .authorityType(AuthorityType.ROLE_USER)
+                .user(savedUser)
+                .build());
+    }
 
     @Override
     @Transactional(readOnly = true)

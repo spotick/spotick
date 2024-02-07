@@ -23,14 +23,15 @@ import java.util.UUID;
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class PlaceFileServiceImpl implements PlaceFileService{
+public class PlaceFileServiceImpl implements PlaceFileService {
     private final PlaceFileRepository placeFileRepository;
 
     @Value("${root.dir}")
     private String ROOT_DIR;
+
     @Override
     public void registerAndSavePlaceFile(List<MultipartFile> placeFiles, Place place) throws IOException {
-        for(MultipartFile file:placeFiles){
+        for (MultipartFile file : placeFiles) {
             PlaceFile placeFile = saveFile(file);
             placeFile.setPlace(place);
             placeFileRepository.save(placeFile);
@@ -39,27 +40,27 @@ public class PlaceFileServiceImpl implements PlaceFileService{
 
     private PlaceFile saveFile(MultipartFile placeFile) throws IOException {
         String originName = placeFile.getOriginalFilename();
-        originName = originName.replace("\\s",""); //파일 이름에 공백 제거
+        originName = originName.replace("\\s", ""); //파일 이름에 공백 제거
         UUID uuid = UUID.randomUUID();
 
-        String sysName = uuid.toString()+"_"+originName;
+        String sysName = uuid.toString() + "_" + originName;
 
-        File uploadPath = new File(ROOT_DIR,getUploadPath());
+        File uploadPath = new File(ROOT_DIR, getUploadPath());
 
-        if(!uploadPath.exists()){
+        if (!uploadPath.exists()) {
             uploadPath.mkdirs();
         }
 
-        File uploadFile = new File(uploadPath,sysName);
+        File uploadFile = new File(uploadPath, sysName);
 
         placeFile.transferTo(uploadFile);
 
-        if(Files.probeContentType(uploadFile.toPath()).startsWith("image")){
-            File thumbnailFile = new File(uploadPath,"t_"+sysName);
+        if (Files.probeContentType(uploadFile.toPath()).startsWith("image")) {
+            File thumbnailFile = new File(uploadPath, "t_" + sysName);
 
-            try(FileOutputStream out = new FileOutputStream(thumbnailFile);
-            InputStream in = placeFile.getInputStream()){
-            Thumbnailator.createThumbnail(placeFile.getInputStream(),out,300,225);
+            try (FileOutputStream out = new FileOutputStream(thumbnailFile);
+                 InputStream in = placeFile.getInputStream()) {
+                Thumbnailator.createThumbnail(in, out, 300, 225);
             }
             // try resource 를 활용해 자동으로 리소스를 닫아준다 out.close 생략 가능
         }
