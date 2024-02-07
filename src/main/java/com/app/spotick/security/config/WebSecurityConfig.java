@@ -70,6 +70,7 @@ public class WebSecurityConfig {
                         .clearAuthentication(true)
 
                 )
+
                 .exceptionHandling(exceptionHandling -> exceptionHandling
                         .accessDeniedPage("/")
                         .authenticationEntryPoint((request, response, authException) -> {

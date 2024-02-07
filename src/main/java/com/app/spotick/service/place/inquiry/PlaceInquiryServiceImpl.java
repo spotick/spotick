@@ -1,6 +1,7 @@
 package com.app.spotick.service.place.inquiry;
 
 import com.app.spotick.api.dto.place.PlaceInquiryDto;
+import com.app.spotick.api.dto.place.InquiryResponseDto;
 import com.app.spotick.domain.dto.place.PlaceInquiryListDto;
 import com.app.spotick.domain.entity.place.Place;
 import com.app.spotick.domain.entity.place.PlaceInquiry;
@@ -65,6 +66,17 @@ public class PlaceInquiryServiceImpl implements PlaceInquiryService {
         );
 
         inquiryRepository.delete(foundInquiry);
+    }
+
+    @Override
+    public void updateInquiryResponse(InquiryResponseDto inquiryResponseDto) {
+        Place tmpPlace = placeRepository.getReferenceById(inquiryResponseDto.getPlaceId());
+
+        PlaceInquiry foundInquiry = inquiryRepository.findByIdAndPlace(inquiryResponseDto.getInquiryId(), tmpPlace).orElseThrow(
+                NoSuchElementException::new
+        );
+
+        foundInquiry.updateResponse(inquiryResponseDto.getResponse());
     }
 }
 

@@ -1,6 +1,6 @@
 const content = document.getElementById('detailContent');
 const response = document.getElementById('detailResponse');
-4
+
 
 let currentPage = 0;
 

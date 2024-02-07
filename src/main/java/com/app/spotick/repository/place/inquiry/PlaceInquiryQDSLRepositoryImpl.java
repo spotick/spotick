@@ -2,11 +2,15 @@ package com.app.spotick.repository.place.inquiry;
 
 import com.app.spotick.domain.dto.place.PlaceFileDto;
 import com.app.spotick.domain.dto.place.PlaceInquiryListDto;
+import com.app.spotick.domain.dto.place.inquiry.InquiryUnansweredDto;
 import com.app.spotick.domain.entity.place.PlaceInquiry;
+import com.app.spotick.domain.entity.user.QUser;
+import com.app.spotick.domain.entity.user.QUserProfileFile;
 import com.app.spotick.domain.type.post.PostStatus;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.JPQLQuery;
+import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -21,10 +25,13 @@ import static com.app.spotick.domain.entity.place.QPlaceBookmark.placeBookmark;
 import static com.app.spotick.domain.entity.place.QPlaceFile.placeFile;
 import static com.app.spotick.domain.entity.place.QPlaceInquiry.placeInquiry;
 import static com.app.spotick.domain.entity.place.QPlaceReview.placeReview;
+import static com.app.spotick.domain.entity.user.QUser.*;
+import static com.app.spotick.domain.entity.user.QUserProfileFile.*;
 
 @RequiredArgsConstructor
 public class PlaceInquiryQDSLRepositoryImpl implements PlaceInquiryQDSLRepository {
     private final JPAQueryFactory queryFactory;
+
     @Override
     public Page<PlaceInquiry> inquiryListWithPage(Long placeId, Pageable pageable) {
 
@@ -41,7 +48,7 @@ public class PlaceInquiryQDSLRepositoryImpl implements PlaceInquiryQDSLRepositor
                 .where(placeInquiry.place.id.eq(placeId))
                 .fetchOne();
 
-        return new PageImpl<>(contents,pageable,totalCount);
+        return new PageImpl<>(contents, pageable, totalCount);
     }
 
     @Override
@@ -108,6 +115,50 @@ public class PlaceInquiryQDSLRepositoryImpl implements PlaceInquiryQDSLRepositor
 
 
         return PageableExecutionUtils.getPage(placeInquiryListDtos, pageable, totalCountQuery::fetchOne);
+    }
+
+    @Override
+    public Page<InquiryUnansweredDto> findUnansweredInquiriesPage(Long placeId, Long userId, Pageable pageable) {
+
+        JPAQuery<Long> totalCount = queryFactory.select(placeInquiry.count())
+                .from(placeInquiry)
+                .join(placeInquiry.place, place)
+                .where(
+                        place.id.eq(placeId),
+                        place.user.id.eq(userId),
+                        placeInquiry.response.isNull()
+                );
+
+        List<InquiryUnansweredDto> inquiryDtos = queryFactory
+                .from(placeInquiry)
+                .join(placeInquiry.place, place)
+                .join(placeInquiry.user, user)
+                .join(user.userProfileFile, userProfileFile)
+                .where(
+                        place.id.eq(placeId),
+                        place.user.id.eq(userId),
+                        placeInquiry.response.isNull()
+                )
+                .orderBy(placeInquiry.id.desc())
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .select(
+                        Projections.constructor(InquiryUnansweredDto.class,
+                                placeInquiry.id,
+                                user.id,
+                                place.id,
+                                placeInquiry.title,
+                                placeInquiry.content,
+                                user.nickName,
+                                userProfileFile.fileName,
+                                userProfileFile.uuid,
+                                userProfileFile.uploadPath,
+                                userProfileFile.isDefaultImage
+                        )
+                )
+                .fetch();
+
+        return PageableExecutionUtils.getPage(inquiryDtos, pageable, totalCount::fetchOne);
     }
 }
 

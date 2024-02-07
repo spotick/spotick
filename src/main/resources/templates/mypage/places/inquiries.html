@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <meta charset="UTF-8">
@@ -23,29 +23,35 @@
     <div class="modal-place">
         <div class="modal-place-user-con">
             <div class="modal-user-icon">
-                <img
-                        src="https://img.hourplace.co.kr/image/user/109990/2023/12/05/79a6f8ac-6b84-4977-a2da-baa111bcd54d?s=2000x2000&amp;amp;t=inside&amp;amp;q=80&amp;amp;f=jpeg&amp;amp;">
+                <img id="detailProfileImg">
             </div>
-            <span class="modal-user-name">your name here</span>
+            <span class="modal-user-name" id="detailNickName"></span>
         </div>
         <div class="modal-place-content-container">
             <div class="modal-place-con-box">
                 <div class="modal-place-title">요청 사항</div>
                 <div class="modal-place-input-con">
-                            <textarea class="modal-place-txarea" cols="30" readonly
-                                      rows="10">테스트 요청사항 테스트 요청사항 테스트 요청사항 테스트 요청사항 테스트 요청사항 테스트 요청사항 테스트 요청사항 테스트 요청사항 </textarea>
+                    <textarea class="modal-place-txarea" cols="30"
+                              id="detailContent" readonly
+                              rows="10"></textarea>
                 </div>
                 <div class="modal-place-title">답변 작성</div>
                 <div class="modal-place-input-con">
-                    <textarea class="modal-place-txarea" cols="30" placeholder="여기에 입력하세요." rows="10"></textarea>
+                    <textarea class="modal-place-txarea" cols="30" id="response"
+                              placeholder="여기에 입력하세요." rows="10"></textarea>
                 </div>
+                <div class="error-content" style="margin-top: 4px;"></div>
             </div>
         </div>
         <div class="modal-place-btn-wrap" style="justify-content: center;">
-            <button class="modal-place-btn" style="background-color: rgb(40, 184, 40);" type="button">
+            <button class="modal-place-btn" id="requestBtn"
+                    style="background-color: rgb(40, 184, 40);"
+                    type="button">
                 <span>작성 완료</span>
             </button>
         </div>
+        <input id="inquiryId" type="hidden">
+        <input id="placeId" type="hidden">
     </div>
 </div>
 
@@ -94,25 +100,42 @@
                         </div>
                     </div>
                     <div class="mpcp-list">
-                        <div class="mpcp-item">
-                            <div class="mpcpi-top">
-                                <div class="mpcpi-request-user-con">
-                                    <div class="mpcpi-ruser-icon">
-                                        <img
-                                                src="https://img.hourplace.co.kr/image/user/109990/2023/12/05/79a6f8ac-6b84-4977-a2da-baa111bcd54d?s=2000x2000&amp;amp;t=inside&amp;amp;q=80&amp;amp;f=jpeg&amp;amp;">
+                        <th:block th:if="${#lists.size(inquiriesPage)}">
+                            <th:block th:each="inquiry:${inquiriesPage}">
+                                <div class="mpcp-item" th:object="${inquiry}">
+                                    <div class="mpcpi-top">
+                                        <div class="mpcpi-request-user-con">
+                                            <div class="mpcpi-ruser-icon">
+                                                <img th:alt="*{nickName}"
+                                                     th:src="*{isDefaultImage
+                                                    ? '/file/default/display?fileName=' + fileName
+                                                    : '/file/display?fileName=' + uploadPath + '/t_' + uuid + '_' + fileName}">
+                                            </div>
+                                            <span class="mpcp-ruser-name" th:text="*{nickName}"></span>
+                                        </div>
                                     </div>
-                                    <span class="mpcp-ruser-name">testuser111111111111111111111111</span>
+                                    <div class="mpcp-body">
+                                        <div class="mpcp-content" style="font-size: 18px;">
+                                            <span th:text="*{inquiryTitle}"></span>
+                                        </div>
+                                        <div class="mpcp-btn detailInquiryBtn" th:data-content="*{content}"
+                                             th:data-id="*{id}"
+                                             th:data-img="*{isDefaultImage
+                                                    ? '/file/default/display?fileName=' + fileName
+                                                    : '/file/display?fileName=' + uploadPath + '/t_' + uuid + '_' + fileName}"
+                                             th:data-nickname="*{nickName}" th:data-place-id="*{placeId}"
+                                             th:data-title="*{inquiryTitle}">
+                                            <span>상세보기</span>
+                                        </div>
+                                    </div>
                                 </div>
+                            </th:block>
+                        </th:block>
+                        <th:block th:if="${inquiriesPage.getTotalElements() == 0}">
+                            <div class="mpcp-no-list">
+                                <span>문의 내역이 없습니다.</span>
                             </div>
-                            <div class="mpcp-body">
-                                <div class="mpcp-content" style="font-size: 18px;">
-                                    <span>문의사항 제목</span>
-                                </div>
-                                <div class="mpcp-btn" onclick="openModal(modalPlace)">
-                                    <span>상세보기</span>
-                                </div>
-                            </div>
-                        </div>
+                        </th:block>
                     </div>
                 </div>
             </div>
@@ -126,10 +149,13 @@
 <script src="https://code.jquery.com/jquery-3.6.4.js"></script>
 <script src="/js/global-js/global.js"></script>
 <script src="/js/mypage/mypage.js"></script>
-<script src="/js/mypage/place.js"></script>
+<script src="/js/mypage/place-inquiry.js"></script>
 <script src="/js/global-js/chat.js"></script>
 <script>
     document.getElementById('places').classList.add('active');
+</script>
+<script th:inline="javascript">
+    console.log([[${inquiriesPage}]]);
 </script>
 
 </html>

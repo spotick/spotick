@@ -1,5 +1,6 @@
 package com.app.spotick.api.controller.place;
 
+import com.app.spotick.domain.dto.place.PlaceDto;
 import com.app.spotick.domain.dto.user.UserDetailsDto;
 import com.app.spotick.domain.entity.place.Place;
 import com.app.spotick.domain.type.post.PostStatus;
@@ -33,7 +34,7 @@ public class PlaceRestController {
 
         placeService.rejectAllReservationRequests(placeId);
 
-        placeService.updateStatusDisabled(placeId);
+        placeService.updateStatus(placeId, PostStatus.DISABLED);
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body("해당 장소를 비활성화시켰습니다.");
@@ -54,9 +55,42 @@ public class PlaceRestController {
                     .body("비활성화된 장소만 활성화로 전환 할 수 있습니다.");
         }
 
-        placeService.updateStatusApproved(placeId);
+        placeService.updateStatus(placeId, PostStatus.APPROVED);
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body("해당 장소를 활성화시켰습니다. 이제부터 대여가 가능합니다.");
+    }
+
+    @PatchMapping("/delete/{placeId}")
+    public ResponseEntity<String> softDeletePlace(@PathVariable("placeId") Long placeId,
+                                                  @AuthenticationPrincipal UserDetailsDto userDetailsDto) {
+        Place foundPlace = placeService.findPlace(placeId, userDetailsDto.getId()).orElse(null);
+
+        if (foundPlace == null) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                    .body("등록된 장소를 조회하는데 실패했습니다.<br>다시 시도해주세요.");
+        }
+
+        placeService.rejectAllReservationRequests(placeId);
+
+        placeService.updateStatus(placeId, PostStatus.DELETED);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body("해당 장소를 삭제했습니다.");
+    }
+
+    @GetMapping("/get/{placeId}")
+    public ResponseEntity<?> getPlaceInfo(@PathVariable("placeId") Long placeId,
+                                          @AuthenticationPrincipal UserDetailsDto userDetailsDto) {
+
+        PlaceDto foundPlace = placeService.findPlaceInfo(placeId, userDetailsDto.getId()).orElse(null);
+
+        if (foundPlace == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("장소를 찾을 수 없습니다.");
+        }
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(foundPlace);
     }
 }
