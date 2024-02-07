@@ -95,10 +95,6 @@ public class WebSecurityConfig {
                         .defaultSuccessUrl("/")
                 )
 
-
-
-
-
         ;
 
         return http.build();

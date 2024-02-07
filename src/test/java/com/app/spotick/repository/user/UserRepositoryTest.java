@@ -45,7 +45,6 @@ class UserRepositoryTest {
                 .build();
 
         user = User.builder()
-                .id(1L)
                 .email("aaa")
                 .password("1234")
                 .nickName("홍길동")
@@ -94,6 +93,13 @@ class UserRepositoryTest {
 
         assertThat(userProfileDto).isNotNull();
         System.out.println("userProfileDto = " + userProfileDto);
+    }
+
+    @Test
+    @DisplayName("회원 프로필 사진 테스트")
+    void findUserProfileFileByUserIdTest(){
+        UserProfileFile userProfileFile = userRepository.findUserProfileFileByUserId(user.getId());
+        System.out.println("userProfileFileByUserId = " + userProfileFile);
     }
 
 }

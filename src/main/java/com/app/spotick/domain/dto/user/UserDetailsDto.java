@@ -4,6 +4,7 @@ import com.app.spotick.domain.entity.user.User;
 import com.app.spotick.domain.entity.user.UserAuthority;
 import com.app.spotick.domain.entity.user.UserProfileFile;
 import com.app.spotick.domain.type.user.UserStatus;
+import com.app.spotick.security.type.OAuthType;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
@@ -30,8 +31,13 @@ public class UserDetailsDto implements UserDetails, OAuth2User {
     private String profileUUID;
     private String profileUploadPath;
     private boolean isDefaultImage;
-
-
+//    ----------⬇️ oauth로그인 필드 ------------------
+//    해당 필드들이 null이면 일반 로그인 사용자
+//    존재하면 oauth로그인 사용자
+    private OAuthType oAuthType;
+    private Map<String, Object> attributes;
+    
+//    일반 로그인 생성자
     public UserDetailsDto(User user, List<UserAuthority> userAuthorities) {
         this.id = user.getId();
         this.email = user.getEmail();
@@ -48,6 +54,13 @@ public class UserDetailsDto implements UserDetails, OAuth2User {
         this.profileUUID = userProfileFile.getUuid();
         this.profileUploadPath = userProfileFile.getUploadPath();
         this.isDefaultImage = userProfileFile.isDefaultImage();
+    }
+
+//    OAuth2 로그인용 생성자
+    public UserDetailsDto(User user, List<UserAuthority> userAuthorities,Map<String,Object> attributes, OAuthType oAuthType) {
+        this(user,userAuthorities);
+        this.attributes = attributes;
+        this.oAuthType = oAuthType;
     }
 
     public void updateProfileImage(String fileName, String uuid, String profileUploadPath, boolean isDefaultImage) {
@@ -104,11 +117,11 @@ public class UserDetailsDto implements UserDetails, OAuth2User {
 //    OAuth2User 구현 메소드
     @Override
     public Map<String, Object> getAttributes() {
-        return null;
+        return attributes;
     }
 
     @Override
     public String getName() {
-        return null;
+        return email;
     }
 }

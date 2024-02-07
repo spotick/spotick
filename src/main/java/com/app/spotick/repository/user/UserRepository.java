@@ -2,6 +2,7 @@ package com.app.spotick.repository.user;
 
 import com.app.spotick.domain.dto.user.UserProfileDto;
 import com.app.spotick.domain.entity.user.User;
+import com.app.spotick.domain.entity.user.UserProfileFile;
 import org.hibernate.annotations.Parent;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -26,4 +27,10 @@ public interface UserRepository extends JpaRepository<User, Long> {
             ") " +
             "from User u join u.userProfileFile f where u.id = :id")
     Optional<UserProfileDto> findUserProfileById(@Param("id") Long id);
+
+    @Query("""
+            select u.userProfileFile from User u join u.userProfileFile uf
+            where u.id = :userId
+            """)
+    UserProfileFile findUserProfileFileByUserId(@Param("userId")Long userId);
 }

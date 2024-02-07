@@ -2,9 +2,9 @@ package com.app.spotick.security.type;
 
 public enum OAuthType {
     KAKAO("kakao"),
-    NAVER("naver"),
-    GOOGLE("google"),
-    NONE("none")
+//    NAVER("naver"),
+//    GOOGLE("google"),
+//    NONE("none")
     ;
 
     private final String registrationId;

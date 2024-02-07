@@ -58,6 +58,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         UserProfileFile userProfileFile = profileFileService.saveDefaultRandomImgByUser();
 
         User savedUser = userRepository.save(userJoinDto.toEntity(userProfileFile));
+        userJoinDto.setId(savedUser.getId());
 //      권한 추가
         authorityRepository.save(UserAuthority.builder()
                 .authorityType(AuthorityType.ROLE_USER)
