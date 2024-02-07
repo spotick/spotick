@@ -154,14 +154,8 @@ public class ReviewRestController {
                                                                                  size = 10, sort = "id",
                                                                                  direction = Sort.Direction.DESC
                                                                          ) Pageable pageable) {
-
         PageRequest pageRequest = PageRequest.of(pageable.getPageNumber() - 1, 5, pageable.getSort());
         Slice<PlaceReviewListDto> placeReviewSlice = placeReviewService.findPlaceReviewSlice(placeId, pageRequest);
-
-        if (placeReviewSlice.isEmpty()) {
-            return ResponseEntity.noContent().build();
-        }
-
         return ResponseEntity.ok(placeReviewSlice);
     }
 

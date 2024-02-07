@@ -115,18 +115,18 @@
             </div>
 
             <div class="place-nav-box flex">
-                <div class="nav-item nav-focus">
+                <button class="nav-item nav-focus menu1" data-menu="placeIntroduction">
                     <p>장소 소개</p>
-                </div>
-                <div class="nav-item">
+                </button>
+                <button class="nav-item menu2" data-menu="placeRule">
                     <p>이용규칙</p>
-                </div>
-                <div class="nav-item">
+                </button>
+                <button class="nav-item menu3" data-menu="placeReview">
                     <p>리뷰<span th:text="${place.evalCount}"></span></p>
-                </div>
-                <div class="nav-item">
+                </button>
+                <button class="nav-item menu4" data-menu="placeInquiry">
                     <p>문의<span class="inquiry-cnt" th:text="${place.inquiryCount}"></span></p>
-                </div>
+                </button>
             </div>
 
             <div class="care-wrap">
@@ -141,7 +141,7 @@
             </div>
 
             <div class="place-content-wrap">
-                <div class="place-info-box">
+                <div id="placeIntroduction" class="place-info-box menu">
                     <p class="title">공간 정보</p>
                     <p class="content" th:text="${place.placeInfo}"></p>
                 </div>
@@ -158,7 +158,7 @@
                     </div>
                 </div>
 
-                <div class="place-rule-box">
+                <div id="placeRule" class="place-rule-box menu">
                     <p class="title">이용규칙</p>
                     <p class="content" th:text="${place.placeRule}">- 대여 시간보다 적게 사용 하더라도 대관비는 환불되지 않습니다.
 
@@ -174,7 +174,7 @@
                         - 이용 후, 쓰레기(일반/재활용/음식물) 분리수거를 꼭 진행해주세요. 미 진행 시, 추가요금이 청구될 수 있습니다.</p>
                 </div>
 
-                <div class="review-wrap">
+                <div id="placeReview" class="review-wrap menu">
                     <div class="flex-between-align">
                         <p class="title">후기 <span class="review-count" th:text="${place.evalCount}"></span></p>
                         <!--                        <button type="button" class="review-write-btn">후기작성</button>-->
@@ -220,7 +220,7 @@
                             <span class="review-score" th:text="${place.evalAvg}"></span>
                         </div>
                         <p>
-                            <span th:text="${place.eval5ScoreCount != 0 ? (place.evalCount / place.eval5ScoreCount) : 0}"></span>%의
+                            <span th:text="${place.eval5ScoreCount != 0 ? #numbers.formatInteger((place.eval5ScoreCount/(place.evalCount*1.0)*100),1,'COMMA') : 0}"></span>%의
                             고객이 5점을 주었어요.
                         </p>
                     </div>
@@ -240,7 +240,7 @@
 
                 </div>
 
-                <div class="place-inquiry-box">
+                <div id="placeInquiry" class="place-inquiry-box menu">
                     <div class="flex-between-align">
                         <p class="title">문의 <span class="inquiry-count inquiry-cnt"
                                                   th:text="${place.inquiryCount}"></span></p>

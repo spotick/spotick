@@ -430,7 +430,8 @@
     margin: 0 2px;
 }
 
-.empty-inquiry{
+.empty-inquiry,
+.empty-review{
     font-size: 16px;
     line-height: 24px;
     color: rgb(212, 215, 226);
@@ -438,6 +439,9 @@
     padding: 20px 0;
 }
 
+.empty-review{
+    margin: 35px 0;
+}
 
 
 
