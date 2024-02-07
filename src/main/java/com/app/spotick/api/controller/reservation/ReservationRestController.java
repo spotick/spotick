@@ -3,11 +3,13 @@ package com.app.spotick.api.controller.reservation;
 import com.app.spotick.api.dto.response.CommonResponse;
 import com.app.spotick.domain.dto.place.reservation.ReservationRequestListDto;
 import com.app.spotick.domain.dto.user.UserDetailsDto;
+import com.app.spotick.domain.type.place.PlaceReservationStatus;
 import com.app.spotick.service.place.reservation.PlaceReservationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -34,5 +36,41 @@ public class ReservationRestController {
         }
 
         return ResponseEntity.ok(new CommonResponse<>(true, "조회 성공", contentsSlice));
+    }
+
+    @PatchMapping("/approve/{reservationId}")
+    public ResponseEntity<String> approveReservation(@PathVariable("reservationId") Long reservationId,
+                                                     @AuthenticationPrincipal UserDetailsDto userDetailsDto) {
+
+        try {
+            placeReservationService.updateReservationStatus(
+                    reservationId,
+                    userDetailsDto.getId(),
+                    PlaceReservationStatus.APPROVED
+            );
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("요청을 찾을 수 없습니다. 나중에 다시 시도해주세요.");
+        }
+
+        return ResponseEntity.ok("예약 요청을 승인했습니다.");
+    }
+
+    @PatchMapping("/reject/{reservationId}")
+    public ResponseEntity<String> rejectReservation(@PathVariable("reservationId") Long reservationId,
+                                                    @AuthenticationPrincipal UserDetailsDto userDetailsDto) {
+
+        try {
+            placeReservationService.updateReservationStatus(
+                    reservationId,
+                    userDetailsDto.getId(),
+                    PlaceReservationStatus.REJECTED
+            );
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("요청을 찾을 수 없습니다. 나중에 다시 시도해주세요.");
+        }
+
+        return ResponseEntity.ok("예약 요청을 거절했습니다.");
     }
 }

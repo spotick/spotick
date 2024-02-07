@@ -103,6 +103,15 @@ public class PlaceReservationServiceImpl implements PlaceReservationService {
     public Slice<ReservationRequestListDto> getReservationsOfPlace(Long placeId, Long userId, Pageable pageable) {
         return placeReservationRepository.findReservationsByPlaceIdAndUserIdSlice(placeId, userId, pageable);
     }
+
+    @Override
+    public void updateReservationStatus(Long reservationId, Long userId, PlaceReservationStatus status) {
+        PlaceReservation foundReservation = placeReservationRepository.findByIdAndHost(reservationId, userId).orElseThrow(
+                NoSuchElementException::new
+        );
+
+        foundReservation.updateStatus(status);
+    }
 }
 
 

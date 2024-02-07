@@ -3,17 +3,9 @@ package com.app.spotick.repository.place.reservation;
 import com.app.spotick.domain.dto.place.PlaceFileDto;
 import com.app.spotick.domain.dto.place.PlaceReservationListDto;
 import com.app.spotick.domain.dto.place.reservation.ReservationRequestListDto;
-import com.app.spotick.domain.entity.place.PlaceFile;
-import com.app.spotick.domain.entity.place.QPlace;
-import com.app.spotick.domain.entity.place.QPlaceFile;
-import com.app.spotick.domain.entity.place.QPlaceReservation;
-import com.app.spotick.domain.entity.user.QUser;
-import com.app.spotick.domain.entity.user.QUserProfileFile;
 import com.app.spotick.domain.type.place.PlaceReservationStatus;
 import com.app.spotick.domain.type.post.PostStatus;
-import com.querydsl.core.group.GroupBy;
 import com.querydsl.core.types.Projections;
-import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQuery;
@@ -25,9 +17,7 @@ import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
 import org.springframework.data.support.PageableExecutionUtils;
 
-import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 import static com.app.spotick.domain.entity.place.QPlace.*;
 import static com.app.spotick.domain.entity.place.QPlaceBookmark.placeBookmark;

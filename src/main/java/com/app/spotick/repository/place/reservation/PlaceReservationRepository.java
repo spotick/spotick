@@ -19,6 +19,14 @@ public interface PlaceReservationRepository extends JpaRepository<PlaceReservati
 
     Optional<PlaceReservation> findByIdAndUser(Long Id, User user);
 
+    @Query("""
+            select r from PlaceReservation r
+            join Place p on r.place.id = p.id
+            where r.id = :reservationId and p.user.id = :userId and r.reservationStatus = 'PENDING'
+            """)
+    Optional<PlaceReservation> findByIdAndHost(@Param("reservationId") Long reservationId,
+                                               @Param("userId") Long userId);
+
     List<PlaceReservation> findAllByPlace(Place place);
 
     /**
@@ -48,5 +56,4 @@ public interface PlaceReservationRepository extends JpaRepository<PlaceReservati
     List<PlaceReservationTimeDto> findReservedTimes(@Param("placeId") Long placeId,
                                                     @Param("startTime") LocalDateTime startTime,
                                                     @Param("endTime") LocalDateTime endTime);
-
 }
