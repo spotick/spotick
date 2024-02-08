@@ -8,9 +8,7 @@ import net.coobird.thumbnailator.Thumbnailator;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.InputStream;
+import java.io.*;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -73,7 +71,7 @@ public class UserProfileFileServiceImpl implements UserProfileFileService {
             String originName = extractFileName(imgUrl);
             UUID uuid = UUID.randomUUID();
             String sysName = uuid.toString() + "_" + originName;
-            String thumbnailName = uuid.toString() + "t_" + originName;
+            String thumbnailName = "t_" + sysName;
 
             String imgUploadPath = getUploadPath();
 
@@ -83,17 +81,15 @@ public class UserProfileFileServiceImpl implements UserProfileFileService {
                 uploadPath.mkdirs();
             }
 
-            Path savePath = Path.of(ROOT_DIR, imgUploadPath, sysName);
+            Path imgPath = Path.of(ROOT_DIR, imgUploadPath, sysName);
             Path thumbnailPath = Path.of(ROOT_DIR, imgUploadPath, thumbnailName);
-            
-            System.out.println("=============================================");
-            System.out.println(savePath);
-            System.out.println(imgUrlString);
-            System.out.println("=============================================");
 
-            try (InputStream in = imgUrl.openStream();
-                 FileOutputStream out = new FileOutputStream(thumbnailPath.toFile())) {
-                Files.copy(in, savePath);
+            try (InputStream in = imgUrl.openStream()) {
+                Files.copy(in, imgPath);
+            }
+
+            try (InputStream in = new FileInputStream(imgPath.toFile());
+                 OutputStream out = new FileOutputStream(thumbnailPath.toFile())) {
                 Thumbnailator.createThumbnail(in,out,300,200);
             }
 

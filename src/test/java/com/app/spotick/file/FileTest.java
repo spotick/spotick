@@ -23,8 +23,8 @@ public class FileTest {
     @Test
     @DisplayName("이미지 url로 로컬저장 테스트")
     void fileSaveTest() {
-        String imgUrlString = "http://k.kakaocdn.net/dn/iJnKP/btrUSvYAhV1/fjatPrXDsk2A8vl8cYeft0/img_640x640.jpg";
-//        String imgUrlString = "https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/bd23ab90-ef8c-48d3-a613-38556452ab8a/dfy0fj1-fc3b5023-e28f-40de-a4c5-bf676d7563aa.jpg/v1/fill/w_1024,h_768,q_75,strp/orora_borealis_2_by_amadeusaya_dfy0fj1-fullview.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7ImhlaWdodCI6Ijw9NzY4IiwicGF0aCI6IlwvZlwvYmQyM2FiOTAtZWY4Yy00OGQzLWE2MTMtMzg1NTY0NTJhYjhhXC9kZnkwZmoxLWZjM2I1MDIzLWUyOGYtNDBkZS1hNGM1LWJmNjc2ZDc1NjNhYS5qcGciLCJ3aWR0aCI6Ijw9MTAyNCJ9XV0sImF1ZCI6WyJ1cm46c2VydmljZTppbWFnZS5vcGVyYXRpb25zIl19.kT2LBdKJKa4npu48LuUJdHrQlcIXuTz7JndcGU857NY";
+//        String imgUrlString = "http://k.kakaocdn.net/dn/iJnKP/btrUSvYAhV1/fjatPrXDsk2A8vl8cYeft0/img_640x640.jpg";
+        String imgUrlString = "https://images-wixmp-ed30a86b8c4ca887773594c2.wixmp.com/f/bd23ab90-ef8c-48d3-a613-38556452ab8a/dfy0fj1-fc3b5023-e28f-40de-a4c5-bf676d7563aa.jpg/v1/fill/w_1024,h_768,q_75,strp/orora_borealis_2_by_amadeusaya_dfy0fj1-fullview.jpg?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1cm46YXBwOjdlMGQxODg5ODIyNjQzNzNhNWYwZDQxNWVhMGQyNmUwIiwiaXNzIjoidXJuOmFwcDo3ZTBkMTg4OTgyMjY0MzczYTVmMGQ0MTVlYTBkMjZlMCIsIm9iaiI6W1t7ImhlaWdodCI6Ijw9NzY4IiwicGF0aCI6IlwvZlwvYmQyM2FiOTAtZWY4Yy00OGQzLWE2MTMtMzg1NTY0NTJhYjhhXC9kZnkwZmoxLWZjM2I1MDIzLWUyOGYtNDBkZS1hNGM1LWJmNjc2ZDc1NjNhYS5qcGciLCJ3aWR0aCI6Ijw9MTAyNCJ9XV0sImF1ZCI6WyJ1cm46c2VydmljZTppbWFnZS5vcGVyYXRpb25zIl19.kT2LBdKJKa4npu48LuUJdHrQlcIXuTz7JndcGU857NY";
 
         String ROOT_DIR = "C:/spotickFilesTest/uploadFiles/";
 
@@ -46,8 +46,7 @@ public class FileTest {
             Path savePath = Path.of(ROOT_DIR, imgUploadPath, sysName);
             Path thumbnailPath = Path.of(ROOT_DIR, imgUploadPath, thumbnailName);
 
-            try (InputStream in = imgUrl.openStream();
-                 FileOutputStream out = new FileOutputStream(thumbnailPath.toFile())) {
+            try (InputStream in = imgUrl.openStream()) {
                 Files.copy(in, savePath);
             }
 
