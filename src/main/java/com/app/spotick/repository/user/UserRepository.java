@@ -33,4 +33,14 @@ public interface UserRepository extends JpaRepository<User, Long> {
             where u.id = :userId
             """)
     UserProfileFile findUserProfileFileByUserId(@Param("userId")Long userId);
+
+//    이메일 중복 확인
+    boolean existsUserByEmail(String email);
+
+//    닉네임 중복 확인
+    boolean existsUserByNickName(String nickname);
 }
+
+
+
+

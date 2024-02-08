@@ -203,6 +203,16 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         }
         return key.toString();
     }
+
+    @Override
+    public boolean isValidEmail(String email) {
+        return !userRepository.existsUserByEmail(email);
+    }
+
+    @Override
+    public boolean isValidNickname(String nickname) {
+        return !userRepository.existsUserByNickName(nickname);
+    }
 }
 
 
