@@ -39,16 +39,13 @@ public class OAuth2UserService extends DefaultOAuth2UserService {
         OAuth2AccessToken accessToken = userRequest.getAccessToken();
         String oauthClientName = userRequest.getClientRegistration().getClientName();
         OAuthType oAuthType = OAuthType.valueOf(oauthClientName.toUpperCase());
+        Map<String, Object> attributes = oAuth2User.getAttributes();
 
         try {
-            System.out.println("=========================================");
-            System.out.println("accessToken = "+accessToken.getTokenValue());
-            System.out.println(new ObjectMapper().writeValueAsString(oAuth2User.getAttributes()));
-            System.out.println("=========================================");
-
             return switch (oAuthType) {
-                case KAKAO -> createOrFindKakoOAuth2User(oAuth2User.getAttributes());
-                case GOOGLE -> createOrFindGoogleOAuth2User(oAuth2User.getAttributes());
+                case KAKAO -> createOrFindKakoOAuth2User(attributes);
+                case GOOGLE -> createOrFindGoogleOAuth2User(attributes);
+                case NAVER -> createOrFindNaverOAuth2User(attributes);
             };
         } catch (AuthenticationException e) {
             e.printStackTrace();
@@ -98,6 +95,25 @@ public class OAuth2UserService extends DefaultOAuth2UserService {
                     userService.join(googleUser,userProfileFile);
 
                     return googleUser.toEntity(userProfileFile);
+                });
+
+        return new UserDetailsDto(user, authorityRepository.findUserAuthorityByUser(user), attributes, OAuthType.GOOGLE);
+    }
+
+    private OAuth2User createOrFindNaverOAuth2User(Map<String, Object> attributes) {
+        Map<String, Object> response = (Map<String, Object>) attributes.get("response");
+        String email = (String) response.get("email");
+        String profileImgUrl = (String)response.get("profile_image");
+        String nickname = (String) response.get("nickname");
+
+        User user = userRepository.findUserAndProfileByEmail(email)
+                .orElseGet(() -> {
+                    UserJoinDto naverUser = UserJoinDto.fromOAuth2ByEmailNickname(email, nickname);
+                    UserProfileFile userProfileFile = profileFileService.saveImgFromImgUrl(profileImgUrl);
+
+                    userService.join(naverUser,userProfileFile);
+
+                    return naverUser.toEntity(userProfileFile);
                 });
 
         return new UserDetailsDto(user, authorityRepository.findUserAuthorityByUser(user), attributes, OAuthType.GOOGLE);
