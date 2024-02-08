@@ -2,8 +2,9 @@ package com.app.spotick.repository.place.inquiry;
 
 import com.app.spotick.domain.dto.place.PlaceFileDto;
 import com.app.spotick.domain.dto.place.PlaceInquiryListDto;
-import com.app.spotick.domain.dto.place.inquiry.InquiryUnansweredDto;
+import com.app.spotick.domain.dto.place.inquiry.UnansweredInquiryDto;
 import com.app.spotick.domain.entity.place.PlaceInquiry;
+import com.app.spotick.domain.entity.place.QPlaceReservation;
 import com.app.spotick.domain.entity.user.QUser;
 import com.app.spotick.domain.entity.user.QUserProfileFile;
 import com.app.spotick.domain.type.post.PostStatus;
@@ -13,9 +14,7 @@ import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.*;
 import org.springframework.data.support.PageableExecutionUtils;
 
 import java.util.List;
@@ -118,35 +117,23 @@ public class PlaceInquiryQDSLRepositoryImpl implements PlaceInquiryQDSLRepositor
     }
 
     @Override
-    public Page<InquiryUnansweredDto> findUnansweredInquiriesPage(Long placeId, Long userId, Pageable pageable) {
+    public Slice<UnansweredInquiryDto> findUnansweredInquiriesPage(Long placeId, Long userId, Pageable pageable) {
 
-        JPAQuery<Long> totalCount = queryFactory.select(placeInquiry.count())
+        List<UnansweredInquiryDto> contents = queryFactory
                 .from(placeInquiry)
-                .join(placeInquiry.place, place)
-                .where(
-                        place.id.eq(placeId),
-                        place.user.id.eq(userId),
-                        placeInquiry.response.isNull()
-                );
-
-        List<InquiryUnansweredDto> inquiryDtos = queryFactory
-                .from(placeInquiry)
-                .join(placeInquiry.place, place)
                 .join(placeInquiry.user, user)
                 .join(user.userProfileFile, userProfileFile)
                 .where(
-                        place.id.eq(placeId),
+                        placeInquiry.place.id.eq(placeId),
                         place.user.id.eq(userId),
                         placeInquiry.response.isNull()
                 )
                 .orderBy(placeInquiry.id.desc())
                 .offset(pageable.getOffset())
-                .limit(pageable.getPageSize())
+                .limit(pageable.getPageSize() + 1)
                 .select(
-                        Projections.constructor(InquiryUnansweredDto.class,
+                        Projections.constructor(UnansweredInquiryDto.class,
                                 placeInquiry.id,
-                                user.id,
-                                place.id,
                                 placeInquiry.title,
                                 placeInquiry.content,
                                 user.nickName,
@@ -158,7 +145,14 @@ public class PlaceInquiryQDSLRepositoryImpl implements PlaceInquiryQDSLRepositor
                 )
                 .fetch();
 
-        return PageableExecutionUtils.getPage(inquiryDtos, pageable, totalCount::fetchOne);
+        boolean hasNext = false;
+
+        if(contents.size() > pageable.getPageSize()){
+            contents.remove(pageable.getPageSize());
+            hasNext = true;
+        }
+
+        return new SliceImpl<>(contents, pageable, hasNext);
     }
 }
 

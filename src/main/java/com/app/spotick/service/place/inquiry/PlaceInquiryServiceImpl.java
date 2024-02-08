@@ -3,6 +3,7 @@ package com.app.spotick.service.place.inquiry;
 import com.app.spotick.api.dto.place.PlaceInquiryDto;
 import com.app.spotick.api.dto.place.InquiryResponseDto;
 import com.app.spotick.domain.dto.place.PlaceInquiryListDto;
+import com.app.spotick.domain.dto.place.inquiry.UnansweredInquiryDto;
 import com.app.spotick.domain.entity.place.Place;
 import com.app.spotick.domain.entity.place.PlaceInquiry;
 import com.app.spotick.domain.entity.user.User;
@@ -12,6 +13,7 @@ import com.app.spotick.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -77,6 +79,11 @@ public class PlaceInquiryServiceImpl implements PlaceInquiryService {
         );
 
         foundInquiry.updateResponse(inquiryResponseDto.getResponse());
+    }
+
+    @Override
+    public Slice<UnansweredInquiryDto> findUnanswerdInquiriesSlice(Long placeId, Long userId, Pageable pageable) {
+        return inquiryRepository.findUnansweredInquiriesPage(placeId, userId, pageable);
     }
 }
 

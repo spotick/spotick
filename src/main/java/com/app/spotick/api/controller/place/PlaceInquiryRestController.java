@@ -58,28 +58,4 @@ public class PlaceInquiryRestController {
         return ResponseEntity.ok()
                 .body(Map.of("inquiryPage", inquiryPage,"pageBlock", pageBlock));
     }
-
-    @PatchMapping("/response")
-    public ResponseEntity<String> updateResponse(@Valid @RequestBody InquiryResponseDto inquiryResponseDto,
-                                                 BindingResult result) {
-        if (result.hasErrors()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body("답변을 제대로 입력해주세요.");
-        }
-
-        try {
-            inquiryService.updateInquiryResponse(inquiryResponseDto);
-        } catch (NoSuchElementException e) {
-
-            return ResponseEntity.status(HttpStatus.FORBIDDEN)
-                    .body("오류가 발생했습니다.<br>다시 시도해주세요.");
-        }
-
-        return ResponseEntity.status(HttpStatus.OK)
-                .body("답변이 작성되었습니다.");
-    }
-
-
-
-
 }

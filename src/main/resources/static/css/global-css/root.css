@@ -862,7 +862,7 @@ img {
 }
 
 .error-content, .error-score {
-    height: 20px;
+    min-height: 20px;
     line-height: 20px;
     font-size: 14px;
     color: red;
