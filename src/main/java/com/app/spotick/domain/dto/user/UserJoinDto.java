@@ -35,13 +35,8 @@ public class UserJoinDto {
                 .build();
     }
 
-    public static UserJoinDto fromKakao(Map<String,Object> kakaoAccount) {
+    public static UserJoinDto fromOAuth2ByEmailNickname(String email,String nickname) {
         UserJoinDto userJoinDto = new UserJoinDto();
-        Map<String, Object> kakaoProfile = (Map<String, Object>) kakaoAccount.get("profile");
-        String email = (String)kakaoAccount.get("email");
-        String nickname = (String)kakaoProfile.get("nickname");
-        String profileImgUrl = (String)kakaoProfile.get("profile_image_url");
-        boolean isDefaultImg = (boolean)kakaoProfile.get("is_default_image");
 
         userJoinDto.setEmail(email);
         userJoinDto.setNickName(nickname);
