@@ -45,7 +45,6 @@ class UserRepositoryTest {
                 .build();
 
         user = User.builder()
-                .id(1L)
                 .email("aaa")
                 .password("1234")
                 .nickName("홍길동")
@@ -69,7 +68,8 @@ class UserRepositoryTest {
     @Test
     @DisplayName("이메일로 회원정보 가져오기")
     void findUserByEmailTest() {
-        User foundUser = userRepository.findUserAndProfileByEmail(user.getEmail());
+        User foundUser = userRepository.findUserAndProfileByEmail(user.getEmail())
+                .orElseGet(null);
         assertThat(foundUser).isNotNull().extracting("id")
                 .isNotNull();
         System.out.println("foundUser = " + foundUser);
@@ -93,6 +93,13 @@ class UserRepositoryTest {
 
         assertThat(userProfileDto).isNotNull();
         System.out.println("userProfileDto = " + userProfileDto);
+    }
+
+    @Test
+    @DisplayName("회원 프로필 사진 테스트")
+    void findUserProfileFileByUserIdTest(){
+        UserProfileFile userProfileFile = userRepository.findUserProfileFileByUserId(user.getId());
+        System.out.println("userProfileFileByUserId = " + userProfileFile);
     }
 
 }
