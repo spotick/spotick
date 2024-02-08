@@ -23,7 +23,7 @@ function showGSForInquiryDeletion(inquiryId) {
 }
 
 function deleteInquiry(inquiryId) {
-    fetch(`/inquiries/${inquiryId}/delete`, {
+    fetch(`/inquiries/api/${inquiryId}/delete`, {
         method: 'GET'
     })
         .then(response => {
