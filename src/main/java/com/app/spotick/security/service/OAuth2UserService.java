@@ -36,7 +36,7 @@ public class OAuth2UserService extends DefaultOAuth2UserService {
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
         OAuth2User oAuth2User = super.loadUser(userRequest);
-        OAuth2AccessToken accessToken = userRequest.getAccessToken();
+//        OAuth2AccessToken accessToken = userRequest.getAccessToken();
         String oauthClientName = userRequest.getClientRegistration().getClientName();
         OAuthType oAuthType = OAuthType.valueOf(oauthClientName.toUpperCase());
         Map<String, Object> attributes = oAuth2User.getAttributes();
@@ -47,6 +47,7 @@ public class OAuth2UserService extends DefaultOAuth2UserService {
                 case GOOGLE -> createOrFindGoogleOAuth2User(attributes);
                 case NAVER -> createOrFindNaverOAuth2User(attributes);
             };
+
         } catch (AuthenticationException e) {
             e.printStackTrace();
             throw e;
@@ -116,7 +117,7 @@ public class OAuth2UserService extends DefaultOAuth2UserService {
                     return naverUser.toEntity(userProfileFile);
                 });
 
-        return new UserDetailsDto(user, authorityRepository.findUserAuthorityByUser(user), attributes, OAuthType.GOOGLE);
+        return new UserDetailsDto(user, authorityRepository.findUserAuthorityByUser(user), attributes, OAuthType.NAVER);
     }
 
 

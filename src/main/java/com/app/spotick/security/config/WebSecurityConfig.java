@@ -74,10 +74,9 @@ public class WebSecurityConfig {
 
                 .logout(logout -> logout
                         .logoutUrl("/logout")
-                        .logoutSuccessUrl("/")
+                        .logoutSuccessUrl("/user/login")
                         .invalidateHttpSession(true)
                         .clearAuthentication(true)
-
                 )
 
                 .exceptionHandling(exceptionHandling -> exceptionHandling
