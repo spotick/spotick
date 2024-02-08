@@ -63,7 +63,20 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         UserProfileFile userProfileFile = profileFileService.saveDefaultRandomImgByUser();
 
         User savedUser = userRepository.save(userJoinDto.toEntity(userProfileFile));
+        userJoinDto.setId(savedUser.getId());
 //      권한 추가
+        authorityRepository.save(UserAuthority.builder()
+                .authorityType(AuthorityType.ROLE_USER)
+                .user(savedUser)
+                .build());
+    }
+    @Override
+    public void join(UserJoinDto userJoinDto, UserProfileFile userProfileFile) {
+        userJoinDto.setPassword(encodePassword(userJoinDto.getPassword()));
+
+        User savedUser = userRepository.save(userJoinDto.toEntity(userProfileFile));
+        userJoinDto.setId(savedUser.getId());
+
         authorityRepository.save(UserAuthority.builder()
                 .authorityType(AuthorityType.ROLE_USER)
                 .user(savedUser)
@@ -73,11 +86,9 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     @Transactional(readOnly = true)
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User foundUser = userRepository.findUserAndProfileByEmail(username);
+        User foundUser = userRepository.findUserAndProfileByEmail(username)
+                .orElseThrow(()->new UsernameNotFoundException("해당 이메일로 등록된 회원 없음"));
 
-        if (foundUser == null) {
-            throw new UsernameNotFoundException("해당 이메일로 등록된 회원 없음");
-        }
         return new UserDetailsDto(foundUser, authorityRepository.findUserAuthorityByUser(foundUser));
     }
 

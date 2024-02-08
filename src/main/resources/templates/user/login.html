@@ -54,12 +54,13 @@
               </div>
             </div>
             <div class="oauth">
-              <button type="button" class="kakao-login login-btn">
+<!--              카카오로그인 url : https://kauth.kakao.com/oauth/authorize-->
+              <a th:href="@{/oauth2/authorization/kakao}" class="kakao-login login-btn">
                   <span>
                     <img src="https://img.lifet.co.kr/icon/icon_kakao.svg" alt="">
                   </span>
                 <p>카카오 로그인</p>
-              </button>
+              </a>
               <button type="button" class="naver-login login-btn">
                   <span>
                     <img src="https://img.lifet.co.kr/icon/icon_naver.svg" alt="">

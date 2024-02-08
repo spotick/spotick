@@ -12,6 +12,7 @@ import com.app.spotick.domain.type.post.PostStatus;
 import com.app.spotick.domain.type.ticket.TicketCategory;
 import com.app.spotick.domain.type.user.UserStatus;
 import com.app.spotick.repository.promotion.PromotionRepository;
+import com.app.spotick.repository.ticket.file.TicketFileRepository;
 import com.app.spotick.repository.user.UserRepository;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
