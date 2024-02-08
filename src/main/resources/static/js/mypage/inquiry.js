@@ -56,7 +56,7 @@ const inquiryService = (function () {
         // todo : 제거 -> 로딩 스크린 테스트 용
         setTimeout(() => {
 
-        fetch('/inquiries/place?page=' + page, {
+        fetch(`/inquiries/api/places?page=${page}`, {
             method: 'GET'
         })
             .then(response => {

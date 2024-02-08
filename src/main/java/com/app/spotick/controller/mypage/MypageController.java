@@ -3,7 +3,6 @@ package com.app.spotick.controller.mypage;
 import com.app.spotick.domain.dto.place.PlaceListDto;
 import com.app.spotick.domain.dto.place.PlaceManageListDto;
 import com.app.spotick.domain.dto.place.PlaceReservationListDto;
-import com.app.spotick.domain.dto.place.inquiry.InquiryUnansweredDto;
 import com.app.spotick.domain.dto.place.reservation.PlaceReservedNotReviewedDto;
 import com.app.spotick.domain.dto.place.review.ContractedPlaceDto;
 import com.app.spotick.domain.dto.place.review.PlaceReviewRegisterDto;
@@ -286,7 +285,7 @@ public class MypageController {
     }
 
     @GetMapping("/reviews/reviewable")
-    public void goToReviewsReviewable(@ModelAttribute("reviewRegisterDto")PlaceReviewRegisterDto placeReviewRegisterDto,
+    public void goToReviewsReviewable(@ModelAttribute("reviewRegisterDto") PlaceReviewRegisterDto placeReviewRegisterDto,
                                       @RequestParam(value = "page", defaultValue = "1") int page,
                                       @AuthenticationPrincipal UserDetailsDto userDetailsDto,
                                       Model model) {
@@ -333,27 +332,23 @@ public class MypageController {
     }
 
     @GetMapping("/places/inquiries/{placeId}")
-    public String goToPlacesInquiryList(@RequestParam(value = "page", defaultValue = "1") int page,
-                                      @PathVariable("placeId") Long placeId,
-                                      @AuthenticationPrincipal UserDetailsDto userDetailsDto,
-                                      Model model) {
-        Pageable pageable = PageRequest.of(page - 1, 6);
+    public String goToPlacesInquiryList(@PathVariable("placeId") Long placeId,
+                                        @AuthenticationPrincipal UserDetailsDto userDetailsDto,
+                                        Model model) {
 
-        Page<InquiryUnansweredDto> inquiriesPage
-                = userService.findUnansweredInquiriesPage(placeId, userDetailsDto.getId(), pageable);
-        Pagination<InquiryUnansweredDto> pagination
-                = new Pagination<>(5, pageable, inquiriesPage);
+        ContractedPlaceDto placeDto = userService.findPlaceBriefly(placeId, userDetailsDto.getId()).orElseThrow(
+                NoSuchElementException::new
+        );
 
-        model.addAttribute("inquiriesPage", inquiriesPage);
-        model.addAttribute("pagination", pagination);
+        model.addAttribute("placeDto", placeDto);
 
         return "/mypage/places/inquiries";
     }
 
     @GetMapping("/places/reservations/{placeId}")
     public String goToPlacesReservationList(@PathVariable("placeId") Long placeId,
-                                          @AuthenticationPrincipal UserDetailsDto userDetailsDto,
-                                          Model model) {
+                                            @AuthenticationPrincipal UserDetailsDto userDetailsDto,
+                                            Model model) {
 
         ContractedPlaceDto placeDto = userService.findPlaceBriefly(placeId, userDetailsDto.getId()).orElseThrow(
                 NoSuchElementException::new

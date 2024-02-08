@@ -3,7 +3,6 @@ package com.app.spotick.service.user;
 import com.app.spotick.domain.dto.place.PlaceListDto;
 import com.app.spotick.domain.dto.place.PlaceManageListDto;
 import com.app.spotick.domain.dto.place.PlaceReservationListDto;
-import com.app.spotick.domain.dto.place.inquiry.InquiryUnansweredDto;
 import com.app.spotick.domain.dto.place.reservation.PlaceReservedNotReviewedDto;
 import com.app.spotick.domain.dto.place.review.ContractedPlaceDto;
 import com.app.spotick.domain.dto.place.review.MypageReviewListDto;
@@ -172,11 +171,6 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     public Page<PlaceManageListDto> findHostPlacesPage(Long userId, Pageable pageable) {
         return placeRepository.findHostPlaceListByUserId(userId, pageable);
-    }
-
-    @Override
-    public Page<InquiryUnansweredDto> findUnansweredInquiriesPage(Long placeId, Long userId, Pageable pageable) {
-        return placeInquiryRepository.findUnansweredInquiriesPage(placeId, userId, pageable);
     }
 
     @Override

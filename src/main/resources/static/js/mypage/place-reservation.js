@@ -3,11 +3,6 @@ let hasNext = true;
 let isLoading = false;
 
 
-const currentPath = window.location.pathname;
-const pathSegments = currentPath.split('/');
-const placeId = pathSegments[pathSegments.length - 1];
-
-
 const reservationContainer = document.getElementById('reservationsContainer');
 
 const detailImg = document.getElementById('detailImg');
@@ -24,6 +19,8 @@ const reservationService = (function () {
 
     function requestReservations(callback) {
         loadingMarkService.show();
+
+        const placeId = extractVariableFromURL();
 
         //todo : 로딩 마스크 테스트용, 테스트 후 삭제 필요
         setTimeout(() => {
@@ -63,8 +60,6 @@ const reservationService = (function () {
 
     function loadReservations(content) {
 
-        // console.log(content)
-
         content.forEach(reservation => {
 
             let checkIn = formatKoreanDate(reservation.checkIn);
@@ -98,31 +93,30 @@ const reservationService = (function () {
                      data-amount="${reservation.amount}" 
                      data-nickname="${reservation.nickname}"
                      ${reservation.defaultImage ?
-                    `data-img="/file/default/display?fileName=${reservation.fileName}">` :
-                    `data-img="/file/display?fileName=${reservation.uploadPath}/t_${reservation.uuid}_${reservation.fileName}">`
-                }
+                        `data-img="/file/default/display?fileName=${reservation.fileName}">` :
+                        `data-img="/file/display?fileName=${reservation.uploadPath}/t_${reservation.uuid}_${reservation.fileName}">`
+                     }
                         <span>상세보기</span>
                     </div>
                 </div>
             </div>`
 
             reservationContainer.insertAdjacentHTML("beforeend", html);
+        })
 
-            /////////// 동적 이벤트 바인딩 //////////
-            document.querySelectorAll('.detailOpen').forEach(detailOpenBtn => {
-                detailOpenBtn.addEventListener('click', function () {
-                    let id = this.getAttribute('data-id')
-                    let img = this.getAttribute('data-img');
-                    let nickname = this.getAttribute('data-nickname');
-                    let visitors = this.getAttribute('data-visitors');
-                    let amount = this.getAttribute('data-amount');
-                    let content = this.getAttribute('data-content');
-                    let checkIn = this.getAttribute('data-check-in');
-                    let checkOut = this.getAttribute('data-check-out');
+        document.querySelectorAll('.detailOpen').forEach(detailOpenBtn => {
+            detailOpenBtn.addEventListener('click', function () {
+                let id = this.getAttribute('data-id')
+                let img = this.getAttribute('data-img');
+                let nickname = this.getAttribute('data-nickname');
+                let visitors = this.getAttribute('data-visitors');
+                let amount = this.getAttribute('data-amount');
+                let content = this.getAttribute('data-content');
+                let checkIn = this.getAttribute('data-check-in');
+                let checkOut = this.getAttribute('data-check-out');
 
 
-                    regenerateModalForm(id, img, nickname, visitors, amount, content, checkIn, checkOut);
-                })
+                regenerateModalForm(id, img, nickname, visitors, amount, content, checkIn, checkOut);
             })
         })
     }
@@ -208,17 +202,6 @@ const reservationService = (function () {
     }
 })();
 
-function formatKoreanDate(dateString) {
-    return new Date(dateString).toLocaleString('ko-KR', {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-        hour: 'numeric',
-        minute: 'numeric',
-        hour12: false,
-    });
-}
-
 //////////////////////////////////////////////////////////////////
 
 window.onload = function () {
@@ -231,8 +214,7 @@ window.onload = function () {
 
         let {scrollTop, scrollHeight, clientHeight} = document.documentElement;
 
-        if(clientHeight + scrollTop >= scrollHeight){
-            console.log("실행")
+        if (clientHeight + scrollTop >= scrollHeight) {
             isLoading = true;
             page++;
             reservationService.requestReservations(reservationService.loadReservations);
