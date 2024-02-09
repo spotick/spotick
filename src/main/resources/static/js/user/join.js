@@ -49,13 +49,21 @@ $(".submit-box").on("click", ".submit-btn.on", function (e) {
     if ($submitBtn.hasClass('disabled')) {
         return;
     }
+    isValidEmail();
+    isValidNickName();
+    isValidPassword();
+    isValidTelNumber();
+    if (!isValidFields()){
+        return ;
+    }
+
     $(".join-wrap").submit(); // 폼 제출
     $submitBtn.addClass('disabled'); // 버튼을 비활성화하여 추가 클릭 방지
 });
 
 function isValidFields() {
     return (
-        // isInputOk() &&
+        // isInputOk() && // 빠른 진행위해 세밀한 검사 주석
         requiredCheckOk()
     );
 }
@@ -63,13 +71,17 @@ function isValidFields() {
 
 // 이메일 유효성 및 중복 검사
 function isValidEmail() {
+
     const regex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
     const $email = $("#email");
     let isValid = regex.test($email.val());
     let $emailFail = $('.email-fail');
+    let $submit = $('.submit-btn');
+
     if (!isValid) {
-        $emailFail.text(isValid ? '' : '유효하지 않은 이메일 형식입니다.').css('color','red');;
+        $emailFail.text(isValid ? '' : '유효하지 않은 이메일 형식입니다.');
         $email.removeClass('ok');
+        $submit.removeClass('on');
         return;
     }
 
@@ -80,38 +92,37 @@ function isValidEmail() {
     })
         .then(r => r.json())
         .then(isAvailable => {
-            $emailFail.text(isAvailable ? '사용가능한 이메일입니다.' : '이미 존재하는 이메일입니다.');
-            $emailFail.css('color',isAvailable?'#40d019':'red');
+            $emailFail.text(isAvailable ? '' : '이미 존재하는 이메일입니다.');
             $email.toggleClass('ok', isAvailable);
+            $submit.toggleClass('on', isValidFields());
         });
 }
 
 // 닉네임 중복 검사
 function isValidNickName() {
-    let $nickName = $("#nick-name");
-    let isValid = $nickName.val() !== '';
+    let $nickname = $("#nick-name");
+    let isValid = $nickname.val() !== '';
+    let $nicknameFail =$('.nick-name-fail');
+    let $submit = $('.submit-btn');
 
-    $('.nick-name-fail').text(isValid ? '' : '닉네임을 다시 입력해주세요');
-
-    $nickName.toggleClass('ok', isValid);
-    // $.ajax({
-    //     url: ``, //url
-    //     type: "post",
-    //     data: {nickName:$("#nick-name").val()},
-    //     success: function (result) {
-    //         if (!result) {
-    //             //해당 닉네임이 있는지 없는지 숫자로 가져온다(0,1)
-    //             $(".nick-name-fail").removeClass("none");
-    //             return true;
-    //         } else {
-    //             $(".nick-name-fail").addClass("none");
-    //             return false;
-    //         }
-    //     },
-    //     error: function (a, b, c) {
-    //         console.error(c);
-    //     },
-    // });
+    if (!isValid) {
+        $nicknameFail.text(isValid ? '' : '닉네임을 입력해주세요');
+        $nickname.removeClass('ok');
+        $submit.removeClass('on');
+        return;
+    }
+    fetch(`/users/api/valid/nickname/${$nickname.val()}`, {
+        headers: {
+            'Content-Type': 'application/json',
+        }
+    })
+        .then(r => r.json())
+        .then(isAvailable => {
+            console.log(isAvailable);
+            $nicknameFail.text(isAvailable ? '' : '이미 존재하는 닉네임입니다.');
+            $nickname.toggleClass('ok', isAvailable);
+            $submit.toggleClass('on', isValidFields());
+        });
 }
 
 // 비밀번호 유효성 검사

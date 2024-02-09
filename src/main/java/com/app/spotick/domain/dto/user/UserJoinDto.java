@@ -37,10 +37,10 @@ public class UserJoinDto {
 
     public static UserJoinDto fromOAuth2ByEmailNickname(String email,String nickname) {
         UserJoinDto userJoinDto = new UserJoinDto();
-
+        String uuid = UUID.randomUUID().toString();
         userJoinDto.setEmail(email);
-        userJoinDto.setNickName(nickname);
-        userJoinDto.setPassword(UUID.randomUUID().toString());
+        userJoinDto.setNickName(nickname+uuid.substring(0,uuid.indexOf('-')));
+        userJoinDto.setPassword(uuid);
 
         return userJoinDto;
     }
