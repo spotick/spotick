@@ -102,4 +102,29 @@ class UserRepositoryTest {
         System.out.println("userProfileFileByUserId = " + userProfileFile);
     }
 
+    @Test
+    @DisplayName("이메일, 닉네임 중복 테스트 ")
+    void emailNicknameDuplicateTest(){
+        // given
+        String email = "aaa";
+        String nickname = "홍길동";
+
+        // when
+        // then
+        assertThat(userRepository.existsUserByEmail(email))
+                .isEqualTo(true );
+        assertThat(userRepository.existsUserByNickName(nickname))
+                .isEqualTo(true );
+        email = "ddd";
+        nickname = "전태풍";
+        assertThat(userRepository.existsUserByEmail(email))
+                .isEqualTo(false );
+        assertThat(userRepository.existsUserByNickName(nickname))
+                .isEqualTo(false);
+
+    }
+
+
+
+
 }

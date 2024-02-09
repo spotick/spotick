@@ -42,4 +42,9 @@ public interface UserService {
     Page<PlaceManageListDto> findHostPlacesPage(Long userId, Pageable pageable);
 
     Optional<ContractedPlaceDto> findPlaceBriefly(Long placeId, Long userId);
+
+    boolean isValidEmail(String email);
+    boolean isValidNickname(String nickname);
+
+
 }
