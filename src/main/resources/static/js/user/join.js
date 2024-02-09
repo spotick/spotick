@@ -53,9 +53,9 @@ $(".submit-box").on("click", ".submit-btn.on", function (e) {
     isValidNickName();
     isValidPassword();
     isValidTelNumber();
-    if (!isValidFields()){
-        return ;
-    }
+    // if (!isValidFields()){
+    //     return ;
+    // }
 
     $(".join-wrap").submit(); // 폼 제출
     $submitBtn.addClass('disabled'); // 버튼을 비활성화하여 추가 클릭 방지
