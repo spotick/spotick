@@ -7,6 +7,7 @@ import com.app.spotick.domain.dto.place.reservation.PlaceReservedNotReviewedDto;
 import com.app.spotick.domain.dto.place.review.ContractedPlaceDto;
 import com.app.spotick.domain.dto.place.review.PlaceReviewRegisterDto;
 import com.app.spotick.domain.dto.place.review.MypageReviewListDto;
+import com.app.spotick.domain.dto.ticket.TicketManageListDto;
 import com.app.spotick.domain.dto.user.UserDetailsDto;
 import com.app.spotick.domain.dto.user.UserProfileDto;
 import com.app.spotick.domain.entity.place.PlaceReservation;
@@ -360,7 +361,18 @@ public class MypageController {
     }
 
     @GetMapping("/tickets")
-    public void goToTickets() {
+    public void goToTickets(@RequestParam(value = "page", defaultValue = "1") int page,
+                            @AuthenticationPrincipal UserDetailsDto userDetailsDto,
+                            Model model) {
+        Pageable pageable = PageRequest.of(page - 1, 5);
+
+        Page<TicketManageListDto> hostTicketsPage
+                = userService.findHostTicketsPage(userDetailsDto.getId(), pageable);
+        Pagination<TicketManageListDto> pagination
+                = new Pagination<>(5, pageable, hostTicketsPage);
+
+        model.addAttribute("hostTicketsPage", hostTicketsPage);
+        model.addAttribute("pagination", pagination);
     }
 
     @GetMapping("/tickets/inquiries")

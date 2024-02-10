@@ -16,17 +16,13 @@ public class TicketFile extends ImageBase {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "USER_ID")
-    private User user;
-    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "TICKET_ID")
     private Ticket ticket;
 
     @Builder
-    public TicketFile(String fileName, String uuid, String uploadPath, Long id, User user, Ticket ticket) {
+    public TicketFile(String fileName, String uuid, String uploadPath, Long id, Ticket ticket) {
         super(fileName, uuid, uploadPath);
         this.id = id;
-        this.user = user;
         this.ticket = ticket;
     }
 
