@@ -58,6 +58,9 @@ dependencies {
     implementation 'net.coobird:thumbnailator:0.4.8'
     // coolsms
     implementation 'net.nurigo:sdk:4.3.0'
+    // oauth2
+    implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
+    implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
 }
 
 tasks.named('test') {

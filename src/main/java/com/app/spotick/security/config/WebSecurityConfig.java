@@ -1,8 +1,10 @@
 package com.app.spotick.security.config;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
@@ -10,13 +12,17 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
+import org.springframework.security.oauth2.jwt.JwtDecoder;
+import org.springframework.security.oauth2.jwt.JwtDecoders;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 @EnableWebSecurity
+@RequiredArgsConstructor
 public class WebSecurityConfig {
-
-    @Bean
+    private final DefaultOAuth2UserService oAuth2UserService;
+     @Bean
     public static PasswordEncoder bCryptPasswordEncoder() {
 //        모든 작업마무리되고 새롭게 create할 때 기본설정메소드로 교체 고려
 //        return PasswordEncoderFactories.createDelegatingPasswordEncoder(); 
@@ -34,6 +40,9 @@ public class WebSecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
 //               spring security csrf 방지 비활성화
+//               기본적으로 logout은 post방식이지만
+//                csrf보호를 비활성화하면 get방식으로 사용할 수 있다.
+//                csrf보호를 적용할지는 프로젝트 진행 및 완성도에 따라서 고려(현재는 비활성화)
                 .csrf(AbstractHttpConfigurer::disable)
 
                 .authorizeHttpRequests((requests) -> requests
@@ -65,10 +74,9 @@ public class WebSecurityConfig {
 
                 .logout(logout -> logout
                         .logoutUrl("/logout")
-                        .logoutSuccessUrl("/")
+                        .logoutSuccessUrl("/user/login")
                         .invalidateHttpSession(true)
                         .clearAuthentication(true)
-
                 )
 
                 .exceptionHandling(exceptionHandling -> exceptionHandling
@@ -77,6 +85,16 @@ public class WebSecurityConfig {
                             response.sendRedirect("/user/login?gm=true");
                         })
                 )
+
+                .oauth2Login(oauth2->oauth2
+                        .loginPage("/user/login")
+                        .redirectionEndpoint(endpoint ->
+                                endpoint.baseUri("/oauth2/callback/*"))
+                        .userInfoEndpoint(endpoint->
+                                endpoint.userService(oAuth2UserService))
+                        .defaultSuccessUrl("/")
+                )
+
         ;
 
         return http.build();
