@@ -217,7 +217,7 @@
                     </th:block>
                 </th:block>
             </div>
-            <th:block th:if="${reservationDtoList.empty}">
+            <th:block th:if="${reservationDtoList.getTotalElements() == 0}">
                 <div class="mp-no-list">
                     <span>예약내역이 없습니다.</span>
                 </div>

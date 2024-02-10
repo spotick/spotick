@@ -2,6 +2,7 @@ package com.app.spotick.domain.entity.ticket;
 
 
 import com.app.spotick.domain.base.post.PostBase;
+import com.app.spotick.domain.dto.ticket.TicketFileDto;
 import com.app.spotick.domain.embedded.post.PostAddress;
 import com.app.spotick.domain.entity.user.User;
 import com.app.spotick.domain.type.post.PostStatus;
@@ -10,6 +11,8 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity @Table(name = "TBL_TICKET_EVENT")
 @SequenceGenerator(name = "SEQ_TICKET_EVENT_GENERATOR", sequenceName = "SEQ_TICKET_EVENT",allocationSize = 1)
@@ -22,6 +25,7 @@ public class Ticket extends PostBase {
     private String content;
     private LocalDate startDate;
     private LocalDate endDate;
+    @Enumerated(EnumType.STRING)
     private TicketCategory ticketCategory;
     private String bankName;
     private String accountNumber; //계좌번호
@@ -31,12 +35,13 @@ public class Ticket extends PostBase {
     private PostAddress ticketEventAddress;
     @Enumerated(EnumType.STRING)
     private PostStatus ticketEventStatus;
-    @Enumerated(EnumType.STRING)
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "USER_ID")
     private User user;
 
+    @OneToMany(mappedBy = "ticket", fetch = FetchType.LAZY)
+    private List<TicketFile> ticketFiles = new ArrayList<>();
 
     @Builder
     public Ticket(String title, int viewCount, Double lat, Double lng, Long id, String content, LocalDate startDate, LocalDate endDate, PostAddress ticketEventAddress, PostStatus ticketEventStatus, TicketCategory ticketCategory, String bankName, String accountNumber, String accountHolder, User user) {

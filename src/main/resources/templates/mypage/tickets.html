@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <meta charset="UTF-8">
@@ -262,173 +262,57 @@
                 </button>
             </nav>
             <div class="mpct-content-wrap">
-                <div class="mpc-ticket-list">
-                    <article
-                            onclick="openTicketDetail(this, '테스트1', '서브 제목', '서울특별시 서초구 서초대로 240', '111', ticketTypes);">
-                        <div class="mpc-ticket-con">
-                            <a class="mpc-ticket-img-con" href="#">
-                                <img alt="테스트"
-                                     src="//t.011st.com/imgUpload/Down/Perf/202310/e6b237ab-f274-4d50-aa75-75e881859c68.jpg">
-                            </a>
-                            <div class="mpct-card-content">
-                                <div class="mpccc-row">
-                                    <p class="mpccc-ticket-title general-ellipsis-1">
-                                        <a href="#">제목 테스트 제목 테스트 제목 테스트 제목 테스트 제목 테스트</a>
-                                    </p>
-                                </div>
-                                <div class="mpccc-row">
-                                    <a class="mpccc-title-font general-ellipsis-1" href="#">
-                                        서울특별시 서초구 서초대로 240 111111111111111111111
+                <th:block th:if="${#lists.size(hostTicketsPage)}">
+                    <div class="mpc-ticket-list">
+                        <th:block th:each="hostTicket:${hostTicketsPage}">
+                            <article
+                                    onclick="openTicketDetail(this, '테스트1', '서브 제목', '서울특별시 서초구 서초대로 240', '111', ticketTypes);"
+                                    th:object="${hostTicket}">
+                                <div class="mpc-ticket-con">
+                                    <a class="mpc-ticket-img-con" href="#">
+                                        <img th:alt="${hostTicket.title}"
+                                             th:src="|/file/display?fileName=*{ticketFileDto.uploadPath}/t_*{ticketFileDto.uuid}_*{ticketFileDto.fileName}|">
                                     </a>
-                                </div>
-                                <div class="mpccc-row" style="margin-top: 10px;">
-                                    <p class="mpccc-price">40,000원</p>
-                                </div>
-                                <div class="mpccc-row" style="margin-top: 10px;">
-                                    <p class="mpccc-general-font">2024년 1월 24일 ~ 2024년 1월 26일</p>
-                                </div>
-                                <div class="mpccc-row">
-                                    <a class="mpccc-line-btn" href="#">
-                                        <span>문의 관리</span>
-                                        <div class="mpccc-alarm">
-                                            <span>9</span>
+                                    <div class="mpct-card-content">
+                                        <div class="mpccc-row">
+                                            <p class="mpccc-ticket-title general-ellipsis-1">
+                                                <a href="#" th:text="*{title}"></a>
+                                            </p>
                                         </div>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="mpc-slide-con">
-                            <div class="mpc-slide-item" onclick="editTicket()">
-                                <span>티켓 정보 수정 하기</span>
-                            </div>
-                        </div>
-                    </article>
-                    <article
-                            onclick="openTicketDetail(this, '테스트2', '서브 제목2', '서울특별시 서초구 서초대로 24444', '111', ticketTypes);">
-                        <div class="mpc-ticket-con">
-                            <a class="mpc-ticket-img-con" href="#">
-                                <img alt="테스트"
-                                     src="//t.011st.com/imgUpload/Down/Perf/202310/e6b237ab-f274-4d50-aa75-75e881859c68.jpg">
-                            </a>
-                            <div class="mpct-card-content">
-                                <div class="mpccc-row">
-                                    <p class="mpccc-ticket-title general-ellipsis-1">
-                                        <a href="#">제목 테스트 제목 테스트 제목 테스트 제목 테스트 제목 테스트</a>
-                                    </p>
-                                </div>
-                                <div class="mpccc-row">
-                                    <a class="mpccc-title-font general-ellipsis-1" href="#">
-                                        서울특별시 서초구 서초대로 240 111111111111111111111
-                                    </a>
-                                </div>
-                                <div class="mpccc-row" style="margin-top: 10px;">
-                                    <p class="mpccc-price">40,000원</p>
-                                </div>
-                                <div class="mpccc-row" style="margin-top: 10px;">
-                                    <p class="mpccc-general-font">2024년 1월 24일 ~ 2024년 1월 26일</p>
-                                </div>
-                                <div class="mpccc-row">
-                                    <a class="mpccc-line-btn" href="#">
-                                        <span>문의 관리</span>
-                                        <div class="mpccc-alarm">
-                                            <span>9</span>
+                                        <div class="mpccc-row">
+                                            <a class="mpccc-title-font general-ellipsis-1" href="#"
+                                               th:text="*{ticketAddress.address + ' ' + ticketAddress.addressDetail}"></a>
                                         </div>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="mpc-slide-con">
-                            <div class="mpc-slide-item" onclick="editTicket()">
-                                <span>티켓 정보 수정 하기</span>
-                            </div>
-                        </div>
-
-                    </article>
-                    <article
-                            onclick="openTicketDetail(this, '테스트1', '서브 제목', '서울특별시 서초구 서초대로 240', '111', ticketTypes);">
-                        <div class="mpc-ticket-con">
-                            <a class="mpc-ticket-img-con" href="#">
-                                <img alt="테스트"
-                                     src="//t.011st.com/imgUpload/Down/Perf/202310/e6b237ab-f274-4d50-aa75-75e881859c68.jpg">
-                            </a>
-                            <div class="mpct-card-content">
-                                <div class="mpccc-row">
-                                    <p class="mpccc-ticket-title general-ellipsis-1">
-                                        <a href="#">제목 테스트 제목 테스트 제목 테스트 제목 테스트 제목 테스트</a>
-                                    </p>
-                                </div>
-                                <div class="mpccc-row">
-                                    <a class="mpccc-title-font general-ellipsis-1" href="#">
-                                        서울특별시 서초구 서초대로 240 111111111111111111111
-                                    </a>
-                                </div>
-                                <div class="mpccc-row" style="margin-top: 10px;">
-                                    <p class="mpccc-price">40,000원</p>
-                                </div>
-                                <div class="mpccc-row" style="margin-top: 10px;">
-                                    <p class="mpccc-general-font">2024년 1월 24일 ~ 2024년 1월 26일</p>
-                                </div>
-                                <div class="mpccc-row">
-                                    <a class="mpccc-line-btn" href="#">
-                                        <span>문의 관리</span>
-                                        <div class="mpccc-alarm">
-                                            <span>9</span>
+                                        <div class="mpccc-row" style="margin-top: 10px;">
+                                            <p class="mpccc-price"
+                                               th:text="${#numbers.formatInteger(hostTicket.ticketGradeDtos[0].price, 3, 'COMMA')} + '원'"></p>
                                         </div>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="mpc-slide-con">
-                            <div class="mpc-slide-item" onclick="editTicket()">
-                                <span>티켓 정보 수정 하기</span>
-                            </div>
-                        </div>
-                    </article>
-                    <article
-                            onclick="openTicketDetail(this, '테스트2', '서브 제목2', '서울특별시 서초구 서초대로 24444', '111', ticketTypes);">
-                        <div class="mpc-ticket-con">
-                            <a class="mpc-ticket-img-con" href="#">
-                                <img alt="테스트"
-                                     src="//t.011st.com/imgUpload/Down/Perf/202310/e6b237ab-f274-4d50-aa75-75e881859c68.jpg">
-                            </a>
-                            <div class="mpct-card-content">
-                                <div class="mpccc-row">
-                                    <p class="mpccc-ticket-title general-ellipsis-1">
-                                        <a href="#">제목 테스트 제목 테스트 제목 테스트 제목 테스트 제목 테스트</a>
-                                    </p>
-                                </div>
-                                <div class="mpccc-row">
-                                    <a class="mpccc-title-font general-ellipsis-1" href="#">
-                                        서울특별시 서초구 서초대로 240 111111111111111111111
-                                    </a>
-                                </div>
-                                <div class="mpccc-row" style="margin-top: 10px;">
-                                    <p class="mpccc-price">40,000원</p>
-                                </div>
-                                <div class="mpccc-row" style="margin-top: 10px;">
-                                    <p class="mpccc-general-font">2024년 1월 24일 ~ 2024년 1월 26일</p>
-                                </div>
-                                <div class="mpccc-row">
-                                    <a class="mpccc-line-btn" href="#">
-                                        <span>문의 관리</span>
-                                        <div class="mpccc-alarm">
-                                            <span>9</span>
+                                        <div class="mpccc-row" style="margin-top: 10px;">
+                                            <p class="mpccc-general-font"
+                                               th:text="*{#temporals.format(startDate, 'yyyy년 MM월 dd일') + ' ~ ' + #temporals.format(endDate, 'yyyy년 MM월 dd일')}"></p>
                                         </div>
-                                    </a>
+                                        <div class="mpccc-row">
+                                            <a class="mpccc-line-btn" href="#">
+                                                <span>문의 관리</span>
+                                                <div class="mpccc-alarm" th:if="*{inquiriesCount > 0}">
+                                                    <span th:text="*{inquiriesCount}"></span>
+                                                </div>
+                                            </a>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                        </div>
-                        <div class="mpc-slide-con">
-                            <div class="mpc-slide-item" onclick="editTicket()">
-                                <span>티켓 정보 수정 하기</span>
-                            </div>
-                        </div>
-
-                    </article>
-                </div>
-                <div class="mpc-ticket-detail-con" id="ticketDetail">
-                    <div class="mpctd-none">선택된 티켓이 없습니다.<br>좌측에서 선택해주세요.</div>
-                </div>
+                                <div class="mpc-slide-con">
+                                    <div class="mpc-slide-item" onclick="editTicket()">
+                                        <span>티켓 정보 수정 하기</span>
+                                    </div>
+                                </div>
+                            </article>
+                        </th:block>
+                    </div>
+                    <div class="mpc-ticket-detail-con" id="ticketDetail">
+                        <div class="mpctd-none">선택된 티켓이 없습니다.<br>좌측에서 선택해주세요.</div>
+                    </div>
+                </th:block>
             </div>
         </article>
     </div>
@@ -438,7 +322,8 @@
 
 </body>
 <script src="https://code.jquery.com/jquery-3.6.4.js"></script>
-<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=3dc12d7c2624483dc7c019a0a91b727f&libraries=services"></script>
+<script src="//dapi.kakao.com/v2/maps/sdk.js?appkey=3dc12d7c2624483dc7c019a0a91b727f&libraries=services"
+        type="text/javascript"></script>
 <script src="/js/global-js/global.js"></script>
 <script src="/js/mypage/mypage.js"></script>
 <script src="/js/place/register/register.js"></script>
@@ -447,6 +332,9 @@
 <script src="/js/global-js/chat.js"></script>
 <script>
     document.getElementById('tickets').classList.add('active');
+</script>
+<script th:inline="javascript">
+    console.log([[${hostTicketsPage}]])
 </script>
 
 </html>

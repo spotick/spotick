@@ -6,6 +6,7 @@ import com.app.spotick.domain.dto.place.PlaceReservationListDto;
 import com.app.spotick.domain.dto.place.reservation.PlaceReservedNotReviewedDto;
 import com.app.spotick.domain.dto.place.review.ContractedPlaceDto;
 import com.app.spotick.domain.dto.place.review.MypageReviewListDto;
+import com.app.spotick.domain.dto.ticket.TicketManageListDto;
 import com.app.spotick.domain.dto.user.UserDetailsDto;
 import com.app.spotick.domain.dto.user.UserJoinDto;
 import com.app.spotick.domain.dto.user.UserProfileDto;
@@ -18,6 +19,7 @@ import com.app.spotick.repository.place.Review.PlaceReviewRepository;
 import com.app.spotick.repository.place.bookmark.PlaceBookmarkRepository;
 import com.app.spotick.repository.place.inquiry.PlaceInquiryRepository;
 import com.app.spotick.repository.place.reservation.PlaceReservationRepository;
+import com.app.spotick.repository.ticket.TicketRepository;
 import com.app.spotick.repository.user.UserAuthorityRepository;
 import com.app.spotick.repository.user.UserRepository;
 import com.app.spotick.service.place.inquiry.PlaceInquiryService;
@@ -53,7 +55,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     private final PlaceBookmarkRepository placeBookmarkRepository;
     private final PlaceReservationRepository placeReservationRepository;
     private final PlaceReviewRepository placeReviewRepository;
-    private final PlaceInquiryRepository placeInquiryRepository;
+    private final TicketRepository ticketRepository;
     private final RedisService redisService;
 
     @Override
@@ -187,6 +189,11 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     public Optional<ContractedPlaceDto> findPlaceBriefly(Long placeId, Long userId) {
         return placeRepository.findPlaceBriefly(placeId, userId);
+    }
+
+    @Override
+    public Page<TicketManageListDto> findHostTicketsPage(Long userId, Pageable pageable) {
+        return ticketRepository.findHostTicketListByUserId(userId, pageable);
     }
 
     private String encodePassword(String password) {
