@@ -149,3 +149,11 @@ function formatKoreanDate(dateString) {
         hour12: false,
     });
 }
+
+function dateDifferenceInDays(date1, date2) {
+    const oneDay = 24 * 60 * 60 * 1000;
+
+    const timeDifference = Math.abs(date2.getTime() - date1.getTime());
+
+    return Math.round(timeDifference / oneDay);
+}

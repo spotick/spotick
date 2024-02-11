@@ -68,6 +68,11 @@ public class TicketQDSLRepositoryImpl implements TicketQDSLRepository {
                         ticket.endDate.before(LocalDate.now())
                 );
 
+        JPQLQuery<Integer> minPrice = JPAExpressions.select(ticketGrade.price.min())
+                .from(ticketGrade)
+                .where(ticketGrade.ticket.eq(ticket))
+                .groupBy(ticketGrade.ticket.id);
+
         JPQLQuery<Long> inquiriesCount = JPAExpressions.select(ticketInquiry.count())
                 .from(ticketInquiry)
                 .where(
@@ -92,6 +97,7 @@ public class TicketQDSLRepositoryImpl implements TicketQDSLRepository {
                         ticket.title,
                         ticket.ticketEventAddress,
                         ticket.ticketCategory,
+                        minPrice,
                         ticket.startDate,
                         ticket.endDate,
                         Projections.constructor(TicketFileDto.class,
@@ -120,38 +126,6 @@ public class TicketQDSLRepositoryImpl implements TicketQDSLRepository {
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
-
-        List<Long> ticketIdList = contents.stream().map(TicketManageListDto::getTicketId).toList();
-
-        List<TicketGradeDto> ticketGrades = queryFactory.select(
-                        Projections.constructor(TicketGradeDto.class,
-                                ticketGrade.gradeName,
-                                ticketGrade.price,
-                                ticketGrade.maxPeople,
-                                ticketGrade.ticket.id
-                        )
-                )
-                .from(ticketGrade)
-                .where(ticketGrade.ticket.id.in(ticketIdList))
-                .orderBy(ticketGrade.id.asc(), ticketGrade.ticket.id.desc())
-                .fetch();
-
-        Map<Long, List<TicketGradeDto>> gradesMap = ticketGrades.stream().collect(Collectors.groupingBy(TicketGradeDto::getTicketId));
-
-        contents.forEach(ticket -> ticket.setTicketGrades(gradesMap.get(ticket.getTicketId())));
-
-        contents.forEach(ticket -> {
-            List<TicketGradeDto> ticketGradesForTicket = gradesMap.get(ticket.getTicketId());
-
-            if (ticketGradesForTicket != null) {
-                try {
-                    String ticketGradesJson = objectMapper.writeValueAsString(ticketGradesForTicket);
-                    ticket.setTicketGradesJson(ticketGradesJson);
-                } catch (JsonProcessingException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
 
         TicketPage result = new TicketPage();
 
