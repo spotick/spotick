@@ -64,3 +64,9 @@ document.querySelectorAll('.ticketItem').forEach(ticketItem => {
         openTicketDetail(this, title, address, addressDetail, gradesJson)
     })
 })
+
+function changePage(page, viewType) {
+    let url = "/mypage/tickets";
+    url += '?page=' + page + '&viewType=' + viewType;
+    window.location.href = url;
+}

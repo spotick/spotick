@@ -251,21 +251,26 @@
                 <h2>티켓팅 관리</h2>
             </div>
             <nav class="mpc-top-nav">
-                <button class="mpc-top-nav-button active" type="button">
-                    전체(<span>0</span>)
-                </button>
-                <button class="mpc-top-nav-button" type="button">
-                    예정된 티켓팅(<span>0</span>)
-                </button>
-                <button class="mpc-top-nav-button" type="button">
-                    종료된 티켓팅(<span>0</span>)
-                </button>
+                <a class="mpc-top-nav-button" th:href="@{/mypage/tickets?page=1&view=all}"
+                   th:classappend="${viewType == 'all' ? 'active' : ''}">
+                    전체(<span th:text="${ticketPage.getTotal()}"></span>)
+                </a>
+
+                <a class="mpc-top-nav-button" th:href="@{/mypage/tickets?page=1&view=upcoming}"
+                   th:classappend="${viewType == 'upcoming' ? 'active' : ''}">
+                    예정된 티켓팅(<span th:text="${ticketPage.getUpcomingCount()}"></span>)
+                </a>
+
+                <a class="mpc-top-nav-button" th:href="@{/mypage/tickets?page=1&view=past}"
+                   th:classappend="${viewType == 'past' ? 'active' : ''}">
+                    종료된 티켓팅(<span th:text="${ticketPage.getPastCount()}"></span>)
+                </a>
             </nav>
-            <div class="mpct-content-wrap">
-                <th:block th:if="${#lists.size(hostTicketsPage)}">
+            <th:block th:if="${ticketPage.getPage().getTotalElements() > 0}">
+                <div class="mpct-content-wrap">
                     <div class="mpc-ticket-list">
-                        <th:block th:each="hostTicket:${hostTicketsPage}">
-                            <th:block th:object="${hostTicket}" th:inline="javascript">
+                        <th:block th:each="hostTicket:${ticketPage.getPage()}">
+                            <th:block th:inline="javascript" th:object="${hostTicket}">
                                 <article class="ticketItem" th:data-address="*{ticketAddress.address}"
                                          th:data-address-detail="*{ticketAddress.addressDetail}"
                                          th:data-grades="*{ticketGradeJson}"
@@ -294,7 +299,8 @@
                                                    th:text="*{#temporals.format(startDate, 'yyyy년 MM월 dd일') + ' ~ ' + #temporals.format(endDate, 'yyyy년 MM월 dd일')}"></p>
                                             </div>
                                             <div class="mpccc-row">
-                                                <a class="mpccc-line-btn" th:href="@{/mypage/tickets/inquiries/{ticketId}(ticketId = *{ticketId})}">
+                                                <a class="mpccc-line-btn"
+                                                   th:href="@{/mypage/tickets/inquiries/{ticketId}(ticketId = *{ticketId})}">
                                                     <span>문의 관리</span>
                                                     <div class="mpccc-alarm" th:if="*{inquiriesCount > 0}">
                                                         <span th:text="*{inquiriesCount}"></span>
@@ -315,9 +321,54 @@
                     <div class="mpc-ticket-detail-con" id="ticketDetail">
                         <div class="mpctd-none">선택된 티켓이 없습니다.<br>좌측에서 선택해주세요.</div>
                     </div>
-                </th:block>
-            </div>
+                </div>
+            </th:block>
+
+            <th:block th:if="${ticketPage.getPage().getTotalElements() == 0}">
+                <div style="padding-top: 28px">
+                    <div class="mp-no-list">
+                        <span>티켓 정보가 없습니다.</span>
+                    </div>
+                </div>
+            </th:block>
+
         </article>
+
+        <section class="pagination-container">
+            <span class="pagination-previous" th:if="${pagination.hasPrevBlock()}">
+                <a class="pagination-btns first" th:href="@{/mypage/tickets(page=1, view=${viewType})}" title="맨 처음">
+                    <i class="fa-solid fa-chevron-left"></i>
+                    <i class="fa-solid fa-chevron-left"></i>
+                </a>
+                <a class="pagination-btns"
+                   th:href="@{/mypage/tickets(page=${pagination.startPage - 1}, view=${viewType})}"
+                   title="이전">
+                    <i class="fa-solid fa-chevron-left"></i>
+                </a>
+            </span>
+
+            <span class="pagination-body">
+                <span class="pagination-btns"
+                      th:each="i : ${#numbers.sequence(pagination.startPage, pagination.endPage)}">
+                    <a th:class="${i == pagination.currentPage ? 'active' : ''}"
+                       th:href="@{/mypage/tickets(page=${i}, view=${viewType})}"
+                       th:text="${i}"></a>
+                </span>
+            </span>
+
+            <span class="pagination-next" th:if="${pagination.hasNextBlock()}">
+                <a class="pagination-btns" th:href="@{/mypage/tickets(page=${pagination.endPage+1}, view=${viewType})}"
+                   title="다음">
+                    <i class="fa-solid fa-chevron-right"></i>
+                </a>
+                <a class="pagination-btns end"
+                   th:href="@{/mypage/tickets(page=${pagination.lastPage}, view=${viewType})}"
+                   title="맨 끝">
+                    <i class="fa-solid fa-chevron-right"></i>
+                    <i class="fa-solid fa-chevron-right"></i>
+                </a>
+            </span>
+        </section>
     </div>
 </main>
 

@@ -1,5 +1,6 @@
 package com.app.spotick.service.user;
 
+import com.app.spotick.domain.dto.page.TicketPage;
 import com.app.spotick.domain.dto.place.PlaceListDto;
 import com.app.spotick.domain.dto.place.PlaceManageListDto;
 import com.app.spotick.domain.dto.place.PlaceReservationListDto;
@@ -11,6 +12,7 @@ import com.app.spotick.domain.dto.ticket.TicketManageListDto;
 import com.app.spotick.domain.dto.user.UserJoinDto;
 import com.app.spotick.domain.dto.user.UserProfileDto;
 import com.app.spotick.domain.entity.user.UserProfileFile;
+import com.app.spotick.domain.type.ticket.TicketRequestType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -45,7 +47,7 @@ public interface UserService {
 
     Optional<ContractedPlaceDto> findPlaceBriefly(Long placeId, Long userId);
 
-    Page<TicketManageListDto> findHostTicketsPage(Long userId, Pageable pageable);
+    TicketPage findHostTicketsPage(Long userId, Pageable pageable, TicketRequestType ticketRequestType);
 
     Optional<TicketInfoDto> findTicketInfo(Long ticketId, Long userId);
 

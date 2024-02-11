@@ -1,5 +1,6 @@
 package com.app.spotick.repository.ticket;
 
+import com.app.spotick.domain.dto.page.TicketPage;
 import com.app.spotick.domain.dto.ticket.TicketManageListDto;
 import com.app.spotick.domain.embedded.post.PostAddress;
 import com.app.spotick.domain.entity.place.Place;
@@ -11,6 +12,7 @@ import com.app.spotick.domain.entity.ticket.TicketGrade;
 import com.app.spotick.domain.entity.user.User;
 import com.app.spotick.domain.type.post.PostStatus;
 import com.app.spotick.domain.type.ticket.TicketCategory;
+import com.app.spotick.domain.type.ticket.TicketRequestType;
 import com.app.spotick.domain.type.user.UserStatus;
 import com.app.spotick.repository.promotion.PromotionRepository;
 import com.app.spotick.repository.ticket.file.TicketFileRepository;
@@ -35,8 +37,10 @@ import java.util.Random;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
+
 @SpringBootTest
-@Transactional @Commit
+@Transactional
+@Commit
 class TicketRepositoryTest {
     @Autowired
     JPAQueryFactory queryFactory;
@@ -55,6 +59,7 @@ class TicketRepositoryTest {
     Ticket ticket;
     User user1;
     User user2;
+
     @BeforeEach
     void setUp() {
         Random random = new Random();
@@ -113,7 +118,7 @@ class TicketRepositoryTest {
 
     @Test
     @DisplayName("test")
-    void save(){
+    void save() {
 
     }
 
@@ -122,9 +127,9 @@ class TicketRepositoryTest {
     void getList() {
         Pageable pageable = PageRequest.of(0, 5);
 
-        Page<TicketManageListDto> contents =
-                ticketRepository.findHostTicketListByUserId(user2.getId(), pageable);
 
-        System.out.println("contents = " + contents.getContent());
+        TicketPage ticketPage = ticketRepository.findHostTicketListByUserId(user2.getId(), pageable, TicketRequestType.ALL);
+
+        System.out.println("contents = " + ticketPage.getPage().getContent());
     }
 }

@@ -1,12 +1,15 @@
 package com.app.spotick.repository.ticket;
 
+import com.app.spotick.domain.dto.page.TicketPage;
 import com.app.spotick.domain.dto.ticket.TicketFileDto;
 import com.app.spotick.domain.dto.ticket.TicketGradeDto;
 import com.app.spotick.domain.dto.ticket.TicketInfoDto;
 import com.app.spotick.domain.dto.ticket.TicketManageListDto;
 import com.app.spotick.domain.type.post.PostStatus;
+import com.app.spotick.domain.type.ticket.TicketRequestType;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.Tuple;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.JPAExpressions;
@@ -18,6 +21,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.support.PageableExecutionUtils;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -36,7 +40,7 @@ public class TicketQDSLRepositoryImpl implements TicketQDSLRepository {
     ObjectMapper objectMapper = new ObjectMapper();
 
     @Override
-    public Page<TicketManageListDto> findHostTicketListByUserId(Long userId, Pageable pageable) {
+    public TicketPage findHostTicketListByUserId(Long userId, Pageable pageable, TicketRequestType ticketRequestType) {
 
         JPAQuery<Long> totalCount = queryFactory.select(ticket.count())
                 .from(ticket)
@@ -46,12 +50,41 @@ public class TicketQDSLRepositoryImpl implements TicketQDSLRepository {
                         ticket.ticketEventStatus.ne(PostStatus.DELETED)
                 );
 
+        JPAQuery<Long> upcomingCount = queryFactory.select(ticket.count())
+                .from(ticket)
+                .where(
+                        ticket.user.id.eq(userId),
+                        ticket.ticketEventStatus.ne(PostStatus.REPLACED),
+                        ticket.ticketEventStatus.ne(PostStatus.DELETED),
+                        ticket.endDate.after(LocalDate.now())
+                );
+
+        JPAQuery<Long> pastCount = queryFactory.select(ticket.count())
+                .from(ticket)
+                .where(
+                        ticket.user.id.eq(userId),
+                        ticket.ticketEventStatus.ne(PostStatus.REPLACED),
+                        ticket.ticketEventStatus.ne(PostStatus.DELETED),
+                        ticket.endDate.before(LocalDate.now())
+                );
+
         JPQLQuery<Long> inquiriesCount = JPAExpressions.select(ticketInquiry.count())
                 .from(ticketInquiry)
                 .where(
                         ticketInquiry.ticket.eq(ticket),
                         ticketInquiry.response.isNull()
                 );
+
+        BooleanBuilder condition = new BooleanBuilder();
+
+        switch (ticketRequestType) {
+            case upcoming:
+                condition.and(ticket.endDate.after(LocalDate.now()));
+                break;
+            case past:
+                condition.and(ticket.endDate.before(LocalDate.now()));
+                break;
+        }
 
         List<TicketManageListDto> contents = queryFactory
                 .select(Projections.constructor(TicketManageListDto.class,
@@ -76,6 +109,7 @@ public class TicketQDSLRepositoryImpl implements TicketQDSLRepository {
                         ticket.user.id.eq(userId),
                         ticket.ticketEventStatus.ne(PostStatus.REPLACED),
                         ticket.ticketEventStatus.ne(PostStatus.DELETED),
+                        condition,
                         ticketFile.id.eq(
                                 JPAExpressions.select(ticketFile.id.min())
                                         .from(ticketFile)
@@ -114,12 +148,30 @@ public class TicketQDSLRepositoryImpl implements TicketQDSLRepository {
                     String ticketGradesJson = objectMapper.writeValueAsString(ticketGradesForTicket);
                     ticket.setTicketGradesJson(ticketGradesJson);
                 } catch (JsonProcessingException e) {
-                    e.printStackTrace(); // Handle the exception according to your needs
+                    e.printStackTrace();
                 }
             }
         });
 
-        return PageableExecutionUtils.getPage(contents, pageable, totalCount::fetchOne);
+        TicketPage result = new TicketPage();
+
+        switch (ticketRequestType) {
+            case all:
+                result.setPage(PageableExecutionUtils.getPage(contents, pageable, totalCount::fetchOne));
+                break;
+            case upcoming:
+                result.setPage(PageableExecutionUtils.getPage(contents, pageable, upcomingCount::fetchOne));
+                break;
+            case past:
+                result.setPage(PageableExecutionUtils.getPage(contents, pageable, pastCount::fetchOne));
+                break;
+        }
+
+        result.setTotal(totalCount.fetchOne());
+        result.setUpcomingCount(upcomingCount.fetchOne());
+        result.setPastCount(pastCount.fetchOne());
+
+        return result;
     }
 
     @Override

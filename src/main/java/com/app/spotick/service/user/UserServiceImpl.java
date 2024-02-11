@@ -1,5 +1,6 @@
 package com.app.spotick.service.user;
 
+import com.app.spotick.domain.dto.page.TicketPage;
 import com.app.spotick.domain.dto.place.PlaceListDto;
 import com.app.spotick.domain.dto.place.PlaceManageListDto;
 import com.app.spotick.domain.dto.place.PlaceReservationListDto;
@@ -14,6 +15,7 @@ import com.app.spotick.domain.dto.user.UserProfileDto;
 import com.app.spotick.domain.entity.user.User;
 import com.app.spotick.domain.entity.user.UserAuthority;
 import com.app.spotick.domain.entity.user.UserProfileFile;
+import com.app.spotick.domain.type.ticket.TicketRequestType;
 import com.app.spotick.domain.type.user.AuthorityType;
 import com.app.spotick.repository.place.PlaceRepository;
 import com.app.spotick.repository.place.Review.PlaceReviewRepository;
@@ -194,8 +196,8 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public Page<TicketManageListDto> findHostTicketsPage(Long userId, Pageable pageable) {
-        return ticketRepository.findHostTicketListByUserId(userId, pageable);
+    public TicketPage findHostTicketsPage(Long userId, Pageable pageable, TicketRequestType ticketRequestType) {
+        return ticketRepository.findHostTicketListByUserId(userId, pageable, ticketRequestType);
     }
 
     @Override
