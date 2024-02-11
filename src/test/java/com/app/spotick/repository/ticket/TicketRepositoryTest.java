@@ -128,7 +128,7 @@ class TicketRepositoryTest {
         Pageable pageable = PageRequest.of(0, 5);
 
 
-        TicketPage ticketPage = ticketRepository.findHostTicketListByUserId(user2.getId(), pageable, TicketRequestType.ALL);
+        TicketPage ticketPage = ticketRepository.findHostTicketListByUserId(user2.getId(), pageable, TicketRequestType.all);
 
         System.out.println("contents = " + ticketPage.getPage().getContent());
     }
