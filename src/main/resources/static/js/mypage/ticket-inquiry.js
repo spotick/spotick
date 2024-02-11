@@ -7,7 +7,6 @@ const currentPath = window.location.pathname;
 const pathSegments = currentPath.split('/');
 const placeId = pathSegments[pathSegments.length - 1];
 
-
 const img = document.getElementById('detailProfileImg');
 const nickname = document.getElementById('detailNickName');
 const contentArea = document.getElementById('detailContent');
@@ -17,8 +16,7 @@ const responseInput = document.getElementById('response');
 
 const errorContent = document.querySelector('.error-content');
 
-const inquiryContainer = document.getElementById('inquiriesContainer');
-
+const inquiryContainer = document.getElementById('inquiryContainer');
 
 const inquiryService = (function () {
 
@@ -30,7 +28,7 @@ const inquiryService = (function () {
         //todo : 로딩 마스크 테스트용, 테스트 후 삭제 필요
         setTimeout(() => {
 
-            fetch(`/inquiries/api/getPlace/${placeId}?page=${page}`, {
+            fetch(`/inquiries/api/getTicket/${placeId}?page=${page}`, {
                 method: 'GET'
             })
                 .then(response => {
@@ -65,8 +63,10 @@ const inquiryService = (function () {
     }
 
     function loadInquiries(content) {
-
         content.forEach(inquiry => {
+
+            console.log(inquiry);
+
             let html =
                 `<div class="mpcp-item">
                     <div class="mpcpi-top">
@@ -96,10 +96,10 @@ const inquiryService = (function () {
                             <span>상세보기</span>
                         </div>
                     </div>
-                </div>`
+                </div>`;
 
             inquiryContainer.insertAdjacentHTML("beforeend", html);
-        })
+        });
 
         document.querySelectorAll('.detailInquiryBtn').forEach(inquiryBtn => {
             inquiryBtn.addEventListener('click', function () {
@@ -116,16 +116,16 @@ const inquiryService = (function () {
         });
     }
 
-    function requestUploadResponse(inquiryId, placeId, responseString) {
+    function requestUploadResponse(ticketId, inquiryId, responseString) {
         closeOnlyThisModal(globalSelection);
 
         const inquiryResponse = {
-            id: placeId,
+            id: ticketId,
             inquiryId: inquiryId,
             response: responseString
         }
 
-        fetch('/inquiries/api/responsePlaceInquiry', {
+        fetch('/inquiries/api/responseTicketInquiry', {
             method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json',
@@ -166,7 +166,7 @@ const inquiryService = (function () {
     }
 })();
 
-/////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
 
 window.onload = function () {
     // 화면 로드
@@ -188,14 +188,12 @@ window.onload = function () {
 
 document.getElementById('requestBtn').addEventListener('click', function () {
     let inquiryId = inquiryIdInput.value;
-    let placeId = extractVariableFromURL();
+    let ticketId = extractVariableFromURL();
     let responseString = responseInput.value;
 
 
     showGlobalSelection(
         "답변을 등록하시겠습니까?",
-        () => inquiryService.requestUploadResponse(inquiryId, placeId, responseString)
+        () => inquiryService.requestUploadResponse(ticketId, inquiryId, responseString)
     );
 })
-
-

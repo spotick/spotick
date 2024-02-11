@@ -6,6 +6,7 @@ import com.app.spotick.domain.dto.place.PlaceReservationListDto;
 import com.app.spotick.domain.dto.place.reservation.PlaceReservedNotReviewedDto;
 import com.app.spotick.domain.dto.place.review.ContractedPlaceDto;
 import com.app.spotick.domain.dto.place.review.MypageReviewListDto;
+import com.app.spotick.domain.dto.ticket.TicketInfoDto;
 import com.app.spotick.domain.dto.ticket.TicketManageListDto;
 import com.app.spotick.domain.dto.user.UserDetailsDto;
 import com.app.spotick.domain.dto.user.UserJoinDto;
@@ -24,6 +25,7 @@ import com.app.spotick.repository.user.UserAuthorityRepository;
 import com.app.spotick.repository.user.UserRepository;
 import com.app.spotick.service.place.inquiry.PlaceInquiryService;
 import com.app.spotick.service.redis.RedisService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import net.nurigo.sdk.NurigoApp;
 import net.nurigo.sdk.message.model.Message;
@@ -194,6 +196,11 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     public Page<TicketManageListDto> findHostTicketsPage(Long userId, Pageable pageable) {
         return ticketRepository.findHostTicketListByUserId(userId, pageable);
+    }
+
+    @Override
+    public Optional<TicketInfoDto> findTicketInfo(Long ticketId, Long userId) {
+        return ticketRepository.findTicketInfoByTicketId(ticketId, userId);
     }
 
     private String encodePassword(String password) {

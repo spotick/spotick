@@ -9,6 +9,7 @@ import com.app.spotick.domain.dto.user.UserDetailsDto;
 import com.app.spotick.domain.entity.place.PlaceInquiry;
 import com.app.spotick.domain.pagination.Pagination;
 import com.app.spotick.service.place.inquiry.PlaceInquiryService;
+import com.app.spotick.service.ticket.inquiry.TicketInquiryService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -28,6 +29,7 @@ import java.util.NoSuchElementException;
 @RequiredArgsConstructor
 public class InquiryRestController {
     private final PlaceInquiryService placeInquiryService;
+    private final TicketInquiryService ticketInquiryService;
 
     @GetMapping("/places")
     public ResponseEntity<PageResponse<PlaceInquiryListDto>> getPlaceInquiries(@RequestParam(value = "page", defaultValue = "1") int page,
@@ -71,7 +73,7 @@ public class InquiryRestController {
                 .body("문의 내역을 삭제했습니다.");
     }
 
-    @GetMapping("/get/{placeId}")
+    @GetMapping("/getPlace/{placeId}")
     public ResponseEntity<CommonResponse<Slice<UnansweredInquiryDto>>> getUnansweredInquiriesOfPlace(@PathVariable("placeId") Long placeId,
                                                                                                      @AuthenticationPrincipal UserDetailsDto userDetailsDto,
                                                                                                      @RequestParam(name = "page", defaultValue = "0") int page) {
@@ -87,8 +89,24 @@ public class InquiryRestController {
         return ResponseEntity.ok(new CommonResponse<>(true, "조회 성공", contentsSlice));
     }
 
-    @PatchMapping("/responseInquiry")
-    public ResponseEntity<String> updateResponse(@Valid @RequestBody InquiryResponseDto inquiryResponseDto,
+    @GetMapping("/getTicket/{ticketId}")
+    public ResponseEntity<CommonResponse<Slice<UnansweredInquiryDto>>> getUnansweredInquiriesOfTicket(@PathVariable("ticketId") Long ticketId,
+                                                                                                      @AuthenticationPrincipal UserDetailsDto userDetailsDto,
+                                                                                                      @RequestParam(name = "page", defaultValue = "0") int page) {
+
+        Pageable pageable = PageRequest.of(page, 10);
+
+        Slice<UnansweredInquiryDto> contentsSlice = ticketInquiryService.findUnanswerdInquiriesSlice(ticketId, userDetailsDto.getId(), pageable);
+
+        if (contentsSlice.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+
+        return ResponseEntity.ok(new CommonResponse<>(true, "조회 성공", contentsSlice));
+    }
+
+    @PatchMapping("/responsePlaceInquiry")
+    public ResponseEntity<String> updatePlaceResponse(@Valid @RequestBody InquiryResponseDto inquiryResponseDto,
                                                  BindingResult result) {
         if (result.hasErrors()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
@@ -97,6 +115,25 @@ public class InquiryRestController {
 
         try {
             placeInquiryService.updateInquiryResponse(inquiryResponseDto);
+        } catch (NoSuchElementException e) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                    .body("오류가 발생했습니다. 다시 시도해주세요.");
+        }
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body("답변이 작성되었습니다.");
+    }
+
+    @PatchMapping("/responseTicketInquiry")
+    public ResponseEntity<String> updateTicketResponse(@Valid @RequestBody InquiryResponseDto inquiryResponseDto,
+                                                      BindingResult result) {
+        if (result.hasErrors()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("답변을 제대로 입력해주세요.");
+        }
+
+        try {
+            ticketInquiryService.updateInquiryResponse(inquiryResponseDto);
         } catch (NoSuchElementException e) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN)
                     .body("오류가 발생했습니다.<br>다시 시도해주세요.");

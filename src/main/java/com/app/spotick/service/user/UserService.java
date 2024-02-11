@@ -6,6 +6,7 @@ import com.app.spotick.domain.dto.place.PlaceReservationListDto;
 import com.app.spotick.domain.dto.place.reservation.PlaceReservedNotReviewedDto;
 import com.app.spotick.domain.dto.place.review.ContractedPlaceDto;
 import com.app.spotick.domain.dto.place.review.MypageReviewListDto;
+import com.app.spotick.domain.dto.ticket.TicketInfoDto;
 import com.app.spotick.domain.dto.ticket.TicketManageListDto;
 import com.app.spotick.domain.dto.user.UserJoinDto;
 import com.app.spotick.domain.dto.user.UserProfileDto;
@@ -45,6 +46,8 @@ public interface UserService {
     Optional<ContractedPlaceDto> findPlaceBriefly(Long placeId, Long userId);
 
     Page<TicketManageListDto> findHostTicketsPage(Long userId, Pageable pageable);
+
+    Optional<TicketInfoDto> findTicketInfo(Long ticketId, Long userId);
 
     boolean isValidEmail(String email);
     boolean isValidNickname(String nickname);

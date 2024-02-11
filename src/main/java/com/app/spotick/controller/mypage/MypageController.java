@@ -7,6 +7,7 @@ import com.app.spotick.domain.dto.place.reservation.PlaceReservedNotReviewedDto;
 import com.app.spotick.domain.dto.place.review.ContractedPlaceDto;
 import com.app.spotick.domain.dto.place.review.PlaceReviewRegisterDto;
 import com.app.spotick.domain.dto.place.review.MypageReviewListDto;
+import com.app.spotick.domain.dto.ticket.TicketInfoDto;
 import com.app.spotick.domain.dto.ticket.TicketManageListDto;
 import com.app.spotick.domain.dto.user.UserDetailsDto;
 import com.app.spotick.domain.dto.user.UserProfileDto;
@@ -375,8 +376,18 @@ public class MypageController {
         model.addAttribute("pagination", pagination);
     }
 
-    @GetMapping("/tickets/inquiries")
-    public void goToTicketsInquiryList() {
+    @GetMapping("/tickets/inquiries/{ticketId}")
+    public String goToTicketsInquiryList(@PathVariable("ticketId") Long ticketId,
+                                       @AuthenticationPrincipal UserDetailsDto userDetailsDto,
+                                       Model model) {
+
+        TicketInfoDto ticketInfo = userService.findTicketInfo(ticketId, userDetailsDto.getId()).orElseThrow(
+                NoSuchElementException::new
+        );
+
+        model.addAttribute("ticketInfo", ticketInfo);
+
+        return "/mypage/tickets/inquiries";
     }
 
     private String getMaskedEmail(String email) {

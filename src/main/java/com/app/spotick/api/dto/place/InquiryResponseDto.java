@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 
 @Data @NoArgsConstructor
 public class InquiryResponseDto {
-    private Long placeId;
+    private Long id;
     private Long inquiryId;
     @NotBlank(message = "답변을 입력해주세요.")
     private String response;
