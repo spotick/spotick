@@ -11,7 +11,7 @@ const detailDates = document.getElementById('detailDates');
 const detailGrades = document.getElementById('detailGrades');
 
 
-function openTicketDetail(article, title, address, addressDetail, startDate, endDate) {
+function openTicketDetail(article, ticketId, title, address, addressDetail, startDate, endDate) {
     slideContainers.forEach(each => each.classList.remove('show'));
 
     const slideContainer = article.querySelector('.mpc-slide-con');
@@ -29,12 +29,22 @@ function openTicketDetail(article, title, address, addressDetail, startDate, end
     dateDifference++;
 
     let datesHTML = '';
+    const date = new Date(startDate);
 
     for (let i = 0; i < dateDifference; i++) {
-        datesHTML += `<div class="date-item"><span>${start + i}</span></div>`;
+        date.setDate(date.getDate() + 1 + i);
+
+        let formattedDate = formatDate(date);
+
+        const isActive = i === 0 ? 'active' : '';
+        datesHTML += `<div class="date-item ${isActive}" data-date="${formattedDate}"><span>${start + i}</span></div>`;
     }
 
     detailDates.innerHTML = datesHTML;
+
+    ticketService.requestGrades(ticketId, startDate, ticketService.loadGrades);
+
+
 
     let dateItems = document.querySelectorAll('.date-item');
     dateItems.forEach(dateItem => {
@@ -42,9 +52,60 @@ function openTicketDetail(article, title, address, addressDetail, startDate, end
             dateItems.forEach(item => item.classList.remove('active'));
 
             this.classList.add('active');
+
+            let date = this.getAttribute('data-date');
+
+            ticketService.requestGrades(ticketId, date, ticketService.loadGrades)
         });
     });
 }
+
+const ticketService = (function () {
+
+    function requestGrades(ticketId, date, callback) {
+        fetch(`/ticket/api/getGrades?ticketId=${ticketId}&date=${date}`, {
+            method: 'GET'
+        })
+            .then(response => {
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    throw response;
+                }
+            })
+            .then(response => {
+                if (callback) {
+                    return callback(response.data);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            })
+    }
+
+    function loadGrades(data) {
+        let gradeHTML = '';
+
+        data.forEach(grade => {
+
+            gradeHTML += `
+                <tr>
+                    <td>${grade.gradeName}</td>
+                    <td>${grade.price.toLocaleString()}</td>
+                    <td>${grade.sold}</td>
+                    <td>${grade.maxPeople}</td>
+                </tr>`
+
+        });
+
+        detailGrades.innerHTML = gradeHTML;
+    }
+
+    return {
+        requestGrades: requestGrades,
+        loadGrades: loadGrades
+    }
+})();
 
 function editTicket() {
     openModal(modalTicket);
@@ -54,13 +115,13 @@ function editTicket() {
 
 document.querySelectorAll('.ticketItem').forEach(ticketItem => {
     ticketItem.addEventListener('click', function () {
+        const ticketId = this.getAttribute('data-id')
         const title = this.getAttribute('data-title');
         const address = this.getAttribute('data-address');
         const addressDetail = this.getAttribute('data-address-detail');
         const startDate = this.getAttribute('data-start-date');
         const endDate = this.getAttribute('data-end-date');
 
-
-        openTicketDetail(this, title, address, addressDetail, startDate, endDate)
+        openTicketDetail(this, ticketId, title, address, addressDetail, startDate, endDate)
     })
 })

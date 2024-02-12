@@ -274,6 +274,7 @@
                                 <article class="ticketItem" th:data-address="*{ticketAddress.address}"
                                          th:data-address-detail="*{ticketAddress.addressDetail}"
                                          th:data-end-date="*{endDate}"
+                                         th:data-id="*{ticketId}"
                                          th:data-start-date="*{startDate}"
                                          th:data-title="*{title}">
                                     <div class="mpc-ticket-con">
@@ -348,9 +349,7 @@
                                         <td>총 좌석수</td>
                                     </tr>
                                     </thead>
-                                    <tbody>
-                                    <tr id="detailGrades">
-                                    </tr>
+                                    <tbody id="detailGrades">
                                     </tbody>
                                 </table>
                             </div>

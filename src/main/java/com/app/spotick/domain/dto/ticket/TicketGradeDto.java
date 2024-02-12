@@ -7,13 +7,13 @@ import lombok.NoArgsConstructor;
 public class TicketGradeDto {
     private String gradeName;
     private Integer price;
+    private Long sold;
     private Integer maxPeople;
-    private Long ticketId;
 
-    public TicketGradeDto(String gradeName, Integer price, Integer maxPeople, Long ticketId) {
+    public TicketGradeDto(String gradeName, Integer price, Long sold, Integer maxPeople) {
         this.gradeName = gradeName;
         this.price = price;
+        this.sold = sold;
         this.maxPeople = maxPeople;
-        this.ticketId = ticketId;
     }
 }

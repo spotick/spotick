@@ -1,11 +1,7 @@
 package com.app.spotick.repository.ticket;
 
 import com.app.spotick.domain.dto.page.TicketPage;
-import com.app.spotick.domain.dto.ticket.TicketManageListDto;
 import com.app.spotick.domain.embedded.post.PostAddress;
-import com.app.spotick.domain.entity.place.Place;
-import com.app.spotick.domain.entity.place.PlaceFile;
-import com.app.spotick.domain.entity.promotion.PromotionBoard;
 import com.app.spotick.domain.entity.ticket.Ticket;
 import com.app.spotick.domain.entity.ticket.TicketFile;
 import com.app.spotick.domain.entity.ticket.TicketGrade;
@@ -14,8 +10,8 @@ import com.app.spotick.domain.type.post.PostStatus;
 import com.app.spotick.domain.type.ticket.TicketCategory;
 import com.app.spotick.domain.type.ticket.TicketRequestType;
 import com.app.spotick.domain.type.user.UserStatus;
-import com.app.spotick.repository.promotion.PromotionRepository;
 import com.app.spotick.repository.ticket.file.TicketFileRepository;
+import com.app.spotick.repository.ticket.grade.TicketGradeRepository;
 import com.app.spotick.repository.user.UserRepository;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
@@ -25,7 +21,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.test.annotation.Commit;
@@ -35,8 +30,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.UUID;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @Transactional
