@@ -46,5 +46,7 @@ public interface UserService {
     boolean isValidEmail(String email);
     boolean isValidNickname(String nickname);
 
+    boolean checkUserByNicknameAndTel(String nickname, String tel);
+
 
 }

@@ -56,7 +56,7 @@ $('.id-section .tel').on('change', function () {
 
 $('.cert-number-label,.password-wrap').on('click', '.cert-btn.on', function () {
     // 사용자에게 인증번호를 보내주는 메소드
-    // sendFindIdAuthenticationCode();
+    sendFindIdAuthenticationCode();
     $(this).siblings('input').attr('readonly', false);
     $(this).text('재전송');
 });
@@ -113,15 +113,16 @@ $('.cert-number-label, .password-wrap .cert-number-label input').on('blur', func
 // 사용자에게 인증번호를 보내주는 메소드
 function sendFindIdAuthenticationCode() {
     // 아이디찾기 인증번호 전송 및 처리하기
+
     $.ajax({
-        url: '',
+        url: '/users/api/email/cert/code',
         type: 'post',
-        data: {
-            name: $('#name').val(),
+        contentType: 'application/json; charset=utf-8',
+        data: JSON.stringify( {
+            nickname: $('#nickname').val(),
             tel: $('#tel').val()
-        },
+        }),
         success: function (result) {
-            console.log('');
         },
         error: (xhr, status, error) => console.log(error),
     });

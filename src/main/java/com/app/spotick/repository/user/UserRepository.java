@@ -39,6 +39,9 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
 //    닉네임 중복 확인
     boolean existsUserByNickName(String nickname);
+
+//    닉네임 전화번호일치 여부 확인(아이디찾기
+    boolean existsUserByNickNameAndTel(String nickname, String tel);
 }
 
 

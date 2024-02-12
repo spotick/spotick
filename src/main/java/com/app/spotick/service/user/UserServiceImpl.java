@@ -213,6 +213,11 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     public boolean isValidNickname(String nickname) {
         return !userRepository.existsUserByNickName(nickname);
     }
+
+    @Override
+    public boolean checkUserByNicknameAndTel(String nickname, String tel) {
+        return userRepository.existsUserByNickNameAndTel(nickname,tel);
+    }
 }
 
 

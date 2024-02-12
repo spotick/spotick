@@ -13,7 +13,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.awaitility.Awaitility.await;
 
 @SpringBootTest
-class RedisCrudTest {
+public class RedisCrudTest {
     final String KEY = "key";
     final String VALUE = "value";
     final Duration DURATION = Duration.ofMillis(5000);
