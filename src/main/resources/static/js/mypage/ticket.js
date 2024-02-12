@@ -1,60 +1,127 @@
 const ticketDetailContainer = document.getElementById('ticketDetail');
 const slideContainers = document.querySelectorAll('.mpc-slide-con');
 
-function openTicketDetail(article, title, subTitle, address, addressDetail, ticketTypes) {
+const noItem = document.querySelector('.mpctd-none');
+const detailContainer = document.querySelector('.mpctd-container');
+
+const detailTitle = document.getElementById('detailTitle');
+const detailAddress = document.getElementById('detailAddress');
+const detailAddressDetail = document.getElementById('detailAddressDetail');
+const detailDates = document.getElementById('detailDates');
+const detailGrades = document.getElementById('detailGrades');
+
+
+function openTicketDetail(article, ticketId, title, address, addressDetail, startDate, endDate) {
     slideContainers.forEach(each => each.classList.remove('show'));
 
     const slideContainer = article.querySelector('.mpc-slide-con');
     slideContainer.classList.add('show');
 
-    ticketDetailContainer.innerHTML = `
-        <div class="mpctd-title">
-            <p>${title}</p>
-        </div>
-        <div class="mpctd-subtitle">
-            <p>${subTitle}</p>
-            
-        </div>
-        <p>행사 장소 주소</p>
-        <label class="mpctd-input-con" style="margin-bottom: 8px">
-            <input readonly type="text" value="${address}">
-        </label>
-        <label class="mpctd-input-con" style="margin-bottom: 40px">
-            <input readonly type="text" value="${addressDetail}">
-        </label>
-        <p>티켓 상태</p>
-        <div class="mpctd-ticket-container" id="ticket-regular">
-            <table class="ticket-table">
-                <thead>
-                    <tr>
-                        <td>등급</td>
-                        <td>가격</td>
-                        <td>판매수</td>
-                        <td>총 좌석수</td>
-                    </tr>
-                </thead>
-                <tbody>
-                    ${ticketTypes.map(ticketType => `
-                        <tr>
-                            <td>${ticketType.name}</td>
-                            <td>${ticketType.price}</td>
-                            <td>${ticketType.sold}</td>
-                            <td>${ticketType.totalSeats}</td>
-                        </tr>
-                    `).join('')}
-                </tbody>
-            </table>
-        </div>`;
+    noItem.classList.add('hide');
+    detailContainer.classList.add('show');
+
+    detailTitle.innerHTML = title;
+    detailAddress.value = address;
+    detailAddressDetail.value = addressDetail;
+
+    let dateDifference = dateDifferenceInDays(new Date(startDate), new Date(endDate));
+    let start = new Date(startDate).getDate() + 1;
+    dateDifference++;
+
+    let datesHTML = '';
+    const date = new Date(startDate);
+
+    for (let i = 0; i < dateDifference; i++) {
+        date.setDate(date.getDate() + 1 + i);
+
+        let formattedDate = formatDate(date);
+
+        const isActive = i === 0 ? 'active' : '';
+        datesHTML += `<div class="date-item ${isActive}" data-date="${formattedDate}"><span>${start + i}</span></div>`;
+    }
+
+    detailDates.innerHTML = datesHTML;
+
+    ticketService.requestGrades(ticketId, startDate, ticketService.loadGrades);
+
+
+
+    let dateItems = document.querySelectorAll('.date-item');
+    dateItems.forEach(dateItem => {
+        dateItem.addEventListener('click', function () {
+            dateItems.forEach(item => item.classList.remove('active'));
+
+            this.classList.add('active');
+
+            let date = this.getAttribute('data-date');
+
+            ticketService.requestGrades(ticketId, date, ticketService.loadGrades)
+        });
+    });
 }
+
+const ticketService = (function () {
+
+    function requestGrades(ticketId, date, callback) {
+        fetch(`/ticket/api/getGrades?ticketId=${ticketId}&date=${date}`, {
+            method: 'GET'
+        })
+            .then(response => {
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    throw response;
+                }
+            })
+            .then(response => {
+                if (callback) {
+                    return callback(response.data);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            })
+    }
+
+    function loadGrades(data) {
+        let gradeHTML = '';
+
+        data.forEach(grade => {
+
+            gradeHTML += `
+                <tr>
+                    <td>${grade.gradeName}</td>
+                    <td>${grade.price.toLocaleString()}</td>
+                    <td>${grade.sold}</td>
+                    <td>${grade.maxPeople}</td>
+                </tr>`
+
+        });
+
+        detailGrades.innerHTML = gradeHTML;
+    }
+
+    return {
+        requestGrades: requestGrades,
+        loadGrades: loadGrades
+    }
+})();
 
 function editTicket() {
     openModal(modalTicket);
 }
 
-// 테스트용
-const ticketTypes = [
-    { name: '일반석', price: '50,000', sold: '10', totalSeats: '100' },
-    { name: 'VIP', price: '70,000', sold: '2', totalSeats: '20' },
-    { name: '스탠딩', price: '40,000', sold: '2', totalSeats: '30' },
-    { name: '테스트', price: '20,000', sold: '10', totalSeats: '30' }
-];
+/////////////////////////////////////////////////////////////
+
+document.querySelectorAll('.ticketItem').forEach(ticketItem => {
+    ticketItem.addEventListener('click', function () {
+        const ticketId = this.getAttribute('data-id')
+        const title = this.getAttribute('data-title');
+        const address = this.getAttribute('data-address');
+        const addressDetail = this.getAttribute('data-address-detail');
+        const startDate = this.getAttribute('data-start-date');
+        const endDate = this.getAttribute('data-end-date');
+
+        openTicketDetail(this, ticketId, title, address, addressDetail, startDate, endDate)
+    })
+})

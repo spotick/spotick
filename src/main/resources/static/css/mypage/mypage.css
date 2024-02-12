@@ -1236,6 +1236,18 @@
     color: rgb(87, 87, 87);
 }
 
+.mpctd-none.hide {
+    display: none;
+}
+
+.mpctd-container {
+    display: none;
+}
+
+.mpctd-container.show {
+    display: block;
+}
+
 .mpctd-title {
     font-size: 20px;
     line-height: 25px;
@@ -1263,6 +1275,34 @@
     text-align: right;
     width: 100%;
     cursor: default;
+}
+
+.date-pick-container {
+    display: flex;
+    margin: 8px 0 16px;
+    height: 40px;
+    justify-content: center;
+}
+
+.date-item {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 100%;
+    border: 1px solid #007AFF;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.date-item.active {
+    background-color: #007AFF;
+    color: white;
+}
+
+.date-item:not(:last-child) {
+    margin-right: 8px;
 }
 
 .mpctd-ticket-container {

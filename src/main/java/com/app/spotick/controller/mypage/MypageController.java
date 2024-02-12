@@ -1,5 +1,6 @@
 package com.app.spotick.controller.mypage;
 
+import com.app.spotick.domain.dto.page.TicketPage;
 import com.app.spotick.domain.dto.place.PlaceListDto;
 import com.app.spotick.domain.dto.place.PlaceManageListDto;
 import com.app.spotick.domain.dto.place.PlaceReservationListDto;
@@ -7,12 +8,14 @@ import com.app.spotick.domain.dto.place.reservation.PlaceReservedNotReviewedDto;
 import com.app.spotick.domain.dto.place.review.ContractedPlaceDto;
 import com.app.spotick.domain.dto.place.review.PlaceReviewRegisterDto;
 import com.app.spotick.domain.dto.place.review.MypageReviewListDto;
+import com.app.spotick.domain.dto.ticket.TicketInfoDto;
 import com.app.spotick.domain.dto.ticket.TicketManageListDto;
 import com.app.spotick.domain.dto.user.UserDetailsDto;
 import com.app.spotick.domain.dto.user.UserProfileDto;
 import com.app.spotick.domain.entity.place.PlaceReservation;
 import com.app.spotick.domain.pagination.Pagination;
 import com.app.spotick.domain.type.place.PlaceReservationStatus;
+import com.app.spotick.domain.type.ticket.TicketRequestType;
 import com.app.spotick.service.place.reservation.PlaceReservationService;
 import com.app.spotick.service.redis.RedisService;
 import com.app.spotick.service.user.UserProfileFileService;
@@ -362,21 +365,36 @@ public class MypageController {
 
     @GetMapping("/tickets")
     public void goToTickets(@RequestParam(value = "page", defaultValue = "1") int page,
+                            @RequestParam(value = "view", defaultValue = "all") String viewType,
                             @AuthenticationPrincipal UserDetailsDto userDetailsDto,
                             Model model) {
         Pageable pageable = PageRequest.of(page - 1, 5);
 
-        Page<TicketManageListDto> hostTicketsPage
-                = userService.findHostTicketsPage(userDetailsDto.getId(), pageable);
-        Pagination<TicketManageListDto> pagination
-                = new Pagination<>(5, pageable, hostTicketsPage);
+        TicketRequestType ticketRequestType = TicketRequestType.valueOf(viewType);
 
-        model.addAttribute("hostTicketsPage", hostTicketsPage);
+        TicketPage ticketPage
+                = userService.findHostTicketsPage(userDetailsDto.getId(), pageable, ticketRequestType);
+        Pagination<TicketManageListDto> pagination
+                = new Pagination<>(5, pageable, ticketPage.getPage());
+
+
+        model.addAttribute("ticketPage", ticketPage);
         model.addAttribute("pagination", pagination);
+        model.addAttribute("viewType", viewType);
     }
 
-    @GetMapping("/tickets/inquiries")
-    public void goToTicketsInquiryList() {
+    @GetMapping("/tickets/inquiries/{ticketId}")
+    public String goToTicketsInquiryList(@PathVariable("ticketId") Long ticketId,
+                                       @AuthenticationPrincipal UserDetailsDto userDetailsDto,
+                                       Model model) {
+
+        TicketInfoDto ticketInfo = userService.findTicketInfo(ticketId, userDetailsDto.getId()).orElseThrow(
+                NoSuchElementException::new
+        );
+
+        model.addAttribute("ticketInfo", ticketInfo);
+
+        return "/mypage/tickets/inquiries";
     }
 
     private String getMaskedEmail(String email) {

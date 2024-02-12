@@ -251,70 +251,158 @@
                 <h2>티켓팅 관리</h2>
             </div>
             <nav class="mpc-top-nav">
-                <button class="mpc-top-nav-button active" type="button">
-                    전체(<span>0</span>)
-                </button>
-                <button class="mpc-top-nav-button" type="button">
-                    예정된 티켓팅(<span>0</span>)
-                </button>
-                <button class="mpc-top-nav-button" type="button">
-                    종료된 티켓팅(<span>0</span>)
-                </button>
+                <a class="mpc-top-nav-button" th:classappend="${viewType == 'all' ? 'active' : ''}"
+                   th:href="@{/mypage/tickets?page=1&view=all}">
+                    전체(<span th:text="${ticketPage.getTotal()}"></span>)
+                </a>
+
+                <a class="mpc-top-nav-button" th:classappend="${viewType == 'upcoming' ? 'active' : ''}"
+                   th:href="@{/mypage/tickets?page=1&view=upcoming}">
+                    예정된 티켓팅(<span th:text="${ticketPage.getUpcomingCount()}"></span>)
+                </a>
+
+                <a class="mpc-top-nav-button" th:classappend="${viewType == 'past' ? 'active' : ''}"
+                   th:href="@{/mypage/tickets?page=1&view=past}">
+                    종료된 티켓팅(<span th:text="${ticketPage.getPastCount()}"></span>)
+                </a>
             </nav>
-            <div class="mpct-content-wrap">
-                <th:block th:if="${#lists.size(hostTicketsPage)}">
+            <th:block th:if="${ticketPage.getPage().getTotalElements() > 0}">
+                <div class="mpct-content-wrap">
                     <div class="mpc-ticket-list">
-                        <th:block th:each="hostTicket:${hostTicketsPage}">
-                            <article
-                                    onclick="openTicketDetail(this, '테스트1', '서브 제목', '서울특별시 서초구 서초대로 240', '111', ticketTypes);"
-                                    th:object="${hostTicket}">
-                                <div class="mpc-ticket-con">
-                                    <a class="mpc-ticket-img-con" href="#">
-                                        <img th:alt="${hostTicket.title}"
-                                             th:src="|/file/display?fileName=*{ticketFileDto.uploadPath}/t_*{ticketFileDto.uuid}_*{ticketFileDto.fileName}|">
-                                    </a>
-                                    <div class="mpct-card-content">
-                                        <div class="mpccc-row">
-                                            <p class="mpccc-ticket-title general-ellipsis-1">
-                                                <a href="#" th:text="*{title}"></a>
-                                            </p>
-                                        </div>
-                                        <div class="mpccc-row">
-                                            <a class="mpccc-title-font general-ellipsis-1" href="#"
-                                               th:text="*{ticketAddress.address + ' ' + ticketAddress.addressDetail}"></a>
-                                        </div>
-                                        <div class="mpccc-row" style="margin-top: 10px;">
-                                            <p class="mpccc-price"
-                                               th:text="${#numbers.formatInteger(hostTicket.ticketGradeDtos[0].price, 3, 'COMMA')} + '원'"></p>
-                                        </div>
-                                        <div class="mpccc-row" style="margin-top: 10px;">
-                                            <p class="mpccc-general-font"
-                                               th:text="*{#temporals.format(startDate, 'yyyy년 MM월 dd일') + ' ~ ' + #temporals.format(endDate, 'yyyy년 MM월 dd일')}"></p>
-                                        </div>
-                                        <div class="mpccc-row">
-                                            <a class="mpccc-line-btn" href="#">
-                                                <span>문의 관리</span>
-                                                <div class="mpccc-alarm" th:if="*{inquiriesCount > 0}">
-                                                    <span th:text="*{inquiriesCount}"></span>
-                                                </div>
-                                            </a>
+                        <th:block th:each="hostTicket:${ticketPage.getPage()}">
+                            <th:block th:inline="javascript" th:object="${hostTicket}">
+                                <article class="ticketItem" th:data-address="*{ticketAddress.address}"
+                                         th:data-address-detail="*{ticketAddress.addressDetail}"
+                                         th:data-end-date="*{endDate}"
+                                         th:data-id="*{ticketId}"
+                                         th:data-start-date="*{startDate}"
+                                         th:data-title="*{title}">
+                                    <div class="mpc-ticket-con">
+                                        <a class="mpc-ticket-img-con" href="#">
+                                            <img th:alt="${hostTicket.title}"
+                                                 th:src="|/file/display?fileName=*{ticketFileDto.uploadPath}/t_*{ticketFileDto.uuid}_*{ticketFileDto.fileName}|">
+                                        </a>
+                                        <div class="mpct-card-content">
+                                            <div class="mpccc-row">
+                                                <p class="mpccc-ticket-title general-ellipsis-1">
+                                                    <a href="#" th:text="*{title}"></a>
+                                                </p>
+                                            </div>
+                                            <div class="mpccc-row">
+                                                <a class="mpccc-title-font general-ellipsis-1" href="#"
+                                                   th:text="*{ticketAddress.address + ' ' + ticketAddress.addressDetail}"></a>
+                                            </div>
+                                            <div class="mpccc-row" style="margin-top: 10px;">
+                                                <p class="mpccc-price"
+                                                   th:text="${#numbers.formatInteger(hostTicket.minPrice, 3, 'COMMA')} + '원'"></p>
+                                            </div>
+                                            <div class="mpccc-row" style="margin-top: 10px;">
+                                                <p class="mpccc-general-font"
+                                                   th:text="*{#temporals.format(startDate, 'yyyy년 MM월 dd일') + ' ~ ' + #temporals.format(endDate, 'yyyy년 MM월 dd일')}"></p>
+                                            </div>
+                                            <div class="mpccc-row">
+                                                <a class="mpccc-line-btn"
+                                                   th:href="@{/mypage/tickets/inquiries/{ticketId}(ticketId = *{ticketId})}">
+                                                    <span>문의 관리</span>
+                                                    <div class="mpccc-alarm" th:if="*{inquiriesCount > 0}">
+                                                        <span th:text="*{inquiriesCount}"></span>
+                                                    </div>
+                                                </a>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="mpc-slide-con">
-                                    <div class="mpc-slide-item" onclick="editTicket()">
-                                        <span>티켓 정보 수정 하기</span>
+                                    <div class="mpc-slide-con">
+                                        <div class="mpc-slide-item" onclick="editTicket()">
+                                            <span>티켓 정보 수정 하기</span>
+                                        </div>
                                     </div>
-                                </div>
-                            </article>
+                                </article>
+                            </th:block>
                         </th:block>
                     </div>
                     <div class="mpc-ticket-detail-con" id="ticketDetail">
                         <div class="mpctd-none">선택된 티켓이 없습니다.<br>좌측에서 선택해주세요.</div>
+                        <div class="mpctd-container">
+                            <div class="mpctd-title">
+                                <p id="detailTitle"></p>
+                            </div>
+
+                            <p>행사 장소 주소</p>
+                            <label class="mpctd-input-con" style="margin-bottom: 8px">
+                                <input id="detailAddress" readonly type="text">
+                            </label>
+                            <label class="mpctd-input-con" style="margin-bottom: 40px">
+                                <input id="detailAddressDetail" readonly type="text">
+                            </label>
+
+                            <p>날짜 선택</p>
+                            <div class="date-pick-container" id="detailDates"></div>
+
+                            <p>티켓 현황</p>
+                            <div class="mpctd-ticket-container">
+                                <table class="ticket-table">
+                                    <thead>
+                                    <tr>
+                                        <td>등급</td>
+                                        <td>가격</td>
+                                        <td>판매수</td>
+                                        <td>총 좌석수</td>
+                                    </tr>
+                                    </thead>
+                                    <tbody id="detailGrades">
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
                     </div>
-                </th:block>
-            </div>
+                </div>
+            </th:block>
+
+            <th:block th:if="${ticketPage.getPage().getTotalElements() == 0}">
+                <div style="padding-top: 28px">
+                    <div class="mp-no-list">
+                        <span>티켓 정보가 없습니다.</span>
+                    </div>
+                </div>
+            </th:block>
+
         </article>
+
+        <section class="pagination-container">
+            <span class="pagination-previous" th:if="${pagination.hasPrevBlock()}">
+                <a class="pagination-btns first" th:href="@{/mypage/tickets(page=1, view=${viewType})}" title="맨 처음">
+                    <i class="fa-solid fa-chevron-left"></i>
+                    <i class="fa-solid fa-chevron-left"></i>
+                </a>
+                <a class="pagination-btns"
+                   th:href="@{/mypage/tickets(page=${pagination.startPage - 1}, view=${viewType})}"
+                   title="이전">
+                    <i class="fa-solid fa-chevron-left"></i>
+                </a>
+            </span>
+
+            <span class="pagination-body">
+                <span class="pagination-btns"
+                      th:each="i : ${#numbers.sequence(pagination.startPage, pagination.endPage)}">
+                    <a th:class="${i == pagination.currentPage ? 'active' : ''}"
+                       th:href="@{/mypage/tickets(page=${i}, view=${viewType})}"
+                       th:text="${i}"></a>
+                </span>
+            </span>
+
+            <span class="pagination-next" th:if="${pagination.hasNextBlock()}">
+                <a class="pagination-btns" th:href="@{/mypage/tickets(page=${pagination.endPage+1}, view=${viewType})}"
+                   title="다음">
+                    <i class="fa-solid fa-chevron-right"></i>
+                </a>
+                <a class="pagination-btns end"
+                   th:href="@{/mypage/tickets(page=${pagination.lastPage}, view=${viewType})}"
+                   title="맨 끝">
+                    <i class="fa-solid fa-chevron-right"></i>
+                    <i class="fa-solid fa-chevron-right"></i>
+                </a>
+            </span>
+        </section>
     </div>
 </main>
 
@@ -334,7 +422,7 @@
     document.getElementById('tickets').classList.add('active');
 </script>
 <script th:inline="javascript">
-    console.log([[${hostTicketsPage}]])
+    console.log([[${ticketPage}]])
 </script>
 
 </html>
