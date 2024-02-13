@@ -4,7 +4,7 @@ let passwordContent = '';
 $('.title-box').on('click', function () {
     let isId = $(this).text().trim() === '아이디';
     $('.id-section').toggleClass('none', !isId);
-    if(passwordContent !== ''){
+    if (passwordContent !== '') {
         $('.password-wrap').html(passwordContent)
     }
     $('.password-section').toggleClass('none', isId);
@@ -28,13 +28,6 @@ function validateInput($input, regex) {
     return isOk; // 유효성 검사 결과를 반환합니다.
 }
 
-// 이름과 전화번호 유효성 검사 함수
-function validateInput($input, regex) {
-    let $warningMsg = $input.closest('.input-box').find('.warning-msg');
-    let isOk = regex.test($input.val());
-    $warningMsg.toggleClass('none', isOk);
-}
-
 // 인증 버튼 상태 업데이트 함수
 function updateCertButtonState() {
     let isNameValid = /^[가-힣A-Za-z]+$/.test($('.id-section .name').val().trim());
@@ -54,9 +47,22 @@ $('.id-section .tel').on('change', function () {
     updateCertButtonState();
 });
 
-$('.cert-number-label,.password-wrap').on('click', '.cert-btn.on', function () {
+$('.id-section .cert-number-label').on('click', '.cert-btn.on', function () {
     // 사용자에게 인증번호를 보내주는 메소드
-    // sendFindIdAuthenticationCode();
+    sendFindIdAuthenticationCode()
+        .then(isOk => {
+            $(this).siblings('input').attr('readonly', !isOk);
+            $(this).text(isOk?'재전송':'인증번호');
+        });
+});
+
+$('.password-wrap .cert-number-label').on('click', '.cert-btn.on', function () {
+    // 사용자에게 인증번호를 보내주는 메소드
+    // sendFindIdAuthenticationCode()
+    //     .then(isOk => {
+    //         $(this).siblings('input').attr('readonly', !isOk);
+    //         $(this).text('재전송');
+    //     });
     $(this).siblings('input').attr('readonly', false);
     $(this).text('재전송');
 });
@@ -65,23 +71,41 @@ $('#certNumber').on('blur', function () {
     let isTrue = $(this).val() !== '';
     $('.find-id-btn').toggleClass('on', isTrue);
 });
-$('.password-wrap').on('blur','#passwordCertNumber', function () {
+$('.password-wrap').on('blur', '#passwordCertNumber', function () {
     let isTrue = $(this).val() !== '';
     $('.find-password-btn').toggleClass('on', isTrue);
 });
 
 
-
-$('.id-section').on('click', '.find-id-btn.on',function (){
-//     사용자가 입력한 인증번호가 맞는지 검사하고
-//     맞으면 해당 사용자의 아이디를 보여주고 
-//     틀리면 다시 인증하게 하기
-//     ajax결과 넘겨주기
-
-    showFoundId({email:'qwer1234@ooo.com',registerDate: '2023년 12월 01일'});
+$('.id-section').on('click', '.find-id-btn.on', function () {
+    let $certMsg = $('.id-cert-msg');
+    fetch('/users/api/find/email', {
+        method: 'POST',
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+            nickname: $('#nickname').val(),
+            tel: $('#tel').val(),
+            certCode: $('#certNumber').val()
+        }),
+    }).then(response=>{
+        if(!response.ok){
+            throw response.json();
+        }
+        return response.json();
+    }).then(data=>data.data)
+        .then(data=>{
+            showFoundId({email: data.email, registerDate: data.createdDateStr});
+        })
+        .catch(error=> {
+            error.then(data=>{
+                $certMsg.text(data.message);
+            })
+        });
 });
 
-$('.password-wrap').on('click', '.find-password-btn.on',function (){
+$('.password-wrap').on('click', '.find-password-btn.on', function () {
     console.log('비밀번호 찾기!!!');
 //     사용자가 입력한 인증번호가 맞는지 검사하고
 //     맞으면 해당 비밀번호를 변경할 수 있게
@@ -90,14 +114,14 @@ $('.password-wrap').on('click', '.find-password-btn.on',function (){
     setPasswordChangeContent();
 });
 
-$('.password-wrap').on('blur','#email',function (){
+$('.password-wrap').on('blur', '#email', function () {
     let regex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
     let isTrue = regex.test($(this).val())
     let $warningMsg = $(this).closest('.input-box').find('.warning-msg');
-    if(isTrue){
+    if (isTrue) {
         $('.cert-btn').addClass('on');
         $warningMsg.addClass('none')
-    }else{
+    } else {
         $('.cert-btn').removeClass('on');
         $warningMsg.removeClass('none')
     }
@@ -109,25 +133,37 @@ $('.cert-number-label, .password-wrap .cert-number-label input').on('blur', func
 });
 
 
-
 // 사용자에게 인증번호를 보내주는 메소드
 function sendFindIdAuthenticationCode() {
+    let $certMsg = $('.id-cert-msg');
+    let result = false;
     // 아이디찾기 인증번호 전송 및 처리하기
-    $.ajax({
-        url: '',
-        type: 'post',
-        data: {
-            name: $('#name').val(),
+    return fetch('/users/api/email/cert/code', {
+        method: 'POST',
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+            nickname: $('#nickname').val(),
             tel: $('#tel').val()
-        },
-        success: function (result) {
-            console.log('');
-        },
-        error: (xhr, status, error) => console.log(error),
-    });
+        }),
+    }).then(r => {
+        if (!r.ok) {
+            throw r;
+        }
+        return r.json();
+    }).then(resp => {
+        $certMsg.text('');
+        return resp.data;
+    }).catch(error => {
+        error.json().then(err => {
+            $certMsg.text(err.message);
+            return error.data;
+        })
+    })
 }
 
-function setPasswordChangeContent(){
+function setPasswordChangeContent() {
     let text = `
         <section class="flex-center password-set-section">
             <p class="guide-msg">새로 사용할 비밀번호를 입력해 주세요</p>
@@ -151,34 +187,34 @@ function setPasswordChangeContent(){
     $('.password-wrap').html(text);
 }
 
-$('.password-wrap').on('blur','.password-set-section input',function (){
+$('.password-wrap').on('blur', '.password-set-section input', function () {
     let isValidPassword = passwordValidation();
     let isSamePassword = checkPasswordMatching();
-    let isTrue = isValidPassword&& isSamePassword;
+    let isTrue = isValidPassword && isSamePassword;
 
-    $('.invalid-password-msg').toggleClass('none',isValidPassword);
-    $('.check-fail-msg').toggleClass('none',isSamePassword);
-    $('.change-password-btn').toggleClass('on',isTrue);
+    $('.invalid-password-msg').toggleClass('none', isValidPassword);
+    $('.check-fail-msg').toggleClass('none', isSamePassword);
+    $('.change-password-btn').toggleClass('on', isTrue);
 });
 
 // 비밀번호 변경 처리
-$('.password-wrap').on('click','.change-password-btn.on',function (){
+$('.password-wrap').on('click', '.change-password-btn.on', function () {
     console.log('비밀번호 변경!!!')
     alert('비밀번호 변경!!')
 });
 
 
 // 비밀번호 유효성 검사
-function passwordValidation(){
+function passwordValidation() {
     let regex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{6,15}$/;
     return regex.test($('#password').val());
 }
 
-function checkPasswordMatching(){
+function checkPasswordMatching() {
     return $('#password').val() === $('#passwordCheck').val();
 }
 
-function showFoundId(result){
+function showFoundId(result) {
     let text = `
         <div class="guide-msg flex-align-center">
           <p>아이디 찾기가 완료되었습니다.</p>
@@ -198,14 +234,13 @@ function showFoundId(result){
                         문의 시간은 평일 : 10:00~19:00입니다.
                     </p>
                 </div>
-                <a href="#" class="go-login flex-align-center">로그인</a>
+                <a href="/user/login?username=${result.email}" class="go-login flex-align-center">로그인</a>
                 </section>
         </div>
     `;
 
     $('.find-wrap').html(text);
 }
-
 
 
 

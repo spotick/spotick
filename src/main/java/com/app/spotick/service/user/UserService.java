@@ -1,6 +1,7 @@
 package com.app.spotick.service.user;
 
 import com.app.spotick.domain.dto.page.TicketPage;
+import com.app.spotick.api.dto.user.UserFindEmailDto;
 import com.app.spotick.domain.dto.place.PlaceListDto;
 import com.app.spotick.domain.dto.place.PlaceManageListDto;
 import com.app.spotick.domain.dto.place.PlaceReservationListDto;
@@ -8,7 +9,6 @@ import com.app.spotick.domain.dto.place.reservation.PlaceReservedNotReviewedDto;
 import com.app.spotick.domain.dto.place.review.ContractedPlaceDto;
 import com.app.spotick.domain.dto.place.review.MypageReviewListDto;
 import com.app.spotick.domain.dto.ticket.TicketInfoDto;
-import com.app.spotick.domain.dto.ticket.TicketManageListDto;
 import com.app.spotick.domain.dto.user.UserJoinDto;
 import com.app.spotick.domain.dto.user.UserProfileDto;
 import com.app.spotick.domain.entity.user.UserProfileFile;
@@ -53,4 +53,7 @@ public interface UserService {
 
     boolean isValidEmail(String email);
     boolean isValidNickname(String nickname);
+    boolean checkUserByNicknameAndTel(String nickname, String tel);
+    boolean isValidCertCode(String certCode, String key);
+    UserFindEmailDto.Response findUserFindEmailDto(String nickname,String tel);
 }

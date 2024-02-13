@@ -1,5 +1,6 @@
 package com.app.spotick.service.user;
 
+import com.app.spotick.api.dto.user.UserFindEmailDto;
 import com.app.spotick.domain.dto.page.TicketPage;
 import com.app.spotick.domain.dto.place.PlaceListDto;
 import com.app.spotick.domain.dto.place.PlaceManageListDto;
@@ -8,7 +9,6 @@ import com.app.spotick.domain.dto.place.reservation.PlaceReservedNotReviewedDto;
 import com.app.spotick.domain.dto.place.review.ContractedPlaceDto;
 import com.app.spotick.domain.dto.place.review.MypageReviewListDto;
 import com.app.spotick.domain.dto.ticket.TicketInfoDto;
-import com.app.spotick.domain.dto.ticket.TicketManageListDto;
 import com.app.spotick.domain.dto.user.UserDetailsDto;
 import com.app.spotick.domain.dto.user.UserJoinDto;
 import com.app.spotick.domain.dto.user.UserProfileDto;
@@ -20,14 +20,11 @@ import com.app.spotick.domain.type.user.AuthorityType;
 import com.app.spotick.repository.place.PlaceRepository;
 import com.app.spotick.repository.place.Review.PlaceReviewRepository;
 import com.app.spotick.repository.place.bookmark.PlaceBookmarkRepository;
-import com.app.spotick.repository.place.inquiry.PlaceInquiryRepository;
 import com.app.spotick.repository.place.reservation.PlaceReservationRepository;
 import com.app.spotick.repository.ticket.TicketRepository;
 import com.app.spotick.repository.user.UserAuthorityRepository;
 import com.app.spotick.repository.user.UserRepository;
-import com.app.spotick.service.place.inquiry.PlaceInquiryService;
 import com.app.spotick.service.redis.RedisService;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import net.nurigo.sdk.NurigoApp;
 import net.nurigo.sdk.message.model.Message;
@@ -42,6 +39,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Duration;
+import java.time.format.DateTimeFormatter;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.Random;
@@ -228,6 +226,25 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     public boolean isValidNickname(String nickname) {
         return !userRepository.existsUserByNickName(nickname);
+    }
+
+    @Override
+    public boolean checkUserByNicknameAndTel(String nickname, String tel) {
+        return userRepository.existsUserByNickNameAndTel(nickname,tel);
+    }
+
+    @Override
+    public boolean isValidCertCode(String certCode, String key) {
+        return certCode.equals(redisService.getValues(key));
+    }
+
+    @Override
+    public UserFindEmailDto.Response findUserFindEmailDto(String nickname, String tel) {
+        UserFindEmailDto.Response response = userRepository.findEmailDtoByNickNameAndTel(nickname, tel)
+                .orElseThrow(() -> new IllegalStateException("잘못된 닉네임, 전화번호"));
+        String registerDateFormat = response.getCreatedDate().format(DateTimeFormatter.ofPattern("yyyy년 MM월 dd일"));
+        response.setCreatedDateStr(registerDateFormat);
+        return response;
     }
 }
 
