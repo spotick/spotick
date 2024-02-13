@@ -171,8 +171,8 @@ public class TicketQDSLRepositoryImpl implements TicketQDSLRepository {
                 .select(Projections.constructor(TicketGradeDto.class,
                         ticketGrade.gradeName,
                         ticketGrade.price,
-                        ticketGrade.maxPeople,
-                        ticketGrade.ticket.id
+                        ticketGrade.id, //불필요 정보
+                        ticketGrade.maxPeople
                 ))
                 .from(ticketGrade)
                 .where(ticketGrade.ticket.id.eq(ticketId))

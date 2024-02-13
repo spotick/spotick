@@ -5,6 +5,7 @@ import com.app.spotick.api.dto.response.CommonResponse;
 import com.app.spotick.api.dto.response.PageResponse;
 import com.app.spotick.domain.dto.place.PlaceInquiryListDto;
 import com.app.spotick.domain.dto.place.inquiry.UnansweredInquiryDto;
+import com.app.spotick.domain.dto.ticket.TicketInquiryListDto;
 import com.app.spotick.domain.dto.user.UserDetailsDto;
 import com.app.spotick.domain.entity.place.PlaceInquiry;
 import com.app.spotick.domain.pagination.Pagination;
@@ -34,7 +35,6 @@ public class InquiryRestController {
     @GetMapping("/places")
     public ResponseEntity<PageResponse<PlaceInquiryListDto>> getPlaceInquiries(@RequestParam(value = "page", defaultValue = "1") int page,
                                                                                @AuthenticationPrincipal UserDetailsDto userDetailsDto) {
-        System.out.println("실행됨");
 
         try {
             Pageable pageable = PageRequest.of(page - 1, 10);
@@ -47,12 +47,29 @@ public class InquiryRestController {
             return new ResponseEntity<>(response, HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
-            // 예외 처리 로직 추가
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
-    @GetMapping("/{placeInquiryId}/delete")
+    @GetMapping("/tickets")
+    public ResponseEntity<PageResponse<TicketInquiryListDto>> getTicketInquiries(@RequestParam(value = "page", defaultValue = "1") int page,
+                                                                                 @AuthenticationPrincipal UserDetailsDto userDetailsDto) {
+        try {
+            Pageable pageable = PageRequest.of(page - 1, 10);
+
+            Page<TicketInquiryListDto> ticketInquiryDtos = ticketInquiryService.findInquiriesPage(userDetailsDto.getId(), pageable);
+            Pagination<TicketInquiryListDto> pagination = new Pagination<>(5, pageable, ticketInquiryDtos);
+
+            PageResponse<TicketInquiryListDto> response = new PageResponse<>(ticketInquiryDtos, pagination);
+
+            return new ResponseEntity<>(response, HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping("/placeDelete/{placeInquiryId}")
     public ResponseEntity<String> deletePlaceInquiry(@PathVariable("placeInquiryId") Long placeInquiryId,
                                                      @AuthenticationPrincipal UserDetailsDto userDetailsDto) {
         if (placeInquiryId == null) {
@@ -60,17 +77,34 @@ public class InquiryRestController {
                     .body("잘못된 요청입니다.");
         }
 
-        PlaceInquiry placeInquiry = placeInquiryService.findInquiryByIdAndUser(placeInquiryId, userDetailsDto.getId()).orElse(null);
+        try {
+            placeInquiryService.deleteInquiryById(placeInquiryId, userDetailsDto.getId());
 
-        if (placeInquiry == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("문의내역을 찾을 수 없습니다.<br>페이지를 새로고침 해주세요.");
+            return ResponseEntity.ok("문의 내역을 삭제했습니다.");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().body("오류가 발생했습니다.<br>다시 시도해주세요.");
+        }
+    }
+
+
+    @DeleteMapping("/ticketDelete/{ticketInquiryId}")
+    public ResponseEntity<String> deleteTicketInquiry(@PathVariable("ticketInquiryId") Long ticketInquiryId,
+                                                      @AuthenticationPrincipal UserDetailsDto userDetailsDto) {
+
+        if (ticketInquiryId == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body("잘못된 요청입니다.");
         }
 
-        placeInquiryService.deleteInquiryById(placeInquiryId);
+        try {
+            ticketInquiryService.deleteInquiry(ticketInquiryId, userDetailsDto.getId());
 
-        return ResponseEntity.status(HttpStatus.OK)
-                .body("문의 내역을 삭제했습니다.");
+            return ResponseEntity.ok("문의 내역을 삭제했습니다.");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().body("오류가 발생했습니다.<br>다시 시도해주세요.");
+        }
     }
 
     @GetMapping("/getPlace/{placeId}")
