@@ -1,5 +1,6 @@
 package com.app.spotick.service.user;
 
+import com.app.spotick.api.dto.user.UserFindEmailDto;
 import com.app.spotick.domain.dto.place.PlaceListDto;
 import com.app.spotick.domain.dto.place.PlaceManageListDto;
 import com.app.spotick.domain.dto.place.PlaceReservationListDto;
@@ -36,6 +37,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Duration;
+import java.time.format.DateTimeFormatter;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.Random;
@@ -217,6 +219,20 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     public boolean checkUserByNicknameAndTel(String nickname, String tel) {
         return userRepository.existsUserByNickNameAndTel(nickname,tel);
+    }
+
+    @Override
+    public boolean isValidCertCode(String certCode, String key) {
+        return certCode.equals(redisService.getValues(key));
+    }
+
+    @Override
+    public UserFindEmailDto.Response findUserFindEmailDto(String nickname, String tel) {
+        UserFindEmailDto.Response response = userRepository.findEmailDtoByNickNameAndTel(nickname, tel)
+                .orElseThrow(() -> new IllegalStateException("잘못된 닉네임, 전화번호"));
+        String registerDateFormat = response.getCreatedDate().format(DateTimeFormatter.ofPattern("yyyy년 MM월 dd일"));
+        response.setCreatedDateStr(registerDateFormat);
+        return response;
     }
 }
 

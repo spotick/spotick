@@ -1,5 +1,6 @@
 package com.app.spotick.service.user;
 
+import com.app.spotick.api.dto.user.UserFindEmailDto;
 import com.app.spotick.domain.dto.place.PlaceListDto;
 import com.app.spotick.domain.dto.place.PlaceManageListDto;
 import com.app.spotick.domain.dto.place.PlaceReservationListDto;
@@ -47,6 +48,8 @@ public interface UserService {
     boolean isValidNickname(String nickname);
 
     boolean checkUserByNicknameAndTel(String nickname, String tel);
+    boolean isValidCertCode(String certCode, String key);
+    UserFindEmailDto.Response findUserFindEmailDto(String nickname,String tel);
 
 
 }

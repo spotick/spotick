@@ -1,5 +1,6 @@
 package com.app.spotick.repository.user;
 
+import com.app.spotick.api.dto.user.UserFindEmailDto;
 import com.app.spotick.domain.dto.user.UserProfileDto;
 import com.app.spotick.domain.entity.user.User;
 import com.app.spotick.domain.entity.user.UserProfileFile;
@@ -42,6 +43,18 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
 //    닉네임 전화번호일치 여부 확인(아이디찾기
     boolean existsUserByNickNameAndTel(String nickname, String tel);
+
+
+//    내부클래스에 접근할 때는 . 대신 $ 사용
+    @Query("""
+            select new com.app.spotick.api.dto.user.UserFindEmailDto$Response(
+                u.email, u.createdDate
+            )
+            from User u
+            where u.nickName = :nickname and u.tel = :tel        
+            """)
+    Optional<UserFindEmailDto.Response> findEmailDtoByNickNameAndTel(@Param("nickname")String nickname, @Param("tel")String tel);
+
 }
 
 
