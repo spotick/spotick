@@ -107,7 +107,7 @@ class UserRepositoryTest {
     void emailNicknameDuplicateTest(){
         // given
         String email = "aaa";
-        String nickname = "홍길동";
+        String nickname = "0101111111";
 
         // when
         // then
@@ -124,7 +124,21 @@ class UserRepositoryTest {
 
     }
 
+    @Test
+    @DisplayName("닉네임, 전화번호 일치 테스트 ")
+    void existsUserByNickNameAndTelTest(){
+        // given
+        String nickname = "홍길동";
+        String tel = "0101111111";
 
+        // when
+        // then
+        assertThat(userRepository.existsUserByNickNameAndTel(nickname,tel))
+                .isEqualTo(true );
+        nickname = "고길동";
+        assertThat(userRepository.existsUserByNickNameAndTel(nickname,tel))
+                .isEqualTo(false );
 
+    }
 
 }
