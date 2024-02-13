@@ -173,11 +173,6 @@ function startVerification() {
 
     fetch("/mypage/authenticateTelStart?tel=" + tel, {
         method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        // body에는 이제 JSON 문자열이 직접 들어갑니다.
-        body: JSON.stringify({tel: tel})
     })
         .then(function (response) {
             if (!response.ok) {
@@ -205,19 +200,24 @@ function authenticate() {
             "Content-Type": "application/json"
         }
     })
-        .then(function (response) {
-            if (!response.ok) {
+        .then(response => {
+            if (response.ok) {
+                return response.text();
+            } else {
                 throw new Error("서버 통신 오류");
             }
+        })
+        .then(async message => {
+            stopTimer();
+            closeModal();
 
-            const redirectUrl = response.headers.get('Location');
-
-            if (redirectUrl) {
-                window.location.href = redirectUrl
-            }
+            document.getElementById('phoneCon').value = tel
+            document.getElementById('successPhone').innerHTML = await message;
         })
         .catch(function (error) {
             console.error("인증 확인 실패", error);
+
+            vibrateTarget(phoneModal);
             modalAlertText.innerHTML = "인증에 실패했습니다. 올바른 값을 입력해주세요."
         });
 }
