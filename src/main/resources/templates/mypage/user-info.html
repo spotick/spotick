@@ -65,24 +65,23 @@
             </form>
         </div>
     </div>
-    <form class="mypage-modal" id="nicknameModal" method="post" th:action="@{/mypage/updateNickName}"
-          th:object="${userProfile}">
+    <div class="mypage-modal" id="nicknameModal" style="width: 500px">
         <div class="modal-row" style="margin-top: 20px;">
             <p style="font-weight: bold; font-size: 12px; line-height: 14px; color: rgb(158, 164, 170);">
                 새 닉네임
             </p>
         </div>
         <div class="modal-input-container" style="margin-top: 8px">
-            <input id="newNickname" maxlength="10" oninput="checkInputLength()" placeholder="새 닉네임을 입력해주세요."
-                   th:field="*{nickName}"
+            <input id="newNickname" maxlength="10" placeholder="새 닉네임을 입력해주세요."
                    type="text">
         </div>
+        <p class="modal-alert-text" id="errorNickname"></p>
         <div style="display: flex; justify-content: center;">
-            <button class="modal-confirm-btn" disabled="disabled" id="nicknameChangeButton" type="submit">
+            <button class="modal-confirm-btn" disabled="disabled" id="nicknameChangeButton" type="button">
                 <span>닉네임 저장</span>
             </button>
         </div>
-    </form>
+    </div>
     <div class="mypage-modal" id="phoneModal" style="width: 500px">
         <div class="modal-row" style="margin-top: 20px;">
             <p style="font-weight: bold; font-size: 12px; line-height: 14px; color: rgb(158, 164, 170);">
@@ -108,10 +107,10 @@
                 <p id="timerText"></p>
             </div>
         </div>
-        <p class="modal-alert-text"></p>
+        <p class="modal-alert-text" id="errorAuth"></p>
         <div style="display: flex; justify-content: center;">
             <button class="modal-confirm-btn" disabled="disabled" id="authConfirmButton"
-                    type="button" onclick="authenticate()">
+                    onclick="authenticate()" type="button">
                 <span>인증 완료</span>
             </button>
         </div>
@@ -161,7 +160,7 @@
                         </div>
                     </div>
                     <figcaption onclick="openNicknameModal(nicknameModal)" style="display: flex; margin-right: 20px">
-                        <b style="cursor:pointer;" th:text="*{nickName}"></b>님
+                        <b id="nickname" style="cursor:pointer;" th:text="*{nickName}"></b>님
                         <div class="mpc-edit-icon" style="position: relative">
                             <svg class="feather feather-edit-2" fill="none" height="16" stroke="currentColor"
                                  stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24"
@@ -170,9 +169,8 @@
                             </svg>
                         </div>
                     </figcaption>
-                    <div th:if="${successProfile}" class="mpc-edit-line success" th:text="${successProfile}"></div>
-                    <div th:if="${errorName}" class="mpc-edit-line error" th:text="${errorName}"></div>
-                    <div th:if="${successName}" class="mpc-edit-line success" th:text="${successName}"></div>
+                    <div class="mpc-edit-line success" th:if="${successProfile}" th:text="${successProfile}"></div>
+                    <div class="mpc-edit-line success" id="successName"></div>
                 </figure>
                 <div>
                     <div class="mpc-user-info-container">
@@ -181,7 +179,7 @@
                     </div>
                     <div class="mpc-user-info-container">
                         <span>휴대 전화</span>
-                        <input class="input-readonly" readonly th:placeholder="*{tel}" id="phoneCon">
+                        <input class="input-readonly" id="phoneCon" readonly th:placeholder="*{tel}">
                         <button onclick="openPhoneModal(phoneModal)" type="submit">전화번호 변경</button>
                         <div class="mpc-edit-line success absolute" id="successPhone"></div>
                         <div class="mpc-edit-line error absolute"></div>
@@ -189,16 +187,18 @@
                     <div class="mpc-user-info-container">
                         <span>새 비밀번호</span>
                         <input id="newPw" placeholder="영문, 숫자, 특수문자 2가지 이상 포함 6~15자리" type="password">
-                        <div th:if="${successPassword}" class="mpc-edit-line success absolute" th:text="${successPassword}"></div>
-                        <div th:if="${errorPassword}" class="mpc-edit-line error absolute" th:text="${errorPassword}"></div>
+                        <div class="mpc-edit-line success absolute" th:if="${successPassword}"
+                             th:text="${successPassword}"></div>
+                        <div class="mpc-edit-line error absolute" th:if="${errorPassword}"
+                             th:text="${errorPassword}"></div>
                     </div>
                     <div class="mpc-user-info-container">
                         <span>새 비밀번호 확인</span>
                         <input id="newPwCheck" placeholder="영문, 숫자, 특수문자 2가지 이상 포함 6~15자리" type="password">
                         <button id="pwChangeConfirm" onclick="confirmChangingPassword()">비밀번호 변경</button>
-                        <form th:action="@{/mypage/changePassword}" method="post" id="changePasswordForm">
-                            <input name="password" hidden="hidden">
-                            <input name="passwordCheck" hidden="hidden">
+                        <form id="changePasswordForm" method="post" th:action="@{/mypage/changePassword}">
+                            <input hidden="hidden" name="password">
+                            <input hidden="hidden" name="passwordCheck">
                         </form>
                     </div>
                 </div>

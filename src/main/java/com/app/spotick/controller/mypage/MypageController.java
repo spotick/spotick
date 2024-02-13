@@ -86,22 +86,22 @@ public class MypageController {
         return new RedirectView("/mypage/user-info");
     }
 
-    @PostMapping("/updateNickName")
-    public RedirectView updateNickName(@RequestParam("nickName") String nickName,
-                                       @AuthenticationPrincipal UserDetailsDto userDetailsDto,
-                                       RedirectAttributes redirectAttributes) {
+    @PatchMapping("/updateNickName")
+    @ResponseBody
+    public ResponseEntity<String> updateNickName(@RequestParam("nickname") String nickname,
+                                                 @AuthenticationPrincipal UserDetailsDto userDetailsDto,
+                                                 RedirectAttributes redirectAttributes) {
 
         // 검증
-        if (nickName == null || nickName.length() < 2 || nickName.length() > 10) {
-            redirectAttributes.addFlashAttribute("errorName", "닉네임은 최소 2자에서 최대 10자까지 가능합니다.");
-            return new RedirectView("/mypage/user-info");
+        if (nickname == null || nickname.length() < 2 || nickname.length() > 10) {
+            return ResponseEntity.badRequest().body("닉네임은 최소 2자에서 최대 10자까지 가능합니다.");
         }
 
-        userDetailsDto.updateNickName(nickName);
-        userService.updateNickName(userDetailsDto.getId(), nickName);
+        userDetailsDto.updateNickName(nickname);
+        userService.updateNickName(userDetailsDto.getId(), nickname);
 
         redirectAttributes.addFlashAttribute("successName", "닉네임이 수정되었습니다.");
-        return new RedirectView("/mypage/user-info");
+        return ResponseEntity.ok().body("닉네임이 수정되었습니다.");
     }
 
     @PostMapping("/authenticateTelStart")
@@ -126,8 +126,10 @@ public class MypageController {
         // 검증
         if (Objects.equals(redisService.getValues(tel), code)) {
             System.out.println("인증 성공");
-
+            
             userService.updateTel(userDetailsDto.getId(), tel);
+
+            redisService.deleteValues(tel);
 
             return ResponseEntity.ok().body("전화번호가 수정되었습니다");
         }
