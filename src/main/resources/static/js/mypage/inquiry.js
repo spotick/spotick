@@ -166,6 +166,12 @@ const inquiryService = (function () {
                             <div class="mpcri-title">문의 내용</div>
                             <div class="mpcriq-title">${inquiry.inquiryTitle}</div>
                             <div class="mpcriq-content">${inquiry.content}</div>
+                            ${inquiry.responded ?
+                                `<div class="mpcriq-check">
+                                    <img src="/imgs/green_check.svg">
+                                </div>`
+                                : ''
+                            }
                         </div>
                     </div>
                 </article>`
@@ -251,7 +257,15 @@ const inquiryService = (function () {
                         </div>
                         <div class="mpcr-divider"></div>
                         <div class="mpcr-info" onclick="popupInquiryModal(this)" data-content="${inquiry.content}" data-response="${inquiry.response}">
-                            <div class="mpcri-title">문의 내용</div>
+                            <div class="space-between" style="margin-bottom: 8px">
+                                <div class="mpcri-title">문의 내용</div>
+                                ${inquiry.responded ?
+                                    `<div class="response-check-icon">
+                                        <img src="/imgs/green_check.svg">
+                                    </div>` 
+                                    : ''
+                                }
+                            </div>
                             <div class="mpcriq-title">${inquiry.inquiryTitle}</div>
                             <div class="mpcriq-content">${inquiry.content}</div>
                         </div>

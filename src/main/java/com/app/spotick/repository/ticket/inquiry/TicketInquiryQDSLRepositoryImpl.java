@@ -10,6 +10,7 @@ import com.app.spotick.domain.entity.ticket.QTicketInquiry;
 import com.app.spotick.domain.entity.user.QUser;
 import com.app.spotick.domain.entity.user.QUserProfileFile;
 import com.querydsl.core.types.Projections;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQuery;
@@ -78,7 +79,8 @@ public class TicketInquiryQDSLRepositoryImpl implements TicketInquiryQDSLReposit
                         ),
                         ticketInquiry.title,
                         ticketInquiry.content,
-                        ticketInquiry.response
+                        ticketInquiry.response,
+                        ticketInquiry.response.isNotNull()
                 ))
                 .fetch();
 

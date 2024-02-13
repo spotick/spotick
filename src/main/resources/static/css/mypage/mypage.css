@@ -840,9 +840,18 @@
 .mpcri-title {
     font-weight: bold;
     font-size: 16px;
-    line-height: 14px;
     color: rgb(38, 40, 43);
     margin-bottom: 10px;
+}
+
+.response-check-icon {
+    width: 24px;
+    height: 24px;
+    margin-right: 40px;
+}
+
+.response-check-icon img {
+    width: 24px;
 }
 
 .mpcre-btn-con {
@@ -1155,6 +1164,15 @@
     word-break: break-all;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 3;
+}
+
+.mpcriq-check {
+    position: absolute;
+    right: 50px;
+}
+
+.mpcriq-check img {
+    width: 24px;
 }
 
 .mpct-content-wrap {

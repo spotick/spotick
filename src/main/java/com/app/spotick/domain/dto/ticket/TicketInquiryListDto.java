@@ -21,8 +21,9 @@ public class TicketInquiryListDto {
     private String inquiryTitle;
     private String content;
     private String response;
+    private boolean isResponded;
 
-    public TicketInquiryListDto(Long ticketId, Long inquiryId, String title, PostAddress ticketAddress, TicketCategory ticketCategory, Integer lowestPrice, LocalDate startDate, LocalDate endDate, TicketFileDto ticketFileDto, String inquiryTitle, String content, String response) {
+    public TicketInquiryListDto(Long ticketId, Long inquiryId, String title, PostAddress ticketAddress, TicketCategory ticketCategory, Integer lowestPrice, LocalDate startDate, LocalDate endDate, TicketFileDto ticketFileDto, String inquiryTitle, String content, String response, boolean isResponded) {
         this.ticketId = ticketId;
         this.inquiryId = inquiryId;
         this.title = title;
@@ -35,5 +36,6 @@ public class TicketInquiryListDto {
         this.inquiryTitle = inquiryTitle;
         this.content = content;
         this.response = response;
+        this.isResponded = isResponded;
     }
 }

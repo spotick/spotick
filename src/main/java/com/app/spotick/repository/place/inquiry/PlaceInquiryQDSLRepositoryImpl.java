@@ -103,7 +103,8 @@ public class PlaceInquiryQDSLRepositoryImpl implements PlaceInquiryQDSLRepositor
                                 bookmarkCount,
                                 placeInquiry.title,
                                 placeInquiry.content,
-                                placeInquiry.response
+                                placeInquiry.response,
+                                placeInquiry.response.isNotNull()
                         )
                 )
                 .fetch();
