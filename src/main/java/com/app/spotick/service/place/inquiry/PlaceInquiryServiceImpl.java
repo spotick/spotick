@@ -55,15 +55,10 @@ public class PlaceInquiryServiceImpl implements PlaceInquiryService {
     }
 
     @Override
-    public Optional<PlaceInquiry> findInquiryByIdAndUser(Long placeInquiryId, Long userId) {
+    public void deleteInquiryById(Long placeInquiryId,  Long userId) {
         User tmpUser = userRepository.getReferenceById(userId);
 
-        return inquiryRepository.findByIdAndUser(placeInquiryId, tmpUser);
-    }
-
-    @Override
-    public void deleteInquiryById(Long placeInquiryId) {
-        PlaceInquiry foundInquiry = inquiryRepository.findById(placeInquiryId).orElseThrow(
+        PlaceInquiry foundInquiry = inquiryRepository.findByIdAndUser(placeInquiryId, tmpUser).orElseThrow(
                 NoSuchElementException::new
         );
 

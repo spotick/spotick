@@ -18,9 +18,7 @@ public interface PlaceInquiryService {
 
     Page<PlaceInquiryListDto> getInquiriesByUserId(Long userId, Pageable pageable);
 
-    Optional<PlaceInquiry> findInquiryByIdAndUser(Long placeInquiryId, Long userId);
-
-    void deleteInquiryById(Long placeInquiryId);
+    void deleteInquiryById(Long placeInquiryId, Long userId);
 
     void updateInquiryResponse(InquiryResponseDto inquiryResponseDto);
 

@@ -2,11 +2,15 @@ package com.app.spotick.service.ticket.inquiry;
 
 import com.app.spotick.api.dto.place.InquiryResponseDto;
 import com.app.spotick.domain.dto.place.inquiry.UnansweredInquiryDto;
+import com.app.spotick.domain.dto.ticket.TicketInquiryListDto;
 import com.app.spotick.domain.entity.ticket.Ticket;
 import com.app.spotick.domain.entity.ticket.TicketInquiry;
+import com.app.spotick.domain.entity.user.User;
 import com.app.spotick.repository.ticket.TicketRepository;
 import com.app.spotick.repository.ticket.inquiry.TicketInquiryRepository;
+import com.app.spotick.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
@@ -20,6 +24,12 @@ import java.util.NoSuchElementException;
 public class TicketInquiryServiceImpl implements TicketInquiryService {
     private final TicketInquiryRepository ticketInquiryRepository;
     private final TicketRepository ticketRepository;
+    private final UserRepository userRepository;
+
+    @Override
+    public Page<TicketInquiryListDto> findInquiriesPage(Long userId, Pageable pageable) {
+        return ticketInquiryRepository.findInquiryListByUserId(userId, pageable);
+    }
 
     @Override
     @Transactional(readOnly = true)
@@ -36,5 +46,16 @@ public class TicketInquiryServiceImpl implements TicketInquiryService {
         );
 
         foundInquiry.updateResponse(inquiryResponseDto.getResponse());
+    }
+
+    @Override
+    public void deleteInquiry(Long inquiryId, Long userId) {
+        User tmpUser = userRepository.getReferenceById(userId);
+
+        TicketInquiry foundInquiry = ticketInquiryRepository.findByIdAndUser(inquiryId, tmpUser).orElseThrow(
+                NoSuchElementException::new
+        );
+
+        ticketInquiryRepository.delete(foundInquiry);
     }
 }

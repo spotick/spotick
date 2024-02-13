@@ -62,8 +62,8 @@ const reservationService = (function () {
 
         content.forEach(reservation => {
 
-            let checkIn = formatKoreanDate(reservation.checkIn);
-            let checkOut = formatKoreanDate(reservation.checkOut);
+            let checkIn = formatKoreanDatetime(reservation.checkIn);
+            let checkOut = formatKoreanDatetime(reservation.checkOut);
 
             let html =
                 `<div class="mpcp-item">
@@ -140,8 +140,8 @@ const reservationService = (function () {
         calendarService.setEventDates(checkIn, checkOut);
         calendarService.buildCalendar();
 
-        detailCheckIn.value = formatKoreanDate(checkIn);
-        detailCheckOut.value = formatKoreanDate(checkOut);
+        detailCheckIn.value = formatKoreanDatetime(checkIn);
+        detailCheckOut.value = formatKoreanDatetime(checkOut);
 
         openModal(modalPlace);
     }

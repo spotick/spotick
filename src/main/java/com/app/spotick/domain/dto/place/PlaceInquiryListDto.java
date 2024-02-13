@@ -21,8 +21,9 @@ public class PlaceInquiryListDto {
     private String inquiryTitle;
     private String content;
     private String response;
+    private boolean isResponded;
 
-    public PlaceInquiryListDto(Long id, Long inquiryId, String placeTitle, Integer price, PostAddress placeAddress, PlaceFileDto placeFileDto, double evalAvg, Long evalCount, Long bookmarkCount, String inquiryTitle, String content, String response) {
+    public PlaceInquiryListDto(Long id, Long inquiryId, String placeTitle, Integer price, PostAddress placeAddress, PlaceFileDto placeFileDto, double evalAvg, Long evalCount, Long bookmarkCount, String inquiryTitle, String content, String response, boolean isResponded) {
         this.id = id;
         this.inquiryId = inquiryId;
         this.placeTitle = placeTitle;
@@ -35,5 +36,6 @@ public class PlaceInquiryListDto {
         this.inquiryTitle = inquiryTitle;
         this.content = content;
         this.response = response;
+        this.isResponded = isResponded;
     }
 }
