@@ -15,11 +15,10 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class UserRestController {
     private final UserService userService;
-    private final RedisService redisService;
 
     @GetMapping("/valid/email/{email}")
     public ResponseEntity<Boolean> isValidEmail(@PathVariable("email") String email) {
-        return ResponseEntity.ok(userService.isValidEmail(email));
+        return ResponseEntity.ok(!userService.isExistsEmail(email));
     }
 
     @GetMapping("/valid/nickname/{nickname}")
@@ -27,8 +26,8 @@ public class UserRestController {
         return ResponseEntity.ok(userService.isValidNickname(nickname));
     }
 
-    @PostMapping("/email/cert/code")
-    public ResponseEntity<CommonResponse<Boolean>> sendEmailCertCode(@RequestBody FindIdCertDto findIdCertDto) {
+    @PostMapping("/tel/cert/code")
+    public ResponseEntity<CommonResponse<Boolean>> sendTelCertCode(@RequestBody FindIdCertDto findIdCertDto) {
         CommonResponse<Boolean> resp = null;
         String nickname = findIdCertDto.getNickname();
         String tel = findIdCertDto.getTel();
@@ -68,6 +67,18 @@ public class UserRestController {
         findEmailResp.setSuccess(true);
         findEmailResp.setData(userFindEmailDto);
         return ResponseEntity.ok(findEmailResp);
+    }
+
+    @PostMapping("/email/cert/code")
+    public void sendEmailCertCode(@RequestBody String email) {
+        System.out.println("email = " + email);
+
+        if(!userService.isExistsEmail(email)){
+//            해당 이메일이 존재하지 않을 경우
+
+        }
+
+
     }
 
 

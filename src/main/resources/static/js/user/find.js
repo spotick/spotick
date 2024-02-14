@@ -52,20 +52,50 @@ $('.id-section .cert-number-label').on('click', '.cert-btn.on', function () {
     sendFindIdAuthenticationCode()
         .then(isOk => {
             $(this).siblings('input').attr('readonly', !isOk);
-            $(this).text(isOk?'재전송':'인증번호');
+            $(this).text(isOk ? '재전송' : '인증번호');
         });
 });
 
 $('.password-wrap .cert-number-label').on('click', '.cert-btn.on', function () {
     // 사용자에게 인증번호를 보내주는 메소드
-    // sendFindIdAuthenticationCode()
-    //     .then(isOk => {
-    //         $(this).siblings('input').attr('readonly', !isOk);
-    //         $(this).text('재전송');
-    //     });
+    sendFindPwAuthenticationCode();
     $(this).siblings('input').attr('readonly', false);
     $(this).text('재전송');
 });
+
+function sendFindPwAuthenticationCode() {
+    let $certMsg = $('.pw-cert-msg');
+    fetch('/users/api/email/cert/code', {
+        method: 'POST',
+        body: $('#email').val()
+    })
+
+    // 아이디찾기 인증번호 전송 및 처리하기
+    // return fetch('/users/api/email/cert/code', {
+    //     method: 'POST',
+    //     headers: {
+    //         "Content-Type": "application/json",
+    //     },
+    //     body: JSON.stringify({
+    //         nickname: $('#nickname').val(),
+    //         tel: $('#tel').val()
+    //     }),
+    // }).then(r => {
+    //     if (!r.ok) {
+    //         throw r;
+    //     }
+    //     return r.json();
+    // }).then(resp => {
+    //     $certMsg.text('');
+    //     return resp.data;
+    // }).catch(error => {
+    //     error.json().then(err => {
+    //         $certMsg.text(err.message);
+    //         return error.data;
+    //     })
+    // })
+}
+
 
 $('#certNumber').on('blur', function () {
     let isTrue = $(this).val() !== '';
@@ -89,17 +119,17 @@ $('.id-section').on('click', '.find-id-btn.on', function () {
             tel: $('#tel').val(),
             certCode: $('#certNumber').val()
         }),
-    }).then(response=>{
-        if(!response.ok){
+    }).then(response => {
+        if (!response.ok) {
             throw response.json();
         }
         return response.json();
-    }).then(data=>data.data)
-        .then(data=>{
+    }).then(data => data.data)
+        .then(data => {
             showFoundId({email: data.email, registerDate: data.createdDateStr});
         })
-        .catch(error=> {
-            error.then(data=>{
+        .catch(error => {
+            error.then(data => {
                 $certMsg.text(data.message);
             })
         });
@@ -133,12 +163,10 @@ $('.cert-number-label, .password-wrap .cert-number-label input').on('blur', func
 });
 
 
-// 사용자에게 인증번호를 보내주는 메소드
+// 아이디찾기 사용자에게 인증번호를 보내주는 메소드
 function sendFindIdAuthenticationCode() {
     let $certMsg = $('.id-cert-msg');
-    let result = false;
-    // 아이디찾기 인증번호 전송 및 처리하기
-    return fetch('/users/api/email/cert/code', {
+    return fetch('/users/api/tel/cert/code', {
         method: 'POST',
         headers: {
             "Content-Type": "application/json",

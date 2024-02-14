@@ -219,26 +219,31 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public boolean isValidEmail(String email) {
-        return !userRepository.existsUserByEmail(email);
+    @Transactional(readOnly = true)
+    public boolean isExistsEmail(String email) {
+        return userRepository.existsUserByEmail(email);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public boolean isValidNickname(String nickname) {
         return !userRepository.existsUserByNickName(nickname);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public boolean checkUserByNicknameAndTel(String nickname, String tel) {
         return userRepository.existsUserByNickNameAndTel(nickname,tel);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public boolean isValidCertCode(String certCode, String key) {
         return certCode.equals(redisService.getValues(key));
     }
 
     @Override
+    @Transactional(readOnly = true)
     public UserFindEmailDto.Response findUserFindEmailDto(String nickname, String tel) {
         UserFindEmailDto.Response response = userRepository.findEmailDtoByNickNameAndTel(nickname, tel)
                 .orElseThrow(() -> new IllegalStateException("잘못된 닉네임, 전화번호"));

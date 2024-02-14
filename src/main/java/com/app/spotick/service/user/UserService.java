@@ -51,7 +51,7 @@ public interface UserService {
 
     Optional<TicketInfoDto> findTicketInfo(Long ticketId, Long userId);
 
-    boolean isValidEmail(String email);
+    boolean isExistsEmail(String email);
     boolean isValidNickname(String nickname);
     boolean checkUserByNicknameAndTel(String nickname, String tel);
     boolean isValidCertCode(String certCode, String key);
