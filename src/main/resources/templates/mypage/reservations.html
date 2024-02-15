@@ -148,7 +148,7 @@
                                          th:src="*{'/file/display?fileName='
                                          + placeFileDto.uploadPath + '/t_' + placeFileDto.uuid + '_' + placeFileDto.fileName}">
                                 </div>
-                                <div class="ItemTextContainer">
+                                <a class="ItemTextContainer" th:href="@{/place/detail/{placeId}(placeId = ${reservationDto.id})}">
                                     <div class="ItemHostNameContainer">
                                         <span class="ItemHostName" th:text="*{placeAddress.address}"></span>
                                         <div class="ItemCountsContainer">
@@ -182,7 +182,7 @@
                                             <span>결제 하기</span>
                                         </button>
                                     </div>
-                                </div>
+                                </a>
                                 <div class="mpcr-divider"></div>
                                 <div class="mpcr-info" onclick="showDetail(this)"
                                      th:data-address="*{placeAddress.address}"

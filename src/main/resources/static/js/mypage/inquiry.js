@@ -82,6 +82,7 @@ const inquiryService = (function () {
 
     function requestPlaceInquiries(page, callback) {
         container.innerHTML = '';
+        paginationContainer.innerHTML = '';
         loadingMarkService.show();
 
         // todo : 제거 -> 로딩 스크린 테스트 용
@@ -110,9 +111,10 @@ const inquiryService = (function () {
 
     function reloadPlaceInquiries(data) {
 
-        console.log(data)
-
-        container.innerHTML = '';
+        if (data.data.content.length === 0) {
+            loadNoList();
+            return
+        }
 
         data.data.content.forEach(inquiry => {
             let articleHtml =
@@ -137,7 +139,7 @@ const inquiryService = (function () {
                                 src="/file/display?fileName=${inquiry.placeFileDto.uploadPath}/t_${inquiry.placeFileDto.uuid}_${inquiry.placeFileDto.fileName}">
                                  style="width: 180px;">
                         </div>
-                        <div class="ItemTextContainer">
+                        <a class="ItemTextContainer" href="/place/detail/${inquiry.id}">
                             <div class="ItemHostNameContainer">
                                 <span class="ItemHostName">${inquiry.placeAddress.address}</span>
                                 <div class="ItemCountsContainer">
@@ -159,15 +161,15 @@ const inquiryService = (function () {
                             <div class="ItemPriceContainer">
                                 <span class="ItemPrice">${inquiry.price.toLocaleString()}원</span>
                             </div>
-                        </div>
+                        </a>
                         <div class="mpcr-divider"></div>
-                        <div class="mpcr-info" onclick="popupInquiryModal(this)" 
+                        <div class="mpcr-info" onclick="popupInquiryModal(this)" title="상세 정보"
                             data-content="${inquiry.content}" data-response="${inquiry.response}">
                             <div class="mpcri-title">문의 내용</div>
                             <div class="mpcriq-title">${inquiry.inquiryTitle}</div>
                             <div class="mpcriq-content">${inquiry.content}</div>
                             ${inquiry.responded ?
-                                `<div class="mpcriq-check">
+                                `<div class="mpcriq-check" title="답변 받음">
                                     <img src="/imgs/green_check.svg">
                                 </div>`
                                 : ''
@@ -184,6 +186,7 @@ const inquiryService = (function () {
 
     function requestTicketInquiries(page, callback) {
         container.innerHTML = '';
+        paginationContainer.innerHTML = '';
         loadingMarkService.show();
 
         // todo : 제거 -> 로딩 스크린 테스트 용
@@ -212,9 +215,10 @@ const inquiryService = (function () {
 
     function reloadTicketInquiries(data) {
 
-        console.log(data)
-
-        container.innerHTML = '';
+        if (data.data.content.length === 0) {
+            loadNoList();
+            return
+        }
 
         data.data.content.forEach(inquiry => {
             let articleHtml =
@@ -256,11 +260,11 @@ const inquiryService = (function () {
                             </div>
                         </div>
                         <div class="mpcr-divider"></div>
-                        <div class="mpcr-info" onclick="popupInquiryModal(this)" data-content="${inquiry.content}" data-response="${inquiry.response}">
+                        <div class="mpcr-info" onclick="popupInquiryModal(this)" title="상세 정보" data-content="${inquiry.content}" data-response="${inquiry.response}">
                             <div class="space-between" style="margin-bottom: 8px">
                                 <div class="mpcri-title">문의 내용</div>
                                 ${inquiry.responded ?
-                                    `<div class="response-check-icon">
+                                    `<div class="response-check-icon" title="답변 받음">
                                         <img src="/imgs/green_check.svg">
                                     </div>` 
                                     : ''
@@ -380,6 +384,13 @@ const inquiryService = (function () {
         }
 
         paginationContainer.innerHTML = paginationHtml;
+    }
+
+    function loadNoList() {
+        inquiryContainer.innerHTML =
+            `<div class="mpcp-no-list">
+            <span>문의 내역이 없습니다.</span>
+         </div>`;
     }
 
     return {

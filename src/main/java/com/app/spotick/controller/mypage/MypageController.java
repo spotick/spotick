@@ -86,22 +86,22 @@ public class MypageController {
         return new RedirectView("/mypage/user-info");
     }
 
-    @PostMapping("/updateNickName")
-    public RedirectView updateNickName(@RequestParam("nickName") String nickName,
-                                       @AuthenticationPrincipal UserDetailsDto userDetailsDto,
-                                       RedirectAttributes redirectAttributes) {
+    @PatchMapping("/updateNickName")
+    @ResponseBody
+    public ResponseEntity<String> updateNickName(@RequestParam("nickname") String nickname,
+                                                 @AuthenticationPrincipal UserDetailsDto userDetailsDto,
+                                                 RedirectAttributes redirectAttributes) {
 
         // 검증
-        if (nickName == null || nickName.length() < 2 || nickName.length() > 10) {
-            redirectAttributes.addFlashAttribute("errorName", "닉네임은 최소 2자에서 최대 10자까지 가능합니다.");
-            return new RedirectView("/mypage/user-info");
+        if (nickname == null || nickname.length() < 2 || nickname.length() > 10) {
+            return ResponseEntity.badRequest().body("닉네임은 최소 2자에서 최대 10자까지 가능합니다.");
         }
 
-        userDetailsDto.updateNickName(nickName);
-        userService.updateNickName(userDetailsDto.getId(), nickName);
+        userDetailsDto.updateNickName(nickname);
+        userService.updateNickName(userDetailsDto.getId(), nickname);
 
         redirectAttributes.addFlashAttribute("successName", "닉네임이 수정되었습니다.");
-        return new RedirectView("/mypage/user-info");
+        return ResponseEntity.ok().body("닉네임이 수정되었습니다.");
     }
 
     @PostMapping("/authenticateTelStart")
@@ -119,25 +119,22 @@ public class MypageController {
 
     @PostMapping("/authenticateTel")
     @ResponseBody
-    public ResponseEntity<Void> authenticateTel(@RequestParam("tel") String tel,
-                                                @RequestParam("code") String code,
-                                                @AuthenticationPrincipal UserDetailsDto userDetailsDto,
-                                                RedirectAttributes redirectAttributes) {
-//        todo : 결과값을 화면으로 반환할 수 있도록 강구하여야 함.
+    public ResponseEntity<String> authenticateTel(@RequestParam("tel") String tel,
+                                                  @RequestParam("code") String code,
+                                                  @AuthenticationPrincipal UserDetailsDto userDetailsDto) {
 
         // 검증
         if (Objects.equals(redisService.getValues(tel), code)) {
             System.out.println("인증 성공");
-
+            
             userService.updateTel(userDetailsDto.getId(), tel);
 
-            HttpHeaders headers = new HttpHeaders();
-            headers.add("Location", "/mypage/user-info");
+            redisService.deleteValues(tel);
 
-            return new ResponseEntity<>(headers, HttpStatus.OK);
+            return ResponseEntity.ok().body("전화번호가 수정되었습니다");
         }
 
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        return ResponseEntity.badRequest().body("잘못된 코드입니다.");
     }
 
     @PostMapping("/changePassword")
@@ -267,7 +264,7 @@ public class MypageController {
         }
 
         if (reservation.getReservationStatus().equals(PlaceReservationStatus.PENDING)
-                || reservation.getReservationStatus().equals(PlaceReservationStatus.WAITING_PAYMENT)) {
+            || reservation.getReservationStatus().equals(PlaceReservationStatus.WAITING_PAYMENT)) {
             // 예약이 해지되지 못하고 유효한 상태일 시 삭제불가
             return ResponseEntity.status(HttpStatus.FORBIDDEN)
                     .body("예약이 해지되어있지 않습니다.<br>예약을 취소하고 삭제를 시도하여주십시오.");
@@ -385,8 +382,8 @@ public class MypageController {
 
     @GetMapping("/tickets/inquiries/{ticketId}")
     public String goToTicketsInquiryList(@PathVariable("ticketId") Long ticketId,
-                                       @AuthenticationPrincipal UserDetailsDto userDetailsDto,
-                                       Model model) {
+                                         @AuthenticationPrincipal UserDetailsDto userDetailsDto,
+                                         Model model) {
 
         TicketInfoDto ticketInfo = userService.findTicketInfo(ticketId, userDetailsDto.getId()).orElseThrow(
                 NoSuchElementException::new

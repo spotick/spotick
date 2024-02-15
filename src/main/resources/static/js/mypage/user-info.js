@@ -1,5 +1,8 @@
 // 개인정보 수정 =========================================================
 
+const errorNickname = document.getElementById('errorNickname');
+const errorAuth = document.getElementById('errorAuth');
+
 // 프로필 사진 수정
 function checkFileSize(inputElement) {
     const file = inputElement.files[0];
@@ -93,8 +96,37 @@ const nicknameInput = document.getElementById('newNickname');
 
 function openNicknameModal(nicknameModal) {
     nicknameInput.value = "";
+    errorNickname.innerHTML = '';
     nicknameChangeButton.setAttribute("disabled", "disabled");
     openModal(nicknameModal);
+}
+
+function changeNickname(nickname) {
+
+    fetch("/mypage/updateNickName?nickname=" + nickname, {
+        method: "PATCH",
+    })
+        .then(response => {
+            if (response.ok) {
+                return response.text();
+            } else {
+                throw response;
+            }
+        })
+        .then(async message => {
+            closeModal();
+            document.getElementById('nickname').innerHTML = nickname;
+            document.getElementById('successName').innerHTML = await message;
+        })
+        .catch(error => {
+            console.error("인증번호 요청 실패", error);
+
+            error.text().then(message => {
+                vibrateTarget(nicknameModal);
+                errorNickname.innerHTML = message;
+            });
+        });
+
 }
 
 function checkInputLength() {
@@ -109,7 +141,6 @@ const newPhoneEraseBtn = document.getElementById('newPhoneEraseBtn');
 const newPhoneAuthBtn = document.getElementById('newPhoneAuthBtn');
 const authNumInputCon = document.getElementById('authNumInputCon');
 const authNumInput = document.getElementById('authNumInput');
-const modalAlertText = document.querySelector('.modal-alert-text');
 const authConfirmBtn = document.getElementById('authConfirmButton');
 
 function openPhoneModal(modalPhone) {
@@ -119,7 +150,7 @@ function openPhoneModal(modalPhone) {
     newPhoneAuthBtn.classList.add('disable');
     authNumInputCon.classList.add('disable');
     authNumInput.value = "";
-    modalAlertText.innerHTML = "";
+    errorAuth.innerHTML = "";
     authConfirmBtn.setAttribute("disabled", "disabled");
     stopTimer();
     openModal(modalPhone)
@@ -153,7 +184,7 @@ newPhoneAuthBtn.addEventListener("click", () => {
         authNumInputCon.classList.remove('disable');
         newPhoneNumCon.classList.add('disable');
         newPhoneEraseBtn.classList.remove('show');
-        modalAlertText.innerHTML = '';
+        errorAuth.innerHTML = '';
         startVerification();
     }
 })
@@ -173,11 +204,6 @@ function startVerification() {
 
     fetch("/mypage/authenticateTelStart?tel=" + tel, {
         method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        // body에는 이제 JSON 문자열이 직접 들어갑니다.
-        body: JSON.stringify({tel: tel})
     })
         .then(function (response) {
             if (!response.ok) {
@@ -205,20 +231,25 @@ function authenticate() {
             "Content-Type": "application/json"
         }
     })
-        .then(function (response) {
-            if (!response.ok) {
+        .then(response => {
+            if (response.ok) {
+                return response.text();
+            } else {
                 throw new Error("서버 통신 오류");
             }
+        })
+        .then(async message => {
+            stopTimer();
+            closeModal();
 
-            const redirectUrl = response.headers.get('Location');
-
-            if (redirectUrl) {
-                window.location.href = redirectUrl
-            }
+            document.getElementById('phoneCon').value = tel
+            document.getElementById('successPhone').innerHTML = await message;
         })
         .catch(function (error) {
             console.error("인증 확인 실패", error);
-            modalAlertText.innerHTML = "인증에 실패했습니다. 올바른 값을 입력해주세요."
+
+            vibrateTarget(phoneModal);
+            errorAuth.innerHTML = "인증에 실패했습니다. 올바른 값을 입력해주세요."
         });
 }
 
@@ -254,7 +285,7 @@ function stopTimer() {
 }
 
 function handleTimerExpiration() {
-    modalAlertText.innerHTML = "입력시간이 초과되었습니다. 다시 시도해주세요."
+    errorAuth.innerHTML = "입력시간이 초과되었습니다. 다시 시도해주세요."
     authConfirmBtn.classList.add('disable')
     stopTimer();
     newPhoneNumCon.classList.remove('disable');
@@ -297,3 +328,15 @@ function confirmChangingPassword() {
 
     form.submit();
 }
+
+
+///////////////////////////////////////////////////////////////////////
+nicknameInput.addEventListener('keyup', function () {
+    checkInputLength();
+});
+
+nicknameChangeButton.addEventListener('click', function () {
+    let newNickname = nicknameInput.value;
+    
+    changeNickname(newNickname);
+})

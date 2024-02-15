@@ -65,8 +65,6 @@ const inquiryService = (function () {
     function loadInquiries(content) {
         content.forEach(inquiry => {
 
-            console.log(inquiry);
-
             let html =
                 `<div class="mpcp-item">
                     <div class="mpcpi-top">
