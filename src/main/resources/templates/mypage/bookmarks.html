@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <title>Spotick | 북마크</title>
+    <link href="/imgs/logo/favicon.png" rel="icon">
     <link href="/css/global-css/root.css" rel="stylesheet">
     <link href="/css/global-css/chat.css" rel="stylesheet">
     <link href="/css/mypage/mypage.css" rel="stylesheet">
@@ -29,10 +30,11 @@
                 <th:block th:if="${#lists.size(placeDtoList)}">
                     <th:block th:each="placeDto:${placeDtoList}">
                         <div class="OneItemContainer hover mybookmark" th:object="${placeDto}">
-                            <a class="OneItemImgContainer" th:href="@{/place/detail/{placeId}(placeId = ${placeDto.id})}">
+                            <div class="OneItemImgContainer">
                                 <div class="swiper ImageSwiper swiper-initialized swiper-horizontal swiper-pointer-events swiper-backface-hidden">
-                                    <div class="swiper-wrapper ImageLength"
-                                         style="transform: translate3d(0px, 0px, 0px);">
+                                    <a class="swiper-wrapper ImageLength"
+                                       style="transform: translate3d(0px, 0px, 0px);"
+                                       th:href="@{/place/detail/{placeId}(placeId = ${placeDto.id})}">
                                         <!-- 이미지 한칸 -->
                                         <th:block th:each="placeFile:${placeDto.placeFiles}">
                                             <div class="swiper-slide swiper-slide-next" th:object="${placeFile}">
@@ -42,7 +44,7 @@
                                             </div>
                                         </th:block>
                                         <!-- 이미지 한칸 -->
-                                    </div>
+                                    </a>
                                     <div class="NavigationBtnContainer">
                                         <button class="NavigationBtn RightBtn" type="button">
                                             <img alt="다음" src="/imgs/round_arrow_right_gray024.7f7e18a3.svg">
@@ -59,7 +61,7 @@
                                         th:data-id="*{id}" type="button">
                                     <img alt="북마크" src="/imgs/bookmark_line_white_shadow_48.png">
                                 </button>
-                            </a>
+                            </div>
                             <a class="ItemTextContainer" th:href="@{/place/detail/{placeId}(placeId = ${placeDto.id})}">
                                 <div class="ItemHostNameContainer">
                                     <span class="ItemHostName" th:text="*{placeAddress.address}"></span>
@@ -89,7 +91,7 @@
                     </th:block>
                 </th:block>
             </div>
-            <th:block th:if="${placeDtoList.empty}">
+            <th:block th:if="${placeDtoList.getTotalElements() == 0}">
                 <div class="mp-no-list">
                     <span>저장된 북마크가 없습니다.</span>
                 </div>
@@ -97,7 +99,7 @@
         </article>
 
 
-        <section class="pagination-container">
+        <section class="pagination-container" th:if="${placeDtoList.getTotalElements() != 0}">
             <span class="pagination-previous" th:if="${pagination.hasPrevBlock()}">
                 <a class="pagination-btns first" th:href="@{/mypage/bookmarks(page=1)}" title="맨 처음">
                     <i class="fa-solid fa-chevron-left"></i>

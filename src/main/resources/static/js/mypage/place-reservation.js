@@ -134,7 +134,7 @@ const reservationService = (function () {
         detailImg.src = profileImg;
         detailNickname.innerHTML = nickname;
         detailVisitors.value = visitors;
-        detailAmount.value = amount.toLocaleString('ko-KR') + '원';
+        detailAmount.value = amount + '원';
         detailContent.value = content;
 
         calendarService.setEventDates(checkIn, checkOut);
