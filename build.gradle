@@ -63,6 +63,9 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
     // webflux
     implementation 'org.springframework.boot:spring-boot-starter-webflux'
+    // 메일인증
+    implementation 'org.springframework.boot:spring-boot-starter-mail:3.2.2'
+
 }
 
 tasks.named('test') {

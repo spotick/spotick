@@ -21,6 +21,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
             where u.email = :email
             """)
     Optional<User> findUserAndProfileByEmail(@Param("email") String email);
+    Optional<User> findUserByEmail(String email);
 
     //    프로필 사진 및 유저 정보 조회(비밀번호 제외)
     @Query("select new com.app.spotick.domain.dto.user.UserProfileDto(" +
@@ -45,7 +46,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
     boolean existsUserByNickNameAndTel(String nickname, String tel);
 
 
-//    내부클래스에 접근할 때는 . 대신 $ 사용
+//    jpql에서 dto반환 내부클래스에 접근할 때는 . 대신 $ 사용
     @Query("""
             select new com.app.spotick.api.dto.user.UserFindEmailDto$Response(
                 u.email, u.createdDate
