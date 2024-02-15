@@ -184,6 +184,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Page<PlaceManageListDto> findHostPlacesPage(Long userId, Pageable pageable) {
         return placeRepository.findHostPlaceListByUserId(userId, pageable);
     }
@@ -194,6 +195,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public TicketPage findHostTicketsPage(Long userId, Pageable pageable, TicketRequestType ticketRequestType) {
         return ticketRepository.findHostTicketListByUserId(userId, pageable, ticketRequestType);
     }

@@ -46,7 +46,7 @@ public class ReservationRestController {
             placeReservationService.updateReservationStatus(
                     reservationId,
                     userDetailsDto.getId(),
-                    PlaceReservationStatus.APPROVED
+                    PlaceReservationStatus.WAITING_PAYMENT // 결제를 할 수 있도록 승인 하는 것이 우선, 결제 이후 승인이 됨
             );
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
