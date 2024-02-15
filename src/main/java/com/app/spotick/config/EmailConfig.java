@@ -3,6 +3,8 @@ package com.app.spotick.config;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
 
 import java.util.Properties;
 
@@ -37,6 +39,18 @@ public class EmailConfig {
 
     @Value("${spring.mail.properties.mail.smtp.writetimeout}")
     private int writeTimeout;
+
+    @Bean
+    public JavaMailSender javaMailSender(){
+        JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
+        mailSender.setHost(host);
+        mailSender.setPort(port);
+        mailSender.setUsername(username);
+        mailSender.setPassword(password);
+        mailSender.setDefaultEncoding("UTF-8");
+        mailSender.setJavaMailProperties(getMailProperties());
+        return mailSender;
+    }
 
 
     private Properties getMailProperties(){

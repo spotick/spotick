@@ -16,6 +16,7 @@ import com.app.spotick.domain.type.ticket.TicketRequestType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.net.ConnectException;
 import java.util.Optional;
 
 public interface UserService {
@@ -34,6 +35,7 @@ public interface UserService {
     void updateTel(Long userId, String newTel);
 
     void updatePassword(Long userId, String newPassword);
+    void updatePassword(String email, String newPassword);
 
     Page<PlaceListDto> findBookmarkedPlacesByUserId(Long userId, Pageable pageable);
 
@@ -56,4 +58,6 @@ public interface UserService {
     boolean checkUserByNicknameAndTel(String nickname, String tel);
     boolean isValidCertCode(String certCode, String key);
     UserFindEmailDto.Response findUserFindEmailDto(String nickname,String tel);
+
+    void sendCodeToEmail(String toEmail) throws ConnectException;
 }
