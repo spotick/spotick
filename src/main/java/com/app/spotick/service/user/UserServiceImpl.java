@@ -25,12 +25,14 @@ import com.app.spotick.repository.ticket.TicketRepository;
 import com.app.spotick.repository.user.UserAuthorityRepository;
 import com.app.spotick.repository.user.UserRepository;
 import com.app.spotick.service.redis.RedisService;
+import com.app.spotick.service.util.MailService;
 import lombok.RequiredArgsConstructor;
 import net.nurigo.sdk.NurigoApp;
 import net.nurigo.sdk.message.model.Message;
 import net.nurigo.sdk.message.service.DefaultMessageService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.mail.MailSendException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -38,6 +40,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.net.ConnectException;
 import java.time.Duration;
 import java.time.format.DateTimeFormatter;
 import java.util.NoSuchElementException;
@@ -59,6 +62,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     private final PlaceReviewRepository placeReviewRepository;
     private final TicketRepository ticketRepository;
     private final RedisService redisService;
+    private final MailService mailService;
 
     @Override
     public void join(UserJoinDto userJoinDto) {
@@ -74,6 +78,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
                 .user(savedUser)
                 .build());
     }
+
     @Override
     public void join(UserJoinDto userJoinDto, UserProfileFile userProfileFile) {
         userJoinDto.setPassword(encodePassword(userJoinDto.getPassword()));
@@ -91,7 +96,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Transactional(readOnly = true)
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User foundUser = userRepository.findUserAndProfileByEmail(username)
-                .orElseThrow(()->new UsernameNotFoundException("해당 이메일로 등록된 회원 없음"));
+                .orElseThrow(() -> new UsernameNotFoundException("해당 이메일로 등록된 회원 없음"));
 
         return new UserDetailsDto(foundUser, authorityRepository.findUserAuthorityByUser(foundUser));
     }
@@ -155,7 +160,14 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         User foundUser = userRepository.findById(userId).orElseThrow(
                 NoSuchElementException::new
         );
+        foundUser.updatePassword(encodePassword(newPassword));
+    }
 
+    @Override
+    public void updatePassword(String email, String newPassword) {
+        User foundUser = userRepository.findUserByEmail(email).orElseThrow(
+                NoSuchElementException::new
+        );
         foundUser.updatePassword(encodePassword(newPassword));
     }
 
@@ -233,7 +245,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     @Transactional(readOnly = true)
     public boolean checkUserByNicknameAndTel(String nickname, String tel) {
-        return userRepository.existsUserByNickNameAndTel(nickname,tel);
+        return userRepository.existsUserByNickNameAndTel(nickname, tel);
     }
 
     @Override
@@ -250,6 +262,14 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         String registerDateFormat = response.getCreatedDate().format(DateTimeFormatter.ofPattern("yyyy년 MM월 dd일"));
         response.setCreatedDateStr(registerDateFormat);
         return response;
+    }
+
+    @Override
+    public void sendCodeToEmail(String toEmail) throws ConnectException, MailSendException {
+        String title = "Spotick 이메일 인증 번호";
+        String certCode = createKey();
+        mailService.sendEmail(toEmail, title, certCode);
+        redisService.setValues(toEmail, certCode, Duration.ofMinutes(5));
     }
 }
 
