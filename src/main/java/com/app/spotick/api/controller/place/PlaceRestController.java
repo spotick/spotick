@@ -1,14 +1,20 @@
 package com.app.spotick.api.controller.place;
 
 import com.app.spotick.domain.dto.place.PlaceDto;
+import com.app.spotick.domain.dto.place.PlaceListDto;
 import com.app.spotick.domain.dto.user.UserDetailsDto;
 import com.app.spotick.domain.entity.place.Place;
 import com.app.spotick.domain.type.post.PostStatus;
 import com.app.spotick.service.place.PlaceService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -93,4 +99,17 @@ public class PlaceRestController {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(foundPlace);
     }
+
+    @GetMapping("/list")
+    public ResponseEntity<Slice<PlaceListDto>> placeList(@AuthenticationPrincipal UserDetailsDto userDetailsDto,
+                            @PageableDefault(page =0,
+                                    size = 10, sort = "id",
+                                    direction = Sort.Direction.DESC
+                            ) Pageable pageable){
+        Long userId = userDetailsDto==null? null: userDetailsDto.getId();
+        Slice<PlaceListDto> placeList = placeService.findPlaceListPagination(pageable,userId);
+        return ResponseEntity.ok(placeList);
+    }
+
+
 }

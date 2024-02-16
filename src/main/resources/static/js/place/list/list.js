@@ -271,75 +271,90 @@ $(`.ListItemsContainer`).on('click','.ItemBookMarkBtn',function (){
 
 // 동적으로 요소들 추가했을 때 이벤트확인하기 위한 코드
 // test();
-function test(){
+function displayPlaceList(data){
+    console.table(data);
+    console.table(data.content);
     let text = '';
 
-    text = `
-        <div class="OneItemContainer hover">
+    data.content.forEach(place=>{
+    text += `
+       <div class="OneItemContainer hover">
                 <div class="OneItemImgContainer">
                     <div class="swiper ImageSwiper swiper-initialized swiper-horizontal swiper-pointer-events swiper-backface-hidden">
-                        <div class="swiper-wrapper ImageLength" style="transform: translate3d(0px, 0px, 0px);">
+                        <a href="/place/detail/${place.id}"
+                           class="swiper-wrapper ImageLength" style="transform: translate3d(0px, 0px, 0px);" >`;
+                    place.placeFiles.forEach(placeImg=>{
+                        text +=`
                             <div class="swiper-slide swiper-slide-active" style="width: 287px;">
-                                <img src="https://img.shareit.kr/tempspaceauth/img/2023-01-10/c4ee019d-1816-4b82-8138-302662a306e4_640.jpg" alt="실내체육관(낙산관)" height="1350.6666666666665px" class="ItemImg">
-                            </div>
-                            <div class="swiper-slide swiper-slide-next" style="width: 287px;">
-                                <img src="https://img.shareit.kr/tempspaceauth/img/2023-01-10/6a7ba1d9-7a02-4b06-b96d-26bc33bc27ca_640.jpg" alt="실내체육관(낙산관)" height="1350.6666666666665px" class="ItemImg">
-                            </div>
-                            <div class="swiper-slide" style="width: 287px;">
-                                <img src="https://img.shareit.kr/tempspaceauth/img/2023-01-10/33f564e8-4102-40e2-9b8e-19374cbf0516_640.jpg" alt="실내체육관(낙산관)" height="1350.6666666666665px" class="ItemImg">
-                            </div>
-                            <div class="swiper-slide" style="width: 287px;">
-                                <img src="https://img.shareit.kr/tempspaceauth/img/2023-01-10/78a18732-9490-4279-9e0a-d659931aa8ec_640.jpg" alt="실내체육관(낙산관)" height="1350.6666666666665px" class="ItemImg">
-                            </div>
-                            <div class="swiper-slide" style="width: 287px;">
-                                <img src="https://img.shareit.kr/tempspaceauth/img/2023-01-10/8b7ecc1d-2084-42dd-9c77-ecc5de1f442f_640.jpg" alt="실내체육관(낙산관)" height="1350.6666666666665px" class="ItemImg">
-                            </div>
-                        </div>
+                                <img class="ItemImg"
+                                     height="1350.6666666666665px" 
+                                     th:alt="${place.title}" src="/file/display?fileName=${placeImg.uploadPath}/t_${placeImg.uuid}_${placeImg.fileName}">
+                            </div>`;
+                    });
+
+              text +=`     </a>
                         <div class="NavigationBtnContainer">
-                            <button type="button" class="NavigationBtn RightBtn">
-                                <img src="/imgs/round_arrow_right_gray024.7f7e18a3.svg" alt="다음">
+                            <button class="NavigationBtn RightBtn" type="button">
+                                <img alt="다음" src="/imgs/round_arrow_right_gray024.7f7e18a3.svg">
                             </button>
-                            <button type="button" class="NavigationBtn LeftBtn">
-                                <img src="/imgs/round_arrow_left_gray024.707193e8.svg" alt="이전">
+                            <button class="NavigationBtn LeftBtn" type="button">
+                                <img alt="이전" src="/imgs/round_arrow_left_gray024.707193e8.svg">
                             </button>
                         </div>
                         <div class="ItemImgPagination">
                             <p><span class="snapIndex">1</span>/5</p>
                         </div>
                     </div>
-                    <button type="button" class="ItemBookMarkBtn" >
-                        <span><i class="fa-regular fa-bookmark"></i></span>
-                        <span class="none"><i class="fa-solid fa-bookmark" style="color: white"></i></span>
+                    <button class="ItemBookMarkBtn" th:data-placeid="${place.id}" type="button">
+                        <span class="${!place.bookmarkChecked?'':'none'}"><i
+                                class="fa-regular fa-bookmark"></i></span>
+                        <span class="${place.bookmarkChecked?'':'none'}"><i class="fa-solid fa-bookmark"
+                                                                                 style="color: white"></i></span>
                     </button>
                 </div>
                 <div class="ItemTextContainer">
                     <div class="ItemHostNameContainer">
-                        <span class="ItemHostName">서울 영등포구</span>
+                        <span class="ItemHostName">${place.placeAddress.address}</span>
                         <div class="ItemCountsContainer">
                             <div class="ItemsStarCountContainer">
-                                <img src="/imgs/star_filled_paintYellow056.a8eb6e44.svg" alt="후기갯수" class="ItemCountImg">
-                                <span class="ItemCountText">4.0(20)</span>
+                                <img alt="후기갯수" class="ItemCountImg"
+                                     src="/imgs/star_filled_paintYellow056.a8eb6e44.svg">
+                                <span class="ItemCountText">${place.evalAvg}(${place.evalCount})</span>
                             </div>
                             <div class="ItemsLikeCountContainer">
-                                <img src="/imgs/bookmark_thin.svg" alt="북마크갯수" class="bookmark-img">
-                                <span class="ItemCountText">1724</span>
+                                <img alt="북마크갯수" class="bookmark-img" src="/imgs/bookmark_thin.svg">
+                                <span class="ItemCountText bookmark-count">${place.bookmarkCount}</span>
                             </div>
                         </div>
                     </div>
                     <div class="ItemSpaceNameContainer">
-                        <p class="ItemSpaceName">한강뷰라니</p>
+                        <p class="ItemSpaceName" >
+                            <a href="/place/detail/${place.id}">${place.title}</a>
+                        </p>
                     </div>
                     <div class="ItemPriceContainer">
-                        <span class="place-price">13,500원</span>
+                        <span class="place-price">${(place.price).toLocaleString()}원</span>
                     </div>
                 </div>
             </div>
     `;
+    })
 
     $('.ListItemsContainer').append(text);
 }
 
+getPlaceList();
 
+function getPlaceList(){
+    fetch(`/place/api/list`)
+        .then(response=>{
+            if(!response.ok){
+                throw new Error();
+            }
+            return response.json();
+        }).then(displayPlaceList);
+
+}
 
 
 
