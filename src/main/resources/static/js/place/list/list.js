@@ -1,3 +1,4 @@
+import {addSlideEvent} from '../../global-js/image-slide.js'
 
 // 필터쪽 체크박스
 const checkboxes = document.querySelectorAll('input[type="checkbox"]');
@@ -275,6 +276,8 @@ function displayPlaceList(data){
     console.table(data);
     console.table(data.content);
     let text = '';
+    
+    // todo 이미지 슬라이드 이벤트 위임으로 처리해야함
 
     data.content.forEach(place=>{
     text += `
@@ -341,6 +344,8 @@ function displayPlaceList(data){
     })
 
     $('.ListItemsContainer').append(text);
+    // 동적으로 추가된 게시글요소에 이미지 슬라이드 이벤트 추가하기
+    addSlideEvent();
 }
 
 getPlaceList();
