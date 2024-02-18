@@ -9,21 +9,24 @@ import com.app.spotick.domain.type.place.PlaceReservationStatus;
 import com.app.spotick.domain.type.post.PostStatus;
 import com.querydsl.core.Tuple;
 import com.querydsl.core.group.GroupBy;
+import com.querydsl.core.types.ExpressionUtils;
+import com.querydsl.core.types.Order;
+import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Expressions;
+import com.querydsl.core.types.dsl.NumberExpression;
+import com.querydsl.core.types.dsl.PathBuilder;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Slice;
-import org.springframework.data.domain.SliceImpl;
+import org.springframework.data.domain.*;
 import org.springframework.data.support.PageableExecutionUtils;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -43,8 +46,7 @@ public class PlaceQDSLRepositoryImpl implements PlaceQDSLRepository {
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public List<PlaceListDto> findPlaceListPaging(Pageable pageable, Long userId) {
-
+    public Slice<PlaceListDto> findPlaceListPaging(Pageable pageable, Long userId) {
         JPQLQuery<Double> reviewAvg = createReviewAvgSub(place);
 
         JPQLQuery<Long> reviewCount = createReviewCountSub(place);
@@ -60,17 +62,24 @@ public class PlaceQDSLRepositoryImpl implements PlaceQDSLRepository {
                                 place.price,
                                 place.placeAddress,
                                 reviewAvg,
-                                reviewCount,
-                                bookmarkCount,
+                                ExpressionUtils.as(reviewCount,"reviewCount"),
+                                ExpressionUtils.as(bookmarkCount,"bookmarkCount"),
                                 isBookmarkChecked
                         )
                 )
                 .from(place)
                 .where(place.placeStatus.eq(PostStatus.APPROVED))
-                .orderBy(place.id.desc())
+                .orderBy(getOrderSpecifier(pageable.getSort()).toArray(OrderSpecifier[]::new))
                 .offset(pageable.getOffset())   //페이지 번호
-                .limit(pageable.getPageSize())  //페이지 사이즈
+                .limit(pageable.getPageSize()+1)  //페이지 사이즈
                 .fetch();
+
+        boolean hasNext = false;
+
+        if(placeListDtos.size() > pageable.getPageSize()){
+            placeListDtos.remove(pageable.getPageSize());
+            hasNext = true;
+        }
 
 //        포스트의 id만 list로 가져온다
         List<Long> placeIdList = placeListDtos.stream().map(PlaceListDto::getId).toList();
@@ -100,7 +109,7 @@ public class PlaceQDSLRepositoryImpl implements PlaceQDSLRepository {
             placeListDto.getPlaceAddress().cutAddress();
         });
 
-        return placeListDtos;
+        return new SliceImpl<>(placeListDtos,pageable,hasNext);
     }
 
     @Override
@@ -437,6 +446,7 @@ public class PlaceQDSLRepositoryImpl implements PlaceQDSLRepository {
     }
 
     private JPQLQuery<Long> createBookmarkCountSub(QPlace place) {
+
         return JPAExpressions.select(placeBookmark.count())
                 .from(placeBookmark)
                 .where(placeBookmark.place.eq(place));
@@ -456,6 +466,21 @@ public class PlaceQDSLRepositoryImpl implements PlaceQDSLRepository {
                 .where(placeBookmark.place.eq(place).and(placeBookmark.user.id.eq(userId)))
                 .exists();
     }
+
+    private List<OrderSpecifier<?>> getOrderSpecifier(Sort sort){
+        List<OrderSpecifier<?>> orders = new ArrayList<>();
+
+        sort.forEach(order->{
+            Order direction = order.isAscending()?Order.ASC:Order.DESC;
+            String prop = order.getProperty();
+            PathBuilder<Place> orderByExpression = new PathBuilder<>(Place.class,place.getMetadata());
+            orders.add(new OrderSpecifier(direction,orderByExpression.get(prop)));
+        });
+
+        return orders;
+    }
+
+
 
 
 }

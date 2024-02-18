@@ -1,3 +1,4 @@
+import {addSlideEvent} from '../../global-js/image-slide.js'
 
 // 필터쪽 체크박스
 const checkboxes = document.querySelectorAll('input[type="checkbox"]');
@@ -16,7 +17,6 @@ const selectBoxBtn = document.querySelector('.SelectBoxBtn');
 const selectBoxList = document.querySelector('.SelectBoxList');
 const selectBoxBtnImg = document.querySelector('.SelectBoxBtnImg');
 const SelectBoxBtnText = document.querySelector('.SelectBoxBtnText');
-
 
 
 // 인기순 필터
@@ -50,17 +50,17 @@ listItems.forEach(item => {
 });
 
 // 필터 모달창 나오기
-document.querySelector('.FilterBtn').addEventListener("click", function(){
+document.querySelector('.FilterBtn').addEventListener("click", function () {
     document.querySelector('.FilterModalContainer').classList.add('On');
 })
 
 // 필터 모달창 숨기기
-document.querySelector('.FilterModalCloseBtn').addEventListener("click", function(){
+document.querySelector('.FilterModalCloseBtn').addEventListener("click", function () {
     document.querySelector('.FilterModalContainer').classList.remove('On');
 })
 
 // 필터 적용 버튼
-document.querySelector('.FilterSubmitBtn').addEventListener("click", function(){
+document.querySelector('.FilterSubmitBtn').addEventListener("click", function () {
     document.querySelector('.FilterModalContainer').classList.remove('On');
 })
 
@@ -159,7 +159,6 @@ checkboxes.forEach(checkbox => {
         }
 
 
-
         const checkedCheckboxes = document.querySelectorAll('input[type="checkbox"]:checked');
         const numberOfCheckedCheckboxes = checkedCheckboxes.length;
 
@@ -170,11 +169,11 @@ checkboxes.forEach(checkbox => {
 
         if (numberOfCheckedCheckboxes === 5) {
             checkboxes.forEach(checkbox => {
-                if(!checkbox.checked && checkbox.name !== "전체"){
+                if (!checkbox.checked && checkbox.name !== "전체") {
                     checkbox.disabled = true;
                 }
             })
-        }else{
+        } else {
             checkboxes.forEach(checkbox => {
                 checkbox.disabled = false;
             })
@@ -199,7 +198,7 @@ resetButton.addEventListener('click', function () {
 });
 
 // 체크박스 전체 해제
-function reset(){
+function reset() {
     // 전체 체크박스 해제
     checkboxes.forEach(checkbox => {
         checkbox.checked = false;
@@ -249,96 +248,129 @@ function toggleCityContainer(targetId) {
 }
 
 
-
 // 좋아요 버튼
-$(`.ListItemsContainer`).on('click','.ItemBookMarkBtn',function (){
+$(`.ListItemsContainer`).on('click', '.ItemBookMarkBtn', function () {
     let isLoggedIn = $('#isLoggedIn').val();
-    if(isLoggedIn==='false'){
+    if (isLoggedIn === 'false') {
         alert('로그인이 필요한 서비스 입니다');
         location.href = '/user/login';
-        return ;
+        return;
     }
     let placeId = $(this).data('placeid');
     let target = $(this).closest('.OneItemContainer').find('.bookmark-count');
     let bookmarkCnt = Number(target.text());
     fetch(`/bookmark?placeId=${placeId}`)
-        .then(response=>response.json())
-        .then(isAdded=>
-            target.text(isAdded?++bookmarkCnt:--bookmarkCnt)
+        .then(response => response.json())
+        .then(isAdded =>
+            target.text(isAdded ? ++bookmarkCnt : --bookmarkCnt)
         );
     $(this).find('span').toggleClass('none');
 });
 
-// 동적으로 요소들 추가했을 때 이벤트확인하기 위한 코드
-// test();
-function test(){
+
+// 무한 페이징
+let page = 1;
+let hasNext = true;
+let pagingTargetIdx = 1;
+
+function getPlaceList() {
+    fetch(`/place/api/list?page=${page++}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error();
+            }
+            return response.json();
+        }).then(data => {
+        hasNext = !data.last;
+        displayPlaceList(data)
+    });
+}
+
+
+function displayPlaceList(data) {
     let text = '';
 
-    text = `
-        <div class="OneItemContainer hover">
+    data.content.forEach(place => {
+        text += `
+       <div class="OneItemContainer hover">
                 <div class="OneItemImgContainer">
                     <div class="swiper ImageSwiper swiper-initialized swiper-horizontal swiper-pointer-events swiper-backface-hidden">
-                        <div class="swiper-wrapper ImageLength" style="transform: translate3d(0px, 0px, 0px);">
+                        <a href="/place/detail/${place.id}"
+                           class="swiper-wrapper ImageLength" style="transform: translate3d(0px, 0px, 0px);" >`;
+        place.placeFiles.forEach(placeImg => {
+            text += `
                             <div class="swiper-slide swiper-slide-active" style="width: 287px;">
-                                <img src="https://img.shareit.kr/tempspaceauth/img/2023-01-10/c4ee019d-1816-4b82-8138-302662a306e4_640.jpg" alt="실내체육관(낙산관)" height="1350.6666666666665px" class="ItemImg">
-                            </div>
-                            <div class="swiper-slide swiper-slide-next" style="width: 287px;">
-                                <img src="https://img.shareit.kr/tempspaceauth/img/2023-01-10/6a7ba1d9-7a02-4b06-b96d-26bc33bc27ca_640.jpg" alt="실내체육관(낙산관)" height="1350.6666666666665px" class="ItemImg">
-                            </div>
-                            <div class="swiper-slide" style="width: 287px;">
-                                <img src="https://img.shareit.kr/tempspaceauth/img/2023-01-10/33f564e8-4102-40e2-9b8e-19374cbf0516_640.jpg" alt="실내체육관(낙산관)" height="1350.6666666666665px" class="ItemImg">
-                            </div>
-                            <div class="swiper-slide" style="width: 287px;">
-                                <img src="https://img.shareit.kr/tempspaceauth/img/2023-01-10/78a18732-9490-4279-9e0a-d659931aa8ec_640.jpg" alt="실내체육관(낙산관)" height="1350.6666666666665px" class="ItemImg">
-                            </div>
-                            <div class="swiper-slide" style="width: 287px;">
-                                <img src="https://img.shareit.kr/tempspaceauth/img/2023-01-10/8b7ecc1d-2084-42dd-9c77-ecc5de1f442f_640.jpg" alt="실내체육관(낙산관)" height="1350.6666666666665px" class="ItemImg">
-                            </div>
-                        </div>
+                                <img class="ItemImg"
+                                     height="1350.6666666666665px" 
+                                     th:alt="${place.title}" src="/file/display?fileName=${placeImg.uploadPath}/t_${placeImg.uuid}_${placeImg.fileName}">
+                            </div>`;
+        });
+
+        text += `     </a>
                         <div class="NavigationBtnContainer">
-                            <button type="button" class="NavigationBtn RightBtn">
-                                <img src="/imgs/round_arrow_right_gray024.7f7e18a3.svg" alt="다음">
+                            <button class="NavigationBtn RightBtn" type="button">
+                                <img alt="다음" src="/imgs/round_arrow_right_gray024.7f7e18a3.svg">
                             </button>
-                            <button type="button" class="NavigationBtn LeftBtn">
-                                <img src="/imgs/round_arrow_left_gray024.707193e8.svg" alt="이전">
+                            <button class="NavigationBtn LeftBtn" type="button">
+                                <img alt="이전" src="/imgs/round_arrow_left_gray024.707193e8.svg">
                             </button>
                         </div>
                         <div class="ItemImgPagination">
                             <p><span class="snapIndex">1</span>/5</p>
                         </div>
                     </div>
-                    <button type="button" class="ItemBookMarkBtn" >
-                        <span><i class="fa-regular fa-bookmark"></i></span>
-                        <span class="none"><i class="fa-solid fa-bookmark" style="color: white"></i></span>
+                    <button class="ItemBookMarkBtn" th:data-placeid="${place.id}" type="button">
+                        <span class="${!place.bookmarkChecked ? '' : 'none'}"><i
+                                class="fa-regular fa-bookmark"></i></span>
+                        <span class="${place.bookmarkChecked ? '' : 'none'}"><i class="fa-solid fa-bookmark"
+                                                                                 style="color: white"></i></span>
                     </button>
                 </div>
                 <div class="ItemTextContainer">
                     <div class="ItemHostNameContainer">
-                        <span class="ItemHostName">서울 영등포구</span>
+                        <span class="ItemHostName">${place.placeAddress.address}</span>
                         <div class="ItemCountsContainer">
                             <div class="ItemsStarCountContainer">
-                                <img src="/imgs/star_filled_paintYellow056.a8eb6e44.svg" alt="후기갯수" class="ItemCountImg">
-                                <span class="ItemCountText">4.0(20)</span>
+                                <img alt="후기갯수" class="ItemCountImg"
+                                     src="/imgs/star_filled_paintYellow056.a8eb6e44.svg">
+                                <span class="ItemCountText">${place.evalAvg}(${place.evalCount})</span>
                             </div>
                             <div class="ItemsLikeCountContainer">
-                                <img src="/imgs/bookmark_thin.svg" alt="북마크갯수" class="bookmark-img">
-                                <span class="ItemCountText">1724</span>
+                                <img alt="북마크갯수" class="bookmark-img" src="/imgs/bookmark_thin.svg">
+                                <span class="ItemCountText bookmark-count">${place.bookmarkCount}</span>
                             </div>
                         </div>
                     </div>
                     <div class="ItemSpaceNameContainer">
-                        <p class="ItemSpaceName">한강뷰라니</p>
+                        <p class="ItemSpaceName" >
+                            <a href="/place/detail/${place.id}">${place.title}</a>
+                        </p>
                     </div>
                     <div class="ItemPriceContainer">
-                        <span class="place-price">13,500원</span>
+                        <span class="place-price">${(place.price).toLocaleString()}원</span>
                     </div>
                 </div>
             </div>
     `;
+    })
 
     $('.ListItemsContainer').append(text);
+    // 동적으로 추가된 게시글요소에 이미지 슬라이드 이벤트 추가하기
+    addSlideEvent();
 }
 
+
+window.addEventListener('scroll', function () {
+    if (!hasNext) return;
+
+    let itemContainers = document.querySelectorAll('.OneItemContainer');
+    let {bottom} = itemContainers[pagingTargetIdx - 1].getBoundingClientRect();
+
+    if (bottom < 0) {
+        pagingTargetIdx += 12;
+        getPlaceList();
+    }
+});
 
 
 
