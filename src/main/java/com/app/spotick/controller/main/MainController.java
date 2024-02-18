@@ -25,7 +25,7 @@ public class MainController {
     @RequestMapping
     public String goToMain(Model model, @AuthenticationPrincipal UserDetailsDto userDetailsDto,
                            @PageableDefault(page = 0,
-                                   size = 10, sort = "id",
+                                   size = 12, sort = "id",
                                    direction = Sort.Direction.DESC
                            ) Pageable pageable) {
         Long userId = userDetailsDto == null ? null : userDetailsDto.getId();

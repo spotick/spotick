@@ -6,7 +6,7 @@ import lombok.Getter;
 import lombok.ToString;
 import org.hibernate.annotations.Subselect;
 
-@Entity
+//@Entity
 @Subselect("""
         select PLACE_ID as placeId,count(PLACE_ID) as bookmarkCount from TBL_PLACE_BOOKMARK
         group by PLACE_ID
@@ -14,7 +14,7 @@ import org.hibernate.annotations.Subselect;
 @Getter
 @ToString
 public class PlaceBookmarkCount {
-    @Id
+//    @Id
     private Long placeId;
     private Long bookmarkCount;
 }

@@ -103,7 +103,7 @@ public class PlaceRestController {
     @GetMapping("/list")
     public ResponseEntity<Slice<PlaceListDto>> placeList(@AuthenticationPrincipal UserDetailsDto userDetailsDto,
                             @PageableDefault(page =0,
-                                    size = 10, sort = "id",
+                                    size = 12, sort = "id",
                                     direction = Sort.Direction.DESC
                             ) Pageable pageable){
         Long userId = userDetailsDto==null? null: userDetailsDto.getId();

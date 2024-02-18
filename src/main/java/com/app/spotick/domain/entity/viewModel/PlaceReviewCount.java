@@ -6,7 +6,7 @@ import lombok.Getter;
 import lombok.ToString;
 import org.hibernate.annotations.Subselect;
 
-@Entity
+//@Entity
 @Subselect("""
         SELECT pr.PLACE_ID as placeId, count(p.PLACE_REVIEW_ID) as reveiwCont FROM TBL_PLACE_REVIEW p
         JOIN TBL_PLACE_RESERVATION pr
@@ -15,7 +15,7 @@ import org.hibernate.annotations.Subselect;
         """)
 @Getter @ToString
 public class PlaceReviewCount {
-    @Id
+//    @Id
     private Long placeId;
     private Long reviewCount;
 }

@@ -19,7 +19,6 @@ const selectBoxBtnImg = document.querySelector('.SelectBoxBtnImg');
 const SelectBoxBtnText = document.querySelector('.SelectBoxBtnText');
 
 
-
 // 인기순 필터
 selectBoxBtn.addEventListener('click', function () {
     // 토글 기능을 이용하여 리스트 보이기/숨기기
@@ -51,17 +50,17 @@ listItems.forEach(item => {
 });
 
 // 필터 모달창 나오기
-document.querySelector('.FilterBtn').addEventListener("click", function(){
+document.querySelector('.FilterBtn').addEventListener("click", function () {
     document.querySelector('.FilterModalContainer').classList.add('On');
 })
 
 // 필터 모달창 숨기기
-document.querySelector('.FilterModalCloseBtn').addEventListener("click", function(){
+document.querySelector('.FilterModalCloseBtn').addEventListener("click", function () {
     document.querySelector('.FilterModalContainer').classList.remove('On');
 })
 
 // 필터 적용 버튼
-document.querySelector('.FilterSubmitBtn').addEventListener("click", function(){
+document.querySelector('.FilterSubmitBtn').addEventListener("click", function () {
     document.querySelector('.FilterModalContainer').classList.remove('On');
 })
 
@@ -160,7 +159,6 @@ checkboxes.forEach(checkbox => {
         }
 
 
-
         const checkedCheckboxes = document.querySelectorAll('input[type="checkbox"]:checked');
         const numberOfCheckedCheckboxes = checkedCheckboxes.length;
 
@@ -171,11 +169,11 @@ checkboxes.forEach(checkbox => {
 
         if (numberOfCheckedCheckboxes === 5) {
             checkboxes.forEach(checkbox => {
-                if(!checkbox.checked && checkbox.name !== "전체"){
+                if (!checkbox.checked && checkbox.name !== "전체") {
                     checkbox.disabled = true;
                 }
             })
-        }else{
+        } else {
             checkboxes.forEach(checkbox => {
                 checkbox.disabled = false;
             })
@@ -200,7 +198,7 @@ resetButton.addEventListener('click', function () {
 });
 
 // 체크박스 전체 해제
-function reset(){
+function reset() {
     // 전체 체크박스 해제
     checkboxes.forEach(checkbox => {
         checkbox.checked = false;
@@ -250,52 +248,65 @@ function toggleCityContainer(targetId) {
 }
 
 
-
 // 좋아요 버튼
-$(`.ListItemsContainer`).on('click','.ItemBookMarkBtn',function (){
+$(`.ListItemsContainer`).on('click', '.ItemBookMarkBtn', function () {
     let isLoggedIn = $('#isLoggedIn').val();
-    if(isLoggedIn==='false'){
+    if (isLoggedIn === 'false') {
         alert('로그인이 필요한 서비스 입니다');
         location.href = '/user/login';
-        return ;
+        return;
     }
     let placeId = $(this).data('placeid');
     let target = $(this).closest('.OneItemContainer').find('.bookmark-count');
     let bookmarkCnt = Number(target.text());
     fetch(`/bookmark?placeId=${placeId}`)
-        .then(response=>response.json())
-        .then(isAdded=>
-            target.text(isAdded?++bookmarkCnt:--bookmarkCnt)
+        .then(response => response.json())
+        .then(isAdded =>
+            target.text(isAdded ? ++bookmarkCnt : --bookmarkCnt)
         );
     $(this).find('span').toggleClass('none');
 });
 
-// 동적으로 요소들 추가했을 때 이벤트확인하기 위한 코드
-// test();
-function displayPlaceList(data){
-    console.table(data);
-    console.table(data.content);
-    let text = '';
-    
-    // todo 이미지 슬라이드 이벤트 위임으로 처리해야함
 
-    data.content.forEach(place=>{
-    text += `
+// 무한 페이징
+let page = 1;
+let hasNext = true;
+let pagingTargetIdx = 1;
+
+function getPlaceList() {
+    fetch(`/place/api/list?page=${page++}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error();
+            }
+            return response.json();
+        }).then(data => {
+        hasNext = !data.last;
+        displayPlaceList(data)
+    });
+}
+
+
+function displayPlaceList(data) {
+    let text = '';
+
+    data.content.forEach(place => {
+        text += `
        <div class="OneItemContainer hover">
                 <div class="OneItemImgContainer">
                     <div class="swiper ImageSwiper swiper-initialized swiper-horizontal swiper-pointer-events swiper-backface-hidden">
                         <a href="/place/detail/${place.id}"
                            class="swiper-wrapper ImageLength" style="transform: translate3d(0px, 0px, 0px);" >`;
-                    place.placeFiles.forEach(placeImg=>{
-                        text +=`
+        place.placeFiles.forEach(placeImg => {
+            text += `
                             <div class="swiper-slide swiper-slide-active" style="width: 287px;">
                                 <img class="ItemImg"
                                      height="1350.6666666666665px" 
                                      th:alt="${place.title}" src="/file/display?fileName=${placeImg.uploadPath}/t_${placeImg.uuid}_${placeImg.fileName}">
                             </div>`;
-                    });
+        });
 
-              text +=`     </a>
+        text += `     </a>
                         <div class="NavigationBtnContainer">
                             <button class="NavigationBtn RightBtn" type="button">
                                 <img alt="다음" src="/imgs/round_arrow_right_gray024.7f7e18a3.svg">
@@ -309,9 +320,9 @@ function displayPlaceList(data){
                         </div>
                     </div>
                     <button class="ItemBookMarkBtn" th:data-placeid="${place.id}" type="button">
-                        <span class="${!place.bookmarkChecked?'':'none'}"><i
+                        <span class="${!place.bookmarkChecked ? '' : 'none'}"><i
                                 class="fa-regular fa-bookmark"></i></span>
-                        <span class="${place.bookmarkChecked?'':'none'}"><i class="fa-solid fa-bookmark"
+                        <span class="${place.bookmarkChecked ? '' : 'none'}"><i class="fa-solid fa-bookmark"
                                                                                  style="color: white"></i></span>
                     </button>
                 </div>
@@ -348,18 +359,19 @@ function displayPlaceList(data){
     addSlideEvent();
 }
 
-getPlaceList();
 
-function getPlaceList(){
-    fetch(`/place/api/list`)
-        .then(response=>{
-            if(!response.ok){
-                throw new Error();
-            }
-            return response.json();
-        }).then(displayPlaceList);
+window.addEventListener('scroll', function () {
+    if (!hasNext) return;
 
-}
+    let itemContainers = document.querySelectorAll('.OneItemContainer');
+    let {bottom} = itemContainers[pagingTargetIdx - 1].getBoundingClientRect();
+
+    if (bottom < 0) {
+        pagingTargetIdx += 12;
+        getPlaceList();
+    }
+});
+
 
 
 
