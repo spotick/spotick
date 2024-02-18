@@ -73,10 +73,15 @@ input[type=checkbox] {
     cursor: pointer;
 }
 
+
+#ListContainer{
+    margin: 50px 0;
+}
+
 .FilterContainer{
     width: 100%;
     max-width: 1200px;
-    margin: 0px auto 16px;
+    margin: 110px auto 16px;
     display: flex;
     -webkit-box-align: center;
     align-items: center;

@@ -15,8 +15,6 @@ import com.app.spotick.repository.place.reservation.PlaceReservationRepository;
 import com.app.spotick.repository.user.UserRepository;
 import com.app.spotick.service.place.file.PlaceFileService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
@@ -54,8 +52,8 @@ public class PlaceServiceImpl implements PlaceService{
 
     @Override
     @Transactional(readOnly = true)
-    public List<PlaceListDto> findPlaceListPagination(int pageRequest,Long userId) {
-        return placeRepository.findPlaceListPaging(PageRequest.of(pageRequest,PAGE_SIZE),userId);
+    public Slice<PlaceListDto> findPlaceListPagination(Pageable pageable, Long userId) {
+        return placeRepository.findPlaceListPaging(pageable,userId);
     }
 
     @Override
