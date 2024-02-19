@@ -48,24 +48,42 @@ $('.id-section .tel').on('change', function () {
 });
 
 $('.id-section .cert-number-label').on('click', '.cert-btn.on', function () {
-    // 사용자에게 인증번호를 보내주는 메소드
     sendFindIdAuthenticationCode()
         .then(isOk => {
             $(this).siblings('input').attr('readonly', !isOk);
-            $(this).text(isOk?'재전송':'인증번호');
+            $(this).text(isOk ? '재전송' : '인증번호');
         });
 });
 
 $('.password-wrap .cert-number-label').on('click', '.cert-btn.on', function () {
-    // 사용자에게 인증번호를 보내주는 메소드
-    // sendFindIdAuthenticationCode()
-    //     .then(isOk => {
-    //         $(this).siblings('input').attr('readonly', !isOk);
-    //         $(this).text('재전송');
-    //     });
-    $(this).siblings('input').attr('readonly', false);
-    $(this).text('재전송');
+    sendFindPwAuthenticationCode()
+        .then(isOk => {
+            $(this).siblings('input').attr('readonly', !isOk);
+            $(this).text(isOk ? '재전송' : '인증번호');
+        });
 });
+
+function sendFindPwAuthenticationCode() {
+    let $certMsg = $('.pw-cert-msg');
+    return fetch('/users/api/email/cert/code', {
+        method: 'POST',
+        body: $('#email').val()
+    }).then(r => {
+        if (!r.ok) {
+            throw r.json();
+        }
+        return r.json();
+    }).then(resp => {
+        $certMsg.text('');
+        return resp.data;
+    }).catch(error => {
+        error.then(err => {
+            $certMsg.text(err.message);
+            return error.data;
+        })
+    })
+}
+
 
 $('#certNumber').on('blur', function () {
     let isTrue = $(this).val() !== '';
@@ -89,29 +107,49 @@ $('.id-section').on('click', '.find-id-btn.on', function () {
             tel: $('#tel').val(),
             certCode: $('#certNumber').val()
         }),
-    }).then(response=>{
-        if(!response.ok){
+    }).then(response => {
+        if (!response.ok) {
             throw response.json();
         }
         return response.json();
-    }).then(data=>data.data)
-        .then(data=>{
+    }).then(data => data.data)
+        .then(data => {
             showFoundId({email: data.email, registerDate: data.createdDateStr});
         })
-        .catch(error=> {
-            error.then(data=>{
+        .catch(error => {
+            error.then(data => {
                 $certMsg.text(data.message);
             })
         });
 });
 
 $('.password-wrap').on('click', '.find-password-btn.on', function () {
-    console.log('비밀번호 찾기!!!');
-//     사용자가 입력한 인증번호가 맞는지 검사하고
-//     맞으면 해당 비밀번호를 변경할 수 있게
-//     틀리면 다시 인증하게 하기
-    passwordContent = $('.password-wrap').html();
-    setPasswordChangeContent();
+    let $certMsg = $('.pw-cert-msg');
+    let email = $('#email').val();
+    fetch('/users/api/find/password', {
+        method: 'POST',
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+            email: email,
+            certCode: $('#passwordCertNumber').val()
+        }),
+    }).then(response => {
+        if (!response.ok) {
+            throw response.json();
+        }
+        return response.json();
+    }).then(data => {
+        $certMsg.text('');
+        passwordContent = $('.password-wrap').html();
+        setPasswordChangeContent(email);
+    }).catch(error => {
+        error.then(error => {
+            $certMsg.text('인증번호를 다시 입력해 주세요');
+        })
+    });
+
 });
 
 $('.password-wrap').on('blur', '#email', function () {
@@ -133,12 +171,10 @@ $('.cert-number-label, .password-wrap .cert-number-label input').on('blur', func
 });
 
 
-// 사용자에게 인증번호를 보내주는 메소드
+// 아이디찾기 사용자에게 인증번호를 보내주는 메소드
 function sendFindIdAuthenticationCode() {
     let $certMsg = $('.id-cert-msg');
-    let result = false;
-    // 아이디찾기 인증번호 전송 및 처리하기
-    return fetch('/users/api/email/cert/code', {
+    return fetch('/users/api/tel/cert/code', {
         method: 'POST',
         headers: {
             "Content-Type": "application/json",
@@ -163,25 +199,28 @@ function sendFindIdAuthenticationCode() {
     })
 }
 
-function setPasswordChangeContent() {
+function setPasswordChangeContent(email) {
     let text = `
-        <section class="flex-center password-set-section">
-            <p class="guide-msg">새로 사용할 비밀번호를 입력해 주세요</p>
-            <div class="input-box">
-                <label for="password">
-                    <input id="password" type="password" class="password" name="password"
-                           placeholder="비밀번호(영문+숫자+특수문자,6~15자)">
-                </label>
-                <p class="invalid-password-msg none">비밀번호는 영문+숫자+특수문자,6~15자로 입력해 주세요</p>
-            </div>
-            <div class="input-box">
-                <label for="passwordCheck" class="password-check-label">
-                    <input id="passwordCheck" type="password" class="passwordCheck" name="passwordCheck"
-                           placeholder="비밀번호 확인">
-                </label>
-                <p class="check-fail-msg none">비밀번호가 일치하지 않습니다</p>
-            </div>                
-            <button type="button" class="change-password-btn flex">비밀번호 변경</button>
+        <section class="password-set-section">
+            <form action="/user/modify/password" method="post" class="flex-center direction-column" id="setPasswordForm">
+                <p class="guide-msg">새로 사용할 비밀번호를 입력해 주세요</p>
+                <div class="input-box">
+                    <input id="targetEmail" name="email" type="hidden" value="${email}">
+                    <label for="password">
+                        <input id="password" type="password" class="password" name="password"
+                               placeholder="비밀번호(영문+숫자+특수문자,6~15자)">
+                    </label>
+                    <p class="invalid-password-msg none">비밀번호는 영문+숫자+특수문자,6~15자로 입력해 주세요</p>
+                </div>
+                <div class="input-box">
+                    <label for="passwordCheck" class="password-check-label">
+                        <input id="passwordCheck" type="password" class="passwordCheck"
+                               placeholder="비밀번호 확인">
+                    </label>
+                    <p class="check-fail-msg none">비밀번호가 일치하지 않습니다</p>
+                </div>      
+                    <button type="button" class="change-password-btn flex">비밀번호 변경</button>
+            </form>
         </section>
     `;
     $('.password-wrap').html(text);
@@ -195,12 +234,9 @@ $('.password-wrap').on('blur', '.password-set-section input', function () {
     $('.invalid-password-msg').toggleClass('none', isValidPassword);
     $('.check-fail-msg').toggleClass('none', isSamePassword);
     $('.change-password-btn').toggleClass('on', isTrue);
-});
-
-// 비밀번호 변경 처리
-$('.password-wrap').on('click', '.change-password-btn.on', function () {
-    console.log('비밀번호 변경!!!')
-    alert('비밀번호 변경!!')
+}).on('click', '.change-password-btn.on', function () {
+    alert('비밀번호가 변경됩니다')
+    $('#setPasswordForm').submit();
 });
 
 

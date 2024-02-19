@@ -1,6 +1,7 @@
 package com.app.spotick.controller.user;
 
 import com.app.spotick.domain.dto.user.UserJoinDto;
+import com.app.spotick.domain.dto.user.UserModifyPwDto;
 import com.app.spotick.service.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -40,6 +41,12 @@ public class UserController {
     @GetMapping("/find")
     public String userFind(){
         return "user/find";
+    }
+
+    @PostMapping("/modify/password")
+    public RedirectView modifyPassword(UserModifyPwDto userModifyPwDto){
+        userService.updatePassword(userModifyPwDto.getEmail(),userModifyPwDto.getPassword());
+        return new RedirectView("/user/login");
     }
 }
 

@@ -4,6 +4,8 @@ import com.app.spotick.domain.dto.place.PlaceListDto;
 import com.app.spotick.domain.embedded.post.PostAddress;
 import com.app.spotick.domain.entity.place.*;
 import com.app.spotick.domain.entity.user.User;
+import com.app.spotick.domain.entity.viewModel.PlaceBookmarkCount;
+import com.app.spotick.domain.entity.viewModel.QPlaceBookmarkCount;
 import com.app.spotick.domain.type.post.PostStatus;
 import com.app.spotick.domain.type.user.UserStatus;
 import com.app.spotick.repository.place.bookmark.PlaceBookmarkRepository;
@@ -35,6 +37,7 @@ import static com.app.spotick.domain.entity.place.QPlace.place;
 import static com.app.spotick.domain.entity.place.QPlaceBookmark.placeBookmark;
 import static com.app.spotick.domain.entity.place.QPlaceFile.placeFile;
 import static com.app.spotick.domain.entity.place.QPlaceReview.placeReview;
+import static com.app.spotick.domain.entity.viewModel.QPlaceBookmarkCount.placeBookmarkCount;
 
 @SpringBootTest
 @Transactional
@@ -182,6 +185,13 @@ class PlaceBookmarkRepositoryTest {
             System.out.println("tuple.get(place.id) = " + tuple.get(place.id));
             System.out.println("tuple.get(place.title) = " + tuple.get(place.title));
         }
+    }
+
+    @Test
+    void bookmarkCountTest(){
+        List<PlaceBookmarkCount> fetch = queryFactory.selectFrom(placeBookmarkCount)
+                .fetch();
+        System.out.println("fetch = " + fetch);
     }
 
 

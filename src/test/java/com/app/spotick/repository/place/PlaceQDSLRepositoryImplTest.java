@@ -18,6 +18,7 @@ import com.app.spotick.repository.user.UserAuthorityRepository;
 import com.app.spotick.repository.user.UserRepository;
 import com.querydsl.core.Tuple;
 import com.querydsl.core.group.GroupBy;
+import com.querydsl.core.types.PathMetadata;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Expressions;
@@ -37,10 +38,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.test.annotation.Commit;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-import java.util.UUID;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import static com.app.spotick.domain.entity.place.QPlace.place;
 import static com.app.spotick.domain.entity.place.QPlaceBookmark.placeBookmark;
@@ -232,14 +231,15 @@ class PlaceQDSLRepositoryImplTest {
                 .fetch();
 
 //        사진정보를 장소 id별로 묶는다
-//        Map<Long, List<PlaceFileDto>> fileListMap = fileDtoList.stream().collect(Collectors.groupingBy(PlaceFileDto::getPlaceId));
+        Map<Long, List<PlaceFileDto>> fileListMap = fileDtoList.stream().collect(Collectors.groupingBy(PlaceFileDto::getPlaceId));
 
 //        장소 id별로 구분된 사진들을 각각 게시글 번호에 맞게 추가한다
-//        placeListDtos.forEach(place -> {
-//            place.updatePlaceFiles(fileListMap.get(place.getId())
-//                    .stream().limit(5L).toList());
-//        });
+        placeListDtos.forEach(place -> {
+            place.updatePlaceFiles(fileListMap.get(place.getId())
+                    .stream().limit(5L).toList());
+        });
 
+        placeListDtos.forEach(System.out::println);
     }
 
     @Test
