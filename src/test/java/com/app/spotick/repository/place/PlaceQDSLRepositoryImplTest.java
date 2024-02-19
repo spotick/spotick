@@ -16,6 +16,7 @@ import com.app.spotick.repository.place.bookmark.PlaceBookmarkRepository;
 import com.app.spotick.repository.place.file.PlaceFileRepository;
 import com.app.spotick.repository.user.UserAuthorityRepository;
 import com.app.spotick.repository.user.UserRepository;
+import com.app.spotick.util.type.SortCriteria;
 import com.querydsl.core.Tuple;
 import com.querydsl.core.group.GroupBy;
 import com.querydsl.core.types.PathMetadata;
@@ -35,6 +36,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.test.annotation.Commit;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -463,7 +465,7 @@ class PlaceQDSLRepositoryImplTest {
     @Test
     void transFormTest2() {
         PageRequest pageRequest = PageRequest.of(0, 12);
-        List<PlaceListDto> placeListPaging = placeRepository.findPlaceListPaging(pageRequest, null);
+        Slice<PlaceListDto> placeListPaging = placeRepository.findPlaceListPaging(pageRequest, null,SortCriteria.NEWEST);
 
         placeListPaging.forEach(place -> {
             System.out.println("place = " + place);

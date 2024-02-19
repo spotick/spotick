@@ -14,6 +14,7 @@ import com.app.spotick.repository.place.PlaceRepository;
 import com.app.spotick.repository.place.reservation.PlaceReservationRepository;
 import com.app.spotick.repository.user.UserRepository;
 import com.app.spotick.service.place.file.PlaceFileService;
+import com.app.spotick.util.type.SortCriteria;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
@@ -29,7 +30,7 @@ import java.util.Optional;
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class PlaceServiceImpl implements PlaceService{
+public class PlaceServiceImpl implements PlaceService {
     private final PlaceRepository placeRepository;
     private final PlaceReservationRepository placeReservationRepository;
     private final UserRepository userRepository;
@@ -37,7 +38,7 @@ public class PlaceServiceImpl implements PlaceService{
     private final int PAGE_SIZE = 12;
 
     @Override
-    public void registerPlace(PlaceRegisterDto placeRegisterDto,Long userId) throws IOException {
+    public void registerPlace(PlaceRegisterDto placeRegisterDto, Long userId) throws IOException {
         User host = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalStateException("존재하지 않는 회원"));
         Place place = placeRegisterDto.toEntity();
@@ -47,17 +48,17 @@ public class PlaceServiceImpl implements PlaceService{
 //        저장된 장소로 사진도 저장해야함
         List<MultipartFile> placeFiles = placeRegisterDto.getPlaceFiles();
 
-        placeFileService.registerAndSavePlaceFile(placeFiles,place);
+        placeFileService.registerAndSavePlaceFile(placeFiles, place);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public Slice<PlaceListDto> findPlaceListPagination(Pageable pageable, Long userId) {
-        return placeRepository.findPlaceListPaging(pageable,userId);
+    public Slice<PlaceListDto> findPlaceListPagination(Pageable pageable, Long userId, SortCriteria sortCriteria) {
+        return placeRepository.findPlaceListPaging(pageable, userId, sortCriteria);
     }
 
     @Override
-    public PlaceDetailDto findPlaceDetailById(Long placeId,Long userId) {
+    public PlaceDetailDto findPlaceDetailById(Long placeId, Long userId) {
         Place place = placeRepository.findById(placeId)
                 .orElseThrow(() -> new IllegalStateException("존재하지 않는 장소 게시글"));
 
@@ -71,7 +72,7 @@ public class PlaceServiceImpl implements PlaceService{
     @Transactional(readOnly = true)
     public PlaceReserveBasicInfoDto findPlaceReserveDefaultInfo(Long placeId) {
         return placeRepository.findPlaceReserveBasicInfo(placeId)
-                .orElseThrow(()->new IllegalStateException("존재하지 않는 장소 게시글"));
+                .orElseThrow(() -> new IllegalStateException("존재하지 않는 장소 게시글"));
     }
 
     @Override

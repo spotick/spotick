@@ -7,16 +7,14 @@ import com.app.spotick.domain.dto.place.review.ContractedPlaceDto;
 import com.app.spotick.domain.entity.place.*;
 import com.app.spotick.domain.type.place.PlaceReservationStatus;
 import com.app.spotick.domain.type.post.PostStatus;
+import com.app.spotick.util.type.SortCriteria;
 import com.querydsl.core.Tuple;
 import com.querydsl.core.group.GroupBy;
 import com.querydsl.core.types.ExpressionUtils;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Projections;
-import com.querydsl.core.types.dsl.BooleanExpression;
-import com.querydsl.core.types.dsl.Expressions;
-import com.querydsl.core.types.dsl.NumberExpression;
-import com.querydsl.core.types.dsl.PathBuilder;
+import com.querydsl.core.types.dsl.*;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQuery;
@@ -46,7 +44,7 @@ public class PlaceQDSLRepositoryImpl implements PlaceQDSLRepository {
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public Slice<PlaceListDto> findPlaceListPaging(Pageable pageable, Long userId) {
+    public Slice<PlaceListDto> findPlaceListPaging(Pageable pageable, Long userId, SortCriteria sortCriteria) {
         JPQLQuery<Double> reviewAvg = createReviewAvgSub(place);
 
         JPQLQuery<Long> reviewCount = createReviewCountSub(place);
@@ -55,21 +53,26 @@ public class PlaceQDSLRepositoryImpl implements PlaceQDSLRepository {
 
         BooleanExpression isBookmarkChecked = isBookmarkCheckedSub(place, userId);
 
+        NumberPath<Long> aliasBookmarkCount = Expressions.numberPath(Long.class,"bookmarkCount");
+        NumberPath<Long> aliasReviewCount = Expressions.numberPath(Long.class,"reviewCount");
+        NumberPath<Double> aliasReviewAvg = Expressions.numberPath(Double.class,"reviewAvg");
+
         List<PlaceListDto> placeListDtos = queryFactory.select(
                         Projections.constructor(PlaceListDto.class,
                                 place.id,
                                 place.title,
                                 place.price,
                                 place.placeAddress,
-                                reviewAvg,
-                                ExpressionUtils.as(reviewCount,"reviewCount"),
-                                ExpressionUtils.as(bookmarkCount,"bookmarkCount"),
+                                ExpressionUtils.as(reviewAvg,aliasReviewAvg),
+                                ExpressionUtils.as(reviewCount,aliasReviewCount),
+                                ExpressionUtils.as(bookmarkCount,aliasBookmarkCount),
                                 isBookmarkChecked
                         )
                 )
                 .from(place)
                 .where(place.placeStatus.eq(PostStatus.APPROVED))
-                .orderBy(getOrderSpecifier(pageable.getSort()).toArray(OrderSpecifier[]::new))
+//                .orderBy(getOrderSpecifier(pageable.getSort()).toArray(OrderSpecifier[]::new))
+                .orderBy(aliasBookmarkCount.desc())
                 .offset(pageable.getOffset())   //페이지 번호
                 .limit(pageable.getPageSize()+1)  //페이지 사이즈
                 .fetch();
@@ -467,18 +470,7 @@ public class PlaceQDSLRepositoryImpl implements PlaceQDSLRepository {
                 .exists();
     }
 
-    private List<OrderSpecifier<?>> getOrderSpecifier(Sort sort){
-        List<OrderSpecifier<?>> orders = new ArrayList<>();
 
-        sort.forEach(order->{
-            Order direction = order.isAscending()?Order.ASC:Order.DESC;
-            String prop = order.getProperty();
-            PathBuilder<Place> orderByExpression = new PathBuilder<>(Place.class,place.getMetadata());
-            orders.add(new OrderSpecifier(direction,orderByExpression.get(prop)));
-        });
-
-        return orders;
-    }
 
 
 

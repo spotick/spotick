@@ -72,13 +72,8 @@
                     </button>
                     <!-- 인기순 selectBoxList -->
                     <div class="SelectBoxList">
-                        <button class="SelectBoxListItem SelectBoxListItem-select" type="button">인기순</button>
-                        <button class="SelectBoxListItem" type="button">관심순</button>
-                        <button class="SelectBoxListItem" type="button">낮은 가격순</button>
-                        <button class="SelectBoxListItem" type="button">높은 가격순</button>
-                        <button class="SelectBoxListItem" type="button">조회순</button>
-                        <button class="SelectBoxListItem" type="button">후기순</button>
-                        <button class="SelectBoxListItem" type="button">평점 높은순</button>
+                        <button  th:class="${enum.ordinal()==0?'SelectBoxListItem SelectBoxListItem-select':'SelectBoxListItem'}" type="button"
+                        th:each="enum : ${sortTypes}" th:data-sort="${enum.name()}" th:text="${enum.displayName}"></button>
                     </div>
                 </div>
                 <!-- 모달창 나오는 버튼 -->

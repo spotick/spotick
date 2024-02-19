@@ -1,5 +1,10 @@
 import {addSlideEvent} from '../../global-js/image-slide.js'
 
+// 무한 페이징
+let page = 1;
+let hasNext = true;
+let pagingTargetIdx = 1;
+
 // 필터쪽 체크박스
 const checkboxes = document.querySelectorAll('input[type="checkbox"]');
 const allCheckboxes = document.querySelectorAll('input[name="전체"]');
@@ -20,6 +25,7 @@ const SelectBoxBtnText = document.querySelector('.SelectBoxBtnText');
 
 
 // 인기순 필터
+
 selectBoxBtn.addEventListener('click', function () {
     // 토글 기능을 이용하여 리스트 보이기/숨기기
     selectBoxList.style.display = (selectBoxList.style.display === 'block') ? 'none' : 'block';
@@ -27,6 +33,8 @@ selectBoxBtn.addEventListener('click', function () {
     // 이미지 변경
     selectBoxBtnImg.src = (selectBoxList.style.display === 'block') ? '/imgs/arrow_up_gray014.75d8599e.svg' : '/imgs/arrow_down_gray014.f502da9d.svg';
 });
+
+
 
 // 각 리스트 아이템에 대한 이벤트 리스너 추가
 const listItems = document.querySelectorAll('.SelectBoxListItem');
@@ -74,7 +82,7 @@ checkboxes.forEach(checkbox => {
         console.log(this.checked);
 
         if (this.checked) {
-            if (checkBoxText.textContent.includes("전체")) {
+            if (checkBoxText.textContent.includes("전체") ) {
                 // 전체 체크박스 해제
                 checkboxes.forEach(otherCheckbox => {
                     if (otherCheckbox !== checkbox) {
@@ -268,10 +276,7 @@ $(`.ListItemsContainer`).on('click', '.ItemBookMarkBtn', function () {
 });
 
 
-// 무한 페이징
-let page = 1;
-let hasNext = true;
-let pagingTargetIdx = 1;
+
 
 function getPlaceList() {
     fetch(`/place/api/list?page=${page++}`)

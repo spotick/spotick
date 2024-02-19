@@ -8,6 +8,7 @@ import com.app.spotick.domain.dto.place.reservation.PlaceReserveRegisterDto;
 import com.app.spotick.domain.dto.user.UserDetailsDto;
 import com.app.spotick.service.place.PlaceService;
 import com.app.spotick.service.place.reservation.PlaceReservationService;
+import com.app.spotick.util.type.SortCriteria;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -46,13 +47,17 @@ public class PlaceController {
 
     @GetMapping("/list")
     public String placeList(Model model,@AuthenticationPrincipal UserDetailsDto userDetailsDto,
+                            @RequestParam(name = "sort",defaultValue = "POPULARITY") String sort,
                             @PageableDefault(page =0,
                                     size = 12, sort = "id",
                                     direction = Sort.Direction.DESC
                             ) Pageable pageable){
         Long userId = userDetailsDto==null? null: userDetailsDto.getId();
-        Slice<PlaceListDto> placeList = placeService.findPlaceListPagination(pageable,userId);
+        SortCriteria sortCriteria = SortCriteria.valueOf(sort);
+
+        Slice<PlaceListDto> placeList = placeService.findPlaceListPagination(pageable,userId,sortCriteria);
         model.addAttribute("placeList",placeList);
+        model.addAttribute("sortTypes", SortCriteria.values());
         return "place/list";
     }
 
