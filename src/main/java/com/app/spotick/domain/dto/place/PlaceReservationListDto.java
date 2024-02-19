@@ -1,13 +1,13 @@
 package com.app.spotick.domain.dto.place;
 
+import com.app.spotick.domain.dto.place.file.PlaceFileDto;
 import com.app.spotick.domain.embedded.post.PostAddress;
-import com.app.spotick.domain.entity.place.PlaceFile;
 import com.app.spotick.domain.type.place.PlaceReservationStatus;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
-import java.util.List;
+
 @Data @NoArgsConstructor
 public class PlaceReservationListDto {
     private Long id;

@@ -1,6 +1,6 @@
 package com.app.spotick.repository.place.reservation;
 
-import com.app.spotick.domain.dto.place.PlaceFileDto;
+import com.app.spotick.domain.dto.place.file.PlaceFileDto;
 import com.app.spotick.domain.dto.place.PlaceReservationListDto;
 import com.app.spotick.domain.dto.place.reservation.ReservationRequestListDto;
 import com.app.spotick.domain.type.place.PlaceReservationStatus;

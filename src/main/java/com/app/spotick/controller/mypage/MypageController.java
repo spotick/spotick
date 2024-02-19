@@ -58,7 +58,7 @@ public class MypageController {
         model.addAttribute("maskedEmail", maskedEmail);
         // 유저 프로필 정보
         UserProfileDto userProfileDto = userService.getUserProfile(userDetailsDto.getId());
-        System.out.println("userProfileDto = " + userProfileDto);
+
         model.addAttribute("userProfile", userProfileDto);
     }
 

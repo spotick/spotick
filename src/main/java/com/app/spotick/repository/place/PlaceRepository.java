@@ -16,10 +16,4 @@ public interface PlaceRepository extends JpaRepository<Place, Long>,PlaceQDSLRep
 
     Optional<Place> findByIdAndUser(Long id, User user);
 
-//    장소 등록 : 기본제공 메소드로 처리
-
-//    @Query("""
-//
-//    """)
-//    Optional<PlaceReserveBasicInfoDto> findPlaceReserveBasicInfo(@Param("placeId")Long placeId);
 }

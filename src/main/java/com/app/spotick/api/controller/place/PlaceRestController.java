@@ -16,6 +16,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/place/api")
@@ -110,6 +113,5 @@ public class PlaceRestController {
         Slice<PlaceListDto> placeList = placeService.findPlaceListPagination(pageable,userId);
         return ResponseEntity.ok(placeList);
     }
-
 
 }

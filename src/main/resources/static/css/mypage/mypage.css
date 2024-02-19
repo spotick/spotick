@@ -1138,14 +1138,6 @@
     width: 30%;
 }
 
-.notification-box {
-    text-align: center;
-    border-radius: 8px;
-    background: #e5e5e5;
-    padding: 20px 10px;
-    margin-bottom: 20px;
-}
-
 .mpcriq-title {
     display: -webkit-box;
     overflow: hidden;

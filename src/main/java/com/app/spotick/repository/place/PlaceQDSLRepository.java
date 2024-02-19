@@ -1,15 +1,12 @@
 package com.app.spotick.repository.place;
 
-import com.app.spotick.domain.dto.place.PlaceDetailDto;
-import com.app.spotick.domain.dto.place.PlaceDto;
-import com.app.spotick.domain.dto.place.PlaceListDto;
-import com.app.spotick.domain.dto.place.PlaceManageListDto;
+import com.app.spotick.domain.dto.place.*;
+import com.app.spotick.domain.dto.place.PlaceEditDto;
 import com.app.spotick.domain.dto.place.reservation.PlaceReserveBasicInfoDto;
 import com.app.spotick.domain.dto.place.reservation.PlaceReservedNotReviewedDto;
 import com.app.spotick.domain.dto.place.review.ContractedPlaceDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Slice;
 
 import java.util.List;
 import java.util.Optional;
@@ -27,7 +24,7 @@ public interface PlaceQDSLRepository {
 
     Page<PlaceManageListDto> findHostPlaceListByUserId(Long userId, Pageable pageable);
 
-    Optional<PlaceDto> findPlaceInfo(Long placeId, Long userId);
-
     Optional<ContractedPlaceDto> findPlaceBriefly(Long placeId, Long userId);
+
+    Optional<PlaceEditDto> findPlaceInfoByPlaceIdAndUserId(Long placeId, Long userId);
 }

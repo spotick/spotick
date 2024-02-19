@@ -1,17 +1,13 @@
 package com.app.spotick.repository.place.inquiry;
 
-import com.app.spotick.domain.dto.place.PlaceFileDto;
+import com.app.spotick.domain.dto.place.file.PlaceFileDto;
 import com.app.spotick.domain.dto.place.PlaceInquiryListDto;
 import com.app.spotick.domain.dto.place.inquiry.UnansweredInquiryDto;
 import com.app.spotick.domain.entity.place.PlaceInquiry;
-import com.app.spotick.domain.entity.place.QPlaceReservation;
-import com.app.spotick.domain.entity.user.QUser;
-import com.app.spotick.domain.entity.user.QUserProfileFile;
 import com.app.spotick.domain.type.post.PostStatus;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.JPQLQuery;
-import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.*;

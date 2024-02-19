@@ -26,4 +26,9 @@ public abstract class PostBase extends Period {
         this.viewCount++;
     }
 
+    public void editBase(String title, Double lat, Double lng) {
+        this.title = title;
+        this.lat = lat;
+        this.lng = lng;
+    }
 }

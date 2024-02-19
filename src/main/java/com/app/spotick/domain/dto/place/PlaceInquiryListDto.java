@@ -1,12 +1,10 @@
 package com.app.spotick.domain.dto.place;
 
+import com.app.spotick.domain.dto.place.file.PlaceFileDto;
 import com.app.spotick.domain.embedded.post.PostAddress;
-import com.app.spotick.domain.type.place.PlaceReservationStatus;
-import jakarta.persistence.Column;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
 @Data @NoArgsConstructor
 public class PlaceInquiryListDto {
     private Long id;

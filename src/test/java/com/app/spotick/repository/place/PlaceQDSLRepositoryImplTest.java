@@ -2,7 +2,7 @@ package com.app.spotick.repository.place;
 
 import com.app.spotick.domain.dto.place.PlaceDetailDto;
 import com.app.spotick.domain.dto.place.PlaceDto;
-import com.app.spotick.domain.dto.place.PlaceFileDto;
+import com.app.spotick.domain.dto.place.file.PlaceFileDto;
 import com.app.spotick.domain.dto.place.PlaceListDto;
 import com.app.spotick.domain.dto.place.reservation.PlaceReserveBasicInfoDto;
 import com.app.spotick.domain.embedded.post.PostAddress;
