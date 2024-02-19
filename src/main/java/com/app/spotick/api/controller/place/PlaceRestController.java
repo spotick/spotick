@@ -88,21 +88,6 @@ public class PlaceRestController {
                 .body("해당 장소를 삭제했습니다.");
     }
 
-    @GetMapping("/get/{placeId}")
-    public ResponseEntity<?> getPlaceInfo(@PathVariable("placeId") Long placeId,
-                                          @AuthenticationPrincipal UserDetailsDto userDetailsDto) {
-
-        PlaceDto foundPlace = placeService.findPlaceInfo(placeId, userDetailsDto.getId()).orElse(null);
-
-        if (foundPlace == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("장소를 찾을 수 없습니다.");
-        }
-
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(foundPlace);
-    }
-
     @GetMapping("/list")
     public ResponseEntity<Slice<PlaceListDto>> placeList(@AuthenticationPrincipal UserDetailsDto userDetailsDto,
                             @PageableDefault(page =0,
