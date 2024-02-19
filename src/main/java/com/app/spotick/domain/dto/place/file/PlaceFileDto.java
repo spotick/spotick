@@ -1,5 +1,6 @@
-package com.app.spotick.domain.dto.place;
+package com.app.spotick.domain.dto.place.file;
 
+import com.app.spotick.domain.entity.place.Place;
 import com.app.spotick.domain.entity.place.PlaceFile;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -28,5 +29,14 @@ public class PlaceFileDto {
         placeFileDto.setUploadPath(placeFile.getUploadPath());
 
         return placeFileDto;
+    }
+
+    public PlaceFile toEntity() {
+        return PlaceFile.builder()
+                .id(placeFileId)
+                .fileName(fileName)
+                .uuid(uuid)
+                .uploadPath(uploadPath)
+                .build();
     }
 }

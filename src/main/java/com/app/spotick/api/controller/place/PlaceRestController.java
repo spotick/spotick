@@ -10,6 +10,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/place/api")
@@ -77,20 +80,5 @@ public class PlaceRestController {
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body("해당 장소를 삭제했습니다.");
-    }
-
-    @GetMapping("/get/{placeId}")
-    public ResponseEntity<?> getPlaceInfo(@PathVariable("placeId") Long placeId,
-                                          @AuthenticationPrincipal UserDetailsDto userDetailsDto) {
-
-        PlaceDto foundPlace = placeService.findPlaceInfo(placeId, userDetailsDto.getId()).orElse(null);
-
-        if (foundPlace == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("장소를 찾을 수 없습니다.");
-        }
-
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(foundPlace);
     }
 }

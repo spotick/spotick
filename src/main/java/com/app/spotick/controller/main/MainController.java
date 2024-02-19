@@ -28,6 +28,6 @@ public class MainController {
 
         List<PlaceListDto> placeList = placeService.findPlaceListPagination(0, userId);
         model.addAttribute("placeList",placeList);
-        return "place/list";
+        return "/place/list";
     }
 }

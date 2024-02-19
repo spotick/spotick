@@ -1,12 +1,8 @@
 package com.app.spotick.domain.entity.place;
 
 import com.app.spotick.domain.base.image.ImageBase;
-import com.app.spotick.domain.entity.user.User;
 import jakarta.persistence.*;
 import lombok.*;
-
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 
 @Entity @Table(name = "TBL_PLACE_FILE")
 @SequenceGenerator(name = "SEQ_PLACE_FILE_GENERATOR", sequenceName = "SEQ_PLACE_FILE",allocationSize = 1)
@@ -31,6 +27,8 @@ public class PlaceFile extends ImageBase {
         this.place = place;
     }
 
-
+    public void setId(Long id) {
+        this.id = id;
+    }
 
 }

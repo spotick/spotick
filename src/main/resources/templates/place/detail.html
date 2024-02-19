@@ -107,7 +107,7 @@
 
                     <!--장소 수정하기 -->
                     <th:block sec:authorize="isAuthenticated()">
-                        <a th:href="@{/mypage/places}" class="place-modify-btn"
+                        <a th:href="@{/place/edit/{placeId}(placeId=*{placeId})}" class="place-modify-btn"
                            th:if="${#authentication.principal != null and #authentication.principal.id == place.hostId}">수정하기</a>
                     </th:block>
 

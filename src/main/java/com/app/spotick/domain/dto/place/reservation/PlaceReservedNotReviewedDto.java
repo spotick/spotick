@@ -1,6 +1,6 @@
 package com.app.spotick.domain.dto.place.reservation;
 
-import com.app.spotick.domain.dto.place.PlaceFileDto;
+import com.app.spotick.domain.dto.place.file.PlaceFileDto;
 import com.app.spotick.domain.embedded.post.PostAddress;
 import com.app.spotick.domain.type.place.PlaceReservationStatus;
 import lombok.Data;

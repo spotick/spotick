@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <title>Spotick | 장소 관리</title>
+    <link href="/imgs/logo/favicon.png" rel="icon">
     <link href="/css/global-css/root.css" rel="stylesheet">
     <link href="/css/mypage/mypage.css" rel="stylesheet">
     <link href="/css/mypage/mypage-modal.css" rel="stylesheet">
@@ -91,33 +92,45 @@
                 </div>
             </div>
 
+            <p class="input-title" style="margin-bottom: 8px">등록된 사진들</p>
+            <div class="img-wrap" id="savedImg">
+                <div class="file-label flex-align-center" style="cursor:default;">
+                    <i class="fa-regular fa-image"></i>
+                    <p>등록된 사진들</p>
+                </div>
+                <div class="imgSlide-btn-wrap" id="savedBtnWrap">
+                    <button class="imgSlide-btn left" id="savedLeft">
+                        <img src="/imgs/round_arrow_left_gray024.707193e8.svg">
+                    </button>
+                    <button class="imgSlide-btn right" id="savedRight">
+                        <img src="/imgs/round_arrow_right_gray024.7f7e18a3.svg">
+                    </button>
+                </div>
+                <ul class="imgSlide-wrap savedImgContainer" id="savedImgs"></ul>
+                <div id="deleteList"></div>
+            </div>
+            <div class="imgSlide-pagination-wrap" id="savedImgPagination"></div>
+
+            <div>
+                <p class="input-title" style="margin-bottom: 8px">새로 등록할 사진들</p>
+                <label for="placeFile">파일 등록하기</label>
+            </div>
             <div class="img-wrap">
                 <input accept="image/*" id="placeFile" multiple name="placeFile" type="file">
-                <label class="file-label flex-align-center" for="placeFile">
+                <div class="file-label flex-align-center">
                     <i class="fa-regular fa-image"></i>
                     <p>장소 사진을 넣어주세요</p>
-                </label>
-                <div class="file-container none">
-                    <ul class="file-wrap" id="imageFileWrap">
-                        <li class="file-item">
-                            <img src="${e.target.result}" alt="">
-                            <button type="button" class="delete" data-name="${file.name}">
-                                <i class="fa-solid fa-x"></i>
-                            </button>
-                        </li>
-                    </ul>
-
-                    <div class="img-button-box">
-                        <button class="prev" type="button">
-                            <i class="fa-solid fa-circle-chevron-left"></i>
-                        </button>
-                        <div></div>
-                        <button class="next" type="button">
-                            <i class="fa-solid fa-circle-chevron-right"></i>
-                        </button>
-                    </div>
                 </div>
-
+                <div class="imgSlide-btn-wrap" id="fileBtnWrap">
+                    <button class="imgSlide-btn left" id="fileLeft">
+                        <img src="/imgs/round_arrow_left_gray024.707193e8.svg">
+                    </button>
+                    <button class="imgSlide-btn right" id="fileRight">
+                        <img src="/imgs/round_arrow_right_gray024.7f7e18a3.svg">
+                    </button>
+                </div>
+                <ul class="imgSlide-wrap" id="imageFileWrap"></ul>
+                <input id="requestFile" type="hidden">
             </div>
 
             <div class="input-wrap">
@@ -127,8 +140,7 @@
                     <p class="invalid-msg"></p>
                 </div>
                 <label class="input-box textarea-box" for="placeInfo">
-                    <textarea id="placeInfo" name="placeInfo"
-                              placeholder="장소에 대해서 자세하게 설명해주세요" required></textarea>
+                    <textarea id="placeInfo" name="placeInfo" placeholder="장소에 대해서 자세하게 설명해주세요" required></textarea>
                 </label>
             </div>
 
@@ -152,7 +164,7 @@
                         <p class="invalid-msg"></p>
                     </div>
                     <div class="input-box">
-                        <input id="placeDefaultPrice" min="0" name="placeDefaultPrice" placeholder="금액을 입력해주세요"
+                        <input min="0" placeholder="금액을 입력해주세요"
                                required
                                type="number">
                         <p class="unit">원</p>
@@ -160,17 +172,27 @@
                 </div>
                 <div class="input-wrap hour-price-wrap">
                     <div class="input-guide flex">
-                        <p class="input-title">기본인원</p>
+                        <p class="input-title">할증금액</p>
                         <img alt="필수입력" src="//s3.hourplace.co.kr/web/images/icon/invalid.svg">
-                        <p class="guide-msg">게스트가 예약할 때 기본 인원을 초과하면 할증이 붙어요</p>
+                        <p class="guide-msg">기본 인원을 초과하면 해당 금액만큼 할증이 붙어요</p>
                         <p class="invalid-msg"></p>
                     </div>
                     <div class="input-box">
-                        <input id="placeDefaultPeople" min="1" name="placeDefaultPeople" placeholder="기본 인원을 입력해주세요"
-                               required
-                               type="number">
-                        <p class="unit">명</p>
+                        <input min="1" placeholder="할증 금액을 입력해주세요" type="number">
+                        <p class="unit">원</p>
                     </div>
+                </div>
+            </div>
+
+            <div class="input-wrap default-people-container">
+                <div class="input-guide flex">
+                    <p class="input-title">기본 인원</p>
+                    <img alt="필수입력" src="//s3.hourplace.co.kr/web/images/icon/invalid.svg">
+                    <p class="invalid-msg"></p>
+                </div>
+                <div class="input-box">
+                    <input min="1" placeholder="장소의 기본 이용인원을 적어주세요" required type="number">
+                    <p class="unit">명</p>
                 </div>
             </div>
 
@@ -220,7 +242,9 @@
             </div>
             <div class="flex-center start">
                 <button class="cancel" type="button">취소</button>
-                <button class="submit-btn flex-align-center" type="button">신청하기</button>
+                <button class="submit-btn flex-align-center" onclick="placeManageService.requestUpdatePlace(1)"
+                        type="button">신청하기
+                </button>
             </div>
         </div>
     </div>
@@ -322,7 +346,8 @@
                                                      th:if="*{postStatus == postStatus.DISABLED}">
                                                     <span>장소 대여 재개</span>
                                                 </div>
-                                                <div class="action-item editPlace">
+                                                <div class="action-item editPlace"
+                                                     th:if="*{postStatus == postStatus.APPROVED or postStatus == postStatus.DISABLED}">
                                                     <span>장소 정보 수정</span>
                                                 </div>
                                                 <div class="action-item deletePlace">
@@ -391,8 +416,10 @@
 <script src="//dapi.kakao.com/v2/maps/sdk.js?appkey=3dc12d7c2624483dc7c019a0a91b727f&libraries=services"
         type="text/javascript"></script>
 <script src="/js/global-js/global.js"></script>
+<script src="/js/global-js/file.js"></script>
 <script src="/js/mypage/mypage.js"></script>
-<script src="/js/place/register/register.js"></script>
+<script src="/js/global-js/img-slide.js"></script>
+<script src="/js/mypage/update.js"></script>
 <script src="/js/global-js/image-slide.js"></script>
 <script src="/js/mypage/kakaoMapApi.js"></script>
 <script src="/js/mypage/place.js"></script>

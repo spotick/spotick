@@ -1,5 +1,6 @@
 package com.app.spotick.domain.dto.place;
 
+import com.app.spotick.domain.dto.place.file.PlaceFileDto;
 import com.app.spotick.domain.embedded.post.PostAddress;
 import com.app.spotick.domain.type.post.PostStatus;
 import lombok.Data;

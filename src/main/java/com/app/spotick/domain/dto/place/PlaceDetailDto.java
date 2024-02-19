@@ -1,5 +1,6 @@
 package com.app.spotick.domain.dto.place;
 
+import com.app.spotick.domain.dto.place.file.PlaceFileDto;
 import com.app.spotick.domain.entity.place.Place;
 import lombok.Data;
 import lombok.NoArgsConstructor;

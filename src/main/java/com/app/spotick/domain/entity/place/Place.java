@@ -6,6 +6,7 @@ import com.app.spotick.domain.entity.user.User;
 import com.app.spotick.domain.type.post.PostStatus;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.DynamicUpdate;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,6 +16,7 @@ import java.util.List;
 @SequenceGenerator(name = "SEQ_PLACE_GENERATOR", sequenceName = "SEQ_PLACE", allocationSize = 1)
 @Getter @ToString(callSuper = true)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@DynamicUpdate
 public class Place extends PostBase {
     @Id
     @GeneratedValue(generator = "SEQ_PLACE_GENERATOR")
@@ -76,7 +78,9 @@ public class Place extends PostBase {
         this.placeStatus = placeStatus;
     }
 
-
+    public void setStatus(PostStatus placeStatus) {
+        this.placeStatus = placeStatus;
+    }
 }
 
 

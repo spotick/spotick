@@ -2,6 +2,8 @@ const placeTitle = document.getElementById('placeTitle');
 const placeSubTitle = document.getElementById('placeSubTitle');
 const placeAddress = document.getElementById('placeAddress');
 const placeAddressDetail = document.getElementById('placeAddressDetail');
+const savedImgWrap = document.getElementById('savedImgs');
+const savedImgPagination = document.getElementById('savedImgPagination');
 const imageFileWrap = document.getElementById('imageFileWrap');
 const placeInfo = document.getElementById('placeInfo');
 const placeRule = document.getElementById('placeRule');
@@ -10,6 +12,9 @@ const placeDefaultPeople = document.getElementById('placeDefaultPeople');
 const accountHolder = document.getElementById('accountHolder');
 const accountNumber = document.getElementById('accountNumber');
 const bankName = document.getElementById('bankName');
+const deleteList = document.getElementById('deleteList');
+const requestFile = document.getElementById('requestFile');
+
 
 const placeManageService = (function () {
     let dialogueString = "";
@@ -48,7 +53,7 @@ const placeManageService = (function () {
     }
 
     function requestEnable(placeId) {
-        fetch(`/place/api/approved/` + placeId, {
+        fetch(`/place/api/approved/${placeId}`, {
             method: 'PATCH'
         })
             .then(response => {
@@ -76,7 +81,7 @@ const placeManageService = (function () {
     }
 
     function requestDelete(placeId) {
-        fetch(`/place/api/delete/` + placeId, {
+        fetch(`/place/api/delete/${placeId}`, {
             method: 'PATCH'
         })
             .then(response => {
@@ -98,15 +103,13 @@ const placeManageService = (function () {
             });
     }
 
-    function editPlace(placeId) {
-        fetch(`/place/api/get/` + placeId, {
+    function requestPlaceInfo(placeId) {
+        fetch(`/place/api/get/${placeId}`, {
             method: 'GET'
         })
             .then(response => {
                 if (response.ok) {
                     return response.json();
-                } else {
-                    throw response
                 }
             })
             .then(data => {
@@ -132,30 +135,75 @@ const placeManageService = (function () {
         placeAddress.value = data.postAddress.address;
         placeAddressDetail.value = data.postAddress.addressDetail;
 
-        data.placeFiles.forEach(item => {
-            let imageHtml =
-                `<li class="file-item">
-                    <img src="/file/display?fileName=${item.uploadPath}/${item.uuid}_${item.fileName}" alt="${data.title}">
-                    <button type="button" class="delete">
-                        <i class="fa-solid fa-x"></i>
-                    </button>
-                </li>`;
+        deleteList.innerHTML = '';
+        savedImgWrap.currentPage = 0;
+        savedImgWrap.style.transform = `translateX(0px)`;
+        imgSlideService.setImgSlides(data.placeFiles, savedImgWrap);
+        imgSlideService.setSlidePagination(data.placeFiles.length, savedImgPagination);
+    }
 
-            imageFileWrap.insertAdjacentElement("beforeend", imageHtml);
+    function requestUpdatePlace(placeId) {
+        const deletedImgList = Array
+            .from(deleteList.querySelectorAll('input'))
+            .map(input => Number(input.value));
+
+        const files = requestFile.value;
+
+        const requestBody = {
+            deletedImgList: deletedImgList,
+            files: files
+        };
+
+        fetch(`/place/api/update/${placeId}`, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(requestBody),
         })
-
-        placeInfo.value = data.info;
-        placeRule.value = data.rule;
-
+            .then(response => {
+                if (response.ok) {
+                    console.log('정상 실행');
+                } else {
+                    throw new Error();
+                }
+            })
+            .catch(error => {
+                console.log(error)
+            });
     }
 
     return {
         disablePlace: disablePlace,
         enablePlace: enablePlace,
         deletePlace: deletePlace,
-        editPlace: editPlace
+        requestPlaceInfo: requestPlaceInfo,
+        requestUpdatePlace: requestUpdatePlace
     }
 })();
+
+function deleteImg(container, dataId) {
+    container.querySelectorAll('.imgSlide-item').forEach(div => {
+        if (div.getAttribute('data-id') === dataId) {
+            const isLastChild = div === container.lastElementChild;
+            console.log(isLastChild);
+
+            container.slideLength--;
+            div.remove();
+
+            const input = document.createElement('input');
+            input.type = 'hidden';
+            input.value = dataId;
+            deleteList.appendChild(input);
+
+            savedImgPagination.lastElementChild.remove();
+
+            if (isLastChild) {
+                imgSlideService.moveSlide("left", savedImgWrap, () => changeActive(savedImgWrap.currentPage))
+            }
+        }
+    })
+}
 
 /////////////////////////////////////////////////////////////
 
@@ -187,7 +235,35 @@ document.querySelectorAll('.editPlace').forEach(place => {
     place.addEventListener('click', function () {
         let placeId = this.parentElement.getAttribute('data-id');
 
-
-        placeManageService.editPlace(placeId)
+        window.location.href = `/place/edit/${placeId}`;
     })
 })
+
+document.getElementById('savedLeft').addEventListener('click', () => {
+    imgSlideService.moveSlide('left', savedImgWrap, () => changeActive(savedImgWrap.currentPage));
+})
+
+document.getElementById('savedRight').addEventListener('click', () => {
+    imgSlideService.moveSlide('right', savedImgWrap, () => changeActive(savedImgWrap.currentPage));
+})
+
+function changeActive(index) {
+    const buttons = savedImgPagination.querySelectorAll('.imgSlide-pagination-btn');
+
+    buttons.forEach(button => button.classList.remove('active'));
+    buttons[index].classList.add('active')
+}
+
+savedImgPagination.addEventListener('click', (e) => {
+    if (e.target.classList.contains('imgSlide-pagination-btn')) {
+        const index = e.target.getAttribute('index');
+
+        imgSlideService.getSlidePage(index, savedImgWrap);
+
+        const buttons = savedImgPagination.querySelectorAll('.imgSlide-pagination-btn');
+
+        buttons.forEach(button => button.classList.remove('active'));
+        e.target.classList.add('active');
+    }
+})
+

@@ -1,10 +1,8 @@
 package com.app.spotick.repository.place.bookmark;
 
-import com.app.spotick.domain.dto.place.PlaceFileDto;
+import com.app.spotick.domain.dto.place.file.PlaceFileDto;
 import com.app.spotick.domain.dto.place.PlaceListDto;
 import com.app.spotick.domain.type.post.PostStatus;
-import com.querydsl.core.Tuple;
-import com.querydsl.core.group.GroupBy;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.JPAExpressions;
@@ -18,7 +16,6 @@ import org.springframework.data.support.PageableExecutionUtils;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static com.app.spotick.domain.entity.place.QPlace.*;

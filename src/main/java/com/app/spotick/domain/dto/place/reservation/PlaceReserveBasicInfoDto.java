@@ -1,7 +1,7 @@
 package com.app.spotick.domain.dto.place.reservation;
 
 
-import com.app.spotick.domain.dto.place.PlaceFileDto;
+import com.app.spotick.domain.dto.place.file.PlaceFileDto;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 

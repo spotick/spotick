@@ -1,15 +1,10 @@
 package com.app.spotick.service.place;
 
-import com.app.spotick.domain.dto.place.PlaceDetailDto;
-import com.app.spotick.domain.dto.place.PlaceDto;
-import com.app.spotick.domain.dto.place.PlaceListDto;
-import com.app.spotick.domain.dto.place.PlaceRegisterDto;
+import com.app.spotick.domain.dto.place.*;
+import com.app.spotick.domain.dto.place.PlaceEditDto;
 import com.app.spotick.domain.dto.place.reservation.PlaceReserveBasicInfoDto;
 import com.app.spotick.domain.entity.place.Place;
 import com.app.spotick.domain.type.post.PostStatus;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Slice;
 
 import java.io.IOException;
 import java.util.List;
@@ -31,7 +26,7 @@ public interface PlaceService {
 
     void rejectAllReservationRequests(Long placeId);
 
-    Optional<PlaceDto> findPlaceInfo(Long placeId, Long userId);
+    Optional<PlaceEditDto> findPlaceInfo(Long placeId, Long userId);
 
-
+    void updatePlace(PlaceEditDto placeEditDto, Long userId) throws IOException;
 }

@@ -1,6 +1,8 @@
 package com.app.spotick.repository.place;
 
 import com.app.spotick.domain.dto.place.*;
+import com.app.spotick.domain.dto.place.PlaceEditDto;
+import com.app.spotick.domain.dto.place.file.PlaceFileDto;
 import com.app.spotick.domain.dto.place.reservation.PlaceReserveBasicInfoDto;
 import com.app.spotick.domain.dto.place.reservation.PlaceReservedNotReviewedDto;
 import com.app.spotick.domain.dto.place.review.ContractedPlaceDto;
@@ -8,7 +10,6 @@ import com.app.spotick.domain.entity.place.*;
 import com.app.spotick.domain.type.place.PlaceReservationStatus;
 import com.app.spotick.domain.type.post.PostStatus;
 import com.querydsl.core.Tuple;
-import com.querydsl.core.group.GroupBy;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Expressions;
@@ -19,8 +20,6 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Slice;
-import org.springframework.data.domain.SliceImpl;
 import org.springframework.data.support.PageableExecutionUtils;
 
 import java.time.LocalDateTime;
@@ -260,7 +259,12 @@ public class PlaceQDSLRepositoryImpl implements PlaceQDSLRepository {
 
         JPAQuery<Long> totalCount = queryFactory.select(place.count())
                 .from(place)
-                .where(place.user.id.eq(userId));
+                .where(
+                        place.user.id.eq(userId),
+                        place.placeStatus.ne(PostStatus.REPLACED),
+                        place.placeStatus.ne(PostStatus.DELETED),
+                        place.placeStatus.ne(PostStatus.MODIFICATION_REQUESTED)
+                );
 
         JPQLQuery<Double> reviewAvg = createReviewAvgSub(place);
 
@@ -299,7 +303,8 @@ public class PlaceQDSLRepositoryImpl implements PlaceQDSLRepository {
                 .where(
                         place.user.id.eq(userId),
                         place.placeStatus.ne(PostStatus.REPLACED),
-                        place.placeStatus.ne(PostStatus.DELETED)
+                        place.placeStatus.ne(PostStatus.DELETED),
+                        place.placeStatus.ne(PostStatus.MODIFICATION_REQUESTED)
                 )
                 .orderBy(place.id.desc())
                 .offset(pageable.getOffset())
@@ -334,48 +339,6 @@ public class PlaceQDSLRepositoryImpl implements PlaceQDSLRepository {
         });
 
         return PageableExecutionUtils.getPage(placeManageListDtos, pageable, totalCount::fetchOne);
-    }
-
-    @Override
-    public Optional<PlaceDto> findPlaceInfo(Long placeId, Long userId) {
-
-        return queryFactory
-                .from(place)
-                .leftJoin(place.placeFileList, placeFile)
-                .where(
-                        place.id.eq(placeId),
-                        place.user.id.eq(userId),
-                        place.placeStatus.ne(PostStatus.DELETED)
-                )
-                .transform(groupBy(place.id)
-                        .list(Projections.constructor(PlaceDto.class,
-                                place.id,
-                                place.title,
-                                place.subTitle,
-                                place.lat,
-                                place.lng,
-                                place.placeAddress,
-                                list(
-                                        Projections.constructor(PlaceFileDto.class,
-                                                placeFile.id,
-                                                placeFile.fileName,
-                                                placeFile.uuid,
-                                                placeFile.uploadPath,
-                                                placeFile.place.id
-                                        )
-                                ),
-                                place.info,
-                                place.rule,
-                                place.defaultPeople,
-                                place.price,
-                                place.surcharge,
-                                place.bankName,
-                                place.accountNumber,
-                                place.accountHolder
-                        ))
-                )
-                .stream()
-                .findFirst();
     }
 
     @Override
@@ -422,6 +385,57 @@ public class PlaceQDSLRepositoryImpl implements PlaceQDSLRepository {
         contractedPlaceDto.ifPresent(placeDto -> placeDto.getPlaceAddress().cutAddress());
 
         return contractedPlaceDto;
+    }
+
+    @Override
+    public Optional<PlaceEditDto> findPlaceInfoByPlaceIdAndUserId(Long placeId, Long userId) {
+
+        Optional<PlaceEditDto> content = Optional.ofNullable(queryFactory
+                .from(place)
+                .where(
+                        place.id.eq(placeId),
+                        place.user.id.eq(userId),
+                        place.placeStatus.eq(PostStatus.APPROVED)
+                                .or(place.placeStatus.eq(PostStatus.DISABLED))
+                )
+                .select(Projections.constructor(PlaceEditDto.class,
+                        place.id,
+                        place.user.id,
+                        place.title,
+                        place.subTitle,
+                        place.info,
+                        place.rule,
+                        place.defaultPeople,
+                        place.placeAddress.address,
+                        place.placeAddress.addressDetail,
+                        place.price,
+                        place.surcharge,
+                        place.bankName,
+                        place.accountNumber,
+                        place.accountHolder,
+                        place.lat,
+                        place.lng
+                ))
+                .fetchOne());
+
+        if (content.isPresent()) {
+            List<PlaceFileDto> fileDtoList = queryFactory.select(
+                            Projections.constructor(PlaceFileDto.class,
+                                    placeFile.id,
+                                    placeFile.fileName,
+                                    placeFile.uuid,
+                                    placeFile.uploadPath,
+                                    placeFile.place.id
+                            ))
+                    .from(placeFile)
+                    .where(placeFile.place.id.eq(content.get().getPlaceId()))
+                    .orderBy(placeFile.id.asc(), placeFile.place.id.desc())
+                    .fetch();
+
+            content.get().setPlaceSavedFileDtos(fileDtoList);
+        }
+
+        return content;
     }
 
     private JPQLQuery<Double> createReviewAvgSub(QPlace place) {
