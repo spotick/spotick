@@ -5,10 +5,7 @@ import com.app.spotick.domain.dto.place.PlaceEditDto;
 import com.app.spotick.domain.dto.place.reservation.PlaceReserveBasicInfoDto;
 import com.app.spotick.domain.entity.place.Place;
 import com.app.spotick.domain.type.post.PostStatus;
-<<<<<<< HEAD
-=======
 import com.app.spotick.util.type.SortType;
->>>>>>> work/sort
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 
