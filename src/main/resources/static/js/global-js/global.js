@@ -1,17 +1,38 @@
 // 로고 옆 컨텐츠 타입 설정
-function toggleContent(index) {
+// import {data} from "../map/map";
+
+function toggleContent(type) {
     let currentType = document.getElementById('currentContent');
 
-    if (index === 1) {
+    if (type === "ticket") {
         currentType.classList.remove('type1');
         currentType.classList.add('type2');
         currentContent.innerHTML = '티켓';
-    } else {
+    } else if (type === "place") {
         currentType.classList.remove('type2');
         currentType.classList.add('type1');
         currentContent.innerHTML = '장소';
     }
 }
+
+function getMainPageByType(type) {
+    window.location.href = type === "place" ? "/place/list" : "/ticket/list";
+}
+
+function checkUrlType() {
+    const currentUri = window.location.pathname;
+
+    // pathname이 존재하지 않을 경우 /place/list이므로 place 반환
+    if (currentUri === "/") {
+        return "place";
+    }
+
+    const firstSegment = currentUri ? currentUri.split('/')[1] : null;
+
+    // place인지 ticket인지 구분. 아니면 null 반환
+    return (firstSegment === 'place' || firstSegment === 'ticket') ? firstSegment : null;
+}
+
 
 // 검색창 컨트롤
 const searchBarOpen = document.getElementById('searchBarOpen');
@@ -76,7 +97,7 @@ let prevScrollpos = window.scrollY;
 const header = document.getElementById("page-header");
 const scrollThreshold = 200; // 스크롤다운 트리거 값
 
-window.onscroll = function() {
+window.onscroll = function () {
     let currentScrollPos = window.scrollY;
 
     if (prevScrollpos > currentScrollPos) {
@@ -97,3 +118,29 @@ function extractVariableFromURL() {
 
     return variableValue ? variableValue[1] : null;
 }
+
+
+///////////////////////////////////////////////////////////////////////////
+window.onload = function () {
+    const type = checkUrlType();
+    console.log(type)
+    toggleContent(type);
+}
+
+async function movePage(type) {
+    await toggleContent(type);
+}
+
+document.querySelectorAll('.hc-content-type').forEach(button => {
+    button.addEventListener('click', async function () {
+        const type = this.getAttribute('main-type');
+
+        console.log(type);
+
+        await toggleContent(type);
+
+        await new Promise(resolve => setTimeout(resolve, 300));
+
+        await getMainPageByType(type);
+    });
+});
