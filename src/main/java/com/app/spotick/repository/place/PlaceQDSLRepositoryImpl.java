@@ -499,7 +499,7 @@ public class PlaceQDSLRepositoryImpl implements PlaceQDSLRepository {
         return switch (sortType) {
             case POPULARITY -> buildOrderSpecifiers(
                     place.viewCount.desc(), aliasBookmarkCount.desc(),
-                    aliasReviewCount.desc(), aliasReviewAvg.desc());
+                    aliasReviewCount.desc(), aliasReviewAvg.desc().nullsLast());
             case NEWEST -> buildOrderSpecifiers(place.createdDate.desc());
             case INTEREST -> buildOrderSpecifiers(aliasBookmarkCount.desc());
             case PRICE_LOW_TO_HIGH -> buildOrderSpecifiers(place.price.asc());
