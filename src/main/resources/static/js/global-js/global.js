@@ -123,19 +123,15 @@ function extractVariableFromURL() {
 ///////////////////////////////////////////////////////////////////////////
 window.onload = function () {
     const type = checkUrlType();
-    console.log(type)
+    if (type === null) {
+        return;
+    }
     toggleContent(type);
-}
-
-async function movePage(type) {
-    await toggleContent(type);
 }
 
 document.querySelectorAll('.hc-content-type').forEach(button => {
     button.addEventListener('click', async function () {
         const type = this.getAttribute('main-type');
-
-        console.log(type);
 
         await toggleContent(type);
 
