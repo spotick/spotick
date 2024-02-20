@@ -1,7 +1,9 @@
 package com.app.spotick.service.place;
 
-import com.app.spotick.domain.dto.place.*;
+import com.app.spotick.domain.dto.place.PlaceDetailDto;
 import com.app.spotick.domain.dto.place.PlaceEditDto;
+import com.app.spotick.domain.dto.place.PlaceListDto;
+import com.app.spotick.domain.dto.place.PlaceRegisterDto;
 import com.app.spotick.domain.dto.place.file.PlaceFileDto;
 import com.app.spotick.domain.dto.place.reservation.PlaceReserveBasicInfoDto;
 import com.app.spotick.domain.entity.place.Place;
@@ -15,10 +17,8 @@ import com.app.spotick.repository.place.file.PlaceFileRepository;
 import com.app.spotick.repository.place.reservation.PlaceReservationRepository;
 import com.app.spotick.repository.user.UserRepository;
 import com.app.spotick.service.place.file.PlaceFileService;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
+import com.app.spotick.util.type.SortType;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
@@ -35,8 +35,6 @@ import java.util.Optional;
 @Transactional
 @RequiredArgsConstructor
 public class PlaceServiceImpl implements PlaceService {
-    @PersistenceContext
-    private final EntityManager em;
 
     private final PlaceRepository placeRepository;
     private final PlaceFileRepository placeFileRepository;
@@ -61,8 +59,8 @@ public class PlaceServiceImpl implements PlaceService {
 
     @Override
     @Transactional(readOnly = true)
-    public Slice<PlaceListDto> findPlaceListPagination(Pageable pageable, Long userId) {
-        return placeRepository.findPlaceListPaging(pageable,userId);
+    public Slice<PlaceListDto> findPlaceListPagination(Pageable pageable, Long userId, SortType sortType) {
+        return placeRepository.findPlaceListPaging(pageable, userId, sortType);
     }
 
     @Override

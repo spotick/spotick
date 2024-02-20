@@ -6,29 +6,32 @@ import com.app.spotick.domain.dto.place.file.PlaceFileDto;
 import com.app.spotick.domain.dto.place.reservation.PlaceReserveBasicInfoDto;
 import com.app.spotick.domain.dto.place.reservation.PlaceReservedNotReviewedDto;
 import com.app.spotick.domain.dto.place.review.ContractedPlaceDto;
-import com.app.spotick.domain.entity.place.*;
+import com.app.spotick.domain.entity.place.Place;
+import com.app.spotick.domain.entity.place.QPlace;
+import com.app.spotick.domain.entity.place.QPlaceFile;
+import com.app.spotick.domain.entity.place.QPlaceReview;
 import com.app.spotick.domain.type.place.PlaceReservationStatus;
 import com.app.spotick.domain.type.post.PostStatus;
+import com.app.spotick.util.type.SortType;
 import com.querydsl.core.Tuple;
-import com.querydsl.core.group.GroupBy;
 import com.querydsl.core.types.ExpressionUtils;
-import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Expressions;
-import com.querydsl.core.types.dsl.NumberExpression;
-import com.querydsl.core.types.dsl.PathBuilder;
+import com.querydsl.core.types.dsl.NumberPath;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.SliceImpl;
 import org.springframework.data.support.PageableExecutionUtils;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -38,7 +41,7 @@ import static com.app.spotick.domain.entity.place.QPlace.place;
 import static com.app.spotick.domain.entity.place.QPlaceBookmark.placeBookmark;
 import static com.app.spotick.domain.entity.place.QPlaceFile.placeFile;
 import static com.app.spotick.domain.entity.place.QPlaceInquiry.placeInquiry;
-import static com.app.spotick.domain.entity.place.QPlaceReservation.*;
+import static com.app.spotick.domain.entity.place.QPlaceReservation.placeReservation;
 import static com.app.spotick.domain.entity.place.QPlaceReview.placeReview;
 import static com.querydsl.core.group.GroupBy.groupBy;
 import static com.querydsl.core.group.GroupBy.list;
@@ -47,8 +50,12 @@ import static com.querydsl.core.group.GroupBy.list;
 public class PlaceQDSLRepositoryImpl implements PlaceQDSLRepository {
     private final JPAQueryFactory queryFactory;
 
+    private NumberPath<Long> aliasBookmarkCount = Expressions.numberPath(Long.class, "bookmarkCount");
+    private NumberPath<Long> aliasReviewCount = Expressions.numberPath(Long.class, "reviewCount");
+    private NumberPath<Double> aliasReviewAvg = Expressions.numberPath(Double.class, "reviewAvg");
+
     @Override
-    public Slice<PlaceListDto> findPlaceListPaging(Pageable pageable, Long userId) {
+    public Slice<PlaceListDto> findPlaceListPaging(Pageable pageable, Long userId, SortType sortType) {
         JPQLQuery<Double> reviewAvg = createReviewAvgSub(place);
 
         JPQLQuery<Long> reviewCount = createReviewCountSub(place);
@@ -57,28 +64,32 @@ public class PlaceQDSLRepositoryImpl implements PlaceQDSLRepository {
 
         BooleanExpression isBookmarkChecked = isBookmarkCheckedSub(place, userId);
 
+
+
+
         List<PlaceListDto> placeListDtos = queryFactory.select(
                         Projections.constructor(PlaceListDto.class,
                                 place.id,
                                 place.title,
                                 place.price,
                                 place.placeAddress,
-                                reviewAvg,
-                                ExpressionUtils.as(reviewCount,"reviewCount"),
-                                ExpressionUtils.as(bookmarkCount,"bookmarkCount"),
+                                ExpressionUtils.as(reviewAvg, aliasReviewAvg),
+                                ExpressionUtils.as(reviewCount, aliasReviewCount),
+                                ExpressionUtils.as(bookmarkCount, aliasBookmarkCount),
                                 isBookmarkChecked
                         )
                 )
                 .from(place)
                 .where(place.placeStatus.eq(PostStatus.APPROVED))
-                .orderBy(getOrderSpecifier(pageable.getSort()).toArray(OrderSpecifier[]::new))
+//                .orderBy(getOrderSpecifier(pageable.getSort()).toArray(OrderSpecifier[]::new))
+                .orderBy(createOrderByClause(sortType))
                 .offset(pageable.getOffset())   //페이지 번호
-                .limit(pageable.getPageSize()+1)  //페이지 사이즈
+                .limit(pageable.getPageSize() + 1)  //페이지 사이즈
                 .fetch();
 
         boolean hasNext = false;
 
-        if(placeListDtos.size() > pageable.getPageSize()){
+        if (placeListDtos.size() > pageable.getPageSize()) {
             placeListDtos.remove(pageable.getPageSize());
             hasNext = true;
         }
@@ -111,7 +122,7 @@ public class PlaceQDSLRepositoryImpl implements PlaceQDSLRepository {
             placeListDto.getPlaceAddress().cutAddress();
         });
 
-        return new SliceImpl<>(placeListDtos,pageable,hasNext);
+        return new SliceImpl<>(placeListDtos, pageable, hasNext);
     }
 
     @Override
@@ -484,20 +495,24 @@ public class PlaceQDSLRepositoryImpl implements PlaceQDSLRepository {
                 .exists();
     }
 
-    private List<OrderSpecifier<?>> getOrderSpecifier(Sort sort){
-        List<OrderSpecifier<?>> orders = new ArrayList<>();
-
-        sort.forEach(order->{
-            Order direction = order.isAscending()?Order.ASC:Order.DESC;
-            String prop = order.getProperty();
-            PathBuilder<Place> orderByExpression = new PathBuilder<>(Place.class,place.getMetadata());
-            orders.add(new OrderSpecifier(direction,orderByExpression.get(prop)));
-        });
-
-        return orders;
+    private OrderSpecifier<?>[] createOrderByClause(SortType sortType) {
+        return switch (sortType) {
+            case POPULARITY -> buildOrderSpecifiers(
+                    place.viewCount.desc(), aliasBookmarkCount.desc(),
+                    aliasReviewCount.desc(), aliasReviewAvg.desc());
+            case NEWEST -> buildOrderSpecifiers(place.createdDate.desc());
+            case INTEREST -> buildOrderSpecifiers(aliasBookmarkCount.desc());
+            case PRICE_LOW_TO_HIGH -> buildOrderSpecifiers(place.price.asc());
+            case PRICE_HIGH_TO_LOW -> buildOrderSpecifiers(place.price.desc());
+            case VIEWS -> buildOrderSpecifiers(place.viewCount.desc());
+            case REVIEWS -> buildOrderSpecifiers(aliasReviewCount.desc());
+            case RATING_HIGH -> buildOrderSpecifiers(aliasReviewAvg.desc().nullsLast());
+        };
     }
 
-
+    private OrderSpecifier<?>[] buildOrderSpecifiers(OrderSpecifier<?>... specifiers) {
+        return specifiers;
+    }
 
 
 }

@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css"
           integrity="sha512-aOG0c6nPNzGk+5zjwyJaoRUgCdOrfSDhmMID2u4+OIslr0GjpLKo7Xm0Ao3xmpM4T8AmIouRkqwj1nrdVsLKEQ=="
           crossorigin="anonymous" referrerpolicy="no-referrer"/>
+    <link th:href="@{/imgs/logo/favicon.png}" rel="icon">
     <link rel="stylesheet" th:href="@{/css/global-css/datepicker.css}">
     <link rel="stylesheet" th:href="@{/css/global-css/root.css}">
     <link rel="stylesheet" th:href="@{/css/place/detail.css}"/>
@@ -29,7 +30,7 @@
                  th:alt="${'장소 이미지'+0}"
                  alt="장소 메인이미지">
         </button>
-        <button type="button" th:class="${'grid-item grid'+(i+1)}" th:data-imgidx="${i+1}"
+        <button type="button" th:class="${'common-img grid-item grid'+(i+1)}" th:data-imgidx="${i+1}"
                 th:each="i : ${#numbers.sequence(1,4)}">
             <img th:src="${'/file/display?fileName=' + place.placeFileList[i].uploadPath +
             '/' + place.placeFileList[i].uuid + '_' + place.placeFileList[i].fileName}"
@@ -385,10 +386,10 @@
 
             </div>
             <button type="button" class="prev">
-                <img src="https://shareit.kr/_next/static/media/round_arrow_left_gray024.707193e8.svg" alt="">
+                <img th:src="@{/imgs/place/circularArrowLeft.svg}" alt="">
             </button>
             <button type="button" class="next">
-                <img src="https://shareit.kr/_next/static/media/round_arrow_right_gray024.7f7e18a3.svg" alt="">
+                <img th:src="@{/imgs/place/circularArrowRight.svg}" alt="">
             </button>
         </div>
     </div>

@@ -1,15 +1,16 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta charset="UTF-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" th:href="@{/css/global-css/root.css}">
-  <link rel="stylesheet" th:href="@{/css/user/login.css}"/>
-  <title>로그인</title>
+    <meta charset="UTF-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap" rel="stylesheet">
+    <link th:href="@{/imgs/logo/favicon.png}" rel="icon">
+    <link rel="stylesheet" th:href="@{/css/global-css/root.css}">
+    <link rel="stylesheet" th:href="@{/css/user/login.css}"/>
+    <title>로그인</title>
 
 </head>
 
@@ -17,78 +18,80 @@
 <header th:replace="~{global-templates/header-footer :: header}"></header>
 
 <div class="body">
-  <div class="main">
-    <div class="main-container">
-      <div class="sign-wrap">
-        <form th:action="@{/user/login}" method="post" class="login-form">
-          <div class="signin">
+    <div class="main">
+        <div class="main-container">
+            <div class="sign-wrap">
+                <form th:action="@{/user/login}" method="post" class="login-form">
+                    <div class="signin">
 
-            <div class="flex login-logo">
-              <img th:src="@{/imgs/logo/spotick-logo.svg}" alt="로고이미지">
-            </div>
-            <p class="flex-center">고객님 환영합니다! 기다리고 있었습니다.</p>
+                        <div class="flex login-logo">
+                            <img th:src="@{/imgs/logo/spotick-logo.svg}" alt="로고이미지">
+                        </div>
+                        <p class="flex-center">고객님 환영합니다! 기다리고 있었습니다.</p>
 
-            <div class="login-box">
-              <div class="input_container bottom">
-                <input type="email" name="username" placeholder="이메일" id="email" required="required" th:value="${param.username}">
-              </div>
+                        <div class="login-box">
+                            <div class="input_container bottom">
+                                <input type="email" name="username" placeholder="이메일" id="email" required="required"
+                                       th:value="${param.username}">
+                            </div>
 
-              <div class="input_container bottom">
-                <input type="password" id="password" name="password" placeholder="비밀번호" />
-              </div>
-              <!-- 로그인 실패 메세지 -->
-              <div class="fail-msg">
-                <p>아이디 및 비밀번호를 확인해 주세요</p>
-              </div>
+                            <div class="input_container bottom">
+                                <input type="password" id="password" name="password" placeholder="비밀번호"/>
+                            </div>
+                            <!-- 로그인 실패 메세지 -->
+                            <div class="fail-msg">
+                                <p>아이디 및 비밀번호를 확인해 주세요</p>
+                            </div>
 
-              <!-- <div class="auto-log">
-                <div class="check-box">
-                  <input type="checkbox" id="saveId" name="saveId" />
-                  <label class="save-id">아이디 저장</label>
-                </div>
-              </div> -->
-              <div class="submit-box flex-center">
-                <div class="flex-center submit login-btn " id="submit">
-                  <p>로그인</p>
-                </div>
-              </div>
-            </div>
-            <div class="oauth">
-<!--              카카오로그인 url : https://kauth.kakao.com/oauth/authorize-->
-              <a th:href="@{/oauth2/authorization/kakao}" class="kakao-login login-btn">
+                            <!-- <div class="auto-log">
+                              <div class="check-box">
+                                <input type="checkbox" id="saveId" name="saveId" />
+                                <label class="save-id">아이디 저장</label>
+                              </div>
+                            </div> -->
+                            <div class="submit-box flex-center">
+                                <div class="flex-center submit login-btn " id="submit">
+                                    <p>로그인</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="oauth">
+                            <!--              카카오로그인 url : https://kauth.kakao.com/oauth/authorize-->
+                            <a th:href="@{/oauth2/authorization/kakao}" class="kakao-login login-btn">
                   <span>
                     <img src="https://img.lifet.co.kr/icon/icon_kakao.svg" alt="">
                   </span>
-                <p>카카오 로그인</p>
-              </a>
-              <a th:href="@{/oauth2/authorization/naver}" class="naver-login login-btn">
+                                <p>카카오 로그인</p>
+                            </a>
+                            <a th:href="@{/oauth2/authorization/naver}" class="naver-login login-btn">
                   <span>
                     <img src="https://img.lifet.co.kr/icon/icon_naver.svg" alt="">
                   </span>
-                <p>네이버 로그인</p>
-              </a>
-              <a th:href="@{/oauth2/authorization/google}" class="google-login login-btn">
+                                <p>네이버 로그인</p>
+                            </a>
+                            <a th:href="@{/oauth2/authorization/google}" class="google-login login-btn">
                   <span>
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg" alt="Google Icon">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg"
+                         alt="Google Icon">
                   </span>
-                <p>Google 로그인</p>
-              </a>
+                                <p>Google 로그인</p>
+                            </a>
 
-            </div>
-            <div class="split-line">
-              <hr>
-              <span>or</span>
-            </div>
-            <div class="join flex-center">
-              <a th:href="@{/user/find}" class="find-id">아이디/비밀번호 찾기</a>
-              <a th:href="@{/user/join}">이메일로 회원가입</a>
-            </div>
+                        </div>
+                        <div class="split-line">
+                            <hr>
+                            <span>or</span>
+                        </div>
+                        <div class="join flex-center">
+                            <a th:href="@{/user/find}" class="find-id">아이디/비밀번호 찾기</a>
+                            <a th:href="@{/user/join}">이메일로 회원가입</a>
+                        </div>
 
-          </div>
-        </form>
-      </div>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
-  </div>
 </div>
 <input type="hidden" class="msg" name="guideMsg" th:value="${guideMsg}">
 <footer th:replace="~{global-templates/header-footer :: footer}"></footer>
