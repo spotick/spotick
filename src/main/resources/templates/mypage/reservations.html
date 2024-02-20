@@ -143,13 +143,13 @@
                                         </div>
                                     </button>
                                 </div>
-                                <div class="mpcr-img-con">
+                                <a class="mpcr-img-con" th:href="@{/place/detail/{placeId}(placeId = ${reservationDto.id})}">
                                     <img style="width: 180px;"
                                          th:alt="*{title}"
                                          th:src="*{'/file/display?fileName='
                                          + placeFileDto.uploadPath + '/t_' + placeFileDto.uuid + '_' + placeFileDto.fileName}">
-                                </div>
-                                <a class="ItemTextContainer" th:href="@{/place/detail/{placeId}(placeId = ${reservationDto.id})}">
+                                </a>
+                                <div class="ItemTextContainer">
                                     <div class="ItemHostNameContainer">
                                         <span class="ItemHostName" th:text="*{placeAddress.address}"></span>
                                         <div class="ItemCountsContainer">
@@ -165,9 +165,9 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="ItemSpaceNameContainer">
+                                    <a class="ItemSpaceNameContainer" th:href="@{/place/detail/{placeId}(placeId = ${reservationDto.id})}">
                                         <p class="ItemSpaceName" th:text="*{title}"></p>
-                                    </div>
+                                    </a>
                                     <div class="ItemPriceContainer">
                                         <span class="ItemPrice"
                                               th:text="${#numbers.formatInteger(reservationDto.price, 3, 'COMMA')} + '원'"></span>
@@ -176,14 +176,13 @@
                                         <div class="mpccc-status">
                                             <span th:text="*{reservationStatus.displayName}"></span>
                                         </div>
-                                        <button class="mpccc-btn"
-                                                onclick="payItem()"
+                                        <button class="mpccc-btn reservationPay" th:data-id="*{reservationId}"
                                                 th:if="*{reservationStatus == reservationStatus.WAITING_PAYMENT}"
                                                 type="button">
                                             <span>결제 하기</span>
                                         </button>
                                     </div>
-                                </a>
+                                </div>
                                 <div class="mpcr-divider"></div>
                                 <div class="mpcr-info" onclick="showDetail(this)"
                                      th:data-address="*{placeAddress.address}"
@@ -263,13 +262,13 @@
 
 </body>
 <script src="https://code.jquery.com/jquery-3.6.4.js"></script>
+<script src="https://js.bootpay.co.kr/bootpay-4.3.4.min.js" type="application/javascript"></script>
+<script src="/js/global-js/bootpay.js"></script>
+<script src="/js/global-js/calendar.js"></script>
+<script src="/js/global-js/chat.js"></script>
 <script src="/js/global-js/global.js"></script>
 <script src="/js/mypage/mypage.js"></script>
 <script src="/js/mypage/reservations.js"></script>
-<script src="/js/global-js/calendar.js"></script>
-<script src="https://js.bootpay.co.kr/bootpay-4.3.4.min.js" type="application/javascript"></script>
-<script src="/js/global-js/bootpay.js"></script>
-<script src="/js/global-js/chat.js"></script>
 <script>
     document.getElementById('reservations').classList.add('active');
 </script>

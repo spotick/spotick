@@ -234,28 +234,32 @@ img {
 
 .hc-current-type {
     position: absolute;
-    display: flex;
+    display: none;
     place-content: center;
     top: 0;
     transition: all 0.2s ease 0s;
+    background: transparent;
     font-size: 16px;
     line-height: 24px;
     color: rgb(255, 255, 255);
     padding: 6px 0;
     width: 76px;
     height: 36px;
-    border: 1px solid rgb(212, 219, 226);
     border-radius: 20px;
 }
 
 .type1 {
+    display: flex;
     left: 0;
     background: rgb(31, 105, 255);
+    border: 1px solid rgb(212, 219, 226);
 }
 
 .type2 {
+    display: flex;
     left: 76px;
     background: rgb(255, 180, 31);
+    border: 1px solid rgb(212, 219, 226);
 }
 
 .hc-selections {
