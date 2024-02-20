@@ -3,7 +3,7 @@ package com.app.spotick.controller.main;
 import com.app.spotick.domain.dto.place.PlaceListDto;
 import com.app.spotick.domain.dto.user.UserDetailsDto;
 import com.app.spotick.service.place.PlaceService;
-import com.app.spotick.util.type.SortCriteria;
+import com.app.spotick.util.type.SortType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
@@ -12,11 +12,8 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-
-import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
@@ -33,11 +30,11 @@ public class MainController {
                                     direction = Sort.Direction.DESC
                             ) Pageable pageable){
         Long userId = userDetailsDto==null? null: userDetailsDto.getId();
-        SortCriteria sortCriteria = SortCriteria.valueOf(sort);
+        SortType sortType = SortType.valueOf(sort);
 
-        Slice<PlaceListDto> placeList = placeService.findPlaceListPagination(pageable,userId,sortCriteria);
+        Slice<PlaceListDto> placeList = placeService.findPlaceListPagination(pageable,userId, sortType);
         model.addAttribute("placeList",placeList);
-        model.addAttribute("sortTypes", SortCriteria.values());
+        model.addAttribute("sortTypes", SortType.values());
         return "place/list";
     }
 }

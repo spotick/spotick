@@ -16,10 +16,9 @@ import com.app.spotick.repository.place.bookmark.PlaceBookmarkRepository;
 import com.app.spotick.repository.place.file.PlaceFileRepository;
 import com.app.spotick.repository.user.UserAuthorityRepository;
 import com.app.spotick.repository.user.UserRepository;
-import com.app.spotick.util.type.SortCriteria;
+import com.app.spotick.util.type.SortType;
 import com.querydsl.core.Tuple;
 import com.querydsl.core.group.GroupBy;
-import com.querydsl.core.types.PathMetadata;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Expressions;
@@ -465,7 +464,7 @@ class PlaceQDSLRepositoryImplTest {
     @Test
     void transFormTest2() {
         PageRequest pageRequest = PageRequest.of(0, 12);
-        Slice<PlaceListDto> placeListPaging = placeRepository.findPlaceListPaging(pageRequest, null,SortCriteria.NEWEST);
+        Slice<PlaceListDto> placeListPaging = placeRepository.findPlaceListPaging(pageRequest, null, SortType.NEWEST);
 
         placeListPaging.forEach(place -> {
             System.out.println("place = " + place);

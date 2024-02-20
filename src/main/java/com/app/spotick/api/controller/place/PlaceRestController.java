@@ -6,7 +6,7 @@ import com.app.spotick.domain.dto.user.UserDetailsDto;
 import com.app.spotick.domain.entity.place.Place;
 import com.app.spotick.domain.type.post.PostStatus;
 import com.app.spotick.service.place.PlaceService;
-import com.app.spotick.util.type.SortCriteria;
+import com.app.spotick.util.type.SortType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
@@ -108,8 +108,8 @@ public class PlaceRestController {
                                                                  direction = Sort.Direction.DESC
                                                          ) Pageable pageable) {
         Long userId = userDetailsDto == null ? null : userDetailsDto.getId();
-        SortCriteria sortCriteria = SortCriteria.valueOf(sort);
-        Slice<PlaceListDto> placeList = placeService.findPlaceListPagination(pageable, userId,sortCriteria);
+        SortType sortType = SortType.valueOf(sort);
+        Slice<PlaceListDto> placeList = placeService.findPlaceListPagination(pageable, userId,sortType);
         return ResponseEntity.ok(placeList);
     }
 

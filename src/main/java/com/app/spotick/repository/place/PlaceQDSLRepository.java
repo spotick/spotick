@@ -7,17 +7,16 @@ import com.app.spotick.domain.dto.place.PlaceManageListDto;
 import com.app.spotick.domain.dto.place.reservation.PlaceReserveBasicInfoDto;
 import com.app.spotick.domain.dto.place.reservation.PlaceReservedNotReviewedDto;
 import com.app.spotick.domain.dto.place.review.ContractedPlaceDto;
-import com.app.spotick.util.type.SortCriteria;
+import com.app.spotick.util.type.SortType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 
-import java.util.List;
 import java.util.Optional;
 
 public interface PlaceQDSLRepository {
 //    메인화면에 뿌려줄 게시글 리스트
-    Slice<PlaceListDto> findPlaceListPaging(Pageable pageable, Long userId, SortCriteria sortCriteria);
+    Slice<PlaceListDto> findPlaceListPaging(Pageable pageable, Long userId, SortType sortType);
 //    장소 상세보기
     Optional<PlaceDetailDto> findPlaceDetailById(Long placeId, Long userId);
 

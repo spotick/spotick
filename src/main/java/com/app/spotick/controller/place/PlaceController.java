@@ -8,11 +8,10 @@ import com.app.spotick.domain.dto.place.reservation.PlaceReserveRegisterDto;
 import com.app.spotick.domain.dto.user.UserDetailsDto;
 import com.app.spotick.service.place.PlaceService;
 import com.app.spotick.service.place.reservation.PlaceReservationService;
-import com.app.spotick.util.type.SortCriteria;
+import com.app.spotick.util.type.SortType;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.Sort;
@@ -24,7 +23,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
-import java.util.List;
 
 @Slf4j
 @Controller
@@ -53,11 +51,11 @@ public class PlaceController {
                                     direction = Sort.Direction.DESC
                             ) Pageable pageable){
         Long userId = userDetailsDto==null? null: userDetailsDto.getId();
-        SortCriteria sortCriteria = SortCriteria.valueOf(sort);
+        SortType sortType = SortType.valueOf(sort);
 
-        Slice<PlaceListDto> placeList = placeService.findPlaceListPagination(pageable,userId,sortCriteria);
+        Slice<PlaceListDto> placeList = placeService.findPlaceListPagination(pageable,userId,sortType);
         model.addAttribute("placeList",placeList);
-        model.addAttribute("sortTypes", SortCriteria.values());
+        model.addAttribute("sortTypes", SortType.values());
         return "place/list";
     }
 
