@@ -51,7 +51,8 @@ public interface PlaceReservationRepository extends JpaRepository<PlaceReservati
                 p.checkIn, p.checkOut
             ) from PlaceReservation p
             where p.place.id = :placeId
-            and (p.checkIn <:endTime and p.checkOut> :startTime)
+            AND p.reservationStatus NOT IN ('REJECTED','CANCELLED')
+            AND (p.checkIn <:endTime and p.checkOut> :startTime)
             """)
     List<PlaceReservationTimeDto> findReservedTimes(@Param("placeId") Long placeId,
                                                     @Param("startTime") LocalDateTime startTime,
