@@ -37,4 +37,8 @@ public class PlacePayment extends Period {
         this.user = user;
         this.placeReservation = placeReservation;
     }
+
+    public void updatePaymentStatus(PaymentStatus paymentStatus) {
+        this.paymentStatus = paymentStatus;
+    }
 }

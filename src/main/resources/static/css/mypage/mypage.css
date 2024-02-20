@@ -647,7 +647,6 @@
     box-shadow: rgba(0, 0, 0, 0.1) 2px 2px 8px 0;
     border-radius: 8px;
     padding: 10px 15px;
-    cursor: pointer;
 }
 
 .mpcr-img-con {
@@ -683,6 +682,7 @@
     display: flex;
     flex-direction: column;
     width: 100%;
+    cursor: pointer;
 }
 
 .mpcri-title {
