@@ -1,5 +1,11 @@
 import {addSlideEvent} from '../../global-js/image-slide.js'
 
+// 무한 페이징
+let page = 1;
+let hasNext = true;
+let pagingTargetIdx = 1;
+let sort = 'POPULARITY';
+
 // 필터쪽 체크박스
 const checkboxes = document.querySelectorAll('input[type="checkbox"]');
 const allCheckboxes = document.querySelectorAll('input[name="전체"]');
@@ -20,13 +26,16 @@ const SelectBoxBtnText = document.querySelector('.SelectBoxBtnText');
 
 
 // 인기순 필터
+
 selectBoxBtn.addEventListener('click', function () {
     // 토글 기능을 이용하여 리스트 보이기/숨기기
     selectBoxList.style.display = (selectBoxList.style.display === 'block') ? 'none' : 'block';
-
+    // todo 선택된 정렬기준에 따라서 리스트 게시글 정렬하기
     // 이미지 변경
     selectBoxBtnImg.src = (selectBoxList.style.display === 'block') ? '/imgs/arrow_up_gray014.75d8599e.svg' : '/imgs/arrow_down_gray014.f502da9d.svg';
 });
+
+
 
 // 각 리스트 아이템에 대한 이벤트 리스너 추가
 const listItems = document.querySelectorAll('.SelectBoxListItem');
@@ -40,12 +49,15 @@ listItems.forEach(item => {
 
         // 선택된 아이템의 텍스트로 버튼 텍스트 변경
         SelectBoxBtnText.textContent = this.textContent;
-
         // 리스트 숨기기
         selectBoxList.style.display = 'none';
 
         // 이미지 변경
         selectBoxBtnImg.src = '/imgs/arrow_down_gray014.f502da9d.svg';
+        sort = this.dataset.sort;
+        resetListPagination();
+        getPlaceList();
+
     });
 });
 
@@ -74,7 +86,7 @@ checkboxes.forEach(checkbox => {
         console.log(this.checked);
 
         if (this.checked) {
-            if (checkBoxText.textContent.includes("전체")) {
+            if (checkBoxText.textContent.includes("전체") ) {
                 // 전체 체크박스 해제
                 checkboxes.forEach(otherCheckbox => {
                     if (otherCheckbox !== checkbox) {
@@ -268,13 +280,10 @@ $(`.ListItemsContainer`).on('click', '.ItemBookMarkBtn', function () {
 });
 
 
-// 무한 페이징
-let page = 1;
-let hasNext = true;
-let pagingTargetIdx = 1;
+
 
 function getPlaceList() {
-    fetch(`/place/api/list?page=${page++}`)
+    fetch(`/place/api/list?page=${page++}&sort=${sort}`)
         .then(response => {
             if (!response.ok) {
                 throw new Error();
@@ -296,61 +305,56 @@ function displayPlaceList(data) {
                 <div class="OneItemImgContainer">
                     <div class="swiper ImageSwiper swiper-initialized swiper-horizontal swiper-pointer-events swiper-backface-hidden">
                         <a href="/place/detail/${place.id}"
-                           class="swiper-wrapper ImageLength" style="transform: translate3d(0px, 0px, 0px);" >`;
-        place.placeFiles.forEach(placeImg => {
-            text += `
-                            <div class="swiper-slide swiper-slide-active" style="width: 287px;">
-                                <img class="ItemImg"
-                                     height="1350.6666666666665px" 
-                                     th:alt="${place.title}" src="/file/display?fileName=${placeImg.uploadPath}/t_${placeImg.uuid}_${placeImg.fileName}">
-                            </div>`;
-        });
-
-        text += `     </a>
-                        <div class="NavigationBtnContainer">
-                            <button class="NavigationBtn RightBtn" type="button">
-                                <img alt="다음" src="/imgs/round_arrow_right_gray024.7f7e18a3.svg">
-                            </button>
-                            <button class="NavigationBtn LeftBtn" type="button">
-                                <img alt="이전" src="/imgs/round_arrow_left_gray024.707193e8.svg">
-                            </button>
-                        </div>
-                        <div class="ItemImgPagination">
-                            <p><span class="snapIndex">1</span>/5</p>
-                        </div>
-                    </div>
-                    <button class="ItemBookMarkBtn" th:data-placeid="${place.id}" type="button">
-                        <span class="${!place.bookmarkChecked ? '' : 'none'}"><i
-                                class="fa-regular fa-bookmark"></i></span>
-                        <span class="${place.bookmarkChecked ? '' : 'none'}"><i class="fa-solid fa-bookmark"
-                                                                                 style="color: white"></i></span>
-                    </button>
-                </div>
-                <div class="ItemTextContainer">
-                    <div class="ItemHostNameContainer">
-                        <span class="ItemHostName">${place.placeAddress.address}</span>
-                        <div class="ItemCountsContainer">
-                            <div class="ItemsStarCountContainer">
-                                <img alt="후기갯수" class="ItemCountImg"
-                                     src="/imgs/star_filled_paintYellow056.a8eb6e44.svg">
-                                <span class="ItemCountText">${place.evalAvg}(${place.evalCount})</span>
-                            </div>
-                            <div class="ItemsLikeCountContainer">
-                                <img alt="북마크갯수" class="bookmark-img" src="/imgs/bookmark_thin.svg">
-                                <span class="ItemCountText bookmark-count">${place.bookmarkCount}</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="ItemSpaceNameContainer">
-                        <p class="ItemSpaceName" >
-                            <a href="/place/detail/${place.id}">${place.title}</a>
-                        </p>
-                    </div>
-                    <div class="ItemPriceContainer">
-                        <span class="place-price">${(place.price).toLocaleString()}원</span>
-                    </div>
-                </div>
-            </div>
+                           class="swiper-wrapper ImageLength" style="transform: translate3d(0px, 0px, 0px);" >`;place.placeFiles.forEach(placeImg => {text += `
+                           <div class="swiper-slide swiper-slide-active" style="width: 287px;">
+                               <img class="ItemImg"
+                                    height="1350.6666666666665px" 
+                                    alt="${place.title}" src="/file/display?fileName=${placeImg.uploadPath}/t_${placeImg.uuid}_${placeImg.fileName}">
+                           </div>`;});text += `     </a>
+                       <div class="NavigationBtnContainer">
+                           <button class="NavigationBtn RightBtn" type="button">
+                               <img alt="다음" src="/imgs/round_arrow_right_gray024.7f7e18a3.svg">
+                           </button>
+                           <button class="NavigationBtn LeftBtn" type="button">
+                               <img alt="이전" src="/imgs/round_arrow_left_gray024.707193e8.svg">
+                           </button>
+                       </div>
+                       <div class="ItemImgPagination">
+                           <p><span class="snapIndex">1</span>/5</p>
+                       </div>
+                   </div>
+                   <button class="ItemBookMarkBtn" data-placeid="${place.id}" type="button">
+                       <span class="${!place.bookmarkChecked ? '' : 'none'}"><i
+                               class="fa-regular fa-bookmark"></i></span>
+                       <span class="${place.bookmarkChecked ? '' : 'none'}"><i class="fa-solid fa-bookmark"
+                                                                                style="color: white"></i></span>
+                   </button>
+               </div>
+               <div class="ItemTextContainer">
+                   <div class="ItemHostNameContainer">
+                       <span class="ItemHostName">${place.placeAddress.address}</span>
+                       <div class="ItemCountsContainer">
+                           <div class="ItemsStarCountContainer">
+                               <img alt="후기갯수" class="ItemCountImg"
+                                    src="/imgs/star_filled_paintYellow056.a8eb6e44.svg">
+                               <span class="ItemCountText">${place.evalAvg}(${place.evalCount})</span>
+                           </div>
+                           <div class="ItemsLikeCountContainer">
+                               <img alt="북마크갯수" class="bookmark-img" src="/imgs/bookmark_thin.svg">
+                               <span class="ItemCountText bookmark-count">${place.bookmarkCount}</span>
+                           </div>
+                       </div>
+                   </div>
+                   <div class="ItemSpaceNameContainer">
+                       <p class="ItemSpaceName" >
+                           <a href="/place/detail/${place.id}">${place.title}</a>
+                       </p>
+                   </div>
+                   <div class="ItemPriceContainer">
+                       <span class="place-price">${(place.price).toLocaleString()}원</span>
+                   </div>
+               </div>
+           </div>
     `;
     })
 
@@ -371,6 +375,13 @@ window.addEventListener('scroll', function () {
         getPlaceList();
     }
 });
+
+function resetListPagination(){
+    page = 0;
+    pagingTargetIdx = 1;
+    $('.ListItemsContainer').html('');
+}
+
 
 
 
