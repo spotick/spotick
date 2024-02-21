@@ -6,7 +6,9 @@ import com.app.spotick.domain.dto.user.UserDetailsDto;
 import com.app.spotick.domain.entity.place.Place;
 import com.app.spotick.domain.type.post.PostStatus;
 import com.app.spotick.service.place.PlaceService;
+import com.app.spotick.util.search.AreaFilter;
 import com.app.spotick.util.type.SortType;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
@@ -15,9 +17,14 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.awt.geom.Area;
+import java.beans.PropertyEditorSupport;
+import java.io.IOException;
+import java.net.URLDecoder;
 import java.util.List;
 
 @RestController
@@ -94,11 +101,28 @@ public class PlaceRestController {
                                                          @PageableDefault(page = 0,
                                                                  size = 12, sort = "id",
                                                                  direction = Sort.Direction.DESC
-                                                         ) Pageable pageable) {
+                                                         ) Pageable pageable,
+                                                         @RequestParam(name = "area",required = false)AreaFilter areaFilter) {
         Long userId = userDetailsDto == null ? null : userDetailsDto.getId();
         SortType sortType = SortType.valueOf(sort);
-        Slice<PlaceListDto> placeList = placeService.findPlaceListPagination(pageable, userId,sortType);
+
+        Slice<PlaceListDto> placeList = placeService.findPlaceListPagination(pageable, userId,sortType, areaFilter);
         return ResponseEntity.ok(placeList);
     }
 
+//    들어오는 area 파라미터를 커스텀 바인딩
+    @InitBinder
+    public void initBinder(WebDataBinder binder){
+        binder.registerCustomEditor(AreaFilter.class, new PropertyEditorSupport() {
+            @Override
+            public void setAsText(String text) throws IllegalArgumentException {
+                try {
+                    ObjectMapper mapper = new ObjectMapper();
+                    setValue(mapper.readValue(URLDecoder.decode(text, "UTF-8"), AreaFilter.class));
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        });
+    }
 }

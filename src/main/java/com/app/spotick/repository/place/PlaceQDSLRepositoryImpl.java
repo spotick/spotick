@@ -1,7 +1,9 @@
 package com.app.spotick.repository.place;
 
-import com.app.spotick.domain.dto.place.*;
+import com.app.spotick.domain.dto.place.PlaceDetailDto;
 import com.app.spotick.domain.dto.place.PlaceEditDto;
+import com.app.spotick.domain.dto.place.PlaceListDto;
+import com.app.spotick.domain.dto.place.PlaceManageListDto;
 import com.app.spotick.domain.dto.place.file.PlaceFileDto;
 import com.app.spotick.domain.dto.place.reservation.PlaceReserveBasicInfoDto;
 import com.app.spotick.domain.dto.place.reservation.PlaceReservedNotReviewedDto;
@@ -12,7 +14,9 @@ import com.app.spotick.domain.entity.place.QPlaceFile;
 import com.app.spotick.domain.entity.place.QPlaceReview;
 import com.app.spotick.domain.type.place.PlaceReservationStatus;
 import com.app.spotick.domain.type.post.PostStatus;
+import com.app.spotick.util.search.AreaFilter;
 import com.app.spotick.util.type.SortType;
+import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.Tuple;
 import com.querydsl.core.types.ExpressionUtils;
 import com.querydsl.core.types.OrderSpecifier;
@@ -20,6 +24,7 @@ import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.core.types.dsl.NumberPath;
+import com.querydsl.core.types.dsl.StringPath;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQuery;
@@ -43,8 +48,6 @@ import static com.app.spotick.domain.entity.place.QPlaceFile.placeFile;
 import static com.app.spotick.domain.entity.place.QPlaceInquiry.placeInquiry;
 import static com.app.spotick.domain.entity.place.QPlaceReservation.placeReservation;
 import static com.app.spotick.domain.entity.place.QPlaceReview.placeReview;
-import static com.querydsl.core.group.GroupBy.groupBy;
-import static com.querydsl.core.group.GroupBy.list;
 
 @RequiredArgsConstructor
 public class PlaceQDSLRepositoryImpl implements PlaceQDSLRepository {
@@ -55,7 +58,7 @@ public class PlaceQDSLRepositoryImpl implements PlaceQDSLRepository {
     private NumberPath<Double> aliasReviewAvg = Expressions.numberPath(Double.class, "reviewAvg");
 
     @Override
-    public Slice<PlaceListDto> findPlaceListPaging(Pageable pageable, Long userId, SortType sortType) {
+    public Slice<PlaceListDto> findPlaceListPaging(Pageable pageable, Long userId, SortType sortType, AreaFilter areaFilter) {
         JPQLQuery<Double> reviewAvg = createReviewAvgSub(place);
 
         JPQLQuery<Long> reviewCount = createReviewCountSub(place);
@@ -63,9 +66,6 @@ public class PlaceQDSLRepositoryImpl implements PlaceQDSLRepository {
         JPQLQuery<Long> bookmarkCount = createBookmarkCountSub(place);
 
         BooleanExpression isBookmarkChecked = isBookmarkCheckedSub(place, userId);
-
-
-
 
         List<PlaceListDto> placeListDtos = queryFactory.select(
                         Projections.constructor(PlaceListDto.class,
@@ -80,8 +80,8 @@ public class PlaceQDSLRepositoryImpl implements PlaceQDSLRepository {
                         )
                 )
                 .from(place)
-                .where(place.placeStatus.eq(PostStatus.APPROVED))
-//                .orderBy(getOrderSpecifier(pageable.getSort()).toArray(OrderSpecifier[]::new))
+                .where(place.placeStatus.eq(PostStatus.APPROVED),
+                        createAreaCondition(areaFilter))
                 .orderBy(createOrderByClause(sortType))
                 .offset(pageable.getOffset())   //페이지 번호
                 .limit(pageable.getPageSize() + 1)  //페이지 사이즈
@@ -514,5 +514,20 @@ public class PlaceQDSLRepositoryImpl implements PlaceQDSLRepository {
         return specifiers;
     }
 
+    private BooleanExpression createAreaCondition(AreaFilter areaFilter){
+        if(areaFilter == null){
+            return null;
+        }
+        BooleanBuilder booleanBuilder = new BooleanBuilder();
+        List<String> list = areaFilter.getAddress();
+        StringPath address = place.placeAddress.address;
+
+        for (String area : list) {
+            booleanBuilder.or(address.contains(area));
+        }
+
+        return address.startsWith(areaFilter.getCity())
+                .and(booleanBuilder);
+    }
 
 }
