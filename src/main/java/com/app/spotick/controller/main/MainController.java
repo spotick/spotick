@@ -32,7 +32,7 @@ public class MainController {
         Long userId = userDetailsDto==null? null: userDetailsDto.getId();
         SortType sortType = SortType.valueOf(sort);
 
-        Slice<PlaceListDto> placeList = placeService.findPlaceListPagination(pageable,userId, sortType);
+        Slice<PlaceListDto> placeList = placeService.findPlaceListPagination(pageable,userId, sortType,null);
         model.addAttribute("placeList",placeList);
         model.addAttribute("sortTypes", SortType.values());
         return "place/list";

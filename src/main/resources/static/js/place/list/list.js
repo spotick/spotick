@@ -6,6 +6,11 @@ let hasNext = true;
 let pagingTargetIdx = 1;
 let sort = 'POPULARITY';
 
+let area = {
+    city: null,
+    address: []
+};
+
 // 필터쪽 체크박스
 const checkboxes = document.querySelectorAll('input[type="checkbox"]');
 const allCheckboxes = document.querySelectorAll('input[name="전체"]');
@@ -34,7 +39,6 @@ selectBoxBtn.addEventListener('click', function () {
     // 이미지 변경
     selectBoxBtnImg.src = (selectBoxList.style.display === 'block') ? '/imgs/arrow_up_gray014.75d8599e.svg' : '/imgs/arrow_down_gray014.f502da9d.svg';
 });
-
 
 
 // 각 리스트 아이템에 대한 이벤트 리스너 추가
@@ -73,6 +77,22 @@ document.querySelector('.FilterModalCloseBtn').addEventListener("click", functio
 
 // 필터 적용 버튼
 document.querySelector('.FilterSubmitBtn').addEventListener("click", function () {
+    let city = $('.AreaGroupBtn.On').text();
+    let $input = $('input:checkbox:checked');
+
+    area.address.length = 0;
+    if ($input.length === 0) {
+        area.city = null;
+    } else {
+        area.city = city;
+        $input.each((i, item) => {
+            if (item.name !== '전체') {
+                area.address.push(item.name);
+            }
+        });
+    }
+    resetListPagination();
+    getPlaceList();
     document.querySelector('.FilterModalContainer').classList.remove('On');
 })
 
@@ -83,10 +103,8 @@ checkboxes.forEach(checkbox => {
         const checkBoxImg = checkBoxContainer.querySelector('.CheckBoxImg');
         const checkBoxText = checkBoxContainer.querySelector('.CheckBoxText');
 
-        console.log(this.checked);
-
         if (this.checked) {
-            if (checkBoxText.textContent.includes("전체") ) {
+            if (checkBoxText.textContent.includes("전체")) {
                 // 전체 체크박스 해제
                 checkboxes.forEach(otherCheckbox => {
                     if (otherCheckbox !== checkbox) {
@@ -207,6 +225,8 @@ function changeSize(size) {
 resetButton.addEventListener('click', function () {
     reset();
     changeSize(465);
+    area.city = null;
+    area.address.length = 0;
 });
 
 // 체크박스 전체 해제
@@ -279,11 +299,8 @@ $(`.ListItemsContainer`).on('click', '.ItemBookMarkBtn', function () {
     $(this).find('span').toggleClass('none');
 });
 
-
-
-
 function getPlaceList() {
-    fetch(`/place/api/list?page=${page++}&sort=${sort}`)
+    fetch(`/place/api/list?page=${page++}&sort=${sort}${area.city==null?'':'&area='+encodeURIComponent(JSON.stringify(area))}`)
         .then(response => {
             if (!response.ok) {
                 throw new Error();
@@ -305,12 +322,16 @@ function displayPlaceList(data) {
                 <div class="OneItemImgContainer">
                     <div class="swiper ImageSwiper swiper-initialized swiper-horizontal swiper-pointer-events swiper-backface-hidden">
                         <a href="/place/detail/${place.id}"
-                           class="swiper-wrapper ImageLength" style="transform: translate3d(0px, 0px, 0px);" >`;place.placeFiles.forEach(placeImg => {text += `
+                           class="swiper-wrapper ImageLength" style="transform: translate3d(0px, 0px, 0px);" >`;
+        place.placeFiles.forEach(placeImg => {
+            text += `
                            <div class="swiper-slide swiper-slide-active" style="width: 287px;">
                                <img class="ItemImg"
                                     height="1350.6666666666665px" 
                                     alt="${place.title}" src="/file/display?fileName=${placeImg.uploadPath}/t_${placeImg.uuid}_${placeImg.fileName}">
-                           </div>`;});text += `     </a>
+                           </div>`;
+        });
+        text += `     </a>
                        <div class="NavigationBtnContainer">
                            <button class="NavigationBtn RightBtn" type="button">
                                <img alt="다음" src="/imgs/round_arrow_right_gray024.7f7e18a3.svg">
@@ -367,16 +388,17 @@ function displayPlaceList(data) {
 window.addEventListener('scroll', function () {
     if (!hasNext) return;
 
+    // 가장 첫 번째 요속가 화면에서 사랴지면 페이징 불러오기
+    // -> 자연스러운 무한페이징
     let itemContainers = document.querySelectorAll('.OneItemContainer');
     let {bottom} = itemContainers[pagingTargetIdx - 1].getBoundingClientRect();
-
     if (bottom < 0) {
         pagingTargetIdx += 12;
         getPlaceList();
     }
 });
 
-function resetListPagination(){
+function resetListPagination() {
     page = 0;
     pagingTargetIdx = 1;
     $('.ListItemsContainer').html('');
