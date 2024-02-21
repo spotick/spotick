@@ -19,9 +19,9 @@
                     <img alt="로고" th:src="@{/imgs/logo/spotick-logo.svg}">
                 </a>
                 <div class="hc-types-selector">
-                    <button class="hc-content-type" onclick="toggleContent(0)" type="button">장소</button>
-                    <button class="hc-content-type" onclick="toggleContent(1)" type="button">티켓</button>
-                    <div class="hc-current-type type1" id="currentContent">장소</div>
+                    <button class="hc-content-type" main-type="place" type="button">장소</button>
+                    <button class="hc-content-type" main-type="ticket" type="button">티켓</button>
+                    <div class="hc-current-type" id="currentContent"></div>
                 </div>
             </div>
             <div class="hc-selections">

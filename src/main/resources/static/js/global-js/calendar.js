@@ -58,11 +58,13 @@ const calendarService = (function () {
             // 오늘날짜 표시
             if (nowDay.toDateString() === today.toDateString()) {
                 nowColumn.classList.add("today");
+                nowColumn.setAttribute("title", "오늘 날짜");
             }
 
             if (eventEndDate !== null) {            
                 if (nowDay >= eventStartDate && nowDay <= eventEndDate) {
                     nowColumn.classList.add("event-date");
+                    nowColumn.setAttribute("title", "대상 날짜");
                 }
             }
             

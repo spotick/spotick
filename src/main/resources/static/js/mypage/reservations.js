@@ -93,3 +93,12 @@ function showDetail(item) {
     calendarService.setEventDates(checkIn, checkOut);
     calendarService.buildCalendar();
 }
+
+///////////////////////////////////////////////////////////////////
+document.querySelectorAll('.reservationPay').forEach(pay => {
+    pay.addEventListener('click', function () {
+        let reservationId = this.getAttribute('data-id');
+
+        payService.requestPlacePaymentSave(reservationId, payService.payItem);
+    })
+})

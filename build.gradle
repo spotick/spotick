@@ -65,7 +65,8 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-webflux'
     // 메일인증
     implementation 'org.springframework.boot:spring-boot-starter-mail:3.2.2'
-
+    // BootPay
+    implementation 'io.github.bootpay:backend:+'
 }
 
 tasks.named('test') {
