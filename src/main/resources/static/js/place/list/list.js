@@ -300,7 +300,8 @@ $(`.ListItemsContainer`).on('click', '.ItemBookMarkBtn', function () {
 });
 
 function getPlaceList() {
-    fetch(`/place/api/list?page=${page++}&sort=${sort}${area.city==null?'':'&area='+encodeURIComponent(JSON.stringify(area))}`)
+    let keyword = $('#searchInput').val();
+    fetch(`/place/api/list?page=${page++}&sort=${sort}${area.city==null?'':'&area='+encodeURIComponent(JSON.stringify(area))}${keyword!==''?'&keyword='+keyword:''}`)
         .then(response => {
             if (!response.ok) {
                 throw new Error();

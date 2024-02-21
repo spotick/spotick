@@ -98,6 +98,7 @@ public class PlaceRestController {
     @GetMapping("/list")
     public ResponseEntity<Slice<PlaceListDto>> placeList(@AuthenticationPrincipal UserDetailsDto userDetailsDto,
                                                          @RequestParam(name = "sort", defaultValue = "POPULARITY") String sort,
+                                                         @RequestParam(name = "keyword", required = false) String keyword,
                                                          @PageableDefault(page = 0,
                                                                  size = 12, sort = "id",
                                                                  direction = Sort.Direction.DESC
@@ -106,7 +107,7 @@ public class PlaceRestController {
         Long userId = userDetailsDto == null ? null : userDetailsDto.getId();
         SortType sortType = SortType.valueOf(sort);
 
-        Slice<PlaceListDto> placeList = placeService.findPlaceListPagination(pageable, userId,sortType, areaFilter);
+        Slice<PlaceListDto> placeList = placeService.findPlaceListPagination(pageable, userId,sortType, areaFilter,keyword);
         return ResponseEntity.ok(placeList);
     }
 

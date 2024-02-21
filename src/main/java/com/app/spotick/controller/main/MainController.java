@@ -25,6 +25,7 @@ public class MainController {
     @RequestMapping
     public String placeList(Model model,@AuthenticationPrincipal UserDetailsDto userDetailsDto,
                             @RequestParam(name = "sort",defaultValue = "POPULARITY") String sort,
+                            @RequestParam(name = "keyword", required = false) String keyword,
                             @PageableDefault(page =0,
                                     size = 12, sort = "id",
                                     direction = Sort.Direction.DESC
@@ -32,7 +33,7 @@ public class MainController {
         Long userId = userDetailsDto==null? null: userDetailsDto.getId();
         SortType sortType = SortType.valueOf(sort);
 
-        Slice<PlaceListDto> placeList = placeService.findPlaceListPagination(pageable,userId, sortType,null);
+        Slice<PlaceListDto> placeList = placeService.findPlaceListPagination(pageable,userId, sortType,null,keyword);
         model.addAttribute("placeList",placeList);
         model.addAttribute("sortTypes", SortType.values());
         return "place/list";

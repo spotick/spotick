@@ -140,3 +140,14 @@ document.querySelectorAll('.hc-content-type').forEach(button => {
         await getMainPageByType(type);
     });
 });
+
+$('#searchInput').on('keyup',function (e){
+    if (e.code == 'Enter'){
+        e.preventDefault();
+        let keyword = $(this).val();
+        location.href = `/place/list?keyword=${keyword}`;
+    }
+});
+
+
+
