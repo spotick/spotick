@@ -22,11 +22,6 @@ public class NoticeServiceImpl implements NoticeService {
     private final UserRepository userRepository;
 
     @Override
-    public void saveNotice(Notice notice) {
-        noticeRepository.save(notice);
-    }
-
-    @Override
     @Transactional(readOnly = true)
     public List<NoticeDto> getNoticeList(Long userId) {
         return noticeRepository.findNoticeListByUserId(userId);
@@ -44,7 +39,7 @@ public class NoticeServiceImpl implements NoticeService {
     }
 
     @Override
-    public void getNoticeLines(@NotNull String noticeType, @NotNull Long userId, @Nullable String title, @Nullable String content) {
+    public void saveNotice(@NotNull String noticeType, @NotNull Long userId, @Nullable String title, @Nullable String content) {
         User tmpUser = userRepository.getReferenceById(userId);
 
         Notice notice;

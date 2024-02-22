@@ -75,7 +75,7 @@ public class PlaceInquiryServiceImpl implements PlaceInquiryService {
                 NoSuchElementException::new
         );
 
-        noticeService.getNoticeLines("inquiryResponse", foundInquiry.getUser().getId(), null, null);
+        noticeService.saveNotice("inquiryResponse", foundInquiry.getUser().getId(), null, null);
 
         foundInquiry.updateResponse(inquiryResponseDto.getResponse());
     }
