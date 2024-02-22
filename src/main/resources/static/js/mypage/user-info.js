@@ -340,3 +340,20 @@ nicknameChangeButton.addEventListener('click', function () {
     
     changeNickname(newNickname);
 })
+
+// todo : 삭제
+document.getElementById('request').addEventListener('click', function () {
+    fetch("/chat/question", {
+        method: "POST",
+    })
+        .then(response => {
+            if (response.ok) {
+                console.log("성공!")
+            } else {
+                throw new Error("서버 통신 오류");
+            }
+        })
+        .catch(function (error) {
+            console.error("인증 확인 실패", error);
+        });
+})

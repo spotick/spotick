@@ -1,3 +1,6 @@
+import { loadingMarkService } from '../modules/loadingMark.js';
+
+
 const content = document.getElementById('detailContent');
 const response = document.getElementById('detailResponse');
 
@@ -38,7 +41,7 @@ function placeDeleteInquiry(inquiryId) {
         .then(message => {
             alert(message);
             closeModal();
-            inquiryService.requestPlaceInquiries(currentPage, inquiryService.reloadPlaceInquiries);
+            inquiryService.requestPlaceInquiries(currentPage);
         })
         .catch(error => {
             console.error('Error:', error);
@@ -67,7 +70,7 @@ function ticketDeleteInquiry(inquiryId) {
         .then(message => {
             alert(message);
             closeModal();
-            inquiryService.requestTicketInquiries(currentPage, inquiryService.reloadTicketInquiries);
+            inquiryService.requestTicketInquiries(currentPage);
         })
         .catch(error => {
             console.error('Error:', error);
@@ -76,14 +79,15 @@ function ticketDeleteInquiry(inquiryId) {
         });
 }
 
-const container = document.getElementById('inquiryContainer')
-const paginationContainer = document.querySelector('.pagination-container')
+const container = document.getElementById('inquiryContainer');
+const paginationContainer = document.querySelector('.pagination-container');
+const loadingMark = document.getElementById('mpLoadingMark');
 const inquiryService = (function () {
 
-    function requestPlaceInquiries(page, callback) {
+    function requestPlaceInquiries(page) {
         container.innerHTML = '';
         paginationContainer.innerHTML = '';
-        loadingMarkService.show();
+        loadingMarkService.show(loadingMark);
 
         // todo : 제거 -> 로딩 스크린 테스트 용
         setTimeout(() => {
@@ -92,7 +96,7 @@ const inquiryService = (function () {
             method: 'GET'
         })
             .then(response => {
-                loadingMarkService.hide();
+                loadingMarkService.hide(loadingMark);
                 if (response.ok) {
                     return response.json();
                 } else {
@@ -100,7 +104,7 @@ const inquiryService = (function () {
                 }
             })
             .then(data => {
-                callback(data);
+                reloadPlaceInquiries(data);
                 currentPage = page;
             })
             .catch(error => {
@@ -163,7 +167,7 @@ const inquiryService = (function () {
                             </div>
                         </a>
                         <div class="mpcr-divider"></div>
-                        <div class="mpcr-info" onclick="popupInquiryModal(this)" title="상세 정보"
+                        <div class="mpcr-info inquiryDetail" title="상세 정보"
                             data-content="${inquiry.content}" data-response="${inquiry.response}">
                             <div class="mpcri-title">문의 내용</div>
                             <div class="mpcriq-title">${inquiry.inquiryTitle}</div>
@@ -179,15 +183,21 @@ const inquiryService = (function () {
                 </article>`
 
             container.insertAdjacentHTML("beforeend", articleHtml);
+
+            document.querySelectorAll('.inquiryDetail').forEach(inquiry => {
+                inquiry.addEventListener('click', () => {
+                    popupInquiryModal(inquiry);
+                })
+            })
         })
 
         placePaginationReload(data)
     }
 
-    function requestTicketInquiries(page, callback) {
+    function requestTicketInquiries(page) {
         container.innerHTML = '';
         paginationContainer.innerHTML = '';
-        loadingMarkService.show();
+        loadingMarkService.show(loadingMark);
 
         // todo : 제거 -> 로딩 스크린 테스트 용
         setTimeout(() => {
@@ -196,7 +206,7 @@ const inquiryService = (function () {
                 method: 'GET'
             })
                 .then(response => {
-                    loadingMarkService.hide();
+                    loadingMarkService.hide(loadingMark);
                     if (response.ok) {
                         return response.json();
                     } else {
@@ -204,7 +214,7 @@ const inquiryService = (function () {
                     }
                 })
                 .then(data => {
-                    callback(data);
+                    reloadTicketInquiries(data);
                     currentPage = page;
                 })
                 .catch(error => {
@@ -288,13 +298,13 @@ const inquiryService = (function () {
         if (data.pagination.hasPrevBlock) {
             paginationHtml +=
                 `<span class="pagination-previous">
-                    <a class="pagination-btns first" onclick="inquiryService.requestPlaceInquiries(1, inquiryService.reloadPlaceInquiries), scrollToTop()"
+                    <a class="pagination-btns first" onclick="inquiryService.requestPlaceInquiries(1), scrollToTop()"
                         title="맨 처음">
                         <i class="fa-solid fa-chevron-left"></i>
                         <i class="fa-solid fa-chevron-left"></i>
                     </a>
                     <a class="pagination-btns"
-                        onclick="inquiryService.requestPlaceInquiries(${data.pagination.startPage - 1}, inquiryService.reloadPlaceInquiries), scrollToTop()"
+                        onclick="inquiryService.requestPlaceInquiries(${data.pagination.startPage - 1}), scrollToTop()"
                         title="이전">
                         <i class="fa-solid fa-chevron-left"></i>
                     </a>
@@ -307,7 +317,7 @@ const inquiryService = (function () {
             paginationHtml +=
                 `<span class="pagination-btns">
                     <a class="${i === data.pagination.currentPage ? 'active' : ''}"
-                       onclick="inquiryService.requestPlaceInquiries(${i}, inquiryService.reloadPlaceInquiries), scrollToTop()">
+                       onclick="inquiryService.requestPlaceInquiries(${i}), scrollToTop()">
                        ${i}
                     </a>
                 </span>`
@@ -319,11 +329,11 @@ const inquiryService = (function () {
             paginationHtml +=
                 `<span class="pagination-next">
                     <a class="pagination-btns"
-                        onclick="inquiryService.requestPlaceInquiries(${data.pagination.endPage + 1}, inquiryService.reloadPlaceInquiries), scrollToTop()"
+                        onclick="inquiryService.requestPlaceInquiries(${data.pagination.endPage + 1}), scrollToTop()"
                         title="다음">
                         <i class="fa-solid fa-chevron-right"></i>
                     </a>
-                    <a class="pagination-btns end" onclick="inquiryService.requestPlaceInquiries(${data.pagination.lastPage}, inquiryService.reloadPlaceInquiries), scrollToTop()"
+                    <a class="pagination-btns end" onclick="inquiryService.requestPlaceInquiries(${data.pagination.lastPage}), scrollToTop()"
                        title="맨 끝">
                         <i class="fa-solid fa-chevron-right"></i>
                         <i class="fa-solid fa-chevron-right"></i>
@@ -340,13 +350,13 @@ const inquiryService = (function () {
         if (data.pagination.hasPrevBlock) {
             paginationHtml +=
                 `<span class="pagination-previous">
-                    <a class="pagination-btns first" onclick="inquiryService.requestTicketInquiries(1, inquiryService.reloadTicketInquiries), scrollToTop()"
+                    <a class="pagination-btns first" onclick="inquiryService.requestTicketInquiries(1), scrollToTop()"
                         title="맨 처음">
                         <i class="fa-solid fa-chevron-left"></i>
                         <i class="fa-solid fa-chevron-left"></i>
                     </a>
                     <a class="pagination-btns"
-                        onclick="inquiryService.requestTicketInquiries(${data.pagination.startPage - 1}, inquiryService.reloadTicketInquiries), scrollToTop()"
+                        onclick="inquiryService.requestTicketInquiries(${data.pagination.startPage - 1}), scrollToTop()"
                         title="이전">
                         <i class="fa-solid fa-chevron-left"></i>
                     </a>
@@ -359,7 +369,7 @@ const inquiryService = (function () {
             paginationHtml +=
                 `<span class="pagination-btns">
                     <a class="${i === data.pagination.currentPage ? 'active' : ''}"
-                       onclick="inquiryService.requestTicketInquiries(${i}, inquiryService.reloadTicketInquiries), scrollToTop()">
+                       onclick="inquiryService.requestTicketInquiries(${i}), scrollToTop()">
                        ${i}
                     </a>
                 </span>`
@@ -371,11 +381,11 @@ const inquiryService = (function () {
             paginationHtml +=
                 `<span class="pagination-next">
                     <a class="pagination-btns"
-                        onclick="inquiryService.requestTicketInquiries(${data.pagination.endPage + 1}, inquiryService.reloadTicketInquiries), scrollToTop()"
+                        onclick="inquiryService.requestTicketInquiries(${data.pagination.endPage + 1}), scrollToTop()"
                         title="다음">
                         <i class="fa-solid fa-chevron-right"></i>
                     </a>
-                    <a class="pagination-btns end" onclick="inquiryService.requestTicketInquiries(${data.pagination.lastPage}, inquiryService.reloadTicketInquiries), scrollToTop()"
+                    <a class="pagination-btns end" onclick="inquiryService.requestTicketInquiries(${data.pagination.lastPage}), scrollToTop()"
                        title="맨 끝">
                         <i class="fa-solid fa-chevron-right"></i>
                         <i class="fa-solid fa-chevron-right"></i>
@@ -400,3 +410,13 @@ const inquiryService = (function () {
         reloadTicketInquiries: reloadTicketInquiries
     }
 })();
+
+
+///////////////////////////////////////////////////////////////////
+document.getElementById('place').addEventListener('click', () => {
+    inquiryService.requestPlaceInquiries(1)
+});
+
+document.getElementById('ticket').addEventListener('click', () => {
+    inquiryService.requestTicketInquiries(1)
+});

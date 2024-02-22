@@ -1,6 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+<html lang="en" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6"
+      xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <meta charset="UTF-8">
@@ -15,7 +15,7 @@
     <div class="header-content">
         <div class="header-grid h-content-container">
             <div class="hc-main">
-                <a th:href="@{/}" class="hc-logo" type="button">
+                <a class="hc-logo" th:href="@{/}" type="button">
                     <img alt="로고" th:src="@{/imgs/logo/spotick-logo.svg}">
                 </a>
                 <div class="hc-types-selector">
@@ -62,15 +62,16 @@
                             <span class="hc-content-font-small">티켓 등록</span>
                         </a>
                     </div>
-                    <div class="h-user-icon" onclick="toggleUsermenu()" th:object="${#authentication.principal}">
+                    <div class="h-user-icon" id="usermenu" th:object="${#authentication.principal}">
                         <!-- src="https://img.hourplace.co.kr/image/user/109990/2023/12/05/79a6f8ac-6b84-4977-a2da-baa111bcd54d?s=2000x2000&amp;amp;t=inside&amp;amp;q=80&amp;amp;f=jpeg&amp;amp;"-->
-                        <img th:src="*{isDefaultImage
+                        <img th:alt="*{nickName}"
+                             th:src="*{isDefaultImage
                         ? '/file/default/display?fileName=' + profileFileName
-                        : '/file/display?fileName=' + profileUploadPath + '/t_' + profileUUID + '_' + profileFileName}"
-                             th:alt="*{nickName}">
+                        : '/file/display?fileName=' + profileUploadPath + '/t_' + profileUUID + '_' + profileFileName}">
 
                     </div>
-                    <div class="hc-content-icon" onclick="toggleNotification()">
+                    <div class="hc-content-icon" id="notification">
+                        <span></span>
                         <i class="fa-regular fa-bell"></i>
                     </div>
                     <a class="hc-content-icon" th:href="@{/mypage/bookmarks}">
@@ -110,35 +111,18 @@
                 </a>
             </div>
             <div class="hd-notification" sec:authorize="isAuthenticated()">
-                <div class="hdn-item">
-                    <div style="display: flex;">
-                        <div style="min-width: 40px;">
-                            <img class="hdn-icon"
-                                 src="https://img.hourplace.co.kr/image/user/109990/2023/12/05/79a6f8ac-6b84-4977-a2da-baa111bcd54d?s=2000x2000&amp;amp;t=inside&amp;amp;q=80&amp;amp;f=jpeg&amp;amp;">
-                        </div>
-                        <div style="width: 90%;">
-                            <div style="display: flex; justify-content: space-between;">
-                                <div class="hdn-title">알림 제목</div>
-                                <div class="hdn-date">~일전</div>
-                            </div>
-                            <div class="hdn-content">알림 내용 입니다.알림 내용 입니다.알림 내용 입니다.알림 내용 입니다.알림 내용 입니다.</div>
-                        </div>
+                <div class="hd-notification-header">
+                    <div>
+                        <p>알림&nbsp;</p>
+                        <span id="notificationCount"></span>
                     </div>
+                    <button id="notificationReload" type="button">
+                        <i class="fa-solid fa-rotate-right"></i>
+                    </button>
                 </div>
-                <div class="hdn-item">
-                    <div style="display: flex;">
-                        <div style="min-width: 40px;">
-                            <img class="hdn-icon"
-                                 src="https://img.hourplace.co.kr/image/user/109990/2023/12/05/79a6f8ac-6b84-4977-a2da-baa111bcd54d?s=2000x2000&amp;amp;t=inside&amp;amp;q=80&amp;amp;f=jpeg&amp;amp;">
-                        </div>
-                        <div style="width: 90%;">
-                            <div style="display: flex; justify-content: space-between;">
-                                <div class="hdn-title">알림 제목</div>
-                                <div class="hdn-date">~일전</div>
-                            </div>
-                            <div class="hdn-content">알림 내용 입니다.</div>
-                        </div>
-                    </div>
+                <div class="hd-notification-body"></div>
+                <div class="loading-wrap show" id="notificationLoadingMark">
+                    <img alt="" src="/imgs/loading.svg">
                 </div>
             </div>
         </div>
@@ -153,7 +137,7 @@
 <footer id="page-footer" th:fragment="footer">
     <ul class="footer-content">
         <li class="footer-content-item">
-            <div style="cursor:pointer;" onclick="toggleFooterHome(this)">
+            <div id="footerHome" style="cursor:pointer;">
                 <b>홈</b>
             </div>
             <ul class="fc-popover-homes">

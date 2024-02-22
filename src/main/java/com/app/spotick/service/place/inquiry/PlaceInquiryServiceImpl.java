@@ -10,6 +10,7 @@ import com.app.spotick.domain.entity.user.User;
 import com.app.spotick.repository.place.PlaceRepository;
 import com.app.spotick.repository.place.inquiry.PlaceInquiryRepository;
 import com.app.spotick.repository.user.UserRepository;
+import com.app.spotick.service.notice.NoticeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -27,6 +28,7 @@ public class PlaceInquiryServiceImpl implements PlaceInquiryService {
     private final PlaceInquiryRepository inquiryRepository;
     private final UserRepository userRepository;
     private final PlaceRepository placeRepository;
+    private final NoticeService noticeService;
     @Override
     public PlaceInquiryDto.Response register(PlaceInquiryDto.Request inquiryReq,Long userId) {
         User userProxy = userRepository.getReferenceById(userId);
@@ -72,6 +74,8 @@ public class PlaceInquiryServiceImpl implements PlaceInquiryService {
         PlaceInquiry foundInquiry = inquiryRepository.findByIdAndPlace(inquiryResponseDto.getInquiryId(), tmpPlace).orElseThrow(
                 NoSuchElementException::new
         );
+
+        noticeService.getNoticeLines("inquiryResponse", foundInquiry.getUser().getId(), null, null);
 
         foundInquiry.updateResponse(inquiryResponseDto.getResponse());
     }

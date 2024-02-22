@@ -1,6 +1,14 @@
-// 로고 옆 컨텐츠 타입 설정
-// import {data} from "../map/map";
+import {getTimeGapFromToday} from '../modules/timeUtils.js';
+import {loadingMarkService} from '../modules/loadingMark.js';
 
+
+// 세션스토리지에 알람을 저장을 했을 시 가져와짐
+// let notifications = sessionStorage.getItem("notifications");
+
+
+const notification = document.getElementById('notification');
+
+// 로고 옆 컨텐츠 타입 설정
 function toggleContent(type) {
     let currentType = document.getElementById('currentContent');
 
@@ -75,21 +83,21 @@ let randomIndex = Math.floor(Math.random() * randomTexts.length);
 searchInput.setAttribute('placeholder', randomTexts[randomIndex]);
 
 // 헤더 유저메뉴, 알림창
-const usermenu = document.querySelector(".hd-usermenu")
-const notification = document.querySelector(".hd-notification")
+const usermenuPopOver = document.querySelector(".hd-usermenu")
+const notificationPopOver = document.querySelector('.hd-notification');
 
 function toggleUsermenu() {
-    notification.classList.remove('show');
-    usermenu.classList.toggle('show');
+    notificationPopOver.classList.remove('show');
+    usermenuPopOver.classList.toggle('show');
 }
 
 function toggleNotification() {
-    usermenu.classList.remove('show');
-    notification.classList.toggle('show');
+    usermenuPopOver.classList.remove('show');
+    notificationPopOver.classList.toggle('show');
 }
 
-function toggleFooterHome(button) {
-    let popover = button.nextElementSibling;
+function toggleFooterHome() {
+    const popover = document.querySelector('.fc-popover-homes');
     popover.classList.toggle('show');
 }
 
@@ -120,6 +128,161 @@ function extractVariableFromURL() {
 }
 
 
+const notificationBody = document.querySelector('.hd-notification-body');
+const notificationReload = document.getElementById('notificationReload');
+const notificationCount = document.getElementById('notificationCount');
+const notificationLoadingMark = document.getElementById('notificationLoadingMark');
+
+const notificationService = (function () {
+    let isLoading = false;
+
+    function requestNotificationList() {
+        if (!isLoading) {
+            isLoading = true;
+
+            notificationBody.innerHTML = '';
+
+            loadingMarkService.show(notificationLoadingMark);
+
+            setTimeout(() => {
+                fetch("/notice/api/list", {
+                    method: 'GET'
+                })
+                    .then(response => {
+                        isLoading = false;
+                        loadingMarkService.hide(notificationLoadingMark);
+
+                        if (response.ok) {
+                            return response.json();
+                        } else {
+                            throw response
+                        }
+                    })
+                    .then(res => {
+                        if (res.data.length > 0) {
+                            loadNotificationList(res.data);
+                        } else {
+                            loadNoContent();
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                    });
+            }, 500);
+        }
+    }
+
+    function loadNotificationList(data) {
+        if (data.length === 0) {
+            return;
+        }
+
+        let anyUnread = false;
+
+        notificationCount.innerHTML = data.length
+
+        data.forEach(notification => {
+            let html = `
+                <div class="hdn-item" id="${notification.noticeId}" link="${notification.link}">
+                    <div style="display: flex; justify-content: space-between;">
+                        <div class="hdn-title">${notification.title}</div>
+                        <div class="hdn-date">${getTimeGapFromToday(notification.createdDate)}</div>
+                    </div>
+                    <div style="display: flex; justify-content: space-between;">
+                        <div class="hdn-content">${notification.content}</div>
+                        <button class="hdn-button">삭제하기</button>
+                    </div>
+                </div>
+            `;
+
+            if (notification.noticeStatus === "UNREAD") anyUnread = true;
+
+            notificationBody.insertAdjacentHTML("beforeend", html);
+        });
+
+        if (anyUnread) notification.classList.add('alarm');
+
+        document.querySelectorAll('.hdn-button').forEach(button => {
+            button.addEventListener('click', (e) => {
+                const hdnItem = e.target.closest('.hdn-item');
+
+                if (hdnItem) {
+                    const id = hdnItem.id;
+                    notificationService.requestUpdateStatus(id, "deleted");
+                }
+            });
+        });
+
+        document.querySelectorAll('.hdn-item').forEach(item => {
+            item.addEventListener('click', (e) => {
+                if (!e.target.classList.contains('hdn-button')) {
+                    window.location.href = item.getAttribute('link');
+                }
+            })
+        })
+    }
+
+    function requestUpdateStatus(noticeId, status) {
+        const condition = status === "read" ? "READ" : "DELETED";
+
+        const requestDto = {
+            noticeId: noticeId,
+            noticeStatus: condition
+        }
+
+        fetch("/notice/api/updateStatus", {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(requestDto),
+        })
+            .then(response => {
+                if (response.ok) {
+                    deleteNotificationHtml(noticeId);
+                } else {
+                    throw response
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    }
+
+    function deleteNotificationHtml(id) {
+        const targetNotification = notificationBody.querySelector(`.hdn-item[id="${id}"]`);
+
+        targetNotification.remove();
+
+        let currentCount = parseInt(notificationCount.innerHTML);
+        currentCount--;
+        notificationCount.innerHTML = currentCount.toString();
+
+        if (notificationBody.children.length === 0) {
+            notificationCount.innerHTML = '';
+            notification.classList.remove('alarm');
+            loadNoContent();
+        }
+    }
+
+    function loadNoContent() {
+        let html = `
+            <div class="hdn-notification-none">
+                <span>알림이 없습니다.</span>
+            </div>
+        `;
+
+        notificationBody.innerHTML = html;
+    }
+
+    return {
+        requestNotificationList: requestNotificationList,
+        loadNotificationList: loadNotificationList,
+        requestUpdateStatus: requestUpdateStatus
+    }
+})();
+
+
 ///////////////////////////////////////////////////////////////////////////
 window.onload = function () {
     const type = checkUrlType();
@@ -140,3 +303,18 @@ document.querySelectorAll('.hc-content-type').forEach(button => {
         await getMainPageByType(type);
     });
 });
+
+document.getElementById('usermenu').addEventListener('click', toggleUsermenu);
+
+notification.addEventListener('click', toggleNotification);
+
+document.getElementById('footerHome').addEventListener('click', toggleFooterHome)
+
+document.addEventListener("DOMContentLoaded", function () {
+    if (notification) {
+        notificationService.requestNotificationList();
+    }
+});
+
+notificationReload.addEventListener('click', notificationService.requestNotificationList);
+

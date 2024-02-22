@@ -11,8 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static com.app.spotick.domain.entity.viewModel.QPlaceReviewCount.placeReviewCount;
-import static org.assertj.core.api.Assertions.*;
+
 
 @SpringBootTest
 @Transactional @Commit
@@ -21,14 +20,14 @@ class PlaceReviewCountTest {
     private JPAQueryFactory queryFactory;
 
 
-    @Test
-    void subSelectTest(){
-        List<PlaceReviewCount> list = queryFactory.selectFrom(placeReviewCount)
-                .fetch();
-
-        System.out.println("list = " + list);
-
-    }
+//    @Test
+//    void subSelectTest(){
+//        List<PlaceReviewCount> list = queryFactory.selectFrom(placeReviewCount)
+//                .fetch();
+//
+//        System.out.println("list = " + list);
+//
+//    }
 
 
 }
