@@ -10,12 +10,10 @@ import java.util.List;
 
 public interface NoticeService {
 
-    void saveNotice(Notice notice);
-
     List<NoticeDto> getNoticeList(Long userId);
 
     void updateStatus(Long noticeId, Long userId, NoticeStatus noticeStatus);
 
-    void getNoticeLines(@NotNull String noticeType, @NotNull Long userId, @Nullable String title, @Nullable String content);
+    void saveNotice(@NotNull String noticeType, @NotNull Long userId, @Nullable String title, @Nullable String content);
 
 }
