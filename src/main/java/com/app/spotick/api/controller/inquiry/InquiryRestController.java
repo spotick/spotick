@@ -149,13 +149,13 @@ public class InquiryRestController {
 
         try {
             placeInquiryService.updateInquiryResponse(inquiryResponseDto);
+
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body("답변이 작성되었습니다.");
         } catch (NoSuchElementException e) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN)
                     .body("오류가 발생했습니다. 다시 시도해주세요.");
         }
-
-        return ResponseEntity.status(HttpStatus.OK)
-                .body("답변이 작성되었습니다.");
     }
 
     @PatchMapping("/responseTicketInquiry")
@@ -168,12 +168,11 @@ public class InquiryRestController {
 
         try {
             ticketInquiryService.updateInquiryResponse(inquiryResponseDto);
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body("답변이 작성되었습니다.");
         } catch (NoSuchElementException e) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN)
                     .body("오류가 발생했습니다.<br>다시 시도해주세요.");
         }
-
-        return ResponseEntity.status(HttpStatus.OK)
-                .body("답변이 작성되었습니다.");
     }
 }

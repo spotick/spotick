@@ -50,14 +50,10 @@
                 <h2>문의 내역</h2>
             </div>
             <nav class="mpc-top-nav">
-                <button class="mpc-top-nav-button"
-                        onclick="inquiryService.requestPlaceInquiries(1, inquiryService.reloadPlaceInquiries)"
-                        type="button">
+                <button class="mpc-top-nav-button" id="place" type="button">
                     장소 문의(<span>0</span>)
                 </button>
-                <button class="mpc-top-nav-button"
-                        onclick="inquiryService.requestTicketInquiries(1, inquiryService.reloadTicketInquiries)"
-                        type="button">
+                <button class="mpc-top-nav-button" id="ticket" type="button">
                     티켓 문의(<span>0</span>)
                 </button>
             </nav>
@@ -76,9 +72,9 @@
 
 </body>
 <script src="https://code.jquery.com/jquery-3.6.4.js"></script>
-<script src="/js/global-js/global.js"></script>
+<script src="/js/global-js/global.js" type="module"></script>
 <script src="/js/mypage/mypage.js"></script>
-<script src="/js/mypage/inquiry.js"></script>
+<script src="/js/mypage/inquiry.js" type="module"></script>
 <script src="/js/global-js/chat.js"></script>
 <script>
     document.getElementById('inquiries').classList.add('active');

@@ -15,10 +15,11 @@ const detailCheckOut = document.getElementById('detailCheckOut');
 
 const detailId = document.getElementById('detailId');
 
+const loadingMark = document.getElementById('mpLoadingMark');
 const reservationService = (function () {
 
     function requestReservations(callback) {
-        loadingMarkService.show();
+        loadingMarkService.show(loadingMark);
 
         const placeId = extractVariableFromURL();
 
@@ -29,7 +30,7 @@ const reservationService = (function () {
                 method: 'GET'
             })
                 .then(response => {
-                    loadingMarkService.hide();
+                    loadingMarkService.hide(loadingMark);
                     if (response.status === 204) {
                         return null;
                     } else if (response.status === 200) {

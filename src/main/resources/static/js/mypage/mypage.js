@@ -113,23 +113,6 @@ function scrollToTop() {
     animateScroll();
 }
 
-const loadingMarkService = (function () {
-    const loadingMark = document.getElementById('mpLoadingMark');
-
-    function show() {
-        loadingMark.classList.add('show');
-    }
-
-    function hide() {
-        loadingMark.classList.remove('show')
-    }
-
-    return {
-        show:show,
-        hide:hide
-    }
-})();
-
 function vibrateTarget(target) {
     target.classList.add('vibration');
 

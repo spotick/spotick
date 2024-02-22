@@ -1,6 +1,8 @@
 package com.app.spotick.domain.entity.notice;
 
 import com.app.spotick.domain.base.Period;
+import com.app.spotick.domain.entity.user.User;
+import com.app.spotick.domain.type.notice.NoticeStatus;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -14,10 +16,29 @@ public class Notice extends Period {
     private String title;
     @Column(length = 1000)
     private String content;
+    private String link;
+    @Enumerated(EnumType.STRING)
+    private NoticeStatus noticeStatus;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "USER_ID")
+    private User user;
 
     @Builder
-    public Notice(Long id, String title, String content) {
+    public Notice(Long id, String title, String content, String link, NoticeStatus noticeStatus, User user) {
         this.id = id;
+        this.title = title;
+        this.content = content;
+        this.link = link;
+        this.noticeStatus = noticeStatus;
+        this.user = user;
+    }
+
+    public void setStatus(NoticeStatus noticeStatus) {
+        this.noticeStatus = noticeStatus;
+    }
+
+    public void setDescription(String title, String content) {
         this.title = title;
         this.content = content;
     }

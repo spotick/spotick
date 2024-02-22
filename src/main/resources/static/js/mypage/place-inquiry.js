@@ -1,3 +1,7 @@
+import { loadingMarkService } from '../modules/loadingMark.js';
+import { extractVariableFromURL } from '../modules/extractFromUrl.js'
+
+
 let page = 0;
 let hasNext = true;
 let isLoading = false;
@@ -19,11 +23,11 @@ const errorContent = document.querySelector('.error-content');
 
 const inquiryContainer = document.getElementById('inquiriesContainer');
 
-
+const loadingMark = document.getElementById('mpLoadingMark');
 const inquiryService = (function () {
 
     function requestInquiries(callback) {
-        loadingMarkService.show();
+        loadingMarkService.show(loadingMark);
 
         const placeId = extractVariableFromURL();
 
@@ -34,7 +38,7 @@ const inquiryService = (function () {
                 method: 'GET'
             })
                 .then(response => {
-                    loadingMarkService.hide();
+                    loadingMarkService.hide(loadingMark);
                     if (response.status === 204) {
                         return null;
                     } else if (response.status === 200) {
@@ -184,6 +188,8 @@ window.onload = function () {
             inquiryService.requestInquiries(inquiryService.loadInquiries);
         }
     })
+
+
 }
 
 document.getElementById('requestBtn').addEventListener('click', function () {

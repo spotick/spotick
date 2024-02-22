@@ -1,6 +1,6 @@
 package com.app.spotick.service.chat;
 
-import com.app.spotick.vo.ChatVo;
+import com.app.spotick.vo.GptChatVo;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -26,8 +26,8 @@ public class OpenAiService {
                 .build();
     }
 
-    private List<ChatVo> messageSetting(List<ChatVo> list) {
-        ChatVo system = new ChatVo();
+    private List<GptChatVo> messageSetting(List<GptChatVo> list) {
+        GptChatVo system = new GptChatVo();
         system.setRole("system");
         system.setContent("You are a customer service representative for our site, capable of answering anything about our website. The name of our site is Happy Pet's Day, and we provide various services for pets. The main features include finding someone to walk your pet with, support and reservation for pet sitters, pet recommendations, and providing information related to pet adoption.\n" +
                           "If a question comes in about the features or services on our site, based on the previous question, make the user able to use the service right away by providing them with:\n" +
@@ -42,7 +42,7 @@ public class OpenAiService {
         return list;
     }
 
-    private Map<String, Object> createRequestBody(List<ChatVo> list) {
+    private Map<String, Object> createRequestBody(List<GptChatVo> list) {
         Map<String, Object> reqBody = new HashMap<>();
         reqBody.put("model", "gpt-3.5-turbo");
         reqBody.put("messages", messageSetting(list));
@@ -52,7 +52,7 @@ public class OpenAiService {
     }
 
 
-    public Mono<Map> getGptMessage(List<ChatVo> list) {
+    public Mono<Map> getGptMessage(List<GptChatVo> list) {
         Map<String, Object> requestBody = createRequestBody(list);
         return webClient.post()
                 .contentType(MediaType.APPLICATION_JSON)
