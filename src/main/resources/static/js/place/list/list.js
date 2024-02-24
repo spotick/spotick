@@ -300,7 +300,7 @@ $(`.ListItemsContainer`).on('click', '.ItemBookMarkBtn', function () {
 });
 
 function getPlaceList() {
-    let keyword = $('#searchInput').val();
+    let keyword = $('#searchKeyword').val();
     fetch(`/place/api/list?page=${page++}&sort=${sort}${area.city==null?'':'&area='+encodeURIComponent(JSON.stringify(area))}${keyword!==''?'&keyword='+keyword:''}`)
         .then(response => {
             if (!response.ok) {
@@ -403,6 +403,7 @@ function resetListPagination() {
     page = 0;
     pagingTargetIdx = 1;
     $('.ListItemsContainer').html('');
+    $('#searchKeyword').val('');
 }
 
 

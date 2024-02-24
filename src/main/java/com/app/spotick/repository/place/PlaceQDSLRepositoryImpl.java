@@ -81,7 +81,8 @@ public class PlaceQDSLRepositoryImpl implements PlaceQDSLRepository {
                 )
                 .from(place)
                 .where(place.placeStatus.eq(PostStatus.APPROVED),
-                        createAreaCondition(areaFilter))
+                        createAreaCondition(areaFilter),
+                        createSearchCondition(keyword))
                 .orderBy(createOrderByClause(sortType))
                 .offset(pageable.getOffset())   //페이지 번호
                 .limit(pageable.getPageSize() + 1)  //페이지 사이즈

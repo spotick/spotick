@@ -2527,6 +2527,7 @@
 </div>
 <!--            로그인 되어있는지 정보 저장-->
 <input id="isLoggedIn" th:value="${#authorization.expression('isAuthenticated()')}" type="hidden"/>
+<input id="searchKeyword" type="hidden" th:value="${param.keyword}">
 <footer th:replace="~{global-templates/header-footer :: footer}"></footer>
 
 
