@@ -135,7 +135,8 @@
                                                  th:onclick="'showGSForCancelingReservation(\'' + *{reservationId} + '\')'">
                                                 예약 취소
                                             </div>
-                                            <div class="action-item" th:onclick="'showGSForRemoveHistory(\'' + *{reservationId} + '\')'"
+                                            <div class="action-item"
+                                                 th:onclick="'showGSForRemoveHistory(\'' + *{reservationId} + '\')'"
                                                  th:unless="*{reservationStatus == reservationStatus.PENDING
                                                 or reservationStatus == reservationStatus.WAITING_PAYMENT}">기록
                                                 삭제
@@ -143,7 +144,8 @@
                                         </div>
                                     </button>
                                 </div>
-                                <a class="mpcr-img-con" th:href="@{/place/detail/{placeId}(placeId = ${reservationDto.id})}">
+                                <a class="mpcr-img-con"
+                                   th:href="@{/place/detail/{placeId}(placeId = ${reservationDto.id})}">
                                     <img style="width: 180px;"
                                          th:alt="*{title}"
                                          th:src="*{'/file/display?fileName='
@@ -165,7 +167,8 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <a class="ItemSpaceNameContainer" th:href="@{/place/detail/{placeId}(placeId = ${reservationDto.id})}">
+                                    <a class="ItemSpaceNameContainer"
+                                       th:href="@{/place/detail/{placeId}(placeId = ${reservationDto.id})}">
                                         <p class="ItemSpaceName" th:text="*{title}"></p>
                                     </a>
                                     <div class="ItemPriceContainer">
@@ -231,19 +234,21 @@
                     <i class="fa-solid fa-chevron-left"></i>
                     <i class="fa-solid fa-chevron-left"></i>
                 </a>
-                <a class="pagination-btns" th:href="@{/mypage/reservations(page=${pagination.startPage - 1})}" title="이전">
+                <a class="pagination-btns" th:href="@{/mypage/reservations(page=${pagination.startPage - 1})}"
+                   title="이전">
                     <i class="fa-solid fa-chevron-left"></i>
                 </a>
             </span>
 
-                    <span class="pagination-body">
-                <span class="pagination-btns" th:each="i : ${#numbers.sequence(pagination.startPage, pagination.endPage)}">
-                    <a th:href="@{/mypage/reservations(page=${i})}" th:text="${i}"
-                       th:class="${i == pagination.currentPage ? 'active' : ''}"></a>
+            <span class="pagination-body">
+                <span class="pagination-btns"
+                      th:each="i : ${#numbers.sequence(pagination.startPage, pagination.endPage)}">
+                    <a th:class="${i == pagination.currentPage ? 'active' : ''}" th:href="@{/mypage/reservations(page=${i})}"
+                       th:text="${i}"></a>
                 </span>
             </span>
 
-                    <span class="pagination-next" th:if="${pagination.hasNextBlock()}">
+            <span class="pagination-next" th:if="${pagination.hasNextBlock()}">
                 <a class="pagination-btns" th:href="@{/mypage/reservations(page=${pagination.endPage+1})}" title="다음">
                     <i class="fa-solid fa-chevron-right"></i>
                 </a>
@@ -265,8 +270,8 @@
 <script src="https://js.bootpay.co.kr/bootpay-4.3.4.min.js" type="application/javascript"></script>
 <script src="/js/global-js/bootpay.js"></script>
 <script src="/js/global-js/calendar.js"></script>
-<script src="/js/global-js/chat.js"></script>
-<script type="module" src="/js/global-js/global.js"></script>
+<script src="/js/global-js/chat.js" type="module"></script>
+<script src="/js/global-js/global.js" type="module"></script>
 <script src="/js/mypage/mypage.js"></script>
 <script src="/js/mypage/reservations.js"></script>
 <script>

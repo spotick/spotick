@@ -1,18 +1,25 @@
+import { requestAiResponse } from '../modules/openAiFetch.js'
 
-// import * as chatBot from '../module/openAi.js';
+
+const $chatbotBody = $('#chatbot-body');
+const $chatbotBodyContent = $('#chatbot-body-content');
+const $chatbotTextarea = $('#chatbot-textarea');
+const chatLoadingMark = document.getElementById('chatLoadingMark');
 
 $(document).ready(function () {
     // 채팅창 열기
     $('#chatbot-open').click(function () {
         $('#chatbot').show();
         $('#chatbot-open').hide();
-        $('.chat-room-wrap').show();
+
+        loadChatList();
+
+        $chatbotBody.scrollTop($chatbotBody[0].scrollHeight);
     });
 
     // 채팅방 목록, 채팅 방 이동
     $('.show-chatBot').on('click', function () {
         $('.chat-room-detail-wrap').show();
-        showChatBotRoom();
         $('.chat-room-wrap').hide();
 
         $('.chat-prev').on('click', function () {
@@ -28,7 +35,7 @@ defaultChatMsg();
 
 function defaultChatMsg() {
     let aiChatData = JSON.parse(sessionStorage.getItem('aiChatData'));
-    let text = "안녕하세요 저는 Happy Pet's Day 사이트의 챗봇입니다.";
+    let text = "안녕하세요 저는 Spotick 사이트의 챗봇입니다.";
     if (aiChatData) {
         text = aiChatData[aiChatData.length - 1].content;
     }
@@ -40,32 +47,36 @@ let aiChatArr = [];
 
 // 챗봇 비동기 통신
 function sendMessage() {
-    let message = $('#chatbot-textarea').val();
+    let message = $chatbotTextarea.val();
+
     if (message.length === 0) {
         return;
     }
+
     addUserMessage(message);
-    $('#chatbot-input').val('');
+    $chatbotTextarea.val('');
     aiChatArr.push({role: 'user', content: message});
 
     sessionStorage.setItem('aiChatData', JSON.stringify(aiChatArr));
-    chatBot.sendMessage(aiChatArr, addBotMessage,defaultChatMsg);
+    requestAiResponse(aiChatArr, addBotMessage, chatLoadingMark);
+    $chatbotBody.scrollTop($chatbotBody[0].scrollHeight);
 }
 
-// input칸 엔터 이벤트
-$('.chat-room-detail-wrap').on('keypress', '#chatbot-textarea', function (e) {
-    if (e.code === 'Enter') {
+// input 엔터 이벤트
+$('.chat-room-detail-wrap').on('keydown', '#chatbot-textarea', function (e) {
+    if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
         sendMessage();
     }
 });
 
-
-// 채팅창 닫기
-$('.chat-room-detail-wrap').on('click', '.chat-screen-close', function () {
-    $('#chatbot').hide();
-    $('#chatbot-open').show();
+// 전송 버튼 클릭시
+$('#chatbot-send').click(function() {
+    sendMessage();
 });
 
+
+// 채팅창 닫기
 $('.chat-screen-close').on('click', function () {
     $('#chatbot').hide();
     $('#chatbot-open').show();
@@ -74,27 +85,30 @@ $('.chat-screen-close').on('click', function () {
 
 // 유저 메세지 추가
 function addUserMessage(message) {
-    let htmlCode = `<div class="user-message message">
-         <div class="message-text">${message}</div>
-       </div>`;
+    let htmlCode = `
+        <div class="user-message message">
+            <div class="message-text">${message}</div>
+        </div>`;
 
-    $('.chatbot-body').append(htmlCode);
-    $('.chatbot-body')[0].scrollTop = $('.chatbot-body')[0].scrollHeight;// 스크롤 하단으로 이동
+    $chatbotBodyContent.append(htmlCode);
+    $chatbotBody[0].scrollTop = $chatbotBody[0].scrollHeight;
 }
 
 // 챗봇 메세지 추가
 function addBotMessage(message) {
-    let htmlCode = `<div class="bot-message message">
-         <div class="message-text">${message}</div>
-       </div>`;
+    let htmlCode = `
+        <div class="bot-message message">
+            <div class="message-text">${message}</div>
+        </div>
+    `;
 
-    $('.chatbot-body').append(htmlCode);
-    $('.chatbot-body')[0].scrollTop = $('.chatbot-body')[0].scrollHeight;// 스크롤 하단으로 이동
+    $chatbotBodyContent.append(htmlCode);
+    $chatbotBody[0].scrollTop = $chatbotBody[0].scrollHeight;
 }
 
 
 // 삭제버튼 띄우기
-$('.chat--more-dot').on('click', function (e) {
+$('.chat--more-dot').on('click', function () {
     let exitBtn = $(this).siblings('.chat-room-exit-btn');
 
     if (exitBtn.is(':visible')) {
@@ -110,48 +124,31 @@ $('.chat-room-exit-btn').on('click', function () {
 });
 
 //챗봇 채팅창 보여주기
-function showChatBotRoom() {
+function loadChatList() {
     let text = '';
 
     //세션스토리지에 있는 값 가져오기
     let aiChatData = JSON.parse(sessionStorage.getItem('aiChatData'));
 
     text += `
-    <div id="chatbot-header" class="chatbot-header">
-                <div class="close-box">
-                    <button type="button" id="chat-prev" class="chatbot-close chat-prev">
-                        <i class="fa-solid fa-arrow-left"></i>
-                    </button>
-                    <h4 class="chat-room-name">챗봇</h4>
-                    <button type="button" class="chatbot-close chat-screen-close">
-                        <i class="fa-solid fa-xmark"></i>
-                    </button>
-                </div>
+        <div class="assistant message">
+            <div class="message-text">
+                안녕하세요 Spotick 사이트의 챗봇입니다. <br>
+                저화 대화한 내용은 로그아웃하거나 브라우저를 종료하면 사라지게 됩니다
+                무엇을 도와드릴까요?
             </div>
-            <div id="chatbot-body" class="chatbot-body">
-                <div class="bot-message message">
-                    <div class="message-text">
-                        안녕하세요 저는 Happy Pet's Day 사이트의 챗봇입니다. <br>
-                        저화 대화한 내용은 로그아웃하거나 브라우저를 종료하면 사라지게 됩니다
-                        무엇을 도와드릴까요?
-                    </div>
-                </div>`;
+        </div>
+    `;
 
     if (aiChatData) {
         aiChatData.forEach(c => {
             text += `
-                        <div class="${c.role === 'user' ? `user-message` : `bot-message`} message">
-                             <div class="message-text">${c.content}</div>
-                        </div>
-                        `;
+                <div class="${c.role === 'user' ? `user-message` : `assistant`} message">
+                    <div class="message-text">${c.content}</div>
+                </div>
+            `;
         })
     }
 
-    text += `</div>
-            <div id="chatbot-footer" class="chatbot-footer">
-                <input type="text" id="chatbot-input" placeholder="궁금한것을 물어보세요!"/>
-                <button id="chatbot-send">전송</button>
-            </div>
-    `;
-    $('.chat-room-detail-wrap').html(text);
+    $chatbotBodyContent.html(text);
 }

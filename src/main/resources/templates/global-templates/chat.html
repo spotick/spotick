@@ -20,34 +20,28 @@
                     </button>
                 </div>
             </div>
-            <div class="chatbot-body" id="chatbot-body">
-                <div class="bot-message message">
-                    <div class="message-text">
-                        안녕하세요 저는 Spotick 사이트의 챗봇입니다. <br>
-                        저와 대화한 내용은 로그아웃하거나 브라우저를 종료하면 사라지게 됩니다
-                        무엇을 도와드릴까요?
-                    </div>
-                </div>
 
+            <div class="chatbot-body" id="chatbot-body">
+                <div id="chatbot-body-content"></div>
+                <div class="loading-wrap" id="chatLoadingMark">
+                    <img alt="" src="/imgs/loadingElip.svg">
+                </div>
             </div>
+
             <div class="chatbot-footer" id="chatbot-footer">
                 <div class="chatbot-input-container">
                     <textarea id="chatbot-textarea" placeholder="궁금한것을 물어보세요!"></textarea>
                 </div>
-                <button id="chatbot-send" onclick="sendMessage()">전송</button>
+                <button id="chatbot-send">전송</button>
             </div>
         </div>
 
     </div>
 
     <button class="chatbot-button" id="chatbot-open">
-        <!-- Font Awesome 채팅 아이콘 -->
         <img alt="" class="chat--open-btn-img"
              src="/imgs/chatbot.svg">
     </button>
-    <span class="chat-notice-icon">
-      21
-    </span>
 
 </div>
 </body>

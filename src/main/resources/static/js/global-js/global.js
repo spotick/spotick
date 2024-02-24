@@ -2,10 +2,6 @@ import {getTimeGapFromToday} from '../modules/timeUtils.js';
 import {loadingMarkService} from '../modules/loadingMark.js';
 
 
-// 세션스토리지에 알람을 저장을 했을 시 가져와짐
-// let notifications = sessionStorage.getItem("notifications");
-
-
 const notification = document.getElementById('notification');
 
 // 로고 옆 컨텐츠 타입 설정
@@ -118,15 +114,6 @@ window.onscroll = function () {
 
     prevScrollpos = currentScrollPos;
 };
-
-// http://localhost:10000/mypage/places/inquiries/100 를 예시로 현재 링크에서 맨 끝자리의 변수를 찾아내서 반납해주는 함수
-// 링크에서 숫자를 찾아낼 시 String 반환 <> 없을시 null반환
-function extractVariableFromURL() {
-    let variableValue = window.location.href.match(/\/(\d+)$/);
-
-    return variableValue ? variableValue[1] : null;
-}
-
 
 const notificationBody = document.querySelector('.hd-notification-body');
 const notificationReload = document.getElementById('notificationReload');
@@ -266,13 +253,11 @@ const notificationService = (function () {
     }
 
     function loadNoContent() {
-        let html = `
+        notificationBody.innerHTML = `
             <div class="hdn-notification-none">
                 <span>알림이 없습니다.</span>
             </div>
         `;
-
-        notificationBody.innerHTML = html;
     }
 
     return {

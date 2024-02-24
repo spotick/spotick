@@ -19,6 +19,8 @@ public class OpenAiService {
 
     public OpenAiService(@Value("${gpt.api}") String apiKey) {
         String endpoint = "https://api.openai.com/v1/chat/completions";
+        System.out.println("apiKey = " + apiKey);
+
         this.webClient = WebClient.builder()
                 .baseUrl(endpoint)
                 .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
@@ -29,14 +31,14 @@ public class OpenAiService {
     private List<GptChatVo> messageSetting(List<GptChatVo> list) {
         GptChatVo system = new GptChatVo();
         system.setRole("system");
-        system.setContent("You are a customer service representative for our site, capable of answering anything about our website. The name of our site is Happy Pet's Day, and we provide various services for pets. The main features include finding someone to walk your pet with, support and reservation for pet sitters, pet recommendations, and providing information related to pet adoption.\n" +
-                          "If a question comes in about the features or services on our site, based on the previous question, make the user able to use the service right away by providing them with:\n" +
-                          "1. <a href=\"/stroll/list\" style=\"font-weight: bolder; font-size: 20px; color: #68a5fe;\">산책메이트 구하기</a> \n" +
-                          "2. <a href=\"/sitter/list\" style=\" font-weight: bolder; font-size: 20px; color: #68a5fe;\">펫시터 예약</a> \n" +
-                          "3. <a href=\"/adopt/list\" style=\" font-weight: bolder; font-size: 20px; color: #68a5fe;\">반려동물 입양 정보</a> \n" +
-                          "4. <a href=\"/recommend/main\" style=\" font-weight: bolder; font-size: 20px; color: #68a5fe;\">반려동물 추천</a>\n" +
-                          "In the form of 'a tags', place the service name and url exactly as I showed you in the HTML tags.\n" +
-                          "If a difficult question comes in, or if a user complains, comfort them and provide our company number 111-111-1111 and company email official@elevenliter.com, asking them to contact us. Please answer in Korean and be concise.");
+        system.setContent("""
+                You are the customer service representing our site. capable of answering anything about our website. The name of our site is Spotick. Our website has features that allow users to rent venues, help organize specific events through our ticketing service, and help promote those events.
+                If a question comes in about the features or services on our site, based on the previous question, make the user able to use the service right away by providing them with:
+                1. <a href="/place/list" style="font-weight: bolder; font-size: 20px; color: #68a5fe;">장소 서비스</a>\s
+                2. <a href="/ticket/list" style=" font-weight: bolder; font-size: 20px; color: #68a5fe;">티켓팅 서비스</a>\s
+                3. <a href="/promotion/list" style=" font-weight: bolder; font-size: 20px; color: #68a5fe;">홍보 게시판</a>\s
+                In the form of 'a tags', place the service name and url exactly as I showed you in the HTML tags.
+                If a difficult question comes in, or if a user complains, comfort them and provide our company number 111-111-1111 and company email test@gmail.com, asking them to contact us. Please answer in Korean and be concise. However, if you are asked questions not totally related with our website and service, for example Code Review, then tell them, politely and genuinely, you only accept questions about services related to ours.""");
         list.add(0, system);
 
         return list;
@@ -54,6 +56,7 @@ public class OpenAiService {
 
     public Mono<Map> getGptMessage(List<GptChatVo> list) {
         Map<String, Object> requestBody = createRequestBody(list);
+
         return webClient.post()
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(BodyInserters.fromValue(requestBody))

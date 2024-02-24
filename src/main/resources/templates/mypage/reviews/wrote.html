@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <title>Spotick | 후기관리</title>
+    <link href="/imgs/logo/favicon.png" rel="icon">
     <link href="/css/global-css/root.css" rel="stylesheet">
     <link href="/css/global-css/chat.css" rel="stylesheet">
     <link href="/css/mypage/mypage.css" rel="stylesheet">
@@ -142,7 +143,7 @@
                     </th:block>
                 </div>
             </div>
-            <th:block th:if="${reviewedList.empty}">
+            <th:block th:if="${reviewedList.getTotalElements() == 0}">
                 <div class="mp-no-list">
                     <span>작성한 후기가 없습니다.</span>
                 </div>
@@ -191,8 +192,8 @@
 </body>
 <script src="https://code.jquery.com/jquery-3.6.4.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
-<script type="module" src="/js/global-js/global.js"></script>
-<script src="/js/global-js/chat.js"></script>
+<script src="/js/global-js/global.js" type="module"></script>
+<script src="/js/global-js/chat.js" type="module"></script>
 <script src="/js/global-js/image-slide.js"></script>
 <script src="/js/mypage/mypage.js"></script>
 <script src="/js/mypage/update-review.js"></script>

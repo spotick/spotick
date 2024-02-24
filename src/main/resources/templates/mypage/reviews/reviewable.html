@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <title>Spotick | 후기관리</title>
+    <link href="/imgs/logo/favicon.png" rel="icon">
     <link href="/css/global-css/root.css" rel="stylesheet">
     <link href="/css/global-css/chat.css" rel="stylesheet">
     <link href="/css/mypage/mypage.css" rel="stylesheet">
@@ -80,7 +81,7 @@
             <div class="mrf-rating-count-con">
                 <input readonly th:field="${reviewRegisterDto.score}" type="text">점
             </div>
-            <div id="errorScore" class="error-score"></div>
+            <div class="error-score" id="errorScore"></div>
         </div>
         <div class="mr-form">
             <textarea cols="30" maxlength="200" name="" oninput="checkTypeCounts()"
@@ -89,7 +90,7 @@
                       th:field="${reviewRegisterDto.content}"></textarea>
         </div>
         <div class="space-between">
-            <div id="errorContent" class="error-content"></div>
+            <div class="error-content" id="errorContent"></div>
             <div class="mr-type-counter">
                 <span>글자수</span>
                 <span id="typeCounter">0</span>
@@ -117,7 +118,7 @@
                 <a class="mpc-top-nav-button active">
                     작성가능 후기(<span th:text="${notReviewedList.getTotalElements()}"></span>)
                 </a>
-                <a th:href="@{/mypage/reviews/wrote}" class="mpc-top-nav-button" type="button">
+                <a class="mpc-top-nav-button" th:href="@{/mypage/reviews/wrote}" type="button">
                     작성한 후기
                 </a>
             </nav>
@@ -209,7 +210,7 @@
                     </th:block>
                 </th:block>
             </div>
-            <th:block th:if="${notReviewedList.empty}">
+            <th:block th:if="${notReviewedList.getTotalElements() == 0}">
                 <div class="mp-no-list">
                     <span>작성가능한 후기가 없습니다.</span>
                 </div>
@@ -259,8 +260,8 @@
 </body>
 <script src="https://code.jquery.com/jquery-3.6.4.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
-<script type="module" src="/js/global-js/global.js"></script>
-<script src="/js/global-js/chat.js"></script>
+<script src="/js/global-js/global.js" type="module"></script>
+<script src="/js/global-js/chat.js" type="module"></script>
 <script src="/js/mypage/mypage.js"></script>
 <script src="/js/mypage/reviews.js"></script>
 <script src="/js/mypage/bookmarks.js"></script>
