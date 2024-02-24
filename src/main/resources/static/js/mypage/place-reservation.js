@@ -1,3 +1,7 @@
+import {loadingMarkService} from "../modules/loadingMark.js";
+import { extractVariableFromURL } from '../modules/extractFromUrl.js'
+
+
 let page = 0;
 let hasNext = true;
 let isLoading = false;
