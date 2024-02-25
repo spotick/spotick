@@ -58,7 +58,7 @@ public class PlaceQDSLRepositoryImpl implements PlaceQDSLRepository {
     private NumberPath<Double> aliasReviewAvg = Expressions.numberPath(Double.class, "reviewAvg");
 
     @Override
-    public Slice<PlaceListDto> findPlaceListPaging(Pageable pageable, Long userId, SortType sortType, AreaFilter areaFilter) {
+    public Slice<PlaceListDto> findPlaceListPaging(Pageable pageable, Long userId, SortType sortType, AreaFilter areaFilter, String keyword) {
         JPQLQuery<Double> reviewAvg = createReviewAvgSub(place);
 
         JPQLQuery<Long> reviewCount = createReviewCountSub(place);
@@ -81,7 +81,8 @@ public class PlaceQDSLRepositoryImpl implements PlaceQDSLRepository {
                 )
                 .from(place)
                 .where(place.placeStatus.eq(PostStatus.APPROVED),
-                        createAreaCondition(areaFilter))
+                        createAreaCondition(areaFilter),
+                        createSearchCondition(keyword))
                 .orderBy(createOrderByClause(sortType))
                 .offset(pageable.getOffset())   //페이지 번호
                 .limit(pageable.getPageSize() + 1)  //페이지 사이즈
@@ -514,8 +515,8 @@ public class PlaceQDSLRepositoryImpl implements PlaceQDSLRepository {
         return specifiers;
     }
 
-    private BooleanExpression createAreaCondition(AreaFilter areaFilter){
-        if(areaFilter == null){
+    private BooleanExpression createAreaCondition(AreaFilter areaFilter) {
+        if (areaFilter == null) {
             return null;
         }
         BooleanBuilder booleanBuilder = new BooleanBuilder();
@@ -528,6 +529,23 @@ public class PlaceQDSLRepositoryImpl implements PlaceQDSLRepository {
 
         return address.startsWith(areaFilter.getCity())
                 .and(booleanBuilder);
+    }
+
+    private BooleanExpression createSearchCondition(String keyword) {
+        if (keyword == null) {
+            return null;
+        }
+
+        BooleanExpression titleContains = place.title.contains(keyword);
+        BooleanExpression subTitleContains = place.subTitle.contains(keyword);
+        BooleanExpression addressContains = place.placeAddress.address.contains(keyword);
+        BooleanExpression addressDetailContains = place.placeAddress.addressDetail.contains(keyword);
+
+        return titleContains
+                .or(subTitleContains)
+                .or(addressContains)
+                .or(addressDetailContains);
+
     }
 
 }

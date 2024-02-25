@@ -60,8 +60,8 @@ public class PlaceServiceImpl implements PlaceService {
 
     @Override
     @Transactional(readOnly = true)
-    public Slice<PlaceListDto> findPlaceListPagination(Pageable pageable, Long userId, SortType sortType, AreaFilter areaFilter) {
-        return placeRepository.findPlaceListPaging(pageable, userId, sortType, areaFilter);
+    public Slice<PlaceListDto> findPlaceListPagination(Pageable pageable, Long userId, SortType sortType, AreaFilter areaFilter,String keyword) {
+        return placeRepository.findPlaceListPaging(pageable, userId, sortType, areaFilter,keyword);
     }
 
     @Override
