@@ -7,6 +7,7 @@ import lombok.*;
 import org.aspectj.weaver.patterns.PerObject;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 
 import java.time.LocalDate;
 
@@ -14,6 +15,7 @@ import java.time.LocalDate;
 @SequenceGenerator(name = "SEQ_USER_GENERATOR", sequenceName = "SEQ_USER",allocationSize = 1)
 @Getter @ToString @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @DynamicInsert
+@DynamicUpdate
 public class User extends Period {
     @Id @GeneratedValue(generator = "SEQ_USER_GENERATOR")
     @Column(name = "USER_ID")

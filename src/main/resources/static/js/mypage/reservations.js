@@ -8,7 +8,7 @@ function showGSForCancelingReservation(reservationId) {
 function cancelReservation(reservationId) {
     closeModal();
 
-    fetch('/mypage/reservation/' + reservationId + '/cancel', {
+    fetch(`/reservation/api/cancel/${reservationId}`, {
         method: 'GET'
     })
         .then(response => {
@@ -36,7 +36,7 @@ function showGSForRemoveHistory(reservationId) {
 function removeHistory(reservationId) {
     closeModal();
 
-    fetch('/mypage/reservation/' + reservationId + '/delete', {
+    fetch(`/reservation/api/delete/${reservationId}`, {
         method: 'GET'
     })
         .then(response => {

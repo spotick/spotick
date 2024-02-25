@@ -105,8 +105,19 @@ public class PlaceReservationServiceImpl implements PlaceReservationService {
     }
 
     @Override
-    public void updateReservationStatus(Long reservationId, Long userId, PlaceReservationStatus status) {
+    public void updateReservationStatusAsHost(Long reservationId, Long userId, PlaceReservationStatus status) {
         PlaceReservation foundReservation = placeReservationRepository.findByIdAndHost(reservationId, userId).orElseThrow(
+                NoSuchElementException::new
+        );
+
+        foundReservation.updateStatus(status);
+    }
+
+    @Override
+    public void updateReservationStatusAsUser(Long reservationId, Long userId, PlaceReservationStatus status) {
+        User tmpUser = userRepository.getReferenceById(userId);
+
+        PlaceReservation foundReservation = placeReservationRepository.findByIdAndUser(reservationId, tmpUser).orElseThrow(
                 NoSuchElementException::new
         );
 

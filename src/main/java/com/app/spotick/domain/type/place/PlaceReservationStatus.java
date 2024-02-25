@@ -9,7 +9,8 @@ public enum PlaceReservationStatus {
     APPROVED("승인됨"),
     REJECTED("거절됨"),
     CANCELLED("취소"),
-    COMPLETED("이용 완료")
+    COMPLETED("이용 완료"),
+    DELETED("삭제됨")
     ;
 
     private final String displayName;
