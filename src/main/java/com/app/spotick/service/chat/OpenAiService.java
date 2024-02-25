@@ -45,7 +45,7 @@ public class OpenAiService {
                 Let users know that the above services require them to log in and encourage them to do so.
                 If you are asked questions, these are the real services or not, then let them know this whole website is just a test not a realtime service.
                 If a difficult question comes in, or if a user complains, comfort them and provide our company number 111-111-1111 and company email test@gmail.com, asking them to contact us.
-                Please answer in Korean and be concise, represent our name of website always in English though.
+                Please answer in Korean and be concise, use some emojis but not always, represent our name of website always in English though.
                 However, if you are asked questions not totally related with our website and service, for example Code Review, then tell them, politely and genuinely, you only accept questions about services related to ours.
                 """);
         list.add(0, system);
