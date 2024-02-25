@@ -14,10 +14,12 @@
     <link rel="stylesheet" th:href="@{/css/global-css/datepicker.css}">
     <link rel="stylesheet" th:href="@{/css/global-css/root.css}">
     <link rel="stylesheet" th:href="@{/css/place/detail.css}"/>
+    <link th:href="@{/css/global-css/chat.css}" rel="stylesheet">
 
     <title>장소 상세보기</title>
 </head>
 <body>
+<div th:replace="~{global-templates/chat :: chat}"></div>
 <header th:replace="~{global-templates/header-footer :: header}"></header>
 <input id="isLoggedIn" th:value="${#authorization.expression('isAuthenticated()')}" type="hidden"/>
 <div class="global-container">
@@ -437,6 +439,7 @@
         src="//dapi.kakao.com/v2/maps/sdk.js?appkey=3dc12d7c2624483dc7c019a0a91b727f&libraries=services"></script>
 <script th:src="@{/js/global-js/global.js}"></script>
 <script th:src="@{/js/global-js/loading.js}"></script>
+<script th:src="@{/js/global-js/chat.js}" type="module"></script>
 
 <script th:src="@{/js/place/detail/detail.js}"></script>
 <script th:src="@{/js/place/detail/kakaoMapApi.js}"></script>

@@ -464,7 +464,7 @@ class PlaceQDSLRepositoryImplTest {
     @Test
     void transFormTest2() {
         PageRequest pageRequest = PageRequest.of(0, 12);
-        Slice<PlaceListDto> placeListPaging = placeRepository.findPlaceListPaging(pageRequest, null, SortType.NEWEST,null);
+        Slice<PlaceListDto> placeListPaging = placeRepository.findPlaceListPaging(pageRequest, null, SortType.NEWEST,null,null);
 
         placeListPaging.forEach(place -> {
             System.out.println("place = " + place);

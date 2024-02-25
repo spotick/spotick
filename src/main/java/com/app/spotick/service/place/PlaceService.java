@@ -17,7 +17,7 @@ public interface PlaceService {
 
     void registerPlace(PlaceRegisterDto placeRegisterDto,Long userId) throws IOException;
 
-    Slice<PlaceListDto> findPlaceListPagination(Pageable pageable, Long userId, SortType sortType, AreaFilter areaFilter);
+    Slice<PlaceListDto> findPlaceListPagination(Pageable pageable, Long userId, SortType sortType, AreaFilter areaFilter,String keyword);
 
     PlaceDetailDto findPlaceDetailById(Long placeId,Long userId);
 

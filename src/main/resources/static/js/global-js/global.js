@@ -303,3 +303,14 @@ document.addEventListener("DOMContentLoaded", function () {
 
 notificationReload.addEventListener('click', notificationService.requestNotificationList);
 
+// 장소 검색
+$('#searchInput').on('keyup',function (e){
+    if (e.code == 'Enter'){
+        e.preventDefault();
+        let keyword = $(this).val();
+        location.href = `/place/list?keyword=${keyword}`;
+    }
+});
+
+
+
