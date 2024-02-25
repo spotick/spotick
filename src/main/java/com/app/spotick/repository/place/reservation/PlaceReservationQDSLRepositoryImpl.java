@@ -56,6 +56,7 @@ public class PlaceReservationQDSLRepositoryImpl implements PlaceReservationQDSLR
                 .join(placeReservation.place, place)
                 .leftJoin(place.placeFileList, placeFile)
                 .where(placeReservation.user.id.eq(userId),
+                        placeReservation.reservationStatus.ne(PlaceReservationStatus.DELETED),
                         placeFile.id.eq(
                                 JPAExpressions.select(placeFile.id.min())
                                         .from(placeFile)

@@ -28,5 +28,7 @@ public interface PlaceReservationService {
 
     Slice<ReservationRequestListDto> getReservationsOfPlace(Long placeId, Long userId, Pageable pageable);
 
-    void updateReservationStatus(Long reservationId, Long userId, PlaceReservationStatus status);
+    void updateReservationStatusAsHost(Long reservationId, Long userId, PlaceReservationStatus status);
+
+    void updateReservationStatusAsUser(Long reservationId, Long userId, PlaceReservationStatus status);
 }
