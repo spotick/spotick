@@ -93,7 +93,7 @@ function toggleLike(btn) {
     var likeIcon = btn.querySelector('.ItemLikeBtn img');
 
     // 이미지를 토글
-    likeIcon.src = likeIcon.src.includes('heart_line') ? '../../static/imgs/heart_filled_white_shadow.708fbebd.png' : '../../static/imgs/heart_line_white_shadow.d5d214d0.png';
+    likeIcon.src = likeIcon.src.includes('heart_line') ? '/imgs/heart_filled_white_shadow.708fbebd.png' : '/imgs/heart_line_white_shadow.d5d214d0.png';
 }
 
 // 인기순 필터
@@ -102,7 +102,7 @@ selectBoxBtn.addEventListener('click', function () {
     selectBoxList.style.display = (selectBoxList.style.display === 'block') ? 'none' : 'block';
 
     // 이미지 변경
-    selectBoxBtnImg.src = (selectBoxList.style.display === 'block') ? '../../static/imgs/arrow_up_gray014.75d8599e.svg' : '../../static/imgs/arrow_down_gray014.f502da9d.svg';
+    selectBoxBtnImg.src = (selectBoxList.style.display === 'block') ? '/imgs/arrow_up_gray014.75d8599e.svg' : '/imgs/arrow_down_gray014.f502da9d.svg';
 });
 
 // 각 리스트 아이템에 대한 이벤트 리스너 추가
@@ -122,7 +122,7 @@ listItems.forEach(item => {
         selectBoxList.style.display = 'none';
 
         // 이미지 변경
-        selectBoxBtnImg.src = '../../static/imgs/arrow_down_gray014.f502da9d.svg';
+        selectBoxBtnImg.src = '/imgs/arrow_down_gray014.f502da9d.svg';
     });
 });
 
@@ -160,7 +160,7 @@ checkboxes.forEach(checkbox => {
                 });
 
                 checkboxImages.forEach(img => {
-                    img.src = '../../static/imgs/rectangle_line_rainyBlue086.76bf0d5f.svg';
+                    img.src = '/imgs/rectangle_line_rainyBlue086.76bf0d5f.svg';
                 });
 
                 // 선택된 지역 리스트 초기화
@@ -168,7 +168,7 @@ checkboxes.forEach(checkbox => {
 
                 changeSize(405);
 
-                checkBoxImg.src = '../../static/imgs/checkRectangle_filled_sweetBlue046.0cd80fee.svg';
+                checkBoxImg.src = '/imgs/checkRectangle_filled_sweetBlue046.0cd80fee.svg';
                 selectedListContainer.classList.add('On');
 
                 // 선택된 지역 리스트에 아이템 추가
@@ -190,7 +190,7 @@ checkboxes.forEach(checkbox => {
                     const checkBoxImg = checkBoxContainer.querySelector('.CheckBoxImg');
                     const checkBoxText = checkBoxContainer.querySelector('.CheckBoxText');
 
-                    checkBoxImg.src = '../../static/imgs/rectangle_line_rainyBlue086.76bf0d5f.svg';
+                    checkBoxImg.src = '/imgs/rectangle_line_rainyBlue086.76bf0d5f.svg';
 
                     // 선택된 지역 리스트에서 아이템 삭제
                     const itemsToRemove = SelectItemContainer.querySelectorAll('.SelectedItemText');
@@ -203,7 +203,8 @@ checkboxes.forEach(checkbox => {
 
                 changeSize(405);
 
-                checkBoxImg.src = '../../static/imgs/checkRectangle_filled_sweetBlue046.0cd80fee.svg';
+                checkBoxImg.src = '' +
+                    '/imgs/checkRectangle_filled_sweetBlue046.0cd80fee.svg';
                 selectedListContainer.classList.add('On');
 
                 // 선택된 지역 리스트에 아이템 추가
@@ -218,7 +219,7 @@ checkboxes.forEach(checkbox => {
             }
 
         } else {
-            checkBoxImg.src = '../../static/imgs/rectangle_line_rainyBlue086.76bf0d5f.svg';
+            checkBoxImg.src = '/imgs/rectangle_line_rainyBlue086.76bf0d5f.svg';
 
             // 선택된 지역 리스트에서 아이템 삭제
             const itemsToRemove = SelectItemContainer.querySelectorAll('.SelectedItemText');
@@ -277,7 +278,7 @@ function reset(){
     });
 
     checkboxImages.forEach(img => {
-        img.src = '../../static/imgs/rectangle_line_rainyBlue086.76bf0d5f.svg';
+        img.src = '/imgs/rectangle_line_rainyBlue086.76bf0d5f.svg';
     });
 
     // 선택된 지역 리스트 초기화
