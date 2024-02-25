@@ -28,8 +28,8 @@ function showGSForPlaceInquiryDeletion(inquiryId) {
 function placeDeleteInquiry(inquiryId) {
     closeOnlyThisModal(globalSelection);
 
-    fetch(`/inquiries/api/${inquiryId}/delete`, {
-        method: 'GET'
+    fetch(`/inquiries/api/placeDelete/${inquiryId}`, {
+        method: 'DELETE'
     })
         .then(response => {
             if (response.ok) {
@@ -80,6 +80,8 @@ function ticketDeleteInquiry(inquiryId) {
 }
 
 const container = document.getElementById('inquiryContainer');
+const placeCount = document.getElementById('placeCount');
+const ticketCount = document.getElementById('ticketCount');
 const paginationContainer = document.querySelector('.pagination-container');
 const loadingMark = document.getElementById('mpLoadingMark');
 const inquiryService = (function () {
@@ -115,6 +117,8 @@ const inquiryService = (function () {
 
     function reloadPlaceInquiries(data) {
 
+        console.log(data)
+
         if (data.data.content.length === 0) {
             loadNoList();
             return
@@ -132,7 +136,7 @@ const inquiryService = (function () {
                                         <a href="/place/detail/${inquiry.id}">해당
                                                     게시글로 이동</a>
                                     </div>
-                                    <div class="action-item" onclick="showGSForPlaceInquiryDeletion(${inquiry.id})">
+                                    <div class="action-item reservationDelete" id="${inquiry.inquiryId}">
                                         <span>문의 내역 삭제</span>
                                     </div>
                                 </div>
@@ -189,6 +193,15 @@ const inquiryService = (function () {
                     popupInquiryModal(inquiry);
                 })
             })
+
+            document.querySelectorAll('.reservationDelete').forEach(reservationDelete => {
+                reservationDelete.addEventListener('click', function () {
+                    const id = this.getAttribute('id');
+                    console.log(id);
+
+                    showGSForPlaceInquiryDeletion(id);
+                })
+            });
         })
 
         placePaginationReload(data)

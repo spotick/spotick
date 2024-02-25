@@ -69,7 +69,7 @@ public class InquiryRestController {
         }
     }
 
-    @GetMapping("/placeDelete/{placeInquiryId}")
+    @DeleteMapping("/placeDelete/{placeInquiryId}")
     public ResponseEntity<String> deletePlaceInquiry(@PathVariable("placeInquiryId") Long placeInquiryId,
                                                      @AuthenticationPrincipal UserDetailsDto userDetailsDto) {
         if (placeInquiryId == null) {
