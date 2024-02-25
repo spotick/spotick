@@ -19,7 +19,7 @@ public class OpenAiController {
     private final OpenAiService openAiService;
 
     @PostMapping("/question")
-    public Mono<Map> question(@RequestBody List<GptChatVo> list) {
+    public Mono<Map<String, Object>> question(@RequestBody List<GptChatVo> list) {
         return openAiService.getGptMessage(list);
     }
 }

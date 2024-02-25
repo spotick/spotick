@@ -27,7 +27,7 @@ class OpenAiServiceTest {
 
         list.add(chat);
 
-        Mono<Map> gptMessage = openAiService.getGptMessage(list);
+        Mono<Map<String, Object>> gptMessage = openAiService.getGptMessage(list);
 
         System.out.println("gptMessage = " + gptMessage);
     }
