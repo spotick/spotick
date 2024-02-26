@@ -40,4 +40,4 @@
 ## 3 프로젝트 내 사용된 기술
 | IDE | Library | API |
 | --- | --- | --- |
-| <a href="https://code.visualstudio.com/"><img src="https://img.shields.io/badge/-VSCode-007ACC?logo=visualstudiocode"/></a> |
+| <a href="https://code.visualstudio.com/"><img src="https://img.shields.io/badge/-VSCode-007ACC?logo=visualstudiocode"/></a> <a href="https://www.jetbrains.com/idea/"><img src="https://img.shields.io/badge/-IntelliJ-000000?logo=intellijidea"/></a> | <a href="https://www.java.com"><img src="https://img.shields.io/badge/Java-007396"/></a> |
