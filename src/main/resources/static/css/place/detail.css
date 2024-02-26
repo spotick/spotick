@@ -192,7 +192,7 @@
     height: 55px;
     border-bottom: 1px solid #e7eaee;
     position: sticky;
-    top: 0;
+    top: 95px;
     background-color: rgb(255, 255, 255);
     z-index: 10;
 }
@@ -715,6 +715,10 @@
     font-weight: bold;
     color: rgb(255, 255, 255);
     margin-left: 12px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: block;
 }
 
 .img-count {
@@ -725,6 +729,7 @@
     line-height: 27px;
     font-weight: bold;
     color: rgb(255, 255, 255);
+    width: 150px;
 }
 
 .modal-img-wrap {
