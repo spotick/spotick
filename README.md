@@ -32,7 +32,7 @@
     이 아이디어를 현재의 프로젝트로서 실행하게 되었습니다.
 
 ### 2-1 주요 서비스
-1) 장소 대여 서비스
+1) 장소 대여 서비스<br>
 ![ezgif com-video-to-gif-converter](https://github.com/spotick/spotick/assets/142222091/71c426bc-e1a5-4a3a-b66d-43863b195536)
 
 2) 티켓팅 서비스
