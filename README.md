@@ -48,7 +48,7 @@
 
 
 ## 4. ERD
-![image](https://github.com/spotick/spotick/assets/142222091/a124d3db-02e3-4c66-aa7a-c041b5acef9f)
+![image](https://github.com/spotick/spotick/assets/142222091/4de433a5-697d-448e-ac87-3e62d7eee8a0)
 
 <br>
 
