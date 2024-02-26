@@ -364,7 +364,7 @@
 <div class="img-modal-container none">
     <div class="modal-wrap">
         <div class="place-img-info-wrap flex-between-align">
-            <div class="place-img-info-box flex-center">
+            <div class="place-img-info-box">
                 <div class="img-count">
                     <span class="current-img-num">1</span>/
                     <th:block th:text="${place.placeFileList.size()}"></th:block>
@@ -437,7 +437,7 @@
 
 <script type="text/javascript"
         src="//dapi.kakao.com/v2/maps/sdk.js?appkey=3dc12d7c2624483dc7c019a0a91b727f&libraries=services"></script>
-<script th:src="@{/js/global-js/global.js}"></script>
+<script th:src="@{/js/global-js/global.js}" type="module"></script>
 <script th:src="@{/js/global-js/loading.js}"></script>
 <script th:src="@{/js/global-js/chat.js}" type="module"></script>
 

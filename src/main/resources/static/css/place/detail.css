@@ -192,7 +192,7 @@
     height: 55px;
     border-bottom: 1px solid #e7eaee;
     position: sticky;
-    top: 95px;
+    top: 0;
     background-color: rgb(255, 255, 255);
     z-index: 10;
 }
@@ -707,6 +707,8 @@
 
 .place-img-info-box {
     width: 250px;
+    display: flex;
+    justify-content: space-around;
 }
 
 .place-img-info-box p {
@@ -729,7 +731,8 @@
     line-height: 27px;
     font-weight: bold;
     color: rgb(255, 255, 255);
-    width: 150px;
+    min-width: 95px;
+    text-align: center;
 }
 
 .modal-img-wrap {
