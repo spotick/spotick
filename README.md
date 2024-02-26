@@ -5,7 +5,7 @@
 1. [팀 구성](#1-팀-구성)
 2. [프로젝트 기획의도](#2-프로젝트-기획의도)
     > [주요 서비스](#2-1-주요-서비스)
-3. [프로젝트 내 사용된 기술](#3-프로젝트-내-사용된-기술)
+3. [개발 환경](#3-개발-환경)
 4. [ERD]()
 5. [담당업무 및 진행도]()
 
@@ -37,7 +37,7 @@
 3) 홍보 게시판
 
 
-## 3 프로젝트 내 사용된 기술
+## 3 개발 환경
 | IDE | Language | Library | Framework |
 | --- | --- | --- | --- |
 | <a href="https://code.visualstudio.com/"><img src="https://img.shields.io/badge/-VSCode-007ACC?logo=visualstudiocode"/></a> <a href="https://www.jetbrains.com/idea/"><img src="https://img.shields.io/badge/-IntelliJ-000000?logo=intellijidea"/></a> | <a href="https://www.java.com"><img src="https://img.shields.io/badge/Java-007396"/></a> <a href="https://www.javascript.com"><img src="https://img.shields.io/badge/Javascript-F7DF1E?logo=javascript&logoColor=black"/></a> <span><img src="https://img.shields.io/badge/HTML-E34F26?logo=html5&logoColor=white"/></span> <span><img src="https://img.shields.io/badge/CSS3-1572B6?logo=css3"/></span> | <a href="https://projectlombok.org/"><img src="https://img.shields.io/badge/Lombok-d9230f"/></a> <a href="https://jquery.com"><img src="https://img.shields.io/badge/jQuery-0769AD?logo=jquery"/></a> <a href="http://querydsl.com/"><img src="https://img.shields.io/badge/Querydsl-4183C4"/></a>  | <a href="https://spring.io/"><img src="https://img.shields.io/badge/Spring-6DB33F?logo=spring&logoColor=white"/></a> <a href="https://spring.io/projects/spring-security"><img src="https://img.shields.io/badge/Spring%20Security-6DB33F?logo=springsecurity&logoColor=white"/></a> <a href="https://hibernate.org/"><img src="https://img.shields.io/badge/Hibernate-59666C?logo=hibernate"/></a> |
