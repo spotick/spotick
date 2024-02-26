@@ -9,7 +9,6 @@
 4. [ERD]()
 5. [담당업무 및 진행도]()
 
-<span><img src="https://img.shields.io/github/languages/count/beygee/survive"/></span>
 
 ## 1. 팀 구성
 |팀장|조남호|
@@ -41,4 +40,4 @@
 ## 3 프로젝트 내 사용된 기술
 | IDE | Library | API |
 | --- | --- | --- |
-| <span><img src="https://img.shields.io/badge/-JAVA-blueviolet"/></span> |
+| <span><img src="https://img.shields.io/badge/-VSCode-#007ACC?logo=visualstudiocode"/></span> |
