@@ -56,3 +56,20 @@
 
 
 ## 5. 담당업무 및 진행도
+![스크린샷 2024-02-26 073400](https://github.com/spotick/spotick/assets/142222091/fd1fe0f1-25ee-48a3-b636-aa3a10dc36f9)
+
+퍼블리싱 진행
+    > 2023년 12월 09일 ~ 2024년 01월 06일
+
+<br>
+
+![스크린샷 2024-02-26 073326](https://github.com/spotick/spotick/assets/142222091/3aba1819-6519-4ec8-abf2-32e8db4e2ced)
+
+프론트/백엔드 작업 진행
+    > 2024년 01월 11일 ~ 2024년 02월 25일
+
+[작업진행도 링크](https://docs.google.com/spreadsheets/d/1dxkic3HMWeWARgZNHwB4UMllsB2hfidbuED7Jl2lGYs/edit#gid=2019515064)
+
+
+
+
