@@ -33,8 +33,12 @@
 
 ### 2-1 주요 서비스
 1) 장소 대여 서비스
+![ezgif com-video-to-gif-converter](https://github.com/spotick/spotick/assets/142222091/71c426bc-e1a5-4a3a-b66d-43863b195536)
+
 2) 티켓팅 서비스
+    > 작업진행중
 3) 홍보 게시판
+    > 작업진행중
 
 
 ## 3. 개발 환경
