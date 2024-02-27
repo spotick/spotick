@@ -5,16 +5,20 @@ import com.app.spotick.domain.type.ticket.TicketCategory;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
+
 @Data
 @NoArgsConstructor
 public class TicketListDto {
     private Long ticketId;
     private String ticketTitle;
-    private String content;
+    private LocalDate startDate;
+    private LocalDate endDate;
     private TicketCategory ticketCategory;
-    private TicketFile ticketFiles;
+    private TicketFile ticketFile;
     private double evalAvg;
     private Long evalCount;
-    private Long bookmarkCount;
+    private Long likeCount;
+    private String postAddress;
 
 }
