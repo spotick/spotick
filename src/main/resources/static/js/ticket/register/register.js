@@ -86,7 +86,7 @@ $('.file-wrap').on('click','.delete',function (){
         idx = length - 1;
     }
 
-    if(length == 0){
+    if(length === 0){
         updatePreviewVisibility(false);
         idx = 0; // 목록이 비었을 때 idx를 0으로 리셋합니다.
     }
@@ -173,3 +173,51 @@ function updatePreviewVisibility(isTrue) {
 //         }
 //     });
 // });
+
+const MAX_ADD_COUNT = 4;
+
+// grade추가할때마다 검증하고 새로 생성; 새로 생성시 name변경
+function checkInputValues() {
+    let allInputsFilled = true;
+
+    $('.price-input-container input').each(function() {
+        if ($(this).val().trim() === '') {
+            allInputsFilled = false;
+            return false;
+        }
+    });
+
+    // 최대 추가 가능한 갯수를 초과하면 추가 버튼 비활성화
+    let currentContainers = $('.price-input-box').length;
+    let disableAddButton = currentContainers >= MAX_ADD_COUNT || !allInputsFilled;
+
+    $('.price-add-button').prop('disabled', disableAddButton);
+}
+
+function addPriceInputContainer() {
+    let currentIndex = $('.price-input-box').length;
+
+    let newContainer = $('.price-input-container .price-input-box:first').clone();
+
+    newContainer.find('input').each(function() {
+        let currentName = $(this).attr('name');
+        let newName = currentName.replace('[0]', '[' + currentIndex + ']');
+        $(this).attr('name', newName);
+        $(this).val('');
+    });
+
+    $('.price-input-container').append(newContainer);
+}
+
+//////////////////////////////////////////////////////////////////////////////
+$(document).ready(function() {
+    $('.price-input-container').on('input', 'input', function() {
+        checkInputValues();
+    });
+
+    // 추가 버튼 클릭 시
+    $('.price-add-button').on('click', function() {
+        addPriceInputContainer();
+        checkInputValues();
+    });
+});

@@ -1,6 +1,5 @@
 package com.app.spotick.controller.ticket;
 
-import com.app.spotick.domain.dto.promotion.PromotionRegisterDto;
 import com.app.spotick.domain.dto.ticket.TicketRegisterDto;
 import com.app.spotick.domain.dto.user.UserDetailsDto;
 import com.app.spotick.service.ticket.TicketService;
@@ -26,43 +25,41 @@ public class TicketController {
     private final TicketService ticketService;
 
     @GetMapping("/list")
-    public void goToList(){
+    public void goToList() {
 
     }
 
     @GetMapping("/detail")
-    public void goToDetail(){
+    public void goToDetail() {
 
     }
 
     @GetMapping("/register")
-    public String goToRegister(
-            @ModelAttribute("ticketRegisterDto")TicketRegisterDto ticketRegisterDto
-            , Model model){
+    public String goToRegister(@ModelAttribute("ticketRegisterDto") TicketRegisterDto ticketRegisterDto) {
         return "ticket/register";
     }
 
     @PostMapping("/register")
-    public String promotionRegister(@Valid TicketRegisterDto ticketRegisterDto,
-                                    BindingResult result,
-                                    Model model,
-                                    @AuthenticationPrincipal UserDetailsDto userDetailsDto){
-        log.info("================================================================");
-        log.info("들어옴");
-        log.info(ticketRegisterDto.toString());
-        log.info("================================================================");
-        if (result.hasErrors()){
-            log.info("들어옴2");
-            return "promotion/register";
+    public String ticketRegister(@Valid TicketRegisterDto ticketRegisterDto,
+                                  BindingResult result,
+                                  Model model,
+                                  @AuthenticationPrincipal UserDetailsDto userDetailsDto) {
+        ticketRegisterDto.setUserId(userDetailsDto.getId());
+
+        System.out.println("ticketRegisterDto = " + ticketRegisterDto);
+
+        if (result.hasErrors()) {
+            return "/ticket/register";
         }
-        log.info(ticketRegisterDto.toString());
 
         try {
-            ticketService.registerTicket(ticketRegisterDto, 3L);
+            ticketService.registerTicket(ticketRegisterDto, userDetailsDto.getId());
         } catch (IOException e) {
-            e.printStackTrace();
-            return  "ticket/register";
+            log.error("Exception [Err_Msg]: {}", e.getMessage());
+            model.addAttribute("registerError", "서비스 저장중 오류가 발생 했습니다. 다시 시도해 주세요.");
+            return "/ticket/register";
         }
+
         return "redirect:/ticket/list";
     }
 }

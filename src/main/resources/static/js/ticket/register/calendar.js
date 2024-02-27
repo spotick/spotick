@@ -61,14 +61,20 @@ $(document).ready(function () {
 function updateDateInfo(pickerNumber) {
     let startDate = $("#datepicker1").datepicker("getDate");
     let endDate = $("#datepicker2").datepicker("getDate");
-    console.log("endDate ::: " , endDate);
+
+    let isoStartDate = $.datepicker.formatDate("yy-mm-dd", startDate);
+    let isoEndDate = $.datepicker.formatDate("yy-mm-dd", endDate);
+
+    console.log("endDate ::: ", isoEndDate);
+
     if (startDate && endDate) {
-        let dateInfo = $.datepicker.formatDate("yy-mm-dd", startDate) + " ~ " + $.datepicker.formatDate("yy-mm-dd", endDate);
+        let dateInfo = isoStartDate + " ~ " + isoEndDate;
         $("#date-info").text(dateInfo);
 
         // 각 데이트피커에 선택된 날짜 범위를 표시
         $("#reservationDate" + pickerNumber).val(dateInfo);
     }
-    $('input[name="datepicker1"]').val(startDate);
-    $('input[name="datepicker2"]').val(endDate);
+
+    $('input[name="startDate"]').val(isoStartDate);
+    $('input[name="endDate"]').val(isoEndDate);
 }

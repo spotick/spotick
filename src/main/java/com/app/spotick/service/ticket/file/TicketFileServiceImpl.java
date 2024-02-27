@@ -1,9 +1,7 @@
 package com.app.spotick.service.ticket.file;
 
-import com.app.spotick.domain.entity.promotion.PromotionFile;
 import com.app.spotick.domain.entity.ticket.Ticket;
 import com.app.spotick.domain.entity.ticket.TicketFile;
-import com.app.spotick.repository.promotion.file.PromotionFileRepository;
 import com.app.spotick.repository.ticket.file.TicketFileRepository;
 import lombok.RequiredArgsConstructor;
 import net.coobird.thumbnailator.Thumbnailator;
