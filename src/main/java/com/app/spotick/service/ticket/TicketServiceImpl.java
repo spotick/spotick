@@ -1,15 +1,12 @@
 package com.app.spotick.service.ticket;
 
 import com.app.spotick.domain.dto.ticket.TicketGradeDto;
-import com.app.spotick.domain.dto.ticket.TicketGradeRegisterDto;
 import com.app.spotick.domain.dto.ticket.TicketListDto;
 import com.app.spotick.domain.dto.ticket.TicketRegisterDto;
-import com.app.spotick.domain.entity.promotion.PromotionBoard;
 import com.app.spotick.domain.entity.ticket.Ticket;
 import com.app.spotick.domain.entity.ticket.TicketGrade;
 import com.app.spotick.domain.entity.user.User;
 import com.app.spotick.repository.ticket.TicketRepository;
-import com.app.spotick.repository.ticket.file.TicketFileRepository;
 import com.app.spotick.repository.ticket.grade.TicketGradeRepository;
 import com.app.spotick.repository.user.UserRepository;
 import com.app.spotick.service.ticket.file.TicketFileService;
@@ -19,12 +16,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @Slf4j

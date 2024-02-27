@@ -4,9 +4,6 @@ import com.app.spotick.domain.base.Period;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.HashMap;
-import java.util.Map;
-
 @Entity @Table(name = "TBL_TICKET_GRADE")
 @SequenceGenerator(name = "SEQ_TICKET_GRADE_GENERATOR", sequenceName = "SEQ_TICKET_GRADE",allocationSize = 1)
 @Getter @ToString(callSuper = true) @NoArgsConstructor(access = AccessLevel.PROTECTED)

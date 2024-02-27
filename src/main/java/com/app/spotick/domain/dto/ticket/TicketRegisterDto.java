@@ -1,13 +1,9 @@
 package com.app.spotick.domain.dto.ticket;
 
 import com.app.spotick.domain.embedded.post.PostAddress;
-import com.app.spotick.domain.entity.promotion.PromotionBoard;
 import com.app.spotick.domain.entity.ticket.Ticket;
-import com.app.spotick.domain.entity.ticket.TicketGrade;
-import com.app.spotick.domain.type.promotion.PromotionCategory;
 import com.app.spotick.domain.type.ticket.TicketCategory;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
@@ -15,10 +11,8 @@ import lombok.NoArgsConstructor;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 @Data
 @NoArgsConstructor

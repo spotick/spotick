@@ -86,7 +86,7 @@ $('.file-wrap').on('click','.delete',function (){
         idx = length - 1;
     }
 
-    if(length == 0){
+    if(length === 0){
         updatePreviewVisibility(false);
         idx = 0; // 목록이 비었을 때 idx를 0으로 리셋합니다.
     }

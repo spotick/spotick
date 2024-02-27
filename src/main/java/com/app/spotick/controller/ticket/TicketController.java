@@ -1,6 +1,5 @@
 package com.app.spotick.controller.ticket;
 
-import com.app.spotick.domain.dto.promotion.PromotionRegisterDto;
 import com.app.spotick.domain.dto.ticket.TicketRegisterDto;
 import com.app.spotick.domain.dto.user.UserDetailsDto;
 import com.app.spotick.service.ticket.TicketService;
@@ -56,7 +55,7 @@ public class TicketController {
         try {
             ticketService.registerTicket(ticketRegisterDto, userDetailsDto.getId());
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error("Exception [Err_Msg]: {}", e.getMessage());
             model.addAttribute("registerError", "서비스 저장중 오류가 발생 했습니다. 다시 시도해 주세요.");
             return "/ticket/register";
         }
