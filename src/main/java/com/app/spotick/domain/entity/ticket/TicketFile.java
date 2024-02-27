@@ -24,8 +24,4 @@ public class TicketFile extends ImageBase {
         this.id = id;
         this.ticket = ticket;
     }
-
-    public void setTicket(Ticket ticket){
-        this.ticket = ticket;
-    }
 }
