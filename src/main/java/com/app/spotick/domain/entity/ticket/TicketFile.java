@@ -15,8 +15,7 @@ public class TicketFile extends ImageBase {
     @Column(name = "TICKET_FILE_ID")
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "TICKET_ID")
+    @OneToOne(mappedBy = "ticketFile", fetch = FetchType.LAZY)
     private Ticket ticket;
 
     @Builder
