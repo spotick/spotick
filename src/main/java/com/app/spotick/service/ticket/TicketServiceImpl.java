@@ -4,8 +4,10 @@ import com.app.spotick.domain.dto.ticket.TicketGradeDto;
 import com.app.spotick.domain.dto.ticket.TicketListDto;
 import com.app.spotick.domain.dto.ticket.TicketRegisterDto;
 import com.app.spotick.domain.entity.ticket.Ticket;
+import com.app.spotick.domain.entity.ticket.TicketFile;
 import com.app.spotick.domain.entity.ticket.TicketGrade;
 import com.app.spotick.domain.entity.user.User;
+import com.app.spotick.domain.type.post.PostStatus;
 import com.app.spotick.repository.ticket.TicketRepository;
 import com.app.spotick.repository.ticket.grade.TicketGradeRepository;
 import com.app.spotick.repository.user.UserRepository;
@@ -34,14 +36,17 @@ public class TicketServiceImpl implements TicketService {
     public void registerTicket(TicketRegisterDto ticketRegisterDto, Long userId) throws IOException {
         User tmpUser = userRepository.getReferenceById(userId);
 
+        // 티켓 이벤트 파일 저장
+        TicketFile ticketFile = ticketFileService.registerAndSaveTicketFile(ticketRegisterDto.getTicketFile());
+
         Ticket ticketEntity = ticketRegisterDto.toEntity();
         ticketEntity.setUser(tmpUser);
+        ticketEntity.setStatus(PostStatus.REGISTRATION_PENDING);
+        ticketEntity.setFile(ticketFile);
 
         // 티켓 이벤트 db저장
         Ticket savedTicket = ticketRepository.save(ticketEntity);
 
-        // 티켓 이벤트 파일 저장
-        ticketFileService.registerAndSaveTicketFile(ticketRegisterDto.getTicketFile(), savedTicket);
 
         // ticketGrades를 엔티티 타입으로 변환 후 entity리스트로 변환 -> 이후 saveAll
         List<TicketGrade> ticketGradeEntities = ticketRegisterDto.getTicketGrades().stream()

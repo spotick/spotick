@@ -45,23 +45,32 @@ public class Ticket extends PostBase {
     private TicketFile ticketFile;
 
     @Builder
-    public Ticket(String title, int viewCount, Double lat, Double lng, Long id, String content, LocalDate startDate, LocalDate endDate, PostAddress ticketEventAddress, PostStatus ticketEventStatus, TicketCategory ticketCategory, String bankName, String accountNumber, String accountHolder, User user) {
+    public Ticket(String title, int viewCount, Double lat, Double lng, Long id, String content, LocalDate startDate, LocalDate endDate, TicketCategory ticketCategory, String bankName, String accountNumber, String accountHolder, PostAddress ticketEventAddress, PostStatus ticketEventStatus, User user, TicketFile ticketFile) {
         super(title, viewCount, lat, lng);
         this.id = id;
         this.content = content;
         this.startDate = startDate;
         this.endDate = endDate;
-        this.ticketEventAddress = ticketEventAddress;
-        this.ticketEventStatus = ticketEventStatus;
         this.ticketCategory = ticketCategory;
         this.bankName = bankName;
         this.accountNumber = accountNumber;
         this.accountHolder = accountHolder;
+        this.ticketEventAddress = ticketEventAddress;
+        this.ticketEventStatus = ticketEventStatus;
         this.user = user;
+        this.ticketFile = ticketFile;
     }
 
     public void setUser(User user){
         this.user = user;
+    }
+
+    public void setStatus(PostStatus ticketEventStatus) {
+        this.ticketEventStatus = ticketEventStatus;
+    }
+
+    public void setFile(TicketFile ticketFile) {
+        this.ticketFile = ticketFile;
     }
 }
 

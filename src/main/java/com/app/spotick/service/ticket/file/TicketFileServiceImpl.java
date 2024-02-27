@@ -27,10 +27,9 @@ public class TicketFileServiceImpl implements TicketFileService {
     @Value("${root.dir}")
     private String ROOT_DIR;
     @Override
-    public void registerAndSaveTicketFile(MultipartFile ticketFile, Ticket ticket) throws IOException {
+    public TicketFile registerAndSaveTicketFile(MultipartFile ticketFile) throws IOException {
         TicketFile file = saveFile(ticketFile);
-        file.setTicket(ticket);
-        ticketFileRepository.save(file);
+        return ticketFileRepository.save(file);
     }
 
     private TicketFile saveFile(MultipartFile promotionFile) throws IOException {
