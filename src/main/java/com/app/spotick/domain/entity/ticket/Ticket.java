@@ -40,8 +40,9 @@ public class Ticket extends PostBase {
     @JoinColumn(name = "USER_ID")
     private User user;
 
-    @OneToMany(mappedBy = "ticket", fetch = FetchType.LAZY)
-    private List<TicketFile> ticketFiles = new ArrayList<>();
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "TICKET_FILE_ID")
+    private TicketFile ticketFile;
 
     @Builder
     public Ticket(String title, int viewCount, Double lat, Double lng, Long id, String content, LocalDate startDate, LocalDate endDate, PostAddress ticketEventAddress, PostStatus ticketEventStatus, TicketCategory ticketCategory, String bankName, String accountNumber, String accountHolder, User user) {
