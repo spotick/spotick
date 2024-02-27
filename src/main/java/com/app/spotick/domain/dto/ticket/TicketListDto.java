@@ -15,17 +15,9 @@ public class TicketListDto {
     private String ticketTitle;
     private String content;
     private TicketCategory ticketCategory;
-    private List<TicketFile> ticketFiles;
-
-
-
-    public TicketListDto(Long ticketId, String ticketTitle, String content, TicketCategory ticketCategory, List<TicketFile> ticketFiles) {
-        this.ticketId = ticketId;
-        this.ticketTitle = ticketTitle;
-        this.content = content;
-        this.ticketCategory = ticketCategory;
-        this.ticketFiles = ticketFiles;
-    }
-
+    private TicketFile ticketFiles;
+    private double evalAvg;
+    private Long evalCount;
+    private Long bookmarkCount;
 
 }

@@ -31,11 +31,9 @@ public class TicketGrade extends Period {
         this.ticket = ticket;
     }
 
-//    private static Map<Integer, Integer> createTicketInfo(Integer price, Integer maxPeople) {
-//        Map<Integer, Integer> ticketDetails = new HashMap<>();
-//        ticketDetails.put(price, maxPeople);
-//        return ticketDetails;
-//    }
+    public void setTicket(Ticket ticket) {
+        this.ticket = ticket;
+    }
 }
 
 

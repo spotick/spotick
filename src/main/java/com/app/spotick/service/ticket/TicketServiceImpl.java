@@ -1,10 +1,12 @@
 package com.app.spotick.service.ticket;
 
 import com.app.spotick.domain.dto.ticket.TicketGradeDto;
+import com.app.spotick.domain.dto.ticket.TicketGradeRegisterDto;
 import com.app.spotick.domain.dto.ticket.TicketListDto;
 import com.app.spotick.domain.dto.ticket.TicketRegisterDto;
 import com.app.spotick.domain.entity.promotion.PromotionBoard;
 import com.app.spotick.domain.entity.ticket.Ticket;
+import com.app.spotick.domain.entity.ticket.TicketGrade;
 import com.app.spotick.domain.entity.user.User;
 import com.app.spotick.repository.ticket.TicketRepository;
 import com.app.spotick.repository.ticket.file.TicketFileRepository;
@@ -22,6 +24,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -34,19 +37,26 @@ public class TicketServiceImpl implements TicketService {
     private final UserRepository userRepository;
     @Override
     public void registerTicket(TicketRegisterDto ticketRegisterDto, Long userId) throws IOException {
-        User writer = userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalStateException("존재하지 않는 회원"));
-        Ticket ticket = ticketRegisterDto.toEntity();
-        ticket.setUser(writer);
+        User tmpUser = userRepository.getReferenceById(userId);
 
-        ticket = ticketRepository.save(ticket);
-//        사진파일 넣기
-        MultipartFile ticketFile = ticketRegisterDto.getTicketFile();
+        Ticket ticketEntity = ticketRegisterDto.toEntity();
+        ticketEntity.setUser(tmpUser);
 
+        // 티켓 이벤트 db저장
+        Ticket savedTicket = ticketRepository.save(ticketEntity);
 
-        log.info("사진 업로드 전");
-        ticketFileService.registerAndSaveTicketFile(ticketFile,ticket);
-        log.info("사진 업로드 후");
+        // 티켓 이벤트 파일 저장
+        ticketFileService.registerAndSaveTicketFile(ticketRegisterDto.getTicketFile(), savedTicket);
+
+        // ticketGrades를 엔티티 타입으로 변환 후 entity리스트로 변환 -> 이후 saveAll
+        List<TicketGrade> ticketGradeEntities = ticketRegisterDto.getTicketGrades().stream()
+                .map(dto -> {
+                    TicketGrade ticketGradeEntity = dto.toEntity();
+                    ticketGradeEntity.setTicket(savedTicket);
+                    return ticketGradeEntity;
+                })
+                .toList();
+        ticketGradeRepository.saveAll(ticketGradeEntities);
     }
 
     @Override
