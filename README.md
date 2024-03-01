@@ -6,6 +6,7 @@
 2. [프로젝트 기획의도](#2-프로젝트-기획의도)
     > [주요 서비스](#2-1-주요-서비스)
 3. [개발 환경](#3-개발-환경)
+    > [버전 정보](#3-1-버전-정보)
 4. [ERD](#4-ERD)
 5. [담당업무 및 진행도](#5-담당업무-및-진행도)
 
@@ -49,6 +50,13 @@
 | DBMS | API | VCS | ETC |
 | --- | --- | --- | --- |
 | <a href="https://www.oracle.com"><img src="https://img.shields.io/badge/Oracle-F80000?logo=oracle"/></a> <a href="https://redis.com/brand-guidelines/"><img src="https://img.shields.io/badge/Redis-DC382D?logo=redis&logoColor=white"/></a> <a href="https://www.h2database.com"><img src="https://img.shields.io/badge/H2%20Database-244a64"/></a> | <a href="https://spring.io/projects/spring-data-jpa"><img src="https://img.shields.io/badge/JPA-6DB33F"/></a> <a href="https://www.bootpay.co.kr/"><img src="https://img.shields.io/badge/bootpay-4529e5"/></a> <a href="https://oauth.net/2/"><img src="https://img.shields.io/badge/OAuth2.0-000000"/></a> <br> <a href="https://coolsms.co.kr/"><img src="https://img.shields.io/badge/coolsms-327AB8"/></a> <a href="https://openai.com/"><img src="https://img.shields.io/badge/openAi-412991?logo=openai"/></a> | <a href="https://git-scm.com/downloads"><img src="https://img.shields.io/badge/Git-F05032?logo=git&logoColor=white"/></a> <a href="https://github.com/"><img src="https://img.shields.io/badge/GitHub-181717?logo=github"/></a> | <a href="https://www.thymeleaf.org/"><img src="https://img.shields.io/badge/Thymeleaf-005F0F?logo=thymeleaf"/></a> <a href="https://aws.amazon.com/"><img src="https://img.shields.io/badge/AWS-FF9900?logo=amazonaws"/></a> <a href="https://www.postman.com/"><img src="https://img.shields.io/badge/Postman-FF6C37?logo=postman&logoColor=white"/></a> <br> <a href="https://tomcat.apache.org/"><img src="https://img.shields.io/badge/Tomcat-F8DC75?logo=apachetomcat&logoColor=black"/></a> <a href="https://gradle.org/"><img src="https://img.shields.io/badge/Gradle-02303A?logo=gradle&logoColor=white"/></a> |
+
+### 3-1 버전 정보
+<a href="https://spring.io/"><img src="https://img.shields.io/badge/3.2.0-Spring-6DB33F?logo=spring&logoColor=6DB33F"/></a>
+<a href="https://www.java.com"><img src="https://img.shields.io/badge/JDK%2017-Java-007396"/></a>
+<a href="https://hibernate.org/"><img src="https://img.shields.io/badge/6.1.5.Final-Hibernate-59666C?logo=hibernate&logoColor=white"/></a>
+ <a href="https://www.oracle.com"><img src="https://img.shields.io/badge/11G%20Express-Oracle-F80000?logo=oracle&logoColor=F80000"/></a>
+ <a href="https://redis.com/brand-guidelines/"><img src="https://img.shields.io/badge/3.0.504-Redis-DC382D?logo=redis&logoColor=DC382D"/></a>
 
 
 ## 4. ERD
