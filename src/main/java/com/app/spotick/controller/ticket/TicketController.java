@@ -1,19 +1,20 @@
 package com.app.spotick.controller.ticket;
 
+import com.app.spotick.domain.dto.ticket.TicketListDto;
 import com.app.spotick.domain.dto.ticket.TicketRegisterDto;
 import com.app.spotick.domain.dto.user.UserDetailsDto;
 import com.app.spotick.service.ticket.TicketService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 
@@ -25,8 +26,16 @@ public class TicketController {
     private final TicketService ticketService;
 
     @GetMapping("/list")
-    public void goToList() {
+    public void goToList(@RequestParam(name = "page", defaultValue = "0") int page,
+                         @AuthenticationPrincipal UserDetailsDto userDetailsDto,
+                         Model model) {
+        Pageable pageable = PageRequest.of(page, 12);
 
+        Slice<TicketListDto> ticketList = ticketService.findTicketListPage(pageable, userDetailsDto.getId());
+
+        System.out.println("ticketList.getContent() = " + ticketList.getContent());
+
+        model.addAttribute("ticketList", ticketList);
     }
 
     @GetMapping("/detail")
