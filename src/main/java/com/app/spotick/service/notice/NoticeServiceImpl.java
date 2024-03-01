@@ -4,6 +4,7 @@ import com.app.spotick.api.dto.notice.NoticeDto;
 import com.app.spotick.domain.entity.notice.Notice;
 import com.app.spotick.domain.entity.user.User;
 import com.app.spotick.domain.type.notice.NoticeStatus;
+import com.app.spotick.domain.type.notice.NoticeType;
 import com.app.spotick.repository.notice.NoticeRepository;
 import com.app.spotick.repository.user.UserRepository;
 import jakarta.annotation.Nullable;
@@ -39,13 +40,13 @@ public class NoticeServiceImpl implements NoticeService {
     }
 
     @Override
-    public void saveNotice(@NotNull String noticeType, @NotNull Long userId, @Nullable String title, @Nullable String content) {
+    public void saveNotice(@NotNull NoticeType noticeType, @NotNull Long userId, @Nullable String title, @Nullable String content) {
         User tmpUser = userRepository.getReferenceById(userId);
 
         Notice notice;
 
         switch (noticeType) {
-            case ("inquiryResponse"): {
+            case INQUIRY_RESPONSE: {
                 notice = Notice.builder()
                         .title("문의 답변")
                         .content("문의가 답변되었습니다. 지금 확인해보세요.")
@@ -55,7 +56,16 @@ public class NoticeServiceImpl implements NoticeService {
                         .build();
                 break;
             }
-
+            case INQUIRY_REGISTER:{
+                notice = Notice.builder()
+                        .title("문의 등록")
+                        .content("문의가 등록되었습니다. 지금 확인해보세요.")
+                        .link("/mypage/inquiries")
+                        .noticeStatus(NoticeStatus.UNREAD)
+                        .user(tmpUser)
+                        .build();
+                break;
+            }
             default: {
                 notice = Notice.builder()
                         .title(title)
