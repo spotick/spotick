@@ -32,12 +32,6 @@ public class PlaceInquiryRestController {
     public ResponseEntity<PlaceInquiryDto.Response> inquiryRegister(@AuthenticationPrincipal UserDetailsDto userDetailsDto,
                                           @RequestBody PlaceInquiryDto.Request inquiryDto){
 
-        Enum<PlaceReservationStatus> completed = PlaceReservationStatus.COMPLETED;
-        Enum<PostStatus> t = PostStatus.APPROVED;
-
-
-
-
         PlaceInquiryDto.Response inquiryDtoResp = inquiryService.register(inquiryDto, userDetailsDto.getId());
         return ResponseEntity.ok()
                 .body(inquiryDtoResp);

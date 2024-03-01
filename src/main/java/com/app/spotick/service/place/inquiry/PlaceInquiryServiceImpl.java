@@ -7,6 +7,7 @@ import com.app.spotick.domain.dto.place.inquiry.UnansweredInquiryDto;
 import com.app.spotick.domain.entity.place.Place;
 import com.app.spotick.domain.entity.place.PlaceInquiry;
 import com.app.spotick.domain.entity.user.User;
+import com.app.spotick.domain.type.notice.NoticeType;
 import com.app.spotick.repository.place.PlaceRepository;
 import com.app.spotick.repository.place.inquiry.PlaceInquiryRepository;
 import com.app.spotick.repository.user.UserRepository;
@@ -32,15 +33,18 @@ public class PlaceInquiryServiceImpl implements PlaceInquiryService {
     @Override
     public PlaceInquiryDto.Response register(PlaceInquiryDto.Request inquiryReq,Long userId) {
         User userProxy = userRepository.getReferenceById(userId);
-        Place placeProxy = placeRepository.getReferenceById(inquiryReq.getPlaceId());
+        Place place = placeRepository.findById(inquiryReq.getPlaceId())
+                .orElseThrow(IllegalStateException::new);
 
         PlaceInquiry placeInquiry = PlaceInquiry.builder()
                 .user(userProxy)
-                .place(placeProxy)
+                .place(place)
                 .title(inquiryReq.getInquiryTitle())
                 .content(inquiryReq.getInquiryContent())
                 .build();
         PlaceInquiry savedInquiry = inquiryRepository.save(placeInquiry);
+
+        noticeService.saveNotice(NoticeType.INQUIRY_REGISTER,place.getUser().getId());
 
         return PlaceInquiryDto.Response.from(savedInquiry);
     }
@@ -75,7 +79,7 @@ public class PlaceInquiryServiceImpl implements PlaceInquiryService {
                 NoSuchElementException::new
         );
 
-        noticeService.saveNotice("inquiryResponse", foundInquiry.getUser().getId(), null, null);
+        noticeService.saveNotice(NoticeType.INQUIRY_RESPONSE, foundInquiry.getUser().getId());
 
         foundInquiry.updateResponse(inquiryResponseDto.getResponse());
     }
