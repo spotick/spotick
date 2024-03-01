@@ -17,10 +17,12 @@ public class TicketManageListDto {
     private Integer minPrice;
     private LocalDate startDate;
     private LocalDate endDate;
-    private TicketFileDto ticketFileDto;
+    private String fileName;
+    private String uuid;
+    private String uploadPath;
     private Long inquiriesCount;
 
-    public TicketManageListDto(Long ticketId, String title, PostAddress ticketAddress, TicketCategory ticketCategory, Integer minPrice, LocalDate startDate, LocalDate endDate, TicketFileDto ticketFileDto, Long inquiriesCount) {
+    public TicketManageListDto(Long ticketId, String title, PostAddress ticketAddress, TicketCategory ticketCategory, Integer minPrice, LocalDate startDate, LocalDate endDate, String fileName, String uuid, String uploadPath, Long inquiriesCount) {
         this.ticketId = ticketId;
         this.title = title;
         this.ticketAddress = ticketAddress;
@@ -28,7 +30,9 @@ public class TicketManageListDto {
         this.minPrice = minPrice;
         this.startDate = startDate;
         this.endDate = endDate;
-        this.ticketFileDto = ticketFileDto;
+        this.fileName = fileName;
+        this.uuid = uuid;
+        this.uploadPath = uploadPath;
         this.inquiriesCount = inquiriesCount;
     }
 }
