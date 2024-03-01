@@ -40,40 +40,16 @@ public class NoticeServiceImpl implements NoticeService {
     }
 
     @Override
-    public void saveNotice(@NotNull NoticeType noticeType, @NotNull Long userId, @Nullable String title, @Nullable String content) {
-        User tmpUser = userRepository.getReferenceById(userId);
+    public void saveNotice(@NotNull NoticeType noticeType, @NotNull Long recipientId) {
+        User recipient = userRepository.getReferenceById(recipientId);
 
-        Notice notice;
-
-        switch (noticeType) {
-            case INQUIRY_RESPONSE: {
-                notice = Notice.builder()
-                        .title("문의 답변")
-                        .content("문의가 답변되었습니다. 지금 확인해보세요.")
-                        .link("/mypage/inquiries")
+        Notice notice = Notice.builder()
+                        .title(noticeType.getTitle())
+                        .content(noticeType.getContent())
+                        .link(noticeType.getLink())
                         .noticeStatus(NoticeStatus.UNREAD)
-                        .user(tmpUser)
+                        .user(recipient)
                         .build();
-                break;
-            }
-            case INQUIRY_REGISTER:{
-                notice = Notice.builder()
-                        .title("문의 등록")
-                        .content("문의가 등록되었습니다. 지금 확인해보세요.")
-                        .link("/mypage/inquiries")
-                        .noticeStatus(NoticeStatus.UNREAD)
-                        .user(tmpUser)
-                        .build();
-                break;
-            }
-            default: {
-                notice = Notice.builder()
-                        .title(title)
-                        .content(content)
-                        .noticeStatus(NoticeStatus.UNREAD)
-                        .build();
-            }
-        }
 
         noticeRepository.save(notice);
     }

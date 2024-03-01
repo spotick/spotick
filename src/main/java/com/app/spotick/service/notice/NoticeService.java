@@ -15,6 +15,6 @@ public interface NoticeService {
 
     void updateStatus(Long noticeId, Long userId, NoticeStatus noticeStatus);
 
-    void saveNotice(@NotNull NoticeType noticeType, @NotNull Long userId, @Nullable String title, @Nullable String content);
+    void saveNotice(@NotNull NoticeType noticeType, @NotNull Long userId);
 
 }

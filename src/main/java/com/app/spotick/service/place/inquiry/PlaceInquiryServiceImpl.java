@@ -44,7 +44,7 @@ public class PlaceInquiryServiceImpl implements PlaceInquiryService {
                 .build();
         PlaceInquiry savedInquiry = inquiryRepository.save(placeInquiry);
 
-        noticeService.saveNotice(NoticeType.INQUIRY_REGISTER,place.getUser().getId(),null,null);
+        noticeService.saveNotice(NoticeType.INQUIRY_REGISTER,place.getUser().getId());
 
         return PlaceInquiryDto.Response.from(savedInquiry);
     }
@@ -79,7 +79,7 @@ public class PlaceInquiryServiceImpl implements PlaceInquiryService {
                 NoSuchElementException::new
         );
 
-        noticeService.saveNotice(NoticeType.INQUIRY_RESPONSE, foundInquiry.getUser().getId(), null, null);
+        noticeService.saveNotice(NoticeType.INQUIRY_RESPONSE, foundInquiry.getUser().getId());
 
         foundInquiry.updateResponse(inquiryResponseDto.getResponse());
     }
