@@ -14,8 +14,8 @@ import com.app.spotick.repository.user.UserRepository;
 import com.app.spotick.service.ticket.file.TicketFileService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,7 +24,6 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Service
-@Slf4j
 @Transactional
 @RequiredArgsConstructor
 public class TicketServiceImpl implements TicketService {
@@ -60,13 +59,8 @@ public class TicketServiceImpl implements TicketService {
     }
 
     @Override
-    public void removeTicket(Long ticketId) {
-        ticketRepository.deleteById(ticketId);
-    }
-
-    @Override
-    public Page<TicketListDto> findTicketList(Pageable pageable) {
-        return null;
+    public Slice<TicketListDto> findTicketListPage(Pageable pageable, Long userId) {
+        return ticketRepository.findTicketListPage(pageable, userId);
     }
 
     @Override

@@ -1,6 +1,7 @@
 package com.app.spotick.repository.ticket;
 
 import com.app.spotick.domain.dto.page.TicketPage;
+import com.app.spotick.domain.dto.ticket.TicketListDto;
 import com.app.spotick.domain.embedded.post.PostAddress;
 import com.app.spotick.domain.entity.ticket.Ticket;
 import com.app.spotick.domain.entity.ticket.TicketFile;
@@ -23,6 +24,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.test.annotation.Commit;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -77,16 +79,6 @@ class TicketRepositoryTest {
         userRepository.save(user2);
 
         for (int i = 0; i < 50; i++) {
-            ticket = Ticket.builder()
-                    .title("테스트 제목" + i)
-                    .content("테스트 내용" + i)
-                    .ticketCategory(TicketCategory.CONCERT)
-                    .ticketEventAddress(new PostAddress("서울특별시 강남구 테헤란로 " + i, "" + i))
-                    .user(user2)
-                    .ticketEventStatus(PostStatus.APPROVED)
-                    .build();
-            ticketRepository.save(ticket);
-
             TicketFile ticketFile = TicketFile.builder()
                     .uuid(UUID.randomUUID().toString())
                     .fileName("테스트")
@@ -94,6 +86,18 @@ class TicketRepositoryTest {
                     .ticket(ticket)
                     .build();
             ticketFileRepository.save(ticketFile);
+
+            ticket = Ticket.builder()
+                    .title("테스트 제목" + i)
+                    .content("테스트 내용" + i)
+                    .ticketCategory(TicketCategory.CONCERT)
+                    .ticketEventAddress(new PostAddress("서울특별시 강남구 테헤란로 " + i, "" + i))
+                    .user(user2)
+                    .ticketEventStatus(PostStatus.APPROVED)
+                    .ticketFile(ticketFile)
+                    .build();
+            ticketRepository.save(ticket);
+
             List<TicketGrade> ticketGrades = new ArrayList<>();
 
             for (int j = 0; j < 3; j++) {
@@ -121,8 +125,8 @@ class TicketRepositoryTest {
         Pageable pageable = PageRequest.of(0, 5);
 
 
-        TicketPage ticketPage = ticketRepository.findHostTicketListByUserId(user2.getId(), pageable, TicketRequestType.all);
+        Slice<TicketListDto> ticketListPage = ticketRepository.findTicketListPage(pageable, null);
 
-        System.out.println("contents = " + ticketPage.getPage().getContent());
+        System.out.println("contents = " + ticketListPage.getContent());
     }
 }

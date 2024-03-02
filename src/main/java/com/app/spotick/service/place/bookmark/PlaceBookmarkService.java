@@ -1,4 +1,4 @@
-package com.app.spotick.service.place;
+package com.app.spotick.service.place.bookmark;
 
 public interface PlaceBookmarkService {
     boolean bookmark(Long placeId, Long userId);

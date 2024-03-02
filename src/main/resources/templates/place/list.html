@@ -2494,10 +2494,12 @@
                         </div>
                     </div>
                     <button class="ItemBookMarkBtn" th:data-placeid="${place.id}" type="button">
-                        <span th:class="${!place.isBookmarkChecked?'':'none'}"><i
-                                class="fa-regular fa-bookmark"></i></span>
-                        <span th:class="${place.isBookmarkChecked?'':'none'}"><i class="fa-solid fa-bookmark"
-                                                                                 style="color: white"></i></span>
+                        <span th:class="${!place.isBookmarkChecked?'':'none'}">
+                            <i class="fa-regular fa-bookmark"></i>
+                        </span>
+                        <span th:class="${place.isBookmarkChecked?'':'none'}">
+                            <i class="fa-solid fa-bookmark" style="color: white"></i>
+                        </span>
                     </button>
                 </div>
                 <div class="ItemTextContainer">
