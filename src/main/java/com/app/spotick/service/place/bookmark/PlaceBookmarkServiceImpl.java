@@ -1,4 +1,4 @@
-package com.app.spotick.service.place;
+package com.app.spotick.service.place.bookmark;
 
 import com.app.spotick.domain.entity.place.Place;
 import com.app.spotick.domain.entity.place.PlaceBookmark;
