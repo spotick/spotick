@@ -30,10 +30,9 @@ public class TicketController {
                          @AuthenticationPrincipal UserDetailsDto userDetailsDto,
                          Model model) {
         Pageable pageable = PageRequest.of(page, 12);
+        Long userId = userDetailsDto == null ? null : userDetailsDto.getId();
 
-        Slice<TicketListDto> ticketList = ticketService.findTicketListPage(pageable, userDetailsDto.getId());
-
-        System.out.println("ticketList.getContent() = " + ticketList.getContent());
+        Slice<TicketListDto> ticketList = ticketService.findTicketListPage(pageable, userId);
 
         model.addAttribute("ticketList", ticketList);
     }
