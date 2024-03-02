@@ -1,3 +1,5 @@
+import {requestLike} from "../modules/likeFetch.js"
+
 // ===================================================================================================================
 // 필터쪽 체크박스
 const checkboxes = document.querySelectorAll('input[type="checkbox"]');
@@ -56,17 +58,17 @@ listItems.forEach(item => {
 });
 
 // 필터 모달창 나오기
-document.querySelector('.FilterBtn').addEventListener("click", function(){
+document.querySelector('.FilterBtn').addEventListener("click", function () {
     document.querySelector('.FilterModalContainer').classList.add('On');
 })
 
 // 필터 모달창 숨기기
-document.querySelector('.FilterModalCloseBtn').addEventListener("click", function(){
+document.querySelector('.FilterModalCloseBtn').addEventListener("click", function () {
     document.querySelector('.FilterModalContainer').classList.remove('On');
 })
 
 // 필터 적용 버튼
-document.querySelector('.FilterSubmitBtn').addEventListener("click", function(){
+document.querySelector('.FilterSubmitBtn').addEventListener("click", function () {
     document.querySelector('.FilterModalContainer').classList.remove('On');
 })
 
@@ -160,7 +162,6 @@ checkboxes.forEach(checkbox => {
         }
 
 
-
         const checkedCheckboxes = document.querySelectorAll('input[type="checkbox"]:checked');
         const numberOfCheckedCheckboxes = checkedCheckboxes.length;
 
@@ -171,11 +172,11 @@ checkboxes.forEach(checkbox => {
 
         if (numberOfCheckedCheckboxes === 5) {
             checkboxes.forEach(checkbox => {
-                if(!checkbox.checked && checkbox.name !== "전체"){
+                if (!checkbox.checked && checkbox.name !== "전체") {
                     checkbox.disabled = true;
                 }
             })
-        }else{
+        } else {
             checkboxes.forEach(checkbox => {
                 checkbox.disabled = false;
             })
@@ -200,7 +201,7 @@ resetButton.addEventListener('click', function () {
 });
 
 // 체크박스 전체 해제
-function reset(){
+function reset() {
     // 전체 체크박스 해제
     checkboxes.forEach(checkbox => {
         checkbox.checked = false;
@@ -251,3 +252,35 @@ function toggleCityContainer(targetId) {
         targetContainer.classList.add('On');
     }
 }
+
+function changeLike(btn, status) {
+    // status에 따라서 클래스 변경
+    const off = btn.children[0];
+    const on = btn.children[1];
+
+    if (status) {
+        off.classList.add('none');
+        on.classList.remove('none')
+    } else {
+        off.classList.remove('none');
+        on.classList.add('none')
+    }
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////
+HTMLCollection.prototype.forEach = Array.prototype.forEach;
+
+document.getElementsByClassName('ItemLikeBtn').forEach(likeBtn => {
+    likeBtn.addEventListener('click', function () {
+        let status = this.getAttribute('data-status');
+        const ticketId = this.getAttribute('data-id');
+
+        requestLike(status, ticketId, (result) => {
+            this.setAttribute('data-status', result);
+
+            changeLike(this, result);
+        });
+    })
+});
+
+

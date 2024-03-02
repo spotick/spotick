@@ -21,7 +21,7 @@ public class LikeRestController {
         status : 현재 좋아요 상태에 따른 결과값 처리이다. true일 시 좋아요가 되어있는 상태 / false일 시 좋아요가 되어있지 않은 상태
      */
     @GetMapping("/like")
-    public boolean doLike(@RequestParam("status") boolean status,
+    public boolean like(@RequestParam("status") boolean status,
                           @RequestParam("ticketId") Long ticketId,
                           @AuthenticationPrincipal UserDetailsDto userDetailsDto) {
 
