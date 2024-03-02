@@ -272,6 +272,13 @@ HTMLCollection.prototype.forEach = Array.prototype.forEach;
 
 document.getElementsByClassName('ItemLikeBtn').forEach(likeBtn => {
     likeBtn.addEventListener('click', function () {
+        let isLoggedIn = document.getElementById('isLoggedIn').value;
+        if (isLoggedIn === 'false') {
+            alert('로그인이 필요한 서비스 입니다');
+            location.href = '/user/login';
+            return;
+        }
+
         let status = this.getAttribute('data-status');
         const ticketId = this.getAttribute('data-id');
 
