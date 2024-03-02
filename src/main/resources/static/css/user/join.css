@@ -35,7 +35,6 @@ input{
 .main-container {
     max-width: 1170px;
     margin: 0 auto;
-    padding: 60px 0 60px;
     background-color: transparent;
 }
 
@@ -44,7 +43,7 @@ input{
     border-radius: 10px;
     border: 1px solid rgb(223, 226, 231);
     width: 640px;
-    margin: 95px auto 0 auto;
+    margin: 0 auto 0 auto;
     padding: 50px 70px;
 }
 

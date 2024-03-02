@@ -18,6 +18,11 @@
 
 <div th:replace="~{/global-templates/header-footer :: header}"></div>
 
+<div class="modal-bg">
+    <div th:replace="~{global-templates/global-dialogue-modal :: global-dialogue}"></div>
+    <div th:replace="~{global-templates/global-dialogue-modal :: global-selection}"></div>
+</div>
+
 <div id="page-body">
     <div id="ListContainer">
         <!-- 카테고리 네비 -->
@@ -2487,7 +2492,7 @@
                                 </div>
                             </div>
                         </a>
-                        <button class="ItemLikeBtn" type="button" th:data-status="*{isLiked}" th:data-id="*{ticketId}">
+                        <button class="ItemLikeBtn" th:data-id="*{ticketId}" th:data-status="*{isLiked}" type="button">
                             <span th:class="*{!isLiked} ? '' : 'none'">
                                 <img alt="좋아요" src="/imgs/heart_line_white_shadow.d5d214d0.png">
                             </span>
@@ -2523,6 +2528,9 @@
         </div>
     </div>
 </div>
+
+<input id="isLoggedIn" th:value="${#authorization.expression('isAuthenticated()')}" type="hidden"/>
+<input id="searchKeyword" type="hidden" th:value="${param.keyword}">
 
 <div th:replace="~{/global-templates/header-footer :: footer}"></div>
 </body>
