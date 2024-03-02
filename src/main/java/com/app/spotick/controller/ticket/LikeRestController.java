@@ -28,14 +28,12 @@ public class LikeRestController {
         // status가 true이면 이미 like 되어있는 상태 -> delete
         // status가 false이면 like가 되어있지 않은 상태 -> insert
 
-        Long userId = 1L;
-
         if (!status) {
-            ticketLikeService.doLike(ticketId, userId);
+            ticketLikeService.doLike(ticketId, userDetailsDto.getId());
 
             return true;
         } else {
-            ticketLikeService.undoLike(ticketId, userId);
+            ticketLikeService.undoLike(ticketId, userDetailsDto.getId());
 
             return false;
         }
