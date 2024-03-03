@@ -3,6 +3,7 @@ package com.app.spotick.domain.dto.ticket;
 import com.app.spotick.domain.embedded.post.PostAddress;
 import com.app.spotick.domain.entity.ticket.Ticket;
 import com.app.spotick.domain.type.ticket.TicketCategory;
+import com.app.spotick.domain.type.ticket.TicketRatingType;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -46,6 +47,8 @@ public class TicketRegisterDto {
     @NotBlank(message = "주소 및 상세주소는 필수 입력사항입니다.")
     private String placeAddressDetail;
 
+    private TicketRatingType ticketRatingType;
+
     private TicketCategory category;
     @NotNull(message = "지도에 장소의 위치를 찍어주세요.")
     private Double placeLat;
@@ -67,6 +70,7 @@ public class TicketRegisterDto {
                 .bankName(bankName)
                 .accountNumber(accountNumber)
                 .accountHolder(accountHolder)
+                .ticketRatingType(ticketRatingType)
                 .ticketCategory(category)
                 .ticketEventAddress(new PostAddress(placeAddress,placeAddressDetail))
                 .lat(placeLat)
