@@ -289,9 +289,20 @@ document.querySelectorAll('.hc-content-type').forEach(button => {
     });
 });
 
-document.getElementById('usermenu').addEventListener('click', toggleUsermenu);
+document.addEventListener('DOMContentLoaded', function() {
+    const usermenuElement = document.getElementById('usermenu');
+    if (usermenuElement) {
+        usermenuElement.addEventListener('click', toggleUsermenu);
+    }
 
-notification.addEventListener('click', toggleNotification);
+    if (notification) {
+        notification.addEventListener('click', toggleNotification);
+    }
+
+    if (notificationReload) {
+        notificationReload.addEventListener('click', notificationService.requestNotificationList);
+    }
+});
 
 document.getElementById('footerHome').addEventListener('click', toggleFooterHome)
 
@@ -300,8 +311,6 @@ document.addEventListener("DOMContentLoaded", function () {
         notificationService.requestNotificationList();
     }
 });
-
-notificationReload.addEventListener('click', notificationService.requestNotificationList);
 
 // 장소 검색
 $('#searchInput').on('keyup',function (e){

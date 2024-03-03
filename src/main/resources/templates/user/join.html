@@ -11,7 +11,7 @@
 <body>
 
 <header th:replace="~{global-templates/header-footer :: header}"></header>
-<div class="body flex-align-center">
+<div id="page-body" class="body flex-align-center">
     <div class="main-container">
 
         <form th:action="@{/user/join}" method="post" class="join-wrap">
@@ -96,7 +96,7 @@
 
 <script src="https://kit.fontawesome.com/c6992f5b12.js" crossorigin="anonymous"></script>
 <script src="https://code.jquery.com/jquery-3.6.4.js"></script>
-<script th:src="@{/js/global-js/global.js}"></script>
+<script th:src="@{/js/global-js/global.js}" type="module"></script>
 <script th:src="@{/js/global-js/loading.js}"></script>
 <script th:src="@{/js/user/join.js}"></script>
 </body>
