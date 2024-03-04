@@ -922,6 +922,11 @@ img {
     justify-content: space-between;
 }
 
+.space-evenly {
+    display: flex;
+    justify-content: space-evenly;
+}
+
 .error-content, .error-score {
     min-height: 20px;
     line-height: 20px;

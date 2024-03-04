@@ -1,6 +1,7 @@
 package com.app.spotick.service.ticket;
 
-import com.app.spotick.domain.dto.ticket.TicketGradeDto;
+import com.app.spotick.domain.dto.ticket.TicketDetailDto;
+import com.app.spotick.domain.dto.ticket.TicketGradeSaleInfoDto;
 import com.app.spotick.domain.dto.ticket.TicketListDto;
 import com.app.spotick.domain.dto.ticket.TicketRegisterDto;
 import com.app.spotick.domain.entity.ticket.Ticket;
@@ -13,7 +14,6 @@ import com.app.spotick.repository.ticket.grade.TicketGradeRepository;
 import com.app.spotick.repository.user.UserRepository;
 import com.app.spotick.service.ticket.file.TicketFileService;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
@@ -22,6 +22,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -64,7 +66,16 @@ public class TicketServiceImpl implements TicketService {
     }
 
     @Override
-    public List<TicketGradeDto> findTicketGrades(Long ticketId, LocalDate date) {
+    public List<TicketGradeSaleInfoDto> findTicketGrades(Long ticketId, LocalDate date) {
         return ticketGradeRepository.findTicketGradesByTicketId(ticketId, date);
+    }
+
+    @Override
+    public TicketDetailDto findTicketDetailById(Long ticketId, Long userId) {
+        TicketDetailDto content = ticketRepository.findTicketDetailById(ticketId, userId).orElseThrow(
+                NoSuchElementException::new
+        );
+
+        return content;
     }
 }

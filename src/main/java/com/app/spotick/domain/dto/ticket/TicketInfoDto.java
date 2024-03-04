@@ -4,7 +4,6 @@ import com.app.spotick.domain.embedded.post.PostAddress;
 import com.app.spotick.domain.type.ticket.TicketCategory;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -17,7 +16,7 @@ public class TicketInfoDto {
     private TicketCategory ticketCategory;
     private LocalDate startDate;
     private LocalDate endDate;
-    private List<TicketGradeDto> ticketGradeDtos;
+    private List<TicketGradeSaleInfoDto> ticketGradeSaleInfoDtos;
 
     public TicketInfoDto(Long ticketId, String title, PostAddress ticketAddress, TicketCategory ticketCategory, LocalDate startDate, LocalDate endDate) {
         this.ticketId = ticketId;

@@ -2,13 +2,9 @@ package com.app.spotick.repository.ticket;
 
 import com.app.spotick.domain.dto.page.TicketPage;
 import com.app.spotick.domain.dto.ticket.*;
-import com.app.spotick.domain.entity.ticket.QTicketLike;
 import com.app.spotick.domain.type.post.PostStatus;
 import com.app.spotick.domain.type.ticket.TicketRequestType;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.querydsl.core.BooleanBuilder;
-import com.querydsl.core.Tuple;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Expressions;
@@ -17,7 +13,6 @@ import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
@@ -25,17 +20,15 @@ import org.springframework.data.support.PageableExecutionUtils;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
-import static com.app.spotick.domain.entity.place.QPlaceBookmark.placeBookmark;
 import static com.app.spotick.domain.entity.ticket.QTicket.*;
 import static com.app.spotick.domain.entity.ticket.QTicketFile.*;
 import static com.app.spotick.domain.entity.ticket.QTicketGrade.*;
 import static com.app.spotick.domain.entity.ticket.QTicketInquiry.*;
 import static com.app.spotick.domain.entity.ticket.QTicketLike.*;
+import static com.app.spotick.domain.entity.ticket.QTicketOrder.*;
 
 @RequiredArgsConstructor
 public class TicketQDSLRepositoryImpl implements TicketQDSLRepository {
@@ -160,8 +153,8 @@ public class TicketQDSLRepositoryImpl implements TicketQDSLRepository {
                 )
                 .fetchOne();
 
-        List<TicketGradeDto> ticketGrades = queryFactory
-                .select(Projections.constructor(TicketGradeDto.class,
+        List<TicketGradeSaleInfoDto> ticketGrades = queryFactory
+                .select(Projections.constructor(TicketGradeSaleInfoDto.class,
                         ticketGrade.gradeName,
                         ticketGrade.price,
                         ticketGrade.id, //불필요 정보
@@ -172,17 +165,13 @@ public class TicketQDSLRepositoryImpl implements TicketQDSLRepository {
                 .orderBy(ticketGrade.id.asc(), ticketGrade.ticket.id.desc())
                 .fetch();
 
-        Objects.requireNonNull(content).setTicketGradeDtos(ticketGrades);
+        Objects.requireNonNull(content).setTicketGradeSaleInfoDtos(ticketGrades);
 
         return Optional.of(content);
     }
 
     @Override
     public Slice<TicketListDto> findTicketListPage(Pageable pageable, Long userId) {
-
-        JPQLQuery<Long> likeCount = JPAExpressions.select(ticketLike.count())
-                .from(ticketLike)
-                .where(ticketLike.ticket.eq(ticket));
 
         JPQLQuery<Integer> lowestPrice = JPAExpressions.select(ticketGrade.price.min())
                 .from(ticketGrade)
@@ -211,7 +200,7 @@ public class TicketQDSLRepositoryImpl implements TicketQDSLRepository {
                         ticket.ticketFile.fileName,
                         ticket.ticketFile.uuid,
                         ticket.ticketFile.uploadPath,
-                        likeCount,
+                        likeCount(),
                         lowestPrice,
                         ticket.ticketEventAddress.address,
                         isLiked
@@ -229,4 +218,39 @@ public class TicketQDSLRepositoryImpl implements TicketQDSLRepository {
 
         return new SliceImpl<>(contents, pageable, hasNext);
     }
+
+    @Override
+    public Optional<TicketDetailDto> findTicketDetailById(Long ticketId, Long userId) {
+
+        // todo: startDate ~ endDate 사이의 각 등급들과 그 등급들의 판매갯수가 몇개인지 가져올 수 있어야 하며 가능하다면 하나의 쿼리로 해결해야함.
+
+        TicketDetailDto content = queryFactory
+                .from(ticket)
+                .where(ticket.id.eq(ticketId))
+                .select(Projections.constructor(TicketDetailDto.class,
+                        ticket.id,
+                        ticket.title,
+                        ticket.content,
+                        ticket.startDate,
+                        ticket.endDate,
+                        ticket.ticketCategory,
+                        ticket.ticketEventAddress,
+                        ticket.ticketRatingType,
+                        ticket.ticketFile.fileName,
+                        ticket.ticketFile.uuid,
+                        ticket.ticketFile.uploadPath,
+                        likeCount()
+                ))
+                .fetchOne();
+
+
+        return Optional.ofNullable(content);
+    }
+
+    private JPQLQuery<Long> likeCount() {
+        return JPAExpressions.select(ticketLike.count())
+                .from(ticketLike)
+                .where(ticketLike.ticket.eq(ticket));
+    }
+
 }

@@ -1,5 +1,6 @@
 package com.app.spotick.controller.ticket;
 
+import com.app.spotick.domain.dto.ticket.TicketDetailDto;
 import com.app.spotick.domain.dto.ticket.TicketListDto;
 import com.app.spotick.domain.dto.ticket.TicketRegisterDto;
 import com.app.spotick.domain.dto.user.UserDetailsDto;
@@ -17,6 +18,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.NoSuchElementException;
 
 @Controller
 @Slf4j
@@ -37,9 +39,18 @@ public class TicketController {
         model.addAttribute("ticketList", ticketList);
     }
 
-    @GetMapping("/detail")
-    public void goToDetail() {
+    @GetMapping("/detail/{ticketId}")
+    public String goToDetail(@PathVariable("ticketId") Long ticketId,
+                             @AuthenticationPrincipal UserDetailsDto userDetailsDto,
+                             Model model) {
 
+        Long userId = userDetailsDto == null ? null : userDetailsDto.getId();
+
+        TicketDetailDto ticketDetail = ticketService.findTicketDetailById(ticketId, userId);
+
+        model.addAttribute("ticketDetail", ticketDetail);
+
+        return "ticket/detail";
     }
 
     @GetMapping("/register")
@@ -49,9 +60,9 @@ public class TicketController {
 
     @PostMapping("/register")
     public String ticketRegister(@Valid TicketRegisterDto ticketRegisterDto,
-                                  BindingResult result,
-                                  Model model,
-                                  @AuthenticationPrincipal UserDetailsDto userDetailsDto) {
+                                 BindingResult result,
+                                 Model model,
+                                 @AuthenticationPrincipal UserDetailsDto userDetailsDto) {
         ticketRegisterDto.setUserId(userDetailsDto.getId());
 
         System.out.println("ticketRegisterDto = " + ticketRegisterDto);
