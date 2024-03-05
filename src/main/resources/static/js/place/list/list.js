@@ -77,7 +77,7 @@ document.querySelector('.FilterModalCloseBtn').addEventListener("click", functio
 
 // 필터 적용 버튼
 document.querySelector('.FilterSubmitBtn').addEventListener("click", function () {
-    let city = $('.AreaGroupBtn.On').text();
+    let city = $('.AreaGroupBtn.On').data('target');
     let $input = $('input:checkbox:checked');
 
     area.address.length = 0;
