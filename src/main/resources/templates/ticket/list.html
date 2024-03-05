@@ -6,10 +6,8 @@
           name="viewport">
     <meta content="ie=edge" http-equiv="X-UA-Compatible">
     <title>Spotick | 티켓팅 리스트</title>
-    <link th:href="@{/imgs/logo/favicon.png}" rel="icon">
+    <link rel="icon" th:href="@{/imgs/logo/favicon.png}">
     <link href="/css/global-css/root.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" rel="stylesheet"/>
-    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     <link href="/css/ticket/list-swiper.css" rel="stylesheet">
     <link href="/css/ticket/ticket-list.css" rel="stylesheet">
     <link href="/css/global-css/chat.css" rel="stylesheet">
@@ -19,6 +17,11 @@
 <div th:replace="~{global-templates/chat :: chat}"></div>
 
 <div th:replace="~{/global-templates/header-footer :: header}"></div>
+
+<div class="modal-bg">
+    <div th:replace="~{global-templates/global-dialogue-modal :: global-dialogue}"></div>
+    <div th:replace="~{global-templates/global-dialogue-modal :: global-selection}"></div>
+</div>
 
 <div id="page-body">
     <div id="ListContainer">
@@ -2476,104 +2479,66 @@
         <!-- 리스트 -->
         <div class="ListItemsContainer">
             <!-- 리스트 아이템 한칸 -->
-            <div class="OneItemContainer hover">
-                <div class="OneItemImgContainer">
-                    <div class="swiper ImageSwiper swiper-initialized swiper-horizontal swiper-pointer-events swiper-backface-hidden">
-                        <div class="swiper-wrapper ImageLength" style="transform: translate3d(0px, 0px, 0px);">
-                            <!-- 이미지 한칸 -->
-                            <div class="swiper-slide swiper-slide-active" style="width: 287px;">
-                                <img alt="실내체육관(낙산관)"
-                                     class="ItemImg" height="1350.6666666666665px"
-                                     src="https://img.shareit.kr/prod/img/2022-07-18/b9c77882-e895-42e5-988a-85a7d5c4f0e0.jpg">
+            <div class="OneItemContainer hover" th:each="ticket : ${ticketList}">
+                <th:block th:object="${ticket}">
+                    <div class="OneItemImgContainer">
+                        <a class="swiper" th:href="@{/ticket/detail/{ticketId}(ticketId = *{ticketId})}">
+                            <div class="swiper-wrapper ImageLength">
+                                <!-- 이미지 한칸 -->
+                                <div class="swiper-slide swiper-slide-active" style="width: 287px;">
+                                    <img class="ItemImg"
+                                         th:alt="*{ticketTitle}"
+                                         th:src="|/file/display?fileName=*{uploadPath}/t_*{uuid}_*{fileName}|">
+                                </div>
                             </div>
-                            <!-- 이미지 한칸 -->
-                            <div class="swiper-slide swiper-slide-active" style="width: 287px;">
-                                <img alt="실내체육관(낙산관)"
-                                     class="ItemImg" height="1350.6666666666665px"
-                                     src="https://img.shareit.kr/prod/img/2022-07-18/b9c77882-e895-42e5-988a-85a7d5c4f0e0.jpg">
-                            </div>
-                            <div class="swiper-slide swiper-slide-active" style="width: 287px;">
-                                <img alt="실내체육관(낙산관)"
-                                     class="ItemImg" height="1350.6666666666665px"
-                                     src="https://img.shareit.kr/prod/img/2022-07-18/b9c77882-e895-42e5-988a-85a7d5c4f0e0.jpg">
-                            </div>
-                            <div class="swiper-slide swiper-slide-active" style="width: 287px;">
-                                <img alt="실내체육관(낙산관)"
-                                     class="ItemImg" height="1350.6666666666665px"
-                                     src="https://img.shareit.kr/prod/img/2022-07-18/b9c77882-e895-42e5-988a-85a7d5c4f0e0.jpg">
-                            </div>
-                            <div class="swiper-slide swiper-slide-next" style="width: 287px;">
-                                <img alt="실내체육관(낙산관)"
-                                     class="ItemImg" height="1350.6666666666665px"
-                                     src="https://img.shareit.kr/prod/img/2022-07-18/b7cf013c-5714-4891-8459-785516154830.jpg">
-                            </div>
-                            <div class="swiper-slide" style="width: 287px;">
-                                <img alt="실내체육관(낙산관)"
-                                     class="ItemImg" height="1350.6666666666665px"
-                                     src="https://img.shareit.kr/prod/img/2022-07-18/f66fbf97-3357-4c71-b367-c2dd750510d4.jpg">
-                            </div>
-                            <div class="swiper-slide" style="width: 287px;">
-                                <img alt="실내체육관(낙산관)"
-                                     class="ItemImg" height="1350.6666666666665px"
-                                     src="https://img.shareit.kr/prod/img/2022-07-18/71de7186-c3a1-4983-8c55-a71c3ab94458.jpg">
-                            </div>
-                            <div class="swiper-slide" style="width: 287px;">
-                                <img alt="실내체육관(낙산관)"
-                                     class="ItemImg" height="1350.6666666666665px"
-                                     src="https://img.shareit.kr/prod/img/2022-07-18/dc4e5592-b3ec-4b42-abed-c780e1fb3a59.jpg">
+                        </a>
+                        <button class="ItemLikeBtn" th:data-id="*{ticketId}" th:data-status="*{isLiked}" type="button">
+                            <span th:class="*{!isLiked} ? '' : 'none'">
+                                <img alt="좋아요" src="/imgs/heart_line_white_shadow.d5d214d0.png">
+                            </span>
+                            <span th:class="*{isLiked} ? '' : 'none'">
+                               <img alt="좋아요" src="/imgs/heart_filled_white_shadow.708fbebd.png">
+                            </span>
+                        </button>
+                    </div>
+                    <div class="ItemTextContainer">
+                        <div class="ItemHostNameContainer">
+                            <span class="ItemHostName" th:text="*{postAddress}"></span>
+                            <div class="ItemCountsContainer">
+                                <div class="ItemsLikeCountContainer">
+                                    <img alt="좋아요갯수" class="ItemCountImg"
+                                         src="/imgs/heart_line_thin_gray054.1ef56fe5.svg">
+                                    <span class="ItemCountText" th:text="*{likeCount}"></span>
+                                </div>
                             </div>
                         </div>
-                        <div class="NavigationBtnContainer">
-                            <button class="NavigationBtn RightBtn" type="button">
-                                <img alt="다음" src="/imgs/round_arrow_right_gray024.7f7e18a3.svg">
-                            </button>
-                            <button class="NavigationBtn LeftBtn" type="button">
-                                <img alt="이전" src="/imgs/round_arrow_left_gray024.707193e8.svg">
-                            </button>
+                        <div class="ItemSpaceNameContainer">
+                            <p class="ItemSpaceName" th:text="*{ticketTitle}"></p>
                         </div>
-                        <div class="ItemImgPagination">
-                            <p><span class="snapIndex">1</span>/<span class="slideIndex">5</span></p>
+                        <div class="ItemPriceContainer">
+                            <span class="ItemPrice"
+                                  th:text="${#numbers.formatInteger(ticket.lowestPrice, 3, 'COMMA')} + '원'"></span>
+                            <span class="ItemDate"
+                                  th:text="*{#temporals.format(startDate, 'yyyy.MM.dd') + ' ~ ' + #temporals.format(endDate, 'yyyy.MM.dd')}"></span>
                         </div>
                     </div>
-                    <button class="ItemLikeBtn" onclick="toggleLike(this)" type="button">
-                        <img alt="좋아요" src="/imgs/heart_line_white_shadow.d5d214d0.png">
-                    </button>
-                </div>
-                <div class="ItemTextContainer">
-                    <div class="ItemHostNameContainer">
-                        <span class="ItemHostName">서울 성북구</span>
-                        <div class="ItemCountsContainer">
-                            <div class="ItemsStarCountContainer">
-                                <img alt="후기갯수" class="ItemCountImg"
-                                     src="/imgs/star_filled_paintYellow056.a8eb6e44.svg">
-                                <span class="ItemCountText">4.0(20)</span>
-                            </div>
-                            <div class="ItemsLikeCountContainer">
-                                <img alt="좋아요갯수" class="ItemCountImg" src="/imgs/heart_line_thin_gray054.1ef56fe5.svg">
-                                <span class="ItemCountText">1724</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="ItemSpaceNameContainer">
-                        <p class="ItemSpaceName">낙산관 실내체육관(낙산관)</p>
-                    </div>
-                    <div class="ItemPriceContainer">
-                        <span class="ItemPrice">2023.12.30 ~ 2024.01.30</span>
-                    </div>
-                </div>
+                </th:block>
             </div>
             <!-- 리스트 아이템 한칸 -->
         </div>
     </div>
 </div>
 
+<input id="isLoggedIn" th:value="${#authorization.expression('isAuthenticated()')}" type="hidden"/>
+<input id="searchKeyword" type="hidden" th:value="${param.keyword}">
+
 <div th:replace="~{/global-templates/header-footer :: footer}"></div>
 </body>
 
 <script crossorigin="anonymous" src="https://kit.fontawesome.com/c6992f5b12.js"></script>
 <script src="https://code.jquery.com/jquery-3.6.4.js"></script>
-<script type="module" th:src="@{/js/global-js/global.js}"></script>
+<script th:src="@{/js/global-js/global.js}" type="module"></script>
 <script th:src="@{/js/global-js/chat.js}" type="module"></script>
-<script src="/js/ticket/ticket-list.js"></script>
-<script src="/js/global-js/image-slide.js"></script>
+<script th:src="@{/js/ticket/ticket-list.js}" type="module"></script>
+
 </html>

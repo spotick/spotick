@@ -106,16 +106,30 @@
                               required th:field="*{content}"></textarea>
                 </label>
             </div>
-            <div class="input-wrap">
-                <div class="input-guide flex">
-                    <p class="input-title">행사 카테고리</p>
-                    <img alt="필수입력" src="/imgs/invalid.svg">
+            <div class="space-evenly">
+                <div class="input-wrap">
+                    <div class="input-guide flex">
+                        <p class="input-title">관람 연령</p>
+                        <img alt="필수입력" src="/imgs/invalid.svg">
+                    </div>
+                    <div class="input-box category-box">
+                        <select class="select" th:field="*{ticketRatingType}">
+                            <option th:each="enumValue : ${T(com.app.spotick.domain.type.ticket.TicketRatingType).values()}"
+                                    th:text="${enumValue.displayName}" th:value="${enumValue}"></option>
+                        </select>
+                    </div>
                 </div>
-                <div class="input-box category-box">
-                    <select class="select" th:field="*{category}">
-                        <option th:each="enumValue : ${T(com.app.spotick.domain.type.ticket.TicketCategory).values()}"
-                                th:text="${enumValue.displayName}" th:value="${enumValue}"></option>
-                    </select>
+                <div class="input-wrap">
+                    <div class="input-guide flex">
+                        <p class="input-title">행사 카테고리</p>
+                        <img alt="필수입력" src="/imgs/invalid.svg">
+                    </div>
+                    <div class="input-box category-box">
+                        <select class="select" th:field="*{category}">
+                            <option th:each="enumValue : ${T(com.app.spotick.domain.type.ticket.TicketCategory).values()}"
+                                    th:text="${enumValue.displayName}" th:value="${enumValue}"></option>
+                        </select>
+                    </div>
                 </div>
             </div>
             <div style="position: relative">

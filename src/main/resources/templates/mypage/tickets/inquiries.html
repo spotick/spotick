@@ -93,7 +93,7 @@
                             </thead>
                             <tbody>
 
-                            <th:block th:each="grade:*{ticketGradeDtos}">
+                            <th:block th:each="grade:*{getTicketGradeSaleInfoDtos}">
                                 <th:block th:object="${grade}">
                                     <tr>
                                         <td th:text="*{gradeName}"></td>

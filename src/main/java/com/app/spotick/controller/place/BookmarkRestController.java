@@ -1,7 +1,7 @@
 package com.app.spotick.controller.place;
 
 import com.app.spotick.domain.dto.user.UserDetailsDto;
-import com.app.spotick.service.place.PlaceBookmarkService;
+import com.app.spotick.service.place.bookmark.PlaceBookmarkService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-public class BookmarkController {
+public class BookmarkRestController {
     private final PlaceBookmarkService placeBookmarkService;
 
     /*

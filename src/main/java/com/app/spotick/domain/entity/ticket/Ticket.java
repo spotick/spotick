@@ -7,6 +7,7 @@ import com.app.spotick.domain.embedded.post.PostAddress;
 import com.app.spotick.domain.entity.user.User;
 import com.app.spotick.domain.type.post.PostStatus;
 import com.app.spotick.domain.type.ticket.TicketCategory;
+import com.app.spotick.domain.type.ticket.TicketRatingType;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -34,6 +35,8 @@ public class Ticket extends PostBase {
     @Enumerated(EnumType.STRING)
     private PostAddress ticketEventAddress;
     @Enumerated(EnumType.STRING)
+    private TicketRatingType ticketRatingType;
+    @Enumerated(EnumType.STRING)
     private PostStatus ticketEventStatus;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -44,8 +47,11 @@ public class Ticket extends PostBase {
     @JoinColumn(name = "TICKET_FILE_ID")
     private TicketFile ticketFile;
 
+    @OneToMany(mappedBy = "ticket", fetch = FetchType.LAZY)
+    private List<TicketGrade> ticketGrades = new ArrayList<>();
+
     @Builder
-    public Ticket(String title, int viewCount, Double lat, Double lng, Long id, String content, LocalDate startDate, LocalDate endDate, TicketCategory ticketCategory, String bankName, String accountNumber, String accountHolder, PostAddress ticketEventAddress, PostStatus ticketEventStatus, User user, TicketFile ticketFile) {
+    public Ticket(String title, int viewCount, Double lat, Double lng, Long id, String content, LocalDate startDate, LocalDate endDate, TicketCategory ticketCategory, String bankName, String accountNumber, String accountHolder, PostAddress ticketEventAddress, TicketRatingType ticketRatingType, PostStatus ticketEventStatus, User user, TicketFile ticketFile) {
         super(title, viewCount, lat, lng);
         this.id = id;
         this.content = content;
@@ -56,6 +62,7 @@ public class Ticket extends PostBase {
         this.accountNumber = accountNumber;
         this.accountHolder = accountHolder;
         this.ticketEventAddress = ticketEventAddress;
+        this.ticketRatingType = ticketRatingType;
         this.ticketEventStatus = ticketEventStatus;
         this.user = user;
         this.ticketFile = ticketFile;

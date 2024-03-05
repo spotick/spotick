@@ -1,6 +1,6 @@
 package com.app.spotick.repository.ticket.grade;
 
-import com.app.spotick.domain.dto.ticket.TicketGradeDto;
+import com.app.spotick.domain.dto.ticket.TicketGradeSaleInfoDto;
 import com.app.spotick.domain.entity.ticket.TicketGrade;
 import io.lettuce.core.dynamic.annotation.Param;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -14,7 +14,7 @@ import java.util.List;
 public interface TicketGradeRepository extends JpaRepository<TicketGrade, Long> {
 
     @Query("""
-            select new com.app.spotick.domain.dto.ticket.TicketGradeDto(
+            select new com.app.spotick.domain.dto.ticket.TicketGradeSaleInfoDto(
                 tg.gradeName,
                 tg.price,
                 COALESCE((SELECT SUM(td.quantity) FROM TicketOrderDetail td WHERE td.ticketGrade = tg and td.ticketOrder.eventDate = :date), 0),
@@ -24,6 +24,6 @@ public interface TicketGradeRepository extends JpaRepository<TicketGrade, Long> 
             where tg.ticket.id = :ticketId
             order by tg.id asc
             """)
-    List<TicketGradeDto> findTicketGradesByTicketId(@Param("ticketId") Long ticketId, @Param("date") LocalDate date);
+    List<TicketGradeSaleInfoDto> findTicketGradesByTicketId(@Param("ticketId") Long ticketId, @Param("date") LocalDate date);
 
 }
