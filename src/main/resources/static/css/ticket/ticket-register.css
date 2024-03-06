@@ -368,8 +368,8 @@ input[type="file"] {
 
 /*데이트픽커*/
 .calendar-text{
-    margin: 0 0 17px 17px;
-    padding-top: 335px;
+    margin: 0 0 30px 17px;
+    padding-top: 380px;
 }
 
 #datepicker1{

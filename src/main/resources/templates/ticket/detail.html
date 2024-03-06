@@ -10,12 +10,7 @@
           referrerpolicy="no-referrer" rel="stylesheet"/>
     <link href="/css/global-css/root.css" rel="stylesheet">
     <link href="/css/global-css/datepicker.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" rel="stylesheet"/>
-    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     <link href="/css/ticket/ticket-detail.css" rel="stylesheet">
-    <!--    <link rel="stylesheet" href="/css/place/detail.css"/>-->
-
-    <script src="https://oapi.map.naver.com/openapi/v3/maps.js?ncpClientId=2n25isgxvf" type="text/javascript"></script>
 
     <title>티켓팅 상세보기</title>
 </head>
@@ -84,17 +79,11 @@
                                     <strong class="infoLabel">가격</strong>
                                     <div class="infoDesc">
                                         <ul class="infoPriceList">
-                                            <li class="infoPriceItem">
-                                                <span class="name">R석</span>
-                                                <span class="price">88,000원</span>
-                                            </li>
-                                            <li class="infoPriceItem">
-                                                <span class="name">S석</span>
-                                                <span class="price">66,000원</span>
-                                            </li>
-                                            <li class="infoPriceItem">
-                                                <span class="name">A석</span>
-                                                <span class="price">44,000원</span>
+                                            <li class="infoPriceItem" th:each="grade : *{ticketGradeDtos}"
+                                                th:object="${grade}">
+                                                <span class="name" th:text="*{gradeName}"></span>
+                                                <span class="price"
+                                                      th:text="*{#numbers.formatInteger(price, 3, 'COMMA') + '원'}"></span>
                                             </li>
                                         </ul>
                                     </div>
@@ -133,12 +122,13 @@
                 <!-- 지도 -->
                 <div class="LocationContainer">
                     <p class="TitleText">위치</p>
-                    <!-- 지도 들어갈 위치 -->
+                    <input id="lat" th:value="*{lat}" type="hidden">
+                    <input id="lng" th:value="*{lng}" type="hidden">
                     <div id="map"></div>
-                    <!-- 지도 들어갈 위치 -->
                     <figure class="LocationFigure">
                         <img alt="위치핀" class="LocationImg" src="/imgs/location_filled_sweetBlue046.de36d6ce.svg">
-                        <figure class="LocationFigureCaption">서울 성북구 삼선교로16길 116</figure>
+                        <figure class="LocationFigureCaption"
+                                th:text="*{ticketEventAddress.address + ' ' + ticketEventAddress.addressDetail}"></figure>
                     </figure>
                 </div>
                 <!-- 주의사항 -->
@@ -152,112 +142,6 @@
                             않으며, 목적과 달리 시설물을 사용하실 경우 이용이 제한됩니다.</p>
                     </div>
                 </div>
-                <!-- 리뷰 -->
-                <!--                <div class="ReviewsContainer">-->
-                <!--                    <p class="TitleText">후기-->
-                <!--                        <span class="ReviewTitleCount">20</span>-->
-                <!--                    </p>-->
-                <!--                    <div class="ReviewAverageContainer">-->
-                <!--                        <div class="ReviewAverageTop">-->
-                <!--                            <div class="ReviewStarsContainer">-->
-                <!--                                <div width="80%" class="ReviewStarsFilled">-->
-                <!--                                    <img src="/imgs/star_filled_paintYellow056.a8eb6e44.svg" alt="평점" width="22" class="ReviewStarsImg">-->
-                <!--                                    <img src="/imgs/star_filled_paintYellow056.a8eb6e44.svg" alt="평점" width="22" class="ReviewStarsImg">-->
-                <!--                                    <img src="/imgs/star_filled_paintYellow056.a8eb6e44.svg" alt="평점" width="22" class="ReviewStarsImg">-->
-                <!--                                    <img src="/imgs/star_filled_paintYellow056.a8eb6e44.svg" alt="평점" width="22" class="ReviewStarsImg">-->
-                <!--                                    <img src="/imgs/star_filled_paintYellow056.a8eb6e44.svg" alt="평점" width="22" class="ReviewStarsImg">-->
-                <!--                                </div>-->
-                <!--                                <div class="ReviewStarsDefaults">-->
-                <!--                                    <img src="/imgs/star_filled_gray084.e69177ff.svg" alt="평점" width="22" class="ReviewStarsImg">-->
-                <!--                                    <img src="/imgs/star_filled_gray084.e69177ff.svg" alt="평점" width="22" class="ReviewStarsImg">-->
-                <!--                                    <img src="/imgs/star_filled_gray084.e69177ff.svg" alt="평점" width="22" class="ReviewStarsImg">-->
-                <!--                                    <img src="/imgs/star_filled_gray084.e69177ff.svg" alt="평점" width="22" class="ReviewStarsImg">-->
-                <!--                                    <img src="/imgs/star_filled_gray084.e69177ff.svg" alt="평점" width="22" class="ReviewStarsImg">-->
-                <!--                                </div>-->
-                <!--                            </div>-->
-                <!--                            <span class="ReviewAverageStarCountText">4.0</span>-->
-                <!--                        </div>-->
-                <!--                        <p class="ReviewAverageTexts">-->
-                <!--                            <span>60%</span>의 고객이&nbsp;<span>5점</span>을 주었어요.-->
-                <!--                        </p>-->
-                <!--                    </div>-->
-                <!--                    <div class="ReviewFiltersContainer">-->
-                <!--                        <div class="ReviewFiltersLeftContainer">-->
-                <!--                            <button type="button" class="ReviewFiltersBtnOn">-->
-                <!--                                <span>•</span>전체-->
-                <!--                            </button>-->
-                <!--                            <button type="button" class="ReviewFiltersBtnOff">-->
-                <!--                                <span>•</span>사진후기-->
-                <!--                            </button>-->
-                <!--                            <button type="button" class="ReviewFiltersBtnOff">-->
-                <!--                                <span>•</span>호스트픽-->
-                <!--                            </button>-->
-                <!--                        </div>-->
-                <!--                        <div>-->
-                <!--                            <div class="ReviewSelectBox">-->
-                <!--                                <button type="button" class="ReviewSelectBoxBtn"><span class="ReviewSelectBoxText">인기순</span>-->
-                <!--                                    <img src="/imgs/arrow_down_gray014.f502da9d.svg" alt="날짜 형식" class="ReviewSelectBoxBtnImg">-->
-                <!--                                    &lt;!&ndash; <img src="/imgs/promotion-ticket/arrow_up_gray014.75d8599e.svg" alt="날짜 형식" class="ReviewSelectBoxBtnImg"> &ndash;&gt;-->
-                <!--                                </button>-->
-                <!--                                <div class="ReviewSelectBoxList">-->
-                <!--                                    <button type="button" class="ReviewFilterSortBtnOff">최신순</button>-->
-                <!--                                    <button type="button" class="ReviewFilterSortBtnOff">과거순</button>-->
-                <!--                                    <button type="button" class="ReviewFilterSortBtnOn">인기순</button>-->
-                <!--                                    <button type="button" class="ReviewFilterSortBtnOff">별점높은순</button>-->
-                <!--                                    <button type="button" class="ReviewFilterSortBtnOff">별점낮은순</button>-->
-                <!--                                </div>-->
-                <!--                            </div>-->
-                <!--                        </div>-->
-                <!--                    </div>-->
-                <!--                    &lt;!&ndash; 댓글 한칸 &ndash;&gt;-->
-                <!--                    <div class="ReviewItemContainer">-->
-                <!--                        <div class="ReviewItemRatingContainer">-->
-                <!--                            <div class="ReviewStarsContainer">-->
-                <!--                                <div width="20%" class="ReviewItemStarsFilled">-->
-                <!--                                    <img src="/imgs/star_filled_paintYellow056.a8eb6e44.svg" alt="평점" width="15" class="ReviewItemStarsImg">-->
-                <!--                                    <img src="/imgs/star_filled_paintYellow056.a8eb6e44.svg" alt="평점" width="15" class="ReviewItemStarsImg">-->
-                <!--                                    <img src="/imgs/star_filled_paintYellow056.a8eb6e44.svg" alt="평점" width="15" class="ReviewItemStarsImg">-->
-                <!--                                    <img src="/imgs/star_filled_paintYellow056.a8eb6e44.svg" alt="평점" width="15" class="ReviewItemStarsImg">-->
-                <!--                                    <img src="/imgs/star_filled_paintYellow056.a8eb6e44.svg" alt="평점" width="15" class="ReviewItemStarsImg">-->
-                <!--                                </div>-->
-                <!--                                <div class="ReviewStarsDefaults">-->
-                <!--                                    <img src="/imgs/star_filled_gray084.e69177ff.svg" alt="평점" width="15" class="ReviewItemStarsImg">-->
-                <!--                                    <img src="/imgs/star_filled_gray084.e69177ff.svg" alt="평점" width="15" class="ReviewItemStarsImg">-->
-                <!--                                    <img src="/imgs/star_filled_gray084.e69177ff.svg" alt="평점" width="15" class="ReviewItemStarsImg">-->
-                <!--                                    <img src="/imgs/star_filled_gray084.e69177ff.svg" alt="평점" width="15" class="ReviewItemStarsImg">-->
-                <!--                                    <img src="/imgs/star_filled_gray084.e69177ff.svg" alt="평점" width="15" class="ReviewItemStarsImg">-->
-                <!--                                </div>-->
-                <!--                            </div>-->
-                <!--                            <span class="ReviewItemRating">1.0</span>-->
-                <!--                            <span class="ReviewItemDevider">｜</span>-->
-                <!--                            <span class="ReviewItemWriter">이**</span>-->
-                <!--                            <p class="ReviewItemCreateAt">-->
-                <!--                                <span>｜</span>2022-09-11-->
-                <!--                            </p>-->
-                <!--                        </div>-->
-                <!--                        <div class="ReviewItemGoodsNameContainer">-->
-                <!--                            <span class="ReviewSquareChip">실시간</span>-->
-                <!--                            <span class="ReviewItemGoodsName">생활체육</span>-->
-                <!--                        </div>-->
-                <!--                        <p class="ReviewItemContents">-->
-                <!--                            에어컨도 학교측 사정으로 아예 안되고 배구공도 빌려주지 않음-->
-                <!--                            선풍기 두대로 더워죽는줄 알았어요. 주차비 따로내고 -->
-                <!--                            정말 공간만 빌려줍니다. 이런 서비스로 어떻게 계속 이용할 수 있나요?-->
-                <!--                        </p>-->
-                <!--                        <div class="ReviewItemLikeBtnContainer">-->
-                <!--                            <span class="ReviewItemLikeText">도움이 됐어요</span>-->
-                <!--                            <button type="button" class="ReviewItemLikeBtn">-->
-                <!--                                <img src="/imgs/thumbs_up_line_red056.c797227b.svg" alt="도움이 됐어요" class="ReviewItemLikeBtnImg">5-->
-                <!--                            </button>-->
-                <!--                        </div>-->
-                <!--                    </div>-->
-                <!--                    &lt;!&ndash; 댓글 한칸 &ndash;&gt;-->
-                <!--                    <div class="ReviewMainBtnContainer">-->
-                <!--                        <button type="button" class="ReviewMainBtn">더보기-->
-                <!--                            <img src="/imgs/arrow_down_gray014.f502da9d.svg" alt="더보기" class="ReviewMainBtnIconRight">-->
-                <!--                        </button>-->
-                <!--                    </div>-->
-                <!--                </div>-->
                 <!-- Qna -->
                 <div class="QnaContainer">
                     <div class="QnaTitleContainer">
@@ -496,101 +380,23 @@
                         <div class="calendar-wrap">
                             <div class="choice-box">
                                 <div class="calendar-box">
-                                    <input id="selectedDate" type="hidden">
+                                    <input id="id" th:value="*{ticketId}" type="hidden">
+                                    <input id="startDate" th:value="*{startDate}" type="hidden">
+                                    <input id="endDate" th:value="*{endDate}" type="hidden">
                                     <div id="datepicker"></div>
                                 </div>
                                 <div class="time-choice-wrap"></div>
                             </div>
                             <div class="calendar-ctr-box"></div>
                         </div>
-                        <div class="RadioBoxContainer">
-                            <div class="RadioBox On">
-                                <div class="RadioBoxOutLine">
-                                    <div class="RadioBoxInLine"></div>
-                                </div>
-                                <input name="" type="radio">
-                                <div class="GoodsInfo">
-                                    <div class="GoodsInfoTitleContainer">
-                                        <span class="GoodsInfoTitle">일반(남은인원 20명)</span>
-                                    </div>
-                                    <div>
-                                        <p class="GoodsInfoDiscountedPrice">60,000원</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="flex-align">
-                                <button class="minus"
-                                        onclick="adjustVisitorCount(this.closest('.RadioBoxContainer'), 'decrement')"
-                                        type="button">-
-                                </button>
-                                <div class="reservation-visitors flex-align-center">
-                                    <input class="visitors" max="99" min="1" type="number" value="1">
-                                </div>
-                                <button class="plus"
-                                        onclick="adjustVisitorCount(this.closest('.RadioBoxContainer'), 'increment')"
-                                        type="button">+
-                                </button>
-                            </div>
-                        </div>
-                        <div class="RadioBoxContainer">
-                            <div class="RadioBox On">
-                                <div class="RadioBoxOutLine">
-                                    <div class="RadioBoxInLine"></div>
-                                </div>
-                                <input name="" type="radio">
-                                <div class="GoodsInfo">
-                                    <div class="GoodsInfoTitleContainer">
-                                        <span class="GoodsInfoTitle">VIP(남은인원 10명)</span>
-                                    </div>
-                                    <div>
-                                        <p class="GoodsInfoDiscountedPrice">150,000원</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="flex-align">
-                                <button class="minus"
-                                        onclick="adjustVisitorCount(this.closest('.RadioBoxContainer'), 'decrement')"
-                                        type="button">-
-                                </button>
-                                <div class="reservation-visitors flex-align-center">
-                                    <input class="visitors" max="99" min="1" type="number" value="1">
-                                </div>
-                                <button class="plus"
-                                        onclick="adjustVisitorCount(this.closest('.RadioBoxContainer'), 'increment')"
-                                        type="button">+
-                                </button>
-                            </div>
-                        </div>
-                        <div class="RadioBoxContainer">
-                            <div class="RadioBox">
-                                <div class="RadioBoxOutLine">
-                                    <div class="RadioBoxInLine"></div>
-                                </div>
-                                <input name="" type="radio">
-                                <div class="GoodsInfo">
-                                    <div class="GoodsInfoTitleContainer">
-                                        <span class="GoodsInfoTitle">스탠딩(남은인원 0명)</span>
-                                    </div>
-                                    <div>
-                                        <p class="GoodsInfoDiscountedPrice">50,000원</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="flex-align">
-                                <button class="minus" type="button">-</button>
-                                <div class="reservation-visitors flex-align-center">
-                                    <input class="visitors" disabled max="99" min="1" type="number" value="1">
-                                </div>
-                                <button class="plus" type="button">+</button>
-                            </div>
-                        </div>
+                        <div id="gradeSelectContainer"></div>
                     </div>
                     <div class="GoodsListBtnContainer">
                         <button class="LikeWithReservationButton" type="button">
                             <img alt="좋아요" class="LikeWithReservationButtonImg"
                                  src="/imgs/heart_2line_gray064.40cc6c61.svg">
                         </button>
-                        <button class="GoodsListReservationBtn" type="button">예약하기</button>
+                        <button class="GoodsListReservationBtn" type="button">구매하기</button>
                     </div>
                 </div>
             </div>
@@ -603,11 +409,13 @@
 <script crossorigin="anonymous" src="https://kit.fontawesome.com/c6992f5b12.js"></script>
 <script src="https://code.jquery.com/jquery-3.6.4.js"></script>
 <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+<script src="//dapi.kakao.com/v2/maps/sdk.js?appkey=3dc12d7c2624483dc7c019a0a91b727f&libraries=services"
+        type="text/javascript"></script>
 <script th:src="@{/js/global-js/global.js}" type="module"></script>
 <script th:src="@{/js/global-js/chat.js}" type="module"></script>
-<script src="/js/ticket/calendar.js"></script>
+<script src="/js/ticket/calendar.js" type="module"></script>
 <script src="/js/ticket/ticket-detail-map.js"></script>
-<script src="/js/ticket/ticket-detail.js"></script>
+<script src="/js/ticket/ticket-detail.js" type="module"></script>
 
 <script th:inline="javascript">
     console.log([[${ticketDetail}]])

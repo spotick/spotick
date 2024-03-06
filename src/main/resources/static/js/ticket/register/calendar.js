@@ -18,8 +18,8 @@ $(document).ready(function () {
     $("#datepicker1").datepicker({
         minDate: currentDate,  // 선택할 수 있는 최소 날짜를 현재 날짜로 설정
         onSelect: function (dateText) {
+            $("#datepicker2").datepicker("option", "minDate", dateText);
             updateDateInfo(1);
-            $("#datepicker2").datepicker("option", "minDate", dateText);  // 두 번째 데이트피커의 최소 날짜 설정
         },
         beforeShowDay: function (date) {
             let reservationDate = $("#reservationDate").datepicker('getDate');
@@ -39,8 +39,8 @@ $(document).ready(function () {
     $("#datepicker2").datepicker({
         minDate: currentDate,
         onSelect: function (dateText) {
-            updateDateInfo(2);
             $("#datepicker1").datepicker("option", "maxDate", dateText); // 두 번째 데이트피커 선택 시 첫 번째 데이트피커의 최대 날짜 설정
+            updateDateInfo(2);
         },
         beforeShowDay: function (date) {
             let reservationDate = $("#reservationDate").datepicker('getDate');

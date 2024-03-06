@@ -2,9 +2,11 @@ package com.app.spotick.repository.ticket;
 
 import com.app.spotick.domain.dto.page.TicketPage;
 import com.app.spotick.domain.dto.ticket.*;
+import com.app.spotick.domain.entity.ticket.QTicketOrderDetail;
 import com.app.spotick.domain.type.post.PostStatus;
 import com.app.spotick.domain.type.ticket.TicketRequestType;
 import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.group.GroupBy;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Expressions;
@@ -28,7 +30,8 @@ import static com.app.spotick.domain.entity.ticket.QTicketFile.*;
 import static com.app.spotick.domain.entity.ticket.QTicketGrade.*;
 import static com.app.spotick.domain.entity.ticket.QTicketInquiry.*;
 import static com.app.spotick.domain.entity.ticket.QTicketLike.*;
-import static com.app.spotick.domain.entity.ticket.QTicketOrder.*;
+import static com.querydsl.core.group.GroupBy.groupBy;
+import static com.querydsl.core.group.GroupBy.list;
 
 @RequiredArgsConstructor
 public class TicketQDSLRepositoryImpl implements TicketQDSLRepository {
@@ -224,27 +227,35 @@ public class TicketQDSLRepositoryImpl implements TicketQDSLRepository {
 
         // todo: startDate ~ endDate 사이의 각 등급들과 그 등급들의 판매갯수가 몇개인지 가져올 수 있어야 하며 가능하다면 하나의 쿼리로 해결해야함.
 
-        TicketDetailDto content = queryFactory
+        List<TicketDetailDto> content = queryFactory
                 .from(ticket)
                 .where(ticket.id.eq(ticketId))
-                .select(Projections.constructor(TicketDetailDto.class,
-                        ticket.id,
-                        ticket.title,
-                        ticket.content,
-                        ticket.startDate,
-                        ticket.endDate,
-                        ticket.ticketCategory,
-                        ticket.ticketEventAddress,
-                        ticket.ticketRatingType,
-                        ticket.ticketFile.fileName,
-                        ticket.ticketFile.uuid,
-                        ticket.ticketFile.uploadPath,
-                        likeCount()
-                ))
-                .fetchOne();
+                .leftJoin(ticket.ticketGrades, ticketGrade)
+                .orderBy(ticketGrade.price.asc())
+                .transform(groupBy(ticket.id).list(Projections.constructor(TicketDetailDto.class,
+                                ticket.id,
+                                ticket.title,
+                                ticket.content,
+                                ticket.startDate,
+                                ticket.endDate,
+                                ticket.lat,
+                                ticket.lng,
+                                ticket.ticketCategory,
+                                ticket.ticketEventAddress,
+                                ticket.ticketRatingType,
+                                ticket.ticketFile.fileName,
+                                ticket.ticketFile.uuid,
+                                ticket.ticketFile.uploadPath,
+                                likeCount(),
+                                list(Projections.constructor(TicketGradeDto.class,
+                                        ticketGrade.gradeName,
+                                        ticketGrade.price,
+                                        ticketGrade.maxPeople
+                                ))
+                        )
+                ));
 
-
-        return Optional.ofNullable(content);
+        return Optional.ofNullable(content.get(0));
     }
 
     private JPQLQuery<Long> likeCount() {

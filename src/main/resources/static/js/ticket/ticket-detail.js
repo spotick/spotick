@@ -1,6 +1,8 @@
+import {ticketGradeFetch} from "../modules/ticketGradeFetch.js"
+
+
 // 모든 QnA 아이템을 선택합니다.
 const qnaItems = document.querySelectorAll('.QnaItemContainer');
-
 
 
 // 공유하기 버튼 모달
@@ -45,8 +47,9 @@ function toggleImageSrc(img) {
     img.src = img.src.includes('down') ? '../../static/imgs/arrow_up_gray074.f2ebf2a9.svg' : '../../static/imgs/arrow_down_gray074.3a483a93.svg';
 
 }
+
 const likeBtnImg = document.querySelector(".LikeWithReservationButtonImg")
-document.querySelector(".LikeWithReservationButton").addEventListener("click",function (){
+document.querySelector(".LikeWithReservationButton").addEventListener("click", function () {
     likeBtnImg.src = likeBtnImg.src.includes('filled') ? '../../static/imgs/heart_2line_gray064.40cc6c61.svg' : '../../static/imgs/heart_filled_sweetBlue046.76e646e1.svg';
 
 })
@@ -68,237 +71,162 @@ $('.RadioBox.On').click(function () {
 
 
 // 문의 모달창 띄우기
-$('.QnaMainBtn').on('click',function (){
+$('.QnaMainBtn').on('click', function () {
     $('.inquiry-modal-container').removeClass('none');
 });
 
 // 문의 모달창 취소
-$('.inquiry-cancel').on('click',function (){
+$('.inquiry-cancel').on('click', function () {
     $('.inquiry-modal-container').addClass('none');
     clearInquiry();
 });
 
-$('#inquiryContent').on('input',function (){
+$('#inquiryContent').on('input', function () {
     let textLength = $(this).val().length;
     let $letterCount = $('.letter-count');
     $letterCount.find('span').text(textLength);
-    $letterCount.toggleClass('over', textLength>200);
-    let isTrue =textLength!==0&&!$letterCount.hasClass('over');
+    $letterCount.toggleClass('over', textLength > 200);
+    let isTrue = textLength !== 0 && !$letterCount.hasClass('over');
     $('.inquiry-submit')
         .toggleClass('on', isTrue);
 });
 
-$('.inquiry-modal-wrap').on('click','.inquiry-submit.on',function (){
+$('.inquiry-modal-wrap').on('click', '.inquiry-submit.on', function () {
 //    ajax로 문의 작성 처리
     alert('문의작성 완료');
     $('.inquiry-modal-container').addClass('none');
     clearInquiry();
 });
 
-function clearInquiry(){
+function clearInquiry() {
     $('#inquiryContent').val('');
     $('.letter-count span').text(0);
     $('.inquiry-submit').removeClass('on');
 }
 
-function adjustVisitorCount(container, operation) {
-    // container 요소 내에서 visitors 클래스를 가진 input 요소를 찾습니다.
+function adjustVisitorCount(container, operation, maxCount) {
     const inputField = container.querySelector('.visitors');
 
-    // 현재 값과 연산에 따라 새로운 값을 계산합니다.
     let newValue;
     if (operation === 'increment') {
-        newValue = Math.min(Number(inputField.value) + 1, 99);
+        newValue = Math.min(Number(inputField.value) + 1, maxCount);
     } else if (operation === 'decrement') {
         newValue = Math.max(Number(inputField.value) - 1, 1);
     }
 
-    // 새로운 값으로 입력란을 업데이트합니다.
     inputField.value = newValue;
 }
 
 
 // 공유하기 버튼
-shareBtn.addEventListener("click",function (){
+shareBtn.addEventListener("click", function () {
     document.body.style.overflow = "hidden";
     document.querySelector(".ModalBackground").classList.add("On")
 })
 
-modalCloseBtn.addEventListener("click",function (){
+modalCloseBtn.addEventListener("click", function () {
     document.body.style.overflow = "auto";
     document.querySelector(".ModalBackground").classList.remove("On")
 })
 
-modalBackground.addEventListener("click",function (){
+modalBackground.addEventListener("click", function () {
     document.body.style.overflow = "auto";
     document.querySelector(".ModalBackground").classList.remove("On")
 })
 
 
-// 리뷰 쪽====================================================================================================
-// 초기 상태 설정
-// const arrowDownSrc = "../../static/imgs/promotion-ticket/arrow_down_gray014.f502da9d.svg";
-// const arrowUpSrc = "../../static/imgs/promotion-ticket/arrow_up_gray014.75d8599e.svg";
-// const reviewSelectBoxBtn = document.querySelector(".ReviewSelectBoxBtn");
-// const reviewSelectBoxBtnImg = document.querySelector(".ReviewSelectBoxBtnImg");
-// const reviewSelectBoxList = document.querySelector(".ReviewSelectBoxList");
-//
-// const buttons = document.querySelectorAll('.ReviewSelectBoxList button');
-// buttons.forEach(function (btn) {
-//     btn.addEventListener('click', function () {
-//         // 아이템을 클릭했을 때의 동작
-//         buttons.forEach(function (innerBtn) {
-//             innerBtn.classList.remove('ReviewFilterSortBtnOn');
-//             innerBtn.classList.add('ReviewFilterSortBtnOff');
-//         });
-//         btn.classList.add('ReviewFilterSortBtnOn');
-//         document.querySelector('.ReviewSelectBoxText').textContent = btn.textContent;
-//         closeReviewSelectBox();
-//     });
-// });
-//
-// reviewSelectBoxBtn.addEventListener("click", function () {
-//     // ReviewSelectBoxBtn을 클릭했을 때의 동작
-//     if (reviewSelectBoxList.style.display === 'none') {
-//         reviewSelectBoxList.style.display = 'flex';
-//         reviewSelectBoxBtnImg.src = arrowUpSrc;
-//     } else {
-//         closeReviewSelectBox();
-//     }
-// });
-//
-// function closeReviewSelectBox() {
-//     // ReviewSelectBoxList를 닫을 때의 동작
-//     reviewSelectBoxList.style.display = 'none';
-//     reviewSelectBoxBtnImg.src = arrowDownSrc;
-// }
-// ====================================================================================================================
+/////////////////////////////////////////////////////////////////
+let gradeData = [];
+const ticketId = document.getElementById('id').value;
+const startDate = document.getElementById('startDate').value;
 
-// 기존 모달창쪽 ========================================================================================================
-// 초기 상태 설정
-// var modalArrowDownSrc = "../../static/imgs/promotion-ticket/arrow_down_gray074.3a483a93.svg";
-// var modalArrowUpSrc = "../../static/imgs/promotion-ticket/arrow_up_gray074.f2ebf2a9.svg";
-// var postQnaModalDropdownBtn = document.querySelector(".PostQnaModalDropdownSelectedBox");
-// var postQnaModalDropdownBtnImg = document.querySelector(".PostQnaModalDropdownImg");
-// var postQnaModalDropdownList = document.querySelector(".PostQnaModalDropdownSpaceList");
-//
-// var modalButtons = document.querySelectorAll('.PostQnaModalDropdownSpaceList button');
-// modalButtons.forEach(function (btn) {
-//     btn.addEventListener('click', function () {
-//
-//         // 아이템을 클릭했을 때의 동작
-//         modalButtons.forEach(function (innerBtn) {
-//             innerBtn.classList.remove('ReviewFilterSortBtnOn');
-//             innerBtn.classList.add('ReviewFilterSortBtnOff');
-//         });
-//         btn.classList.add('ReviewFilterSortBtnOn');
-//         var selectedText = btn.textContent;
-//         document.querySelector('.PostQnaModalDropdownSelectedBox p').textContent = selectedText;
-//         document.querySelector('.PostQnaModalDropdownSelectedBox p').style.color = 'black'; // 선택된 버튼의 부모 요소인 p의 글자색을 검정색으로 변경
-//         closePostQnaModalDropdown();
-//     });
-// });
-//
-// postQnaModalDropdownBtn.addEventListener("click", function () {
-//     // PostQnaModalDropdownBtn을 클릭했을 때의 동작
-//     if (postQnaModalDropdownList.style.display === 'none') {
-//         postQnaModalDropdownList.style.display = 'flex';
-//         postQnaModalDropdownBtnImg.src = modalArrowUpSrc;
-//     } else {
-//         closePostQnaModalDropdown();
-//     }
-// });
-//
-// function closePostQnaModalDropdown() {
-//     // PostQnaModalDropdownList를 닫을 때의 동작
-//     postQnaModalDropdownList.style.display = 'none';
-//     postQnaModalDropdownBtnImg.src = modalArrowDownSrc;
-// }
+export async function getGrade(date) {
+    const existingKV = gradeData.find(data => data.date === date);
+
+    if (existingKV) {
+        console.log(existingKV.grade);
+        loadGradeList(existingKV.grade)
+        return;
+    }
+
+    try {
+        console.log('없어서 실행')
+        const responseData = await ticketGradeFetch(ticketId, date);
+        const newData = { date: date, grade: responseData };
+
+        // gradeData에 추가
+        gradeData.push(newData);
+
+        console.log(responseData);
+        loadGradeList(responseData);
+    } catch (error) {
+        console.error('Error:', error);
+    }
+}
+
+const gradeSelectContainer = document.getElementById('gradeSelectContainer');
+function loadGradeList(dataList) {
+    let html = ``;
+
+    dataList.forEach(data => {
+        html +=
+            `
+                <div class="RadioBoxContainer">
+                    <input class="totalPrice" type="hidden">
+                    <div class="RadioBox">
+                        <div class="RadioBoxOutLine">
+                            <div class="RadioBoxInLine"></div>
+                        </div>
+                        <input name="" type="radio">
+                        <div class="GoodsInfo">
+                            <div class="GoodsInfoTitleContainer">
+                                <span class="GoodsInfoTitle">${data.gradeName}<br>(남은인원 ${data.maxPeople - data.sold}명)</span>
+                            </div>
+                            <div>
+                                <p class="GoodsInfoDiscountedPrice">${data.price.toLocaleString()}원</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex-align countWrap" max="${data.maxPeople - data.sold}">
+                        <button class="minus" type="button">-</button>
+                        <div class="reservation-visitors flex-align-center">
+                            <input class="visitors" max="${data.maxPeople - data.sold}" min="1" type="number" value="1">
+                        </div>
+                        <button class="plus" type="button">+</button>
+                    </div>
+                </div>
+            `;
+    })
+
+    gradeSelectContainer.innerHTML = html;
 
 
-// function updateTextLength() {
-//     var textarea = document.querySelector('.TextArea');
-//     var textLength = textarea.value.length;
-//     var maxLength = parseInt(textarea.getAttribute('maxlength'));
-//     var textLengthElement = document.querySelector('.PostQnaModalTextLength');
-//     textLengthElement.textContent = textLength + '/' + maxLength;
-// }
+    document.querySelectorAll('.RadioBox').forEach(box => {
+        box.addEventListener('click', () => {
+            const radioBoxInLine = box.querySelector('.RadioBoxInLine');
 
-// 문의하기 모달창 켜기
-// document.querySelector(".QnaMainBtn").addEventListener("click", function(){
-//     document.querySelector(".PostQnaModalContainer").classList.remove("none");
-//     document.body.style.overflow = "hidden";
-// })
-//
-// // 문의하기 모달창 끄기
-// document.querySelector(".PostQnaModalCrossImg").addEventListener("click", function(){
-//     document.querySelector(".PostQnaModalContainer").classList.add("none");
-//     document.body.style.overflow = "auto";
-// })
-//
-// document.querySelector(".PostQnaModalFooterBtnCancel").addEventListener("click", function(){
-//     document.querySelector(".PostQnaModalContainer").classList.add("none");
-//     document.body.style.overflow = "auto";
-// })
-// 기존 모달창쪽 ========================================================================================================
+            if (radioBoxInLine) {
+                radioBoxInLine.classList.toggle('On');
+            }
+        })
+    })
 
-// var swiper = new Swiper(".swiper", {
-//   pagination: {
-//     el: ".swiper-pagination",
-//     clickable: true,
-//   },
-//   navigation: {
-//     nextEl: ".ImageModalNextvArrowBtn",
-//     prevEl: ".ImageModalPrevArrowBtn",
-//   },
-//   on: {
-//         slideChange: function () {
-//           document.querySelector(".snapIndex").textContent = swiper.snapIndex + 1;
-//         },
-//       },
-//
-// });
-//
-// // MoreImagesBtn 버튼 요소 선택
-// var ImageCount = document.querySelector('.ImageCount');
-// var ImageCount2 = document.querySelector('.ImageCount2');
-//
-//
-// // ImageLength 클래스를 가진 모든 요소 선택
-// var imageLengthElements = document.querySelectorAll('.ImageLength');
-//
-// // 각 ImageLength 클래스 내의 div 개수를 합산
-// var totalDivCount = Array.from(imageLengthElements).reduce(function (total, element) {
-//   return total + element.querySelectorAll('div').length;
-// }, 0);
-//
-// // MoreImagesBtn 버튼 텍스트에 totalDivCount 값을 설정
-// ImageCount.textContent =  totalDivCount;
-// ImageCount2.textContent =  totalDivCount;
-//
-// // 이미지 모달창 켜기
-// document.querySelector(".MoreImagesBtn").addEventListener("click", function(){
-//     document.querySelector(".ImageModalContainer").classList.remove("none");
-// })
-//
-// // 이미지 모달창 끄기
-// document.querySelector(".ImageModalCloseBtn").addEventListener("click", function(){
-//     document.querySelector(".ImageModalContainer").classList.add("none");
-// })
+    document.querySelectorAll('.countWrap').forEach(countWrap => {
+        const minus = countWrap.querySelector('.minus');
+        const plus = countWrap.querySelector('.plus');
+        const max = countWrap.getAttribute('max');
 
-// // 문의하기 모달창 켜기
-// document.querySelector(".QnaMainBtn").addEventListener("click", function(){
-//     document.querySelector(".PostQnaModalContainer").classList.remove("none");
-//     document.body.style.overflow = "hidden";
-// })
-//
-// // 문의하기 모달창 끄기
-// document.querySelector(".PostQnaModalCrossImg").addEventListener("click", function(){
-//     document.querySelector(".PostQnaModalContainer").classList.add("none");
-//     document.body.style.overflow = "auto";
-// })
-//
-// document.querySelector(".PostQnaModalFooterBtnCancel").addEventListener("click", function(){
-//     document.querySelector(".PostQnaModalContainer").classList.add("none");
-//     document.body.style.overflow = "auto";
-// })
+        minus.addEventListener('click', () => {
+            adjustVisitorCount(countWrap, 'decrement');
+        })
+
+        plus.addEventListener('click', () => {
+            adjustVisitorCount(countWrap, 'increment', max);
+        })
+    })
+}
+
+window.onload = function () {
+    getGrade(startDate)
+}
+

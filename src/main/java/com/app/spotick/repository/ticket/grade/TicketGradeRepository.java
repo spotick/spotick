@@ -22,7 +22,7 @@ public interface TicketGradeRepository extends JpaRepository<TicketGrade, Long> 
             )
             from TicketGrade tg
             where tg.ticket.id = :ticketId
-            order by tg.id asc
+            order by tg.price asc
             """)
     List<TicketGradeSaleInfoDto> findTicketGradesByTicketId(@Param("ticketId") Long ticketId, @Param("date") LocalDate date);
 
