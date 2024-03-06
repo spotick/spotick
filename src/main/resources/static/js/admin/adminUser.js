@@ -61,3 +61,12 @@ function handleStatusChoice(checkboxIndex, selectValue) {
         //   });
     }
 }
+
+getUserList();
+function getUserList(){
+    fetch(`/admins/user/list`)
+        .then(console.log);
+}
+
+
+
