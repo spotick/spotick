@@ -1,5 +1,6 @@
 package com.app.spotick.domain.type.user;
 
+import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.Getter;
 
 @Getter
