@@ -14,8 +14,8 @@
   <link th:href="@{/imgs/logo/favicon.png}" rel="icon">
   <link rel="stylesheet" th:href="@{/css/admin/adminUser.css}" />
   <link rel="stylesheet" th:href="@{/css/admin/datepicker.css}" />
-  <link rel="stylesheet" th:href="@{/css/global-css/adminSideBar.css}" />
-  <link rel="stylesheet" th:href="@{/css/global-css/root.css}">
+  <link rel="stylesheet" th:href="@{/css/global-css/adminSideBar.css}"/>
+  <link rel="stylesheet" th:href="@{/css/global-css/root.css}"/>
 </head>
 <body>
 <header th:replace="~{global-templates/header-footer :: header}"></header>
@@ -50,11 +50,14 @@
           <input type="text" placeholder="닉네임" class="user-search-name" />
           <span>가입일 : </span>
           <input name="date" id="datepicker" />
-          <span>회원등급 : </span>
+          <span>회원상태 : </span>
           <select name="mode" id="mode" class="user-search-place-ticket">
             <option value="">선택</option>
-            <option value="1">일반회원</option>
-            <option value="2">호스트</option>
+            <option value="ACTIVATE">활성</option>
+            <option value="SUSPENDED_7_DAYS">7일 정지</option>
+            <option value="SUSPENDED_30_DAYS">30일 정지</option>
+            <option value="PERMANENTLY_SUSPENDED">영구 정지</option>
+            <option value="DEACTIVATE">탈퇴</option>ㄴ
             <select name="mode" id="mode" class="user-status">
               <button type="button" class="search-btn">검색</button>
               <!-- 장소일 때, 티켓일 때 드롭박스 달리 보이게 설정 -->
@@ -81,35 +84,10 @@
           </tr>
           </thead>
 
-          <tbody>
-          <!-- 회원 1 -->
-          <tr class="user-table-category">
-            <td class="user-table-checkbox" align="center">
-              <input type="checkbox" name="" class="user-check" id="user-checking" />
-            </td>
-            <td class="user-email" align="center">aaa@gmail.com</td>
-            <td class="user-nickname" align="center">aaa@gmail.com</td>
-            <td class="user-palce-tcket" align="center">일반회원</td>
-            <td class="user-phonenumber" align="center">010-1111-1111</td>
-            <td class="user-register-date" align="center">2023-12-13</td>
-            <td class="user-status-select" align="center">
-              <select class="user-status-choice" name="status-choice">
-                <option value="">선택</option>
-                <option value="1">일반 회원</option>
-                <option value="2">7일 정지</option>
-                <!-- <option value="3">15일 정지</option>
-                <option value="4">영구 정지</option> -->
-              </select>
-            </td>
-            <td class="user-status-manegement" align="center">
-              <div class="user-status-box Y">일반회원</div>
-              <!-- 회원 상태 보여주기 -->
-              <!-- <div class="user-status-box">정지 회원</div>
-              <div class="user-status-box">영구 정지</div> -->
-              <!-- 회원 상태 보여주기 -->
-            </td>
-          </tr>
-          <!-- 회원 1 -->
+          <tbody class="tbody-user">
+          <!-- 회원 1명 정보 -->
+
+          <!-- 회원 1명 정보 -->
           </tbody>
         </table>
       </div>
@@ -121,6 +99,8 @@
     <!-- 관리자 카테고리 및 회원 정보 검색 및 테이블 -->
   </div>
 </div>
+
+<footer th:replace="~{global-templates/header-footer :: footer}"></footer>
 </body>
 
 <!--        integrity="sha256-nQLuAZGRRcILA+6dMBOvcRh5Pe310sBpanc6+QBmyVM="-->

@@ -1,4 +1,4 @@
-package com.app.spotick.repository.admin;
+package com.app.spotick.repository.admin.user;
 
 import com.app.spotick.domain.dto.admin.AdminUserListDto;
 import com.app.spotick.domain.dto.user.UserAuthorityDto;
@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Map;
@@ -17,8 +18,9 @@ import java.util.stream.Collectors;
 import static com.app.spotick.domain.entity.user.QUser.user;
 import static com.app.spotick.domain.entity.user.QUserAuthority.userAuthority;
 
+@Repository
 @RequiredArgsConstructor
-public class AdminQDSLRepositoryImpl implements AdminQDSLRepository {
+public class AdminUserQDSLRepositoryImpl implements AdminUserQDSLRepository {
     private final JPAQueryFactory queryFactory;
 
     @Override
@@ -66,6 +68,7 @@ public class AdminQDSLRepositoryImpl implements AdminQDSLRepository {
                     authorityListMap.get(adminUserListDto.getId())
                             .size() == 1 ? AuthorityType.ROLE_USER : AuthorityType.ROLE_ADMIN
             );
+            adminUserListDto.formatCreatedDate();
         });
 
         return new SliceImpl<>(userList,pageable,hasNext);

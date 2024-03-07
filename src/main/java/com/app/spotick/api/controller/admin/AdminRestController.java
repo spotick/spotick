@@ -2,6 +2,7 @@ package com.app.spotick.api.controller.admin;
 
 import com.app.spotick.api.dto.response.CommonResponse;
 import com.app.spotick.domain.dto.admin.AdminUserListDto;
+import com.app.spotick.domain.type.user.UserStatus;
 import com.app.spotick.service.admin.AdminService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;

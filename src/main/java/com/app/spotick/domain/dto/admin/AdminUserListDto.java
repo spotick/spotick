@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Data
 @NoArgsConstructor
@@ -17,6 +18,7 @@ public class AdminUserListDto {
     private UserStatus userStatus;
     private AuthorityType authorityType;
     private LocalDateTime createdDate;
+    private String createdDateStr;
 
     public AdminUserListDto(Long id, String email, String nickName, String tel, UserStatus userStatus, LocalDateTime createdDate) {
         this.id = id;
@@ -26,4 +28,11 @@ public class AdminUserListDto {
         this.userStatus = userStatus;
         this.createdDate = createdDate;
     }
+
+    public void formatCreatedDate(){
+        createdDateStr = this.createdDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+    }
+
+
+
 }
