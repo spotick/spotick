@@ -19,6 +19,11 @@ public class AdminController {
 
         return "admin/adminPlace";
     }
+    @GetMapping("/ticket")
+    public String adminTicket(){
+
+        return "admin/adminTicket";
+    }
 
     @GetMapping("/reply")
     public String adminReply(){
