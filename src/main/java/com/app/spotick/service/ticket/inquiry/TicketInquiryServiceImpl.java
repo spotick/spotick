@@ -1,6 +1,7 @@
 package com.app.spotick.service.ticket.inquiry;
 
 import com.app.spotick.api.dto.place.InquiryResponseDto;
+import com.app.spotick.api.dto.ticket.TicketInquiryDto;
 import com.app.spotick.domain.dto.place.inquiry.UnansweredInquiryDto;
 import com.app.spotick.domain.dto.ticket.TicketInquiryListDto;
 import com.app.spotick.domain.entity.ticket.Ticket;
@@ -57,5 +58,29 @@ public class TicketInquiryServiceImpl implements TicketInquiryService {
         );
 
         ticketInquiryRepository.delete(foundInquiry);
+    }
+
+    @Override
+    public void register(TicketInquiryDto.Request inquiryReq, Long userId) {
+        User tmpUser = userRepository.getReferenceById(userId);
+        Ticket ticket = ticketRepository.findById(inquiryReq.getTicketId()).orElseThrow(
+                NoSuchElementException::new
+        );
+
+        TicketInquiry inquiry = TicketInquiry.builder()
+                .user(tmpUser)
+                .ticket(ticket)
+                .title(inquiryReq.getInquiryTitle())
+                .content(inquiryReq.getInquiryContent())
+                .build();
+        ticketInquiryRepository.save(inquiry);
+    }
+
+    @Override
+    public Page<TicketInquiryDto.Response> findInquiryListPageById(Long ticketId, Pageable pageable) {
+        Ticket tmpTicket = ticketRepository.getReferenceById(ticketId);
+
+        return ticketInquiryRepository.findAllByTicketOrderByIdDesc(tmpTicket, pageable)
+                .map(TicketInquiryDto.Response::from);
     }
 }

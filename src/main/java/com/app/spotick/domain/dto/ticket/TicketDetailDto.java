@@ -27,10 +27,12 @@ public class TicketDetailDto {
     private String uuid;
     private String uploadPath;
     private Long likeCount;
+    private long inquiryCount;
+    private boolean isLiked;
 
     private List<TicketGradeDto> ticketGradeDtos = new ArrayList<>();
 
-    public TicketDetailDto(Long ticketId, String title, String content, LocalDate startDate, LocalDate endDate, double lat, double lng, TicketCategory ticketCategory, PostAddress ticketEventAddress, TicketRatingType ticketRatingType, String fileName, String uuid, String uploadPath, Long likeCount, List<TicketGradeDto> ticketGradeDtos) {
+    public TicketDetailDto(Long ticketId, String title, String content, LocalDate startDate, LocalDate endDate, double lat, double lng, TicketCategory ticketCategory, PostAddress ticketEventAddress, TicketRatingType ticketRatingType, String fileName, String uuid, String uploadPath, Long likeCount, long inquiryCount, boolean isLiked, List<TicketGradeDto> ticketGradeDtos) {
         this.ticketId = ticketId;
         this.title = title;
         this.content = content;
@@ -45,6 +47,8 @@ public class TicketDetailDto {
         this.uuid = uuid;
         this.uploadPath = uploadPath;
         this.likeCount = likeCount;
+        this.inquiryCount = inquiryCount;
+        this.isLiked = isLiked;
         this.ticketGradeDtos = ticketGradeDtos;
     }
 }

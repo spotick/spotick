@@ -229,9 +229,13 @@ function convertToAmPmFormat(hour) {
 $('.inquiry-write-btn').on('click', function () {
     let isLoggedIn = $('#isLoggedIn').val();
     if (isLoggedIn === 'false') {
-        alert('로그인이 필요한 서비스 입니다');
-        location.href = '/user/login';
-        return;
+        const selection = confirm("로그인이 필요한 서비스입니다. 로그인 하시겠습니까?");
+        if (selection) {
+            location.href = '/user/login';
+            return;
+        } else {
+            return;
+        }
     }
     $('.inquiry-modal-container').removeClass('none');
     $('body').css('overflow', 'hidden');

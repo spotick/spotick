@@ -1,5 +1,13 @@
 import {ticketGradeFetch} from "../modules/ticketGradeFetch.js"
+import {requestTicketInquiryList, requestTicketInquiryRegister} from "../modules/inquiryFetch.js"
+import {
+    ticketInquiryListComponent,
+    ticketDetailInquiryPaginationComponent
+} from "../async-components/ticket/inquiry-component.js"
+import {requestLike} from "../modules/likeFetch.js"
 
+
+const isLoggedIn = document.getElementById('isLoggedIn');
 
 // 모든 QnA 아이템을 선택합니다.
 const qnaItems = document.querySelectorAll('.QnaItemContainer');
@@ -41,19 +49,6 @@ qnaItems.forEach(function (qnaItem) {
     });
 });
 
-// 이미지의 src를 토글하는 함수
-function toggleImageSrc(img) {
-    // 현재 이미지 src에 따라 토글합니다.
-    img.src = img.src.includes('down') ? '../../static/imgs/arrow_up_gray074.f2ebf2a9.svg' : '../../static/imgs/arrow_down_gray074.3a483a93.svg';
-
-}
-
-const likeBtnImg = document.querySelector(".LikeWithReservationButtonImg")
-document.querySelector(".LikeWithReservationButton").addEventListener("click", function () {
-    likeBtnImg.src = likeBtnImg.src.includes('filled') ? '../../static/imgs/heart_2line_gray064.40cc6c61.svg' : '../../static/imgs/heart_filled_sweetBlue046.76e646e1.svg';
-
-})
-
 // 요소의 가시성을 토글하는 함수
 function toggleVisibility(element) {
     // "none" 클래스의 존재 여부에 따라 토글합니다.
@@ -72,6 +67,15 @@ $('.RadioBox.On').click(function () {
 
 // 문의 모달창 띄우기
 $('.QnaMainBtn').on('click', function () {
+    if (isLoggedIn.value === 'false') {
+        const selection = confirm("로그인이 필요한 서비스입니다. 로그인 하시겠습니까?");
+        if (selection) {
+            location.href = '/user/login';
+            return;
+        } else {
+            return;
+        }
+    }
     $('.inquiry-modal-container').removeClass('none');
 });
 
@@ -87,15 +91,8 @@ $('#inquiryContent').on('input', function () {
     $letterCount.find('span').text(textLength);
     $letterCount.toggleClass('over', textLength > 200);
     let isTrue = textLength !== 0 && !$letterCount.hasClass('over');
-    $('.inquiry-submit')
-        .toggleClass('on', isTrue);
-});
-
-$('.inquiry-modal-wrap').on('click', '.inquiry-submit.on', function () {
-//    ajax로 문의 작성 처리
-    alert('문의작성 완료');
-    $('.inquiry-modal-container').addClass('none');
-    clearInquiry();
+    $('.inquiry-submit').toggleClass('on', isTrue);
+    $('#inquiryRegisterBtn').prop('disabled', !isTrue);
 });
 
 function clearInquiry() {
@@ -152,7 +149,7 @@ export async function getGrade(date) {
     try {
         console.log('없어서 실행')
         const responseData = await ticketGradeFetch(ticketId, date);
-        const newData = { date: date, grade: responseData };
+        const newData = {date: date, grade: responseData};
 
         // gradeData에 추가
         gradeData.push(newData);
@@ -165,6 +162,7 @@ export async function getGrade(date) {
 }
 
 const gradeSelectContainer = document.getElementById('gradeSelectContainer');
+
 function loadGradeList(dataList) {
     let html = ``;
 
@@ -226,7 +224,99 @@ function loadGradeList(dataList) {
     })
 }
 
+const inquiryRegisterBtn = document.getElementById('inquiryRegisterBtn');
+
 window.onload = function () {
-    getGrade(startDate)
+    getGrade(startDate);
+    displayInquiryPage(1);
+    inquiryRegisterBtn.disabled = true;
 }
 
+const inquiryTitle = document.getElementById('inquiryTitle');
+const inquiryContent = document.getElementById('inquiryContent');
+inquiryRegisterBtn.addEventListener('click', () => {
+
+
+    const inquiryReq = {
+        ticketId: ticketId,
+        inquiryTitle: inquiryTitle.value,
+        inquiryContent: inquiryContent.value,
+    }
+
+    requestTicketInquiryRegister(inquiryReq)
+        .then((res) => {
+            if (res.ok) {
+                displayInquiryPage(1);
+                $('.inquiry-modal-container').addClass('none');
+            }
+        })
+        .catch((error) => {
+            console.error(error);
+        });
+})
+
+const inquiryPagination = document.getElementById('inquiryPagination');
+
+
+// 통신과 화면을 각각 js파일들로 분리하여 모듈화 시켰고 하나의 함수로 묶어 사용하는 방식을 사용해보았음.
+
+// 장점 : 파일분류를 더욱 세밀하게 해내어 기존의 복잡한 코드 구조를 조금 더 풀어낼 수 있었음.
+// 특히 HTML을 추가하는 코드는 기존의 코드를 난잡하게 만드는 주 원인이 되었으나 js파일로 격리해버림으로써 가독성을 조금이나마 끌어올릴 수 있게됨
+// 단점 : 통신과 화면을 동시에 처리하던 기존의 방식에서 이 조차 분할 해내게 되니 전역변수를 서로 공유하지 못한다는 것이 단점으로 자리매김하게 된다.
+// 그에 따라 코드를 쓰기전 설계를 더욱 세밀하게 할 필요성이 생기게되었다. js파일들이 많아지게됨으로서 파일명에 따른 js파일 분류를 신경써야 한다.
+
+// 코드의 가독성을 끌어올리기 위한 좋은 시도였으나 여전히 코드의 가독성을 확실하게 끌어올렸다라고 말하기엔 여전히 무리가 있다.
+// 어떻게하면 한 페이지에 사용되게 되는 js파일들 간의 유기성을 높이면서 가독성을 끌어올릴 수 있을 지는 계속된 연구가 필요하겠다.
+function displayInquiryPage(page) {
+    requestTicketInquiryList(ticketId, page)
+        .then(data => {
+            document.getElementById('inquiryContainer').innerHTML = ticketInquiryListComponent(data.data);
+            inquiryPagination.innerHTML = ticketDetailInquiryPaginationComponent(data.pagination);
+
+            Array.from(inquiryPagination.children).forEach(child => {
+                child.addEventListener('click', () => {
+                    const page = child.getAttribute('page');
+
+                    if (page) {
+                        displayInquiryPage(page);
+                    }
+                });
+            });
+        })
+}
+
+
+const likeBtn = document.getElementById('likeBtn');
+likeBtn.addEventListener('click', () => {
+    if (isLoggedIn.value === 'false') {
+        const selection = confirm("로그인이 필요한 서비스입니다. 로그인 하시겠습니까?");
+        if (selection) {
+            location.href = '/user/login';
+            return;
+        } else {
+            return;
+        }
+    }
+
+    const status = likeBtn.getAttribute('data-status');
+
+    requestLike(status, ticketId, (result) => {
+        likeBtn.setAttribute('data-status', result);
+
+        changeLike(likeBtn, result);
+    });
+})
+
+function changeLike(btn, status) {
+    // status에 따라서 클래스 변경
+    const off = btn.children[0];
+    const on = btn.children[1];
+
+    if (status) {
+        off.classList.add('none');
+        on.classList.remove('none')
+    } else {
+        off.classList.remove('none');
+        on.classList.add('none')
+    }
+}

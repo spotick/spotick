@@ -2,11 +2,9 @@ package com.app.spotick.repository.ticket;
 
 import com.app.spotick.domain.dto.page.TicketPage;
 import com.app.spotick.domain.dto.ticket.*;
-import com.app.spotick.domain.entity.ticket.QTicketOrderDetail;
 import com.app.spotick.domain.type.post.PostStatus;
 import com.app.spotick.domain.type.ticket.TicketRequestType;
 import com.querydsl.core.BooleanBuilder;
-import com.querydsl.core.group.GroupBy;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Expressions;
@@ -181,13 +179,6 @@ public class TicketQDSLRepositoryImpl implements TicketQDSLRepository {
                 .where(ticketGrade.ticket.eq(ticket))
                 .groupBy(ticketGrade.ticket);
 
-        BooleanExpression isLiked = userId == null ?
-                Expressions.asBoolean(false)
-                : JPAExpressions.select(ticketLike.id.isNotNull())
-                .from(ticketLike)
-                .where(ticketLike.ticket.eq(ticket).and(ticketLike.user.id.eq(userId)))
-                .exists();
-
         List<TicketListDto> contents = queryFactory
                 .from(ticket)
                 .where(ticket.ticketEventStatus.eq(PostStatus.APPROVED))
@@ -206,7 +197,7 @@ public class TicketQDSLRepositoryImpl implements TicketQDSLRepository {
                         likeCount(),
                         lowestPrice,
                         ticket.ticketEventAddress.address,
-                        isLiked
+                        isLiked(userId)
                 ))
                 .fetch();
 
@@ -247,6 +238,8 @@ public class TicketQDSLRepositoryImpl implements TicketQDSLRepository {
                                 ticket.ticketFile.uuid,
                                 ticket.ticketFile.uploadPath,
                                 likeCount(),
+                                inquiryCount(),
+                                isLiked(userId),
                                 list(Projections.constructor(TicketGradeDto.class,
                                         ticketGrade.gradeName,
                                         ticketGrade.price,
@@ -262,6 +255,21 @@ public class TicketQDSLRepositoryImpl implements TicketQDSLRepository {
         return JPAExpressions.select(ticketLike.count())
                 .from(ticketLike)
                 .where(ticketLike.ticket.eq(ticket));
+    }
+
+    private JPQLQuery<Long> inquiryCount() {
+        return JPAExpressions.select(ticketInquiry.count())
+                .from(ticketInquiry)
+                .where(ticketInquiry.ticket.eq(ticket));
+    }
+
+    private BooleanExpression isLiked(Long userId) {
+        return userId == null ?
+                Expressions.asBoolean(false)
+                : JPAExpressions.select(ticketLike.id.isNotNull())
+                .from(ticketLike)
+                .where(ticketLike.ticket.eq(ticket).and(ticketLike.user.id.eq(userId)))
+                .exists();
     }
 
 }
