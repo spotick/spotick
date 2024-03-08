@@ -119,7 +119,7 @@
 }
 
 .admin-small-category1 {
-    width: 90px;
+    width: 100px;
     margin-right: 10px;
     border-bottom: 2px solid #595f63;
 }
@@ -127,7 +127,7 @@
 .admin-small-category1 > a {
     text-decoration: none;
     color: black;
-    width: 90px;
+    width: 100px;
     height: 40px;
     display: flex;
     justify-content: center;
@@ -135,7 +135,7 @@
 }
 
 .admin-small-category2 {
-    width: 80px;
+    width: 100px;
     margin-right: 10px;
     /* border-bottom: 2px solid #595f63; */
 }
@@ -143,22 +143,36 @@
 .admin-small-category2 > a {
     text-decoration: none;
     color: black;
-    width: 80px;
+    width: 100px;
     height: 40px;
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
-.admin-small-category1 > a:hover {
+.admin-small-category3 {
+    width: 100px;
+    margin-right: 10px;
+    /* border-bottom: 2px solid #595f63; */
+}
+
+.admin-small-category3 > a {
+    text-decoration: none;
+    color: black;
+    width: 100px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.admin-small-category1 > a:hover,
+.admin-small-category2 > a:hover,
+.admin-small-category3 > a:hover {
     background-color: rgba(198, 198, 198, 0.251);
     border-radius: 5px;
 }
 
-.admin-small-category2 > a:hover {
-    background-color: rgba(198, 198, 198, 0.251);
-    border-radius: 5px;
-}
 /* 관리자 카테고리 */
 
 /* 회원 정보 검색 및 테이블  */
@@ -174,7 +188,8 @@
     margin-top: 4px;
 }
 
-.user-search-writer {
+.user-search-email,
+.user-search-nickname {
     width: 90px;
     height: 25px;
     padding: 0px 5px;
@@ -310,3 +325,8 @@ tbody tr {
     background: #fff;
 }
 /* 테이블 스크롤 바 */
+
+/* datepicker */
+#datepicker {
+    width: 100px;
+}

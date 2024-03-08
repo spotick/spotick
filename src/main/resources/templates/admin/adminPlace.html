@@ -1,59 +1,20 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>관리자 페이지 - 게시판 관리</title>
-  <link rel="stylesheet" href="../css/adminBoard.css" />
+  <link rel="stylesheet" th:href="@{/css/admin/adminPlace.css}" />
+  <link th:href="@{/imgs/logo/favicon.png}" rel="icon">
+  <link rel="stylesheet" th:href="@{/css/admin/datepicker.css}" />
+  <link rel="stylesheet" th:href="@{/css/global-css/adminSideBar.css}" />
+  <link rel="stylesheet" th:href="@{/css/global-css/root.css}">
 </head>
 <body>
 <div class="admin-main">
   <div class="admin-app">
     <!-- 관리자 사이드메뉴 flagment -->
-    <div class="admin-container">
-      <aside class="admin-aside-menu">
-        <!-- 관리자 프로필 -->
-        <div class="admin-pfp">
-          <!-- 관리자 프로필 사진 업로드 -->
-          <div class="admin-pfp-img-upload">
-            <label class="adminPfpImgUpload">
-              <div class="admin-pfp-img-icon">
-                <img class="amdin-pfp-img" src="../img/exProfile_img.png" />
-              </div>
-            </label>
-            <input type="file" id="adminPfpImgUpload" name="adminPfpImgUpload" />
-          </div>
-          <!-- 관리자 프로필 사진 업로드 -->
-
-          <!-- 관리자 이름, 이메일 주소 -->
-          <div class="admin-name-email">
-            <div class="admin-name">홍길동</div>
-            <div class="admin-email-box">
-              <div class="admin-email">aaa@naver.com</div>
-            </div>
-          </div>
-          <!-- 관리자 이름, 이메일 주소 -->
-        </div>
-        <!-- 관리자 프로필 -->
-
-        <!-- 관리자 사이드 메뉴 -->
-        <div class="admin-side-menu">
-          <a href="#" class="side-menu">
-            <div class="admin-management user-management">회원 관리</div>
-          </a>
-          <a href="#" class="side-menu">
-            <div class="admin-management board-management">게시판 관리</div>
-          </a>
-          <a href="#" class="side-menu">
-            <div class="admin-management pay-management">결제 관리</div>
-          </a>
-          <a href="#" class="side-menu">
-            <div class="admin-management admin-confirm-management">관리자 승인</div>
-          </a>
-        </div>
-        <!-- 관리자 사이드 메뉴 -->
-      </aside>
-    </div>
+    <div class="admin-container" th:replace="~{global-templates/adminSideBar :: adminSideBar}"></div>
     <!-- 관리자 사이드메뉴 flagment -->
 
     <!-- 관리자 카테고리 및 회원 정보 검색 및 테이블 -->
@@ -188,10 +149,8 @@
   </div>
 </div>
 </body>
-<script
-        src="https://code.jquery.com/jquery-3.6.3.js"
-        integrity="sha256-nQLuAZGRRcILA+6dMBOvcRh5Pe310sBpanc6+QBmyVM="
-        crossorigin="anonymous"
-></script>
-<script src="../js/adminBoard.js"></script>
+<script crossorigin="anonymous" src="https://kit.fontawesome.com/c6992f5b12.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.3.js"></script>
+<script type="module" th:src="@{/js/global-js/global.js}"></script>
+<script th:src="@{/js/admin/adminPlace.js}"></script>
 </html>

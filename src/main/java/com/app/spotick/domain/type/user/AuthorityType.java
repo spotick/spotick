@@ -6,7 +6,6 @@ import lombok.Getter;
 public enum AuthorityType {
     ROLE_USER("일반회원"),
     ROLE_ADMIN("관리자"),
-    ROLE_HOST("호스트")
     ;
 
     private final String displayName;

@@ -1,6 +1,8 @@
 # SPOTICK - 장소 대여와 티켓팅을 한번에<br>Venue Rental and Ticketing Service at Once
 ![spotick-logo](https://github.com/spotick/spotick/assets/142222091/4af6c9ba-df10-4fe9-9478-2db17d55ae3e)
 
+(이 프로젝트는 영리를 추구하는 프로젝트가 아니며 참여자의 개발 실력을 향상시키기 위한 목적의 프로젝트임을 밝힙니다.)
+
 ### 목차
 1. [팀 구성](#1-팀-구성)
 2. [프로젝트 기획의도](#2-프로젝트-기획의도)
