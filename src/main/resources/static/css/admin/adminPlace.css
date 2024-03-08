@@ -4,7 +4,7 @@
 }
 
 .admin-main {
-    margin: auto;
+    margin: 100px auto;
     display: flex;
     justify-content: center;
 }
@@ -265,7 +265,7 @@ tbody tr {
 }
 
 .Y {
-    width: 45px;
+    width: 85px;
     background-color: #eaf4ff;
     color: #007aff;
     border: none;
@@ -275,7 +275,7 @@ tbody tr {
 }
 
 .B {
-    width: 45px;
+    width: 85px;
     background-color: rgb(255, 237, 237);
     color: red;
     border: none;
@@ -330,3 +330,11 @@ tbody tr {
 #datepicker {
     width: 100px;
 }
+
+.board-title>p{
+    width: 230px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+

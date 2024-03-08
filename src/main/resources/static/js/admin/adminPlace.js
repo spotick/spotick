@@ -51,3 +51,18 @@ function handleStatusChoice(checkboxIndex, selectValue) {
         });
     }
 }
+
+loadUserList();
+
+function loadUserList() {
+    fetch(`/admins/place/list`)
+        .then(response => response.json())
+        .then(data => {
+            displayPlaceList(data);
+        });
+}
+
+function displayPlaceList(data) {
+    console.log(data);
+
+}

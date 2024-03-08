@@ -80,25 +80,25 @@ function loadUserList() {
         .then(data => {
             console.log(data);
             console.table(data.content);
-            displayUserLit(data.content);
+            displayUserList(data.content);
         });
 }
 
-function displayUserLit(data) {
+function displayUserList(data) {
     let text = '';
 
     data.forEach(user => {
         text += `
             <tr class="user-table-category">
-            <td class="user-table-checkbox" align="center">
+            <td align="center" class="user-table-checkbox" align="center">
               <input type="checkbox" name="" class="user-check" id="user-checking" value="${user.id}"/>
             </td>
-            <td class="user-email" >${user.email}</td>
-            <td class="user-nickname" >${user.nickName}</td>
-            <td class="user-palce-tcket">${user.authorityType == 'ROLE_USER'?'일반회원':'관리자'}</td>
-            <td class="user-phonenumber">${user.tel==null?'미입력':user.tel}</td>
-            <td class="user-register-date">${user.createdDateStr}</td>
-            <td class="user-status-select">
+            <td align="center" class="user-email" >${user.email}</td>
+            <td align="center" class="user-nickname" >${user.nickName}</td>
+            <td align="center" class="user-palce-tcket">${user.authorityType == 'ROLE_USER'?'일반회원':'관리자'}</td>
+            <td align="center" class="user-phonenumber">${user.tel==null?'미입력':user.tel}</td>
+            <td align="center" class="user-register-date">${user.createdDate.split('T')[0]}</td>
+            <td align="center" class="user-status-select">
               <select class="user-status-choice" name="status-choice">
                 <option disabled selected value="">선택</option>
                 <option value="ACTIVATE">활성</option>
