@@ -5,20 +5,29 @@
     <meta content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
           name="viewport">
     <meta content="ie=edge" http-equiv="X-UA-Compatible">
+    <link rel="icon" th:href="@{/imgs/logo/favicon.png}">
     <link crossorigin="anonymous" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css"
           integrity="sha512-aOG0c6nPNzGk+5zjwyJaoRUgCdOrfSDhmMID2u4+OIslr0GjpLKo7Xm0Ao3xmpM4T8AmIouRkqwj1nrdVsLKEQ=="
           referrerpolicy="no-referrer" rel="stylesheet"/>
     <link href="/css/global-css/root.css" rel="stylesheet">
     <link href="/css/global-css/datepicker.css" rel="stylesheet">
     <link href="/css/ticket/ticket-detail.css" rel="stylesheet">
+    <link href="/css/global-css/chat.css" rel="stylesheet">
 
-    <title>티켓팅 상세보기</title>
+    <title th:text="${ticketDetail.title}"></title>
 </head>
 <body>
+
+<div th:replace="~{global-templates/chat :: chat}"></div>
+
+<div th:replace="~{/global-templates/header-footer :: header}"></div>
+
+<input id="isLoggedIn" th:value="${#authorization.expression('isAuthenticated()')}" type="hidden"/>
+
 <div id="page-body">
-    <div th:replace="~{/global-templates/header-footer :: header}"></div>
     <div class="SpaceDetailPageContainer">
         <div class="SpaceDetailContentContainer" th:object="${ticketDetail}">
+            <input id="id" th:value="*{ticketId}" type="hidden">
             <div class="SpaceDetailLeftContainer">
                 <div class="productMainTop">
                     <div class="summary">
@@ -64,12 +73,6 @@
                                     </div>
                                 </li>
                                 <li class="infoItem">
-                                    <strong class="infoLabel">공연시간</strong>
-                                    <div class="infoDesc">
-                                        <p class="infoText">110분</p>
-                                    </div>
-                                </li>
-                                <li class="infoItem">
                                     <strong class="infoLabel">관람연령</strong>
                                     <div class="infoDesc">
                                         <p class="infoText" th:text="*{ticketRatingType.displayName}"></p>
@@ -98,7 +101,7 @@
                     <button class="InfoTabBtn InfoTabBtnOff" onclick="changeTab(this)" type="button">주의사항</button>
                     <!--                    <button type="button" class="InfoTabBtn InfoTabBtnOff" onclick="changeTab(this)">후기<span class="InfoTabCount">20</span></button>-->
                     <button class="InfoTabBtn InfoTabBtnOff" onclick="changeTab(this)" type="button">문의<span
-                            class="InfoTabCount">250</span></button>
+                            class="InfoTabCount" th:text="*{inquiryCount}"></span></button>
                     <button class="InfoTabBtn InfoTabBtnOff" onclick="changeTab(this)" type="button">환불규정</button>
                 </div>
                 <!-- 직거래 유도 주의 안내 -->
@@ -146,68 +149,15 @@
                 <div class="QnaContainer">
                     <div class="QnaTitleContainer">
                         <p class="TitleText">문의
-                            <span class="QnaTitleCount">250</span>
+                            <span class="QnaTitleCount" th:text="*{inquiryCount}"></span>
                         </p>
                         <button class="QnaMainBtn" type="button">문의하기</button>
                     </div>
-                    <div class="QnaListContainer">
-                        <!-- QnA 한칸 -->
-                        <div class="QnaItemContainer">
-                            <div class="QnaItemQuestionContainer">
-                                <div class="QnaItemContentsContainer">
-                                    <p class="QnaItemContents">12/16(토) 11-2시 사이 예약될지요?</p>
-                                    <button class="QnaItemContentsMoreBtn" type="button"></button>
-                                    <!-- 열기 -->
-                                    <img alt="더보기" class="QnaItemContentsMoreBtnImg"
-                                         src="/imgs/arrow_down_gray074.3a483a93.svg">
-                                    <!-- 닫기 -->
-                                    <!-- <img src="/imgs/promotion-ticket/arrow_up_gray074.f2ebf2a9.svg" alt="더보기" class="QnaItemContentsMoreBtnImg"> -->
-                                </div>
-                                <div class="QnaAnswerContainer">
-                                    <div class="QnaDetailInfoContainer">
-                                        <span class="QnaReplyCount">답변1</span>
-                                        <p class="QnaDetailInformation">
-                                            <span>｜</span>[일정 문의] <span>｜</span> 권** <span>｜</span> 2023-12-16
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- 답변칸 -->
-                            <div class="QnaRepliesContainer none">
-                                <div class="QnaReply">
-                                    <p class="QnaReplyTitle">
-                                        <span class="QnaReplyTail">└</span>쉐어잇<span>｜</span>2023-12-18
-                                    </p>
-                                    <p class="QnaReplyContents">
-                                        안녕하세요 쉐어잇 입니다
-                                        학교시설의 경우 예약하기를 통해 접수 후 별도 안내드리고 있으며, 확인은 영업일 기준 2~3일 이상 시간이 소요될 수 있는 점
-                                        참고부탁드리겠습니다.
-                                        감사합니다.
-                                    </p>
-                                </div>
-                            </div>
-                            <!-- 답변칸 -->
-                        </div>
-                        <!-- QnA 한칸 -->
-                    </div>
+
+                    <div class="QnaListContainer" id="inquiryContainer"></div>
+
                     <div class="QnaPaginationContainer">
-                        <div class="QnaPagination">
-                            <button class="QnaPaginationArrowBtn" type="button">
-                                <img alt="이전 페이지" class="QnaPaginationArrowBtnImg"
-                                     src="/imgs/arrow_left_gray074.fa695002.svg">
-                            </button>
-                            <button class="PaginationPageOn" type="button">1</button>
-                            <button class="PaginationPageOff" type="button">2</button>
-                            <button class="PaginationPageOff" type="button">3</button>
-                            <button class="PaginationPageOff" type="button">4</button>
-                            <button class="PaginationPageOff" type="button">5</button>
-                            <button class="PaginationPageOff" type="button">6</button>
-                            <button class="PaginationPageOff" type="button">7</button>
-                            <button class="QnaPaginationArrowBtn" type="button">
-                                <img alt="다음 페이지" class="QnaPaginationArrowBtnImg"
-                                     src="/imgs/arrow_right_gray034.648942ed.svg">
-                            </button>
-                        </div>
+                        <div class="QnaPagination" id="inquiryPagination"></div>
                     </div>
                 </div>
                 <!-- Qna 페이징 -->
@@ -222,8 +172,6 @@
                         <div class="inquiry-content-box flex-between-align">
                             <p class="inquiry-guide">문의 제목</p>
                         </div>
-                        <!--        <div class="inquiry-title-box ">-->
-                        <!--        </div>-->
                         <input id="inquiryTitle" name="inquiryTitle" placeholder="문의 제목을 입력해주세요" type="text">
 
                         <div class="inquiry-content-box flex-between-align">
@@ -234,7 +182,7 @@
                                   placeholder="장소에 대해서 궁금한 점을 문의해주세요"
                                   rows="10"></textarea>
                         <div class="flex-align-center">
-                            <button class="inquiry-submit" type="button">문의등록</button>
+                            <button class="inquiry-submit" id="inquiryRegisterBtn" type="button">문의등록</button>
                         </div>
 
                     </div>
@@ -380,7 +328,6 @@
                         <div class="calendar-wrap">
                             <div class="choice-box">
                                 <div class="calendar-box">
-                                    <input id="id" th:value="*{ticketId}" type="hidden">
                                     <input id="startDate" th:value="*{startDate}" type="hidden">
                                     <input id="endDate" th:value="*{endDate}" type="hidden">
                                     <div id="datepicker"></div>
@@ -392,9 +339,15 @@
                         <div id="gradeSelectContainer"></div>
                     </div>
                     <div class="GoodsListBtnContainer">
-                        <button class="LikeWithReservationButton" type="button">
-                            <img alt="좋아요" class="LikeWithReservationButtonImg"
-                                 src="/imgs/heart_2line_gray064.40cc6c61.svg">
+                        <button id="likeBtn" class="LikeWithReservationButton" th:data-status="*{isLiked}"
+                                type="button">
+                            <span th:class="*{!isLiked} ? '' : 'none'">
+                                <img alt="좋아요" class="LikeWithReservationButtonImg"
+                                     src="/imgs/heart_2line_gray064.40cc6c61.svg">
+                            </span>
+                            <span th:class="*{isLiked} ? '' : 'none'">
+                               <img alt="좋아요" src="/imgs/heart_filled_sweetBlue046.76e646e1.svg">
+                            </span>
                         </button>
                         <button class="GoodsListReservationBtn" type="button">구매하기</button>
                     </div>
@@ -403,15 +356,17 @@
         </div>
     </div>
 </div>
+
 <div th:replace="~{/global-templates/header-footer :: footer}"></div>
+
 </body>
 
+<script src="/js/global-js/global.js" type="module"></script>
 <script crossorigin="anonymous" src="https://kit.fontawesome.com/c6992f5b12.js"></script>
 <script src="https://code.jquery.com/jquery-3.6.4.js"></script>
 <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
 <script src="//dapi.kakao.com/v2/maps/sdk.js?appkey=3dc12d7c2624483dc7c019a0a91b727f&libraries=services"
         type="text/javascript"></script>
-<script th:src="@{/js/global-js/global.js}" type="module"></script>
 <script th:src="@{/js/global-js/chat.js}" type="module"></script>
 <script src="/js/ticket/calendar.js" type="module"></script>
 <script src="/js/ticket/ticket-detail-map.js"></script>
