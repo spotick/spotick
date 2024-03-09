@@ -1,8 +1,12 @@
 package com.app.spotick.controller.admin;
 
+import com.app.spotick.domain.type.user.UserStatus;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import java.util.Arrays;
 
 @Controller
 @RequestMapping("/admin")
@@ -10,7 +14,6 @@ public class AdminController {
 
     @GetMapping("/user")
     public String adminUser(){
-
         return "admin/adminUser";
     }
 
