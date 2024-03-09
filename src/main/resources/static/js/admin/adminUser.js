@@ -72,54 +72,70 @@ function handleStatusChoice(checkboxIndex, selectValue) {
     }
 }
 
+let page = 0;
+let pagingTargetIdx = 2;
+let hasNext = true;
+
 loadUserList();
 
 function loadUserList() {
     fetch(`/admins/user/list`)
         .then(response => response.json())
         .then(data => {
-            console.log(data);
-            console.table(data.content);
-            displayUserLit(data.content);
+            displayUserList(data);
         });
 }
 
-function displayUserLit(data) {
+function displayUserList(data) {
+    hasNext = !data.slice.last;
     let text = '';
 
-    data.forEach(user => {
+    data.slice.content.forEach(user => {
         text += `
             <tr class="user-table-category">
-            <td class="user-table-checkbox" align="center">
+            <td align="center" class="user-table-checkbox" align="center">
               <input type="checkbox" name="" class="user-check" id="user-checking" value="${user.id}"/>
             </td>
-            <td class="user-email" >${user.email}</td>
-            <td class="user-nickname" >${user.nickName}</td>
-            <td class="user-palce-tcket">${user.authorityType == 'ROLE_USER'?'일반회원':'관리자'}</td>
-            <td class="user-phonenumber">${user.tel==null?'미입력':user.tel}</td>
-            <td class="user-register-date">${user.createdDateStr}</td>
-            <td class="user-status-select">
+            <td align="center" class="user-email" >${user.email}</td>
+            <td align="center" class="user-nickname" >${user.nickName}</td>
+            <td align="center" class="user-palce-tcket">${user.authorityType == 'ROLE_USER'?'일반회원':'관리자'}</td>
+            <td align="center" class="user-phonenumber">${user.tel==null?'미입력':user.tel}</td>
+            <td align="center" class="user-register-date">${user.createdDate.split('T')[0]}</td>
+            <td align="center" class="user-status-select">
               <select class="user-status-choice" name="status-choice">
-                <option disabled selected value="">선택</option>
-                <option value="ACTIVATE">활성</option>
-                <option value="SUSPENDED_7_DAYS">7일 정지</option>
-                <option value="SUSPENDED_30_DAYS">30일 정지</option> 
-                <option value="PERMANENTLY_SUSPENDED">영구 정지</option> 
-                <option value="DEACTIVATE">탈퇴</option> 
-              </select>
+                <option disabled selected value="">선택</option>`;
+        data.enumValues.forEach(status=>{
+            text += `<option value="${status.name}">${status.displayName}</option>`;
+        });
+
+        text +=`</select>
             </td>
-            <td class="user-status-manegement" align="center">
-              <div class="user-status-box Y">${valueOfUserStatus(user.userStatus).displayName}</div>
-              <!-- 회원 상태 보여주기 -->
-              <!-- <div class="user-status-box">정지 회원</div>
-              <div class="user-status-box">영구 정지</div> -->
-              <!-- 회원 상태 보여주기 -->
-            </td>
+            <td class="user-status-manegement" align="center">`;
+
+        data.enumValues.forEach(status=>{
+            if(status.name === user.userStatus){
+                text += `<div class="user-status-box ${user.userStatus === "ACTIVATE"?'Y':'B'}">
+                    ${status.displayName}
+                  </div>`;
+            }
+        });
+        text += `</td>
           </tr>       
        `;
     });
 
-    $('.tbody-user').html(text);
+    $('.tbody-user').append(text);
 }
+
+$('.table-box').on('scroll',function (){
+    if(!hasNext) return;
+
+    let itemContainers = document.querySelectorAll('.user-table-category');
+    let {bottom} = itemContainers[pagingTargetIdx - 1].getBoundingClientRect();
+    if (bottom < 0) {
+        pagingTargetIdx += 12;
+        loadPlaceList();
+    }
+});
 
 

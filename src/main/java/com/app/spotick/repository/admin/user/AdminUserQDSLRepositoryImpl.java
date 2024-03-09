@@ -18,7 +18,6 @@ import java.util.stream.Collectors;
 import static com.app.spotick.domain.entity.user.QUser.user;
 import static com.app.spotick.domain.entity.user.QUserAuthority.userAuthority;
 
-@Repository
 @RequiredArgsConstructor
 public class AdminUserQDSLRepositoryImpl implements AdminUserQDSLRepository {
     private final JPAQueryFactory queryFactory;
@@ -68,7 +67,6 @@ public class AdminUserQDSLRepositoryImpl implements AdminUserQDSLRepository {
                     authorityListMap.get(adminUserListDto.getId())
                             .size() == 1 ? AuthorityType.ROLE_USER : AuthorityType.ROLE_ADMIN
             );
-            adminUserListDto.formatCreatedDate();
         });
 
         return new SliceImpl<>(userList,pageable,hasNext);

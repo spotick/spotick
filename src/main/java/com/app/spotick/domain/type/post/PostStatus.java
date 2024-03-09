@@ -1,9 +1,10 @@
 package com.app.spotick.domain.type.post;
 
+import com.app.spotick.domain.base.type.Displayable;
 import lombok.Getter;
 
 @Getter
-public enum PostStatus {
+public enum PostStatus implements Displayable {
     REGISTRATION_PENDING("등록 대기중"), // 등록 대기중
     APPROVED("활성화"),             // 승인
     REJECTED("거절됨"),             // 거절
@@ -18,6 +19,4 @@ public enum PostStatus {
     PostStatus(String displayName) {
         this.displayName = displayName;
     }
-
-
 }
