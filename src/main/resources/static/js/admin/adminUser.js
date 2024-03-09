@@ -72,18 +72,22 @@ function handleStatusChoice(checkboxIndex, selectValue) {
     }
 }
 
+let page = 0;
+let pagingTargetIdx = 2;
+let hasNext = true;
+
 loadUserList();
 
 function loadUserList() {
     fetch(`/admins/user/list`)
         .then(response => response.json())
         .then(data => {
-            console.log(data);
             displayUserList(data);
         });
 }
 
 function displayUserList(data) {
+    hasNext = !data.slice.last;
     let text = '';
 
     data.slice.content.forEach(user => {
@@ -120,7 +124,18 @@ function displayUserList(data) {
        `;
     });
 
-    $('.tbody-user').html(text);
+    $('.tbody-user').append(text);
 }
+
+$('.table-box').on('scroll',function (){
+    if(!hasNext) return;
+
+    let itemContainers = document.querySelectorAll('.user-table-category');
+    let {bottom} = itemContainers[pagingTargetIdx - 1].getBoundingClientRect();
+    if (bottom < 0) {
+        pagingTargetIdx += 12;
+        loadPlaceList();
+    }
+});
 
 
