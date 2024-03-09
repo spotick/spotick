@@ -339,14 +339,15 @@
                         <div id="gradeSelectContainer"></div>
                     </div>
                     <div class="GoodsListBtnContainer">
-                        <button id="likeBtn" class="LikeWithReservationButton" th:data-status="*{isLiked}"
+                        <button class="LikeWithReservationButton" id="likeBtn" th:data-status="*{isLiked}"
                                 type="button">
                             <span th:class="*{!isLiked} ? '' : 'none'">
                                 <img alt="좋아요" class="LikeWithReservationButtonImg"
                                      src="/imgs/heart_2line_gray064.40cc6c61.svg">
                             </span>
                             <span th:class="*{isLiked} ? '' : 'none'">
-                               <img alt="좋아요" src="/imgs/heart_filled_sweetBlue046.76e646e1.svg">
+                               <img alt="좋아요" class="LikeWithReservationButtonImg"
+                                    src="/imgs/heart_filled_sweetBlue046.76e646e1.svg">
                             </span>
                         </button>
                         <button class="GoodsListReservationBtn" type="button">구매하기</button>

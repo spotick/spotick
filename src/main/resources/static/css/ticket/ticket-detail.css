@@ -1035,7 +1035,7 @@ button {
 .ReviewItemLikeBtnImg {
     width: 16px;
     animation-duration: 0.6s;
-    animation-name: activateAnimation;
+    animation-name: activateAnimation2;
 }
 
 .ReviewMainBtnContainer {
@@ -2768,4 +2768,16 @@ button {
     width: 22px;
     height: 12px;
     background: url('https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/vertex_white.png')
+}
+
+@keyframes activateAnimation2 {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(0.1);
+    }
+    100% {
+        transform: scale(1);
+    }
 }

@@ -1,3 +1,6 @@
+import {loadingMarkService} from "../modules/loadingMark.js";
+
+
 let page = 0;
 let hasNext = true;
 let isLoading = false;
@@ -19,17 +22,16 @@ const errorContent = document.querySelector('.error-content');
 const inquiryContainer = document.getElementById('inquiryContainer');
 
 const loadingMark = document.getElementById('mpLoadingMark');
+const ticketId = document.getElementById('id').value;
 const inquiryService = (function () {
 
     function requestInquiries(callback) {
         loadingMarkService.show(loadingMark);
 
-        const placeId = extractVariableFromURL();
-
         //todo : 로딩 마스크 테스트용, 테스트 후 삭제 필요
         setTimeout(() => {
 
-            fetch(`/inquiries/api/getTicket/${placeId}?page=${page}`, {
+            fetch(`/inquiries/api/getTicket/${ticketId}?page=${page}`, {
                 method: 'GET'
             })
                 .then(response => {
@@ -187,7 +189,6 @@ window.onload = function () {
 
 document.getElementById('requestBtn').addEventListener('click', function () {
     let inquiryId = inquiryIdInput.value;
-    let ticketId = extractVariableFromURL();
     let responseString = responseInput.value;
 
 

@@ -303,7 +303,7 @@
                                             </div>
                                             <div class="mpccc-row">
                                                 <a class="mpccc-line-btn"
-                                                   th:href="@{/mypage/tickets/inquiries/{ticketId}(ticketId = *{ticketId})}">
+                                                   th:href="@{/mypage/tickets/{ticketId}/inquiries(ticketId = *{ticketId})}">
                                                     <span>문의 관리</span>
                                                     <div class="mpccc-alarm" th:if="*{inquiriesCount > 0}">
                                                         <span th:text="*{inquiriesCount}"></span>

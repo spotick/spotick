@@ -57,6 +57,8 @@ function showGSForTicketInquiryDeletion(inquiryId) {
 function ticketDeleteInquiry(inquiryId) {
     closeOnlyThisModal(globalSelection);
 
+    console.log(inquiryId)
+
     fetch(`/inquiries/api/ticketDelete/${inquiryId}`, {
         method: 'DELETE'
     })
@@ -194,7 +196,7 @@ const inquiryService = (function () {
                 })
             })
 
-            document.querySelectorAll('.reservationDelete').forEach(reservationDelete => {
+            document.querySelectorAll(".reservationDelete").forEach(reservationDelete => {
                 reservationDelete.addEventListener('click', function () {
                     const id = this.getAttribute('id');
                     console.log(id);
@@ -255,7 +257,7 @@ const inquiryService = (function () {
                                         <a href="/place/detail/${inquiry.ticketId}">해당
                                             게시글로 이동</a>
                                     </div>
-                                    <div class="action-item" onclick="showGSForTicketInquiryDeletion(${inquiry.inquiryId})">
+                                    <div class="action-item ticketDelete" id="${inquiry.inquiryId}">
                                         <span>문의 내역 삭제</span>
                                     </div>
                                 </div>
@@ -283,7 +285,7 @@ const inquiryService = (function () {
                             </div>
                         </div>
                         <div class="mpcr-divider"></div>
-                        <div class="mpcr-info" onclick="popupInquiryModal(this)" title="상세 정보" data-content="${inquiry.content}" data-response="${inquiry.response}">
+                        <div class="mpcr-info popupTicket" title="상세 정보" data-content="${inquiry.content}" data-response="${inquiry.response}">
                             <div class="space-between" style="margin-bottom: 8px">
                                 <div class="mpcri-title">문의 내용</div>
                                 ${inquiry.responded ?
@@ -300,6 +302,19 @@ const inquiryService = (function () {
                 </article>`
 
             container.insertAdjacentHTML("beforeend", articleHtml);
+        })
+
+        document.querySelectorAll('.popupTicket').forEach((ticket) => {
+            ticket.addEventListener('click', () => {
+                popupInquiryModal(ticket);
+            })
+        })
+
+        document.querySelectorAll('.ticketDelete').forEach((ticket) => {
+            ticket.addEventListener('click', () => {
+                const ticketId = ticket.getAttribute('id');
+                showGSForTicketInquiryDeletion(ticketId);
+            })
         })
 
         ticketPaginationReload(data)

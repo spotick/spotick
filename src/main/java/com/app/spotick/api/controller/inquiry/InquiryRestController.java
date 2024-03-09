@@ -7,7 +7,6 @@ import com.app.spotick.domain.dto.place.PlaceInquiryListDto;
 import com.app.spotick.domain.dto.place.inquiry.UnansweredInquiryDto;
 import com.app.spotick.domain.dto.ticket.TicketInquiryListDto;
 import com.app.spotick.domain.dto.user.UserDetailsDto;
-import com.app.spotick.domain.entity.place.PlaceInquiry;
 import com.app.spotick.domain.pagination.Pagination;
 import com.app.spotick.service.place.inquiry.PlaceInquiryService;
 import com.app.spotick.service.ticket.inquiry.TicketInquiryService;
