@@ -53,6 +53,7 @@
 
 <header th:replace="~{global-templates/header-footer :: header}"></header>
 
+<input id="id" th:value="${ticketInfo.ticketId}" type="hidden">
 <main class="my-page-main" id="page-body">
     <div th:replace="~{global-templates/mypage :: mypage-menu}"></div>
     <div class="mp-content">
@@ -119,7 +120,7 @@
 <script src="https://code.jquery.com/jquery-3.6.4.js"></script>
 <script src="/js/global-js/global.js" type="module"></script>
 <script src="/js/mypage/mypage.js"></script>
-<script src="/js/mypage/ticket-inquiry.js"></script>
+<script src="/js/mypage/ticket-inquiry.js" type="module"></script>
 <script src="/js/global-js/chat.js" type="module"></script>
 <script>
     document.getElementById('tickets').classList.add('active');
