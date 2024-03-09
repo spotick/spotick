@@ -45,9 +45,6 @@ public class Place extends PostBase {
     @OneToMany(mappedBy = "place", fetch = FetchType.LAZY)
     private List<PlaceFile> placeFileList = new ArrayList<>();
 
-//    @OneToMany(mappedBy = "place", fetch = FetchType.LAZY)
-//    private List<PlaceReview> placeReviewList = new ArrayList<>();
-
     @Builder
     public Place(String title, int viewCount, Double lat, Double lng, Long id, String subTitle, String info, String rule, Integer defaultPeople, PostAddress placeAddress, Integer price, Integer surcharge, String bankName, String accountNumber, String accountHolder, PostStatus placeStatus, User user,  List<PlaceFile> placeFileList) {
         super(title, viewCount, lat, lng);

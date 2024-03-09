@@ -1,7 +1,8 @@
 package com.app.spotick.api.controller.admin;
 
-import com.app.spotick.api.dto.response.CommonResponse;
+import com.app.spotick.domain.dto.admin.AdminPlaceListDto;
 import com.app.spotick.domain.dto.admin.AdminUserListDto;
+import com.app.spotick.domain.type.post.PostStatus;
 import com.app.spotick.domain.type.user.UserStatus;
 import com.app.spotick.service.admin.AdminService;
 import lombok.RequiredArgsConstructor;
@@ -14,7 +15,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
 import java.util.Map;
+
+import com.app.spotick.domain.dto.enumdto.DisplayableEnumDto;
+
+import static com.app.spotick.domain.dto.enumdto.DisplayableEnumDto.getDisplayableDtoList;
 
 @RestController
 @RequiredArgsConstructor
@@ -24,29 +30,30 @@ public class AdminRestController {
 
     //  관리자 페이지 회원관리 전체 조회 및 페이징 처리(무한 스크롤)
     @GetMapping("/user/list")
-    public ResponseEntity<Slice<AdminUserListDto>> adminUserList(
+    public ResponseEntity<Map<String,Object>> adminUserList(
             @PageableDefault(page = 0,
                     size = 12, sort = "id",
                     direction = Sort.Direction.DESC
             ) Pageable pageable) {
         Slice<AdminUserListDto> adminUserListDto = adminService.findAdminUserList(pageable);
-        return ResponseEntity.ok(adminUserListDto);
+        Map<String,Object> map = new HashMap<>();
+        map.put("slice",adminUserListDto);
+        map.put("enumValues", getDisplayableDtoList(UserStatus.values()));
+        return ResponseEntity.ok(map);
     }
 
     //  관리자 페이지 장소글 전체 조회 및 페이징 처리(무한 스크롤)
     @GetMapping("/place/list")
-    public ResponseEntity<CommonResponse<Map<String, Object>>> adminPlaceList(Pageable pageable) {
-//        Slice<AdminPlaceListDto> adminPlaceListDto = adminPlaceService.placeListWithSlice(pageable);
-//
-//        PostStatus[] values = PostStatus.values();
-//        Map<String, Object> map = new HashMap<>();
-//
-//        map.put("postStatus",values);
-//        map.put("list",adminPlaceListDto);
-//
-//        return ResponseEntity.ok(new ApiResponse<>(true, "목록 조회성공", map));
-        return null;
-
+    public ResponseEntity<Map<String, Object>> adminPlaceList(
+            @PageableDefault(page = 0,
+                    size = 12, sort = "id",
+                    direction = Sort.Direction.DESC
+            ) Pageable pageable) {
+        Slice<AdminPlaceListDto> adminPlaceListDto = adminService.findAdminPlaceList(pageable);
+        Map<String,Object> map = new HashMap<>();
+        map.put("slice",adminPlaceListDto);
+        map.put("enumValues", getDisplayableDtoList(PostStatus.values()));
+        return ResponseEntity.ok(map);
     }
 
 
