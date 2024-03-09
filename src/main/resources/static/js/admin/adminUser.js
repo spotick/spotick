@@ -79,15 +79,14 @@ function loadUserList() {
         .then(response => response.json())
         .then(data => {
             console.log(data);
-            console.table(data.content);
-            displayUserList(data.content);
+            displayUserList(data);
         });
 }
 
 function displayUserList(data) {
     let text = '';
 
-    data.forEach(user => {
+    data.slice.content.forEach(user => {
         text += `
             <tr class="user-table-category">
             <td align="center" class="user-table-checkbox" align="center">
@@ -100,21 +99,23 @@ function displayUserList(data) {
             <td align="center" class="user-register-date">${user.createdDate.split('T')[0]}</td>
             <td align="center" class="user-status-select">
               <select class="user-status-choice" name="status-choice">
-                <option disabled selected value="">선택</option>
-                <option value="ACTIVATE">활성</option>
-                <option value="SUSPENDED_7_DAYS">7일 정지</option>
-                <option value="SUSPENDED_30_DAYS">30일 정지</option> 
-                <option value="PERMANENTLY_SUSPENDED">영구 정지</option> 
-                <option value="DEACTIVATE">탈퇴</option> 
-              </select>
+                <option disabled selected value="">선택</option>`;
+        data.enumValues.forEach(status=>{
+            text += `<option value="${status.name}">${status.displayName}</option>`;
+        });
+
+        text +=`</select>
             </td>
-            <td class="user-status-manegement" align="center">
-              <div class="user-status-box Y">${valueOfUserStatus(user.userStatus).displayName}</div>
-              <!-- 회원 상태 보여주기 -->
-              <!-- <div class="user-status-box">정지 회원</div>
-              <div class="user-status-box">영구 정지</div> -->
-              <!-- 회원 상태 보여주기 -->
-            </td>
+            <td class="user-status-manegement" align="center">`;
+
+        data.enumValues.forEach(status=>{
+            if(status.name === user.userStatus){
+                text += `<div class="user-status-box ${user.userStatus === "ACTIVATE"?'Y':'B'}">
+                    ${status.displayName}
+                  </div>`;
+            }
+        });
+        text += `</td>
           </tr>       
        `;
     });

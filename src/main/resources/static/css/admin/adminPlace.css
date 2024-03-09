@@ -274,6 +274,16 @@ tbody tr {
     font-weight: bold;
 }
 
+.P{
+    background-color: rgb(255 247 237);
+    color: #ffc100;
+    width: 85px;
+    border: none;
+    border-radius: 5px;
+    padding: 6px 11px;
+    font-weight: bold;
+}
+
 .B {
     width: 85px;
     background-color: rgb(255, 237, 237);
