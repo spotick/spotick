@@ -20,7 +20,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.NoSuchElementException;
-import java.util.Optional;
 
 @Service
 @Transactional
@@ -44,7 +43,7 @@ public class PlaceInquiryServiceImpl implements PlaceInquiryService {
                 .build();
         PlaceInquiry savedInquiry = inquiryRepository.save(placeInquiry);
 
-        noticeService.saveNotice(NoticeType.INQUIRY_REGISTER,place.getUser().getId());
+        noticeService.saveNotice(NoticeType.PLACE_INQUIRY_REGISTER,place.getUser().getId());
 
         return PlaceInquiryDto.Response.from(savedInquiry);
     }
