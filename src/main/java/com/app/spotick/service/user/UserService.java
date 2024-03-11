@@ -1,5 +1,6 @@
 package com.app.spotick.service.user;
 
+import com.app.spotick.api.dto.user.UserStatusDto;
 import com.app.spotick.domain.dto.page.TicketPage;
 import com.app.spotick.api.dto.user.UserFindEmailDto;
 import com.app.spotick.domain.dto.place.PlaceListDto;
@@ -60,4 +61,6 @@ public interface UserService {
     UserFindEmailDto.Response findUserFindEmailDto(String nickname,String tel);
 
     void sendCodeToEmail(String toEmail) throws ConnectException;
+
+    void updateUserStatus(UserStatusDto userStatusDto);
 }
