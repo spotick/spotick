@@ -1,9 +1,12 @@
 package com.app.spotick.repository.admin.user;
 
+import com.app.spotick.api.dto.admin.AdminUserSearchDto;
 import com.app.spotick.domain.dto.admin.AdminUserListDto;
 import com.app.spotick.domain.dto.user.UserAuthorityDto;
 import com.app.spotick.domain.type.user.AuthorityType;
+import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Projections;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -23,8 +26,8 @@ public class AdminUserQDSLRepositoryImpl implements AdminUserQDSLRepository {
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public Slice<AdminUserListDto> findAdminUserList(Pageable pageable) {
-
+    public Slice<AdminUserListDto> findAdminUserList(Pageable pageable, AdminUserSearchDto userSearchDto) {
+        System.out.println(" userSearchDto = " + userSearchDto);
         List<AdminUserListDto> userList = queryFactory.select(
                         Projections.constructor(AdminUserListDto.class,
                                 user.id,
@@ -36,6 +39,7 @@ public class AdminUserQDSLRepositoryImpl implements AdminUserQDSLRepository {
                         )
                 )
                 .from(user)
+                .where(createSearchCondition(userSearchDto))
                 .orderBy(user.id.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize() + 1)
@@ -71,4 +75,22 @@ public class AdminUserQDSLRepositoryImpl implements AdminUserQDSLRepository {
 
         return new SliceImpl<>(userList,pageable,hasNext);
     }
+
+    private BooleanBuilder createSearchCondition(AdminUserSearchDto userSearchDto){
+        BooleanBuilder builder = new BooleanBuilder();
+        if (userSearchDto.getEmail() != null) {
+            builder.and(user.email.contains(userSearchDto.getEmail()));
+        }
+        if (userSearchDto.getNickName() != null) {
+            builder.and(user.nickName.contains(userSearchDto.getNickName()));
+        }
+        if (userSearchDto.getStatus() != null) {
+            builder.and(user.userStatus.eq(userSearchDto.getStatus()));
+        }
+        return builder;
+    }
+
+
+
 }
+

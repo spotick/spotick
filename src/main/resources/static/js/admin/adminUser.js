@@ -6,7 +6,7 @@ const UserStatus = {
     DEACTIVATE: {value: 'DEACTIVATE', displayName: "탈퇴"}
 }
 
-function valueOfUserStatus(key){
+function valueOfUserStatus(key) {
     return UserStatus[key];
 }
 
@@ -28,23 +28,23 @@ $(".user-check").on("click", function () {
 });
 
 // 체크박스 선택 후 일반회원 정지회원 설정하기
-    $(".tbody-user").on('change','input.user-check',function () {
-        let checkboxes = $("input.user-check:checked");
+$(".tbody-user").on('change', 'input.user-check', function () {
+    let checkboxes = $("input.user-check:checked");
 
-        checkboxes.each(function () {
-            let checkbox = $(this);
-            let checkboxIndex = checkbox.closest("tr").index();
-            let isChecked = checkbox.is(":checked");
+    checkboxes.each(function () {
+        let checkbox = $(this);
+        let checkboxIndex = checkbox.closest("tr").index();
+        let isChecked = checkbox.is(":checked");
 
-            if (isChecked) {
-                $(".user-search-table tbody tr:eq(" + checkboxIndex + ") .user-status-choice").change(function () {
-                    let selectElement = $(this);
-                    let selectValue = selectElement.val();
-                    handleStatusChoice(checkboxIndex, selectValue);
-                });
-            }
-        });
+        if (isChecked) {
+            $(".user-search-table tbody tr:eq(" + checkboxIndex + ") .user-status-choice").change(function () {
+                let selectElement = $(this);
+                let selectValue = selectElement.val();
+                handleStatusChoice(checkboxIndex, selectValue);
+            });
+        }
     });
+});
 
 function handleStatusChoice(checkboxIndex, selectValue) {
     let statusChoiceBtn = $(".user-search-table tbody tr:eq(" + checkboxIndex + ") .user-status-box");
@@ -75,11 +75,14 @@ function handleStatusChoice(checkboxIndex, selectValue) {
 let page = 0;
 let pagingTargetIdx = 2;
 let hasNext = true;
+let email = '';
+let nickName = '';
+let status = '';
 
 loadUserList();
 
 function loadUserList() {
-    fetch(`/admins/user/list`)
+    fetch(`/admins/user/list?page=${page++}${createSearchParamQuery()}`)
         .then(response => response.json())
         .then(data => {
             displayUserList(data);
@@ -98,23 +101,24 @@ function displayUserList(data) {
             </td>
             <td align="center" class="user-email" >${user.email}</td>
             <td align="center" class="user-nickname" >${user.nickName}</td>
-            <td align="center" class="user-palce-tcket">${user.authorityType == 'ROLE_USER'?'일반회원':'관리자'}</td>
-            <td align="center" class="user-phonenumber">${user.tel==null?'미입력':user.tel}</td>
+            <td align="center" class="user-palce-tcket">${user.authorityType == 'ROLE_USER' ? '일반회원' : '관리자'}</td>
+            <td align="center" class="user-phonenumber">${user.tel == null ? '미입력' : user.tel}</td>
             <td align="center" class="user-register-date">${user.createdDate.split('T')[0]}</td>
             <td align="center" class="user-status-select">
-              <select class="user-status-choice" name="status-choice">
-                <option disabled selected value="">선택</option>`;
-        data.enumValues.forEach(status=>{
-            text += `<option value="${status.name}">${status.displayName}</option>`;
+              <select class="user-status-choice" name="status-choice">`;
+        data.enumValues.forEach(status => {
+            text += `<option value="${status.name}" ${user.userStatus === status.name ? 'selected' : ''}>
+                        ${status.displayName}
+                     </option>`;
         });
 
-        text +=`</select>
+        text += `</select>
             </td>
             <td class="user-status-manegement" align="center">`;
 
-        data.enumValues.forEach(status=>{
-            if(status.name === user.userStatus){
-                text += `<div class="user-status-box ${user.userStatus === "ACTIVATE"?'Y':'B'}">
+        data.enumValues.forEach(status => {
+            if (status.name === user.userStatus) {
+                text += `<div class="user-status-box ${user.userStatus === "ACTIVATE" ? 'Y' : 'B'}">
                     ${status.displayName}
                   </div>`;
             }
@@ -127,8 +131,8 @@ function displayUserList(data) {
     $('.tbody-user').append(text);
 }
 
-$('.table-box').on('scroll',function (){
-    if(!hasNext) return;
+$('.table-box').on('scroll', function () {
+    if (!hasNext) return;
 
     let itemContainers = document.querySelectorAll('.user-table-category');
     let {bottom} = itemContainers[pagingTargetIdx - 1].getBoundingClientRect();
@@ -136,6 +140,66 @@ $('.table-box').on('scroll',function (){
         pagingTargetIdx += 12;
         loadPlaceList();
     }
+});
+
+// 회원 상태 변경
+$('.user-management-btn').on('click', function () {
+    let checkboxes = $("input.user-check:checked");
+    let statusObjArr = [];
+
+    checkboxes.each((i, checkbox) => {
+        let $checkbox = $(checkbox);
+        let userId = $checkbox.val();
+        let selectedStatus = $checkbox.closest('.user-table-category')
+            .find('.user-status-choice').val();
+        let statusObj = {userId: userId, status: selectedStatus}
+        statusObjArr.push(statusObj);
+    });
+    changeUserStatus(statusObjArr);
+});
+
+function changeUserStatus(statusObjArr) {
+    fetch(`/admins/user/status/change`, {
+        method: 'POST',
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(statusObjArr),
+    }).then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        } else {
+            clearList();
+            loadUserList();
+        }
+    });
+}
+
+function clearList() {
+    page = 0;
+    $('.tbody-user').html('');
+}
+
+function createSearchParamQuery() {
+    let paramStr = '';
+
+    paramStr += email === '' ? '' : `&email=${email}`;
+    paramStr += nickName === '' ? '' : `&nickName=${nickName}`;
+    paramStr += status === '' ? '' : `&status=${status}`;
+
+    return paramStr;
+}
+
+$('.search-btn').on('click', function () {
+    let emailValue = $('#email').val();
+    let nickNameValue = $('#nickName').val();
+    let statusValue = $('#status').val();
+
+    email = emailValue;
+    nickName = nickNameValue;
+    status = statusValue;
+    clearList();
+    loadUserList();
 });
 
 
