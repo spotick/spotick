@@ -75,11 +75,14 @@ function handleStatusChoice(checkboxIndex, selectValue) {
 let page = 0;
 let pagingTargetIdx = 2;
 let hasNext = true;
+let email = '';
+let nickName = '';
+let status = '';
 
 loadUserList();
 
 function loadUserList() {
-    fetch(`/admins/user/list?page=${page++}`)
+    fetch(`/admins/user/list?page=${page++}${createSearchParamQuery()}`)
         .then(response => response.json())
         .then(data => {
             displayUserList(data);
@@ -163,12 +166,40 @@ function changeUserStatus(statusObjArr) {
         },
         body: JSON.stringify(statusObjArr),
     }).then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }else{
-                page = 0;
-                $('.tbody-user').html('');
-                loadUserList();
-            }
-        });
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        } else {
+            clearList();
+            loadUserList();
+        }
+    });
 }
+
+function clearList() {
+    page = 0;
+    $('.tbody-user').html('');
+}
+
+function createSearchParamQuery() {
+    let paramStr = '';
+
+    paramStr += email === '' ? '' : `&email=${email}`;
+    paramStr += nickName === '' ? '' : `&nickName=${nickName}`;
+    paramStr += status === '' ? '' : `&status=${status}`;
+
+    return paramStr;
+}
+
+$('.search-btn').on('click', function () {
+    let emailValue = $('#email').val();
+    let nickNameValue = $('#nickName').val();
+    let statusValue = $('#status').val();
+
+    email = emailValue;
+    nickName = nickNameValue;
+    status = statusValue;
+    clearList();
+    loadUserList();
+});
+
+

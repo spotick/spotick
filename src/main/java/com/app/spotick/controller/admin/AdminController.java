@@ -16,7 +16,8 @@ import static com.app.spotick.domain.dto.enumdto.DisplayableEnumDto.getDisplayab
 public class AdminController {
 
     @GetMapping("/user")
-    public String adminUser(){
+    public String adminUser(Model model){
+        model.addAttribute("enumValues",getDisplayableDtoList(UserStatus.values()));
         return "admin/adminUser";
     }
 

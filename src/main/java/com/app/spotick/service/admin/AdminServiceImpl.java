@@ -1,5 +1,6 @@
 package com.app.spotick.service.admin;
 
+import com.app.spotick.api.dto.admin.AdminUserSearchDto;
 import com.app.spotick.api.dto.user.UserStatusDto;
 import com.app.spotick.domain.dto.admin.AdminPlaceListDto;
 import com.app.spotick.domain.dto.admin.AdminUserListDto;
@@ -23,8 +24,8 @@ public class AdminServiceImpl implements AdminService{
     private final UserService userService;
 
     @Override
-    public Slice<AdminUserListDto> findAdminUserList(Pageable pageable){
-        return adminUserRepository.findAdminUserList(pageable);
+    public Slice<AdminUserListDto> findAdminUserList(Pageable pageable, AdminUserSearchDto userSearchDto){
+        return adminUserRepository.findAdminUserList(pageable,userSearchDto);
     }
 
     @Override

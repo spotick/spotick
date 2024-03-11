@@ -1,103 +1,100 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>관리자 페이지 - 회원 관리</title>
-  <link
-          rel="stylesheet"
-          href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css"
-          integrity="sha512-aOG0c6nPNzGk+5zjwyJaoRUgCdOrfSDhmMID2u4+OIslr0GjpLKo7Xm0Ao3xmpM4T8AmIouRkqwj1nrdVsLKEQ=="
-          crossorigin="anonymous"
-          referrerpolicy="no-referrer"
-  />
-  <link th:href="@{/imgs/logo/favicon.png}" rel="icon">
-  <link rel="stylesheet" th:href="@{/css/admin/adminUser.css}" />
-  <link rel="stylesheet" th:href="@{/css/admin/datepicker.css}" />
-  <link rel="stylesheet" th:href="@{/css/global-css/adminSideBar.css}"/>
-  <link rel="stylesheet" th:href="@{/css/global-css/root.css}"/>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>관리자 페이지 - 회원 관리</title>
+    <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css"
+            integrity="sha512-aOG0c6nPNzGk+5zjwyJaoRUgCdOrfSDhmMID2u4+OIslr0GjpLKo7Xm0Ao3xmpM4T8AmIouRkqwj1nrdVsLKEQ=="
+            crossorigin="anonymous"
+            referrerpolicy="no-referrer"
+    />
+    <link th:href="@{/imgs/logo/favicon.png}" rel="icon">
+    <link rel="stylesheet" th:href="@{/css/admin/adminUser.css}"/>
+    <link rel="stylesheet" th:href="@{/css/admin/datepicker.css}"/>
+    <link rel="stylesheet" th:href="@{/css/global-css/adminSideBar.css}"/>
+    <link rel="stylesheet" th:href="@{/css/global-css/root.css}"/>
 </head>
 <body>
 <header th:replace="~{global-templates/header-footer :: header}"></header>
 <div class="admin-main">
-  <div class="admin-app">
-    <!-- 관리자 사이드메뉴 flagment -->
-    <div class="admin-container" th:replace="~{global-templates/adminSideBar :: adminSideBar}"></div>
-    <!-- 관리자 사이드메뉴 flagment -->
+    <div class="admin-app">
+        <!-- 관리자 사이드메뉴 flagment -->
+        <div class="admin-container" th:replace="~{global-templates/adminSideBar :: adminSideBar}"></div>
+        <!-- 관리자 사이드메뉴 flagment -->
 
-    <!-- 관리자 카테고리 및 회원 정보 검색 및 테이블 -->
-    <div class="admin-category">
-      <!-- 관리자 카테고리 -->
-      <div class="category">
-        <div class="admin-big-category">
-          <h2>회원 관리</h2>
+        <!-- 관리자 카테고리 및 회원 정보 검색 및 테이블 -->
+        <div class="admin-category">
+            <!-- 관리자 카테고리 -->
+            <div class="category">
+                <div class="admin-big-category">
+                    <h2>회원 관리</h2>
 
-          <div class="admin-small-category">
-            <a href="#" class="admin-small-category-url categoty-url">
-              <h4>회원 정보</h4>
-            </a>
-          </div>
+                    <div class="admin-small-category">
+                        <a href="#" class="admin-small-category-url categoty-url">
+                            <h4>회원 정보</h4>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <!-- 관리자 카테고리 -->
+
+            <!-- 회원 정보 검색 및 테이블 -->
+            <form action="#" method="get">
+                <div class="user-search">
+                    <span>이메일 : </span>
+                    <input type="text" id="email" placeholder="이메일" class="user-search-name"/>
+                    <span>닉네임 : </span>
+                    <input type="text" id="nickName" placeholder="닉네임" class="user-search-name"/>
+                    <span>가입일 : </span>
+                    <input name="date" id="datepicker"/>
+                    <span>회원상태 : </span>
+                    <select name="mode" id="status" class="user-search-place-ticket">
+                        <option selected value="">전체</option>
+                        <option th:value="${status.name}" th:each="status : ${enumValues}"
+                                th:text="${status.displayName}"></option>
+                    </select>
+                    <button type="button" class="search-btn">검색</button>
+                </div>
+                <!-- 장소일 때, 티켓일 때 드롭박스 달리 보이게 설정 -->
+            </form>
+
+            <div class="table-box">
+                <table class="user-search-table">
+                    <thead>
+                    <tr class="user-table-category">
+                        <td class="user-table-checkbox" align="center">
+                            <input type="checkbox" name="" id="user-table-category-check"/>
+                        </td>
+                        <td class="user-email" align="center">이메일</td>
+                        <td class="user-nickname" align="center">닉네임</td>
+                        <td class="user-place-ticket" align="center">회원등급</td>
+                        <td class="user-phonenumber" align="center">핸드폰 번호</td>
+                        <!-- <td class="user-address">주소</td>
+                        <td class="user-address-detail">상세주소</td>
+                        <td class="user-zipcode">우편번호</td> -->
+                        <td class="user-register-date" align="center">가입일</td>
+                        <td class="user-status" align="center">회원상태</td>
+                        <td class="user-now-status" align="center">회원 상태 변경</td>
+                    </tr>
+                    </thead>
+
+                    <tbody class="tbody-user">
+                    <!-- 회원 1명 정보 -->
+
+                    <!-- 회원 1명 정보 -->
+                    </tbody>
+                </table>
+            </div>
+            <!-- 회원 정보 검색 및 테이블 -->
         </div>
-      </div>
-      <!-- 관리자 카테고리 -->
-
-      <!-- 회원 정보 검색 및 테이블 -->
-      <form action="#" method="get">
-        <div class="user-search">
-          <span>이메일 : </span>
-          <input type="text" placeholder="이메일" class="user-search-name" />
-          <span>닉네임 : </span>
-          <input type="text" placeholder="닉네임" class="user-search-name" />
-          <span>가입일 : </span>
-          <input name="date" id="datepicker" />
-          <span>회원상태 : </span>
-          <select name="mode" id="mode" class="user-search-place-ticket">
-            <option value="">선택</option>
-            <option value="ACTIVATE">활성</option>
-            <option value="SUSPENDED_7_DAYS">7일 정지</option>
-            <option value="SUSPENDED_30_DAYS">30일 정지</option>
-            <option value="PERMANENTLY_SUSPENDED">영구 정지</option>
-            <option value="DEACTIVATE">탈퇴</option>ㄴ
-            <select name="mode" id="mode" class="user-status">
-              <button type="button" class="search-btn">검색</button>
-              <!-- 장소일 때, 티켓일 때 드롭박스 달리 보이게 설정 -->
+        <div class="user-status-btn">
+            <button type="button" class="user-management-btn">변경</button>
         </div>
-      </form>
-
-      <div class="table-box">
-        <table class="user-search-table">
-          <thead>
-          <tr class="user-table-category">
-            <td class="user-table-checkbox" align="center">
-              <input type="checkbox" name="" id="user-table-category-check" />
-            </td>
-            <td class="user-email" align="center">이메일</td>
-            <td class="user-nickname" align="center">닉네임</td>
-            <td class="user-place-ticket" align="center">회원등급</td>
-            <td class="user-phonenumber" align="center">핸드폰 번호</td>
-            <!-- <td class="user-address">주소</td>
-            <td class="user-address-detail">상세주소</td>
-            <td class="user-zipcode">우편번호</td> -->
-            <td class="user-register-date" align="center">가입일</td>
-            <td class="user-status" align="center">회원상태</td>
-            <td class="user-now-status" align="center">회원 상태 변경</td>
-          </tr>
-          </thead>
-
-          <tbody class="tbody-user">
-          <!-- 회원 1명 정보 -->
-
-          <!-- 회원 1명 정보 -->
-          </tbody>
-        </table>
-      </div>
-      <!-- 회원 정보 검색 및 테이블 -->
+        <!-- 관리자 카테고리 및 회원 정보 검색 및 테이블 -->
     </div>
-    <div class="user-status-btn">
-      <button type="button" class="user-management-btn">변경</button>
-    </div>
-    <!-- 관리자 카테고리 및 회원 정보 검색 및 테이블 -->
-  </div>
 </div>
 
 <footer th:replace="~{global-templates/header-footer :: footer}"></footer>

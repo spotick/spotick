@@ -1,5 +1,6 @@
 package com.app.spotick.api.controller.admin;
 
+import com.app.spotick.api.dto.admin.AdminUserSearchDto;
 import com.app.spotick.api.dto.user.UserStatusDto;
 import com.app.spotick.domain.dto.admin.AdminPlaceListDto;
 import com.app.spotick.domain.dto.admin.AdminUserListDto;
@@ -34,8 +35,8 @@ public class AdminRestController {
             @PageableDefault(page = 0,
                     size = 12, sort = "id",
                     direction = Sort.Direction.DESC
-            ) Pageable pageable) {
-        Slice<AdminUserListDto> adminUserListDto = adminService.findAdminUserList(pageable);
+            ) Pageable pageable, AdminUserSearchDto userSearchDto) {
+        Slice<AdminUserListDto> adminUserListDto = adminService.findAdminUserList(pageable,userSearchDto);
         Map<String,Object> map = new HashMap<>();
         map.put("slice",adminUserListDto);
         map.put("enumValues", getDisplayableDtoList(UserStatus.values()));
