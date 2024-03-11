@@ -7,9 +7,11 @@ import com.app.spotick.domain.dto.ticket.TicketInquiryListDto;
 import com.app.spotick.domain.entity.ticket.Ticket;
 import com.app.spotick.domain.entity.ticket.TicketInquiry;
 import com.app.spotick.domain.entity.user.User;
+import com.app.spotick.domain.type.notice.NoticeType;
 import com.app.spotick.repository.ticket.TicketRepository;
 import com.app.spotick.repository.ticket.inquiry.TicketInquiryRepository;
 import com.app.spotick.repository.user.UserRepository;
+import com.app.spotick.service.notice.NoticeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -26,6 +28,7 @@ public class TicketInquiryServiceImpl implements TicketInquiryService {
     private final TicketInquiryRepository ticketInquiryRepository;
     private final TicketRepository ticketRepository;
     private final UserRepository userRepository;
+    private final NoticeService noticeService;
 
     @Override
     public Page<TicketInquiryListDto> findInquiriesPage(Long userId, Pageable pageable) {
@@ -45,6 +48,8 @@ public class TicketInquiryServiceImpl implements TicketInquiryService {
         TicketInquiry foundInquiry = ticketInquiryRepository.findByIdAndTicket(inquiryResponseDto.getInquiryId(), tmpTicket).orElseThrow(
                 NoSuchElementException::new
         );
+
+        noticeService.saveNotice(NoticeType.INQUIRY_RESPONSE, foundInquiry.getUser().getId());
 
         foundInquiry.updateResponse(inquiryResponseDto.getResponse());
     }
@@ -74,6 +79,8 @@ public class TicketInquiryServiceImpl implements TicketInquiryService {
                 .content(inquiryReq.getInquiryContent())
                 .build();
         ticketInquiryRepository.save(inquiry);
+
+        noticeService.saveNotice(NoticeType.TICKET_INQUIRY_REGISTER, ticket.getUser().getId());
     }
 
     @Override

@@ -282,6 +282,16 @@ function displayInquiryPage(page) {
                     }
                 });
             });
+
+            document.querySelectorAll('.answer-ctr-box').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    btn.querySelectorAll('img').forEach(img => {
+                        img.classList.toggle('none');
+                    });
+
+                    btn.nextElementSibling.classList.toggle('none');
+                })
+            })
         })
 }
 
