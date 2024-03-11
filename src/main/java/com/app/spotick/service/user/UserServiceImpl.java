@@ -1,6 +1,7 @@
 package com.app.spotick.service.user;
 
 import com.app.spotick.api.dto.user.UserFindEmailDto;
+import com.app.spotick.api.dto.user.UserStatusDto;
 import com.app.spotick.domain.dto.page.TicketPage;
 import com.app.spotick.domain.dto.place.PlaceListDto;
 import com.app.spotick.domain.dto.place.PlaceManageListDto;
@@ -42,6 +43,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.net.ConnectException;
 import java.time.Duration;
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -272,6 +274,21 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         String certCode = createKey();
         mailService.sendEmail(toEmail, title, certCode);
         redisService.setValues(toEmail, certCode, Duration.ofMinutes(5));
+    }
+
+    @Override
+    public void updateUserStatus(UserStatusDto userStatusDto) {
+        User user = userRepository.findById(userStatusDto.getUserId())
+                .orElseThrow(() -> new IllegalStateException("존재하지 않는 회원 ID"));
+
+        LocalDate suspensionEndDate = switch (userStatusDto.getStatus()){
+            case SUSPENDED_7_DAYS -> LocalDate.now().plusDays(7);
+            case SUSPENDED_30_DAYS -> LocalDate.now().plusDays(30);
+            default -> null;
+        };
+
+        user.updateSuspensionEndDate(suspensionEndDate);
+        user.updateUserStatus(userStatusDto.getStatus());
     }
 }
 

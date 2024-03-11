@@ -1,3 +1,8 @@
+let page = 0;
+let pagingTargetIdx = 2;
+let hasNext = true;
+
+
 // 체크박스 전체 선택
 $("#board-table-category-check").on("click", function () {
     if ($(this).is(":checked")) {
@@ -52,9 +57,7 @@ function handleStatusChoice(checkboxIndex, selectValue) {
     }
 }
 
-let page = 0;
-let pagingTargetIdx = 2;
-let hasNext = true;
+
 
 
 
@@ -70,7 +73,6 @@ function loadPlaceList() {
 
 function displayPlaceList(data) {
     hasNext = !data.slice.last;
-
     let text = '';
 
     data.slice.content.forEach(place => {

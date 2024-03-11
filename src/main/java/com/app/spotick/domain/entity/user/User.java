@@ -10,6 +10,7 @@ import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity @Table(name = "TBL_USER")
 @SequenceGenerator(name = "SEQ_USER_GENERATOR", sequenceName = "SEQ_USER",allocationSize = 1)
@@ -58,6 +59,14 @@ public class User extends Period {
 
     public void updateUserProfile(UserProfileFile userProfileFile){
         this.userProfileFile = userProfileFile;
+    }
+
+    public void updateUserStatus(UserStatus userStatus){
+        this.userStatus = userStatus;
+    }
+
+    public void updateSuspensionEndDate(LocalDate suspensionEndDate){
+        this.suspensionEndDate = suspensionEndDate;
     }
 }
 
