@@ -1,4 +1,4 @@
-package com.app.spotick.controller.place;
+package com.app.spotick.api.controller.place;
 
 import com.app.spotick.domain.dto.user.UserDetailsDto;
 import com.app.spotick.service.place.bookmark.PlaceBookmarkService;
