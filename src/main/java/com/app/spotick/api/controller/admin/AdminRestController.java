@@ -1,5 +1,6 @@
 package com.app.spotick.api.controller.admin;
 
+import com.app.spotick.api.dto.admin.AdminPlaceApproveDto;
 import com.app.spotick.api.dto.admin.AdminUserSearchDto;
 import com.app.spotick.api.dto.user.UserStatusDto;
 import com.app.spotick.domain.dto.admin.AdminPlaceListDto;
@@ -69,6 +70,13 @@ public class AdminRestController {
         return ResponseEntity.ok().build();
     }
 
+    @PostMapping("/place/approve")
+    public void adminPlaceApproved(@RequestBody AdminPlaceApproveDto.Request approveDto){
+        System.out.println("approveDto = " + approveDto);
+    }
 
 }
+
+
+
 

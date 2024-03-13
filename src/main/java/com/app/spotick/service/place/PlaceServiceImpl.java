@@ -52,7 +52,6 @@ public class PlaceServiceImpl implements PlaceService {
         place.setHost(host);
 
         place = placeRepository.save(place);
-//        저장된 장소로 사진도 저장해야함
         List<MultipartFile> placeFiles = placeRegisterDto.getPlaceFiles();
 
         placeFileService.registerAndSavePlaceFile(placeFiles, place);
