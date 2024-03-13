@@ -58,9 +58,6 @@ function handleStatusChoice(checkboxIndex, selectValue) {
 }
 
 
-
-
-
 loadPlaceList();
 
 function loadPlaceList() {
@@ -85,33 +82,25 @@ function displayPlaceList(data) {
              <td class="board-writer" align="center">${place.hostEmail}</td>
              <td class="board-title" align="center"><p>${place.title}</p></td>
              <td class="board-write-date" align="center">${place.createdDate.split('T')[0]}</td>
-             <td class="board-public-secret" align="center">
-                 <select name="board-status" class="board-status-choice" align="center">
-                     <option disabled selected >선택</option>`;
-            data.enumValues.forEach(status=>{
-            text +=  `<option value="${status.name}">${status.displayName}</option>`;
-            });
-    text +=  `</select>
-             </td>
              <td class="board-status" align="center">`;
-        data.enumValues.forEach(status=>{
-            if(status.name === place.status){
-                text += `<div class="user-status-box ${getStatusStyle(place.status)}">
+        data.enumValues.forEach(status => {
+            if (status.name === place.status) {
+                text += `<div class="user-status-box ${getStatusStyle(place.status)}" data-status="${place.status}">
                     ${status.displayName}
-                  </div>`;
+                  </div>
+                </td>`;
             }
         });
-                 // <div class="board-status-box Y">활성화</div>
-    text +=`</td>
-         </tr>
-    `;
-
+        text += `<td class="board-public-secret" align="center">
+                    ${displayByStatus(place.status)}
+                 </td>
+            </tr>`;
     });
     $('.tbody-place').append(text);
 }
 
-$('.table-box').on('scroll',function (){
-    if(!hasNext) return;
+$('.table-box').on('scroll', function () {
+    if (!hasNext) return;
 
     let itemContainers = document.querySelectorAll('.board-table-category');
     let {bottom} = itemContainers[pagingTargetIdx - 1].getBoundingClientRect();
@@ -121,8 +110,7 @@ $('.table-box').on('scroll',function (){
     }
 });
 
-
-function getStatusStyle(status){
+function getStatusStyle(status) {
     switch (status) {
         case 'APPROVED':
             return 'Y';
@@ -134,3 +122,92 @@ function getStatusStyle(status){
             return 'P';
     }
 }
+
+function displayByStatus(status) {
+    switch (status) {
+        // case 'APPROVED':
+        //     return `<button type="button" class="change-btn B" data-change="DISABLED">비활성화</button>`;
+        // case 'DISABLED':
+        //     return `<button type="button" class="change-btn Y" data-change="APPROVED">활성화</button>`;
+        case 'REGISTRATION_PENDING':
+        case 'MODIFICATION_REQUESTED':
+            return `<button type="button" class="approve-btn Y" data-approve="true">승인</button>
+            <button type="button" class="approve-btn B" data-approve="false">거절</button>`;
+        default:
+            return '';
+    }
+}
+
+// 장소 등록, 수정신청 승인 및 거절
+$('.tbody-place').on('click', '.approve-btn', function () {
+
+    if(!confirm(`신청을 ${$(this).text()}하시겠습니까?`)){
+        return ;
+    }
+
+    let isApprove = $(this).data('approve');
+    let $root = $(this).closest('.board-table-category')
+    let placeId = $root.find('.board-id').text();
+    let $statusBox = $root.find('.user-status-box');
+    let status = $statusBox.data('status');
+
+    fetch(`/admins/place/approve`,{
+        method: 'POST',
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+            isApprove: isApprove,
+            placeId: placeId,
+            status: status
+        }),
+    }).then(response=>{
+        if(!response.ok){
+            throw response;
+        }
+        return response.json();
+    }).then(result=>{
+        $statusBox.removeClass('P').addClass(isApprove?'Y':'B');
+        $statusBox.text(isApprove?'활성화':'거절됨');
+        $statusBox.data('status',isApprove?'APPROVED':'REJECTED');
+        $(this).closest('.board-public-secret').html('');
+    });
+
+});
+
+
+// 장소 상태 변경(활성화/비활성화)
+// $('.tbody-place').on('click', '.change-btn', function () {
+//
+//     let stateToChange = $(this).data('change');
+//     let placeId = $(this).closest('.board-table-category').find('.board-id').text();
+//
+//     if (!confirm(`${placeId}번 장소를 ${$(this).text()}하시겠습니까`)) {
+//         return;
+//     }
+//
+//     let isDisabled = stateToChange ==='DISABLED';
+//
+//     fetch(`/place/api/${stateToChange.toLowerCase()}/${placeId}`, {
+//         method: 'PATCH'
+//     }).then(response => {
+//         if (!response.ok) {
+//             throw response;
+//         }
+//         return response.text();
+//     }).then(message=>{
+//         $(this).data('change',isDisabled?'APPROVED':'DISABLED');
+//         $(this).text(isDisabled?'활성화':'비활성화');
+//         $(this).removeClass(isDisabled?'B':'Y').addClass(isDisabled?'Y':'B');
+//         let $statusDiv = $(this).closest('.board-table-category').find('.user-status-box');
+//         $statusDiv.removeClass(isDisabled?'Y':'B').addClass(isDisabled?'B':'Y');
+//         $statusDiv.text(isDisabled?'비활성화':'활성화');
+//     });
+// });
+
+
+
+
+
+
+
