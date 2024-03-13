@@ -148,8 +148,8 @@ $('.tbody-place').on('click', '.approve-btn', function () {
     let isApprove = $(this).data('approve');
     let $root = $(this).closest('.board-table-category')
     let placeId = $root.find('.board-id').text();
-    let status = $root.find('.user-status-box').data('status');
-    console.log(isApprove);
+    let $statusBox = $root.find('.user-status-box');
+    let status = $statusBox.data('status');
 
     fetch(`/admins/place/approve`,{
         method: 'POST',
@@ -161,7 +161,17 @@ $('.tbody-place').on('click', '.approve-btn', function () {
             placeId: placeId,
             status: status
         }),
-    }).then();
+    }).then(response=>{
+        if(!response.ok){
+            throw response;
+        }
+        return response.json();
+    }).then(result=>{
+        $statusBox.removeClass('P').addClass(isApprove?'Y':'B');
+        $statusBox.text(isApprove?'활성화':'거절됨');
+        $statusBox.data('status',isApprove?'APPROVED':'REJECTED');
+        $(this).closest('.board-public-secret').html('');
+    });
 
 });
 

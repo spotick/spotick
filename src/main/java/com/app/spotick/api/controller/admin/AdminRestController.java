@@ -71,8 +71,9 @@ public class AdminRestController {
     }
 
     @PostMapping("/place/approve")
-    public void adminPlaceApproved(@RequestBody AdminPlaceApproveDto.Request approveDto){
-        System.out.println("approveDto = " + approveDto);
+    public ResponseEntity<Boolean> adminPlaceApproved(@RequestBody AdminPlaceApproveDto.Request approveDto){
+        adminService.approveOrRejectPlace(approveDto);
+        return ResponseEntity.ok(approveDto.getIsApprove());
     }
 
 }
