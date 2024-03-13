@@ -52,7 +52,6 @@ public class PlaceServiceImpl implements PlaceService {
         place.setHost(host);
 
         place = placeRepository.save(place);
-//        저장된 장소로 사진도 저장해야함
         List<MultipartFile> placeFiles = placeRegisterDto.getPlaceFiles();
 
         placeFileService.registerAndSavePlaceFile(placeFiles, place);
@@ -122,7 +121,7 @@ public class PlaceServiceImpl implements PlaceService {
                 NoSuchElementException::new
         );
         // 기존의 장소정보는 status만 교체한다.
-        foundPlace.setStatus(PostStatus.MODIFICATION_REQUESTED);
+        foundPlace.setPlaceStatus(PostStatus.MODIFICATION_REQUESTED);
 
 
         // 업데이트된 장소정보는 통째로 새로 등록시킨다.
