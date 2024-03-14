@@ -31,4 +31,8 @@ public abstract class PostBase extends Period {
         this.lat = lat;
         this.lng = lng;
     }
+
+    public void setViewCount(int viewCount){
+        this.viewCount = viewCount;
+    }
 }
