@@ -164,16 +164,18 @@ $('.tbody-place').on('click', '.approve-btn', function () {
     }).then(response=>{
         if(!response.ok){
             throw response;
+        }else{
+            clearList();
+            loadPlaceList();
         }
-        return response.json();
-    }).then(result=>{
-        $statusBox.removeClass('P').addClass(isApprove?'Y':'B');
-        $statusBox.text(isApprove?'활성화':'거절됨');
-        $statusBox.data('status',isApprove?'APPROVED':'REJECTED');
-        $(this).closest('.board-public-secret').html('');
     });
 
 });
+
+function clearList() {
+    page = 0;
+    $('.tbody-place').html('');
+}
 
 
 // 장소 상태 변경(활성화/비활성화)

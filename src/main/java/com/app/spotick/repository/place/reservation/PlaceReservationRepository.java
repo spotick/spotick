@@ -6,6 +6,7 @@ import com.app.spotick.domain.dto.place.reservation.PlaceReservationTimeDto;
 import com.app.spotick.domain.entity.place.PlaceReservation;
 import com.app.spotick.domain.entity.user.User;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -57,4 +58,16 @@ public interface PlaceReservationRepository extends JpaRepository<PlaceReservati
     List<PlaceReservationTimeDto> findReservedTimes(@Param("placeId") Long placeId,
                                                     @Param("startTime") LocalDateTime startTime,
                                                     @Param("endTime") LocalDateTime endTime);
+
+    @Modifying
+    @Query("UPDATE PlaceReservation pr SET pr.place = :changedPlace WHERE pr.place = :originalPlace")
+    void bulkUpdateReservationPlace(@Param("originalPlace")Place originalPlace, @Param("changedPlace")Place changedPlace);
 }
+
+
+
+
+
+
+
+
