@@ -7,6 +7,7 @@ import com.app.spotick.domain.dto.admin.AdminPlaceListDto;
 import com.app.spotick.domain.dto.admin.AdminUserListDto;
 import com.app.spotick.domain.entity.place.Place;
 import com.app.spotick.domain.entity.place.PlaceModifyRequest;
+import com.app.spotick.domain.type.post.PostModifyStatus;
 import com.app.spotick.domain.type.post.PostStatus;
 import com.app.spotick.repository.admin.place.AdminPlaceRepository;
 import com.app.spotick.repository.admin.user.AdminUserRepository;
@@ -83,6 +84,7 @@ public class AdminServiceImpl implements AdminService{
         if(!approveDto.getIsApprove()){
             changedPlace.setPlaceStatus(PostStatus.REJECTED);
             originalPlace.setPlaceStatus(PostStatus.APPROVED);
+            modifyRequest.setPlaceModifyStatus(PostModifyStatus.REJECTED);
             return ;
         }
 
@@ -91,10 +93,10 @@ public class AdminServiceImpl implements AdminService{
         placeInquiryRepository.bulkUpdateInquiryPlace(originalPlace,changedPlace);
         placeReservationRepository.bulkUpdateReservationPlace(originalPlace,changedPlace);
 
-
         changedPlace.setViewCount(originalPlace.getViewCount());
         changedPlace.setPlaceStatus(PostStatus.APPROVED);
         originalPlace.setPlaceStatus(PostStatus.REPLACED);
+        modifyRequest.setPlaceModifyStatus(PostModifyStatus.APPROVED);
     }
 
 
