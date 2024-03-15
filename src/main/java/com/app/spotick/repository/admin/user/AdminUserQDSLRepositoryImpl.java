@@ -27,7 +27,6 @@ public class AdminUserQDSLRepositoryImpl implements AdminUserQDSLRepository {
 
     @Override
     public Slice<AdminUserListDto> findAdminUserList(Pageable pageable, AdminUserSearchDto userSearchDto) {
-        System.out.println(" userSearchDto = " + userSearchDto);
         List<AdminUserListDto> userList = queryFactory.select(
                         Projections.constructor(AdminUserListDto.class,
                                 user.id,

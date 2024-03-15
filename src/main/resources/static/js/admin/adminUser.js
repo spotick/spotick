@@ -178,6 +178,7 @@ function changeUserStatus(statusObjArr) {
 
 function clearList() {
     page = 0;
+    pagingTargetIdx = 3;
     $('.tbody-user').html('');
 }
 
@@ -192,13 +193,9 @@ function createSearchParamQuery() {
 }
 
 $('.search-btn').on('click', function () {
-    let emailValue = $('#email').val();
-    let nickNameValue = $('#nickName').val();
-    let statusValue = $('#status').val();
-
-    email = emailValue;
-    nickName = nickNameValue;
-    status = statusValue;
+    email =  $('#email').val();
+    nickName =  $('#nickName').val();
+    status =  $('#status').val();
     clearList();
     loadUserList();
 });

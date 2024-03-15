@@ -1,6 +1,9 @@
 let page = 0;
 let pagingTargetIdx = 3;
 let hasNext = true;
+let email = '';
+let placeTitle = '';
+let searchStatus = '';
 
 
 // 체크박스 전체 선택
@@ -61,12 +64,32 @@ function handleStatusChoice(checkboxIndex, selectValue) {
 loadPlaceList();
 
 function loadPlaceList() {
-    fetch(`/admins/place/list?page=${page++}`)
+    fetch(`/admins/place/list?page=${page++}${createSearchParamQuery()}`)
         .then(response => response.json())
         .then(data => {
             displayPlaceList(data);
         });
 }
+
+function createSearchParamQuery() {
+    let paramStr = '';
+
+    paramStr += email === '' ? '' : `&email=${email}`;
+    paramStr += placeTitle === '' ? '' : `&placeTitle=${placeTitle}`;
+    paramStr += searchStatus === '' ? '' : `&status=${searchStatus}`;
+
+    return paramStr;
+}
+
+// 장소 검색
+$('.search-btn').on('click', function () {
+    email = $('#email').val();
+    placeTitle = $('#placeTitle').val();
+    searchStatus = $('#status').val();
+    clearList();
+    loadPlaceList();
+});
+
 
 function displayPlaceList(data) {
     hasNext = !data.slice.last;
@@ -142,8 +165,8 @@ function displayByStatus(status) {
 // 장소 등록, 수정신청 승인 및 거절
 $('.tbody-place').on('click', '.approve-btn', function () {
 
-    if(!confirm(`신청을 ${$(this).text()}하시겠습니까?`)){
-        return ;
+    if (!confirm(`신청을 ${$(this).text()}하시겠습니까?`)) {
+        return;
     }
 
     let isApprove = $(this).data('approve');
@@ -152,7 +175,7 @@ $('.tbody-place').on('click', '.approve-btn', function () {
     let $statusBox = $root.find('.user-status-box');
     let status = $statusBox.data('status');
 
-    fetch(`/admins/place/approve`,{
+    fetch(`/admins/place/approve`, {
         method: 'POST',
         headers: {
             "Content-Type": "application/json",
@@ -162,10 +185,10 @@ $('.tbody-place').on('click', '.approve-btn', function () {
             placeId: placeId,
             status: status
         }),
-    }).then(response=>{
-        if(!response.ok){
+    }).then(response => {
+        if (!response.ok) {
             throw response;
-        }else{
+        } else {
             clearList();
             loadPlaceList();
         }
@@ -174,6 +197,7 @@ $('.tbody-place').on('click', '.approve-btn', function () {
 
 function clearList() {
     page = 0;
+    pagingTargetIdx = 3;
     $('.tbody-place').html('');
 }
 

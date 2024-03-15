@@ -52,7 +52,7 @@
                     <!-- 작성일 달력 들어갈 예정 -->
 
                     <span>상태 : </span>
-                    <select name="public-secret" id="public-secret" class="select-public-secret">
+                    <select name="public-secret" id="status" class="select-public-secret">
                         <option value="">전체</option>
                         <option th:value="${status.name}" th:each="status : ${enumValues}"
                                 th:text="${status.displayName}"></option>

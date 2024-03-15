@@ -1,6 +1,7 @@
 package com.app.spotick.service.admin;
 
 import com.app.spotick.api.dto.admin.AdminPlaceApproveDto;
+import com.app.spotick.api.dto.admin.AdminPlaceSearchDto;
 import com.app.spotick.api.dto.admin.AdminUserSearchDto;
 import com.app.spotick.api.dto.user.UserStatusDto;
 import com.app.spotick.domain.dto.admin.AdminPlaceListDto;
@@ -45,8 +46,8 @@ public class AdminServiceImpl implements AdminService{
 
     @Override
     @Transactional(readOnly = true)
-    public Slice<AdminPlaceListDto> findAdminPlaceList(Pageable pageable) {
-        return adminPlaceRepository.findAdminPlaceList(pageable);
+    public Slice<AdminPlaceListDto> findAdminPlaceList(Pageable pageable, AdminPlaceSearchDto placeSearchDto) {
+        return adminPlaceRepository.findAdminPlaceList(pageable,placeSearchDto);
     }
 
     @Override
