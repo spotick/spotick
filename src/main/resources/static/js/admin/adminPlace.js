@@ -103,7 +103,7 @@ function displayPlaceList(data) {
              </td>
              <td class="board-id" align="center">${place.placeId}</td>
              <td class="board-writer" align="center">${place.hostEmail}</td>
-             <td class="board-title" align="center"><p>${place.title}</p></td>
+             <td class="board-title" align="center"><a href="/place/detail/${place.placeId}">${place.title}</a></td>
              <td class="board-write-date" align="center">${place.createdDate.split('T')[0]}</td>
              <td class="board-status" align="center">`;
         data.enumValues.forEach(status => {
