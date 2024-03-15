@@ -89,8 +89,8 @@ public class AdminServiceImpl implements AdminService{
         }
 
 //       조회수, 북마크, 문의, 예약 테이블의 장소들을 모두 기존 장소에서 바뀔 장소로 변경
-        placeBookmarkRepository.bulkUpdateBookmarkPlace(originalPlace,changedPlace);
         placeInquiryRepository.bulkUpdateInquiryPlace(originalPlace,changedPlace);
+        placeBookmarkRepository.bulkUpdateBookmarkPlace(originalPlace,changedPlace);
         placeReservationRepository.bulkUpdateReservationPlace(originalPlace,changedPlace);
 
         changedPlace.setViewCount(originalPlace.getViewCount());

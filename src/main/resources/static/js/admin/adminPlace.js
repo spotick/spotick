@@ -1,5 +1,5 @@
 let page = 0;
-let pagingTargetIdx = 2;
+let pagingTargetIdx = 3;
 let hasNext = true;
 
 
@@ -104,7 +104,8 @@ $('.table-box').on('scroll', function () {
 
     let itemContainers = document.querySelectorAll('.board-table-category');
     let {bottom} = itemContainers[pagingTargetIdx - 1].getBoundingClientRect();
-    if (bottom < 0) {
+    let {top} = document.querySelector('.table-box').getBoundingClientRect();
+    if (bottom < top) {
         pagingTargetIdx += 12;
         loadPlaceList();
     }
@@ -169,7 +170,6 @@ $('.tbody-place').on('click', '.approve-btn', function () {
             loadPlaceList();
         }
     });
-
 });
 
 function clearList() {

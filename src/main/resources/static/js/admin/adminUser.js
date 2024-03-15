@@ -73,7 +73,7 @@ function handleStatusChoice(checkboxIndex, selectValue) {
 }
 
 let page = 0;
-let pagingTargetIdx = 2;
+let pagingTargetIdx = 3;
 let hasNext = true;
 let email = '';
 let nickName = '';
@@ -136,7 +136,8 @@ $('.table-box').on('scroll', function () {
 
     let itemContainers = document.querySelectorAll('.user-table-category');
     let {bottom} = itemContainers[pagingTargetIdx - 1].getBoundingClientRect();
-    if (bottom < 0) {
+    let {top} = document.querySelector('.table-box').getBoundingClientRect();
+    if (bottom < top) {
         pagingTargetIdx += 12;
         loadPlaceList();
     }
