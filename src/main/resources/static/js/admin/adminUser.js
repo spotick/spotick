@@ -73,7 +73,7 @@ function handleStatusChoice(checkboxIndex, selectValue) {
 }
 
 let page = 0;
-let pagingTargetIdx = 2;
+let pagingTargetIdx = 3;
 let hasNext = true;
 let email = '';
 let nickName = '';
@@ -136,7 +136,8 @@ $('.table-box').on('scroll', function () {
 
     let itemContainers = document.querySelectorAll('.user-table-category');
     let {bottom} = itemContainers[pagingTargetIdx - 1].getBoundingClientRect();
-    if (bottom < 0) {
+    let {top} = document.querySelector('.table-box').getBoundingClientRect();
+    if (bottom < top) {
         pagingTargetIdx += 12;
         loadPlaceList();
     }
@@ -177,6 +178,7 @@ function changeUserStatus(statusObjArr) {
 
 function clearList() {
     page = 0;
+    pagingTargetIdx = 3;
     $('.tbody-user').html('');
 }
 
@@ -191,13 +193,9 @@ function createSearchParamQuery() {
 }
 
 $('.search-btn').on('click', function () {
-    let emailValue = $('#email').val();
-    let nickNameValue = $('#nickName').val();
-    let statusValue = $('#status').val();
-
-    email = emailValue;
-    nickName = nickNameValue;
-    status = statusValue;
+    email =  $('#email').val();
+    nickName =  $('#nickName').val();
+    status =  $('#status').val();
     clearList();
     loadUserList();
 });

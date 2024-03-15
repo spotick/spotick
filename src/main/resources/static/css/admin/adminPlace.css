@@ -188,6 +188,13 @@
     margin-top: 4px;
 }
 
+.user-search-writer{
+    border: 1px solid rgb(95 97 97 / 64%);
+    padding-left: 4px;
+    width: 180px;
+    border-radius: 8px;
+}
+
 .user-search-email,
 .user-search-nickname {
     width: 90px;

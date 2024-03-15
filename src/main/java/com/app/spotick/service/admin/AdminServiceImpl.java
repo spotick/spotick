@@ -1,6 +1,7 @@
 package com.app.spotick.service.admin;
 
 import com.app.spotick.api.dto.admin.AdminPlaceApproveDto;
+import com.app.spotick.api.dto.admin.AdminPlaceSearchDto;
 import com.app.spotick.api.dto.admin.AdminUserSearchDto;
 import com.app.spotick.api.dto.user.UserStatusDto;
 import com.app.spotick.domain.dto.admin.AdminPlaceListDto;
@@ -45,8 +46,8 @@ public class AdminServiceImpl implements AdminService{
 
     @Override
     @Transactional(readOnly = true)
-    public Slice<AdminPlaceListDto> findAdminPlaceList(Pageable pageable) {
-        return adminPlaceRepository.findAdminPlaceList(pageable);
+    public Slice<AdminPlaceListDto> findAdminPlaceList(Pageable pageable, AdminPlaceSearchDto placeSearchDto) {
+        return adminPlaceRepository.findAdminPlaceList(pageable,placeSearchDto);
     }
 
     @Override
@@ -89,8 +90,8 @@ public class AdminServiceImpl implements AdminService{
         }
 
 //       조회수, 북마크, 문의, 예약 테이블의 장소들을 모두 기존 장소에서 바뀔 장소로 변경
-        placeBookmarkRepository.bulkUpdateBookmarkPlace(originalPlace,changedPlace);
         placeInquiryRepository.bulkUpdateInquiryPlace(originalPlace,changedPlace);
+        placeBookmarkRepository.bulkUpdateBookmarkPlace(originalPlace,changedPlace);
         placeReservationRepository.bulkUpdateReservationPlace(originalPlace,changedPlace);
 
         changedPlace.setViewCount(originalPlace.getViewCount());
