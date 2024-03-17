@@ -8,12 +8,15 @@ import com.app.spotick.domain.dto.place.file.PlaceFileDto;
 import com.app.spotick.domain.dto.place.reservation.PlaceReserveBasicInfoDto;
 import com.app.spotick.domain.entity.place.Place;
 import com.app.spotick.domain.entity.place.PlaceFile;
+import com.app.spotick.domain.entity.place.PlaceModifyRequest;
 import com.app.spotick.domain.entity.place.PlaceReservation;
 import com.app.spotick.domain.entity.user.User;
 import com.app.spotick.domain.type.place.PlaceReservationStatus;
+import com.app.spotick.domain.type.post.PostModifyStatus;
 import com.app.spotick.domain.type.post.PostStatus;
 import com.app.spotick.repository.place.PlaceRepository;
 import com.app.spotick.repository.place.file.PlaceFileRepository;
+import com.app.spotick.repository.place.modifyRequest.PlaceModifyReqRepository;
 import com.app.spotick.repository.place.reservation.PlaceReservationRepository;
 import com.app.spotick.repository.user.UserRepository;
 import com.app.spotick.service.place.file.PlaceFileService;
@@ -42,6 +45,7 @@ public class PlaceServiceImpl implements PlaceService {
     private final PlaceReservationRepository placeReservationRepository;
     private final UserRepository userRepository;
     private final PlaceFileService placeFileService;
+    private final PlaceModifyReqRepository placeModifyReqRepository;
     private final int PAGE_SIZE = 12;
 
     @Override
@@ -52,7 +56,6 @@ public class PlaceServiceImpl implements PlaceService {
         place.setHost(host);
 
         place = placeRepository.save(place);
-//        저장된 장소로 사진도 저장해야함
         List<MultipartFile> placeFiles = placeRegisterDto.getPlaceFiles();
 
         placeFileService.registerAndSavePlaceFile(placeFiles, place);
@@ -60,8 +63,8 @@ public class PlaceServiceImpl implements PlaceService {
 
     @Override
     @Transactional(readOnly = true)
-    public Slice<PlaceListDto> findPlaceListPagination(Pageable pageable, Long userId, SortType sortType, AreaFilter areaFilter,String keyword) {
-        return placeRepository.findPlaceListPaging(pageable, userId, sortType, areaFilter,keyword);
+    public Slice<PlaceListDto> findPlaceListPagination(Pageable pageable, Long userId, SortType sortType, AreaFilter areaFilter, String keyword) {
+        return placeRepository.findPlaceListPaging(pageable, userId, sortType, areaFilter, keyword);
     }
 
     @Override
@@ -118,23 +121,22 @@ public class PlaceServiceImpl implements PlaceService {
     public void updatePlace(PlaceEditDto placeEditDto, Long userId) throws IOException {
         User tmpUser = userRepository.getReferenceById(userId);
 
-        Place foundPlace = placeRepository.findByIdAndUser(placeEditDto.getPlaceId(), tmpUser).orElseThrow(
+        Place originalPlace = placeRepository.findByIdAndUser(placeEditDto.getPlaceId(), tmpUser).orElseThrow(
                 NoSuchElementException::new
         );
         // 기존의 장소정보는 status만 교체한다.
-        foundPlace.setStatus(PostStatus.MODIFICATION_REQUESTED);
-
+        originalPlace.setPlaceStatus(PostStatus.MODIFICATION_PENDING);
 
         // 업데이트된 장소정보는 통째로 새로 등록시킨다.
         Place updatedPlace = placeEditDto.toEntity();
         updatedPlace.setHost(tmpUser);
 
-        Place newPlace = placeRepository.save(updatedPlace);
-        System.out.println("newPlace = " + newPlace);
+        Place changedPlace = placeRepository.save(updatedPlace);
+        System.out.println("newPlace = " + changedPlace);
 
         // 새로 등록된 장소에 사진정보도 옮겨준다.
         List<PlaceFileDto> files = placeFileRepository.findPlaceFilesByPlaceIdNotFileIds(
-                foundPlace.getId(),
+                originalPlace.getId(),
                 placeEditDto.getSaveFileIdList()
         );
         System.out.println("files = " + files);
@@ -143,7 +145,7 @@ public class PlaceServiceImpl implements PlaceService {
         files.forEach(file -> {
             PlaceFile copiedFile = file.toEntity();
             copiedFile.setId(null);
-            copiedFile.setPlace(newPlace);
+            copiedFile.setPlace(changedPlace);
             copiedFiles.add(copiedFile);
         });
 
@@ -151,13 +153,20 @@ public class PlaceServiceImpl implements PlaceService {
 
         placeFileRepository.saveAll(copiedFiles);
 
-
         List<MultipartFile> placeFiles = placeEditDto.getPlaceNewFiles();
         // 새파일이 비어있지 않은 경우에만 처리
         if (placeFiles.stream().anyMatch(file -> file.getSize() > 0)) {
             System.out.println("placeFiles = " + placeFiles);
-            placeFileService.registerAndSavePlaceFile(placeFiles, newPlace);
+            placeFileService.registerAndSavePlaceFile(placeFiles, changedPlace);
         }
+
+//        기존 장소와, 새로 업데이트될 장소를 등록 및 상태 수정 후 장소 수정신청 엔티티에 등록
+        placeModifyReqRepository.save(PlaceModifyRequest.builder()
+                .originalPlace(originalPlace)
+                .changedPlace(changedPlace)
+                .placeModifyStatus(PostModifyStatus.PENDING)
+                .build());
+
     }
 }
 

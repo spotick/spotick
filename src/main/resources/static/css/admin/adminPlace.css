@@ -188,6 +188,13 @@
     margin-top: 4px;
 }
 
+.user-search-writer{
+    border: 1px solid rgb(95 97 97 / 64%);
+    padding-left: 4px;
+    width: 180px;
+    border-radius: 8px;
+}
+
 .user-search-email,
 .user-search-nickname {
     width: 90px;
@@ -265,6 +272,7 @@ tbody tr {
 }
 
 .Y {
+    font-size: 12px;
     width: 85px;
     background-color: #eaf4ff;
     color: #007aff;
@@ -275,9 +283,10 @@ tbody tr {
 }
 
 .P{
+    font-size: 12px;
+    width: 85px;
     background-color: rgb(255 247 237);
     color: #ffc100;
-    width: 85px;
     border: none;
     border-radius: 5px;
     padding: 6px 11px;
@@ -285,6 +294,7 @@ tbody tr {
 }
 
 .B {
+    font-size: 12px;
     width: 85px;
     background-color: rgb(255, 237, 237);
     color: red;
@@ -293,6 +303,13 @@ tbody tr {
     padding: 6px 11px;
     font-weight: bold;
 }
+
+.approve-btn{
+    width: 50px;
+}
+
+
+
 
 #board-table-category-check,
 #board-checking {
@@ -342,7 +359,7 @@ tbody tr {
 }
 
 .board-title>p{
-    width: 230px;
+    width: 150px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;

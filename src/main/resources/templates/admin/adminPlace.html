@@ -45,19 +45,17 @@
             <form action="#" method="#">
                 <div class="user-search">
                     <span>작성자 : </span>
-                    <input type="text" placeholder="작성자" class="user-search-writer"/>
-                    <span>게시판 : </span>
-                    <select name="place-ticket" id="place-ticket" class="select-place-ticket">
-                        <option value="1">대여</option>
-                        <option value="2">발매</option>
-                    </select>
-                    <span>작성일 : </span>
+                    <input type="text" id="email" placeholder="작성자" class="user-search-writer"/>
+                    <span>장소명 : </span>
+                    <input type="text" id="placeTitle" placeholder="장소명" class="user-search-writer"/>
+                    <!--                    <span>작성일 : </span>-->
                     <!-- 작성일 달력 들어갈 예정 -->
-                    <!--  -->
+
                     <span>상태 : </span>
-                    <select name="public-secret" id="public-secret" class="select-public-secret">
-                        <option value="" >전체</option>
-                        <option th:value="${status.name}" th:each="status : ${enumValues}" th:text="${status.displayName}"></option>
+                    <select name="public-secret" id="status" class="select-public-secret">
+                        <option value="">전체</option>
+                        <option th:value="${status.name}" th:each="status : ${enumValues}"
+                                th:text="${status.displayName}"></option>
                     </select>
                     <button type="button" class="search-btn">검색</button>
                 </div>
@@ -72,15 +70,14 @@
                         </td>
                         <td class="board-id" align="center">번호</td>
                         <td class="board-writer" align="center">작성자 이메일</td>
-                        <td class="board-title" align="center">글 제목</td>
+                        <td class="board-title" align="center">장소 이름</td>
                         <td class="board-write-date" align="center">작성일</td>
-                        <td class="board-public-secret" align="center">활성 상태</td>
-                        <td class="board-status" align="center">상태</td>
+                        <td class="board-status" align="center">현재 상태</td>
+                        <td class="board-public-secret" align="center">승인/거절</td>
                     </tr>
                     </thead>
 
                     <tbody class="tbody-place">
-
 
                     </tbody>
                 </table>

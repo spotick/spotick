@@ -75,9 +75,7 @@ public class Place extends PostBase {
         this.placeStatus = placeStatus;
     }
 
-    public void setStatus(PostStatus placeStatus) {
-        this.placeStatus = placeStatus;
-    }
+
 }
 
 

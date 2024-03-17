@@ -28,4 +28,8 @@ public class PlaceModifyRequest extends Period {
         this.changedPlace = changedPlace;
         this.placeModifyStatus = placeModifyStatus;
     }
+
+    public void setPlaceModifyStatus(PostModifyStatus placeModifyStatus){
+        this.placeModifyStatus = placeModifyStatus;
+    }
 }

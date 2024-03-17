@@ -1,5 +1,7 @@
 package com.app.spotick.api.controller.admin;
 
+import com.app.spotick.api.dto.admin.AdminPlaceApproveDto;
+import com.app.spotick.api.dto.admin.AdminPlaceSearchDto;
 import com.app.spotick.api.dto.admin.AdminUserSearchDto;
 import com.app.spotick.api.dto.user.UserStatusDto;
 import com.app.spotick.domain.dto.admin.AdminPlaceListDto;
@@ -49,8 +51,9 @@ public class AdminRestController {
             @PageableDefault(page = 0,
                     size = 12, sort = "id",
                     direction = Sort.Direction.DESC
-            ) Pageable pageable) {
-        Slice<AdminPlaceListDto> adminPlaceListDto = adminService.findAdminPlaceList(pageable);
+            ) Pageable pageable, AdminPlaceSearchDto placeSearchDto) {
+
+        Slice<AdminPlaceListDto> adminPlaceListDto = adminService.findAdminPlaceList(pageable,placeSearchDto);
         Map<String,Object> map = new HashMap<>();
         map.put("slice",adminPlaceListDto);
         map.put("enumValues", getDisplayableDtoList(PostStatus.values()));
@@ -69,6 +72,14 @@ public class AdminRestController {
         return ResponseEntity.ok().build();
     }
 
+    @PostMapping("/place/approve")
+    public ResponseEntity<Boolean> adminPlaceApproved(@RequestBody AdminPlaceApproveDto.Request approveDto){
+        adminService.approveOrRejectPlace(approveDto);
+        return ResponseEntity.ok(approveDto.getIsApprove());
+    }
 
 }
+
+
+
 
