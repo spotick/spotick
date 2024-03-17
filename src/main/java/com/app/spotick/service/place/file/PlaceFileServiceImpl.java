@@ -43,7 +43,7 @@ public class PlaceFileServiceImpl implements PlaceFileService {
         originName = originName.replace("\\s", ""); //파일 이름에 공백 제거
         UUID uuid = UUID.randomUUID();
 
-        String sysName = uuid.toString() + "_" + originName;
+        String sysName = uuid + "_" + originName;
 
         File uploadPath = new File(ROOT_DIR, getUploadPath());
 

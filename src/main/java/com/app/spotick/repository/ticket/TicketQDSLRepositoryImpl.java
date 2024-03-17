@@ -2,6 +2,7 @@ package com.app.spotick.repository.ticket;
 
 import com.app.spotick.domain.dto.page.TicketPage;
 import com.app.spotick.domain.dto.ticket.*;
+import com.app.spotick.domain.entity.ticket.QTicketFile;
 import com.app.spotick.domain.type.post.PostStatus;
 import com.app.spotick.domain.type.ticket.TicketRequestType;
 import com.querydsl.core.BooleanBuilder;
@@ -240,6 +241,45 @@ public class TicketQDSLRepositoryImpl implements TicketQDSLRepository {
                                 likeCount(),
                                 inquiryCount(),
                                 isLiked(userId),
+                                list(Projections.constructor(TicketGradeDto.class,
+                                        ticketGrade.gradeName,
+                                        ticketGrade.price,
+                                        ticketGrade.maxPeople
+                                ))
+                        )
+                ));
+
+        return Optional.ofNullable(content.get(0));
+    }
+
+    @Override
+    public Optional<TicketEditDto> findTicketEditById(Long ticketId, Long userId) {
+
+        List<TicketEditDto> content = queryFactory
+                .from(ticket)
+                .where(ticket.id.eq(ticketId), ticket.user.id.eq(userId))
+                .leftJoin(ticket.ticketGrades, ticketGrade)
+                .orderBy(ticketGrade.price.asc())
+                .transform(groupBy(ticket.id).list(Projections.constructor(TicketEditDto.class,
+                                ticket.id,
+                                ticket.user.id,
+                                ticket.title,
+                                ticket.content,
+                                ticket.startDate,
+                                ticket.endDate,
+                                ticket.bankName,
+                                ticket.accountNumber,
+                                ticket.accountHolder,
+                                ticket.ticketEventAddress.address,
+                                ticket.ticketEventAddress.addressDetail,
+                                ticket.ticketRatingType,
+                                ticket.ticketCategory,
+                                ticket.lat,
+                                ticket.lng,
+                                ticket.ticketFile.id,
+                                ticket.ticketFile.fileName,
+                                ticket.ticketFile.uuid,
+                                ticket.ticketFile.uploadPath,
                                 list(Projections.constructor(TicketGradeDto.class,
                                         ticketGrade.gradeName,
                                         ticketGrade.price,

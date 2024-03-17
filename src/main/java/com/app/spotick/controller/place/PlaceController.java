@@ -50,9 +50,9 @@ public class PlaceController {
 
     @GetMapping("/list")
     public String placeList(Model model,@AuthenticationPrincipal UserDetailsDto userDetailsDto,
-                            @RequestParam(name = "sort",defaultValue = "POPULARITY") String sort,
+                            @RequestParam(name = "sort", defaultValue = "POPULARITY") String sort,
                             @RequestParam(name = "keyword", required = false) String keyword,
-                            @PageableDefault(page =0,
+                            @PageableDefault(page = 0,
                                     size = 12, sort = "id",
                                     direction = Sort.Direction.DESC
                             ) Pageable pageable){
@@ -86,7 +86,7 @@ public class PlaceController {
         try {
             placeService.registerPlace(placeRegisterDto, userDetailsDto.getId());
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error("Exception [Err_Msg]: {}", e.getMessage());
             return "place/register";
         }
 
@@ -158,7 +158,7 @@ public class PlaceController {
         try {
             placeService.updatePlace(placeEditDto, userDetailsDto.getId());
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error("Exception [Err_Msg]: {}", e.getMessage());
             return "redirect:/place/edit/" + placeId;
         }
 

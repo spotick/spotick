@@ -2,7 +2,6 @@ package com.app.spotick.domain.entity.ticket;
 
 
 import com.app.spotick.domain.base.post.PostBase;
-import com.app.spotick.domain.dto.ticket.TicketFileDto;
 import com.app.spotick.domain.embedded.post.PostAddress;
 import com.app.spotick.domain.entity.user.User;
 import com.app.spotick.domain.type.post.PostStatus;

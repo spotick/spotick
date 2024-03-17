@@ -1,6 +1,7 @@
 package com.app.spotick.controller.ticket;
 
 import com.app.spotick.domain.dto.ticket.TicketDetailDto;
+import com.app.spotick.domain.dto.ticket.TicketEditDto;
 import com.app.spotick.domain.dto.ticket.TicketListDto;
 import com.app.spotick.domain.dto.ticket.TicketRegisterDto;
 import com.app.spotick.domain.dto.user.UserDetailsDto;
@@ -53,6 +54,7 @@ public class TicketController {
         return "ticket/detail";
     }
 
+    ////////////////////////////////////////////////// 티켓 등록 //////////////////////////////////////////////////
     @GetMapping("/register")
     public String goToRegister(@ModelAttribute("ticketRegisterDto") TicketRegisterDto ticketRegisterDto) {
         return "ticket/register";
@@ -80,5 +82,30 @@ public class TicketController {
         }
 
         return "redirect:/ticket/list";
+    }
+
+    ////////////////////////////////////////////////// 티켓 수정 //////////////////////////////////////////////////
+    @GetMapping("/edit/{ticketId}")
+    public String goToTicketEdit(@PathVariable("ticketId") Long ticketId,
+                                 @AuthenticationPrincipal UserDetailsDto userDetailsDto,
+                                 Model model) {
+
+        TicketEditDto ticketEditDto = ticketService.findTicketEditById(ticketId, userDetailsDto.getId());
+
+        model.addAttribute("ticketEditDto", ticketEditDto);
+        return "/ticket/edit";
+    }
+
+    @PostMapping("/edit/{ticketId}")
+    public String ticketEdit(@PathVariable("ticketId") String ticketId,
+                             @Valid @ModelAttribute("TicketEditDto") TicketEditDto ticketEditDto,
+                             BindingResult bindingResult,
+                             @AuthenticationPrincipal UserDetailsDto userDetailsDto) {
+
+        System.out.println("ticketEditDto = " + ticketEditDto);
+
+        //
+
+        return "redirect:/mypage/tickets";
     }
 }

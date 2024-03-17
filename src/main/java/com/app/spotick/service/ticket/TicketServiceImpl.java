@@ -1,9 +1,6 @@
 package com.app.spotick.service.ticket;
 
-import com.app.spotick.domain.dto.ticket.TicketDetailDto;
-import com.app.spotick.domain.dto.ticket.TicketGradeSaleInfoDto;
-import com.app.spotick.domain.dto.ticket.TicketListDto;
-import com.app.spotick.domain.dto.ticket.TicketRegisterDto;
+import com.app.spotick.domain.dto.ticket.*;
 import com.app.spotick.domain.entity.ticket.Ticket;
 import com.app.spotick.domain.entity.ticket.TicketFile;
 import com.app.spotick.domain.entity.ticket.TicketGrade;
@@ -23,7 +20,6 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Optional;
 
 @Service
 @Transactional
@@ -72,10 +68,15 @@ public class TicketServiceImpl implements TicketService {
 
     @Override
     public TicketDetailDto findTicketDetailById(Long ticketId, Long userId) {
-        TicketDetailDto content = ticketRepository.findTicketDetailById(ticketId, userId).orElseThrow(
+        return ticketRepository.findTicketDetailById(ticketId, userId).orElseThrow(
                 NoSuchElementException::new
         );
+    }
 
-        return content;
+    @Override
+    public TicketEditDto findTicketEditById(Long ticketId, Long userId) {
+        return ticketRepository.findTicketEditById(ticketId, userId).orElseThrow(
+                NoSuchElementException::new
+        );
     }
 }
