@@ -1,4 +1,4 @@
-package com.app.spotick.controller.ticket;
+package com.app.spotick.api.controller.ticket;
 
 import com.app.spotick.domain.dto.user.UserDetailsDto;
 import com.app.spotick.service.ticket.like.TicketLikeService;

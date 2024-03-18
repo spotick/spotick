@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>티켓팅 등록</title>
+    <title>티켓팅 수정</title>
     <link href="/imgs/logo/favicon.png" rel="icon">
     <link href="/css/global-css/root.css" rel="stylesheet">
     <link href="/css/ticket/ticket-register.css" rel="stylesheet"/>
@@ -18,14 +18,15 @@
 <div class="header-back"></div>
 <div class="body">
     <div class="place-register-container">
-        <form class="register-form" enctype="multipart/form-data" method="post" th:action="@{/ticket/register}"
-              th:object="${ticketRegisterDto}">
+        <form class="register-form" enctype="multipart/form-data" method="post"
+              th:action="@{/ticket/edit/{ticketId}(ticketId=${ticketEditDto.ticketId})}"
+              th:object="${ticketEditDto}">
             <div class="guide-title-box">
-                <p>티켓팅 등록 신청</p>
+                <p>티켓팅 수정 신청</p>
             </div>
 
             <div class="notification-box">
-                <span>티켓팅 신청 및 수정은 티켓팅 시작날짜로부터<br>최소 일주일의 시간이 있어야 가능합니다.<br>또한, 특정 필드는 신청한 뒤로부터 수정이 불가할 수 있으니 상세히 확인하시기 바랍니다.</span>
+                <span>티켓팅 정보 수정 시 관리자의 승인 이후 변경됩니다.<br>일부 티켓팅 정보는 수정이 불가능 합니다.</span>
             </div>
 
             <div class="input-wrap">
@@ -34,9 +35,9 @@
                     <img alt="필수입력" src="/imgs/invalid.svg">
                     <p class="invalid-msg" th:errors="*{title}" th:if="${#fields.hasErrors()}"></p>
                 </div>
-                <div class="input-box">
+                <label class="input-box">
                     <input placeholder="행사를 대표하는 이름을 입력해 주세요" required th:field="*{title}" type="text">
-                </div>
+                </label>
             </div>
 
             <div class="map-box">
@@ -78,23 +79,24 @@
             </div>
 
             <div class="img-wrap">
-                <input accept="image/*" th:field="*{ticketFile}" type="file">
-                <label class="file-label flex-align-center" th:for="ticketFile">
+                <input accept="image/*" th:field="*{newTicketFile}" type="file">
+                <label class="file-label flex-align-center none" th:for="newTicketFile">
                     <i class="fa-regular fa-image"></i>
                     <p>해당 이벤트를 대표할 사진을 선택해주세요.</p>
                 </label>
-                <div class="file-container none">
-                    <ul class="file-wrap"></ul>
-
-                    <div class="img-button-box">
-                        <button class="prev" type="button">
-                            <i class="fa-solid fa-circle-chevron-left"></i>
-                        </button>
-                        <div></div>
-                        <button class="next" type="button">
-                            <i class="fa-solid fa-circle-chevron-right"></i>
-                        </button>
-                    </div>
+                <div class="file-container">
+                    <ul class="file-wrap">
+                        <li class="file-item">
+                            <img alt="" th:src="|/file/display?fileName=*{uploadPath}/*{uuid}_*{fileName}|">
+                            <button class="delete" th:tId="*{ticketFileId}" type="button">
+                                <i class="fa-solid fa-x"></i>
+                            </button>
+                        </li>
+                    </ul>
+                    <input th:field="*{ticketFileId}" type="hidden">
+                    <input th:field="*{uuid}" type="hidden">
+                    <input th:field="*{fileName}" type="hidden">
+                    <input th:field="*{uploadPath}" type="hidden">
                 </div>
             </div>
 
@@ -109,6 +111,7 @@
                               required th:field="*{content}"></textarea>
                 </label>
             </div>
+
             <div class="space-evenly">
                 <div class="input-wrap">
                     <div class="input-guide flex">
@@ -135,6 +138,7 @@
                     </div>
                 </div>
             </div>
+
             <div style="position: relative">
                 <div class="input-guide flex">
                     <p class="input-title price-title">행사 기간</p>
@@ -143,16 +147,19 @@
                 </div>
 
                 <div class="date-container">
+                    <div class="notification-box">
+                        <span>해당 필드는 수정이 불가능 합니다.</span>
+                    </div>
                     <p class="date-header-text">시작 날짜 / 마지막 날짜</p>
-                    <input id="reservationDate" type="hidden">
                     <div class="date-wrap">
                         <div id="datepicker1"></div>
-                        <input th:field="*{startDate}" type="hidden">
+                        <input id="startDate" th:value="*{startDate}" type="hidden">
                         <div id="datepicker2"></div>
-                        <input th:field="*{endDate}" type="hidden">
+                        <input id="endDate" th:value="*{endDate}" type="hidden">
                     </div>
-                    <div class="calendar-ctr-box"></div>
-                    <p class="calendar-text">선택된 날짜 : <span id="date-info"></span></p>
+                    <p class="calendar-text"
+                       th:text="'선택된 날짜 : ' + *{#temporals.format(startDate, 'yyyy-MM-dd') + ' ~ ' + #temporals.format(endDate, 'yyyy-MM-dd')}">
+                        <span id="date-info"></span></p>
                 </div>
             </div>
 
@@ -160,34 +167,34 @@
                 <div class="input-wrap hour-price-wrap width">
                     <div class="input-guide flex">
                         <p class="input-title price-title">등급 별 금액</p>
-                        <img alt="필수입력" src="/imgs/invalid.svg">
                     </div>
+
+                    <div class="notification-box">
+                        <span>해당 필드는 수정이 불가능 합니다.</span>
+                    </div>
+
                     <div class="price-input-container">
-                        <div class="price-input-box">
+                        <div class="price-input-container-mask"></div>
+                        <div class="price-input-box" th:each="grade : *{ticketGrades}" th:object="${grade}">
                             <div class="input-box">
-                                <input class="placeDefaultPrice ticket-class" name="ticketGrades[0].gradeName"
-                                       placeholder="등급을 입력해주세요"
-                                       required
+                                <input class="placeDefaultPrice ticket-class"
+                                       placeholder="등급을 입력해주세요" readonly th:value="*{gradeName}"
                                        type="text">
                             </div>
                             <div class="input-box">
-                                <input class="placeDefaultPrice ticket-price" name="ticketGrades[0].price"
-                                       placeholder="금액을 입력해주세요"
-                                       required
+                                <input class="placeDefaultPrice ticket-price"
+                                       placeholder="금액을 입력해주세요" readonly th:value="*{price}"
                                        type="number">
                                 <p class="unit">원</p>
                             </div>
                             <div class="input-box">
                                 <input class="placeDefaultPrice ticket-headcount"
-                                       name="ticketGrades[0].maxPeople"
-                                       placeholder="최대 인원을 입력해주세요"
-                                       required
+                                       placeholder="최대 인원을 입력해주세요" readonly th:value="*{maxPeople}"
                                        type="number">
                                 <p class="unit">명</p>
                             </div>
                         </div>
                     </div>
-                    <button class="price-add-button" disabled type="button">추가</button>
                 </div>
             </div>
 
@@ -233,6 +240,7 @@
                            type="text">
                 </div>
             </div>
+
             <div class="flex-center start">
                 <button class="cancel" type="button">취소</button>
                 <button class="submit-btn on flex-align-center">신청하기</button>
@@ -249,7 +257,17 @@
 <!-- datepicker js-->
 <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
 <script th:src="@{/js/global-js/global.js}" type="module"></script>
-<script src="/js/ticket/register/calendar.js"></script>
-<script src="/js/ticket/register/register.js"></script>
-<script src="/js/ticket/register/kakaoMapApi.js"></script>
+<script src="/js/ticket/edit/calendar.js"></script>
+<script src="/js/ticket/edit/edit.js"></script>
+<script th:src="@{/js/place/register/kakaoMapApi.js}"></script>
+<script th:inline="javascript">
+    console.log([[${ticketEditDto}]]);
+
+    $(function () {
+        // 화면 첫 접근 시 맵 마커 생성
+        const DEFAULT_LAT = $('#placeLat').val();
+        const DEFAULT_LNG = $('#placeLng').val();
+        resetMapAndMarkerByLatLng(DEFAULT_LAT, DEFAULT_LNG);
+    });
+</script>
 </html>

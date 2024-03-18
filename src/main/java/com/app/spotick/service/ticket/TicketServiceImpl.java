@@ -1,9 +1,6 @@
 package com.app.spotick.service.ticket;
 
-import com.app.spotick.domain.dto.ticket.TicketDetailDto;
-import com.app.spotick.domain.dto.ticket.TicketGradeSaleInfoDto;
-import com.app.spotick.domain.dto.ticket.TicketListDto;
-import com.app.spotick.domain.dto.ticket.TicketRegisterDto;
+import com.app.spotick.domain.dto.ticket.*;
 import com.app.spotick.domain.entity.ticket.Ticket;
 import com.app.spotick.domain.entity.ticket.TicketFile;
 import com.app.spotick.domain.entity.ticket.TicketGrade;
@@ -23,7 +20,6 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Optional;
 
 @Service
 @Transactional
@@ -33,6 +29,7 @@ public class TicketServiceImpl implements TicketService {
     private final TicketGradeRepository ticketGradeRepository;
     private final TicketFileService ticketFileService;
     private final UserRepository userRepository;
+
     @Override
     public void registerTicket(TicketRegisterDto ticketRegisterDto, Long userId) throws IOException {
         User tmpUser = userRepository.getReferenceById(userId);
@@ -72,10 +69,34 @@ public class TicketServiceImpl implements TicketService {
 
     @Override
     public TicketDetailDto findTicketDetailById(Long ticketId, Long userId) {
-        TicketDetailDto content = ticketRepository.findTicketDetailById(ticketId, userId).orElseThrow(
+        return ticketRepository.findTicketDetailById(ticketId, userId).orElseThrow(
+                NoSuchElementException::new
+        );
+    }
+
+    @Override
+    public TicketEditDto findTicketEditById(Long ticketId, Long userId) {
+        return ticketRepository.findTicketEditById(ticketId, userId).orElseThrow(
+                NoSuchElementException::new
+        );
+    }
+
+    @Override
+    public void updateTicket(TicketEditDto ticketEditDto, Long userId) throws IOException {
+        User tmpUser = userRepository.getReferenceById(userId);
+
+        Ticket foundTicket = ticketRepository.findByIdAndUser(ticketEditDto.getTicketId(), tmpUser).orElseThrow(
                 NoSuchElementException::new
         );
 
-        return content;
+        // 티켓 정보 수정
+        foundTicket.updateTicket(ticketEditDto);
+
+        // 파일의 경우, 새로 받아온 파일 정보가 있을 시 파일정보를 수정.
+        if (!ticketEditDto.getNewTicketFile().isEmpty()) {
+            TicketFile newFile = ticketFileService
+                    .registerAndSaveTicketFile(ticketEditDto.getNewTicketFile());
+            foundTicket.setFile(newFile);
+        }
     }
 }

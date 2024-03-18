@@ -1,4 +1,4 @@
-package com.app.spotick.controller.file;
+package com.app.spotick.api.controller.file;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
