@@ -2,6 +2,7 @@ package com.app.spotick.domain.entity.ticket;
 
 
 import com.app.spotick.domain.base.post.PostBase;
+import com.app.spotick.domain.dto.ticket.TicketEditDto;
 import com.app.spotick.domain.embedded.post.PostAddress;
 import com.app.spotick.domain.entity.user.User;
 import com.app.spotick.domain.type.post.PostStatus;
@@ -77,6 +78,18 @@ public class Ticket extends PostBase {
 
     public void setFile(TicketFile ticketFile) {
         this.ticketFile = ticketFile;
+    }
+
+    public void updateTicket(TicketEditDto ticketEditDto) {
+        editBase(ticketEditDto.getTitle(), ticketEditDto.getPlaceLat(), ticketEditDto.getPlaceLng());
+        this.content = ticketEditDto.getContent();
+        this.ticketCategory = ticketEditDto.getCategory();
+        this.bankName = ticketEditDto.getBankName();
+        this.accountNumber = ticketEditDto.getAccountNumber();
+        this.accountHolder = ticketEditDto.getAccountHolder();
+        this.ticketEventAddress = new PostAddress(ticketEditDto.getPlaceAddress(), ticketEditDto.getPlaceAddressDetail());
+        this.ticketRatingType = ticketEditDto.getTicketRatingType();
+        this.ticketEventStatus = PostStatus.MODIFICATION_REQUESTED;
     }
 }
 

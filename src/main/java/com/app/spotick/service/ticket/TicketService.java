@@ -19,4 +19,6 @@ public interface TicketService {
     TicketDetailDto findTicketDetailById(Long ticketId, Long userId);
 
     TicketEditDto findTicketEditById(Long ticketId, Long userId);
+
+    void updateTicket(TicketEditDto ticketEditDto, Long userId) throws IOException;
 }

@@ -29,6 +29,7 @@ public class TicketServiceImpl implements TicketService {
     private final TicketGradeRepository ticketGradeRepository;
     private final TicketFileService ticketFileService;
     private final UserRepository userRepository;
+
     @Override
     public void registerTicket(TicketRegisterDto ticketRegisterDto, Long userId) throws IOException {
         User tmpUser = userRepository.getReferenceById(userId);
@@ -78,5 +79,24 @@ public class TicketServiceImpl implements TicketService {
         return ticketRepository.findTicketEditById(ticketId, userId).orElseThrow(
                 NoSuchElementException::new
         );
+    }
+
+    @Override
+    public void updateTicket(TicketEditDto ticketEditDto, Long userId) throws IOException {
+        User tmpUser = userRepository.getReferenceById(userId);
+
+        Ticket foundTicket = ticketRepository.findByIdAndUser(ticketEditDto.getTicketId(), tmpUser).orElseThrow(
+                NoSuchElementException::new
+        );
+
+        // 티켓 정보 수정
+        foundTicket.updateTicket(ticketEditDto);
+
+        // 파일의 경우, 새로 받아온 파일 정보가 있을 시 파일정보를 수정.
+        if (!ticketEditDto.getNewTicketFile().isEmpty()) {
+            TicketFile newFile = ticketFileService
+                    .registerAndSaveTicketFile(ticketEditDto.getNewTicketFile());
+            foundTicket.setFile(newFile);
+        }
     }
 }

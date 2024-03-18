@@ -1,5 +1,9 @@
 package com.app.spotick.domain.dto.ticket;
 
+import com.app.spotick.domain.embedded.post.PostAddress;
+import com.app.spotick.domain.entity.ticket.Ticket;
+import com.app.spotick.domain.entity.ticket.TicketFile;
+import com.app.spotick.domain.type.post.PostStatus;
 import com.app.spotick.domain.type.ticket.TicketCategory;
 import com.app.spotick.domain.type.ticket.TicketRatingType;
 import jakarta.validation.constraints.NotBlank;
@@ -26,10 +30,8 @@ public class TicketEditDto {
     @Size(max = 2000, message = "입력한 글자수가 너무 많습니다.")
     private String content;
 
-    @NotNull(message = "날짜를 정확히 선택해주세요.")
     private LocalDate startDate;
 
-    @NotNull(message = "날짜를 정확히 선택해주세요.")
     private LocalDate endDate;
 
     private String bankName;
@@ -57,10 +59,8 @@ public class TicketEditDto {
     private String uuid;
     private String uploadPath;
 
-    // 삭제된 사진이 있을 경우
-    private Long deletedFileId;
     // 새로 추가될 사진이 있을 경우
-    private MultipartFile ticketFile;
+    private MultipartFile newTicketFile;
 
     // readOnly, 수정 불가능.
     private List<TicketGradeRegisterDto> ticketGrades = new ArrayList<>();
@@ -87,5 +87,23 @@ public class TicketEditDto {
         this.uuid = uuid;
         this.uploadPath = uploadPath;
         this.ticketGrades = ticketGrades;
+    }
+
+    // 티켓 파일만 따로 받아 저장
+    public Ticket toEntity(TicketFile ticketFile) {
+        return Ticket.builder()
+                .title(title)
+                .content(content)
+                .bankName(bankName)
+                .accountNumber(accountNumber)
+                .accountHolder(accountHolder)
+                .ticketEventAddress(new PostAddress(placeAddress, placeAddressDetail))
+                .ticketRatingType(ticketRatingType)
+                .ticketCategory(category)
+                .lat(placeLat)
+                .lng(placeLng)
+                .ticketFile(ticketFile)
+                .ticketEventStatus(PostStatus.MODIFICATION_REQUESTED)
+                .build();
     }
 }

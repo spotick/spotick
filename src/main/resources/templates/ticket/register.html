@@ -84,8 +84,7 @@
                     <p>해당 이벤트를 대표할 사진을 선택해주세요.</p>
                 </label>
                 <div class="file-container none">
-                    <ul class="file-wrap">
-                    </ul>
+                    <ul class="file-wrap"></ul>
 
                     <div class="img-button-box">
                         <button class="prev" type="button">
@@ -141,16 +140,20 @@
                     <p class="input-title price-title">행사 기간</p>
                     <img alt="필수입력" src="/imgs/invalid.svg">
                     <p class="invalid-msg" th:errors="*{endDate}" th:if="${#fields.hasErrors()}"></p>
-                    <p class="date-header-text">시작 날짜 / 마지막 날짜</p>
                 </div>
 
-                <input id="reservationDate" type="hidden">
-                <div id="datepicker1"></div>
-                <input th:field="*{startDate}" type="hidden">
-                <div id="datepicker2"></div>
-                <input th:field="*{endDate}" type="hidden">
-                <div class="calendar-ctr-box"></div>
-                <p class="calendar-text">선택된 날짜 : <span id="date-info"></span></p>
+                <div class="date-container">
+                    <p class="date-header-text">시작 날짜 / 마지막 날짜</p>
+                    <input id="reservationDate" type="hidden">
+                    <div class="date-wrap">
+                        <div id="datepicker1"></div>
+                        <input th:field="*{startDate}" type="hidden">
+                        <div id="datepicker2"></div>
+                        <input th:field="*{endDate}" type="hidden">
+                    </div>
+                    <div class="calendar-ctr-box"></div>
+                    <p class="calendar-text">선택된 날짜 : <span id="date-info"></span></p>
+                </div>
             </div>
 
             <div class="price-people-container no-flex" style="width: 100%">

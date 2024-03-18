@@ -16,7 +16,9 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
 import java.util.NoSuchElementException;
@@ -99,12 +101,25 @@ public class TicketController {
     @PostMapping("/edit/{ticketId}")
     public String ticketEdit(@PathVariable("ticketId") String ticketId,
                              @Valid @ModelAttribute("TicketEditDto") TicketEditDto ticketEditDto,
-                             BindingResult bindingResult,
-                             @AuthenticationPrincipal UserDetailsDto userDetailsDto) {
+                             BindingResult result,
+                             @AuthenticationPrincipal UserDetailsDto userDetailsDto,
+                             RedirectAttributes redirectAttributes) throws IOException {
 
         System.out.println("ticketEditDto = " + ticketEditDto);
 
-        //
+        if (result.hasErrors()) {
+            for (FieldError error : result.getFieldErrors()) {
+                redirectAttributes.addFlashAttribute(error.getField() + "Error", error.getDefaultMessage());
+            }
+            return "redirect:/ticket/edit/" + ticketId;
+        }
+
+        try {
+            ticketService.updateTicket(ticketEditDto, userDetailsDto.getId());
+        } catch (IOException e) {
+            log.error("Exception [Err_Msg]: {}", e.getMessage());
+            return "redirect:/ticket/edit/" + ticketId;
+        }
 
         return "redirect:/mypage/tickets";
     }
