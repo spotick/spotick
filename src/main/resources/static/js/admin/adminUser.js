@@ -94,6 +94,7 @@ function displayUserList(data) {
     let text = '';
 
     data.slice.content.forEach(user => {
+        let isCommonUser = user.authorityType == 'ROLE_USER';
         text += `
             <tr class="user-table-category">
             <td align="center" class="user-table-checkbox" align="center">
@@ -101,7 +102,7 @@ function displayUserList(data) {
             </td>
             <td align="center" class="user-email" >${user.email}</td>
             <td align="center" class="user-nickname" >${user.nickName}</td>
-            <td align="center" class="user-palce-tcket">${user.authorityType == 'ROLE_USER' ? '일반회원' : '관리자'}</td>
+            <td align="center" class="user-palce-tcket">${isCommonUser ? '일반회원' : '관리자'}</td>
             <td align="center" class="user-phonenumber">${user.tel == null ? '미입력' : user.tel}</td>
             <td align="center" class="user-register-date">${user.createdDate.split('T')[0]}</td>
             <td align="center" class="user-status-select">
@@ -124,7 +125,12 @@ function displayUserList(data) {
             }
         });
         text += `</td>
-          </tr>       
+            <td class="user-status-manegement" align="center">
+                <button class="user-authority-btn ${isCommonUser?'Y':'B'}" data-id="${user.id}" data-isgranted="${isCommonUser}">
+                    ${isCommonUser?'권한부여':'권한해제'}
+                </button>
+            </td>
+          </tr>
        `;
     });
 
@@ -193,11 +199,21 @@ function createSearchParamQuery() {
 }
 
 $('.search-btn').on('click', function () {
-    email =  $('#email').val();
-    nickName =  $('#nickName').val();
-    status =  $('#status').val();
+    email = $('#email').val();
+    nickName = $('#nickName').val();
+    status = $('#status').val();
     clearList();
     loadUserList();
 });
 
+// 관리자권한 부여, 해제
+$('.tbody-user').on('click','.user-authority-btn',function (){
+    let userId = $(this).data('id');
+    let isGrant = $(this).data('isgranted');
+    if(!confirm(`${userId}번 회원의 관리자 권한을 ${isGrant?'부여':'해제'}하시겠습니까?`)){
+        return ;
+    }
+
+
+});
 
