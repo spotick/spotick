@@ -2,6 +2,7 @@ package com.app.spotick.service.admin;
 
 import com.app.spotick.api.dto.admin.AdminPlaceApproveDto;
 import com.app.spotick.api.dto.admin.AdminPlaceSearchDto;
+import com.app.spotick.api.dto.admin.AdminUserAuthorityConfigDto;
 import com.app.spotick.api.dto.admin.AdminUserSearchDto;
 import com.app.spotick.api.dto.user.UserStatusDto;
 import com.app.spotick.domain.dto.admin.AdminPlaceListDto;
@@ -17,4 +18,6 @@ public interface AdminService {
     void updateUsersStatus(List<UserStatusDto> userStatusDtoList);
 
     void approveOrRejectPlace(AdminPlaceApproveDto.Request approveDto);
+
+    void grantOrRevokeUserAuthority(AdminUserAuthorityConfigDto configDto);
 }
