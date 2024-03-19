@@ -1,21 +1,36 @@
 package com.app.spotick.api.controller.order;
 
+import com.app.spotick.domain.type.payment.PaymentStatus;
+import com.app.spotick.domain.type.payment.PaymentType;
 import com.app.spotick.service.bootpay.BootpayService;
+import com.app.spotick.service.place.payment.PlacePaymentService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
+@Slf4j
 @RequestMapping("/bootpay/api")
 @RequiredArgsConstructor
 public class BootpayRestController {
     private final BootpayService bootpayService;
+    private final PlacePaymentService placePaymentService;
 
     @PostMapping("/place/check")
-    public ResponseEntity<?> priceCheck(@RequestParam("orderId") String orderId) {
-        return bootpayService.priceCheck(orderId);
+    public ResponseEntity<?> priceCheck(@RequestParam("receiptId") String receiptId) {
+        return bootpayService.priceCheck(receiptId, PaymentType.PLACE);
+    }
+
+    @PutMapping("/place/reject")
+    public ResponseEntity<String> rejectPayment(@RequestParam("paymentId") Long paymentId) {
+        try {
+            placePaymentService.updateStatus(paymentId, PaymentStatus.DECLINED);
+
+            return ResponseEntity.ok("거부 처리 완료");
+        } catch (Exception e) {
+            log.error("[Err_Msg]: {}", e.getMessage());
+            return ResponseEntity.badRequest().body("오류 발생");
+        }
     }
 }

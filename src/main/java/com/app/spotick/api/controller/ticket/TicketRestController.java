@@ -1,6 +1,6 @@
 package com.app.spotick.api.controller.ticket;
 
-import com.app.spotick.api.dto.response.CommonResponse;
+import com.app.spotick.api.response.CommonResponse;
 import com.app.spotick.domain.dto.ticket.TicketGradeSaleInfoDto;
 import com.app.spotick.service.ticket.TicketService;
 import lombok.RequiredArgsConstructor;

@@ -14,6 +14,7 @@ import java.util.List;
 @NoArgsConstructor
 public class TicketDetailDto {
     private Long ticketId;
+    private Long hostId;
     private String title;
     private String content;
     private LocalDate startDate;
@@ -32,8 +33,9 @@ public class TicketDetailDto {
 
     private List<TicketGradeDto> ticketGradeDtos = new ArrayList<>();
 
-    public TicketDetailDto(Long ticketId, String title, String content, LocalDate startDate, LocalDate endDate, double lat, double lng, TicketCategory ticketCategory, PostAddress ticketEventAddress, TicketRatingType ticketRatingType, String fileName, String uuid, String uploadPath, Long likeCount, long inquiryCount, boolean isLiked, List<TicketGradeDto> ticketGradeDtos) {
+    public TicketDetailDto(Long ticketId, Long hostId, String title, String content, LocalDate startDate, LocalDate endDate, double lat, double lng, TicketCategory ticketCategory, PostAddress ticketEventAddress, TicketRatingType ticketRatingType, String fileName, String uuid, String uploadPath, Long likeCount, long inquiryCount, boolean isLiked, List<TicketGradeDto> ticketGradeDtos) {
         this.ticketId = ticketId;
+        this.hostId = hostId;
         this.title = title;
         this.content = content;
         this.startDate = startDate;

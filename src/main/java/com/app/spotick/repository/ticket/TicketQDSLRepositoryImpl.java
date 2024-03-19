@@ -221,11 +221,15 @@ public class TicketQDSLRepositoryImpl implements TicketQDSLRepository {
 
         List<TicketDetailDto> content = queryFactory
                 .from(ticket)
-                .where(ticket.id.eq(ticketId))
+                .where(
+                        ticket.id.eq(ticketId),
+                        ticket.ticketEventStatus.eq(PostStatus.APPROVED)
+                )
                 .leftJoin(ticket.ticketGrades, ticketGrade)
                 .orderBy(ticketGrade.price.asc())
                 .transform(groupBy(ticket.id).list(Projections.constructor(TicketDetailDto.class,
                                 ticket.id,
+                                ticket.user.id,
                                 ticket.title,
                                 ticket.content,
                                 ticket.startDate,

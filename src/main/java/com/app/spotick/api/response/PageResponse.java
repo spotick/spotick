@@ -1,4 +1,4 @@
-package com.app.spotick.api.dto.response;
+package com.app.spotick.api.response;
 
 import com.app.spotick.domain.pagination.Pagination;
 import lombok.Data;

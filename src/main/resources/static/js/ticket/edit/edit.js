@@ -183,3 +183,7 @@ $(document).ready(function () {
         checkInputValues();
     });
 });
+
+$('.cancel').on('click', () => {
+    window.history.back();
+});

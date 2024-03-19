@@ -313,9 +313,9 @@
                                         </div>
                                     </div>
                                     <div class="mpc-slide-con">
-                                        <div class="mpc-slide-item" onclick="editTicket()">
+                                        <a class="mpc-slide-item" th:href="@{/ticket/edit/{ticketId}(ticketId=*{ticketId})}">
                                             <span>티켓 정보 수정 하기</span>
-                                        </div>
+                                        </a>
                                     </div>
                                 </article>
                             </th:block>

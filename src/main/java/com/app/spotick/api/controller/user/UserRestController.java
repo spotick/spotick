@@ -1,17 +1,14 @@
 package com.app.spotick.api.controller.user;
 
-import com.app.spotick.api.dto.response.CommonResponse;
+import com.app.spotick.api.response.CommonResponse;
 import com.app.spotick.api.dto.user.FindIdCertDto;
 import com.app.spotick.api.dto.user.UserFindEmailDto;
 import com.app.spotick.api.dto.user.UserFindPwDto;
-import com.app.spotick.service.redis.RedisService;
 import com.app.spotick.service.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.net.ConnectException;
 
 @RestController
 @RequestMapping("/users/api")

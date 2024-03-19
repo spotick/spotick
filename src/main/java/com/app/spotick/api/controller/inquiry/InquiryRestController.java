@@ -1,8 +1,8 @@
 package com.app.spotick.api.controller.inquiry;
 
 import com.app.spotick.api.dto.place.InquiryResponseDto;
-import com.app.spotick.api.dto.response.CommonResponse;
-import com.app.spotick.api.dto.response.PageResponse;
+import com.app.spotick.api.response.CommonResponse;
+import com.app.spotick.api.response.PageResponse;
 import com.app.spotick.domain.dto.place.PlaceInquiryListDto;
 import com.app.spotick.domain.dto.place.inquiry.UnansweredInquiryDto;
 import com.app.spotick.domain.dto.ticket.TicketInquiryListDto;
