@@ -298,6 +298,10 @@ input[type="number"]::-webkit-inner-spin-button {
     margin: 4px;
 }
 
+.cancel:hover {
+    color: #000;
+}
+
 .start {
     justify-content: flex-end;
 }

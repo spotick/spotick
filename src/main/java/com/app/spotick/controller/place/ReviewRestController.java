@@ -1,6 +1,6 @@
 package com.app.spotick.controller.place;
 
-import com.app.spotick.api.dto.response.ReviewResponse;
+import com.app.spotick.api.response.ReviewResponse;
 import com.app.spotick.domain.dto.place.review.PlaceReviewListDto;
 import com.app.spotick.domain.dto.place.review.PlaceReviewRegisterDto;
 import com.app.spotick.domain.dto.place.review.PlaceReviewUpdateDto;

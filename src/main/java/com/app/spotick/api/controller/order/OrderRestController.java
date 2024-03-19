@@ -1,7 +1,6 @@
 package com.app.spotick.api.controller.order;
 
 import com.app.spotick.api.dto.place.PlacePaymentDto;
-import com.app.spotick.api.dto.response.CommonResponse;
 import com.app.spotick.domain.dto.user.UserDetailsDto;
 import com.app.spotick.service.place.payment.PlacePaymentService;
 import jakarta.validation.Valid;
@@ -20,8 +19,8 @@ public class OrderRestController {
     private final PlacePaymentService placePaymentService;
 
     @PostMapping("/place/save")
-    public ResponseEntity<CommonResponse<Long>> save(@Valid @RequestBody PlacePaymentDto dto,
-                                                     @AuthenticationPrincipal UserDetailsDto userDetailsDto) {
+    public ResponseEntity<?> save(@Valid @RequestBody PlacePaymentDto dto,
+                                  @AuthenticationPrincipal UserDetailsDto userDetailsDto) {
         return placePaymentService.savePayment(userDetailsDto.getId(), dto);
     }
 }

@@ -1,4 +1,4 @@
-package com.app.spotick.api.dto.response;
+package com.app.spotick.api.response;
 
 import lombok.Builder;
 import lombok.Data;

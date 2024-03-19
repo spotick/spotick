@@ -1310,6 +1310,21 @@ button {
     width: 18px;
 }
 
+.inquiry-write-btn,
+.review-write-btn,
+.place-modify-btn{
+    display: flex;
+    align-items: center;
+    width: fit-content;
+    height: 45px;
+    padding: 0 15px;
+    font-size: 15px;
+    border-radius: 4px;
+    color: #007AFF;
+    background-color: rgb(255, 255, 255);
+    border: 1px solid #007AFF;
+}
+
 .PostQnaModalArrowImg {
     display: none;
 }

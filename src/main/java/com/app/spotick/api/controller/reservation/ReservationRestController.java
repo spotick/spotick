@@ -1,6 +1,6 @@
 package com.app.spotick.api.controller.reservation;
 
-import com.app.spotick.api.dto.response.CommonResponse;
+import com.app.spotick.api.response.CommonResponse;
 import com.app.spotick.domain.dto.place.reservation.ReservationRequestListDto;
 import com.app.spotick.domain.dto.user.UserDetailsDto;
 import com.app.spotick.domain.entity.place.PlaceReservation;
@@ -16,7 +16,6 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
-import java.util.Objects;
 
 @RestController
 @RequestMapping("/reservation/api")

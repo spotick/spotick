@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
 <head>
     <meta charset="UTF-8">
     <meta content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
@@ -38,7 +39,12 @@
                                 <div th:text="*{title}"></div>
                             </h2>
                             <div class="prdTitleBottom">
-                                <div class="BasicInformationReviewsContainer">-->
+                                <div class="BasicInformationReviewsContainer">
+                                    <th:block sec:authorize="isAuthenticated()">
+                                        <a class="place-modify-btn"
+                                           th:href="@{/ticket/edit/{ticketId}(ticketId=*{ticketId})}"
+                                           th:if="${#authentication.principal != null and #authentication.principal.id == ticketDetail.hostId}">수정하기</a>
+                                    </th:block>
                                     <button class="BasicInformationShareBtn" type="button">
                                         <img alt="공유하기" class="BasicInformationShareImg"
                                              src="/imgs/share_line_gray034.d1513b9a.svg">

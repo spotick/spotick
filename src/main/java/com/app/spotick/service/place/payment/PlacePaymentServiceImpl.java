@@ -1,7 +1,8 @@
 package com.app.spotick.service.place.payment;
 
 import com.app.spotick.api.dto.place.PlacePaymentDto;
-import com.app.spotick.api.dto.response.CommonResponse;
+import com.app.spotick.api.dto.place.PlacePaymentInfoDto;
+import com.app.spotick.api.response.CommonResponse;
 import com.app.spotick.domain.entity.place.PlacePayment;
 import com.app.spotick.domain.entity.place.PlaceReservation;
 import com.app.spotick.domain.entity.user.User;
@@ -26,7 +27,7 @@ public class PlacePaymentServiceImpl implements PlacePaymentService {
     private final PlaceReservationRepository placeReservationRepository;
 
     @Override
-    public ResponseEntity<CommonResponse<Long>> savePayment(Long userId, PlacePaymentDto dto) {
+    public ResponseEntity<?> savePayment(Long userId, PlacePaymentDto dto) {
         User tmpUser = userRepository.getReferenceById(userId);
 
         PlaceReservation foundReservation = placeReservationRepository.findByIdAndUser(
@@ -46,12 +47,24 @@ public class PlacePaymentServiceImpl implements PlacePaymentService {
 
         PlacePayment savedEntity = placePaymentRepository.save(paymentEntity);
 
+        PlacePaymentInfoDto paymentDetail = placePaymentRepository.findPaymentDetailById(savedEntity.getId()).orElseThrow(
+                NoSuchElementException::new
+        );
+
         return new ResponseEntity<>(
-                CommonResponse.<Long>builder()
+                CommonResponse.builder()
                         .success(true)
                         .message("주문 저장 성공")
-                        .data(savedEntity.getId())
+                        .data(paymentDetail)
                         .build(),
                 HttpStatus.OK);
+    }
+
+    @Override
+    public void updateStatus(Long paymentId, PaymentStatus paymentStatus) {
+        PlacePayment foundPayment = placePaymentRepository.findById(paymentId).orElseThrow(
+                NoSuchElementException::new
+        );
+        foundPayment.updatePaymentStatus(paymentStatus);
     }
 }

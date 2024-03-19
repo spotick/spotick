@@ -20,7 +20,7 @@ $('#ticketFile').on('change', function (event) {
     // 미리보기 이미지 목록을 비웁니다.
     $('.file-wrap').empty();
 
-    files.forEach((file,i) => {
+    files.forEach((file, i) => {
         let reader = new FileReader();
 
         reader.onload = function (e) {
@@ -42,20 +42,20 @@ $('#ticketFile').on('change', function (event) {
 });
 
 // 미리보기 사진 다음버튼
-$('.next').on('click', function() {
+$('.next').on('click', function () {
     idx++;
     $fileList.css('transform', 'translateX(' + (-width * idx) + 'px)').css('transition', '0.5s');
     checkEnd();
 });
 
 // 미리보기 사진 이전버튼
-$('.prev').on('click', function() {
+$('.prev').on('click', function () {
     idx--;
     $fileList.css('transform', 'translateX(' + (-width * idx) + 'px)').css('transition', '0.5s');
     checkEnd();
 });
 
-$('.file-wrap').on('click','.delete',function (){
+$('.file-wrap').on('click', '.delete', function () {
     let files = $('#ticketFile')[0].files;
 
     // 삭제된 이미지의 인덱스를 찾습니다.
@@ -77,16 +77,16 @@ $('.file-wrap').on('click','.delete',function (){
     length = $('.file-item').length;
 
     // 삭제된 이미지가 현재 인덱스보다 앞에 있으면 idx를 감소시킵니다.
-    if(deletedIndex < idx) {
+    if (deletedIndex < idx) {
         idx--;
     }
 
     // 삭제 후 현재 인덱스가 목록 길이를 초과하지 않도록 조정합니다.
-    if(idx >= length) {
+    if (idx >= length) {
         idx = length - 1;
     }
 
-    if(length === 0){
+    if (length === 0) {
         updatePreviewVisibility(false);
         idx = 0; // 목록이 비었을 때 idx를 0으로 리셋합니다.
     }
@@ -99,14 +99,14 @@ $('.file-wrap').on('click','.delete',function (){
 
 
 function checkEnd() {
-    if(idx <= 0){
+    if (idx <= 0) {
         $('.prev').hide();
-    }else {
+    } else {
         $('.prev').show();
     }
-    if(idx >= length - 1){
+    if (idx >= length - 1) {
         $('.next').hide();
-    }else {
+    } else {
         $('.next').show();
     }
 }
@@ -180,7 +180,7 @@ const MAX_ADD_COUNT = 4;
 function checkInputValues() {
     let allInputsFilled = true;
 
-    $('.price-input-container input').each(function() {
+    $('.price-input-container input').each(function () {
         if ($(this).val().trim() === '') {
             allInputsFilled = false;
             return false;
@@ -199,7 +199,7 @@ function addPriceInputContainer() {
 
     let newContainer = $('.price-input-container .price-input-box:first').clone();
 
-    newContainer.find('input').each(function() {
+    newContainer.find('input').each(function () {
         let currentName = $(this).attr('name');
         let newName = currentName.replace('[0]', '[' + currentIndex + ']');
         $(this).attr('name', newName);
@@ -210,14 +210,18 @@ function addPriceInputContainer() {
 }
 
 //////////////////////////////////////////////////////////////////////////////
-$(document).ready(function() {
-    $('.price-input-container').on('input', 'input', function() {
+$(document).ready(function () {
+    $('.price-input-container').on('input', 'input', function () {
         checkInputValues();
     });
 
     // 추가 버튼 클릭 시
-    $('.price-add-button').on('click', function() {
+    $('.price-add-button').on('click', function () {
         addPriceInputContainer();
         checkInputValues();
     });
+});
+
+$('.cancel').on('click', () => {
+    window.history.back();
 });

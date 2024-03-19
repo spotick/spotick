@@ -1,6 +1,6 @@
 package com.app.spotick.api.controller.ticket;
 
-import com.app.spotick.api.dto.response.PageResponse;
+import com.app.spotick.api.response.PageResponse;
 import com.app.spotick.api.dto.ticket.TicketInquiryDto;
 import com.app.spotick.domain.dto.user.UserDetailsDto;
 import com.app.spotick.domain.pagination.Pagination;
@@ -10,7 +10,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
