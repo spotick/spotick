@@ -2,20 +2,26 @@ package com.app.spotick.service.admin;
 
 import com.app.spotick.api.dto.admin.AdminPlaceApproveDto;
 import com.app.spotick.api.dto.admin.AdminPlaceSearchDto;
+import com.app.spotick.api.dto.admin.AdminUserAuthorityConfigDto;
 import com.app.spotick.api.dto.admin.AdminUserSearchDto;
 import com.app.spotick.api.dto.user.UserStatusDto;
 import com.app.spotick.domain.dto.admin.AdminPlaceListDto;
 import com.app.spotick.domain.dto.admin.AdminUserListDto;
 import com.app.spotick.domain.entity.place.Place;
 import com.app.spotick.domain.entity.place.PlaceModifyRequest;
+import com.app.spotick.domain.entity.user.User;
+import com.app.spotick.domain.entity.user.UserAuthority;
 import com.app.spotick.domain.type.post.PostModifyStatus;
 import com.app.spotick.domain.type.post.PostStatus;
+import com.app.spotick.domain.type.user.AuthorityType;
 import com.app.spotick.repository.admin.place.AdminPlaceRepository;
 import com.app.spotick.repository.admin.user.AdminUserRepository;
 import com.app.spotick.repository.place.bookmark.PlaceBookmarkRepository;
 import com.app.spotick.repository.place.inquiry.PlaceInquiryRepository;
 import com.app.spotick.repository.place.modifyRequest.PlaceModifyReqRepository;
 import com.app.spotick.repository.place.reservation.PlaceReservationRepository;
+import com.app.spotick.repository.user.UserAuthorityRepository;
+import com.app.spotick.repository.user.UserRepository;
 import com.app.spotick.service.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -35,6 +41,8 @@ public class AdminServiceImpl implements AdminService{
     private final PlaceBookmarkRepository placeBookmarkRepository;
     private final PlaceInquiryRepository placeInquiryRepository;
     private final PlaceReservationRepository placeReservationRepository;
+    private final UserAuthorityRepository userAuthorityRepository;
+    private final UserRepository userRepository;
     private final UserService userService;
 
 
@@ -100,7 +108,22 @@ public class AdminServiceImpl implements AdminService{
         modifyRequest.setPlaceModifyStatus(PostModifyStatus.APPROVED);
     }
 
-
+    @Override
+    public void grantOrRevokeUserAuthority(AdminUserAuthorityConfigDto configDto) {
+        User targetUser = userRepository.getReferenceById(configDto.getUserId());
+        if(configDto.getIsGranted()){
+//            관리자 권한 부여인 경우
+            userAuthorityRepository.save(UserAuthority.builder()
+                    .authorityType(AuthorityType.ROLE_ADMIN)
+                    .user(targetUser)
+                    .build());
+            return;
+        }
+//            관리자 권한 해제인 경우
+        userAuthorityRepository.delete(userAuthorityRepository
+                .findByUserIdAndAuthorityType(configDto.getUserId(), AuthorityType.ROLE_ADMIN)
+                .orElseThrow(() -> new IllegalStateException("이미 관리자권한을 가지고 있지 않습니다")));
+    }
 }
 
 
