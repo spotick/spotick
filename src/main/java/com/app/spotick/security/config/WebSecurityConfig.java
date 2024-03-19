@@ -1,28 +1,28 @@
 package com.app.spotick.security.config;
 
+import com.app.spotick.security.handler.CustomLoginFailureHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
-import org.springframework.security.oauth2.jwt.JwtDecoder;
-import org.springframework.security.oauth2.jwt.JwtDecoders;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class WebSecurityConfig {
     private final DefaultOAuth2UserService oAuth2UserService;
-     @Bean
+    private final AuthenticationFailureHandler authenticationFailureHandler;
+
+    @Bean
     public static PasswordEncoder bCryptPasswordEncoder() {
 //        모든 작업마무리되고 새롭게 create할 때 기본설정메소드로 교체 고려
 //        return PasswordEncoderFactories.createDelegatingPasswordEncoder(); 
@@ -70,8 +70,8 @@ public class WebSecurityConfig {
                                 .loginPage("/user/login")
                                 .loginProcessingUrl("/user/login")
                                 .defaultSuccessUrl("/")
+                                .failureHandler(authenticationFailureHandler)
 //                                .successHandler(new CustomLoginSuccessHandler("/"))
-
                 )
 
                 .logout(logout -> logout
@@ -88,15 +88,14 @@ public class WebSecurityConfig {
                         })
                 )
 
-                .oauth2Login(oauth2->oauth2
+                .oauth2Login(oauth2 -> oauth2
                         .loginPage("/user/login")
                         .redirectionEndpoint(endpoint ->
                                 endpoint.baseUri("/oauth2/callback/*"))
-                        .userInfoEndpoint(endpoint->
+                        .userInfoEndpoint(endpoint ->
                                 endpoint.userService(oAuth2UserService))
                         .defaultSuccessUrl("/")
                 )
-
         ;
 
         return http.build();
