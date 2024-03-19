@@ -209,11 +209,43 @@ $('.search-btn').on('click', function () {
 // 관리자권한 부여, 해제
 $('.tbody-user').on('click','.user-authority-btn',function (){
     let userId = $(this).data('id');
-    let isGrant = $(this).data('isgranted');
-    if(!confirm(`${userId}번 회원의 관리자 권한을 ${isGrant?'부여':'해제'}하시겠습니까?`)){
+    let isGranted = $(this).data('isgranted');
+    if(!confirm(`${userId}번 회원의 관리자 권한을 ${isGranted?'부여':'해제'}하시겠습니까?`)){
         return ;
     }
+//     todo 관리자권한 부여, 해제 백작업하기
 
-
+    fetch(`/admins/user/authority/config`, {
+        method: 'POST',
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+            userId:userId,
+            isGranted:isGranted
+        }),
+    }).then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        } else {
+            clearList();
+            loadUserList();
+        }
+    });
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
