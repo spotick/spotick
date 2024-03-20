@@ -4,12 +4,12 @@ import com.app.spotick.domain.type.post.PostStatus;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-public class AdminPlaceApproveDto {
+public class AdminPostApproveDto {
 
     @Data @NoArgsConstructor
     public static class Request{
         private Boolean isApprove;
-        private Long placeId;
+        private Long postId;
         private PostStatus status;
     }
 }

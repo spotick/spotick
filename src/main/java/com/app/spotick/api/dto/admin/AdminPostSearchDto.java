@@ -6,8 +6,8 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class AdminPlaceSearchDto {
+public class AdminPostSearchDto {
     private String email;
-    private String placeTitle;
+    private String postTitle;
     private PostStatus status;
 }

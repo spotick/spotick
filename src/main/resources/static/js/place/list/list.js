@@ -35,7 +35,6 @@ const SelectBoxBtnText = document.querySelector('.SelectBoxBtnText');
 selectBoxBtn.addEventListener('click', function () {
     // 토글 기능을 이용하여 리스트 보이기/숨기기
     selectBoxList.style.display = (selectBoxList.style.display === 'block') ? 'none' : 'block';
-    // todo 선택된 정렬기준에 따라서 리스트 게시글 정렬하기
     // 이미지 변경
     selectBoxBtnImg.src = (selectBoxList.style.display === 'block') ? '/imgs/arrow_up_gray014.75d8599e.svg' : '/imgs/arrow_down_gray014.f502da9d.svg';
 });

@@ -28,6 +28,10 @@ public class TicketModifyRequest extends Period {
         this.changedTicket = changedTicket;
         this.ticketModifyStatus = ticketModifyStatus;
     }
+
+    public void setTicketModifyStatus(PostModifyStatus ticketModifyStatus){
+        this.ticketModifyStatus = ticketModifyStatus;
+    }
 }
 
 

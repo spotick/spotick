@@ -1,10 +1,12 @@
 package com.app.spotick.repository.ticket.grade;
 
 import com.app.spotick.domain.dto.ticket.TicketGradeSaleInfoDto;
+import com.app.spotick.domain.entity.ticket.Ticket;
 import com.app.spotick.domain.entity.ticket.TicketGrade;
-import io.lettuce.core.dynamic.annotation.Param;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
@@ -25,5 +27,9 @@ public interface TicketGradeRepository extends JpaRepository<TicketGrade, Long> 
             order by tg.price asc
             """)
     List<TicketGradeSaleInfoDto> findTicketGradesByTicketId(@Param("ticketId") Long ticketId, @Param("date") LocalDate date);
+
+    @Modifying
+    @Query("UPDATE TicketGrade tg SET tg.ticket = :changedTicket WHERE tg.ticket = :originalTicket")
+    void bulkUpdateGradeTicket(@Param("originalTicket") Ticket originalTicket, @Param("changedTicket")Ticket changedTicket);
 
 }
