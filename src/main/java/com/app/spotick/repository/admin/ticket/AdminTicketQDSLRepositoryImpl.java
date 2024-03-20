@@ -1,7 +1,8 @@
-package com.app.spotick.repository.admin.place;
+package com.app.spotick.repository.admin.ticket;
 
 import com.app.spotick.api.dto.admin.AdminPostSearchDto;
 import com.app.spotick.domain.dto.admin.AdminPostListDto;
+import com.app.spotick.domain.entity.place.QPlace;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -13,27 +14,27 @@ import org.springframework.data.domain.SliceImpl;
 import java.util.List;
 
 import static com.app.spotick.domain.entity.place.QPlace.place;
+import static com.app.spotick.domain.entity.ticket.QTicket.ticket;
 
 @RequiredArgsConstructor
-public class AdminPlaceQDSLRepositoryImpl implements AdminPlaceQDSLRepository {
+public class AdminTicketQDSLRepositoryImpl implements AdminTicketQDSLRepository{
     private final JPAQueryFactory queryFactory;
-
     @Override
-    public Slice<AdminPostListDto> findAdminPlaceList(Pageable pageable, AdminPostSearchDto placeSearchDto) {
+    public Slice<AdminPostListDto> findAdminTicketList(Pageable pageable, AdminPostSearchDto ticketSearchDto) {
 
         List<AdminPostListDto> adminPlaceList = queryFactory.select(
                         Projections.constructor(AdminPostListDto.class,
-                                place.id,
-                                place.user.email,
-                                place.title,
-                                place.createdDate,
-                                place.placeStatus
+                                ticket.id,
+                                ticket.user.email,
+                                ticket.title,
+                                ticket.createdDate,
+                                ticket.ticketEventStatus
                         )
                 )
-                .from(place)
-                .join(place.user)
-                .where(createSearchCondition(placeSearchDto))
-                .orderBy(place.id.desc())
+                .from(ticket)
+                .join(ticket.user)
+                .where(createSearchCondition(ticketSearchDto))
+                .orderBy(ticket.id.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize() + 1)
                 .fetch();
@@ -48,34 +49,17 @@ public class AdminPlaceQDSLRepositoryImpl implements AdminPlaceQDSLRepository {
         return new SliceImpl<>(adminPlaceList,pageable,hasNext);
     }
 
-    private BooleanBuilder createSearchCondition(AdminPostSearchDto placeSearchDto){
+    private BooleanBuilder createSearchCondition(AdminPostSearchDto ticketSearchDto){
         BooleanBuilder builder = new BooleanBuilder();
-        if (placeSearchDto.getEmail() != null) {
-            builder.and(place.user.email.contains(placeSearchDto.getEmail()));
+        if (ticketSearchDto.getEmail() != null) {
+            builder.and(ticket.user.email.contains(ticketSearchDto.getEmail()));
         }
-        if (placeSearchDto.getPostTitle() != null) {
-            builder.and(place.title.contains(placeSearchDto.getPostTitle()));
+        if (ticketSearchDto.getPostTitle() != null) {
+            builder.and(ticket.title.contains(ticketSearchDto.getPostTitle()));
         }
-        if (placeSearchDto.getStatus() != null) {
-            builder.and(place.placeStatus.eq(placeSearchDto.getStatus()));
+        if (ticketSearchDto.getStatus() != null) {
+            builder.and(ticket.ticketEventStatus.eq(ticketSearchDto.getStatus()));
         }
         return builder;
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

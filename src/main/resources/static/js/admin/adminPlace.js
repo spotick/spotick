@@ -75,7 +75,7 @@ function createSearchParamQuery() {
     let paramStr = '';
 
     paramStr += email === '' ? '' : `&email=${email}`;
-    paramStr += placeTitle === '' ? '' : `&placeTitle=${placeTitle}`;
+    paramStr += placeTitle === '' ? '' : `&postTitle=${placeTitle}`;
     paramStr += searchStatus === '' ? '' : `&status=${searchStatus}`;
 
     return paramStr;
@@ -98,12 +98,9 @@ function displayPlaceList(data) {
     data.slice.content.forEach(place => {
         text += `
          <tr class="board-table-category">
-             <td class="board-checkbox" align="center">
-                 <input type="checkbox" name="" class="board-check" id="board-checking"/>
-             </td>
-             <td class="board-id" align="center">${place.placeId}</td>
+             <td class="board-id" align="center">${place.postId}</td>
              <td class="board-writer" align="center">${place.hostEmail}</td>
-             <td class="board-title" align="center"><a href="/place/detail/${place.placeId}">${place.title}</a></td>
+             <td class="board-title" align="center"><a href="/place/detail/${place.postId}">${place.title}</a></td>
              <td class="board-write-date" align="center">${place.createdDate.split('T')[0]}</td>
              <td class="board-status" align="center">`;
         data.enumValues.forEach(status => {
@@ -171,7 +168,7 @@ $('.tbody-place').on('click', '.approve-btn', function () {
 
     let isApprove = $(this).data('approve');
     let $root = $(this).closest('.board-table-category')
-    let placeId = $root.find('.board-id').text();
+    let postId = $root.find('.board-id').text();
     let $statusBox = $root.find('.user-status-box');
     let status = $statusBox.data('status');
 
@@ -182,7 +179,7 @@ $('.tbody-place').on('click', '.approve-btn', function () {
         },
         body: JSON.stringify({
             isApprove: isApprove,
-            placeId: placeId,
+            postId: postId,
             status: status
         }),
     }).then(response => {
@@ -201,35 +198,6 @@ function clearList() {
     $('.tbody-place').html('');
 }
 
-
-// 장소 상태 변경(활성화/비활성화)
-// $('.tbody-place').on('click', '.change-btn', function () {
-//
-//     let stateToChange = $(this).data('change');
-//     let placeId = $(this).closest('.board-table-category').find('.board-id').text();
-//
-//     if (!confirm(`${placeId}번 장소를 ${$(this).text()}하시겠습니까`)) {
-//         return;
-//     }
-//
-//     let isDisabled = stateToChange ==='DISABLED';
-//
-//     fetch(`/place/api/${stateToChange.toLowerCase()}/${placeId}`, {
-//         method: 'PATCH'
-//     }).then(response => {
-//         if (!response.ok) {
-//             throw response;
-//         }
-//         return response.text();
-//     }).then(message=>{
-//         $(this).data('change',isDisabled?'APPROVED':'DISABLED');
-//         $(this).text(isDisabled?'활성화':'비활성화');
-//         $(this).removeClass(isDisabled?'B':'Y').addClass(isDisabled?'Y':'B');
-//         let $statusDiv = $(this).closest('.board-table-category').find('.user-status-box');
-//         $statusDiv.removeClass(isDisabled?'Y':'B').addClass(isDisabled?'B':'Y');
-//         $statusDiv.text(isDisabled?'비활성화':'활성화');
-//     });
-// });
 
 
 

@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>관리자 페이지 - 게시판 관리</title>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>관리자 페이지 - 티켓 관리</title>
     <link
             rel="stylesheet"
             href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css"
@@ -11,10 +11,14 @@
             crossorigin="anonymous"
             referrerpolicy="no-referrer"
     />
-    <link rel="stylesheet" th:href="@{/css/admin/adminTicket.css}" />
-    <link rel="stylesheet" th:href="@{/css/admin/datepicker.css}" />
+    <link rel="stylesheet" th:href="@{/css/admin/adminTicket.css}"/>
+    <link rel="stylesheet" th:href="@{/css/admin/datepicker.css}"/>
+    <link rel="stylesheet" th:href="@{/css/global-css/adminSideBar.css}"/>
+    <link rel="stylesheet" th:href="@{/css/global-css/root.css}">
+    <link rel="icon" th:href="@{/imgs/logo/favicon.png}" >
 </head>
 <body>
+<header th:replace="~{global-templates/header-footer :: header}"></header>
 <div class="admin-main">
     <div class="admin-app">
         <!-- 관리자 사이드메뉴 flagment -->
@@ -26,123 +30,53 @@
             <!-- 관리자 카테고리 -->
             <div class="category">
                 <div class="admin-big-category">
-                    <h2>게시글 관리</h2>
+                    <h2>티켓 관리</h2>
 
                     <div class="admin-small-category-container">
-                        <div class="admin-small-category1">
-                            <a href="#" class="admin-small-category-url categoty-url">
-                                <h4>장소글 관리</h4>
-                            </a>
-                        </div>
                         <div class="admin-small-category2">
                             <a href="#" class="admin-small-category-url categoty-url">
-                                <h4>티켓글 관리</h4>
+                                <h4>티켓 관리</h4>
                             </a>
                         </div>
-                        <div class="admin-small-category3">
-                            <a href="#" class="admin-small-category-url categoty-url">
-                                <h4>댓글 관리</h4>
-                            </a>
-                        </div>
+
                     </div>
                 </div>
             </div>
             <!-- 관리자 카테고리 -->
 
             <!-- 회원 정보 검색 및 테이블 -->
-            <form action="#" method="#">
-                <div class="user-search">
-                    <span>이메일 : </span>
-                    <input type="text" placeholder="이메일" class="user-search-email" />
-                    <span>닉네임 : </span>
-                    <input type="text" placeholder="닉네임" class="user-search-nickname" />
-                    <span>작성일 : </span>
-                    <input name="date" id="datepicker" />
-                    <span>공개/비공개 : </span>
-                    <select name="public-secret" id="public-secret" class="select-public-secret">
-                        <option value="1">공개</option>
-                        <option value="2">비공개</option>
-                    </select>
-                    <button type="button" class="search-btn">검색</button>
-                </div>
-            </form>
+            <div class="user-search">
+                <span>호스트 : </span>
+                <input type="text" id="email" placeholder="호스트 이메일" class="user-search-writer"/>
+                <span>티켓 제목 : </span>
+                <input type="text" id="ticketTitle" placeholder="티켓 제목" class="user-search-writer"/>
+                <!--                    <span>작성일 : </span>-->
+                <!-- 작성일 달력 들어갈 예정 -->
+
+                <span>상태 : </span>
+                <select name="public-secret" id="status" class="select-public-secret">
+                    <option value="">전체</option>
+                    <option th:value="${status.name}" th:each="status : ${enumValues}"
+                            th:text="${status.displayName}"></option>
+                </select>
+                <button type="button" class="search-btn">검색</button>
+            </div>
 
             <div class="table-box">
                 <table class="board-search-table">
                     <thead>
                     <tr class="reply-table-category">
-                        <td class="board-table-checkbox" align="center">
-                            <input type="checkbox" name="" id="board-table-category-check" />
-                        </td>
-                        <td class="board-writer" align="center">이메일</td>
-                        <td class="board-category" align="center">닉네임</td>
-                        <td class="board-title" align="center">글 제목</td>
+                        <td class="board-id" align="center">번호</td>
+                        <td class="board-writer" align="center">호스트 이메일</td>
+                        <td class="board-title" align="center">티켓 제목</td>
                         <td class="board-write-date" align="center">작성일</td>
-                        <td class="board-public-secret" align="center">공개/비공개</td>
-                        <td class="board-status" align="center">상태</td>
+                        <td class="board-status" align="center">현재 상태</td>
+                        <td class="board-public-secret" align="center">승인/거절</td>
                     </tr>
                     </thead>
 
-                    <tbody>
-                    <tr class="board-table-category">
-                        <td class="board-checkbox" align="center">
-                            <input type="checkbox" name="" class="board-check" id="board-checking" />
-                        </td>
-                        <td class="board-email" align="center">김철수</td>
-                        <td class="board-nicknami" align="center">철수</td>
-                        <td class="board-title" align="center">풋살장 빌려드립니다!</td>
-                        <td class="board-write-date" align="center">2023-12-13</td>
-                        <td class="board-public-secret" align="center">
-                            <select name="board-status" class="board-status-choice" align="center">
-                                <option value="">선택</option>
-                                <option value="1">공개</option>
-                                <option value="2">비공개</option>
-                            </select>
-                        </td>
-                        <td class="board-status" align="center">
-                            <div class="board-status-box Y">공개</div>
-                        </td>
-                    </tr>
+                    <tbody class="tbody-ticket">
 
-                    <tr class="board-table-category">
-                        <td class="board-checkbox" align="center">
-                            <input type="checkbox" name="" class="board-check" id="board-checking" />
-                        </td>
-                        <td class="board-email" align="center">김철수</td>
-                        <td class="board-category" align="center">철수</td>
-                        <td class="board-title" align="center">풋살장 빌려드립니다!</td>
-                        <td class="board-write-date" align="center">2023-12-13</td>
-                        <td class="board-public-secret" align="center">
-                            <select name="board-status" class="board-status-choice" align="center">
-                                <option value="">선택</option>
-                                <option value="1">공개</option>
-                                <option value="2">비공개</option>
-                            </select>
-                        </td>
-                        <td class="board-status" align="center">
-                            <div class="board-status-box Y">공개</div>
-                        </td>
-                    </tr>
-
-                    <tr class="board-table-category">
-                        <td class="board-checkbox" align="center">
-                            <input type="checkbox" name="" class="board-check" id="board-checking" />
-                        </td>
-                        <td class="board-email" align="center">김철수</td>
-                        <td class="board-nickname" align="center">철수</td>
-                        <td class="board-title" align="center">풋살장 빌려드립니다!</td>
-                        <td class="board-write-date" align="center">2023-12-13</td>
-                        <td class="board-public-secret" align="center">
-                            <select name="board-status" class="board-status-choice" align="center">
-                                <option value="">선택</option>
-                                <option value="1">공개</option>
-                                <option value="2">비공개</option>
-                            </select>
-                        </td>
-                        <td class="board-status" align="center">
-                            <div class="board-status-box B">비공개</div>
-                        </td>
-                    </tr>
                     </tbody>
                 </table>
             </div>
@@ -153,11 +87,12 @@
         <!-- 관리자 카테고리 및 회원 정보 검색 및 테이블 -->
     </div>
 </div>
+<footer th:replace="~{global-templates/header-footer :: footer}"></footer>
 </body>
 <script crossorigin="anonymous" src="https://kit.fontawesome.com/c6992f5b12.js"></script>
 <script src="https://code.jquery.com/jquery-3.6.3.js"></script>
 <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
 <script type="module" th:src="@{/js/global-js/global.js}"></script>
 <script th:src="@{/js/admin/datepicker.js}"></script>
-<script th:src="@{/js/admin/adminPlace.js}"></script>
+<script th:src="@{/js/admin/adminTicket.js}"></script>
 </html>
