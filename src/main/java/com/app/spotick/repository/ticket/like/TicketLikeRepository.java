@@ -3,10 +3,10 @@ package com.app.spotick.repository.ticket.like;
 import com.app.spotick.domain.entity.ticket.Ticket;
 import com.app.spotick.domain.entity.ticket.TicketLike;
 import com.app.spotick.domain.entity.user.User;
-import io.lettuce.core.dynamic.annotation.Param;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -20,5 +20,9 @@ public interface TicketLikeRepository extends JpaRepository<TicketLike, Long> {
     @Modifying
     @Query("DELETE FROM TicketLike t WHERE t.ticket = :ticket AND t.user = :user")
     void deleteByTicketAndUser(@Param("ticket") Ticket ticket, @Param("user") User user);
+
+    @Modifying
+    @Query("UPDATE TicketLike tl SET tl.ticket = :changedTicket WHERE tl.ticket = :originalTicket")
+    void bulkUpdateLikeTicket(@Param("originalTicket") Ticket originalTicket, @Param("changedTicket")Ticket changedTicket);
 
 }

@@ -1,11 +1,11 @@
 package com.app.spotick.api.controller.admin;
 
-import com.app.spotick.api.dto.admin.AdminPlaceApproveDto;
-import com.app.spotick.api.dto.admin.AdminPlaceSearchDto;
+import com.app.spotick.api.dto.admin.AdminPostApproveDto;
+import com.app.spotick.api.dto.admin.AdminPostSearchDto;
 import com.app.spotick.api.dto.admin.AdminUserAuthorityConfigDto;
 import com.app.spotick.api.dto.admin.AdminUserSearchDto;
 import com.app.spotick.api.dto.user.UserStatusDto;
-import com.app.spotick.domain.dto.admin.AdminPlaceListDto;
+import com.app.spotick.domain.dto.admin.AdminPostListDto;
 import com.app.spotick.domain.dto.admin.AdminUserListDto;
 import com.app.spotick.domain.type.post.PostStatus;
 import com.app.spotick.domain.type.user.UserStatus;
@@ -50,9 +50,9 @@ public class AdminRestController {
             @PageableDefault(page = 0,
                     size = 12, sort = "id",
                     direction = Sort.Direction.DESC
-            ) Pageable pageable, AdminPlaceSearchDto placeSearchDto) {
+            ) Pageable pageable, AdminPostSearchDto placeSearchDto) {
 
-        Slice<AdminPlaceListDto> adminPlaceListDto = adminService.findAdminPlaceList(pageable, placeSearchDto);
+        Slice<AdminPostListDto> adminPlaceListDto = adminService.findAdminPlaceList(pageable, placeSearchDto);
         Map<String, Object> map = new HashMap<>();
         map.put("slice", adminPlaceListDto);
         map.put("enumValues", getDisplayableDtoList(PostStatus.values()));
@@ -72,7 +72,7 @@ public class AdminRestController {
     }
 
     @PostMapping("/place/approve")
-    public ResponseEntity<Boolean> adminPlaceApproved(@RequestBody AdminPlaceApproveDto.Request approveDto) {
+    public ResponseEntity<Boolean> adminPlaceApproved(@RequestBody AdminPostApproveDto.Request approveDto) {
         adminService.approveOrRejectPlace(approveDto);
         return ResponseEntity.ok(approveDto.getIsApprove());
     }
@@ -81,6 +81,26 @@ public class AdminRestController {
     public ResponseEntity<Void> adminAuthorityConfig(@RequestBody AdminUserAuthorityConfigDto configDto) {
         adminService.grantOrRevokeUserAuthority(configDto);
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/ticket/list")
+    public ResponseEntity<Map<String, Object>> adminTicketList(
+            @PageableDefault(page = 0,
+                    size = 12, sort = "id",
+                    direction = Sort.Direction.DESC
+            ) Pageable pageable,AdminPostSearchDto ticketSearchDto) {
+
+        Slice<AdminPostListDto> adminPlaceListDto = adminService.findAdminTicketList(pageable,ticketSearchDto);
+        Map<String, Object> map = new HashMap<>();
+        map.put("slice", adminPlaceListDto);
+        map.put("enumValues", getDisplayableDtoList(PostStatus.values()));
+        return ResponseEntity.ok(map);
+    }
+
+    @PostMapping("/ticket/approve")
+    public ResponseEntity<Boolean> adminTicketApproved(@RequestBody AdminPostApproveDto.Request approveDto) {
+        adminService.approveOrRejectTicket(approveDto);
+        return ResponseEntity.ok(approveDto.getIsApprove());
     }
 
 

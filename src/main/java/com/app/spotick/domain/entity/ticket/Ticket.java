@@ -80,6 +80,10 @@ public class Ticket extends PostBase {
         this.ticketFile = ticketFile;
     }
 
+    public void setTicketEventStatus(PostStatus ticketEventStatus){
+        this.ticketEventStatus = ticketEventStatus;
+    }
+
     public void updateTicket(TicketEditDto ticketEditDto) {
         editBase(ticketEditDto.getTitle(), ticketEditDto.getPlaceLat(), ticketEditDto.getPlaceLng());
         this.content = ticketEditDto.getContent();
