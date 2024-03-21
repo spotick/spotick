@@ -18,6 +18,7 @@ import com.app.spotick.domain.entity.user.UserAuthority;
 import com.app.spotick.domain.entity.user.UserProfileFile;
 import com.app.spotick.domain.type.ticket.TicketRequestType;
 import com.app.spotick.domain.type.user.AuthorityType;
+import com.app.spotick.domain.type.user.UserStatus;
 import com.app.spotick.repository.place.PlaceRepository;
 import com.app.spotick.repository.place.Review.PlaceReviewRepository;
 import com.app.spotick.repository.place.bookmark.PlaceBookmarkRepository;
@@ -95,11 +96,17 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    @Transactional(readOnly = true)
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User foundUser = userRepository.findUserAndProfileByEmail(username)
                 .orElseThrow(() -> new UsernameNotFoundException("해당 이메일로 등록된 회원 없음"));
 
+        if (foundUser.getUserStatus().isTemporarilySuspended()) {
+            LocalDate now = LocalDate.now();
+            if (now.isAfter(foundUser.getSuspensionEndDate()) || now.isEqual(foundUser.getSuspensionEndDate())) {
+                foundUser.updateSuspensionEndDate(null);
+                foundUser.updateUserStatus(UserStatus.ACTIVATE);
+            }
+        }
         return new UserDetailsDto(foundUser, authorityRepository.findUserAuthorityByUser(foundUser));
     }
 
@@ -281,7 +288,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         User user = userRepository.findById(userStatusDto.getUserId())
                 .orElseThrow(() -> new IllegalStateException("존재하지 않는 회원 ID"));
 
-        LocalDate suspensionEndDate = switch (userStatusDto.getStatus()){
+        LocalDate suspensionEndDate = switch (userStatusDto.getStatus()) {
             case SUSPENDED_7_DAYS -> LocalDate.now().plusDays(7);
             case SUSPENDED_30_DAYS -> LocalDate.now().plusDays(30);
             default -> null;
