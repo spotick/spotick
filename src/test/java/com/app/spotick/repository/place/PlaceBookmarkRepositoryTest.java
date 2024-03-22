@@ -4,7 +4,6 @@ import com.app.spotick.domain.dto.place.PlaceListDto;
 import com.app.spotick.domain.embedded.post.PostAddress;
 import com.app.spotick.domain.entity.place.*;
 import com.app.spotick.domain.entity.user.User;
-import com.app.spotick.domain.entity.viewModel.PlaceBookmarkCount;
 import com.app.spotick.domain.type.post.PostStatus;
 import com.app.spotick.domain.type.user.UserStatus;
 import com.app.spotick.repository.place.bookmark.PlaceBookmarkRepository;

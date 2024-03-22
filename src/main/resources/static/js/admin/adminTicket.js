@@ -80,6 +80,7 @@ function createSearchParamQuery() {
     return paramStr;
 }
 
+
 // 장소 검색
 $('.search-btn').on('click', function () {
     email = $('#email').val();

@@ -111,7 +111,8 @@ public class AdminServiceImpl implements AdminService{
             return ;
         }
 
-//       조회수, 북마크, 문의, 예약 테이블의 장소들을 모두 기존 장소에서 바뀔 장소로 변경
+//       생성일 조회수, 북마크, 문의, 예약 테이블의 장소들을 모두 기존 장소에서 바뀔 장소로 변경
+        adminPlaceRepository.updateCreatedDateWithOriginal(originalPlace.getCreatedDate(),changedPlace.getId());
         placeInquiryRepository.bulkUpdateInquiryPlace(originalPlace,changedPlace);
         placeBookmarkRepository.bulkUpdateBookmarkPlace(originalPlace,changedPlace);
         placeReservationRepository.bulkUpdateReservationPlace(originalPlace,changedPlace);
@@ -177,7 +178,8 @@ public class AdminServiceImpl implements AdminService{
             return ;
         }
         
-//       조회수, 좋아요, 문의, 주문, 등급 테이블의 티켓들을 모두 기존 티켓에서 바뀔 티켓로 변경
+//       생성일, 조회수, 좋아요, 문의, 주문, 등급 테이블의 티켓들을 모두 기존 티켓에서 바뀔 티켓로 변경
+        adminTicketRepository.updateCreatedDateWithOriginal(originalTicket.getCreatedDate(),changedTicket.getId());
         ticketInquiryRepository.bulkUpdateInquiryTicket(originalTicket,changedTicket);
         ticketLikeRepository.bulkUpdateLikeTicket(originalTicket,changedTicket);
         ticketOrderRepository.bulkUpdateOrderTicket(originalTicket,changedTicket);

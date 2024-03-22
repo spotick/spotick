@@ -17,4 +17,9 @@ public enum UserStatus implements Displayable {
         this.displayName = displayName;
     }
 
+    public boolean isTemporarilySuspended(){
+        return this == SUSPENDED_7_DAYS || this == SUSPENDED_30_DAYS;
+    }
+
+
 }
