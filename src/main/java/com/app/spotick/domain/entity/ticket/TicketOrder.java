@@ -2,6 +2,8 @@ package com.app.spotick.domain.entity.ticket;
 
 import com.app.spotick.domain.base.Period;
 import com.app.spotick.domain.entity.user.User;
+import com.app.spotick.domain.type.payment.PaymentMethod;
+import com.app.spotick.domain.type.payment.PaymentStatus;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -15,6 +17,11 @@ public class TicketOrder extends Period {
     @Column(name = "TICKET_ORDER_ID")
     private Long id;
     private LocalDate eventDate;
+    private Integer amount;
+    @Enumerated(EnumType.STRING)
+    private PaymentMethod paymentMethod;
+    @Enumerated(EnumType.STRING)
+    private PaymentStatus paymentStatus;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "TICKET_EVENT_ID")
@@ -24,9 +31,12 @@ public class TicketOrder extends Period {
     private User user;
 
     @Builder
-    public TicketOrder(Long id, LocalDate eventDate, Ticket ticket, User user) {
+    public TicketOrder(Long id, LocalDate eventDate, Integer amount, PaymentMethod paymentMethod, PaymentStatus paymentStatus, Ticket ticket, User user) {
         this.id = id;
         this.eventDate = eventDate;
+        this.amount = amount;
+        this.paymentMethod = paymentMethod;
+        this.paymentStatus = paymentStatus;
         this.ticket = ticket;
         this.user = user;
     }

@@ -1,7 +1,7 @@
 import {ticketGradeFetch} from "../modules/ticketGradeFetch.js"
 import {requestTicketInquiryList, requestTicketInquiryRegister} from "../modules/inquiryFetch.js"
 import {
-    ticketInquiryListComponent,
+    ticketInquiryListLayout,
     ticketDetailInquiryPaginationComponent
 } from "../async-components/ticket/inquiry-component.js"
 import {requestLike} from "../modules/likeFetch.js"
@@ -169,7 +169,7 @@ function loadGradeList(dataList) {
     dataList.forEach(data => {
         html +=
             `
-                <div class="RadioBoxContainer">
+                <div class="RadioBoxContainer" id="${data.gradeId}">
                     <input class="totalPrice" type="hidden">
                     <div class="RadioBox">
                         <div class="RadioBoxOutLine">
@@ -206,6 +206,8 @@ function loadGradeList(dataList) {
             if (radioBoxInLine) {
                 radioBoxInLine.classList.toggle('On');
             }
+
+
         })
     })
 
@@ -270,7 +272,7 @@ const inquiryPagination = document.getElementById('inquiryPagination');
 function displayInquiryPage(page) {
     requestTicketInquiryList(ticketId, page)
         .then(data => {
-            document.getElementById('inquiryContainer').innerHTML = ticketInquiryListComponent(data.data);
+            document.getElementById('inquiryContainer').innerHTML = ticketInquiryListLayout(data.data);
             inquiryPagination.innerHTML = ticketDetailInquiryPaginationComponent(data.pagination);
 
             Array.from(inquiryPagination.children).forEach(child => {

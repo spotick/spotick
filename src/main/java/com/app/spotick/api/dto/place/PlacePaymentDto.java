@@ -1,9 +1,6 @@
 package com.app.spotick.api.dto.place;
 
-import com.app.spotick.domain.entity.place.PlacePayment;
-import com.app.spotick.domain.entity.place.PlaceReservation;
 import com.app.spotick.domain.type.payment.PaymentMethod;
-import com.app.spotick.domain.type.payment.PaymentStatus;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;

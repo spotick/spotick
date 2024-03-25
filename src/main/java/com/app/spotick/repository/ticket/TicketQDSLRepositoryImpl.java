@@ -2,7 +2,8 @@ package com.app.spotick.repository.ticket;
 
 import com.app.spotick.domain.dto.page.TicketPage;
 import com.app.spotick.domain.dto.ticket.*;
-import com.app.spotick.domain.entity.ticket.QTicketFile;
+import com.app.spotick.domain.dto.ticket.grade.TicketGradeDto;
+import com.app.spotick.domain.dto.ticket.grade.TicketGradeSaleInfoDto;
 import com.app.spotick.domain.type.post.PostStatus;
 import com.app.spotick.domain.type.ticket.TicketRequestType;
 import com.querydsl.core.BooleanBuilder;
