@@ -8,15 +8,15 @@ import java.time.LocalDateTime;
 
 @NoArgsConstructor
 @Data
-public class AdminPlaceListDto {
-    private Long placeId;
+public class AdminPostListDto {
+    private Long postId;
     private String hostEmail;
     private String title;
     private LocalDateTime createdDate;
     private PostStatus status;
 
-    public AdminPlaceListDto(Long placeId, String hostEmail, String title, LocalDateTime createdDate, PostStatus status) {
-        this.placeId = placeId;
+    public AdminPostListDto(Long postId, String hostEmail, String title, LocalDateTime createdDate, PostStatus status) {
+        this.postId = postId;
         this.hostEmail = hostEmail;
         this.title = title;
         this.createdDate = createdDate;

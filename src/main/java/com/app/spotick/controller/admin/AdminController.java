@@ -27,8 +27,8 @@ public class AdminController {
         return "admin/adminPlace";
     }
     @GetMapping("/ticket")
-    public String adminTicket(){
-
+    public String adminTicket(Model model){
+        model.addAttribute("enumValues",getDisplayableDtoList(PostStatus.values()));
         return "admin/adminTicket";
     }
 

@@ -12,6 +12,7 @@ import com.app.spotick.domain.entity.place.QPlaceFile;
 import com.app.spotick.domain.entity.user.User;
 import com.app.spotick.domain.type.post.PostStatus;
 import com.app.spotick.domain.type.user.UserStatus;
+import com.app.spotick.repository.admin.place.AdminPlaceRepository;
 import com.app.spotick.repository.place.bookmark.PlaceBookmarkRepository;
 import com.app.spotick.repository.place.file.PlaceFileRepository;
 import com.app.spotick.repository.user.UserAuthorityRepository;
@@ -28,6 +29,8 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import lombok.extern.slf4j.Slf4j;
+
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -39,6 +42,7 @@ import org.springframework.data.domain.Slice;
 import org.springframework.test.annotation.Commit;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -48,6 +52,8 @@ import static com.app.spotick.domain.entity.place.QPlaceFile.placeFile;
 import static com.app.spotick.domain.entity.place.QPlaceReview.placeReview;
 import static com.querydsl.core.group.GroupBy.groupBy;
 import static com.querydsl.core.group.GroupBy.list;
+import static org.assertj.core.api.Assertions.assertThat;
+
 
 
 @Slf4j
@@ -65,6 +71,8 @@ class PlaceQDSLRepositoryImplTest {
     private PlaceBookmarkRepository placeBookmarkRepository;
     @Autowired
     private PlaceFileRepository placeFileRepository;
+    @Autowired
+    private AdminPlaceRepository adminPlaceRepository;
 
     @PersistenceContext
     private EntityManager em;
@@ -553,7 +561,23 @@ class PlaceQDSLRepositoryImplTest {
 
         System.out.println("fetch = " + placeDto);
     }
+    @Test
+    @DisplayName("장소 생성일 변경 테스트")
+    void updateCreatedDateTest(){
+        Place place = placeRepository.findById(1L).get();
 
+        LocalDateTime beforeCreatedDate = place.getCreatedDate();
+
+        adminPlaceRepository.updateCreatedDateWithOriginal(LocalDateTime.of(2023,8,13,0,0,0),place.getId());
+
+        em.flush();
+        em.clear();
+
+        place = placeRepository.findById(1L).get();
+
+        assertThat(beforeCreatedDate).isNotEqualTo(place.getCreatedDate());
+        System.out.println(place.getCreatedDate());
+    }
 
 }
 

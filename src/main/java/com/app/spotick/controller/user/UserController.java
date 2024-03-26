@@ -2,14 +2,12 @@ package com.app.spotick.controller.user;
 
 import com.app.spotick.domain.dto.user.UserJoinDto;
 import com.app.spotick.domain.dto.user.UserModifyPwDto;
+import com.app.spotick.security.type.LoginErrorType;
 import com.app.spotick.service.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.view.RedirectView;
 
 @Controller
@@ -19,9 +17,15 @@ public class UserController {
 
     private final UserService userService;
     @GetMapping("/login")
-    public String userLogin(@RequestParam(name = "gm", required = false) String guideMsg, Model model){
+    public String userLogin(@RequestParam(name = "gm", required = false) String guideMsg,
+                            @RequestParam(name = "errorType", required = false) LoginErrorType errorType,
+                            Model model){
         if(guideMsg!=null){
             model.addAttribute("guideMsg",true);
+        }
+
+        if(errorType != null){
+            model.addAttribute("errorMsg",errorType.getErrorMessage());
         }
         return "user/login";
     }
