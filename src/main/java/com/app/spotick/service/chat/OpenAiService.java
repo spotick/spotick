@@ -20,7 +20,6 @@ public class OpenAiService {
 
     public OpenAiService(@Value("${gpt.api}") String apiKey) {
         String endpoint = "https://api.openai.com/v1/chat/completions";
-        System.out.println("apiKey = " + apiKey);
 
         this.webClient = WebClient.builder()
                 .baseUrl(endpoint)

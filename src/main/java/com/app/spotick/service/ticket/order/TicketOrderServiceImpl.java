@@ -101,4 +101,14 @@ public class TicketOrderServiceImpl implements TicketOrderService {
                 HttpStatus.OK
         );
     }
+
+    @Override
+    public void declineOrder(Long orderId, PaymentStatus paymentStatus) {
+//        ticketOrderDetailRepository.deleteAllByTicketOrderId(orderId);
+
+        TicketOrder foundOrder = ticketOrderRepository.findById(orderId).orElseThrow(
+                NoSuchElementException::new
+        );
+        foundOrder.updatePaymentStatus(PaymentStatus.DECLINED);
+    }
 }

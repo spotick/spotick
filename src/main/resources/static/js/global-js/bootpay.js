@@ -104,7 +104,7 @@ export const payService = (function () {
                     break
                 case 'confirm': //payload.extra.separately_confirmed = true; 일 경우 승인 전 해당 이벤트가 호출됨
                     fetch(`/bootpay/api/place/check?receiptId=${response.receipt_id}`, {
-                        method: "POST",
+                        method: "GET",
                     })
                         .then((res) => res.json())
                         .then((result) => {
@@ -143,7 +143,7 @@ export const payService = (function () {
                     console.log(e.message);
 
                     fetch(`/bootpay/api/place/reject?paymentId=${data.placePaymentId}`, {
-                        method: 'PUT'
+                        method: 'PATCH'
                     })
                         .then(response => {
                             if (response.ok) {
@@ -162,7 +162,7 @@ export const payService = (function () {
                     console.log(e.error_code);
 
                     fetch(`/bootpay/api/place/reject?paymentId=${data.placePaymentId}`, {
-                        method: 'PUT'
+                        method: 'PATCH'
                     })
                         .then(response => {
                             if (response.ok) {
@@ -179,8 +179,6 @@ export const payService = (function () {
     }
 
     async function payTickets(data) {
-        console.log('실행됨');
-        console.log(data.bootpayItemDtoList)
         try {
             const response = await Bootpay.requestPayment({
                 "application_id": "653a391400be04001c8e27f6",
@@ -213,8 +211,8 @@ export const payService = (function () {
                     // 결제 완료 처리
                     break
                 case 'confirm': //payload.extra.separately_confirmed = true; 일 경우 승인 전 해당 이벤트가 호출됨
-                    fetch(`/bootpay/api/place/check?receiptId=${response.receipt_id}`, {
-                        method: "POST",
+                    fetch(`/bootpay/api/ticket/check?receiptId=${response.receipt_id}`, {
+                        method: "GET",
                     })
                         .then((res) => res.json())
                         .then((result) => {
@@ -252,8 +250,8 @@ export const payService = (function () {
                     // 사용자가 결제창을 닫을때 호출
                     console.log(e.message);
 
-                    fetch(`/bootpay/api/place/reject?paymentId=${data.placePaymentId}`, {
-                        method: 'PUT'
+                    fetch(`/bootpay/api/ticket/reject?orderId=${data.orderId}`, {
+                        method: 'PATCH'
                     })
                         .then(response => {
                             if (response.ok) {
@@ -271,8 +269,8 @@ export const payService = (function () {
                     // 결제 승인 중 오류 발생시 호출
                     console.log(e.error_code);
 
-                    fetch(`/bootpay/api/place/reject?paymentId=${data.placePaymentId}`, {
-                        method: 'PUT'
+                    fetch(`/bootpay/api/ticket/reject?orderId=${data.orderId}}`, {
+                        method: 'PATCH'
                     })
                         .then(response => {
                             if (response.ok) {

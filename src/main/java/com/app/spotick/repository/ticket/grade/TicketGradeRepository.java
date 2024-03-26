@@ -18,7 +18,7 @@ public interface TicketGradeRepository extends JpaRepository<TicketGrade, Long> 
                 tg.id,
                 tg.gradeName,
                 tg.price,
-                COALESCE((SELECT SUM(td.quantity) FROM TicketOrderDetail td WHERE td.ticketGrade = tg and td.ticketOrder.eventDate = :date), 0),
+                COALESCE((SELECT SUM(td.quantity) FROM TicketOrderDetail td WHERE td.ticketGrade = tg and td.ticketOrder.eventDate = :date and td.ticketOrder.paymentStatus != 'DECLINED'), 0),
                 tg.maxPeople
             )
             from TicketGrade tg

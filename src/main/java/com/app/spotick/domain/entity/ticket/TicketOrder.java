@@ -45,4 +45,8 @@ public class TicketOrder extends Period {
         this.ticket = ticket;
         this.user = user;
     }
+
+    public void updatePaymentStatus(PaymentStatus paymentStatus) {
+        this.paymentStatus = paymentStatus;
+    }
 }
