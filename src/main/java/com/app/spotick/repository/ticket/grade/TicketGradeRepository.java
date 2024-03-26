@@ -5,6 +5,7 @@ import com.app.spotick.domain.entity.ticket.Ticket;
 import com.app.spotick.domain.entity.ticket.TicketGrade;
 import io.lettuce.core.dynamic.annotation.Param;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
@@ -36,5 +37,7 @@ public interface TicketGradeRepository extends JpaRepository<TicketGrade, Long> 
     List<Integer> findTicketGradePriceByTicketIdAndGradeIds(@Param("ticketId") Long ticketId,
                                                            @Param("gradeIds") List<Long> gradeIds);
 
-    void bulkUpdateGradeTicket(Ticket originalTicket, Ticket changedTicket);
+    @Modifying
+    @Query("UPDATE TicketGrade tg SET tg.ticket = :changedTicket WHERE tg.ticket = :originalTicket")
+    void bulkUpdateGradeTicket(@Param("originalTicket") Ticket originalTicket, @Param("changedTicket")Ticket changedTicket);
 }
