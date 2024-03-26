@@ -1,5 +1,5 @@
-// 페이저블 데이터를 받아온 뒤 페이지를 가공처리해서 돌려주는 component
-export function ticketInquiryListComponent(pageData) {
+// 페이저블 데이터를 받아온 뒤 페이지를 가공처리해서 돌려주는 layout
+export function ticketInquiryListLayout(pageData) {
     let html = '';
 
     // 페이저블 데이터를 통해 아무것도 없을 시 문의가 없음을 html로 반환해준다.

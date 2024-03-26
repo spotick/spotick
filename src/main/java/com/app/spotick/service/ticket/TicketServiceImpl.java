@@ -1,6 +1,7 @@
 package com.app.spotick.service.ticket;
 
 import com.app.spotick.domain.dto.ticket.*;
+import com.app.spotick.domain.dto.ticket.grade.TicketGradeSaleInfoDto;
 import com.app.spotick.domain.entity.ticket.Ticket;
 import com.app.spotick.domain.entity.ticket.TicketFile;
 import com.app.spotick.domain.entity.ticket.TicketGrade;

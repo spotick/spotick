@@ -1,5 +1,6 @@
 package com.app.spotick.domain.dto.ticket;
 
+import com.app.spotick.domain.dto.ticket.grade.TicketGradeRegisterDto;
 import com.app.spotick.domain.embedded.post.PostAddress;
 import com.app.spotick.domain.entity.ticket.Ticket;
 import com.app.spotick.domain.type.ticket.TicketCategory;

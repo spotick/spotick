@@ -1,6 +1,7 @@
 package com.app.spotick.service.ticket;
 
 import com.app.spotick.domain.dto.ticket.*;
+import com.app.spotick.domain.dto.ticket.grade.TicketGradeSaleInfoDto;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 

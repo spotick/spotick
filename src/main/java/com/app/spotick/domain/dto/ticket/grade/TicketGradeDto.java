@@ -1,4 +1,4 @@
-package com.app.spotick.domain.dto.ticket;
+package com.app.spotick.domain.dto.ticket.grade;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;

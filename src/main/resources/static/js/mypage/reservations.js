@@ -1,5 +1,5 @@
+import {payService} from "../global-js/bootpay.js";
 // 액션 버튼 컨트롤
-const actionBtns = document.querySelectorAll('.mpcr-action-btn');
 
 function showGSForCancelingReservation(reservationId) {
     showGlobalSelection("예약을 취소하시겠습니까?", () => cancelReservation(reservationId))
@@ -59,7 +59,7 @@ function removeHistory(reservationId) {
 
 
 const address = document.getElementById('detailAddress');
-const eval = document.getElementById('detailEval');
+const evalDetail = document.getElementById('detailEval');
 const bookmark = document.getElementById('detailBookmark');
 const title = document.getElementById('detailTitle');
 const price = document.getElementById('detailPrice');
@@ -79,7 +79,7 @@ function showDetail(item) {
     const checkOut = item.getAttribute('data-checkOut');
 
     address.innerHTML = item.getAttribute('data-address');
-    eval.innerHTML = evalAvg + "(" + evalCount + ")";
+    evalDetail.innerHTML = evalAvg + "(" + evalCount + ")";
     bookmark.innerHTML = item.getAttribute('data-bookmarkCount');
     title.innerHTML = item.getAttribute('data-title')
     price.innerHTML = item.getAttribute('data-price')

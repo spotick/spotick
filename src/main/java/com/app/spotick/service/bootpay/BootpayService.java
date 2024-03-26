@@ -4,10 +4,12 @@ import com.app.spotick.api.response.BootPayResponse;
 import com.app.spotick.api.response.CommonResponse;
 import com.app.spotick.domain.entity.place.PlacePayment;
 import com.app.spotick.domain.entity.place.PlaceReservation;
+import com.app.spotick.domain.entity.ticket.TicketOrder;
 import com.app.spotick.domain.type.payment.PaymentStatus;
 import com.app.spotick.domain.type.payment.PaymentType;
 import com.app.spotick.domain.type.place.PlaceReservationStatus;
 import com.app.spotick.repository.place.payment.PlacePaymentRepository;
+import com.app.spotick.repository.ticket.order.TicketOrderRepository;
 import kr.co.bootpay.Bootpay;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -32,6 +34,7 @@ public class BootpayService {
     private String PRIVATE_KEY;
     private Bootpay bootpay;
     private final PlacePaymentRepository placePaymentRepository;
+    private final TicketOrderRepository ticketOrderRepository;
 
     // 부트페이와 연결을 하기위한 토큰 발급 코드
     private void getBootpayToken() {
@@ -61,24 +64,43 @@ public class BootpayService {
     }
 
     // 결제를 승인하기 위한 메소드
-    public HashMap<String, Object> confirm(String receiptId, PaymentType paymentType) {
+    private HashMap<String, Object> confirm(String receiptId, PaymentType paymentType) {
         try {
             getBootpayToken();
             HashMap<String, Object> res = bootpay.confirm(receiptId);
-            if (res.get("error_code") == null) { //success
-                System.out.println("confirm success: " + res);
 
-                // order테이블의 status column 데이터를 바꿔준다.
-                Long orderId = Long.valueOf(res.get("order_id").toString());
-                PlacePayment foundPayment = placePaymentRepository.findById(orderId).orElseThrow(
-                        NoSuchElementException::new
-                );
-                foundPayment.updatePaymentStatus(PaymentStatus.APPROVED);
+            // place
+            if (paymentType == PaymentType.PLACE) {
+                if (res.get("error_code") == null) { //success
+                    System.out.println("confirm success: " + res);
 
-                PlaceReservation foundReservation = placePaymentRepository.findReservationByPaymentId(Long.valueOf(res.get("order_id").toString()));
-                foundReservation.updateStatus(PlaceReservationStatus.APPROVED);
-            } else {
-                System.out.println("confirm false: " + res);
+                    // order테이블의 status column 데이터를 바꿔준다.
+                    Long orderId = Long.valueOf(res.get("order_id").toString());
+                    PlacePayment foundPayment = placePaymentRepository.findById(orderId).orElseThrow(
+                            NoSuchElementException::new
+                    );
+                    foundPayment.updatePaymentStatus(PaymentStatus.APPROVED);
+
+                    PlaceReservation foundReservation = placePaymentRepository.findReservationByPaymentId(Long.valueOf(res.get("order_id").toString()));
+                    foundReservation.updateStatus(PlaceReservationStatus.APPROVED);
+                } else {
+                    System.out.println("confirm false: " + res);
+                }
+
+                // ticket
+            } else if (paymentType == PaymentType.TICKET) {
+                if (res.get("error_code") == null) { //success
+                    System.out.println("confirm success: " + res);
+
+                    // order테이블의 status column 데이터를 바꿔준다.
+                    Long orderId = Long.valueOf(res.get("order_id").toString());
+                    TicketOrder foundOrder = ticketOrderRepository.findById(orderId).orElseThrow(
+                            NoSuchElementException::new
+                    );
+                    foundOrder.updatePaymentStatus(PaymentStatus.APPROVED);
+                } else {
+                    System.out.println("confirm false: " + res);
+                }
             }
 
             return res;
@@ -146,9 +168,43 @@ public class BootpayService {
                         HttpStatus.FORBIDDEN
                 );
             }
+        } else if (paymentType == PaymentType.TICKET) {
+            // orderId를 통하여 DB에 저장된 총 가격을 가져온다. 없을 시 Exception
+            Long fullPrice = ticketOrderRepository.findAmountById(Long.valueOf(res.get("order_id").toString())).orElseThrow(
+                    NoSuchElementException::new
+            );
+
+            System.out.println("fullPrice = " + fullPrice);
+
+            // 부트페이와 DB에 저장된 가격을 일치하는지 확인 한다.
+            // 일치할 시: confirm() 실행 후 결제 성공을 return한다.
+            // 일치하지 않을 시
+            if (receiptPrice == fullPrice) {
+                HashMap<String, Object> confirmationData = confirm(orderId, PaymentType.TICKET);
+                System.out.println("confirmationData = " + confirmationData);
+
+                return new ResponseEntity<>(
+                        BootPayResponse.builder()
+                                .success(true)
+                                .code(0)
+                                .message("결제 성공")
+                                .data(confirmationData)
+                                .build(),
+                        HttpStatus.OK
+                );
+            } else {
+                deny(orderId, paymentType);
+
+                return new ResponseEntity<>(
+                        BootPayResponse.builder()
+                                .success(false)
+                                .code(2)
+                                .message("결제가 거부되었습니다.")
+                                .build(),
+                        HttpStatus.FORBIDDEN
+                );
+            }
         }
-
-
         return null;
     }
 }

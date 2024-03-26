@@ -2,10 +2,14 @@ package com.app.spotick.domain.entity.ticket;
 
 import com.app.spotick.domain.base.Period;
 import com.app.spotick.domain.entity.user.User;
+import com.app.spotick.domain.type.payment.PaymentMethod;
+import com.app.spotick.domain.type.payment.PaymentStatus;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity @Table(name = "TBL_TICKET_ORDER")
 @SequenceGenerator(name = "SEQ_TICKET_ORDER_GENERATOR", sequenceName = "SEQ_TICKET_ORDER",allocationSize = 1)
@@ -15,6 +19,11 @@ public class TicketOrder extends Period {
     @Column(name = "TICKET_ORDER_ID")
     private Long id;
     private LocalDate eventDate;
+    private Integer amount;
+    @Enumerated(EnumType.STRING)
+    private PaymentMethod paymentMethod;
+    @Enumerated(EnumType.STRING)
+    private PaymentStatus paymentStatus;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "TICKET_EVENT_ID")
@@ -23,11 +32,21 @@ public class TicketOrder extends Period {
     @JoinColumn(name = "USER_ID")
     private User user;
 
+    @OneToMany(mappedBy = "ticketOrder", fetch = FetchType.LAZY)
+    private List<TicketOrderDetail> ticketOrderDetails = new ArrayList<>();
+
     @Builder
-    public TicketOrder(Long id, LocalDate eventDate, Ticket ticket, User user) {
+    public TicketOrder(Long id, LocalDate eventDate, Integer amount, PaymentMethod paymentMethod, PaymentStatus paymentStatus, Ticket ticket, User user) {
         this.id = id;
         this.eventDate = eventDate;
+        this.amount = amount;
+        this.paymentMethod = paymentMethod;
+        this.paymentStatus = paymentStatus;
         this.ticket = ticket;
         this.user = user;
+    }
+
+    public void updatePaymentStatus(PaymentStatus paymentStatus) {
+        this.paymentStatus = paymentStatus;
     }
 }
