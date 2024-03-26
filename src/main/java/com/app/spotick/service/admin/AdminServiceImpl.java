@@ -179,15 +179,15 @@ public class AdminServiceImpl implements AdminService{
         }
         
 //       생성일, 조회수, 좋아요, 문의, 주문, 등급 테이블의 티켓들을 모두 기존 티켓에서 바뀔 티켓로 변경
-        adminTicketRepository.updateCreatedDateWithOriginal(originalTicket.getCreatedDate(),changedTicket.getId());
-        ticketInquiryRepository.bulkUpdateInquiryTicket(originalTicket,changedTicket);
-        ticketLikeRepository.bulkUpdateLikeTicket(originalTicket,changedTicket);
-        ticketOrderRepository.bulkUpdateOrderTicket(originalTicket,changedTicket);
-        ticketGradeRepository.bulkUpdateGradeTicket(originalTicket,changedTicket);
+//        adminTicketRepository.updateCreatedDateWithOriginal(originalTicket.getCreatedDate(),changedTicket.getId());
+//        ticketInquiryRepository.bulkUpdateInquiryTicket(originalTicket,changedTicket);
+//        ticketLikeRepository.bulkUpdateLikeTicket(originalTicket,changedTicket);
+//        ticketOrderRepository.bulkUpdateOrderTicket(originalTicket,changedTicket);
+//        ticketGradeRepository.bulkUpdateGradeTicket(originalTicket,changedTicket);
 
-        changedTicket.setViewCount(originalTicket.getViewCount());
-        changedTicket.setTicketEventStatus(PostStatus.APPROVED);
-        originalTicket.setTicketEventStatus(PostStatus.REPLACED);
+        changedTicket.setTicketEventStatus(PostStatus.DELETED);
+        originalTicket.replaceTicket(changedTicket);
+        originalTicket.setTicketEventStatus(PostStatus.APPROVED);
         modifyRequest.setTicketModifyStatus(PostModifyStatus.APPROVED);
     }
 

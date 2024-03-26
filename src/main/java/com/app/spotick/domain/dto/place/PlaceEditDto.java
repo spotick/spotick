@@ -80,7 +80,7 @@ public class PlaceEditDto {
                 .bankName(bankName)
                 .accountHolder(accountHolder)
                 .accountNumber(accountNumber)
-                .placeStatus(PostStatus.MODIFICATION_REQUESTED )
+                .placeStatus(PostStatus.MODIFICATION_REQUESTED)
                 .build();
     }
 
