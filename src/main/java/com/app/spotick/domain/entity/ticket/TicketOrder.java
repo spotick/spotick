@@ -8,6 +8,8 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity @Table(name = "TBL_TICKET_ORDER")
 @SequenceGenerator(name = "SEQ_TICKET_ORDER_GENERATOR", sequenceName = "SEQ_TICKET_ORDER",allocationSize = 1)
@@ -29,6 +31,9 @@ public class TicketOrder extends Period {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "USER_ID")
     private User user;
+
+    @OneToMany(mappedBy = "ticketOrder", fetch = FetchType.LAZY)
+    private List<TicketOrderDetail> ticketOrderDetails = new ArrayList<>();
 
     @Builder
     public TicketOrder(Long id, LocalDate eventDate, Integer amount, PaymentMethod paymentMethod, PaymentStatus paymentStatus, Ticket ticket, User user) {

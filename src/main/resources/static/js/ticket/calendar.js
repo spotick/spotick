@@ -17,6 +17,7 @@ $.datepicker.setDefaults({
 
 const startDate = $('#startDate').val();
 const endDate = $('#endDate').val();
+const $selectedDate = $('#selectedDate');
 
 // 페이지가 로드될 때 실행할 함수
 $(function () {
@@ -25,6 +26,7 @@ $(function () {
         minDate: startDate,
         maxDate: endDate,
         onSelect: function (date) {
+            $selectedDate.val(date);
             getGrade(date);
         },
     });

@@ -34,20 +34,17 @@ public class TicketOrderServiceImpl implements TicketOrderService {
     private final UserRepository userRepository;
 
     @Override
-    public ResponseEntity<?> saveTicketOrder(TicketOrderDto dto, Long userId) {
-
-        TicketOrderDto.Save save = dto.getSave();
-
+    public ResponseEntity<?> saveTicketOrder(TicketOrderDto.Save saveDto, Long userId) {
         List<Long> gradeIds = new ArrayList<>();
         List<Integer> quantities = new ArrayList<>();
 
-        save.getTicketOrderDetailDtoList().stream()
+        saveDto.getTicketOrderDetailDtoList().stream()
                 .sorted(Comparator.comparingLong(TicketOrderDetailDto::getGradeId))
                 .forEach(detailDto -> {
                     gradeIds.add(detailDto.getGradeId());
                     quantities.add(detailDto.getQuantity());
                 });
-        List<Integer> prices = ticketGradeRepository.findTicketGradePriceByTicketIdAndGradeIds(save.getTicketId(), gradeIds);
+        List<Integer> prices = ticketGradeRepository.findTicketGradePriceByTicketIdAndGradeIds(saveDto.getTicketId(), gradeIds);
 
         // gradeId의 갯수만큼 price값을 조회해오지 못했다면 클라이언트의 id값 조작을 의심할 수 있다.
         // 제대로된 결제를 위해 검증 절차를 거친다.
@@ -61,13 +58,13 @@ public class TicketOrderServiceImpl implements TicketOrderService {
                 .sum();
 
         // TicketOrder 엔티티를 제작하여 저장한다.
-        Ticket tmpTicket = ticketRepository.getReferenceById(save.getTicketId());
+        Ticket tmpTicket = ticketRepository.getReferenceById(saveDto.getTicketId());
         User tmpUser = userRepository.getReferenceById(userId);
 
         TicketOrder orderEntity = TicketOrder.builder()
                 .amount(amount)
-                .eventDate(save.getEventDate())
-                .paymentMethod(save.getPaymentMethod())
+                .eventDate(saveDto.getEventDate())
+                .paymentMethod(saveDto.getPaymentMethod())
                 .paymentStatus(PaymentStatus.PENDING)
                 .ticket(tmpTicket)
                 .user(tmpUser)
@@ -78,7 +75,7 @@ public class TicketOrderServiceImpl implements TicketOrderService {
         // TicketOrderDetail 엔티티화 시켜 저장한다.
         List<TicketOrderDetail> ticketOrderDetails = new ArrayList<>();
 
-        save.getTicketOrderDetailDtoList().forEach(detailDto -> {
+        saveDto.getTicketOrderDetailDtoList().forEach(detailDto -> {
             TicketGrade tmpGrade = ticketGradeRepository.getReferenceById(detailDto.getGradeId());
 
             ticketOrderDetails.add(
@@ -93,12 +90,13 @@ public class TicketOrderServiceImpl implements TicketOrderService {
 
 
         // 여기까지 코드가 진행되었다면 이상이 없다는 의미이며 결제 정보값(ID 포함)을 리턴한다.
+        TicketOrderDto.Info returnValue = ticketOrderRepository.findOrderInfoById(savedOrder.getId());
 
         return new ResponseEntity<>(
                 CommonResponse.builder()
                         .success(true)
                         .message("티켓 결제정보 저장")
-                        .data(savedOrder.getId())
+                        .data(returnValue)
                         .build(),
                 HttpStatus.OK
         );

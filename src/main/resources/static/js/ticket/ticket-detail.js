@@ -5,7 +5,7 @@ import {
     ticketDetailInquiryPaginationComponent
 } from "../async-components/ticket/inquiry-component.js"
 import {requestLike} from "../modules/likeFetch.js"
-
+import {payService} from "../global-js/bootpay.js"
 
 const isLoggedIn = document.getElementById('isLoggedIn');
 
@@ -169,7 +169,7 @@ function loadGradeList(dataList) {
     dataList.forEach(data => {
         html +=
             `
-                <div class="RadioBoxContainer" id="${data.gradeId}">
+                <div class="RadioBoxContainer ticketItems" id="${data.gradeId}">
                     <input class="totalPrice" type="hidden">
                     <div class="RadioBox">
                         <div class="RadioBoxOutLine">
@@ -332,3 +332,23 @@ function changeLike(btn, status) {
         on.classList.add('none')
     }
 }
+
+document.getElementById('purchase').addEventListener('click', () => {
+    const ticketItems = document.querySelectorAll('.ticketItems');
+    const selectedDate = document.getElementById('selectedDate').value;
+    const ticketOrderDetailDtoList = [];
+
+    // 유저가 선택한 티켓
+    ticketItems.forEach(item => {
+        const radioBoxInLine = item.querySelector('.RadioBoxInLine');
+        const hasOnClass = radioBoxInLine.classList.contains('On');
+        if (hasOnClass) {
+            const gradeId = item.id;
+            const input = item.querySelector('.visitors');
+            const quantity = input.value;
+            ticketOrderDetailDtoList.push({ gradeId: gradeId, quantity: quantity });
+        }
+    });
+
+    payService.requestTicketPaymentSave(ticketId, selectedDate, ticketOrderDetailDtoList, payService.payTickets);
+});

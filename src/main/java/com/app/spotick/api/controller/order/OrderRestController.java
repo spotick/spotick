@@ -28,8 +28,10 @@ public class OrderRestController {
     }
 
     @PostMapping("/ticket/save")
-    public ResponseEntity<?> saveTicket(@Valid @RequestBody TicketOrderDto dto,
+    public ResponseEntity<?> saveTicket(@Valid @RequestBody TicketOrderDto.Save saveDto,
                                         @AuthenticationPrincipal UserDetailsDto userDetailsDto) {
-        return ticketOrderService.saveTicketOrder(dto, userDetailsDto.getId());
+        System.out.println("saveDto = " + saveDto);
+
+        return ticketOrderService.saveTicketOrder(saveDto, userDetailsDto.getId());
     }
 }

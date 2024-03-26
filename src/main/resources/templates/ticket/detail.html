@@ -336,6 +336,7 @@
                                 <div class="calendar-box">
                                     <input id="startDate" th:value="*{startDate}" type="hidden">
                                     <input id="endDate" th:value="*{endDate}" type="hidden">
+                                    <input id="selectedDate" th:value="*{startDate}" type="hidden">
                                     <div id="datepicker"></div>
                                 </div>
                                 <div class="time-choice-wrap"></div>
@@ -356,7 +357,7 @@
                                     src="/imgs/heart_filled_sweetBlue046.76e646e1.svg">
                             </span>
                         </button>
-                        <button class="GoodsListReservationBtn" type="button">구매하기</button>
+                        <button id="purchase" class="GoodsListReservationBtn" type="button">구매하기</button>
                     </div>
                 </div>
             </div>

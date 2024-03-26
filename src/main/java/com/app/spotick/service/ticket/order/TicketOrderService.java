@@ -5,6 +5,6 @@ import org.springframework.http.ResponseEntity;
 
 public interface TicketOrderService {
 
-    ResponseEntity<?> saveTicketOrder(TicketOrderDto dto, Long userId);
+    ResponseEntity<?> saveTicketOrder(TicketOrderDto.Save saveDto, Long userId);
 
 }
