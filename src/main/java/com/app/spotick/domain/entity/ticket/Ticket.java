@@ -84,6 +84,7 @@ public class Ticket extends PostBase {
         this.ticketEventStatus = ticketEventStatus;
     }
 
+    @Deprecated
     public void updateTicket(TicketEditDto ticketEditDto) {
         editBase(ticketEditDto.getTitle(), ticketEditDto.getPlaceLat(), ticketEditDto.getPlaceLng());
         this.content = ticketEditDto.getContent();
@@ -94,6 +95,10 @@ public class Ticket extends PostBase {
         this.ticketEventAddress = new PostAddress(ticketEditDto.getPlaceAddress(), ticketEditDto.getPlaceAddressDetail());
         this.ticketRatingType = ticketEditDto.getTicketRatingType();
         this.ticketEventStatus = PostStatus.MODIFICATION_REQUESTED;
+    }
+
+    public void updateStatus(PostStatus ticketEventStatus) {
+        this.ticketEventStatus = ticketEventStatus;
     }
 }
 

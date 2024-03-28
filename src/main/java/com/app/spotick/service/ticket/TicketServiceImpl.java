@@ -90,14 +90,26 @@ public class TicketServiceImpl implements TicketService {
                 NoSuchElementException::new
         );
 
-        // 티켓 정보 수정
-        foundTicket.updateTicket(ticketEditDto);
+        // 기존의 티켓정보는 수정한다.
+        foundTicket.updateStatus(PostStatus.MODIFICATION_PENDING);
 
         // 파일의 경우, 새로 받아온 파일 정보가 있을 시 파일정보를 수정.
+        TicketFile file;
         if (!ticketEditDto.getNewTicketFile().isEmpty()) {
-            TicketFile newFile = ticketFileService
+            file = ticketFileService
                     .registerAndSaveTicketFile(ticketEditDto.getNewTicketFile());
-            foundTicket.setFile(newFile);
+        } else { // 변경점이 없을 경우 기존의 파일을 수정된 티켓에 넣어준다.
+            file = foundTicket.getTicketFile();
         }
+
+        Ticket modifiedInfo = ticketEditDto.toEntity(
+                foundTicket.getUser(),
+                file,
+                foundTicket.getStartDate(),
+                foundTicket.getEndDate()
+        );
+        modifiedInfo.updateStatus(PostStatus.MODIFICATION_REQUESTED);
+
+        ticketRepository.save(modifiedInfo);
     }
 }

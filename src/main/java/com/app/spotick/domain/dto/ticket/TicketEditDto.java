@@ -4,6 +4,7 @@ import com.app.spotick.domain.dto.ticket.grade.TicketGradeRegisterDto;
 import com.app.spotick.domain.embedded.post.PostAddress;
 import com.app.spotick.domain.entity.ticket.Ticket;
 import com.app.spotick.domain.entity.ticket.TicketFile;
+import com.app.spotick.domain.entity.user.User;
 import com.app.spotick.domain.type.post.PostStatus;
 import com.app.spotick.domain.type.ticket.TicketCategory;
 import com.app.spotick.domain.type.ticket.TicketRatingType;
@@ -55,15 +56,16 @@ public class TicketEditDto {
     @NotNull(message = "지도에 장소의 위치를 찍어주세요.")
     private Double placeLng;
 
+    // 전송용 필드
     private Long ticketFileId;
     private String fileName;
     private String uuid;
     private String uploadPath;
 
-    // 새로 추가될 사진이 있을 경우
+    // 새로 추가될 사진이 있을 경우 사용
     private MultipartFile newTicketFile;
 
-    // readOnly, 수정 불가능.
+    // readOnly, 수정 불가능 필드.
     private List<TicketGradeRegisterDto> ticketGrades = new ArrayList<>();
 
     // QueryDSL 생성자
@@ -104,6 +106,26 @@ public class TicketEditDto {
                 .lat(placeLat)
                 .lng(placeLng)
                 .ticketFile(ticketFile)
+                .ticketEventStatus(PostStatus.MODIFICATION_REQUESTED)
+                .build();
+    }
+
+    public Ticket toEntity(User user, TicketFile ticketFile, LocalDate startDate, LocalDate endDate) {
+        return Ticket.builder()
+                .title(title)
+                .content(content)
+                .bankName(bankName)
+                .accountNumber(accountNumber)
+                .accountHolder(accountHolder)
+                .ticketEventAddress(new PostAddress(placeAddress, placeAddressDetail))
+                .ticketRatingType(ticketRatingType)
+                .ticketCategory(category)
+                .lat(placeLat)
+                .lng(placeLng)
+                .ticketFile(ticketFile)
+                .user(user)
+                .startDate(startDate)
+                .endDate(endDate)
                 .ticketEventStatus(PostStatus.MODIFICATION_REQUESTED)
                 .build();
     }

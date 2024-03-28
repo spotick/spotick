@@ -162,6 +162,7 @@ public class AdminServiceImpl implements AdminService{
     }
 
     private void handleTicketModification(AdminPostApproveDto.Request approveDto){
+        System.out.println("approveDto = " + approveDto.getPostId());
         Ticket reqTicket = adminTicketRepository.getReferenceById(approveDto.getPostId());
 
         TicketModifyRequest modifyRequest = ticketModifyReqRepository.findByChangedTicket(reqTicket)
