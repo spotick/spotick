@@ -50,10 +50,10 @@ public class WebSecurityConfig {
                                 .requestMatchers("/mypage/**").authenticated()
                                 .requestMatchers("/place/api/list").permitAll()
                                 .requestMatchers("/place/api/**").authenticated()
-
                                 .requestMatchers("/place/register").authenticated()
                                 .requestMatchers("/place/edit/*").authenticated()
                                 .requestMatchers("/place/check/reserve").authenticated()
+                                .requestMatchers("/admin/**","/admins/**").hasRole("ADMIN")
 //                        해당  url로 들어온 요청은 인증과 권한확인을 해야한다
 //                                .requestMatchers("/admin")
 //                                .hasAnyRole("USER", "ADMIN")

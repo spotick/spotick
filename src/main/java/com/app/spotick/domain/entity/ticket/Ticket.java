@@ -100,6 +100,19 @@ public class Ticket extends PostBase {
     public void updateStatus(PostStatus ticketEventStatus) {
         this.ticketEventStatus = ticketEventStatus;
     }
+
+    public void replaceTicket(Ticket updatedTicket){
+        editBase(updatedTicket.getTitle(), updatedTicket.getLat(), updatedTicket.getLng());
+        this.content = updatedTicket.getContent();
+        this.ticketCategory = updatedTicket.getTicketCategory();
+        this.bankName = updatedTicket.getBankName();
+        this.accountNumber = updatedTicket.getAccountNumber();
+        this.accountHolder = updatedTicket.getAccountHolder();
+        this.ticketEventAddress = new PostAddress(updatedTicket.getTicketEventAddress().getAddress(), updatedTicket.getTicketEventAddress().getAddressDetail());
+        this.ticketRatingType = updatedTicket.getTicketRatingType();
+        setViewCount(updatedTicket.getViewCount());
+        this.ticketFile = updatedTicket.getTicketFile();
+    }
 }
 
 
