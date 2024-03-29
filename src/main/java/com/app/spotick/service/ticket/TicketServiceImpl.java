@@ -5,10 +5,13 @@ import com.app.spotick.domain.dto.ticket.grade.TicketGradeSaleInfoDto;
 import com.app.spotick.domain.entity.ticket.Ticket;
 import com.app.spotick.domain.entity.ticket.TicketFile;
 import com.app.spotick.domain.entity.ticket.TicketGrade;
+import com.app.spotick.domain.entity.ticket.TicketModifyRequest;
 import com.app.spotick.domain.entity.user.User;
+import com.app.spotick.domain.type.post.PostModifyStatus;
 import com.app.spotick.domain.type.post.PostStatus;
 import com.app.spotick.repository.ticket.TicketRepository;
 import com.app.spotick.repository.ticket.grade.TicketGradeRepository;
+import com.app.spotick.repository.ticket.modifyRequest.TicketModifyReqRepository;
 import com.app.spotick.repository.user.UserRepository;
 import com.app.spotick.service.ticket.file.TicketFileService;
 import lombok.RequiredArgsConstructor;
@@ -30,6 +33,7 @@ public class TicketServiceImpl implements TicketService {
     private final TicketGradeRepository ticketGradeRepository;
     private final TicketFileService ticketFileService;
     private final UserRepository userRepository;
+    private final TicketModifyReqRepository ticketModifyReqRepository;
 
     @Override
     public void registerTicket(TicketRegisterDto ticketRegisterDto, Long userId) throws IOException {
@@ -86,12 +90,12 @@ public class TicketServiceImpl implements TicketService {
     public void updateTicket(TicketEditDto ticketEditDto, Long userId) throws IOException {
         User tmpUser = userRepository.getReferenceById(userId);
 
-        Ticket foundTicket = ticketRepository.findByIdAndUser(ticketEditDto.getTicketId(), tmpUser).orElseThrow(
+        Ticket originalTicket = ticketRepository.findByIdAndUser(ticketEditDto.getTicketId(), tmpUser).orElseThrow(
                 NoSuchElementException::new
         );
 
         // 기존의 티켓정보는 수정한다.
-        foundTicket.updateStatus(PostStatus.MODIFICATION_PENDING);
+        originalTicket.updateStatus(PostStatus.MODIFICATION_PENDING);
 
         // 파일의 경우, 새로 받아온 파일 정보가 있을 시 파일정보를 수정.
         TicketFile file;
@@ -99,17 +103,25 @@ public class TicketServiceImpl implements TicketService {
             file = ticketFileService
                     .registerAndSaveTicketFile(ticketEditDto.getNewTicketFile());
         } else { // 변경점이 없을 경우 기존의 파일을 수정된 티켓에 넣어준다.
-            file = foundTicket.getTicketFile();
+            file = originalTicket.getTicketFile();
         }
 
-        Ticket modifiedInfo = ticketEditDto.toEntity(
-                foundTicket.getUser(),
+        Ticket changedTicket = ticketEditDto.toEntity(
+                originalTicket.getUser(),
                 file,
-                foundTicket.getStartDate(),
-                foundTicket.getEndDate()
+                originalTicket.getStartDate(),
+                originalTicket.getEndDate()
         );
-        modifiedInfo.updateStatus(PostStatus.MODIFICATION_REQUESTED);
+        changedTicket.updateStatus(PostStatus.MODIFICATION_REQUESTED);
 
-        ticketRepository.save(modifiedInfo);
+        // 새 정보를 저장
+        changedTicket = ticketRepository.save(changedTicket);
+
+        // 요청테이블에 insert
+        ticketModifyReqRepository.save(TicketModifyRequest.builder()
+                .originalTicket(originalTicket)
+                .changedTicket(changedTicket)
+                .ticketModifyStatus(PostModifyStatus.PENDING)
+                .build());
     }
 }
