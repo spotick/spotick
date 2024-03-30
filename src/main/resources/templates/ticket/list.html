@@ -86,7 +86,7 @@
                     </button>
                     <!-- 인기순 selectBoxList -->
                     <div class="SelectBoxList">
-                        <button th:each="sortType, iterStat : ${T(com.app.spotick.util.type.SortType).values()}"
+                        <button th:each="sortType, iterStat : ${T(com.app.spotick.util.type.TicketSortType).values()}"
                                 th:text="${sortType.displayName}"
                                 th:classappend="${iterStat.index == 0} ? 'SelectBoxListItem-select' : ''"
                                 th:sortType="${sortType}"

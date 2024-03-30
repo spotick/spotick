@@ -55,7 +55,7 @@ export const ticketLayout = (() => {
                                 <p class="ItemSpaceName">${ticket.ticketTitle}</p>
                             </div>
                             <div class="ItemPriceContainer">
-                                <span class="ItemPrice">${formattedPrice}</span>
+                                <span class="ItemPrice">${formattedPrice}원</span>
                                 <span class="ItemDate">${formattedStartDate} ~ ${formattedEndDate}</span>
                             </div>
                         </div>

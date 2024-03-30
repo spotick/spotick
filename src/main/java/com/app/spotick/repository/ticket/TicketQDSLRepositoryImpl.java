@@ -337,9 +337,18 @@ public class TicketQDSLRepositoryImpl implements TicketQDSLRepository {
                     ticketLikeCountDESC(),
                     ticket.id.desc()
             );
-            case PRICE_LOW_TO_HIGH -> null;
-            case PRICE_HIGH_TO_LOW -> null;
-            case VIEWS -> null;
+            case PRICE_LOW_TO_HIGH -> buildOrderSpecifiers(
+                    ticketPriceASC(),
+                    ticket.id.desc()
+            );
+            case PRICE_HIGH_TO_LOW -> buildOrderSpecifiers(
+                    ticketPriceDESC(),
+                    ticket.id.desc()
+            );
+            case VIEWS -> buildOrderSpecifiers(
+                    ticket.viewCount.desc(),
+                    ticket.id.desc()
+            );
         };
     }
 
@@ -358,6 +367,26 @@ public class TicketQDSLRepositoryImpl implements TicketQDSLRepository {
     private OrderSpecifier<?> ticketLikeCountDESC() {
         return new OrderSpecifier<>(
                 Order.DESC, likeCount()
+        );
+    }
+
+    private OrderSpecifier<?> ticketPriceASC() {
+        return new OrderSpecifier<>(
+                Order.ASC,
+                JPAExpressions.select(ticketGrade.price.min())
+                        .from(ticketGrade)
+                        .where(ticketGrade.ticket.eq(ticket))
+                        .groupBy(ticketGrade.ticket)
+        );
+    }
+
+    private OrderSpecifier<?> ticketPriceDESC() {
+        return new OrderSpecifier<>(
+                Order.DESC,
+                JPAExpressions.select(ticketGrade.price.max())
+                        .from(ticketGrade)
+                        .where(ticketGrade.ticket.eq(ticket))
+                        .groupBy(ticketGrade.ticket)
         );
     }
 
