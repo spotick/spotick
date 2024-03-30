@@ -32,7 +32,7 @@ public class TicketDummyController {
 
     private final Random random = new Random();
 
-    @PostConstruct
+//    @PostConstruct
     public void createTicketDummy() {
         User user = userRepository.findById(2L).get();
         for (int i = 0; i < 70; i++) {

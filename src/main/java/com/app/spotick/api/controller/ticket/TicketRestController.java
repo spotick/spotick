@@ -1,11 +1,17 @@
 package com.app.spotick.api.controller.ticket;
 
 import com.app.spotick.api.response.CommonResponse;
+import com.app.spotick.domain.dto.ticket.TicketListDto;
 import com.app.spotick.domain.dto.ticket.grade.TicketGradeSaleInfoDto;
+import com.app.spotick.domain.dto.user.UserDetailsDto;
 import com.app.spotick.service.ticket.TicketService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -16,6 +22,17 @@ import java.util.List;
 @RequiredArgsConstructor
 public class TicketRestController {
     private final TicketService ticketService;
+
+    @GetMapping("/list")
+    public ResponseEntity<Slice<TicketListDto>> ticketList(@RequestParam("page") int page,
+                                                           @AuthenticationPrincipal UserDetailsDto userDetailsDto) {
+        Pageable pageable = PageRequest.of(page, 12);
+        Long userId = userDetailsDto == null ? null : userDetailsDto.getId();
+
+        Slice<TicketListDto> ticketList = ticketService.findTicketListPage(pageable, userId);
+
+        return ResponseEntity.ok(ticketList);
+    }
 
     @GetMapping("/getGrades")
     public ResponseEntity<CommonResponse<List<TicketGradeSaleInfoDto>>> getTicketGrades(@RequestParam("ticketId") Long ticketId,

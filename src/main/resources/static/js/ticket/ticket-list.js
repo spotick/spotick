@@ -1,4 +1,6 @@
-import {requestLike} from "../modules/likeFetch.js"
+import {requestLike} from "../modules/likeFetch.js";
+import {showTicketListEvent} from "../components/ticket/ticketComponent.js";
+import {loadingMarkService} from "../modules/loadingMark.js";
 
 // ===================================================================================================================
 // 필터쪽 체크박스
@@ -270,24 +272,63 @@ function changeLike(btn, status) {
 /////////////////////////////////////////////////////////////////////////////////////////
 HTMLCollection.prototype.forEach = Array.prototype.forEach;
 
-document.getElementsByClassName('ItemLikeBtn').forEach(likeBtn => {
-    likeBtn.addEventListener('click', function () {
-        let isLoggedIn = document.getElementById('isLoggedIn').value;
+let isLoggedIn = document.getElementById('isLoggedIn').value;
+let page = 1;
+let isLoading = false;
+let isLastPage = document.getElementById("next").value;
+
+const postContainer = document.getElementById('postContainer');
+const loadingMark = document.getElementById('loadingMark');
+
+postContainer.addEventListener('click', function (e) {
+    const itemLikeBtn = e.target.closest(".ItemLikeBtn");
+    if (itemLikeBtn) {
         if (isLoggedIn === 'false') {
             alert('로그인이 필요한 서비스 입니다');
             location.href = '/user/login';
             return;
         }
 
-        let status = this.getAttribute('data-status');
-        const ticketId = this.getAttribute('data-id');
+        const ticketId = itemLikeBtn.getAttribute("data-id");
+        const status = itemLikeBtn.getAttribute("data-status");
 
         requestLike(status, ticketId, (result) => {
             this.setAttribute('data-status', result);
 
-            changeLike(this, result);
+            changeLike(itemLikeBtn, result);
         });
-    })
+    }
 });
 
 
+// 스크롤시 슬라이스 로딩
+window.addEventListener('scroll', function () {
+    if (isLoading === true || isLastPage === true) return;
+
+    let {scrollTop, scrollHeight, clientHeight} = document.documentElement;
+
+    if (clientHeight + scrollTop >= scrollHeight) {
+        loadNextPage();
+    }
+});
+
+function loadNextPage() {
+    isLoading = true;
+    loadingMarkService.show(loadingMark)
+        .then(() => {
+            window.scrollTo({
+                top: document.body.scrollHeight,
+                behavior: 'smooth'
+            });
+            return showTicketListEvent(page, postContainer);
+        })
+        .then(() => {
+            loadingMarkService.hide(loadingMark);
+            page++;
+            isLoading = false;
+        })
+        .catch(error => {
+            console.error("로드 중 오류 발생 : ", error);
+            isLoading = false;
+        });
+}

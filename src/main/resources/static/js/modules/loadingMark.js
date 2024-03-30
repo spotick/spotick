@@ -1,6 +1,6 @@
 export const loadingMarkService = (function () {
 
-    function show(loadingMark) {
+    async function show(loadingMark) {
         loadingMark.classList.add('show');
     }
 
