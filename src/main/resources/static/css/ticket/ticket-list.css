@@ -4,6 +4,7 @@
     max-width: 1200px;
     margin: 0 auto 20px;
     padding: 16px 0;
+    position: relative;
 }
 
 .CategoryContainer .swiper-slide {
@@ -11,12 +12,12 @@
 }
 
 .CategoryItem {
-
     font-size: 15px;
     line-height: 22px;
     color: rgb(163, 163, 163);
     text-decoration: initial;
     cursor: pointer;
+    margin-bottom: 10px;
 }
 
 .FilterContainer {

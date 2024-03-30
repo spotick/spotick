@@ -5,7 +5,10 @@ import com.app.spotick.domain.dto.ticket.TicketEditDto;
 import com.app.spotick.domain.dto.ticket.TicketListDto;
 import com.app.spotick.domain.dto.ticket.TicketRegisterDto;
 import com.app.spotick.domain.dto.user.UserDetailsDto;
+import com.app.spotick.domain.type.ticket.TicketCategory;
 import com.app.spotick.service.ticket.TicketService;
+import com.app.spotick.util.type.SortType;
+import com.app.spotick.util.type.TicketSortType;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -42,7 +45,7 @@ public class TicketController {
         Pageable pageable = PageRequest.of(0, 12);
         Long userId = userDetailsDto == null ? null : userDetailsDto.getId();
 
-        Slice<TicketListDto> ticketList = ticketService.findTicketListPage(pageable, userId);
+        Slice<TicketListDto> ticketList = ticketService.findTicketListPage(pageable, TicketSortType.POPULARITY, userId);
 
         model.addAttribute("ticketList", ticketList);
     }

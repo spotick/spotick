@@ -27,32 +27,38 @@
     <div id="ListContainer">
         <!-- 카테고리 네비 -->
         <div class="CategoryContainer">
-            <div class="swiper CategorySwiper swiper-initialized swiper-horizontal swiper-pointer-events swiper-watch-progress">
-                <div class="swiper-wrapper">
-                    <div class="swiper-slide swiper-slide-visible active">
-                        <div class="CategoryItem">전체</div>
-                    </div>
-                    <div class="swiper-slide swiper-slide-visible">
-                        <div class="CategoryItem">뮤지컬</div>
-                    </div>
-                    <div class="swiper-slide swiper-slide-visible swiper-slide-next">
-                        <div class="CategoryItem">콘서트</div>
-                    </div>
-                    <div class="swiper-slide swiper-slide-visible">
-                        <div class="CategoryItem">연극</div>
-                    </div>
-                    <div class="swiper-slide swiper-slide-visible">
-                        <div class="CategoryItem">클래식/무용</div>
-                    </div>
-                    <div class="swiper-slide swiper-slide-visible">
-                        <div class="CategoryItem">스포츠</div>
-                    </div>
-                    <div class="swiper-slide swiper-slide-visible">
-                        <div class="CategoryItem">전시/행사</div>
-                    </div>
-                    <div class="swiper-slide">
-                        <div class="CategoryItem">기타</div>
-                    </div>
+            <div class="swiper">
+                <div class="swiper-slide active">
+                    <div class="CategoryItem">전체</div>
+                    <div class="underline"></div>
+                </div>
+                <div class="swiper-slide">
+                    <div class="CategoryItem">뮤지컬</div>
+                    <div class="underline"></div>
+                </div>
+                <div class="swiper-slide">
+                    <div class="CategoryItem">콘서트</div>
+                    <div class="underline"></div>
+                </div>
+                <div class="swiper-slide">
+                    <div class="CategoryItem">연극</div>
+                    <div class="underline"></div>
+                </div>
+                <div class="swiper-slide">
+                    <div class="CategoryItem">클래식/무용</div>
+                    <div class="underline"></div>
+                </div>
+                <div class="swiper-slide">
+                    <div class="CategoryItem">스포츠</div>
+                    <div class="underline"></div>
+                </div>
+                <div class="swiper-slide">
+                    <div class="CategoryItem">전시/행사</div>
+                    <div class="underline"></div>
+                </div>
+                <div class="swiper-slide">
+                    <div class="CategoryItem">기타</div>
+                    <div class="underline"></div>
                 </div>
             </div>
         </div>
@@ -80,13 +86,16 @@
                     </button>
                     <!-- 인기순 selectBoxList -->
                     <div class="SelectBoxList">
-                        <button class="SelectBoxListItem SelectBoxListItem-select" type="button">인기순</button>
-                        <button class="SelectBoxListItem" type="button">관심순</button>
-                        <button class="SelectBoxListItem" type="button">낮은 가격순</button>
-                        <button class="SelectBoxListItem" type="button">높은 가격순</button>
-                        <button class="SelectBoxListItem" type="button">조회순</button>
-                        <button class="SelectBoxListItem" type="button">후기순</button>
-                        <button class="SelectBoxListItem" type="button">평점 높은순</button>
+                        <button th:each="sortType, iterStat : ${T(com.app.spotick.util.type.SortType).values()}"
+                                th:text="${sortType.displayName}"
+                                th:classappend="${iterStat.index == 0} ? 'SelectBoxListItem-select' : ''"
+                                th:sortType="${sortType}"
+                                class="SelectBoxListItem" type="button">
+                        </button>
+                        <!--                        <button class="SelectBoxListItem" type="button">관심순</button>-->
+                        <!--                        <button class="SelectBoxListItem" type="button">낮은 가격순</button>-->
+                        <!--                        <button class="SelectBoxListItem" type="button">높은 가격순</button>-->
+                        <!--                        <button class="SelectBoxListItem" type="button">조회순</button>-->
                     </div>
                 </div>
                 <!-- 모달창 나오는 버튼 -->
@@ -2535,7 +2544,7 @@
 </div>
 
 <input id="isLoggedIn" th:value="${#authorization.expression('isAuthenticated()')}" type="hidden"/>
-<input id="searchKeyword" th:value="${param.keyword}" type="hidden">
+<input id="sort" value="POPULARITY" type="hidden">
 <input id="next" th:value="${ticketList.last}" type="hidden">
 
 <div th:replace="~{global-templates/header-footer :: footer}"></div>
@@ -2546,8 +2555,5 @@
 <script th:src="@{/js/global-js/global.js}" type="module"></script>
 <script th:src="@{/js/global-js/chat.js}" type="module"></script>
 <script th:src="@{/js/ticket/ticket-list.js}" type="module"></script>
-<script th:inline="javascript">
-    console.log([[${ticketList}]])
-</script>
 
 </html>

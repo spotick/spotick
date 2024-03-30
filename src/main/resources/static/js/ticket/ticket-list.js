@@ -21,14 +21,6 @@ const selectBoxList = document.querySelector('.SelectBoxList');
 const selectBoxBtnImg = document.querySelector('.SelectBoxBtnImg');
 const SelectBoxBtnText = document.querySelector('.SelectBoxBtnText');
 
-// 좋아요 버튼
-function toggleLike(btn) {
-    let likeIcon = btn.querySelector('.ItemLikeBtn img');
-
-    // 이미지를 토글
-    likeIcon.src = likeIcon.src.includes('heart_line') ? '/imgs/heart_filled_white_shadow.708fbebd.png' : '/imgs/heart_line_white_shadow.d5d214d0.png';
-}
-
 // 인기순 필터
 selectBoxBtn.addEventListener('click', function () {
     // 토글 기능을 이용하여 리스트 보이기/숨기기
@@ -40,6 +32,8 @@ selectBoxBtn.addEventListener('click', function () {
 
 // 각 리스트 아이템에 대한 이벤트 리스너 추가
 const listItems = document.querySelectorAll('.SelectBoxListItem');
+const sort = document.getElementById('sort');
+
 listItems.forEach(item => {
     item.addEventListener('click', function () {
         // 선택된 아이템에 SelectBoxListItem-select 클래스 추가
@@ -56,6 +50,10 @@ listItems.forEach(item => {
 
         // 이미지 변경
         selectBoxBtnImg.src = '/imgs/arrow_down_gray014.f502da9d.svg';
+
+        sort.value = this.getAttribute("sortType");
+
+        reloadPage();
     });
 });
 
@@ -269,6 +267,15 @@ function changeLike(btn, status) {
     }
 }
 
+const items = document.querySelectorAll('.swiper-slide');
+
+items.forEach((item, index) => {
+    item.addEventListener('click', () => {
+        items.forEach(item => item.classList.remove('active'));
+        item.classList.add('active');
+    });
+});
+
 /////////////////////////////////////////////////////////////////////////////////////////
 HTMLCollection.prototype.forEach = Array.prototype.forEach;
 
@@ -280,6 +287,7 @@ let isLastPage = document.getElementById("next").value;
 const postContainer = document.getElementById('postContainer');
 const loadingMark = document.getElementById('loadingMark');
 
+// 이벤트 위임으로 좋아요 기능 구현
 postContainer.addEventListener('click', function (e) {
     const itemLikeBtn = e.target.closest(".ItemLikeBtn");
     if (itemLikeBtn) {
@@ -320,7 +328,31 @@ function loadNextPage() {
                 top: document.body.scrollHeight,
                 behavior: 'smooth'
             });
-            return showTicketListEvent(page, postContainer);
+            return showTicketListEvent(page, sort.value, postContainer);
+        })
+        .then(() => {
+            loadingMarkService.hide(loadingMark);
+            page++;
+            isLoading = false;
+        })
+        .catch(error => {
+            console.error("로드 중 오류 발생 : ", error);
+            isLoading = false;
+        });
+}
+
+function reloadPage() {
+    postContainer.innerHTML = '';
+    page = 0;
+
+    isLoading = true;
+    loadingMarkService.show(loadingMark)
+        .then(() => {
+            window.scrollTo({
+                top: document.body.scrollHeight,
+                behavior: 'smooth'
+            });
+            return showTicketListEvent(page, sort.value, postContainer);
         })
         .then(() => {
             loadingMarkService.hide(loadingMark);

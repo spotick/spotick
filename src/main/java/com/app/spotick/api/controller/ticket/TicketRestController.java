@@ -5,6 +5,8 @@ import com.app.spotick.domain.dto.ticket.TicketListDto;
 import com.app.spotick.domain.dto.ticket.grade.TicketGradeSaleInfoDto;
 import com.app.spotick.domain.dto.user.UserDetailsDto;
 import com.app.spotick.service.ticket.TicketService;
+import com.app.spotick.util.type.SortType;
+import com.app.spotick.util.type.TicketSortType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -25,11 +27,12 @@ public class TicketRestController {
 
     @GetMapping("/list")
     public ResponseEntity<Slice<TicketListDto>> ticketList(@RequestParam("page") int page,
+                                                           @RequestParam("ticketSortType") TicketSortType ticketSortType,
                                                            @AuthenticationPrincipal UserDetailsDto userDetailsDto) {
         Pageable pageable = PageRequest.of(page, 12);
         Long userId = userDetailsDto == null ? null : userDetailsDto.getId();
 
-        Slice<TicketListDto> ticketList = ticketService.findTicketListPage(pageable, userId);
+        Slice<TicketListDto> ticketList = ticketService.findTicketListPage(pageable, ticketSortType, userId);
 
         return ResponseEntity.ok(ticketList);
     }

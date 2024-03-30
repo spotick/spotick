@@ -1,7 +1,7 @@
 export const ticketService = (() => {
 
-    const getList = async (page, callback) => {
-        const response = await fetch(`/ticket/api/list?page=${page}`, 
+    const getList = async (page, ticketSortType, callback) => {
+        const response = await fetch(`/ticket/api/list?page=${page}&ticketSortType=${ticketSortType}`,
             {
                     method: "GET"
                 }

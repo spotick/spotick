@@ -1,6 +1,5 @@
 package com.app.spotick.repository.ticket;
 
-import com.app.spotick.domain.dto.page.TicketPage;
 import com.app.spotick.domain.dto.ticket.TicketListDto;
 import com.app.spotick.domain.embedded.post.PostAddress;
 import com.app.spotick.domain.entity.ticket.Ticket;
@@ -9,11 +8,11 @@ import com.app.spotick.domain.entity.ticket.TicketGrade;
 import com.app.spotick.domain.entity.user.User;
 import com.app.spotick.domain.type.post.PostStatus;
 import com.app.spotick.domain.type.ticket.TicketCategory;
-import com.app.spotick.domain.type.ticket.TicketRequestType;
 import com.app.spotick.domain.type.user.UserStatus;
 import com.app.spotick.repository.ticket.file.TicketFileRepository;
 import com.app.spotick.repository.ticket.grade.TicketGradeRepository;
 import com.app.spotick.repository.user.UserRepository;
+import com.app.spotick.util.type.SortType;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -125,7 +124,7 @@ class TicketRepositoryTest {
         Pageable pageable = PageRequest.of(0, 5);
 
 
-        Slice<TicketListDto> ticketListPage = ticketRepository.findTicketListPage(pageable, null);
+        Slice<TicketListDto> ticketListPage = ticketRepository.findTicketListPage(pageable, SortType.POPULARITY, null);
 
         System.out.println("contents = " + ticketListPage.getContent());
     }

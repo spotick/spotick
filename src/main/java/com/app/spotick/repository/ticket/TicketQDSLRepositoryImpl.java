@@ -4,9 +4,13 @@ import com.app.spotick.domain.dto.page.TicketPage;
 import com.app.spotick.domain.dto.ticket.*;
 import com.app.spotick.domain.dto.ticket.grade.TicketGradeDto;
 import com.app.spotick.domain.dto.ticket.grade.TicketGradeSaleInfoDto;
+import com.app.spotick.domain.type.payment.PaymentStatus;
 import com.app.spotick.domain.type.post.PostStatus;
 import com.app.spotick.domain.type.ticket.TicketRequestType;
+import com.app.spotick.util.type.TicketSortType;
 import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.types.Order;
+import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Expressions;
@@ -30,6 +34,7 @@ import static com.app.spotick.domain.entity.ticket.QTicketFile.*;
 import static com.app.spotick.domain.entity.ticket.QTicketGrade.*;
 import static com.app.spotick.domain.entity.ticket.QTicketInquiry.*;
 import static com.app.spotick.domain.entity.ticket.QTicketLike.*;
+import static com.app.spotick.domain.entity.ticket.QTicketOrder.ticketOrder;
 import static com.querydsl.core.group.GroupBy.groupBy;
 import static com.querydsl.core.group.GroupBy.list;
 
@@ -174,7 +179,7 @@ public class TicketQDSLRepositoryImpl implements TicketQDSLRepository {
     }
 
     @Override
-    public Slice<TicketListDto> findTicketListPage(Pageable pageable, Long userId) {
+    public Slice<TicketListDto> findTicketListPage(Pageable pageable, TicketSortType ticketSortType, Long userId) {
 
         JPQLQuery<Integer> lowestPrice = JPAExpressions.select(ticketGrade.price.min())
                 .from(ticketGrade)
@@ -182,11 +187,6 @@ public class TicketQDSLRepositoryImpl implements TicketQDSLRepository {
                 .groupBy(ticketGrade.ticket);
 
         List<TicketListDto> contents = queryFactory
-                .from(ticket)
-                .where(ticket.ticketEventStatus.eq(PostStatus.APPROVED))
-                .orderBy(ticket.id.desc())
-                .offset(pageable.getOffset())
-                .limit(pageable.getPageSize() + 1)
                 .select(Projections.constructor(TicketListDto.class,
                         ticket.id,
                         ticket.title,
@@ -201,6 +201,11 @@ public class TicketQDSLRepositoryImpl implements TicketQDSLRepository {
                         ticket.ticketEventAddress.address,
                         isLiked(userId)
                 ))
+                .from(ticket)
+                .where(ticket.ticketEventStatus.eq(PostStatus.APPROVED))
+                .orderBy(createOrderByClause(ticketSortType))
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize() + 1)
                 .fetch();
 
         contents.forEach(TicketListDto::cutAddress);
@@ -317,4 +322,46 @@ public class TicketQDSLRepositoryImpl implements TicketQDSLRepository {
                 .exists();
     }
 
+    private OrderSpecifier<?>[] createOrderByClause(TicketSortType ticketSortType) {
+        return switch (ticketSortType) {
+            case POPULARITY -> buildOrderSpecifiers(
+                    ticketOrderCountDESC(),
+                    ticketLikeCountDESC(),
+                    ticket.viewCount.desc(),
+                    ticket.id.desc()
+            );
+            case NEWEST -> buildOrderSpecifiers(
+                    ticket.createdDate.desc()
+            );
+            case INTEREST -> buildOrderSpecifiers(
+                    ticketLikeCountDESC(),
+                    ticket.id.desc()
+            );
+            case PRICE_LOW_TO_HIGH -> null;
+            case PRICE_HIGH_TO_LOW -> null;
+            case VIEWS -> null;
+        };
+    }
+
+    private OrderSpecifier<?> ticketOrderCountDESC() {
+        return new OrderSpecifier<>(
+                Order.DESC, JPAExpressions
+                .select(ticketOrder.count())
+                .from(ticketOrder)
+                .where(
+                        ticketOrder.ticket.eq(ticket),
+                        ticketOrder.paymentStatus.eq(PaymentStatus.APPROVED)
+                )
+        );
+    }
+
+    private OrderSpecifier<?> ticketLikeCountDESC() {
+        return new OrderSpecifier<>(
+                Order.DESC, likeCount()
+        );
+    }
+
+    private OrderSpecifier<?>[] buildOrderSpecifiers(OrderSpecifier<?>... specifiers) {
+        return specifiers;
+    }
 }
