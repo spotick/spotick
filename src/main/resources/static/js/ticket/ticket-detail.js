@@ -3,7 +3,7 @@ import {requestTicketInquiryList, requestTicketInquiryRegister} from "../modules
 import {
     ticketInquiryListLayout,
     ticketDetailInquiryPaginationComponent
-} from "../async-components/ticket/inquiry-component.js"
+} from "../layouts/ticket/inquiryLayout.js"
 import {requestLike} from "../modules/likeFetch.js"
 import {payService} from "../global-js/bootpay.js"
 

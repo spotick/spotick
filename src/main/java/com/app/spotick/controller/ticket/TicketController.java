@@ -5,7 +5,10 @@ import com.app.spotick.domain.dto.ticket.TicketEditDto;
 import com.app.spotick.domain.dto.ticket.TicketListDto;
 import com.app.spotick.domain.dto.ticket.TicketRegisterDto;
 import com.app.spotick.domain.dto.user.UserDetailsDto;
+import com.app.spotick.domain.type.ticket.TicketCategory;
 import com.app.spotick.service.ticket.TicketService;
+import com.app.spotick.util.type.SortType;
+import com.app.spotick.util.type.TicketSortType;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,14 +33,19 @@ import java.util.NoSuchElementException;
 public class TicketController {
     private final TicketService ticketService;
 
+    /*
+    * 항상 첫번째 페이지는 타임리프를 통해 SSR 방식으로 컨텐츠를 로딩해 온다.
+    * 이렇게 할 시, 검색엔진에 더 잘 노출된다고 한다.
+    * 그러나 이후 방식은 USR 방식으로 컨텐츠를 로드해오기 때문에
+    * 이곳에서는 항상 첫번째 페이지, 전체 카테고리, 인기순, 전체 지역을 조건으로 하여 불러온다.
+    * */
     @GetMapping("/list")
-    public void goToList(@RequestParam(name = "page", defaultValue = "0") int page,
-                         @AuthenticationPrincipal UserDetailsDto userDetailsDto,
+    public void goToList(@AuthenticationPrincipal UserDetailsDto userDetailsDto,
                          Model model) {
-        Pageable pageable = PageRequest.of(page, 12);
+        Pageable pageable = PageRequest.of(0, 12);
         Long userId = userDetailsDto == null ? null : userDetailsDto.getId();
 
-        Slice<TicketListDto> ticketList = ticketService.findTicketListPage(pageable, userId);
+        Slice<TicketListDto> ticketList = ticketService.findTicketListPage(pageable, TicketSortType.POPULARITY, userId);
 
         model.addAttribute("ticketList", ticketList);
     }
