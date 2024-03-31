@@ -9,6 +9,7 @@ import com.app.spotick.domain.entity.ticket.TicketModifyRequest;
 import com.app.spotick.domain.entity.user.User;
 import com.app.spotick.domain.type.post.PostModifyStatus;
 import com.app.spotick.domain.type.post.PostStatus;
+import com.app.spotick.domain.type.ticket.TicketCategory;
 import com.app.spotick.repository.ticket.TicketRepository;
 import com.app.spotick.repository.ticket.grade.TicketGradeRepository;
 import com.app.spotick.repository.ticket.modifyRequest.TicketModifyReqRepository;
@@ -65,8 +66,8 @@ public class TicketServiceImpl implements TicketService {
     }
 
     @Override
-    public Slice<TicketListDto> findTicketListPage(Pageable pageable, TicketSortType ticketSortType, Long userId) {
-        return ticketRepository.findTicketListPage(pageable, ticketSortType, userId);
+    public Slice<TicketListDto> findTicketListPage(Pageable pageable, TicketCategory ticketCategory, TicketSortType ticketSortType, Long userId) {
+        return ticketRepository.findTicketListPage(pageable, ticketCategory, ticketSortType, userId);
     }
 
     @Override

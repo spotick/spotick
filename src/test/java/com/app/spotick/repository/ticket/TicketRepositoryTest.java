@@ -125,7 +125,7 @@ class TicketRepositoryTest {
         Pageable pageable = PageRequest.of(0, 5);
 
 
-        Slice<TicketListDto> ticketListPage = ticketRepository.findTicketListPage(pageable, TicketSortType.POPULARITY, null);
+        Slice<TicketListDto> ticketListPage = ticketRepository.findTicketListPage(pageable, null, TicketSortType.POPULARITY, null);
 
         System.out.println("contents = " + ticketListPage.getContent());
     }

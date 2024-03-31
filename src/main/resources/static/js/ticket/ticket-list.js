@@ -2,6 +2,11 @@ import {requestLike} from "../modules/likeFetch.js";
 import {showTicketListEvent} from "../components/ticket/ticketComponent.js";
 import {loadingMarkService} from "../modules/loadingMark.js";
 
+// ============================================== 선언부
+const categoryInput = document.getElementById('category');
+const sortInput = document.getElementById('sort');
+
+
 // ===================================================================================================================
 // 필터쪽 체크박스
 const checkboxes = document.querySelectorAll('input[type="checkbox"]');
@@ -32,7 +37,6 @@ selectBoxBtn.addEventListener('click', function () {
 
 // 각 리스트 아이템에 대한 이벤트 리스너 추가
 const listItems = document.querySelectorAll('.SelectBoxListItem');
-const sort = document.getElementById('sort');
 
 listItems.forEach(item => {
     item.addEventListener('click', function () {
@@ -51,7 +55,7 @@ listItems.forEach(item => {
         // 이미지 변경
         selectBoxBtnImg.src = '/imgs/arrow_down_gray014.f502da9d.svg';
 
-        sort.value = this.getAttribute("sortType");
+        sortInput.value = this.getAttribute("sortType");
 
         reloadPage();
     });
@@ -267,12 +271,16 @@ function changeLike(btn, status) {
     }
 }
 
-const items = document.querySelectorAll('.swiper-slide');
+const categories = document.querySelectorAll('.swiper-slide');
 
-items.forEach((item, index) => {
-    item.addEventListener('click', () => {
-        items.forEach(item => item.classList.remove('active'));
-        item.classList.add('active');
+categories.forEach((category) => {
+    category.addEventListener('click', () => {
+        categories.forEach(item => item.classList.remove('active'));
+        category.classList.add('active');
+
+        categoryInput.value = category.getAttribute('category')
+
+        reloadPage();
     });
 });
 
@@ -328,7 +336,7 @@ function loadNextPage() {
                 top: document.body.scrollHeight,
                 behavior: 'smooth'
             });
-            return showTicketListEvent(page, sort.value, postContainer);
+            return showTicketListEvent(page, categoryInput.value, sortInput.value, postContainer);
         })
         .then(() => {
             loadingMarkService.hide(loadingMark);
@@ -352,7 +360,7 @@ function reloadPage() {
                 top: document.body.scrollHeight,
                 behavior: 'smooth'
             });
-            return showTicketListEvent(page, sort.value, postContainer);
+            return showTicketListEvent(page, categoryInput.value, sortInput.value, postContainer);
         })
         .then(() => {
             loadingMarkService.hide(loadingMark);
