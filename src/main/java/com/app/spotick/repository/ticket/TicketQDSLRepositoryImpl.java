@@ -7,6 +7,7 @@ import com.app.spotick.domain.dto.ticket.grade.TicketGradeSaleInfoDto;
 import com.app.spotick.domain.type.payment.PaymentStatus;
 import com.app.spotick.domain.type.post.PostStatus;
 import com.app.spotick.domain.type.ticket.TicketCategory;
+import com.app.spotick.domain.type.ticket.TicketRatingType;
 import com.app.spotick.domain.type.ticket.TicketRequestType;
 import com.app.spotick.util.type.TicketSortType;
 import com.querydsl.core.BooleanBuilder;
@@ -180,7 +181,11 @@ public class TicketQDSLRepositoryImpl implements TicketQDSLRepository {
     }
 
     @Override
-    public Slice<TicketListDto> findTicketListPage(Pageable pageable, TicketCategory ticketCategory, TicketSortType ticketSortType, Long userId) {
+    public Slice<TicketListDto> findTicketListPage(Pageable pageable,
+                                                   TicketCategory ticketCategory,
+                                                   TicketRatingType ticketRatingType,
+                                                   TicketSortType ticketSortType,
+                                                   Long userId) {
 
         JPQLQuery<Integer> lowestPrice = JPAExpressions.select(ticketGrade.price.min())
                 .from(ticketGrade)
@@ -189,6 +194,10 @@ public class TicketQDSLRepositoryImpl implements TicketQDSLRepository {
 
         BooleanBuilder whereClause = new BooleanBuilder();
         whereClause.and(ticket.ticketEventStatus.eq(PostStatus.APPROVED));
+
+        if (ticketRatingType != null) {
+            whereClause.and(ticket.ticketRatingType.eq(ticketRatingType));
+        }
 
         if (ticketCategory != null) {
             whereClause.and(ticket.ticketCategory.eq(ticketCategory));

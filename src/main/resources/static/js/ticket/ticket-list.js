@@ -5,6 +5,7 @@ import {loadingMarkService} from "../modules/loadingMark.js";
 // ============================================== 선언부
 const categoryInput = document.getElementById('category');
 const sortInput = document.getElementById('sort');
+const rateInput = document.getElementById('rate')
 
 
 // ===================================================================================================================
@@ -21,42 +22,54 @@ const resetButton = document.querySelector('.FilterResetBtn');
 
 const areaGroupButtons = document.querySelectorAll('.AreaGroupBtn');
 
-const selectBoxBtn = document.querySelector('.SelectBoxBtn');
-const selectBoxList = document.querySelector('.SelectBoxList');
-const selectBoxBtnImg = document.querySelector('.SelectBoxBtnImg');
-const SelectBoxBtnText = document.querySelector('.SelectBoxBtnText');
-
 // 인기순 필터
-selectBoxBtn.addEventListener('click', function () {
-    // 토글 기능을 이용하여 리스트 보이기/숨기기
-    selectBoxList.style.display = (selectBoxList.style.display === 'block') ? 'none' : 'block';
+const sortSelectBoxBtn = document.querySelector('#sortType .SelectBoxBtn');
+const sortSelectBoxList = document.querySelector('#sortType .SelectBoxList');
+const sortSelectBoxBtnImg = document.querySelector('#sortType .SelectBoxBtnImg');
+const sortSelectBoxBtnText = document.querySelector('#sortType .SelectBoxBtnText');
+const sortListItems = document.querySelectorAll('#sortType .SelectBoxListItem');
 
-    // 이미지 변경
-    selectBoxBtnImg.src = (selectBoxList.style.display === 'block') ? '/imgs/arrow_up_gray014.75d8599e.svg' : '/imgs/arrow_down_gray014.f502da9d.svg';
+sortSelectBoxBtn.addEventListener('click', function () {
+    sortSelectBoxList.style.display = (sortSelectBoxList.style.display === 'block') ? 'none' : 'block';
+    sortSelectBoxBtnImg.src = (sortSelectBoxList.style.display === 'block') ? '/imgs/arrow_up_gray014.75d8599e.svg' : '/imgs/arrow_down_gray014.f502da9d.svg';
 });
 
-// 각 리스트 아이템에 대한 이벤트 리스너 추가
-const listItems = document.querySelectorAll('.SelectBoxListItem');
-
-listItems.forEach(item => {
+sortListItems.forEach(item => {
     item.addEventListener('click', function () {
-        // 선택된 아이템에 SelectBoxListItem-select 클래스 추가
-        listItems.forEach(otherItem => {
+        sortListItems.forEach(otherItem => {
             otherItem.classList.remove('SelectBoxListItem-select');
         });
         this.classList.add('SelectBoxListItem-select');
-
-        // 선택된 아이템의 텍스트로 버튼 텍스트 변경
-        SelectBoxBtnText.textContent = this.textContent;
-
-        // 리스트 숨기기
-        selectBoxList.style.display = 'none';
-
-        // 이미지 변경
-        selectBoxBtnImg.src = '/imgs/arrow_down_gray014.f502da9d.svg';
-
+        sortSelectBoxBtnText.textContent = this.textContent;
+        sortSelectBoxList.style.display = 'none';
+        sortSelectBoxBtnImg.src = '/imgs/arrow_down_gray014.f502da9d.svg';
         sortInput.value = this.getAttribute("sortType");
+        reloadPage();
+    });
+});
 
+// 관람 등급 필터
+const ratingSelectBoxBtn = document.querySelector('#ratingType .SelectBoxBtn');
+const ratingSelectBoxList = document.querySelector('#ratingType .SelectBoxList');
+const ratingSelectBoxBtnImg = document.querySelector('#ratingType .SelectBoxBtnImg');
+const ratingSelectBoxBtnText = document.querySelector('#ratingType .SelectBoxBtnText');
+const ratingListItems = document.querySelectorAll('#ratingType .SelectBoxListItem');
+
+ratingSelectBoxBtn.addEventListener('click', function () {
+    ratingSelectBoxList.style.display = (ratingSelectBoxList.style.display === 'block') ? 'none' : 'block';
+    ratingSelectBoxBtnImg.src = (ratingSelectBoxList.style.display === 'block') ? '/imgs/arrow_up_gray014.75d8599e.svg' : '/imgs/arrow_down_gray014.f502da9d.svg';
+});
+
+ratingListItems.forEach(item => {
+    item.addEventListener('click', function () {
+        ratingListItems.forEach(otherItem => {
+            otherItem.classList.remove('SelectBoxListItem-select');
+        });
+        this.classList.add('SelectBoxListItem-select');
+        ratingSelectBoxBtnText.textContent = this.textContent;
+        ratingSelectBoxList.style.display = 'none';
+        ratingSelectBoxBtnImg.src = '/imgs/arrow_down_gray014.f502da9d.svg';
+        rateInput.value = this.getAttribute("ratingType");
         reloadPage();
     });
 });
@@ -336,7 +349,7 @@ function loadNextPage() {
                 top: document.body.scrollHeight,
                 behavior: 'smooth'
             });
-            return showTicketListEvent(page, categoryInput.value, sortInput.value, postContainer);
+            return showTicketListEvent(page, categoryInput.value, rateInput.value, sortInput.value, postContainer);
         })
         .then(() => {
             loadingMarkService.hide(loadingMark);
@@ -360,7 +373,7 @@ function reloadPage() {
                 top: document.body.scrollHeight,
                 behavior: 'smooth'
             });
-            return showTicketListEvent(page, categoryInput.value, sortInput.value, postContainer);
+            return showTicketListEvent(page, categoryInput.value, rateInput.value, sortInput.value, postContainer);
         })
         .then(() => {
             loadingMarkService.hide(loadingMark);

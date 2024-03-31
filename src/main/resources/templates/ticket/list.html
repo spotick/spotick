@@ -41,26 +41,26 @@
         <!-- 카테고리 네비 -->
         <!-- 필터버튼쪽 -->
         <div class="FilterContainer">
-            <div class="EventCheckBoxContainer">
-                <!-- <label for="spaces-event"  class="CheckBoxLabel">
-                  <input type="checkbox" id="spaces-event" name="spaces-event">
-                  <div class="CheckBoxContainer">
-                    <img src="/imgs/rectangle_line_rainyBlue086.76bf0d5f.svg" alt="할인공간" class="CheckBoxImg">
-                    <span class="CheckBoxText">
-                      <img src="/imgs/discountedSpace.24c7ec0d.svg" alt="할인공간">
-                    </span>
-                  </div>
-                </label> -->
-            </div>
             <div class="FilterRightContainer">
-                <div class="SelectBox">
-                    <button class="SelectBoxBtn" type="button"><span class="SelectBoxBtnText">인기순</span>
-                        <!-- 아래화살표 -->
+                <div class="SelectBox" id="ratingType">
+                    <button class="SelectBoxBtn" type="button">
+                        <span class="SelectBoxBtnText">구분 없음</span>
                         <img alt="날짜 형식" class="SelectBoxBtnImg" src="/imgs/arrow_down_gray014.f502da9d.svg">
-                        <!-- 위 화살표 -->
-                        <!-- <img src="/imgs/arrow_up_gray014.75d8599e.svg" alt="날짜 형식" class="SelectBoxBtnImg"> -->
                     </button>
-                    <!-- 인기순 selectBoxList -->
+                    <div class="SelectBoxList">
+                        <button class="SelectBoxListItem SelectBoxListItem-select" ratingType="no" type="button">구분 없음</button>
+                        <button th:each="ratingType : ${T(com.app.spotick.domain.type.ticket.TicketRatingType).values()}"
+                                th:text="${ratingType.displayName}"
+                                th:ratingType="${ratingType}"
+                                class="SelectBoxListItem" type="button">
+                        </button>
+                    </div>
+                </div>
+                <div class="SelectBox" id="sortType">
+                    <button class="SelectBoxBtn" type="button">
+                        <span class="SelectBoxBtnText">인기순</span>
+                        <img alt="날짜 형식" class="SelectBoxBtnImg" src="/imgs/arrow_down_gray014.f502da9d.svg">
+                    </button>
                     <div class="SelectBoxList">
                         <button th:each="sortType, iterStat : ${T(com.app.spotick.util.type.TicketSortType).values()}"
                                 th:text="${sortType.displayName}"
@@ -70,13 +70,11 @@
                         </button>
                     </div>
                 </div>
-                <!-- 모달창 나오는 버튼 -->
                 <button class="FilterBtn" type="button">
                     <img alt="필터" src="/imgs/filter_filled_rainyblue086.50bb2e40.svg">
                 </button>
             </div>
         </div>
-        <!-- 필터버튼쪽 -->
         <!-- 필터 모달창 -->
         <div class="FilterModalContainer">
             <div style="position: relative; transform: translateY(0px) translateZ(0px);">
@@ -141,7 +139,7 @@
                             <div class="AreasCityContainer On" id="Seoul">
                                 <div class="AreasCheckboxContainer">
                                     <label class="CheckBoxLabel " for="area-code-0">
-                                        <input id="area-code-0" name="전체" type="checkbox">
+                                        <input name="전체" type="checkbox">
                                         <div class="CheckBoxContainer">
                                             <img alt="전체검색" class="CheckBoxImg"
                                                  src="/imgs/rectangle_line_rainyBlue086.76bf0d5f.svg">
@@ -2500,8 +2498,11 @@
                             <p class="ItemSpaceName" th:text="*{ticketTitle}"></p>
                         </div>
                         <div class="ItemPriceContainer">
-                            <span class="ItemPrice"
+                            <div class="price-wrap">
+                                <span class="price-sub">최저가</span>
+                                <span class="ItemPrice"
                                   th:text="${#numbers.formatInteger(ticket.lowestPrice, 3, 'COMMA')} + '원'"></span>
+                            </div>
                             <span class="ItemDate"
                                   th:text="*{#temporals.format(startDate, 'yyyy.MM.dd') + ' ~ ' + #temporals.format(endDate, 'yyyy.MM.dd')}"></span>
                         </div>
@@ -2518,6 +2519,7 @@
 <input id="isLoggedIn" th:value="${#authorization.expression('isAuthenticated()')}" type="hidden"/>
 <input id="category" value="ALL" type="hidden">
 <input id="sort" value="POPULARITY" type="hidden">
+<input id="rate" value="ALL" type="hidden">
 <input id="next" th:value="${ticketList.last}" type="hidden">
 
 <div th:replace="~{global-templates/header-footer :: footer}"></div>

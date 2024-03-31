@@ -7,10 +7,10 @@ export const ticketLayout = (() => {
             const formattedPrice = ticket.lowestPrice.toLocaleString('ko-KR');
 
             const startDate = new Date(ticket.startDate);
-            const formattedStartDate = startDate.toLocaleDateString('ko-KR');
+            const formattedStartDate = `${startDate.getFullYear()}.${startDate.getMonth() + 1}.${startDate.getDate()}`;
 
             const endDate = new Date(ticket.endDate);
-            const formattedEndDate = endDate.toLocaleDateString('ko-KR');
+            const formattedEndDate = `${endDate.getFullYear()}.${endDate.getMonth() + 1}.${endDate.getDate()}`;
 
             html += `
                 <div class="OneItemContainer hover">
@@ -55,7 +55,10 @@ export const ticketLayout = (() => {
                                 <p class="ItemSpaceName">${ticket.ticketTitle}</p>
                             </div>
                             <div class="ItemPriceContainer">
-                                <span class="ItemPrice">${formattedPrice}원</span>
+                                <div class="price-wrap">
+                                    <span class="price-sub">최저가</span>
+                                    <span class="ItemPrice">${formattedPrice}원</span>
+                                </div>
                                 <span class="ItemDate">${formattedStartDate} ~ ${formattedEndDate}</span>
                             </div>
                         </div>
