@@ -4,6 +4,7 @@ import com.app.spotick.api.response.CommonResponse;
 import com.app.spotick.domain.dto.ticket.TicketListDto;
 import com.app.spotick.domain.dto.ticket.grade.TicketGradeSaleInfoDto;
 import com.app.spotick.domain.dto.user.UserDetailsDto;
+import com.app.spotick.domain.type.ticket.TicketCategory;
 import com.app.spotick.service.ticket.TicketService;
 import com.app.spotick.util.type.SortType;
 import com.app.spotick.util.type.TicketSortType;
@@ -27,12 +28,13 @@ public class TicketRestController {
 
     @GetMapping("/list")
     public ResponseEntity<Slice<TicketListDto>> ticketList(@RequestParam("page") int page,
-                                                           @RequestParam("ticketSortType") TicketSortType ticketSortType,
+                                                           @RequestParam(value = "category", required = false) TicketCategory category,
+                                                           @RequestParam("sortType") TicketSortType sortType,
                                                            @AuthenticationPrincipal UserDetailsDto userDetailsDto) {
         Pageable pageable = PageRequest.of(page, 12);
         Long userId = userDetailsDto == null ? null : userDetailsDto.getId();
 
-        Slice<TicketListDto> ticketList = ticketService.findTicketListPage(pageable, ticketSortType, userId);
+        Slice<TicketListDto> ticketList = ticketService.findTicketListPage(pageable, category, sortType, userId);
 
         return ResponseEntity.ok(ticketList);
     }

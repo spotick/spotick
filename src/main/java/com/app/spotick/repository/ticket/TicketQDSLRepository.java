@@ -6,6 +6,7 @@ import com.app.spotick.domain.dto.ticket.TicketEditDto;
 import com.app.spotick.domain.dto.ticket.TicketInfoDto;
 import com.app.spotick.domain.dto.ticket.TicketListDto;
 import com.app.spotick.domain.entity.ticket.TicketInquiry;
+import com.app.spotick.domain.type.ticket.TicketCategory;
 import com.app.spotick.domain.type.ticket.TicketRequestType;
 import com.app.spotick.util.type.SortType;
 import com.app.spotick.util.type.TicketSortType;
@@ -20,7 +21,7 @@ public interface TicketQDSLRepository {
 
     Optional<TicketInfoDto> findTicketInfoByTicketId(Long ticketId, Long userId);
 
-    Slice<TicketListDto> findTicketListPage(Pageable pageable, TicketSortType ticketSortType, Long userId);
+    Slice<TicketListDto> findTicketListPage(Pageable pageable, TicketCategory ticketCategory, TicketSortType ticketSortType, Long userId);
 
     Optional<TicketDetailDto> findTicketDetailById(Long ticketId, Long userId);
 

@@ -6,6 +6,7 @@ import com.app.spotick.domain.dto.ticket.grade.TicketGradeDto;
 import com.app.spotick.domain.dto.ticket.grade.TicketGradeSaleInfoDto;
 import com.app.spotick.domain.type.payment.PaymentStatus;
 import com.app.spotick.domain.type.post.PostStatus;
+import com.app.spotick.domain.type.ticket.TicketCategory;
 import com.app.spotick.domain.type.ticket.TicketRequestType;
 import com.app.spotick.util.type.TicketSortType;
 import com.querydsl.core.BooleanBuilder;
@@ -179,12 +180,19 @@ public class TicketQDSLRepositoryImpl implements TicketQDSLRepository {
     }
 
     @Override
-    public Slice<TicketListDto> findTicketListPage(Pageable pageable, TicketSortType ticketSortType, Long userId) {
+    public Slice<TicketListDto> findTicketListPage(Pageable pageable, TicketCategory ticketCategory, TicketSortType ticketSortType, Long userId) {
 
         JPQLQuery<Integer> lowestPrice = JPAExpressions.select(ticketGrade.price.min())
                 .from(ticketGrade)
                 .where(ticketGrade.ticket.eq(ticket))
                 .groupBy(ticketGrade.ticket);
+
+        BooleanBuilder whereClause = new BooleanBuilder();
+        whereClause.and(ticket.ticketEventStatus.eq(PostStatus.APPROVED));
+
+        if (ticketCategory != null) {
+            whereClause.and(ticket.ticketCategory.eq(ticketCategory));
+        }
 
         List<TicketListDto> contents = queryFactory
                 .select(Projections.constructor(TicketListDto.class,
@@ -202,7 +210,7 @@ public class TicketQDSLRepositoryImpl implements TicketQDSLRepository {
                         isLiked(userId)
                 ))
                 .from(ticket)
-                .where(ticket.ticketEventStatus.eq(PostStatus.APPROVED))
+                .where(whereClause)
                 .orderBy(createOrderByClause(ticketSortType))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize() + 1)
@@ -267,7 +275,10 @@ public class TicketQDSLRepositoryImpl implements TicketQDSLRepository {
 
         List<TicketEditDto> content = queryFactory
                 .from(ticket)
-                .where(ticket.id.eq(ticketId), ticket.user.id.eq(userId))
+                .where(
+                        ticket.id.eq(ticketId),
+                        ticket.user.id.eq(userId)
+                )
                 .leftJoin(ticket.ticketGrades, ticketGrade)
                 .orderBy(ticketGrade.price.asc())
                 .transform(groupBy(ticket.id).list(Projections.constructor(TicketEditDto.class,

@@ -28,36 +28,12 @@
         <!-- 카테고리 네비 -->
         <div class="CategoryContainer">
             <div class="swiper">
-                <div class="swiper-slide active">
+                <div class="swiper-slide active" category="ALL">
                     <div class="CategoryItem">전체</div>
                     <div class="underline"></div>
                 </div>
-                <div class="swiper-slide">
-                    <div class="CategoryItem">뮤지컬</div>
-                    <div class="underline"></div>
-                </div>
-                <div class="swiper-slide">
-                    <div class="CategoryItem">콘서트</div>
-                    <div class="underline"></div>
-                </div>
-                <div class="swiper-slide">
-                    <div class="CategoryItem">연극</div>
-                    <div class="underline"></div>
-                </div>
-                <div class="swiper-slide">
-                    <div class="CategoryItem">클래식/무용</div>
-                    <div class="underline"></div>
-                </div>
-                <div class="swiper-slide">
-                    <div class="CategoryItem">스포츠</div>
-                    <div class="underline"></div>
-                </div>
-                <div class="swiper-slide">
-                    <div class="CategoryItem">전시/행사</div>
-                    <div class="underline"></div>
-                </div>
-                <div class="swiper-slide">
-                    <div class="CategoryItem">기타</div>
+                <div class="swiper-slide" th:each="category : ${T(com.app.spotick.domain.type.ticket.TicketCategory).values()}" th:category="${category}">
+                    <div class="CategoryItem" th:text="${category.displayName}"></div>
                     <div class="underline"></div>
                 </div>
             </div>
@@ -92,10 +68,6 @@
                                 th:sortType="${sortType}"
                                 class="SelectBoxListItem" type="button">
                         </button>
-                        <!--                        <button class="SelectBoxListItem" type="button">관심순</button>-->
-                        <!--                        <button class="SelectBoxListItem" type="button">낮은 가격순</button>-->
-                        <!--                        <button class="SelectBoxListItem" type="button">높은 가격순</button>-->
-                        <!--                        <button class="SelectBoxListItem" type="button">조회순</button>-->
                     </div>
                 </div>
                 <!-- 모달창 나오는 버튼 -->
@@ -2544,6 +2516,7 @@
 </div>
 
 <input id="isLoggedIn" th:value="${#authorization.expression('isAuthenticated()')}" type="hidden"/>
+<input id="category" value="ALL" type="hidden">
 <input id="sort" value="POPULARITY" type="hidden">
 <input id="next" th:value="${ticketList.last}" type="hidden">
 

@@ -45,7 +45,7 @@ public class TicketController {
         Pageable pageable = PageRequest.of(0, 12);
         Long userId = userDetailsDto == null ? null : userDetailsDto.getId();
 
-        Slice<TicketListDto> ticketList = ticketService.findTicketListPage(pageable, TicketSortType.POPULARITY, userId);
+        Slice<TicketListDto> ticketList = ticketService.findTicketListPage(pageable, null, TicketSortType.POPULARITY, userId);
 
         model.addAttribute("ticketList", ticketList);
     }
