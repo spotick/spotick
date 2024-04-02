@@ -47,8 +47,7 @@
 }
 
 .CheckBoxLabel > input {
-    position: absolute;
-    inset: 0;
+    display: none;
 }
 
 .CheckBoxContainer {
@@ -58,8 +57,14 @@
     gap: 4px;
 }
 
-.CheckBoxImg {
+.checkBoxImg {
+    background-image: url("/imgs/rectangle_line_rainyBlue086.76bf0d5f.svg");
     width: 24px;
+    height: 24px;
+}
+
+input[type="checkbox"]:checked + .CheckBoxContainer .checkBoxImg {
+    background-image: url("/imgs/checkRectangle_filled_sweetBlue046.0cd80fee.svg");
 }
 
 .CheckBoxText {
