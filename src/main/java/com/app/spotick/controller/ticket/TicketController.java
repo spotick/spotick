@@ -108,7 +108,7 @@ public class TicketController {
                              @Valid @ModelAttribute("TicketEditDto") TicketEditDto ticketEditDto,
                              BindingResult result,
                              @AuthenticationPrincipal UserDetailsDto userDetailsDto,
-                             RedirectAttributes redirectAttributes) throws IOException {
+                             RedirectAttributes redirectAttributes) {
 
         System.out.println("ticketEditDto = " + ticketEditDto);
 

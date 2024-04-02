@@ -2,7 +2,6 @@ package com.app.spotick.util.search;
 
 import lombok.Data;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Data
