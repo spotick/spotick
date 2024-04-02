@@ -4,6 +4,7 @@ import com.app.spotick.domain.dto.ticket.*;
 import com.app.spotick.domain.dto.ticket.grade.TicketGradeSaleInfoDto;
 import com.app.spotick.domain.type.ticket.TicketCategory;
 import com.app.spotick.domain.type.ticket.TicketRatingType;
+import com.app.spotick.util.search.DistrictFilter;
 import com.app.spotick.util.type.SortType;
 import com.app.spotick.util.type.TicketSortType;
 import org.springframework.data.domain.Pageable;
@@ -17,7 +18,7 @@ public interface TicketService {
 
     void registerTicket(TicketRegisterDto ticketRegisterDto, Long userId) throws IOException;
 
-    Slice<TicketListDto> findTicketListPage(Pageable pageable, TicketCategory ticketCategory, TicketRatingType ticketRatingType, TicketSortType ticketSortType, Long userId);
+    Slice<TicketListDto> findTicketListPage(Pageable pageable, TicketCategory ticketCategory, TicketRatingType ticketRatingType, TicketSortType ticketSortType, DistrictFilter districtFilter, Long userId);
 
     List<TicketGradeSaleInfoDto> findTicketGrades(Long ticketId, LocalDate date);
 

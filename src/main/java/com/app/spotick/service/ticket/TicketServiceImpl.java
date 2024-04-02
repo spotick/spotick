@@ -16,7 +16,7 @@ import com.app.spotick.repository.ticket.grade.TicketGradeRepository;
 import com.app.spotick.repository.ticket.modifyRequest.TicketModifyReqRepository;
 import com.app.spotick.repository.user.UserRepository;
 import com.app.spotick.service.ticket.file.TicketFileService;
-import com.app.spotick.util.type.SortType;
+import com.app.spotick.util.search.DistrictFilter;
 import com.app.spotick.util.type.TicketSortType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -67,8 +67,8 @@ public class TicketServiceImpl implements TicketService {
     }
 
     @Override
-    public Slice<TicketListDto> findTicketListPage(Pageable pageable, TicketCategory ticketCategory, TicketRatingType ticketRatingType, TicketSortType ticketSortType, Long userId) {
-        return ticketRepository.findTicketListPage(pageable, ticketCategory, ticketRatingType, ticketSortType, userId);
+    public Slice<TicketListDto> findTicketListPage(Pageable pageable, TicketCategory ticketCategory, TicketRatingType ticketRatingType, TicketSortType ticketSortType, DistrictFilter districtFilter, Long userId) {
+        return ticketRepository.findTicketListPage(pageable, ticketCategory, ticketRatingType, ticketSortType, districtFilter, userId);
     }
 
 

@@ -5,9 +5,7 @@ import com.app.spotick.domain.dto.ticket.TicketEditDto;
 import com.app.spotick.domain.dto.ticket.TicketListDto;
 import com.app.spotick.domain.dto.ticket.TicketRegisterDto;
 import com.app.spotick.domain.dto.user.UserDetailsDto;
-import com.app.spotick.domain.type.ticket.TicketCategory;
 import com.app.spotick.service.ticket.TicketService;
-import com.app.spotick.util.type.SortType;
 import com.app.spotick.util.type.TicketSortType;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +22,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
-import java.util.NoSuchElementException;
 
 @Controller
 @Slf4j
@@ -45,7 +42,7 @@ public class TicketController {
         Pageable pageable = PageRequest.of(0, 12);
         Long userId = userDetailsDto == null ? null : userDetailsDto.getId();
 
-        Slice<TicketListDto> ticketList = ticketService.findTicketListPage(pageable, null, null, TicketSortType.POPULARITY, userId);
+        Slice<TicketListDto> ticketList = ticketService.findTicketListPage(pageable, null, null, TicketSortType.POPULARITY, null, userId);
 
         model.addAttribute("ticketList", ticketList);
     }

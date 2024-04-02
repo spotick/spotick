@@ -382,6 +382,10 @@ input[type="checkbox"]:checked + .CheckBoxContainer .checkBoxImg {
     cursor: pointer;
 }
 
+.SelectedItem:not(:last-child) {
+    margin-right: 10px;
+}
+
 .SelectedItemText {
     font-size: 13px;
     line-height: 20px;

@@ -7,14 +7,13 @@ import com.app.spotick.domain.dto.user.UserDetailsDto;
 import com.app.spotick.domain.type.ticket.TicketCategory;
 import com.app.spotick.domain.type.ticket.TicketRatingType;
 import com.app.spotick.service.ticket.TicketService;
-import com.app.spotick.util.type.SortType;
+import com.app.spotick.util.search.DistrictFilter;
 import com.app.spotick.util.type.TicketSortType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -33,11 +32,15 @@ public class TicketRestController {
                                                            @RequestParam(value = "category", required = false) TicketCategory category,
                                                            @RequestParam(value = "ratingType", required = false) TicketRatingType ratingType,
                                                            @RequestParam("sortType") TicketSortType sortType,
+                                                           @RequestParam(value = "district", required = false) String district,
+                                                           @RequestParam(value = "detailDistrict", required = false) List<String> detailDistrict,
                                                            @AuthenticationPrincipal UserDetailsDto userDetailsDto) {
         Pageable pageable = PageRequest.of(page, 12);
         Long userId = userDetailsDto == null ? null : userDetailsDto.getId();
 
-        Slice<TicketListDto> ticketList = ticketService.findTicketListPage(pageable, category, ratingType, sortType, userId);
+        DistrictFilter districtFilter = new DistrictFilter(district, detailDistrict);
+
+        Slice<TicketListDto> ticketList = ticketService.findTicketListPage(pageable, category, ratingType, sortType, districtFilter, userId);
 
         return ResponseEntity.ok(ticketList);
     }

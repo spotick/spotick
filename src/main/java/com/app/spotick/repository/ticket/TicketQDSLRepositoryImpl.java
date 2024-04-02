@@ -9,6 +9,7 @@ import com.app.spotick.domain.type.post.PostStatus;
 import com.app.spotick.domain.type.ticket.TicketCategory;
 import com.app.spotick.domain.type.ticket.TicketRatingType;
 import com.app.spotick.domain.type.ticket.TicketRequestType;
+import com.app.spotick.util.search.DistrictFilter;
 import com.app.spotick.util.type.TicketSortType;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Order;
@@ -185,6 +186,7 @@ public class TicketQDSLRepositoryImpl implements TicketQDSLRepository {
                                                    TicketCategory ticketCategory,
                                                    TicketRatingType ticketRatingType,
                                                    TicketSortType ticketSortType,
+                                                   DistrictFilter districtFilter,
                                                    Long userId) {
 
         JPQLQuery<Integer> lowestPrice = JPAExpressions.select(ticketGrade.price.min())
@@ -201,6 +203,19 @@ public class TicketQDSLRepositoryImpl implements TicketQDSLRepository {
 
         if (ticketCategory != null) {
             whereClause.and(ticket.ticketCategory.eq(ticketCategory));
+        }
+
+        if (districtFilter != null && districtFilter.getDistrict() != null) {
+
+            if (districtFilter.getDetailDistrict() != null) {
+                BooleanBuilder booleanBuilder = new BooleanBuilder();
+                for (String detailDistrict : districtFilter.getDetailDistrict()) {
+                    booleanBuilder.or(ticket.ticketEventAddress.address.like(districtFilter.getDistrict() + "%" + detailDistrict + "%"));
+                }
+                whereClause.and(booleanBuilder);
+            } else {
+                whereClause.and(ticket.ticketEventAddress.address.like(districtFilter.getDistrict() + "%"));
+            }
         }
 
         List<TicketListDto> contents = queryFactory

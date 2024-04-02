@@ -104,17 +104,17 @@
                     <div class="FilterContentContainer">
                         <!-- 지역 -->
                         <div class="AreasContainer">
-                            <div class="AreaGroupContainer">
-                                <button class="AreaGroupBtn On" data-target="서울" type="button">서울</button>
-                                <button class="AreaGroupBtn" data-target="경기" type="button">경기</button>
-                                <button class="AreaGroupBtn" data-target="인천" type="button">인천</button>
-                                <button class="AreaGroupBtn" data-target="부산" type="button">부산</button>
-                                <button class="AreaGroupBtn" data-target="대전" type="button">대전</button>
-                                <button class="AreaGroupBtn" data-target="대구" type="button">대구</button>
-                                <button class="AreaGroupBtn" data-target="울산" type="button">울산</button>
-                                <button class="AreaGroupBtn" data-target="세종" type="button">세종</button>
-                                <button class="AreaGroupBtn" data-target="광주" type="button">광주</button>
-                                <button class="AreaGroupBtn" data-target="강원" type="button">강원</button>
+                            <div class="AreaGroupContainer" id="areaGroupContainer">
+                                <button class="AreaGroupBtn On" data-target="서울특별시" type="button">서울</button>
+                                <button class="AreaGroupBtn" data-target="경기도" type="button">경기</button>
+                                <button class="AreaGroupBtn" data-target="인천광역시" type="button">인천</button>
+                                <button class="AreaGroupBtn" data-target="부산광역시" type="button">부산</button>
+                                <button class="AreaGroupBtn" data-target="대전광역시" type="button">대전</button>
+                                <button class="AreaGroupBtn" data-target="대구광역시" type="button">대구</button>
+                                <button class="AreaGroupBtn" data-target="울산광역시" type="button">울산</button>
+                                <button class="AreaGroupBtn" data-target="세종특별자치시" type="button">세종</button>
+                                <button class="AreaGroupBtn" data-target="광주광역시" type="button">광주</button>
+                                <button class="AreaGroupBtn" data-target="강원도" type="button">강원</button>
                                 <button class="AreaGroupBtn" data-target="충청북도" type="button">충북</button>
                                 <button class="AreaGroupBtn" data-target="충청남도" type="button">충남</button>
                                 <button class="AreaGroupBtn" data-target="경상북도" type="button">경북</button>
@@ -124,7 +124,7 @@
                                 <button class="AreaGroupBtn" data-target="제주특별자치도" type="button">제주</button>
                             </div>
                             <!-- 지역 - 서울 -->
-                            <div class="AreasCityContainer On" id="서울">
+                            <div class="AreasCityContainer On" id="서울특별시">
                                 <div class="AreasCheckboxContainer">
                                     <label class="CheckBoxLabel">
                                         <input class="checkBox all" name="서울특별시" type="checkbox">
@@ -135,18 +135,18 @@
                                     </label>
                                 </div>
                                 <div class="AreasCheckboxContainer"
-                                     th:each="district : ${T(com.app.spotick.domain.district.SeoulDistrict).values()}">
+                                     th:each="detailDistrict : ${T(com.app.spotick.domain.district.SeoulDistrict).values()}">
                                     <label class="CheckBoxLabel">
-                                        <input class="checkBox" th:name="${district}" type="checkbox">
+                                        <input class="checkBox" th:name="${detailDistrict}" type="checkbox">
                                         <div class="CheckBoxContainer">
                                             <div class="checkBoxImg"></div>
-                                            <span class="CheckBoxText" th:text="${district}"></span>
+                                            <span class="CheckBoxText" th:text="${detailDistrict}"></span>
                                         </div>
                                     </label>
                                 </div>
                             </div>
                             <!-- 지역 - 경기 -->
-                            <div class="AreasCityContainer" id="경기">
+                            <div class="AreasCityContainer" id="경기도">
                                 <div class="AreasCheckboxContainer">
                                     <label class="CheckBoxLabel">
                                         <input class="checkBox all" name="경기도" type="checkbox">
@@ -157,18 +157,18 @@
                                     </label>
                                 </div>
                                 <div class="AreasCheckboxContainer"
-                                     th:each="district : ${T(com.app.spotick.domain.district.GyenggiDistrict).values()}">
+                                     th:each="detailDistrict : ${T(com.app.spotick.domain.district.GyenggiDistrict).values()}">
                                     <label class="CheckBoxLabel">
-                                        <input class="checkBox" th:name="${district}" type="checkbox">
+                                        <input class="checkBox" th:name="${detailDistrict}" type="checkbox">
                                         <div class="CheckBoxContainer">
                                             <div class="checkBoxImg"></div>
-                                            <span class="CheckBoxText" th:text="${district}"></span>
+                                            <span class="CheckBoxText" th:text="${detailDistrict}"></span>
                                         </div>
                                     </label>
                                 </div>
                             </div>
                             <!-- 지역 - 인천 -->
-                            <div class="AreasCityContainer" id="인천">
+                            <div class="AreasCityContainer" id="인천광역시">
                                 <div class="AreasCheckboxContainer">
                                     <label class="CheckBoxLabel">
                                         <input class="checkBox all" name="인천광역시" type="checkbox">
@@ -179,18 +179,18 @@
                                     </label>
                                 </div>
                                 <div class="AreasCheckboxContainer"
-                                     th:each="district : ${T(com.app.spotick.domain.district.IncheonDistrict).values()}">
+                                     th:each="detailDistrict : ${T(com.app.spotick.domain.district.IncheonDistrict).values()}">
                                     <label class="CheckBoxLabel">
-                                        <input class="checkBox" th:name="${district}" type="checkbox">
+                                        <input class="checkBox" th:name="${detailDistrict}" type="checkbox">
                                         <div class="CheckBoxContainer">
                                             <div class="checkBoxImg"></div>
-                                            <span class="CheckBoxText" th:text="${district}"></span>
+                                            <span class="CheckBoxText" th:text="${detailDistrict}"></span>
                                         </div>
                                     </label>
                                 </div>
                             </div>
                             <!-- 지역 - 부산 -->
-                            <div class="AreasCityContainer" id="부산">
+                            <div class="AreasCityContainer" id="부산광역시">
                                 <div class="AreasCheckboxContainer">
                                     <label class="CheckBoxLabel">
                                         <input class="checkBox all" name="부산광역시" type="checkbox">
@@ -201,18 +201,18 @@
                                     </label>
                                 </div>
                                 <div class="AreasCheckboxContainer"
-                                     th:each="district : ${T(com.app.spotick.domain.district.BusanDistrict).values()}">
+                                     th:each="detailDistrict : ${T(com.app.spotick.domain.district.BusanDistrict).values()}">
                                     <label class="CheckBoxLabel">
-                                        <input class="checkBox" th:name="${district}" type="checkbox">
+                                        <input class="checkBox" th:name="${detailDistrict}" type="checkbox">
                                         <div class="CheckBoxContainer">
                                             <div class="checkBoxImg"></div>
-                                            <span class="CheckBoxText" th:text="${district}"></span>
+                                            <span class="CheckBoxText" th:text="${detailDistrict}"></span>
                                         </div>
                                     </label>
                                 </div>
                             </div>
                             <!-- 지역 - 대전 -->
-                            <div class="AreasCityContainer" id="대전">
+                            <div class="AreasCityContainer" id="대전광역시">
                                 <div class="AreasCheckboxContainer">
                                     <label class="CheckBoxLabel">
                                         <input class="checkBox all" name="대전광역시" type="checkbox">
@@ -223,18 +223,18 @@
                                     </label>
                                 </div>
                                 <div class="AreasCheckboxContainer"
-                                     th:each="district : ${T(com.app.spotick.domain.district.DaejeonDistrict).values()}">
+                                     th:each="detailDistrict : ${T(com.app.spotick.domain.district.DaejeonDistrict).values()}">
                                     <label class="CheckBoxLabel">
-                                        <input class="checkBox" th:name="${district}" type="checkbox">
+                                        <input class="checkBox" th:name="${detailDistrict}" type="checkbox">
                                         <div class="CheckBoxContainer">
                                             <div class="checkBoxImg"></div>
-                                            <span class="CheckBoxText" th:text="${district}"></span>
+                                            <span class="CheckBoxText" th:text="${detailDistrict}"></span>
                                         </div>
                                     </label>
                                 </div>
                             </div>
                             <!-- 지역 - 대구 -->
-                            <div class="AreasCityContainer" id="대구">
+                            <div class="AreasCityContainer" id="대구광역시">
                                 <div class="AreasCheckboxContainer">
                                     <label class="CheckBoxLabel">
                                         <input class="checkBox all" name="대구광역시" type="checkbox">
@@ -245,18 +245,18 @@
                                     </label>
                                 </div>
                                 <div class="AreasCheckboxContainer"
-                                     th:each="district : ${T(com.app.spotick.domain.district.DaeguDistrict).values()}">
+                                     th:each="detailDistrict : ${T(com.app.spotick.domain.district.DaeguDistrict).values()}">
                                     <label class="CheckBoxLabel">
-                                        <input class="checkBox" th:name="${district}" type="checkbox">
+                                        <input class="checkBox" th:name="${detailDistrict}" type="checkbox">
                                         <div class="CheckBoxContainer">
                                             <div class="checkBoxImg"></div>
-                                            <span class="CheckBoxText" th:text="${district}"></span>
+                                            <span class="CheckBoxText" th:text="${detailDistrict}"></span>
                                         </div>
                                     </label>
                                 </div>
                             </div>
                             <!-- 지역 - 울산 -->
-                            <div class="AreasCityContainer" id="울산">
+                            <div class="AreasCityContainer" id="울산광역시">
                                 <div class="AreasCheckboxContainer">
                                     <label class="CheckBoxLabel">
                                         <input class="checkBox all" name="울산광역시" type="checkbox">
@@ -267,18 +267,18 @@
                                     </label>
                                 </div>
                                 <div class="AreasCheckboxContainer"
-                                     th:each="district : ${T(com.app.spotick.domain.district.UlsanDistrict).values()}">
+                                     th:each="detailDistrict : ${T(com.app.spotick.domain.district.UlsanDistrict).values()}">
                                     <label class="CheckBoxLabel">
-                                        <input class="checkBox" th:name="${district}" type="checkbox">
+                                        <input class="checkBox" th:name="${detailDistrict}" type="checkbox">
                                         <div class="CheckBoxContainer">
                                             <div class="checkBoxImg"></div>
-                                            <span class="CheckBoxText" th:text="${district}"></span>
+                                            <span class="CheckBoxText" th:text="${detailDistrict}"></span>
                                         </div>
                                     </label>
                                 </div>
                             </div>
                             <!-- 지역 - 세종 -->
-                            <div class="AreasCityContainer" id="세종">
+                            <div class="AreasCityContainer" id="세종특별자치시">
                                 <div class="AreasCheckboxContainer">
                                     <label class="CheckBoxLabel">
                                         <input class="checkBox all" name="세종특별자치시" type="checkbox">
@@ -290,7 +290,7 @@
                                 </div>
                             </div>
                             <!-- 지역 - 광주 -->
-                            <div class="AreasCityContainer" id="광주">
+                            <div class="AreasCityContainer" id="광주광역시">
                                 <div class="AreasCheckboxContainer">
                                     <label class="CheckBoxLabel">
                                         <input class="checkBox all" name="광주광역시" type="checkbox">
@@ -301,18 +301,18 @@
                                     </label>
                                 </div>
                                 <div class="AreasCheckboxContainer"
-                                     th:each="district : ${T(com.app.spotick.domain.district.GwangjuDistrict).values()}">
+                                     th:each="detailDistrict : ${T(com.app.spotick.domain.district.GwangjuDistrict).values()}">
                                     <label class="CheckBoxLabel">
-                                        <input class="checkBox" th:name="${district}" type="checkbox">
+                                        <input class="checkBox" th:name="${detailDistrict}" type="checkbox">
                                         <div class="CheckBoxContainer">
                                             <div class="checkBoxImg"></div>
-                                            <span class="CheckBoxText" th:text="${district}"></span>
+                                            <span class="CheckBoxText" th:text="${detailDistrict}"></span>
                                         </div>
                                     </label>
                                 </div>
                             </div>
                             <!-- 지역 - 강원 -->
-                            <div class="AreasCityContainer" id="강원">
+                            <div class="AreasCityContainer" id="강원도">
                                 <div class="AreasCheckboxContainer">
                                     <label class="CheckBoxLabel">
                                         <input class="checkBox all" name="강원특별자치도" type="checkbox">
@@ -323,12 +323,12 @@
                                     </label>
                                 </div>
                                 <div class="AreasCheckboxContainer"
-                                     th:each="district : ${T(com.app.spotick.domain.district.GangwonDistrict).values()}">
+                                     th:each="detailDistrict : ${T(com.app.spotick.domain.district.GangwonDistrict).values()}">
                                     <label class="CheckBoxLabel">
-                                        <input class="checkBox" th:name="${district}" type="checkbox">
+                                        <input class="checkBox" th:name="${detailDistrict}" type="checkbox">
                                         <div class="CheckBoxContainer">
                                             <div class="checkBoxImg"></div>
-                                            <span class="CheckBoxText" th:text="${district}"></span>
+                                            <span class="CheckBoxText" th:text="${detailDistrict}"></span>
                                         </div>
                                     </label>
                                 </div>
@@ -345,12 +345,12 @@
                                     </label>
                                 </div>
                                 <div class="AreasCheckboxContainer"
-                                     th:each="district : ${T(com.app.spotick.domain.district.ChungbukDistrict).values()}">
+                                     th:each="detailDistrict : ${T(com.app.spotick.domain.district.ChungbukDistrict).values()}">
                                     <label class="CheckBoxLabel">
-                                        <input class="checkBox" th:name="${district}" type="checkbox">
+                                        <input class="checkBox" th:name="${detailDistrict}" type="checkbox">
                                         <div class="CheckBoxContainer">
                                             <div class="checkBoxImg"></div>
-                                            <span class="CheckBoxText" th:text="${district}"></span>
+                                            <span class="CheckBoxText" th:text="${detailDistrict}"></span>
                                         </div>
                                     </label>
                                 </div>
@@ -367,12 +367,12 @@
                                     </label>
                                 </div>
                                 <div class="AreasCheckboxContainer"
-                                     th:each="district : ${T(com.app.spotick.domain.district.ChungnamDistrict).values()}">
+                                     th:each="detailDistrict : ${T(com.app.spotick.domain.district.ChungnamDistrict).values()}">
                                     <label class="CheckBoxLabel">
-                                        <input class="checkBox" th:name="${district}" type="checkbox">
+                                        <input class="checkBox" th:name="${detailDistrict}" type="checkbox">
                                         <div class="CheckBoxContainer">
                                             <div class="checkBoxImg"></div>
-                                            <span class="CheckBoxText" th:text="${district}"></span>
+                                            <span class="CheckBoxText" th:text="${detailDistrict}"></span>
                                         </div>
                                     </label>
                                 </div>
@@ -389,12 +389,12 @@
                                     </label>
                                 </div>
                                 <div class="AreasCheckboxContainer"
-                                     th:each="district : ${T(com.app.spotick.domain.district.GyeongbukDistrict).values()}">
+                                     th:each="detailDistrict : ${T(com.app.spotick.domain.district.GyeongbukDistrict).values()}">
                                     <label class="CheckBoxLabel">
-                                        <input class="checkBox" th:name="${district}" type="checkbox">
+                                        <input class="checkBox" th:name="${detailDistrict}" type="checkbox">
                                         <div class="CheckBoxContainer">
                                             <div class="checkBoxImg"></div>
-                                            <span class="CheckBoxText" th:text="${district}"></span>
+                                            <span class="CheckBoxText" th:text="${detailDistrict}"></span>
                                         </div>
                                     </label>
                                 </div>
@@ -411,12 +411,12 @@
                                     </label>
                                 </div>
                                 <div class="AreasCheckboxContainer"
-                                     th:each="district : ${T(com.app.spotick.domain.district.GyeongnamDistrict).values()}">
+                                     th:each="detailDistrict : ${T(com.app.spotick.domain.district.GyeongnamDistrict).values()}">
                                     <label class="CheckBoxLabel">
-                                        <input class="checkBox" th:name="${district}" type="checkbox">
+                                        <input class="checkBox" th:name="${detailDistrict}" type="checkbox">
                                         <div class="CheckBoxContainer">
                                             <div class="checkBoxImg"></div>
-                                            <span class="CheckBoxText" th:text="${district}"></span>
+                                            <span class="CheckBoxText" th:text="${detailDistrict}"></span>
                                         </div>
                                     </label>
                                 </div>
@@ -433,12 +433,12 @@
                                     </label>
                                 </div>
                                 <div class="AreasCheckboxContainer"
-                                     th:each="district : ${T(com.app.spotick.domain.district.JeonbukDistrict).values()}">
+                                     th:each="detailDistrict : ${T(com.app.spotick.domain.district.JeonbukDistrict).values()}">
                                     <label class="CheckBoxLabel">
-                                        <input class="checkBox" th:name="${district}" type="checkbox">
+                                        <input class="checkBox" th:name="${detailDistrict}" type="checkbox">
                                         <div class="CheckBoxContainer">
                                             <div class="checkBoxImg"></div>
-                                            <span class="CheckBoxText" th:text="${district}"></span>
+                                            <span class="CheckBoxText" th:text="${detailDistrict}"></span>
                                         </div>
                                     </label>
                                 </div>
@@ -455,12 +455,12 @@
                                     </label>
                                 </div>
                                 <div class="AreasCheckboxContainer"
-                                     th:each="district : ${T(com.app.spotick.domain.district.JeonnamDistrict).values()}">
+                                     th:each="detailDistrict : ${T(com.app.spotick.domain.district.JeonnamDistrict).values()}">
                                     <label class="CheckBoxLabel">
-                                        <input class="checkBox" th:name="${district}" type="checkbox">
+                                        <input class="checkBox" th:name="${detailDistrict}" type="checkbox">
                                         <div class="CheckBoxContainer">
                                             <div class="checkBoxImg"></div>
-                                            <span class="CheckBoxText" th:text="${district}"></span>
+                                            <span class="CheckBoxText" th:text="${detailDistrict}"></span>
                                         </div>
                                     </label>
                                 </div>
@@ -477,22 +477,29 @@
                                     </label>
                                 </div>
                                 <div class="AreasCheckboxContainer"
-                                     th:each="district : ${T(com.app.spotick.domain.district.JejuDistrict).values()}">
+                                     th:each="detailDistrict : ${T(com.app.spotick.domain.district.JejuDistrict).values()}">
                                     <label class="CheckBoxLabel">
-                                        <input class="checkBox" th:name="${district}" type="checkbox">
+                                        <input class="checkBox" th:name="${detailDistrict}" type="checkbox">
                                         <div class="CheckBoxContainer">
                                             <div class="checkBoxImg"></div>
-                                            <span class="CheckBoxText" th:text="${district}"></span>
+                                            <span class="CheckBoxText" th:text="${detailDistrict}"></span>
                                         </div>
                                     </label>
                                 </div>
                             </div>
                         </div>
                     </div>
+                    <div class="SelectedListContainer" id="selectedListContainer">
+                        <div class="swiper swiper-initialized swiper-horizontal swiper-pointer-events swiper-backface-hidden">
+                            <div class="swiper-wrapper selectItemContainer"
+                                 style="transform: translate3d(26px, 0px, 0px);">
+                            </div>
+                        </div>
+                    </div>
                     <div class="FilterModalButtonContainer">
                         <div class="FilterModalButtonInnerContainer">
                             <button class="FilterResetBtn" id="filterResetBtn" type="button">초기화</button>
-                            <button class="FilterSubmitBtn" type="button">필터적용</button>
+                            <button class="FilterSubmitBtn" id="filterSubmitBtn" type="button">필터적용</button>
                         </div>
                     </div>
                 </div>
@@ -562,6 +569,8 @@
 <input id="sort" type="hidden" value="POPULARITY">
 <input id="rate" type="hidden" value="ALL">
 <input id="next" th:value="${ticketList.last}" type="hidden">
+<input id="district" type="hidden">
+<input id="detailDistrict" type="hidden">
 
 <div th:replace="~{global-templates/header-footer :: footer}"></div>
 </body>
@@ -570,7 +579,7 @@
 <script src="https://code.jquery.com/jquery-3.6.4.js"></script>
 <script th:src="@{/js/global-js/global.js}" type="module"></script>
 <script th:src="@{/js/global-js/chat.js}" type="module"></script>
-<script src="/js/ticket/list/list-filter-modal.js"></script>
+<script src="/js/ticket/list/list-filter-modal.js" type="module"></script>
 <script th:src="@{/js/ticket/list/ticket-list.js}" type="module"></script>
 
 </html>
