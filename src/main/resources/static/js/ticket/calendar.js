@@ -1,4 +1,4 @@
-import {getGrade} from "./ticket-detail.js"
+import {getGrade} from "./detail/ticket-detail.js"
 
 // Datepicker의 기본 설정을 한국어로 변경
 $.datepicker.setDefaults({

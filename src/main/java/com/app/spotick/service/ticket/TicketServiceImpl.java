@@ -10,6 +10,7 @@ import com.app.spotick.domain.entity.user.User;
 import com.app.spotick.domain.type.post.PostModifyStatus;
 import com.app.spotick.domain.type.post.PostStatus;
 import com.app.spotick.domain.type.ticket.TicketCategory;
+import com.app.spotick.domain.type.ticket.TicketRatingType;
 import com.app.spotick.repository.ticket.TicketRepository;
 import com.app.spotick.repository.ticket.grade.TicketGradeRepository;
 import com.app.spotick.repository.ticket.modifyRequest.TicketModifyReqRepository;
@@ -66,9 +67,11 @@ public class TicketServiceImpl implements TicketService {
     }
 
     @Override
-    public Slice<TicketListDto> findTicketListPage(Pageable pageable, TicketCategory ticketCategory, TicketSortType ticketSortType, Long userId) {
-        return ticketRepository.findTicketListPage(pageable, ticketCategory, ticketSortType, userId);
+    public Slice<TicketListDto> findTicketListPage(Pageable pageable, TicketCategory ticketCategory, TicketRatingType ticketRatingType, TicketSortType ticketSortType, Long userId) {
+        return ticketRepository.findTicketListPage(pageable, ticketCategory, ticketRatingType, ticketSortType, userId);
     }
+
+
 
     @Override
     public List<TicketGradeSaleInfoDto> findTicketGrades(Long ticketId, LocalDate date) {
