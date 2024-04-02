@@ -19,6 +19,9 @@ const ratingSelectBoxBtnImg = document.querySelector('#ratingType .SelectBoxBtnI
 const ratingSelectBoxBtnText = document.querySelector('#ratingType .SelectBoxBtnText');
 const ratingListItems = document.querySelectorAll('#ratingType .SelectBoxListItem');
 
+const districtInput = document.getElementById('district');
+const detailDistrictInput = document.getElementById('detailDistrict');
+
 // 인기순 필터
 sortSelectBoxBtn.addEventListener('click', function () {
     sortSelectBoxList.style.display = (sortSelectBoxList.style.display === 'block') ? 'none' : 'block';
@@ -118,6 +121,9 @@ postContainer.addEventListener('click', function (e) {
     }
 });
 
+districtInput.addEventListener('change', () => {
+    reloadPage();
+})
 
 // 스크롤시 슬라이스 로딩
 window.addEventListener('scroll', function () {
@@ -138,7 +144,7 @@ function loadNextPage() {
                 top: document.body.scrollHeight,
                 behavior: 'smooth'
             });
-            return showTicketListEvent(page, categoryInput.value, rateInput.value, sortInput.value, postContainer);
+            return showTicketListEvent(page, categoryInput.value, rateInput.value, sortInput.value, districtInput.value, detailDistrictInput.value, postContainer);
         })
         .then(() => {
             loadingMarkService.hide(loadingMark);
@@ -162,7 +168,7 @@ function reloadPage() {
                 top: document.body.scrollHeight,
                 behavior: 'smooth'
             });
-            return showTicketListEvent(page, categoryInput.value, rateInput.value, sortInput.value, postContainer);
+            return showTicketListEvent(page, categoryInput.value, rateInput.value, sortInput.value, districtInput.value, detailDistrictInput.value, postContainer);
         })
         .then(() => {
             loadingMarkService.hide(loadingMark);
