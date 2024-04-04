@@ -19,9 +19,21 @@ public class BookmarkRestController {
         삭제될 시 => false 반환
      */
     @GetMapping("/bookmark")
-    public boolean bookmark(@RequestParam("placeId") Long placeId,
+    public boolean bookmark(@RequestParam("status") boolean status,
+                            @RequestParam("placeId") Long placeId,
                             @AuthenticationPrincipal UserDetailsDto userDetailsDto) {
-        return placeBookmarkService.bookmark(placeId, userDetailsDto.getId());
+        // status가 true이면 이미 like 되어있는 상태 -> delete
+        // status가 false이면 like가 되어있지 않은 상태 -> insert
+
+        if (!status) {
+            placeBookmarkService.bookmark(placeId, userDetailsDto.getId());
+
+            return true;
+        } else {
+            placeBookmarkService.undoBookmark(placeId, userDetailsDto.getId());
+
+            return false;
+        }
     }
 
     /*

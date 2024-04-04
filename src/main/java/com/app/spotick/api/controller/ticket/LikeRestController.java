@@ -22,8 +22,8 @@ public class LikeRestController {
      */
     @GetMapping("/like")
     public boolean like(@RequestParam("status") boolean status,
-                          @RequestParam("ticketId") Long ticketId,
-                          @AuthenticationPrincipal UserDetailsDto userDetailsDto) {
+                        @RequestParam("ticketId") Long ticketId,
+                        @AuthenticationPrincipal UserDetailsDto userDetailsDto) {
 
         // status가 true이면 이미 like 되어있는 상태 -> delete
         // status가 false이면 like가 되어있지 않은 상태 -> insert

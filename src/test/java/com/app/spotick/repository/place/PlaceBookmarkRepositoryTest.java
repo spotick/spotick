@@ -121,17 +121,17 @@ class PlaceBookmarkRepositoryTest {
         }
         placeFileRepository.saveAll(placeFileList2);
 
-        PlaceBookmark user1Bookmark = PlaceBookmark.builder()
-                .user(user1)
-                .place(place1)
-                .build();
-        placeBookmarkRepository.save(user1Bookmark);
-
-        PlaceBookmark user1Bookmark2 = PlaceBookmark.builder()
-                .user(user1)
-                .place(place2)
-                .build();
-        placeBookmarkRepository.save(user1Bookmark2);
+//        PlaceBookmark user1Bookmark = PlaceBookmark.builder()
+//                .user(user1)
+//                .place(place1)
+//                .build();
+//        placeBookmarkRepository.save(user1Bookmark);
+//
+//        PlaceBookmark user1Bookmark2 = PlaceBookmark.builder()
+//                .user(user1)
+//                .place(place2)
+//                .build();
+//        placeBookmarkRepository.save(user1Bookmark2);
 
         em.flush();
         em.clear();
