@@ -346,7 +346,7 @@ function displayPlaceList(data) {
                            <p><span class="snapIndex">1</span>/5</p>
                        </div>
                    </div>
-                   <button class="ItemBookMarkBtn" data-placeid="${place.id}" type="button">
+                   <button class="ItemBookMarkBtn" data-placeid="${place.id}" data-status="${place.bookmarkChecked}" type="button">
                        <span class="${!place.bookmarkChecked ? '' : 'none'}"><i
                                class="fa-regular fa-bookmark"></i></span>
                        <span class="${place.bookmarkChecked ? '' : 'none'}"><i class="fa-solid fa-bookmark"
