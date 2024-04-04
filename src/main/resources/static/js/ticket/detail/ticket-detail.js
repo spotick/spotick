@@ -1,10 +1,10 @@
-import {ticketGradeFetch} from "../../modules/ticketGradeFetch.js"
-import {requestTicketInquiryList, requestTicketInquiryRegister} from "../../modules/inquiryFetch.js"
+import {ticketGradeFetch} from "../../modules/fetch/ticketGradeFetch.js"
+import {requestTicketInquiryList, requestTicketInquiryRegister} from "../../modules/fetch/inquiryFetch.js"
 import {
     ticketInquiryListLayout,
     ticketDetailInquiryPaginationComponent
 } from "../../layouts/ticket/inquiryLayout.js"
-import {requestLike} from "../../modules/likeFetch.js"
+import {requestLike} from "../../modules/fetch/likeFetch.js"
 import {payService} from "../../global-js/bootpay.js"
 
 const isLoggedIn = document.getElementById('isLoggedIn');
