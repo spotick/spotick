@@ -1,4 +1,4 @@
-import {requestLike} from "../../modules/likeFetch.js";
+import {requestLike} from "../../modules/fetch/likeFetch.js";
 import {showTicketListEvent} from "../../components/ticket/ticketComponent.js";
 import {loadingMarkService} from "../../modules/loadingMark.js";
 

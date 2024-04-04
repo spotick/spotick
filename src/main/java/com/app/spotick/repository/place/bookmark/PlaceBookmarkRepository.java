@@ -22,6 +22,8 @@ public interface PlaceBookmarkRepository extends JpaRepository<PlaceBookmark, Lo
     @Query("UPDATE PlaceBookmark pb SET pb.place = :changedPlace WHERE pb.place = :originalPlace")
     void bulkUpdateBookmarkPlace(@Param("originalPlace")Place originalPlace,@Param("changedPlace")Place changedPlace);
 
-
+    @Modifying
+    @Query("DELETE FROM PlaceBookmark b WHERE b.place = :place and b.user = :user")
+    void deleteByPlaceAndUser(@Param("place") Place place, @Param("user") User user);
 
 }

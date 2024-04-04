@@ -1,4 +1,5 @@
-import {addSlideEvent} from '../../global-js/image-slide.js'
+import {addSlideEvent} from '../../global-js/image-slide.js';
+import {bookmarkFetch} from '../../modules/fetch/bookmarkFetch.js'
 
 // 무한 페이징
 let page = 1;
@@ -287,14 +288,15 @@ $(`.ListItemsContainer`).on('click', '.ItemBookMarkBtn', function () {
         location.href = '/user/login';
         return;
     }
-    let placeId = $(this).data('placeid');
-    let target = $(this).closest('.OneItemContainer').find('.bookmark-count');
-    let bookmarkCnt = Number(target.text());
-    fetch(`/bookmark?placeId=${placeId}`)
-        .then(response => response.json())
-        .then(isAdded =>
-            target.text(isAdded ? ++bookmarkCnt : --bookmarkCnt)
-        );
+    const placeId = $(this).data('placeid');
+    const status = $(this).data('status');
+
+    bookmarkFetch(status, placeId)
+        .then((boo) => {
+            console.log(boo)
+            $(this).data('status', boo);
+        });
+
     $(this).find('span').toggleClass('none');
 });
 
@@ -344,7 +346,7 @@ function displayPlaceList(data) {
                            <p><span class="snapIndex">1</span>/5</p>
                        </div>
                    </div>
-                   <button class="ItemBookMarkBtn" data-placeid="${place.id}" type="button">
+                   <button class="ItemBookMarkBtn" data-placeid="${place.id}" data-status="${place.bookmarkChecked}" type="button">
                        <span class="${!place.bookmarkChecked ? '' : 'none'}"><i
                                class="fa-regular fa-bookmark"></i></span>
                        <span class="${place.bookmarkChecked ? '' : 'none'}"><i class="fa-solid fa-bookmark"

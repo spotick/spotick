@@ -1,4 +1,4 @@
-import { requestAiResponse } from '../modules/openAiFetch.js'
+import { requestAiResponse } from '../modules/fetch/openAiFetch.js'
 
 
 const $chatbotBody = $('#chatbot-body');

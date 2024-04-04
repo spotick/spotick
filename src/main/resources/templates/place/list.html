@@ -2493,7 +2493,7 @@
                             <p><span class="snapIndex">1</span>/5</p>
                         </div>
                     </div>
-                    <button class="ItemBookMarkBtn" th:data-placeid="${place.id}" type="button">
+                    <button class="ItemBookMarkBtn" th:data-placeid="${place.id}" th:data-status="${place.isBookmarkChecked()}" type="button">
                         <span th:class="${!place.isBookmarkChecked?'':'none'}">
                             <i class="fa-regular fa-bookmark"></i>
                         </span>

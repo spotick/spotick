@@ -1,5 +1,6 @@
 package com.app.spotick.service.place.bookmark;
 
+import com.app.spotick.domain.entity.compositePk.PlaceBookmarkId;
 import com.app.spotick.domain.entity.place.Place;
 import com.app.spotick.domain.entity.place.PlaceBookmark;
 import com.app.spotick.domain.entity.user.User;
@@ -21,25 +22,27 @@ public class PlaceBookmarkServiceImpl implements PlaceBookmarkService {
     private final UserRepository userRepository;
 
     @Override
-    public boolean bookmark(Long placeId, Long userId) {
+    public void bookmark(Long placeId, Long userId) {
         // 프록시 객체를 활용하여 쿼리 수 단축
         Place tmpPlace = placeRepository.getReferenceById(placeId);
         User tmpuser = userRepository.getReferenceById(userId);
 
-        Optional<PlaceBookmark> bookmark = placeBookmarkRepository.findByPlaceAndUser(tmpPlace, tmpuser);
+        PlaceBookmarkId id = new PlaceBookmarkId(placeId, userId);
 
-        if (bookmark.isEmpty()) {
-            PlaceBookmark placeBookmark = PlaceBookmark.builder()
-                    .place(tmpPlace)
-                    .user(tmpuser)
-                    .build();
-            placeBookmarkRepository.save(placeBookmark);
-            return true;
-        } else {
-            placeBookmarkRepository.delete(bookmark.get());
-            return false;
-        }
+        PlaceBookmark placeBookmark = PlaceBookmark.builder()
+                .id(id)
+                .place(tmpPlace)
+                .user(tmpuser)
+                .build();
+        placeBookmarkRepository.save(placeBookmark);
+    }
 
+    @Override
+    public void undoBookmark(Long placeId, Long userId) {
+        Place tmpPlace = placeRepository.getReferenceById(placeId);
+        User tmpUser = userRepository.getReferenceById(userId);
+
+        placeBookmarkRepository.deleteByPlaceAndUser(tmpPlace, tmpUser);
     }
 
     @Override
