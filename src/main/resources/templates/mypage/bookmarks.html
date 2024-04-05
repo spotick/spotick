@@ -57,9 +57,14 @@
                                         <p><span class="snapIndex">1</span>/<span class="slideIndex">5</span></p>
                                     </div>
                                 </div>
-                                <button class="ItemBookMarkBtn active" onclick="toggleBookmark(this)"
+                                <button class="ItemBookMarkBtn active" th:data-status="*{isBookmarkChecked}"
                                         th:data-id="*{id}" type="button">
-                                    <img alt="북마크" src="/imgs/bookmark_line_white_shadow_48.png">
+                                    <span th:class="${!placeDto.isBookmarkChecked?'':'none'}">
+                                        <i class="fa-regular fa-bookmark"></i>
+                                    </span>
+                                    <span th:class="${placeDto.isBookmarkChecked?'':'none'}">
+                                        <i class="fa-solid fa-bookmark" style="color: white"></i>
+                                    </span>
                                 </button>
                             </div>
                             <a class="ItemTextContainer" th:href="@{/place/detail/{placeId}(placeId = ${placeDto.id})}">
@@ -142,7 +147,7 @@
 <script src="/js/global-js/global.js" type="module"></script>
 <script src="/js/global-js/image-slide.js" type="module"></script>
 <script src="/js/global-js/chat.js" type="module"></script>
-<script src="/js/mypage/bookmarks.js"></script>
+<script src="/js/mypage/bookmarks.js" type="module"></script>
 <script>
     document.getElementById('bookmarks').classList.add('active');
 </script>

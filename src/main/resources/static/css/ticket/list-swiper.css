@@ -17,6 +17,7 @@
     display: flex;
     transition-property: transform;
     box-sizing: content-box;
+    background-color: rgb(240, 240, 240);
 }
 
 .swiper-slide {

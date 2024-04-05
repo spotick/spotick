@@ -95,21 +95,25 @@
 
 .ItemLikeBtn, .ItemBookMarkBtn {
     position: absolute;
-    top: 2px;
-    right: 2px;
+    top: 12px;
+    right: 5px;
     width: 43px;
     z-index: 1010;
 }
 
-.ItemLikeBtn > img, .ItemBookMarkBtn > img{
+.ItemBookMarkBtn > span{
     width: 100%;
     background: none;
     animation-duration: 0.6s;
     animation-name: activateAnimation2;
+    color: white;
 }
 
-.ItemBookMarkBtn.active > img {
-    content: url(../../imgs/bookmark_filled_white_48.png);
+.ItemBookMarkBtn i {
+    width: 30px;
+    animation-duration: 0.6s;
+    animation-name: activateAnimation2;
+    font-size: 24px;
 }
 
 .ItemTextContainer{
