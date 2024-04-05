@@ -130,16 +130,15 @@
                                                 <a th:href="@{/place/detail/{placeId}(placeId = ${reservationDto.id})}">해당
                                                     게시글로 이동</a>
                                             </div>
-                                            <div class="action-item" th:if="*{reservationStatus == reservationStatus.PENDING
-                                                or reservationStatus == reservationStatus.WAITING_PAYMENT}"
-                                                 th:onclick="'showGSForCancelingReservation(\'' + *{reservationId} + '\')'">
+                                            <div class="action-item cancel" th:id="*{reservationId}"
+                                                 th:if="*{reservationStatus == reservationStatus.PENDING
+                                                or reservationStatus == reservationStatus.WAITING_PAYMENT}">
                                                 예약 취소
                                             </div>
-                                            <div class="action-item"
-                                                 th:onclick="'showGSForRemoveHistory(\'' + *{reservationId} + '\')'"
+                                            <div class="action-item delete" th:id="*{reservationId}"
                                                  th:unless="*{reservationStatus == reservationStatus.PENDING
-                                                or reservationStatus == reservationStatus.WAITING_PAYMENT}">기록
-                                                삭제
+                                                or reservationStatus == reservationStatus.WAITING_PAYMENT}">
+                                                기록 삭제
                                             </div>
                                         </div>
                                     </button>
@@ -187,7 +186,7 @@
                                     </div>
                                 </div>
                                 <div class="mpcr-divider"></div>
-                                <div class="mpcr-info" onclick="showDetail(this)"
+                                <div class="mpcr-info details"
                                      th:data-address="*{placeAddress.address}"
                                      th:data-bookmarkCount="*{bookmarkCount}"
                                      th:data-checkIn="*{checkIn}"
@@ -243,7 +242,8 @@
             <span class="pagination-body">
                 <span class="pagination-btns"
                       th:each="i : ${#numbers.sequence(pagination.startPage, pagination.endPage)}">
-                    <a th:class="${i == pagination.currentPage ? 'active' : ''}" th:href="@{/mypage/reservations(page=${i})}"
+                    <a th:class="${i == pagination.currentPage ? 'active' : ''}"
+                       th:href="@{/mypage/reservations(page=${i})}"
                        th:text="${i}"></a>
                 </span>
             </span>

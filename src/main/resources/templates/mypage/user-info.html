@@ -147,7 +147,7 @@
                     <div onclick="openModal(profileModal)" style="position: relative">
                         <img class="mpc-user-info-user-img"
                              th:alt="*{nickName}"
-                             th:src="*{isDefaultImage
+                             th:src="${userProfile.isDefaultImage
                                 ? '/file/default/display?fileName=' + fileName
                                 : '/file/display?fileName=' + uploadPath + '/t_' + uuid + '_' + fileName}">
 

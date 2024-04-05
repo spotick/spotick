@@ -100,5 +100,23 @@ document.querySelectorAll('.reservationPay').forEach(pay => {
         let reservationId = this.getAttribute('data-id');
 
         payService.requestPlacePaymentSave(reservationId, payService.payItem);
+    });
+});
+
+document.querySelectorAll('.details').forEach(detail => {
+    detail.addEventListener('click', () => showDetail(detail));
+});
+
+document.querySelectorAll('.cancel').forEach(cancel => {
+    cancel.addEventListener('click', () => {
+        const reservationId = cancel.getAttribute('id');
+        showGSForCancelingReservation(reservationId);
+    });
+});
+
+document.querySelectorAll('.delete').forEach(dlt => {
+    dlt.addEventListener('click', () => {
+        const reservationId = dlt.getAttribute('id');
+        showGSForRemoveHistory(reservationId);
     })
 })
