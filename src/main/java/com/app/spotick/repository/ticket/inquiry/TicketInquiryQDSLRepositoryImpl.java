@@ -42,14 +42,8 @@ public class TicketInquiryQDSLRepositoryImpl implements TicketInquiryQDSLReposit
         List<TicketInquiryListDto> contents = queryFactory
                 .from(ticketInquiry)
                 .join(ticketInquiry.ticket, ticket)
-                .join(ticket.ticketFile, ticketFile)
                 .where(
-                        ticketInquiry.user.id.eq(userId),
-                        ticketFile.id.eq(
-                                JPAExpressions.select(ticket.id.min())
-                                        .from(ticketFile)
-                                        .where(ticketFile.ticket.eq(ticket))
-                        )
+                        ticketInquiry.user.id.eq(userId)
                 )
                 .orderBy(ticketInquiry.id.desc())
                 .offset(pageable.getOffset())
@@ -63,19 +57,17 @@ public class TicketInquiryQDSLRepositoryImpl implements TicketInquiryQDSLReposit
                         lowestPrice,
                         ticket.startDate,
                         ticket.endDate,
-                        Projections.constructor(TicketFileDto.class,
-                                ticketFile.id,
-                                ticketFile.fileName,
-                                ticketFile.uuid,
-                                ticketFile.uploadPath,
-                                ticket.id
-                        ),
+                        ticket.ticketFile.fileName,
+                        ticket.ticketFile.uuid,
+                        ticket.ticketFile.uploadPath,
                         ticketInquiry.title,
                         ticketInquiry.content,
                         ticketInquiry.response,
                         ticketInquiry.response.isNotNull()
                 ))
                 .fetch();
+
+        System.out.println("contents = " + contents);
 
         return PageableExecutionUtils.getPage(contents, pageable, totalCount::fetchOne);
     }
