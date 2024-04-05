@@ -393,7 +393,9 @@ window.addEventListener('scroll', function () {
     // -> 자연스러운 무한페이징
     let itemContainers = document.querySelectorAll('.OneItemContainer');
     let {bottom} = itemContainers[pagingTargetIdx - 1].getBoundingClientRect();
-    if (bottom < 0) {
+    let {scrollTop, scrollHeight, clientHeight} = document.documentElement;
+
+    if (bottom < 0||(clientHeight + scrollTop >= scrollHeight)) {
         pagingTargetIdx += 12;
         getPlaceList();
     }
