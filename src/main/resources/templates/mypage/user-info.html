@@ -22,7 +22,8 @@
     <div th:replace="~{global-templates/global-dialogue-modal :: global-selection}"></div>
     <div class="mypage-modal" id="profileModal">
         <div class="modal-row">
-            <p style="font-weight: bold; font-size: 14px; line-height: 14px; color: rgb(158, 164, 170);">Spotick에서 제공하는 고화질 프로필 사진을 사용해 보세요!</p>
+            <p style="font-weight: bold; font-size: 14px; line-height: 14px; color: rgb(158, 164, 170);">Spotick에서 제공하는
+                고화질 프로필 사진을 사용해 보세요!</p>
         </div>
         <form action="/mypage/updateDefaultImg" id="imageForm" method="POST">
             <input id="selectedImageNumber" name="imgName" type="hidden" value="">
@@ -148,8 +149,8 @@
                         <img class="mpc-user-info-user-img"
                              th:alt="*{nickName}"
                              th:src="${userProfile.isDefaultImage
-                                ? '/file/default/display?fileName=' + fileName
-                                : '/file/display?fileName=' + uploadPath + '/t_' + uuid + '_' + fileName}">
+                                ? '/file/default/display?fileName=' + userProfile.fileName
+                                : '/file/display?fileName=' + userProfile.uploadPath + '/t_' + userProfile.uuid + '_' + userProfile.fileName}">
 
 
                         <div class="mpc-edit-icon" style="right: 38px; bottom: 2px">
@@ -212,13 +213,16 @@
 
 </body>
 <script src="https://code.jquery.com/jquery-3.6.4.js"></script>
-<script type="module" src="/js/global-js/global.js"></script>
+<script src="/js/global-js/global.js" type="module"></script>
 <script src="/js/mypage/mypage.js"></script>
 <script src="/js/global-js/loading.js"></script>
 <script src="/js/mypage/user-info.js"></script>
-<script type="module" src="/js/global-js/chat.js"></script>
+<script src="/js/global-js/chat.js" type="module"></script>
 <script>
     document.getElementById('userInfo').classList.add('active');
+</script>
+<script th:inline="javascript">
+    console.log([[${userProfile}]])
 </script>
 
 

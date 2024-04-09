@@ -1,4 +1,9 @@
-const ticketDetailContainer = document.getElementById('ticketDetail');
+import {loadingMarkService} from "../modules/loadingMark.js";
+import {ticketService} from "../sevices/ticket/ticketService.js";
+import {mypageTicketLayout} from "../layouts/ticket/mypage.js";
+
+const loadingMark = document.getElementById('loadingMark');
+
 const slideContainers = document.querySelectorAll('.mpc-slide-con');
 
 const noItem = document.querySelector('.mpctd-none');
@@ -10,6 +15,8 @@ const detailAddressDetail = document.getElementById('detailAddressDetail');
 const detailDates = document.getElementById('detailDates');
 const detailGrades = document.getElementById('detailGrades');
 
+// 이미 불러왔었던 티켓 정보를 배열형태로 저장함으로써 불필요한 sql을 최소화 한다. {ticketId, date, gradeInfo}
+let gradeData = [];
 
 function openTicketDetail(article, ticketId, title, address, addressDetail, startDate, endDate) {
     slideContainers.forEach(each => each.classList.remove('show'));
@@ -25,14 +32,14 @@ function openTicketDetail(article, ticketId, title, address, addressDetail, star
     detailAddressDetail.value = addressDetail;
 
     let dateDifference = dateDifferenceInDays(new Date(startDate), new Date(endDate));
-    let start = new Date(startDate).getDate() + 1;
+    let start = new Date(startDate).getDate();
     dateDifference++;
 
     let datesHTML = '';
     const date = new Date(startDate);
 
     for (let i = 0; i < dateDifference; i++) {
-        date.setDate(date.getDate() + 1 + i);
+        date.setDate(start + i);
 
         let formattedDate = formatDate(date);
 
@@ -42,8 +49,9 @@ function openTicketDetail(article, ticketId, title, address, addressDetail, star
 
     detailDates.innerHTML = datesHTML;
 
-    ticketService.requestGrades(ticketId, startDate, ticketService.loadGrades);
-
+    loadingMarkService.show(loadingMark)
+        .then(() => checkGrade(ticketId, startDate))
+        .then(() => loadingMarkService.hide(loadingMark));
 
 
     let dateItems = document.querySelectorAll('.date-item');
@@ -54,61 +62,37 @@ function openTicketDetail(article, ticketId, title, address, addressDetail, star
             this.classList.add('active');
 
             let date = this.getAttribute('data-date');
+            console.log(date)
 
-            ticketService.requestGrades(ticketId, date, ticketService.loadGrades)
+            checkGrade(ticketId, date);
         });
     });
 }
 
-const ticketService = (function () {
+async function checkGrade(ticketId, date) {
+    const existingKV = gradeData.find(data => data.ticketId === ticketId && data.date === date);
 
-    function requestGrades(ticketId, date, callback) {
-        fetch(`/ticket/api/getGrades?ticketId=${ticketId}&date=${date}`, {
-            method: 'GET'
-        })
-            .then(response => {
-                if (response.ok) {
-                    return response.json();
-                } else {
-                    throw response;
-                }
-            })
-            .then(response => {
-                if (callback) {
-                    return callback(response.data);
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-            })
+    console.log(ticketId);
+
+    if (existingKV) {
+        console.log(existingKV.grade);
+        detailGrades.innerHTML = mypageTicketLayout.showGradeInfo(existingKV.grade)
+        return;
     }
 
-    function loadGrades(data) {
-        let gradeHTML = '';
+    try {
+        console.log('없어서 실행')
+        const responseData = await ticketService.getGrades(ticketId, date);
+        const newData = {ticketId: ticketId, date: date, grade: responseData};
 
-        data.forEach(grade => {
+        // gradeData에 추가
+        gradeData.push(newData);
 
-            gradeHTML += `
-                <tr>
-                    <td>${grade.gradeName}</td>
-                    <td>${grade.price.toLocaleString()}</td>
-                    <td>${grade.sold}</td>
-                    <td>${grade.maxPeople}</td>
-                </tr>`
-
-        });
-
-        detailGrades.innerHTML = gradeHTML;
+        console.log(gradeData);
+        detailGrades.innerHTML = mypageTicketLayout.showGradeInfo(responseData);
+    } catch (error) {
+        console.error('Error:', error);
     }
-
-    return {
-        requestGrades: requestGrades,
-        loadGrades: loadGrades
-    }
-})();
-
-function editTicket() {
-    openModal(modalTicket);
 }
 
 /////////////////////////////////////////////////////////////

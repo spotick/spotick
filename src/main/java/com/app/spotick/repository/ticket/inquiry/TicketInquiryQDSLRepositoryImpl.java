@@ -67,8 +67,6 @@ public class TicketInquiryQDSLRepositoryImpl implements TicketInquiryQDSLReposit
                 ))
                 .fetch();
 
-        System.out.println("contents = " + contents);
-
         return PageableExecutionUtils.getPage(contents, pageable, totalCount::fetchOne);
     }
 
