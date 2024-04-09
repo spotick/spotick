@@ -17,7 +17,6 @@ public class TicketInfoDto {
     private TicketCategory ticketCategory;
     private LocalDate startDate;
     private LocalDate endDate;
-    private List<TicketGradeSaleInfoDto> ticketGradeSaleInfoDtos;
 
     public TicketInfoDto(Long ticketId, String title, PostAddress ticketAddress, TicketCategory ticketCategory, LocalDate startDate, LocalDate endDate) {
         this.ticketId = ticketId;

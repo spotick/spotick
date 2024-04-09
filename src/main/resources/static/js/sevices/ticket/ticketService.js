@@ -32,9 +32,30 @@ export const ticketService = (() => {
         if (callback) {
             return callback(ticketsSlice.content);
         }
+
+        return ticketsSlice.content;
+    }
+
+    /*
+    * 한 티켓의 특정날짜를 받아와 그 날짜의 판매 갯수 또한 보여준다.
+    * 반환 : commonResponse / data = gradeId, gradeName, price, sold, maxPeople;
+    * */
+    const getGrades = async (ticketId, date, callback) => {
+        const response = await fetch(`/ticket/api/getGrades?ticketId=${ticketId}&date=${date}`, {
+            method: 'GET'
+        });
+
+        const responseData = await response.json();
+
+        if (callback) {
+            return callback(responseData.data);
+        }
+
+        return responseData.data;
     }
 
     return {
         getList: getList,
+        getGrades: getGrades
     }
 })();

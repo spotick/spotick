@@ -57,8 +57,6 @@ function showGSForTicketInquiryDeletion(inquiryId) {
 function ticketDeleteInquiry(inquiryId) {
     closeOnlyThisModal(globalSelection);
 
-    console.log(inquiryId)
-
     fetch(`/inquiries/api/ticketDelete/${inquiryId}`, {
         method: 'DELETE'
     })
@@ -118,8 +116,6 @@ const inquiryService = (function () {
     }
 
     function reloadPlaceInquiries(data) {
-
-        console.log(data)
 
         if (data.data.content.length === 0) {
             loadNoList();
@@ -199,7 +195,6 @@ const inquiryService = (function () {
             document.querySelectorAll(".reservationDelete").forEach(reservationDelete => {
                 reservationDelete.addEventListener('click', function () {
                     const id = this.getAttribute('id');
-                    console.log(id);
 
                     showGSForPlaceInquiryDeletion(id);
                 })
@@ -264,7 +259,7 @@ const inquiryService = (function () {
                             </button>
                         </div>
                         <a class="mpc-ticket-img-con" href="#">
-                            <img src="/file/display?fileName=${inquiry.ticketFileDto.uploadPath}/t_${inquiry.ticketFileDto.uuid}_${inquiry.ticketFileDto.fileName}">
+                            <img src="/file/display?fileName=${inquiry.uploadPath}/t_${inquiry.uuid}_${inquiry.fileName}">
                         </a>
                         <div class="mpct-card-content" style="min-width: 40%">
                             <div class="mpccc-row">
@@ -326,29 +321,26 @@ const inquiryService = (function () {
         if (data.pagination.hasPrevBlock) {
             paginationHtml +=
                 `<span class="pagination-previous">
-                    <a class="pagination-btns first" onclick="inquiryService.requestPlaceInquiries(1), scrollToTop()"
-                        title="맨 처음">
-                        <i class="fa-solid fa-chevron-left"></i>
-                        <i class="fa-solid fa-chevron-left"></i>
-                    </a>
-                    <a class="pagination-btns"
-                        onclick="inquiryService.requestPlaceInquiries(${data.pagination.startPage - 1}), scrollToTop()"
-                        title="이전">
-                        <i class="fa-solid fa-chevron-left"></i>
-                    </a>
-                </span>`
+                <a class="pagination-btns first" title="맨 처음" data-page="1">
+                    <i class="fa-solid fa-chevron-left"></i>
+                    <i class="fa-solid fa-chevron-left"></i>
+                </a>
+                <a class="pagination-btns" title="이전" data-page="${data.pagination.startPage - 1}">
+                    <i class="fa-solid fa-chevron-left"></i>
+                </a>
+            </span>`;
         }
 
         for (let i = data.pagination.startPage; i <= data.pagination.endPage; i++) {
             paginationHtml += "<span class=\"pagination-body\">";
 
-            paginationHtml +=
-                `<span class="pagination-btns">
-                    <a class="${i === data.pagination.currentPage ? 'active' : ''}"
-                       onclick="inquiryService.requestPlaceInquiries(${i}), scrollToTop()">
-                       ${i}
-                    </a>
-                </span>`
+            paginationHtml += `
+            <span class="pagination-btns">
+                <a class="${i === data.pagination.currentPage ? 'active' : ''}" data-page="${i}">
+                   ${i}
+                </a>
+            </span>
+            `;
 
             paginationHtml += "</span>";
         }
@@ -356,21 +348,28 @@ const inquiryService = (function () {
         if (data.pagination.hasNextBlock) {
             paginationHtml +=
                 `<span class="pagination-next">
-                    <a class="pagination-btns"
-                        onclick="inquiryService.requestPlaceInquiries(${data.pagination.endPage + 1}), scrollToTop()"
-                        title="다음">
-                        <i class="fa-solid fa-chevron-right"></i>
-                    </a>
-                    <a class="pagination-btns end" onclick="inquiryService.requestPlaceInquiries(${data.pagination.lastPage}), scrollToTop()"
-                       title="맨 끝">
-                        <i class="fa-solid fa-chevron-right"></i>
-                        <i class="fa-solid fa-chevron-right"></i>
-                    </a>
-                </span>`;
+                <a class="pagination-btns" title="다음" data-page="${data.pagination.endPage + 1}">
+                    <i class="fa-solid fa-chevron-right"></i>
+                </a>
+                <a class="pagination-btns end" title="맨 끝" data-page="${data.pagination.lastPage}">
+                    <i class="fa-solid fa-chevron-right"></i>
+                    <i class="fa-solid fa-chevron-right"></i>
+                </a>
+            </span>`;
         }
 
         paginationContainer.innerHTML = paginationHtml;
+
+        const paginationButtons = paginationContainer.querySelectorAll(".pagination-btns a[data-page]");
+        paginationButtons.forEach(button => {
+            button.addEventListener("click", function() {
+                const page = parseInt(this.getAttribute("data-page"));
+                inquiryService.requestPlaceInquiries(page);
+                scrollToTop();
+            });
+        });
     }
+
 
     function ticketPaginationReload(data) {
         let paginationHtml = "";
@@ -378,17 +377,14 @@ const inquiryService = (function () {
         if (data.pagination.hasPrevBlock) {
             paginationHtml +=
                 `<span class="pagination-previous">
-                    <a class="pagination-btns first" onclick="inquiryService.requestTicketInquiries(1), scrollToTop()"
-                        title="맨 처음">
-                        <i class="fa-solid fa-chevron-left"></i>
-                        <i class="fa-solid fa-chevron-left"></i>
-                    </a>
-                    <a class="pagination-btns"
-                        onclick="inquiryService.requestTicketInquiries(${data.pagination.startPage - 1}), scrollToTop()"
-                        title="이전">
-                        <i class="fa-solid fa-chevron-left"></i>
-                    </a>
-                </span>`
+                <a class="pagination-btns first" title="맨 처음" data-page="1">
+                    <i class="fa-solid fa-chevron-left"></i>
+                    <i class="fa-solid fa-chevron-left"></i>
+                </a>
+                <a class="pagination-btns" title="이전" data-page="${data.pagination.startPage - 1}">
+                    <i class="fa-solid fa-chevron-left"></i>
+                </a>
+            </span>`;
         }
 
         for (let i = data.pagination.startPage; i <= data.pagination.endPage; i++) {
@@ -396,11 +392,10 @@ const inquiryService = (function () {
 
             paginationHtml +=
                 `<span class="pagination-btns">
-                    <a class="${i === data.pagination.currentPage ? 'active' : ''}"
-                       onclick="inquiryService.requestTicketInquiries(${i}), scrollToTop()">
-                       ${i}
-                    </a>
-                </span>`
+                <a class="${i === data.pagination.currentPage ? 'active' : ''}" data-page="${i}">
+                   ${i}
+                </a>
+            </span>`;
 
             paginationHtml += "</span>";
         }
@@ -408,21 +403,28 @@ const inquiryService = (function () {
         if (data.pagination.hasNextBlock) {
             paginationHtml +=
                 `<span class="pagination-next">
-                    <a class="pagination-btns"
-                        onclick="inquiryService.requestTicketInquiries(${data.pagination.endPage + 1}), scrollToTop()"
-                        title="다음">
-                        <i class="fa-solid fa-chevron-right"></i>
-                    </a>
-                    <a class="pagination-btns end" onclick="inquiryService.requestTicketInquiries(${data.pagination.lastPage}), scrollToTop()"
-                       title="맨 끝">
-                        <i class="fa-solid fa-chevron-right"></i>
-                        <i class="fa-solid fa-chevron-right"></i>
-                    </a>
-                </span>`;
+                <a class="pagination-btns" title="다음" data-page="${data.pagination.endPage + 1}">
+                    <i class="fa-solid fa-chevron-right"></i>
+                </a>
+                <a class="pagination-btns end" title="맨 끝" data-page="${data.pagination.lastPage}">
+                    <i class="fa-solid fa-chevron-right"></i>
+                    <i class="fa-solid fa-chevron-right"></i>
+                </a>
+            </span>`;
         }
 
         paginationContainer.innerHTML = paginationHtml;
+
+        const paginationButtons = paginationContainer.querySelectorAll(".pagination-btns a[data-page]");
+        paginationButtons.forEach(button => {
+            button.addEventListener("click", function() {
+                const page = parseInt(this.getAttribute("data-page"));
+                inquiryService.requestTicketInquiries(page);
+                scrollToTop();
+            });
+        });
     }
+
 
     function loadNoList() {
         inquiryContainer.innerHTML =

@@ -293,7 +293,6 @@ $(`.ListItemsContainer`).on('click', '.ItemBookMarkBtn', function () {
 
     bookmarkFetch(status, placeId)
         .then((boo) => {
-            console.log(boo)
             $(this).data('status', boo);
         });
 

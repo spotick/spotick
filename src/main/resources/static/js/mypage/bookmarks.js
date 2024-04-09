@@ -1,33 +1,32 @@
-// 북마크 버튼 컨트롤
-function toggleBookmark(button) {
-    const placeId = button.getAttribute('data-id');
+import {bookmarkFetch} from "../modules/fetch/bookmarkFetch.js";
 
-    if (placeId) {
-        fetch(`/bookmark?placeId=${placeId}`, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error(`HTTP error! Status: ${response.status}`);
-                }
-                return response.json();
-            })
-            .then(data => {
-                // Assuming the server returns a boolean indicating whether the bookmark was added or removed
-                if (data) {
-                    button.classList.add('active');
-                } else {
-                    button.classList.remove('active');
-                }
-            })
-            .catch(error => {
-                console.error('오류:', error);
-            });
-    } else {
-        console.error('placeId를 찾을 수 없음');
-        showGlobalDialogue("오류가 발생했습니다.<br>페이지를 새로고침해주세요.")
-    }
+const bookmarkBtns = document.querySelectorAll('.ItemBookMarkBtn');
+
+// 북마크 버튼 컨트롤
+function toggleBookmark(btn) {
+    const placeId = btn.getAttribute('data-id');
+    const status = btn.getAttribute('data-status');
+
+    bookmarkFetch(status, placeId)
+        .then(boo => {
+            btn.setAttribute('data-status', boo);
+            const off = btn.children[0];
+            const on = btn.children[1];
+
+            if (boo) {
+                off.classList.add('none');
+                on.classList.remove('none')
+            } else {
+                off.classList.remove('none');
+                on.classList.add('none')
+            }
+        });
 }
+
+/////////////////////////////////////////////////////
+bookmarkBtns.forEach(btn => {
+
+    btn.addEventListener('click', () => {
+        toggleBookmark(btn);
+    });
+})

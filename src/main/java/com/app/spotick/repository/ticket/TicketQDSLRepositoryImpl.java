@@ -148,7 +148,7 @@ public class TicketQDSLRepositoryImpl implements TicketQDSLRepository {
     @Override
     public Optional<TicketInfoDto> findTicketInfoByTicketId(Long ticketId, Long userId) {
 
-        TicketInfoDto content = queryFactory
+        return Optional.ofNullable(queryFactory
                 .select(Projections.constructor(TicketInfoDto.class,
                         ticket.id,
                         ticket.title,
@@ -162,23 +162,7 @@ public class TicketQDSLRepositoryImpl implements TicketQDSLRepository {
                         ticket.id.eq(ticketId),
                         ticket.user.id.eq(userId)
                 )
-                .fetchOne();
-
-        List<TicketGradeSaleInfoDto> ticketGrades = queryFactory
-                .select(Projections.constructor(TicketGradeSaleInfoDto.class,
-                        ticketGrade.gradeName,
-                        ticketGrade.price,
-                        ticketGrade.id, //불필요 정보
-                        ticketGrade.maxPeople
-                ))
-                .from(ticketGrade)
-                .where(ticketGrade.ticket.id.eq(ticketId))
-                .orderBy(ticketGrade.id.asc(), ticketGrade.ticket.id.desc())
-                .fetch();
-
-        Objects.requireNonNull(content).setTicketGradeSaleInfoDtos(ticketGrades);
-
-        return Optional.of(content);
+                .fetchOne());
     }
 
     @Override

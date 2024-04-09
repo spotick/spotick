@@ -17,13 +17,15 @@ public class TicketInquiryListDto {
     private Integer lowestPrice;
     private LocalDate startDate;
     private LocalDate endDate;
-    private TicketFileDto ticketFileDto;
+    private String fileName;
+    private String uuid;
+    private String uploadPath;
     private String inquiryTitle;
     private String content;
     private String response;
     private boolean isResponded;
 
-    public TicketInquiryListDto(Long ticketId, Long inquiryId, String title, PostAddress ticketAddress, TicketCategory ticketCategory, Integer lowestPrice, LocalDate startDate, LocalDate endDate, TicketFileDto ticketFileDto, String inquiryTitle, String content, String response, boolean isResponded) {
+    public TicketInquiryListDto(Long ticketId, Long inquiryId, String title, PostAddress ticketAddress, TicketCategory ticketCategory, Integer lowestPrice, LocalDate startDate, LocalDate endDate, String fileName, String uuid, String uploadPath, String inquiryTitle, String content, String response, boolean isResponded) {
         this.ticketId = ticketId;
         this.inquiryId = inquiryId;
         this.title = title;
@@ -32,7 +34,9 @@ public class TicketInquiryListDto {
         this.lowestPrice = lowestPrice;
         this.startDate = startDate;
         this.endDate = endDate;
-        this.ticketFileDto = ticketFileDto;
+        this.fileName = fileName;
+        this.uuid = uuid;
+        this.uploadPath = uploadPath;
         this.inquiryTitle = inquiryTitle;
         this.content = content;
         this.response = response;
