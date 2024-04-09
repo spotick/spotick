@@ -81,7 +81,13 @@
                     <label class="mpctd-input-con" style="margin-bottom: 40px">
                         <input readonly="" th:value="*{ticketAddress.addressDetail}" type="text">
                     </label>
-                    <p>티켓 상태</p>
+
+                    <p>날짜 선택</p>
+                    <input id="startDate" th:value="*{startDate}" type="hidden">
+                    <input id="endDate" th:value="*{endDate}" type="hidden">
+                    <div class="date-pick-container" id="detailDates"></div>
+
+                    <p>티켓 판매 현황</p>
                     <div class="mpctd-ticket-container" id="ticket-regular">
                         <table class="ticket-table">
                             <thead>
@@ -92,20 +98,12 @@
                                 <td>총 좌석수</td>
                             </tr>
                             </thead>
-                            <tbody>
 
-                            <th:block th:each="grade:*{getTicketGradeSaleInfoDtos}">
-                                <th:block th:object="${grade}">
-                                    <tr>
-                                        <td th:text="*{gradeName}"></td>
-                                        <td th:text="*{#numbers.formatInteger(price, 3, 'COMMA')}"></td>
-                                        <td>10</td>
-                                        <td th:text="*{maxPeople}"></td>
-                                    </tr>
-                                </th:block>
-                            </th:block>
-
+                            <tbody id="detailGrades">
                             </tbody>
+                            <div class="loading-wrap" id="loadingMark">
+                                <img alt="" src="/imgs/loading.svg">
+                            </div>
                         </table>
                     </div>
                 </div>

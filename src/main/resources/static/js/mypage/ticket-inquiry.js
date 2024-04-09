@@ -1,14 +1,15 @@
 import {loadingMarkService} from "../modules/loadingMark.js";
-
+import {ticketService} from "../sevices/ticket/ticketService.js";
+import {mypageTicketLayout} from "../layouts/ticket/mypage.js";
 
 let page = 0;
 let hasNext = true;
 let isLoading = false;
 
-
-const currentPath = window.location.pathname;
-const pathSegments = currentPath.split('/');
-const placeId = pathSegments[pathSegments.length - 1];
+const startDate = document.getElementById('startDate').value;
+const endDate = document.getElementById('endDate').value;
+const detailDates = document.getElementById('detailDates');
+const detailGrades = document.getElementById('detailGrades');
 
 const img = document.getElementById('detailProfileImg');
 const nickname = document.getElementById('detailNickName');
@@ -22,7 +23,9 @@ const errorContent = document.querySelector('.error-content');
 const inquiryContainer = document.getElementById('inquiryContainer');
 
 const loadingMark = document.getElementById('mpLoadingMark');
+const loadingMarkGrade = document.getElementById('loadingMark');
 const ticketId = document.getElementById('id').value;
+
 const inquiryService = (function () {
 
     function requestInquiries(callback) {
@@ -167,11 +170,57 @@ const inquiryService = (function () {
     }
 })();
 
+let gradeData = [];
+async function checkGrade(ticketId, date) {
+    const existingKV = gradeData.find(data => data.ticketId === ticketId && data.date === date);
+
+    if (existingKV) {
+        detailGrades.innerHTML = mypageTicketLayout.showGradeInfo(existingKV.grade)
+        return;
+    }
+
+    try {
+        const responseData = await ticketService.getGrades(ticketId, date);
+        const newData = {ticketId: ticketId, date: date, grade: responseData};
+
+        // gradeData에 추가
+        gradeData.push(newData);
+
+        detailGrades.innerHTML = mypageTicketLayout.showGradeInfo(responseData);
+    } catch (error) {
+        console.error('Error:', error);
+    }
+}
+
 ///////////////////////////////////////////////////////////////////////////////
 
 window.onload = function () {
-    // 화면 로드
+    // 문의 내역 화면 로드
     inquiryService.requestInquiries(inquiryService.loadInquiries);
+
+    // 날짜 기능 추가
+    let dateDifference = dateDifferenceInDays(new Date(startDate), new Date(endDate));
+    let start = new Date(startDate).getDate();
+    dateDifference++;
+
+    let datesHTML = '';
+    const date = new Date(startDate);
+
+    for (let i = 0; i < dateDifference; i++) {
+        date.setDate(start + i);
+
+        let formattedDate = formatDate(date);
+
+        const isActive = i === 0 ? 'active' : '';
+        datesHTML += `<div class="date-item ${isActive}" data-date="${formattedDate}"><span>${start + i}</span></div>`;
+    }
+
+    detailDates.innerHTML = datesHTML;
+
+    // 날짜의 첫번째 grade 로드
+    loadingMarkService.show(loadingMarkGrade)
+        .then(() => checkGrade(ticketId, startDate))
+        .then(() => loadingMarkService.hide(loadingMarkGrade));
 
     // 스크롤 이벤트 리스너
     window.addEventListener('scroll', function () {
@@ -185,6 +234,19 @@ window.onload = function () {
             inquiryService.requestInquiries(inquiryService.loadInquiries);
         }
     })
+
+    let dateItems = document.querySelectorAll('.date-item');
+    dateItems.forEach(dateItem => {
+        dateItem.addEventListener('click', function () {
+            dateItems.forEach(item => item.classList.remove('active'));
+
+            this.classList.add('active');
+
+            let date = this.getAttribute('data-date');
+
+            checkGrade(ticketId, date);
+        });
+    });
 }
 
 document.getElementById('requestBtn').addEventListener('click', function () {

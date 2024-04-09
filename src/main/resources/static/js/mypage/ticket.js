@@ -62,7 +62,6 @@ function openTicketDetail(article, ticketId, title, address, addressDetail, star
             this.classList.add('active');
 
             let date = this.getAttribute('data-date');
-            console.log(date)
 
             checkGrade(ticketId, date);
         });
@@ -72,23 +71,18 @@ function openTicketDetail(article, ticketId, title, address, addressDetail, star
 async function checkGrade(ticketId, date) {
     const existingKV = gradeData.find(data => data.ticketId === ticketId && data.date === date);
 
-    console.log(ticketId);
-
     if (existingKV) {
-        console.log(existingKV.grade);
         detailGrades.innerHTML = mypageTicketLayout.showGradeInfo(existingKV.grade)
         return;
     }
 
     try {
-        console.log('없어서 실행')
         const responseData = await ticketService.getGrades(ticketId, date);
         const newData = {ticketId: ticketId, date: date, grade: responseData};
 
         // gradeData에 추가
         gradeData.push(newData);
 
-        console.log(gradeData);
         detailGrades.innerHTML = mypageTicketLayout.showGradeInfo(responseData);
     } catch (error) {
         console.error('Error:', error);
