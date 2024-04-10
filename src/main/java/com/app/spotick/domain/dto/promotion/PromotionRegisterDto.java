@@ -28,8 +28,7 @@ public class PromotionRegisterDto {
     @NotBlank(message = "행사 부 제목은 필수 입력사항입니다")
     @Size(max = 250, message = "입력한 글자수가 너무 많습니다")
     private String promotionSubTitle;
-
-//    @NotBlank(message = "행사 내용을 입력해주세요")
+    
     private String promotionContent;
 
     @NotBlank(message = "주소는 필수 입력사항입니다")
@@ -39,28 +38,6 @@ public class PromotionRegisterDto {
     private String placeAddressDetail;
     @NotNull(message = "카테고리를 선택해주세요")
     private PromotionCategory promotionCategory;
-    @NotNull(message = "지도에 장소의 위치를 찍어주세요")
-    private Double placeLat;
-    @NotNull(message = "지도에 장소의 위치를 찍어주세요")
-    private Double placeLng;
-//    @Size(min=1, max = 1,message = "대표 사진을 선택해주세요")
-    private MultipartFile placeFile;
-
-//    private List<MultipartFile> promotionFiles = new ArrayList<>();
 
 
-
-    //    조회수 제외됨
-    public PromotionBoard toEntity(){
-        return PromotionBoard.builder()
-                .id(promotionId)
-                .title(promotionTitle)
-                .subTitle(promotionSubTitle)
-                .content(promotionContent)
-                .promotionAddress(new PostAddress(placeAddress,placeAddressDetail))
-                .promotionCategory(promotionCategory)
-                .lat(placeLat)
-                .lng(placeLng)
-                .build();
-    }
 }

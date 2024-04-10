@@ -34,12 +34,5 @@ public class PromotionListDto {
     }
 
     //    조회수 제외됨
-    public PromotionBoard toEntity(){
-        return PromotionBoard.builder()
-                .id(promotionId)
-                .title(promotionTitle)
-                .subTitle(promotionSubTitle)
-                .promotionCategory(promotionCategory)
-                .build();
-    }
+
 }

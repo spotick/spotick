@@ -13,34 +13,28 @@ import java.time.LocalDate;
 @Entity @Table(name = "TBL_PROMOTION_BOARD")
 @SequenceGenerator(name = "SEQ_PROMOTION_BOARD_GENERATOR", sequenceName = "SEQ_PROMOTION_BOARD",allocationSize = 1)
 @Getter @ToString(callSuper = true) @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class PromotionBoard extends PostBase {
+public class PromotionBoard {
     @Id @GeneratedValue(generator = "SEQ_PROMOTION_BOARD_GENERATOR")
     @Column(name = "PROMOTION_ID")
     private Long id;
-    private String subTitle;
+    private String title;
     @Lob
     private String content;
-    private LocalDate startDate;
-    private LocalDate endDate;
-    @Embedded
-    private PostAddress promotionAddress;
     private PromotionCategory promotionCategory;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "USER_ID")
     private User user;
 
-    @Builder
-    public PromotionBoard(String title, int viewCount, Double lat, Double lng, Long id, String subTitle, String content, LocalDate startDate, LocalDate endDate, PostAddress promotionAddress,PromotionCategory promotionCategory, User user) {
-        super(title, viewCount, lat, lng);
+    public PromotionBoard(Long id, String title, String content, PromotionCategory promotionCategory, User user) {
         this.id = id;
-        this.subTitle = subTitle;
+        this.title = title;
         this.content = content;
-        this.startDate = startDate;
-        this.endDate = endDate;
-        this.promotionAddress = promotionAddress;
         this.promotionCategory = promotionCategory;
         this.user = user;
     }
+
+    @Builder
+
 
 
     public void setWriter(User user){

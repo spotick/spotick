@@ -33,20 +33,7 @@ public class PromotionServiceImpl implements PromotionService {
     private final PromotionFileService promotionFileService;
     @Override
     public void registerPromotion(PromotionRegisterDto promotionRegisterDto, Long userId) throws IOException {
-        User writer = userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalStateException("존재하지 않는 회원"));
-        PromotionBoard promotionBoard = promotionRegisterDto.toEntity();
-        promotionBoard.setWriter(writer);
 
-        promotionBoard = promotionRepository.save(promotionBoard);
-        log.info("보드 만들어짐");
-//        사진파일 넣기
-        MultipartFile promotionFile = promotionRegisterDto.getPlaceFile();
-
-
-        log.info("사진 업로드 전");
-        promotionFileService.registerAndSavePromotionFile(promotionFile,promotionBoard);
-        log.info("사진 업로드 후");
     }
 
     @Override

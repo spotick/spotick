@@ -25,7 +25,14 @@ function mainSlideChangeStart () {
     );
 }
 
-
+window.onload = function() {
+    console.log('실행')
+    // localStorage에서 'visited' 키를 확인하여 값이 없으면 alert 창을 띄우고, 그 값을 true로 설정합니다.
+    if (!localStorage.getItem('visited')) {
+        alert('처음 방문하셨습니다!');
+        localStorage.setItem('visited', true);
+    }
+}
 
 let filterBtn = document.querySelector(".FilterBtn button")
 let filterModal = document.querySelector(".FilterModal")
