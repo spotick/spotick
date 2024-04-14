@@ -74,8 +74,6 @@ public class TicketController {
                                  @AuthenticationPrincipal UserDetailsDto userDetailsDto) {
         ticketRegisterDto.setUserId(userDetailsDto.getId());
 
-        System.out.println("ticketRegisterDto = " + ticketRegisterDto);
-
         if (result.hasErrors()) {
             return "/ticket/register";
         }

@@ -2,6 +2,7 @@ package com.app.spotick.controller.promotion;
 
 import com.app.spotick.domain.dto.promotion.PromotionRegisterDto;
 import com.app.spotick.domain.dto.user.UserDetailsDto;
+import com.app.spotick.domain.entity.promotion.PromotionBoard;
 import com.app.spotick.service.promotion.PromotionService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -34,34 +35,27 @@ public class PromotionController {
 
     }
 
+    ///////////////////////////////////////////// 프로모션 등록 //////////////////////////////////////////////
     @GetMapping("/register")
-    public String promotionRegister(
-            @ModelAttribute("promotionRegisterDto")PromotionRegisterDto promotionRegisterDto
-            , Model model){
+    public String promotionRegister(@ModelAttribute("promotionRegisterDto")
+                                        PromotionRegisterDto promotionRegisterDto){
         return "promotion/register";
     }
 
     @PostMapping("/register")
     public String promotionRegister(@Valid PromotionRegisterDto promotionRegisterDto,
                                     BindingResult result,
-                                    Model model,
-                                    @AuthenticationPrincipal UserDetailsDto userDetailsDto){
-        log.info("================================================================");
-        log.info("들어옴");
-        log.info(promotionRegisterDto.toString());
-        log.info("================================================================");
-        if (result.hasErrors()){
-            log.info("들어옴2");
-            return "promotion/register";
-        }
-        log.info(promotionRegisterDto.toString());
+                                    @AuthenticationPrincipal UserDetailsDto userDetailsDto) throws IOException {
+        promotionRegisterDto.setUserId(userDetailsDto.getId());
 
-        try {
-            promotionService.registerPromotion(promotionRegisterDto, 3L);
-        } catch (IOException e) {
-            e.printStackTrace();
-            return  "promotion/register";
+        System.out.println("promotionRegisterDto = " + promotionRegisterDto);
+
+        if (result.hasErrors()) {
+            return "/promotion/register";
         }
-        return "redirect:/promotion/list";
+
+        Long id = promotionService.promotionBoardSave(promotionRegisterDto);
+
+        return "redirect:/promotion/detail/" + id;
     }
 }

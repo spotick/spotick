@@ -21,23 +21,27 @@ import java.util.List;
 public class PromotionRegisterDto {
     private Long promotionId;
     private Long userId;
-    @NotBlank(message = "행사제목은 필수 입력사항입니다")
-    @Size(max = 250, message = "입력한 글자수가 너무 많습니다")
-    private String promotionTitle;
+    @NotBlank(message = "제목은 필수 입력사항입니다.")
+    @Size(max = 250, message = "입력한 글자수가 너무 많습니다.")
+    private String title;
 
-    @NotBlank(message = "행사 부 제목은 필수 입력사항입니다")
-    @Size(max = 250, message = "입력한 글자수가 너무 많습니다")
-    private String promotionSubTitle;
-    
-    private String promotionContent;
+//    @NotBlank(message = "행사 부 제목은 필수 입력사항입니다")
+//    @Size(max = 250, message = "입력한 글자수가 너무 많습니다")
+//    private String promotionSubTitle;
 
-    @NotBlank(message = "주소는 필수 입력사항입니다")
-    private String placeAddress;
+    private MultipartFile file;
 
-    @NotBlank(message = "주소 및 상세주소는 필수 입력사항입니다")
-    private String placeAddressDetail;
-    @NotNull(message = "카테고리를 선택해주세요")
-    private PromotionCategory promotionCategory;
+    @NotBlank(message = "내용을 작성해주세요.")
+    private String content;
+    @NotNull(message = "카테고리를 선택해주세요.")
+    private PromotionCategory category;
 
-
+    public PromotionBoard toEntity() {
+        return PromotionBoard.builder()
+                .id(promotionId)
+                .title(title)
+                .content(content)
+                .promotionCategory(category)
+                .build();
+    }
 }

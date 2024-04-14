@@ -17,6 +17,7 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Objects;
 import java.util.UUID;
 @Service
 @Transactional
@@ -34,7 +35,7 @@ public class TicketFileServiceImpl implements TicketFileService {
 
     private TicketFile saveFile(MultipartFile promotionFile) throws IOException {
         String originName = promotionFile.getOriginalFilename();
-        originName = originName.replace("\\s",""); //파일 이름에 공백 제거
+        originName = Objects.requireNonNull(originName).replace("\\s",""); //파일 이름에 공백 제거
         UUID uuid = UUID.randomUUID();
 
         String sysName = uuid.toString()+"_"+originName;
