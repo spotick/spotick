@@ -19,6 +19,7 @@
             <div class="guide-title-box">
                 <p>홍보 게시글 작성</p>
             </div>
+
             <div class="input-wrap">
                 <div class="input-guide flex">
                     <p class="input-title">게시글 제목</p>
@@ -26,16 +27,27 @@
                     <p class="invalid-msg" th:errors="*{title}" th:if="${#fields.hasErrors()}"></p>
                 </div>
                 <label class="input-box" style="width: 60%">
-                    <input name="promotionTitle" placeholder="게시글 제목을 입력해 주세요" required
+                    <input name="promotionTitle" placeholder="게시글 제목을 입력해 주세요." required
                            th:field="*{title}" type="text">
                 </label>
             </div>
 
+            <div class="input-wrap">
+                <div class="input-guide flex">
+                    <p class="input-title">게시글 부제목</p>
+                </div>
+                <label class="input-box" style="width: 60%">
+                    <input name="promotionTitle" placeholder="부제목을 입력해 주세요."
+                           th:field="*{subTitle}" type="text">
+                </label>
+            </div>
+
+            <p class="invalid-msg" th:errors="*{file}" th:if="${#fields.hasErrors()}"></p>
             <div class="img-wrap">
                 <input accept="image/*" th:field="*{file}" type="file">
                 <label class="file-label flex-align-center" th:for="file">
                     <i class="fa-regular fa-image"></i>
-                    <p>해당 이벤트를 대표할 사진을 선택해주세요.</p>
+                    <p>썸네일 사진을 선택해주세요.</p>
                 </label>
                 <div class="file-container none">
                     <ul class="file-wrap"></ul>

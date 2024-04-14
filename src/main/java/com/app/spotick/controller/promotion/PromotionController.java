@@ -2,19 +2,14 @@ package com.app.spotick.controller.promotion;
 
 import com.app.spotick.domain.dto.promotion.PromotionRegisterDto;
 import com.app.spotick.domain.dto.user.UserDetailsDto;
-import com.app.spotick.domain.entity.promotion.PromotionBoard;
 import com.app.spotick.service.promotion.PromotionService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 
@@ -25,14 +20,16 @@ import java.io.IOException;
 public class PromotionController {
     private final PromotionService promotionService;
 
-    @GetMapping("/list")
-    public void goToList(){
-
+    @GetMapping
+    public String goToList(){
+        return "promotion/list";
     }
 
-    @GetMapping("/detail")
-    public void goToDetail(){
+    @GetMapping("/{id}")
+    public String goToDetail(@PathVariable Long id,
+                           @AuthenticationPrincipal UserDetailsDto userDetailsDto){
 
+        return "promotion/detail";
     }
 
     ///////////////////////////////////////////// 프로모션 등록 //////////////////////////////////////////////
@@ -56,6 +53,6 @@ public class PromotionController {
 
         Long id = promotionService.promotionBoardSave(promotionRegisterDto);
 
-        return "redirect:/promotion/detail/" + id;
+        return "redirect:/promotion/" + id;
     }
 }

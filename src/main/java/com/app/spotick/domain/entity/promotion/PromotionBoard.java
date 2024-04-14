@@ -23,6 +23,7 @@ public class PromotionBoard extends ImageBase {
     @Column(name = "PROMOTION_ID")
     private Long id;
     private String title;
+    private String subTitle;
     @Lob
     private String content;
     private PromotionCategory promotionCategory;
@@ -32,14 +33,17 @@ public class PromotionBoard extends ImageBase {
 
 
     @Builder
-    public PromotionBoard(String fileName, String uuid, String uploadPath, Long id, String title, String content, PromotionCategory promotionCategory, User user) {
+    public PromotionBoard(String fileName, String uuid, String uploadPath, Long id, String title, String subTitle, String content, PromotionCategory promotionCategory, User user) {
         super(fileName, uuid, uploadPath);
         this.id = id;
         this.title = title;
+        this.subTitle = subTitle;
         this.content = content;
         this.promotionCategory = promotionCategory;
         this.user = user;
     }
+
+
 
     public void setWriter(User user) {
         this.user = user;

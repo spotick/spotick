@@ -38,6 +38,7 @@ public class PromotionServiceImpl implements PromotionService {
 
         PromotionBoard entity = PromotionBoard.builder()
                 .title(promotionRegisterDto.getTitle())
+                .subTitle(promotionRegisterDto.getSubTitle())
                 .content(promotionRegisterDto.getContent())
                 .promotionCategory(promotionRegisterDto.getCategory())
                 .user(tmpUser)
