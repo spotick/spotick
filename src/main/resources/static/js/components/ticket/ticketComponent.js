@@ -1,4 +1,4 @@
-import {ticketService} from "../../sevices/ticket/ticketService.js";
+import {ticketService} from "../../services/ticket/ticketService.js";
 import {ticketLayout} from "../../layouts/ticket/ticketLayout.js";
 
 export const showTicketListEvent = async (page, category, ratingType, ticketSortType, district, detailDistrict, container) => {

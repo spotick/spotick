@@ -5,10 +5,12 @@ import com.app.spotick.domain.entity.user.User;
 import com.app.spotick.domain.type.notice.NoticeStatus;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.DynamicUpdate;
 
 @Entity @Table(name = "TBL_NOTICE")
 @SequenceGenerator(name = "SEQ_NOTICE_GENERATOR", sequenceName = "SEQ_NOTICE",allocationSize = 1)
 @Getter @ToString(callSuper = true) @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@DynamicUpdate
 public class Notice extends Period {
     @Id @GeneratedValue(generator = "SEQ_NOTICE_GENERATOR")
     @Column(name = "NOTICE_ID")

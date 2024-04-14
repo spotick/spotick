@@ -1,66 +1,88 @@
 package com.app.spotick.service.promotion;
 
-import com.app.spotick.domain.dto.promotion.PromotionDetailDto;
-import com.app.spotick.domain.dto.promotion.PromotionListDto;
+import com.app.spotick.domain.dto.promotion.FileDto;
 import com.app.spotick.domain.dto.promotion.PromotionRegisterDto;
-import com.app.spotick.domain.entity.place.Place;
 import com.app.spotick.domain.entity.promotion.PromotionBoard;
 import com.app.spotick.domain.entity.user.User;
-import com.app.spotick.repository.place.PlaceRepository;
 import com.app.spotick.repository.promotion.PromotionRepository;
 import com.app.spotick.repository.user.UserRepository;
-import com.app.spotick.service.place.file.PlaceFileService;
-import com.app.spotick.service.promotion.file.PromotionFileService;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import net.coobird.thumbnailator.Thumbnailator;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.UUID;
 
 @Service
-@Slf4j
-@Transactional
 @RequiredArgsConstructor
 public class PromotionServiceImpl implements PromotionService {
+    @Value("${root.dir}")
+    private String ROOT_DIR;
+
     private final PromotionRepository promotionRepository;
     private final UserRepository userRepository;
-    private final PromotionFileService promotionFileService;
+
     @Override
-    public void registerPromotion(PromotionRegisterDto promotionRegisterDto, Long userId) throws IOException {
-        User writer = userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalStateException("존재하지 않는 회원"));
-        PromotionBoard promotionBoard = promotionRegisterDto.toEntity();
-        promotionBoard.setWriter(writer);
+    public Long promotionBoardSave(PromotionRegisterDto promotionRegisterDto) throws IOException {
+        User tmpUser = userRepository.getReferenceById(promotionRegisterDto.getUserId());
 
-        promotionBoard = promotionRepository.save(promotionBoard);
-        log.info("보드 만들어짐");
-//        사진파일 넣기
-        MultipartFile promotionFile = promotionRegisterDto.getPlaceFile();
+        FileDto fileDto = saveFile(promotionRegisterDto.getFile());
 
+        PromotionBoard entity = PromotionBoard.builder()
+                .title(promotionRegisterDto.getTitle())
+                .subTitle(promotionRegisterDto.getSubTitle())
+                .content(promotionRegisterDto.getContent())
+                .promotionCategory(promotionRegisterDto.getCategory())
+                .user(tmpUser)
+                .fileName(fileDto.getFileName())
+                .uuid(fileDto.getUuid())
+                .uploadPath(fileDto.getUploadPath())
+                .build();
 
-        log.info("사진 업로드 전");
-        promotionFileService.registerAndSavePromotionFile(promotionFile,promotionBoard);
-        log.info("사진 업로드 후");
+        PromotionBoard savedEntity = promotionRepository.save(entity);
+
+        return savedEntity.getId();
     }
 
-    @Override
-    public void removePromotion(Long promotionId) {
-        promotionRepository.deleteById(promotionId);
+    private FileDto saveFile(MultipartFile file) throws IOException {
+        String originName = file.getOriginalFilename();
+        originName = originName.replace("\\s",""); //파일 이름에 공백 제거
+        UUID uuid = UUID.randomUUID();
+
+        String sysName = uuid.toString()+"_"+originName;
+
+        File uploadPath = new File(ROOT_DIR,getUploadPath());
+
+        if(!uploadPath.exists()){
+            uploadPath.mkdirs();
+        }
+
+        File uploadFile = new File(uploadPath,sysName);
+
+        file.transferTo(uploadFile);
+
+        if(Files.probeContentType(uploadFile.toPath()).startsWith("image")){
+            File thumbnailFile = new File(uploadPath,"t_"+sysName);
+
+            try(FileOutputStream out = new FileOutputStream(thumbnailFile);
+                InputStream in = file.getInputStream()){
+                Thumbnailator.createThumbnail(file.getInputStream(),out,300,225);
+            }
+            // try resource 를 활용해 자동으로 리소스를 닫아준다 out.close 생략 가능
+        }
+
+        return new FileDto(originName, uuid.toString(), getUploadPath());
     }
 
-    @Override
-    public PromotionDetailDto promotionDetail(Long promotionId) {
-        return null;
-    }
-
-    @Override
-    public Page<PromotionListDto> findPromotionList(Pageable pageable) {
-        return promotionRepository.findListWithPage(pageable);
+    private String getUploadPath() {
+        return LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd"));
     }
 }

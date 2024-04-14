@@ -1,4 +1,4 @@
-import {ticketGradeFetch} from "../../modules/fetch/ticketGradeFetch.js"
+import {ticketService} from "../../services/ticket/ticketService.js"
 import {requestTicketInquiryList, requestTicketInquiryRegister} from "../../modules/fetch/inquiryFetch.js"
 import {
     ticketInquiryListLayout,
@@ -141,20 +141,17 @@ export async function getGrade(date) {
     const existingKV = gradeData.find(data => data.date === date);
 
     if (existingKV) {
-        console.log(existingKV.grade);
         loadGradeList(existingKV.grade)
         return;
     }
 
     try {
-        console.log('없어서 실행')
-        const responseData = await ticketGradeFetch(ticketId, date);
+        const responseData = await ticketService.getGrades(ticketId, date);
         const newData = {date: date, grade: responseData};
 
         // gradeData에 추가
         gradeData.push(newData);
 
-        console.log(responseData);
         loadGradeList(responseData);
     } catch (error) {
         console.error('Error:', error);

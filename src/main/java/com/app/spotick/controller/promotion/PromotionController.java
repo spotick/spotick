@@ -8,12 +8,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 
@@ -24,44 +20,39 @@ import java.io.IOException;
 public class PromotionController {
     private final PromotionService promotionService;
 
-    @GetMapping("/list")
-    public void goToList(){
-
+    @GetMapping
+    public String goToList(){
+        return "promotion/list";
     }
 
-    @GetMapping("/detail")
-    public void goToDetail(){
+    @GetMapping("/{id}")
+    public String goToDetail(@PathVariable Long id,
+                           @AuthenticationPrincipal UserDetailsDto userDetailsDto){
 
+        return "promotion/detail";
     }
 
+    ///////////////////////////////////////////// 프로모션 등록 //////////////////////////////////////////////
     @GetMapping("/register")
-    public String promotionRegister(
-            @ModelAttribute("promotionRegisterDto")PromotionRegisterDto promotionRegisterDto
-            , Model model){
+    public String promotionRegister(@ModelAttribute("promotionRegisterDto")
+                                        PromotionRegisterDto promotionRegisterDto){
         return "promotion/register";
     }
 
     @PostMapping("/register")
     public String promotionRegister(@Valid PromotionRegisterDto promotionRegisterDto,
                                     BindingResult result,
-                                    Model model,
-                                    @AuthenticationPrincipal UserDetailsDto userDetailsDto){
-        log.info("================================================================");
-        log.info("들어옴");
-        log.info(promotionRegisterDto.toString());
-        log.info("================================================================");
-        if (result.hasErrors()){
-            log.info("들어옴2");
-            return "promotion/register";
-        }
-        log.info(promotionRegisterDto.toString());
+                                    @AuthenticationPrincipal UserDetailsDto userDetailsDto) throws IOException {
+        promotionRegisterDto.setUserId(userDetailsDto.getId());
 
-        try {
-            promotionService.registerPromotion(promotionRegisterDto, 3L);
-        } catch (IOException e) {
-            e.printStackTrace();
-            return  "promotion/register";
+        System.out.println("promotionRegisterDto = " + promotionRegisterDto);
+
+        if (result.hasErrors()) {
+            return "/promotion/register";
         }
-        return "redirect:/promotion/list";
+
+        Long id = promotionService.promotionBoardSave(promotionRegisterDto);
+
+        return "redirect:/promotion/" + id;
     }
 }

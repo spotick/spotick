@@ -1,5 +1,5 @@
 import {loadingMarkService} from "../modules/loadingMark.js";
-import {ticketService} from "../sevices/ticket/ticketService.js";
+import {ticketService} from "../services/ticket/ticketService.js";
 import {mypageTicketLayout} from "../layouts/ticket/mypage.js";
 
 const loadingMark = document.getElementById('loadingMark');

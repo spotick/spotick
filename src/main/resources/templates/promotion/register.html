@@ -3,11 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <title>프로모션 등록</title>
-    <link rel="stylesheet" href="/css/global-css/root.css">
-    <link rel="stylesheet" href="/css/promotion/promotion-register.css"/>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css"
-          integrity="sha512-aOG0c6nPNzGk+5zjwyJaoRUgCdOrfSDhmMID2u4+OIslr0GjpLKo7Xm0Ao3xmpM4T8AmIouRkqwj1nrdVsLKEQ=="
-          crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link href="/css/global-css/root.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.css" rel="stylesheet">
+    <link href="/css/promotion/promotion-register.css" rel="stylesheet">
+    <script crossorigin="anonymous" src="https://kit.fontawesome.com/c6992f5b12.js"></script>
 </head>
 <body>
 
@@ -15,124 +14,88 @@
 <div class="header-back"></div>
 <div class="body">
     <div class="place-register-container">
-        <form th:action="@{/promotion/register}" method="post" class="register-form" th:object="${promotionRegisterDto}" enctype="multipart/form-data">
+        <form class="register-form" enctype="multipart/form-data" method="post" th:action="@{/promotion/register}"
+              th:object="${promotionRegisterDto}">
             <div class="guide-title-box">
-                <p>행사 등록 신청</p>
-            </div>
-            <div class="input-wrap">
-                <div class="input-guide flex">
-                    <p class="input-title">행사 이름</p>
-                    <img src="//s3.hourplace.co.kr/web/images/icon/invalid.svg" alt="필수입력">
-                    <p class="invalid-msg"></p>
-                </div>
-                <div class="input-box">
-                    <input th:field="*{promotionTitle}" type="text" name="promotionTitle" placeholder="행사를 대표하는 이름을 입력해 주세요" required>
-                </div>
-            </div>
-            <div class="input-wrap">
-                <div class="input-guide flex">
-                    <p class="input-title">행사 소제목</p>
-                    <img src="//s3.hourplace.co.kr/web/images/icon/invalid.svg" alt="필수입력">
-                    <p class="invalid-msg"></p>
-                </div>
-                <div class="input-box">
-                    <input th:field="*{promotionSubTitle}" type="text" name="promotionSubTitle" placeholder="행사를 짧게 나타내는 소제목을 입력해주세요"
-                           required>
-                </div>
-            </div>
-            <div class="map-box">
-                <div class="input-guide flex">
-                    <p class="input-title">위치 검색</p>
-                    <p class="guide-msg">장소를 검색하신 후 클릭하여 핀을 찍어주세요</p>
-                </div>
-                <div class="search-wrap">
-                    <div class="input-box search-box">
-                        <input id="search" type="text" placeholder="장소를 검색해주세요" required>
-                    </div>
-                    <div class="flex-align-center">
-                        <button type="button" class="search-btn">
-                            <i class="fa-solid fa-magnifying-glass" style="color: #343434;"></i>
-                        </button>
-                    </div>
-                </div>
-                <div id="map"></div>
-                <input id="placeLat" th:field="*{placeLat}" type="hidden" name="placeLat">
-                <input id="placeLng" th:field="*{placeLng}" type="hidden" name="placeLng">
+                <p>홍보 게시글 작성</p>
             </div>
 
             <div class="input-wrap">
                 <div class="input-guide flex">
-                    <p class="input-title">행사 장소 주소</p>
-                    <img src="//s3.hourplace.co.kr/web/images/icon/invalid.svg" alt="필수입력">
-                    <p class="invalid-msg"></p>
+                    <p class="input-title">게시글 제목</p>
+                    <img alt="필수입력" src="/imgs/invalid.svg">
+                    <p class="invalid-msg" th:errors="*{title}" th:if="${#fields.hasErrors()}"></p>
                 </div>
-                <div class="input-box">
-                    <input th:field="*{placeAddress}" type="text" placeholder="행사 장소 주소를 입력해 주세요" required>
-                </div>
-                <div class="input-box">
-                    <input  th:field="*{placeAddressDetail}" type="text" placeholder="장소의 상세 주소를 입력해 주세요" required>
-                </div>
+                <label class="input-box" style="width: 60%">
+                    <input name="promotionTitle" placeholder="게시글 제목을 입력해 주세요." required
+                           th:field="*{title}" type="text">
+                </label>
             </div>
+
+            <div class="input-wrap">
+                <div class="input-guide flex">
+                    <p class="input-title">게시글 부제목</p>
+                </div>
+                <label class="input-box" style="width: 60%">
+                    <input name="promotionTitle" placeholder="부제목을 입력해 주세요."
+                           th:field="*{subTitle}" type="text">
+                </label>
+            </div>
+
+            <p class="invalid-msg" th:errors="*{file}" th:if="${#fields.hasErrors()}"></p>
             <div class="img-wrap">
-                <input type="file" th:field="*{placeFile}" accept="image/*">
-                <label for="placeFile" class="file-label flex-align-center">
+                <input accept="image/*" th:field="*{file}" type="file">
+                <label class="file-label flex-align-center" th:for="file">
                     <i class="fa-regular fa-image"></i>
-                    <p>대표 행사 사진 또는 장소 사진을 넣어주세요</p>
+                    <p>썸네일 사진을 선택해주세요.</p>
                 </label>
                 <div class="file-container none">
                     <ul class="file-wrap"></ul>
+
                     <div class="img-button-box">
-                        <button type="button" class="prev">
+                        <button class="prev" type="button">
                             <i class="fa-solid fa-circle-chevron-left"></i>
                         </button>
                         <div></div>
-                        <button type="button" class="next">
+                        <button class="next" type="button">
                             <i class="fa-solid fa-circle-chevron-right"></i>
                         </button>
                     </div>
                 </div>
             </div>
+
             <div class="input-wrap">
                 <div class="input-guide flex">
                     <p class="input-title">행사 카테고리</p>
-                    <img src="//s3.hourplace.co.kr/web/images/icon/invalid.svg" alt="필수입력">
-                    <p class="invalid-msg"></p>
+                    <img alt="필수입력" src="/imgs/invalid.svg">
+                    <p class="invalid-msg" th:errors="*{category}" th:if="${#fields.hasErrors()}"></p>
                 </div>
                 <div class="input-box category-box">
-                    <label for="promotionCategory"></label>
-                    <select class="select" th:field="*{promotionCategory}">
-                        <option value="EDUCATION">강연/교육/세미나</option>
-                        <option value="WORKSHOP">컨퍼런스/워크숍</option>
-                        <option value="TEST_PBT">시험_P.B.T</option>
-                        <option value="MOVIE_FILMING">드라마/영화/MV촬영</option>
-                        <option value="CF_FILMING">화보/제품/CF촬영</option>
-                        <option value="POP_UP_STORE">팝업 스토어</option>
-                        <option value="ADVERTISEMENT">옥외광고</option>
-                        <option value="CAMP">캠프/연수</option>
-                        <option value="ATHLETICS_CONTEST">체육/경연대회</option>
-                        <option value="CONCERT">공연/콘서트</option>
-                        <option value="EXHIBITION_EVENT">박람회/전시</option>
-                        <option value="ETC_WORK">기타(work)</option>
-                        <option value="STUDIO_FILMING">스튜디오 촬영</option>
-                        <option value="SOCIAL_GATHERING">친목모임</option>
-                        <option value="DANCE">댄스 연습</option>
-                        <option value="ONE_DAY_CLASS">원데이클래스/레슨</option>
-                    </select>
+                    <label>
+                        <select class="select" required th:field="*{category}">
+                            <option value="">카테고리를 선택해주세요.</option>
+                            <option th:each="category : ${T(com.app.spotick.domain.type.promotion.PromotionCategory).values()}"
+                                    th:text="${category.displayName}" th:value="${category}"></option>
+                        </select>
+                    </label>
                 </div>
             </div>
+
             <div class="input-wrap">
                 <div class="input-guide flex">
                     <p class="input-title">행사 내용</p>
-                    <img src="//s3.hourplace.co.kr/web/images/icon/invalid.svg" alt="필수입력">
-                    <p class="invalid-msg"></p>
+                    <img alt="필수입력" src="/imgs/invalid.svg">
+                    <p class="invalid-msg" th:errors="*{content}" th:if="${#fields.hasErrors()}"></p>
                 </div>
                 <div style="min-height: 500px">
-                    <textarea th:field="*{promotionContent}"></textarea>
+                    <label>
+                        <textarea id="summernote" required th:field="*{content}"></textarea>
+                    </label>
                 </div>
             </div>
             <div class="flex-center start">
-                <button type="button" class="cancel">취소</button>
-                <button type="button" class="submit-btn on flex-align-center">신청하기</button>
+                <button class="cancel" type="button">취소</button>
+                <button class="submit-btn on flex-align-center" type="submit">신청하기</button>
             </div>
         </form>
     </div>
@@ -140,26 +103,9 @@
 <div th:replace="~{/global-templates/header-footer :: footer}"></div>
 </body>
 <script src="https://code.jquery.com/jquery-3.6.4.js"></script>
+<script th:src="@{/js/global-js/global.js}" type="module"></script>
+<script src="/js/summernote/summernote-lite.js"></script>
+<script src="/js/summernote/summernote-ko-KR.js"></script>
+<script src="/js/promotion/promotion-register.js"></script>
 
-<script src="https://kit.fontawesome.com/c6992f5b12.js" crossorigin="anonymous"></script>
-<script type="text/javascript"
-        src="//dapi.kakao.com/v2/maps/sdk.js?appkey=3dc12d7c2624483dc7c019a0a91b727f&libraries=services"></script>
-<script src="/js/ticket/register/register.js"></script>
-<script src="/js/ticket/register/kakaoMapApi.js"></script>
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-
-<!-- 서머노트를 위해 추가해야할 부분 -->
-<script src="/js/promotion/summernote-lite.js"></script>
-<script src="/js/promotion/summernote-ko-KR.js"></script>
-<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.css" rel="stylesheet">
-<script>
-    $('#promotionContent').summernote({
-        height: 500,
-        lang: "ko-KR",
-        minHeight:500,
-    });
-</script>
 </html>
