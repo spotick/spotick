@@ -1,5 +1,6 @@
 package com.app.spotick.controller.promotion;
 
+import com.app.spotick.domain.dto.promotion.PromotionDetailDto;
 import com.app.spotick.domain.dto.promotion.PromotionRegisterDto;
 import com.app.spotick.domain.dto.user.UserDetailsDto;
 import com.app.spotick.service.promotion.PromotionService;
@@ -8,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,9 +28,15 @@ public class PromotionController {
     }
 
     @GetMapping("/{id}")
-    public String goToDetail(@PathVariable Long id,
-                           @AuthenticationPrincipal UserDetailsDto userDetailsDto){
+    public String goToDetail(@PathVariable("id") Long promotionId,
+                             @AuthenticationPrincipal UserDetailsDto userDetailsDto,
+                             Model model){
 
+        Long userId = userDetailsDto == null ? null : userDetailsDto.getId();
+
+        PromotionDetailDto content = promotionService.getPromotionBoardById(promotionId, userId);
+
+        model.addAttribute("promotion", content);
         return "promotion/detail";
     }
 

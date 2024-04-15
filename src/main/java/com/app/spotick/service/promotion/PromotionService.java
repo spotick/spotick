@@ -1,5 +1,6 @@
 package com.app.spotick.service.promotion;
 
+import com.app.spotick.domain.dto.promotion.PromotionDetailDto;
 import com.app.spotick.domain.dto.promotion.PromotionRegisterDto;
 import com.app.spotick.domain.entity.promotion.PromotionBoard;
 
@@ -9,4 +10,5 @@ public interface PromotionService {
 
     Long promotionBoardSave(PromotionRegisterDto promotionRegisterDto) throws IOException;
 
+    PromotionDetailDto getPromotionBoardById(Long promotionId, Long userId);
 }
