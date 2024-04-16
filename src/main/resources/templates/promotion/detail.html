@@ -7,9 +7,8 @@
           name="viewport">
     <meta content="ie=edge" http-equiv="X-UA-Compatible">
     <link href="/css/global-css/root.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" rel="stylesheet"/>
-    <link href="/css/promotion/promotion-detail.css" rel="stylesheet">
     <link href="/css/promotion/promotion-detail-swiper.css" rel="stylesheet">
+    <link href="/css/promotion/promotion-detail.css" rel="stylesheet">
     <link href="/css/global-css/chat.css" rel="stylesheet">
     <script crossorigin="anonymous" src="https://kit.fontawesome.com/c6992f5b12.js"></script>
 </head>
@@ -42,20 +41,23 @@
             <div class="MainContentContainer">
                 <div class="MainContentContainerHeader">
                     <div class="MainContentContainerHeaderTitle" th:text="*{title}"></div>
+                    <div class="MainContentContainerHeaderSubTitle" th:text="*{category.displayName}"></div>
                     <div class="MainContentContainerHeaderDate"
                          th:text="*{#temporals.format(createdDate, 'yyyy-MM-dd HH-mm-ss')}"></div>
                     <div class="MainContentContainerHeaderWriterContainer">
                         <img class="WriterImg"
-                             th:if="*{userProfileImage.uuid != null}"
                              th:alt="*{nickName}"
+                             th:if="*{userProfileImage.uuid != null}"
                              th:src="|/file/display?fileName=*{userProfileImage.uploadPath}/*{userProfileImage.uuid}_*{userProfileImage.fileName}|">
                         <img class="WriterImg"
-                             th:unless="*{userProfileImage.uuid != null}"
                              th:alt="*{nickName}"
-                             th:src="@{/imgs/defaultProfileImgs/{fileName}(fileName=*{userProfileImage.fileName})}">
+                             th:src="@{/imgs/defaultProfileImgs/{fileName}(fileName=*{userProfileImage.fileName})}"
+                             th:unless="*{userProfileImage.uuid != null}">
                         <div class="WriterNickName" th:text="*{nickName}"></div>
+                        <input id="promo" th:value="*{promotionId}" type="hidden">
+                        <input id="user" th:value="*{userId}" type="hidden">
                     </div>
-                    <div th:if="*{subTitle != null}" class="MainContentContainerHeaderText" th:text="*{subTitle}"></div>
+                    <div class="MainContentContainerHeaderText" th:if="*{subTitle != null}" th:text="*{subTitle}"></div>
                 </div>
                 <div class="HeaderHrLine"></div>
 
@@ -64,39 +66,13 @@
             </div>
         </div>
         <div class="CategoryContentsContainer">
-            <p class="CategoryContentsText">함께 보면 좋을 컨텐츠</p>
-            <div class="swiper swiper-initialized swiper-horizontal swiper-pointer-events swiper-backface-hidden">
-                <div class="swiper-wrapper" style="transform: translate3d(0px, 0px, 0px); transition-duration: 0ms;">
-                    <div class="swiper-slide ">
-                        <div class="CategoryContentItem">
-                            <img alt="컨텐츠 이미지"
-                                 class="CategoryContentItemImage"
-                                 src="https://img.shareit.kr///spacelog/img/2023-04-07//48b275d2-2319-4c47-b1b2-e38e3e85b089_640.jpg">
-                            <p>[클로짓셰어] 팝업 스토어 행사</p>
-                        </div>
-                    </div>
-                    <div class="swiper-slide ">
-                        <div class="CategoryContentItem">
-                            <img alt="컨텐츠 이미지"
-                                 class="CategoryContentItemImage"
-                                 src="https://img.shareit.kr///spacelog/img/2023-04-07//e43d53a3-758f-4214-a58d-4476b8e6339d_640.jpg">
-                            <p>[민트콜렉션] 팝업 스토어 행사</p>
-                        </div>
-                    </div>
-                    <div class="swiper-slide">
-                        <div class="CategoryContentItem">
-                            <img alt="컨텐츠 이미지"
-                                 class="CategoryContentItemImage"
-                                 src="https://img.shareit.kr///spacelog/img/2023-04-13//2f1f1427-3fd3-420d-a2b1-a73f199b6a15_640.jpg">
-                            <p>[FAAV] 팝업 스토어 행사 현장</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="CategoryContentsBtnContainer">
-                <button class="Cleia OtherBtn" type="button">다른 컨텐츠 더보기</button>
+            <p class="CategoryContentsText">해당 유저의 다른 컨텐츠도 확인해보세요.</p>
+            <div id="moreContentsBlock"></div>
+            <div class="loading-wrap" id="loadingMark">
+                <img alt="" src="/imgs/loading.svg">
             </div>
         </div>
+
         <!--      공유하기 모달창-->
         <div class="ModalBackground">
             <div class="ShareModalContainer">
@@ -129,9 +105,6 @@
 <script src="https://code.jquery.com/jquery-3.6.4.js"></script>
 <script th:src="@{/js/global-js/global.js}" type="module"></script>
 <script th:src="@{/js/global-js/chat.js}" type="module"></script>
-<script src="/js/promotion/promotion-detail.js"></script>
-<script th:inline="javascript">
-    console.log([[${promotion}]])
-</script>
+<script src="/js/promotion/promotion-detail.js" type="module"></script>
 
 </html>

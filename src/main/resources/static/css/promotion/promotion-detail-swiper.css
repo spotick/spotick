@@ -1,20 +1,22 @@
-.PlaceImagesContainer .swiper-slide{
-  width: 100% !important;
+.PlaceImagesContainer .swiper-slide {
+    width: 100% !important;
 }
 
-.Swiper-Img{
-  width: 100% !important;
+.Swiper-Img {
+    width: 100% !important;
 }
-
 
 .CategoryContentsContainer .swiper-slide {
-  width:32.3% !important;
-  margin-right: 18px !important;
+    width: 32.3% !important;
 }
 
-.swiper-slide img {
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+.CategoryContentsContainer .swiper-slide:not(:last-child) {
+    margin-right: 18px;
+}
+
+.flex-wrap {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    margin-bottom: 18px;
 }

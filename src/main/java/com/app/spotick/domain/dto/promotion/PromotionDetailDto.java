@@ -2,6 +2,7 @@ package com.app.spotick.domain.dto.promotion;
 
 import com.app.spotick.domain.embedded.post.PostAddress;
 import com.app.spotick.domain.entity.promotion.PromotionBoard;
+import com.app.spotick.domain.type.promotion.PromotionCategory;
 import com.app.spotick.domain.type.user.UserStatus;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -26,10 +27,11 @@ public class PromotionDetailDto {
     private String subTitle;
     private String content;
     private FileDto thumbnailImage;
+    private PromotionCategory category;
     private Long likeCount;
     private boolean isLiked;
 
-    public PromotionDetailDto(Long promotionId, Long userId, String nickName, FileDto userProfileImage, LocalDateTime createdDate, String title, String subTitle, String content, FileDto thumbnailImage, Long likeCount, boolean isLiked) {
+    public PromotionDetailDto(Long promotionId, Long userId, String nickName, FileDto userProfileImage, LocalDateTime createdDate, String title, String subTitle, String content, FileDto thumbnailImage, PromotionCategory category, Long likeCount, boolean isLiked) {
         this.promotionId = promotionId;
         this.userId = userId;
         this.nickName = nickName;
@@ -39,6 +41,7 @@ public class PromotionDetailDto {
         this.subTitle = subTitle;
         this.content = content;
         this.thumbnailImage = thumbnailImage;
+        this.category = category;
         this.likeCount = likeCount;
         this.isLiked = isLiked;
     }
