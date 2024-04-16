@@ -53,6 +53,7 @@ public class WebSecurityConfig {
                                 .requestMatchers("/place/register").authenticated()
                                 .requestMatchers("/place/edit/*").authenticated()
                                 .requestMatchers("/place/check/reserve").authenticated()
+                                .requestMatchers("/promotion/register").authenticated()
                                 .requestMatchers("/admin/**","/admins/**").hasRole("ADMIN")
 //                        해당  url로 들어온 요청은 인증과 권한확인을 해야한다
 //                                .requestMatchers("/admin")
