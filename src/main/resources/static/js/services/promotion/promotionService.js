@@ -18,8 +18,17 @@ export const promotionService = (() => {
         return data.data;
     }
 
+    const likeRequest = async (promotionId, status) => {
+        const response = await fetch(`/promotion/api/like?promotionId=${promotionId}&status=${status}`,
+            {method: 'GET'}
+        );
+
+        return response.json();
+    }
+
     return {
         getList: getList,
-        getListOfUser: getListOfUser
+        getListOfUser: getListOfUser,
+        likeRequest: likeRequest,
     }
 })();

@@ -94,11 +94,15 @@ img {
     cursor: pointer;
 }
 
-.SideMenuBtnImg{
-    width: 30px;
-    height: 30px;
-    margin: 0px;
+.SideBookMark img{
+    width: 60px;
+    height: 60px;
+    margin: 0;
     cursor: pointer;
+}
+
+.none {
+    display: none;
 }
 
 .BookMarkCount{

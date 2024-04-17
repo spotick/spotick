@@ -2,14 +2,17 @@ package com.app.spotick.api.controller.promotion;
 
 import com.app.spotick.api.response.CommonResponse;
 import com.app.spotick.domain.dto.promotion.PromotionListDto;
+import com.app.spotick.domain.dto.user.UserDetailsDto;
 import com.app.spotick.domain.type.promotion.PromotionCategory;
 import com.app.spotick.service.promotion.PromotionService;
+import com.app.spotick.service.promotion.like.PromotionLikeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -17,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class PromotionRestController {
     private final PromotionService promotionService;
+    private final PromotionLikeService promotionLikeService;
 
     @GetMapping("/list")
     public ResponseEntity<?> getList(@RequestParam("page") int page,
@@ -51,4 +55,18 @@ public class PromotionRestController {
         );
     }
 
+    @GetMapping("/like")
+    public boolean like(@RequestParam("status") boolean status,
+                        @RequestParam("promotionId") Long promotionId,
+                        @AuthenticationPrincipal UserDetailsDto userDetailsDto) {
+        if (!status) {
+            promotionLikeService.doLike(promotionId, userDetailsDto.getId());
+
+            return true;
+        } else {
+            promotionLikeService.undoLike(promotionId, userDetailsDto.getId());
+
+            return false;
+        }
+    }
 }

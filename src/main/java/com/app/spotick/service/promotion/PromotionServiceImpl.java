@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -28,6 +29,7 @@ import java.util.NoSuchElementException;
 import java.util.UUID;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class PromotionServiceImpl implements PromotionService {
     @Value("${root.dir}")

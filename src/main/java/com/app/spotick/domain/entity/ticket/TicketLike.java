@@ -8,7 +8,6 @@ import lombok.*;
 import org.springframework.data.domain.Persistable;
 
 @Entity @Table(name = "TBL_TICKET_LIKE")
-//@SequenceGenerator(name = "SEQ_TICKET_LIKE_GENERATOR", sequenceName = "SEQ_TICKET_LIKE",allocationSize = 1)
 @Getter @ToString(callSuper = true) @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class TicketLike extends Period implements Persistable<TicketLikeId> {
     // Persistable<>은 새로운 엔티티 여부를 판단하는 기준점(isNew())을 사용자가 직접 오버라이딩 함으로써 사용되어진다.
