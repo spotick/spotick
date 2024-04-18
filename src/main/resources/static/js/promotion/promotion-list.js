@@ -1,10 +1,16 @@
+import {promotionListComponent} from "../components/promotion/promotionComponents.js"
+import {loadingMarkService} from "../modules/loadingMark.js";
+
+const loadingMark = document.getElementById("loadingMark");
+const contentsContainer = document.getElementById("contentsContainer");
+
 var topSwiper = new Swiper(".top-swiper", {
     slidesPerView: 4,
     slidesPerGroup: 4,
 });
 
 var swiper = new Swiper(".category-swiper", {
-    width:800,
+    width: 800,
     slidesPerView: 10,
     slidesPerGroup: 10,
 });
@@ -16,22 +22,13 @@ function swiperPositionSet(el, Xposition, index) {
     );
 }
 
-function mainSlideChangeStart () {
+function mainSlideChangeStart() {
     var swiper_position_X = [0, -190, -380, -520];
     swiperPositionSet(
         '.category-swiper .swiper-wrapper',
         swiper_position_X,
         mySwiperMainNav.realIndex
     );
-}
-
-window.onload = function() {
-    console.log('실행')
-    // localStorage에서 'visited' 키를 확인하여 값이 없으면 alert 창을 띄우고, 그 값을 true로 설정합니다.
-    if (!localStorage.getItem('visited')) {
-        alert('처음 방문하셨습니다!');
-        localStorage.setItem('visited', true);
-    }
 }
 
 let filterBtn = document.querySelector(".FilterBtn button")
@@ -63,12 +60,12 @@ filterBtn.addEventListener("click", function () {
     }
 });
 
-modalCloseBtn.addEventListener("click", function(){
+modalCloseBtn.addEventListener("click", function () {
     filterModal.style.display = "none";
     document.body.style.overflow = "auto";
 })
 
-modalSaveBtn.addEventListener("click", function(){
+modalSaveBtn.addEventListener("click", function () {
     filterModal.style.display = "none";
     document.body.style.overflow = "auto";
     // CategoryList Category 버튼의 On 클래스 제거
@@ -100,9 +97,9 @@ modalSaveBtn.addEventListener("click", function(){
     }
 })
 
-modalCategoryBtn.forEach(function(button) {
-    button.addEventListener("click", function() {
-        modalCategoryBtn.forEach(function(btn) {
+modalCategoryBtn.forEach(function (button) {
+    button.addEventListener("click", function () {
+        modalCategoryBtn.forEach(function (btn) {
             // 클릭한 버튼을 제외한 다른 버튼에서 "On" 클래스 제거
             if (btn !== button) {
                 btn.classList.remove("On");
@@ -114,10 +111,10 @@ modalCategoryBtn.forEach(function(button) {
     });
 });
 
-CategoryBtn.forEach(function(button) {
-    button.addEventListener("click", function(){
+CategoryBtn.forEach(function (button) {
+    button.addEventListener("click", function () {
         if (!button.classList.contains("On")) {
-            CategoryBtn.forEach(function(btn) {
+            CategoryBtn.forEach(function (btn) {
                 btn.classList.remove("On");
             });
             button.classList.add("On");
@@ -125,8 +122,60 @@ CategoryBtn.forEach(function(button) {
     })
 });
 
-modalResetBtn.addEventListener("click", function() {
-    modalCategoryBtn.forEach(function(button) {
+modalResetBtn.addEventListener("click", function () {
+    modalCategoryBtn.forEach(function (button) {
         button.classList.remove("On");
     });
 });
+
+
+/////////////
+// 무한 스크롤
+
+// 처음 로드시 ssr방식으로 첫번째 페이지는 불러와졌으므로 1부터 시작.
+let categoryInput = document.getElementById('category');
+let page = 1;
+let isLoading = false;
+let isLastPage = document.getElementById('last').value;
+
+window.addEventListener('scroll', function () {
+    if (isLoading === true || isLastPage === true) return;
+
+    let {scrollTop, scrollHeight, clientHeight} = document.documentElement;
+
+    if (clientHeight + scrollTop >= scrollHeight) {
+        loadNextPage();
+    }
+});
+
+const loadNextPage = async () => {
+    try {
+        console.log(categoryInput.value)
+        setLoading(true);
+        await loadingMarkService.show(loadingMark);
+        const returnVal = await promotionListComponent(categoryInput.value, page);
+        await loadingMarkService.hide(loadingMark);
+
+        appendContent(returnVal.html);
+
+        isLastPage = returnVal.isLast;
+        page++;
+    } catch (e) {
+        console.error(e);
+    } finally {
+        setLoading(false);
+    }
+}
+
+const setLoading = (boo) => {
+    isLoading = boo;
+}
+
+const reloadPage = () => {
+
+}
+
+const appendContent = (html) => {
+    contentsContainer.insertAdjacentHTML("beforeend", html);
+}
+

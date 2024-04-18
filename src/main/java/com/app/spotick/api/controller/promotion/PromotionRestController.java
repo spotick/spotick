@@ -28,12 +28,12 @@ public class PromotionRestController {
 
         Pageable pageable = PageRequest.of(page, 12);
 
-//        Slice<PromotionListDto> contents = promotionService.getPromotionBoards(pageable, category, null);
+        Slice<PromotionListDto> contents = promotionService.getPromotionBoards(pageable, category);
 
         return new ResponseEntity<>(CommonResponse.builder()
                 .success(true)
                 .message("조회 성공")
-//                .data(contents)
+                .data(contents)
                 .build(), HttpStatus.OK
         );
     }

@@ -1,9 +1,6 @@
 package com.app.spotick.service.promotion;
 
-import com.app.spotick.domain.dto.promotion.FileDto;
-import com.app.spotick.domain.dto.promotion.PromotionDetailDto;
-import com.app.spotick.domain.dto.promotion.PromotionListDto;
-import com.app.spotick.domain.dto.promotion.PromotionRegisterDto;
+import com.app.spotick.domain.dto.promotion.*;
 import com.app.spotick.domain.entity.promotion.PromotionBoard;
 import com.app.spotick.domain.entity.user.User;
 import com.app.spotick.domain.type.promotion.PromotionCategory;
@@ -25,6 +22,7 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.UUID;
 
@@ -69,12 +67,17 @@ public class PromotionServiceImpl implements PromotionService {
 
     @Override
     public Slice<PromotionListDto> getPromotionBoards(Pageable pageable, PromotionCategory category) {
-        return null;
+        return promotionRepository.findPromotionList(pageable, category);
     }
 
     @Override
     public Slice<PromotionListDto> getPromotionBoardsOfUser(Pageable pageable, Long writerId, Long promotionId) {
         return promotionRepository.findPromotionListOfUser(pageable, writerId, promotionId);
+    }
+
+    @Override
+    public List<PromotionRecommendListDto> getRecommendPromotionBoards() {
+        return promotionRepository.findRecommendPromotionList();
     }
 
     private FileDto saveFile(MultipartFile file) throws IOException {

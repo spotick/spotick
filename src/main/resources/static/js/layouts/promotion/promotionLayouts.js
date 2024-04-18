@@ -1,7 +1,26 @@
 export const promotionLayouts = (() => {
 
-    const promotionListLayout = () => {
+    const promotionListLayout = (data) => {
+        const contents = data.content;
+        const isLast = data.last;
+        let html = ``;
 
+        contents.forEach(({promotionId, title, thumbnailImage}) => {
+            html += `
+                <a class="ContentOneContainer" href="/promotion/${promotionId}">
+                    <div class="ContentMainImgContainer">
+                        <img class="ContentMainImg"
+                             alt="${title}"
+                             src="/file/display?fileName=${thumbnailImage.uploadPath}/t_${thumbnailImage.uuid}_${thumbnailImage.fileName}">>
+                    </div>
+                    <div class="ContentTitle">
+                        <p>${title}</p>
+                    </div>
+                </a>
+            `;
+        });
+
+        return {html, isLast};
     }
 
     const promotionMoreContentsLayout = (data) => {
@@ -37,7 +56,7 @@ export const promotionLayouts = (() => {
     }
 
     return {
-        promotionListLayoutL: promotionListLayout,
+        promotionListLayout: promotionListLayout,
         promotionMoreContentsLayout: promotionMoreContentsLayout,
         loadMoreBtn: loadMoreBtn,
     }

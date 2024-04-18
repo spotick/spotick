@@ -1,7 +1,23 @@
 export const promotionService = (() => {
 
-    const getList = async (category, page) => {
+    const getList = async (category, page, callback) => {
+        let uri = `/promotion/api/list?page=${page}`;
 
+        if (category) {
+            uri += `&category=${category}`;
+        }
+
+        const response = await fetch(uri, {
+            method : 'GET'
+        });
+
+        const data = await response.json();
+
+        if (callback) {
+            return callback(data.data);
+        }
+
+        return data.data;
     }
 
     const getListOfUser = async (userId, promotionId, page, callback) => {

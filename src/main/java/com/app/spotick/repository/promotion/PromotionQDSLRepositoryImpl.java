@@ -3,7 +3,10 @@ package com.app.spotick.repository.promotion;
 import com.app.spotick.domain.dto.promotion.FileDto;
 import com.app.spotick.domain.dto.promotion.PromotionDetailDto;
 import com.app.spotick.domain.dto.promotion.PromotionListDto;
+import com.app.spotick.domain.dto.promotion.PromotionRecommendListDto;
 import com.app.spotick.domain.type.promotion.PromotionCategory;
+import com.querydsl.core.types.Order;
+import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Expressions;
@@ -15,6 +18,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -65,7 +69,6 @@ public class PromotionQDSLRepositoryImpl implements PromotionQDSLRepository {
     public Slice<PromotionListDto> findPromotionList(Pageable pageable,
                                                      PromotionCategory category) {
         BooleanExpression categoryCondition = null;
-        BooleanExpression userCondition = null;
 
         if (category != null) {
             categoryCondition = promotionBoard.promotionCategory.eq(category);
@@ -83,8 +86,7 @@ public class PromotionQDSLRepositoryImpl implements PromotionQDSLRepository {
                 ))
                 .from(promotionBoard)
                 .where(
-                        categoryCondition,
-                        userCondition
+                        categoryCondition
                 )
                 .orderBy(promotionBoard.id.desc())
                 .offset(pageable.getOffset())
@@ -133,6 +135,33 @@ public class PromotionQDSLRepositoryImpl implements PromotionQDSLRepository {
         return new SliceImpl<>(contents, pageable, hasNext);
     }
 
+    @Override
+    public List<PromotionRecommendListDto> findRecommendPromotionList() {
+        LocalDateTime oneMonthAgo = LocalDateTime.now().minusMonths(1);
+
+        return queryFactory
+                .from(promotionBoard)
+                .where(
+                        promotionBoard.createdDate.after(oneMonthAgo)
+                )
+                .orderBy(
+                        promotionLikeCountDESC(),
+                        promotionBoard.id.desc()
+                )
+                .limit(10)
+                .select(Projections.constructor(PromotionRecommendListDto.class,
+                        promotionBoard.id,
+                        promotionBoard.title,
+                        promotionBoard.subTitle,
+                        Projections.constructor(FileDto.class,
+                                promotionBoard.fileName,
+                                promotionBoard.uuid,
+                                promotionBoard.uploadPath
+                        )
+                ))
+                .fetch();
+    }
+
     private JPQLQuery<Long> likeCount() {
         return JPAExpressions
                 .select(promotionLike.count())
@@ -147,5 +176,11 @@ public class PromotionQDSLRepositoryImpl implements PromotionQDSLRepository {
                 .from(promotionLike)
                 .where(promotionLike.promotionBoard.eq(promotionBoard).and(promotionLike.user.id.eq(userId)))
                 .exists();
+    }
+
+    private OrderSpecifier<?> promotionLikeCountDESC() {
+        return new OrderSpecifier<>(
+                Order.DESC, likeCount()
+        );
     }
 }
