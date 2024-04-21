@@ -1,4 +1,5 @@
 import {promotionListOfUserComponent} from "../components/promotion/promotionComponents.js";
+import {promotionService} from "../services/promotion/promotionService.js";
 import {promotionLayouts} from "../layouts/promotion/promotionLayouts.js";
 import {loadingMarkService} from "../modules/loadingMark.js";
 
@@ -13,6 +14,11 @@ const moreContentsBlock = document.getElementById('moreContentsBlock');
 const moreContentsContainer = document.querySelector('.CategoryContentsContainer');
 
 const loadingMark = document.getElementById('loadingMark');
+
+const isLoggedIn = document.getElementById('isLoggedIn');
+
+const countIndicator = document.getElementById('count');
+
 
 shareBtn.addEventListener("click", function () {
     document.body.style.overflow = "hidden";
@@ -75,5 +81,50 @@ const loadMoreContents = async () => {
             top: document.body.scrollHeight,
             behavior: 'smooth'
         });
+    }
+}
+
+const likeBtn = document.getElementById('likeBtn');
+
+likeBtn.addEventListener('click', () => {
+    if (isLoggedIn.value === 'false') {
+        const selection = confirm("로그인이 필요한 서비스입니다. 로그인 하시겠습니까?");
+        if (selection) {
+            location.href = '/user/login';
+            return;
+        } else {
+            return;
+        }
+    }
+
+    const status = likeBtn.getAttribute('data-status');
+
+    promotionService.likeRequest(promotionId, status)
+        .then((r) => {
+            likeBtn.setAttribute('data-status', r);
+
+            let curVal = parseInt(countIndicator.textContent);
+
+            if (r === true) {
+                countIndicator.textContent = (++curVal).toString();
+            } else {
+                countIndicator.textContent = (--curVal).toString();
+            }
+
+            changeLike(likeBtn, r);
+        });
+});
+
+function changeLike(btn, status) {
+    // status에 따라서 클래스 변경
+    const off = btn.children[0];
+    const on = btn.children[1];
+
+    if (status) {
+        off.classList.add('none');
+        on.classList.remove('none')
+    } else {
+        off.classList.remove('none');
+        on.classList.add('none')
     }
 }

@@ -101,8 +101,8 @@ img {
 .ListWrapper{
     display: flex;
     flex-direction: column;
-    padding: 0px 166px;
-    margin-bottom: 230px;
+    padding: 0 166px;
+    margin-bottom: 100px;
 }
 
 .ListCategoryContainer{
@@ -422,12 +422,14 @@ img {
     border: 1px solid rgb(212, 219, 226);
     cursor: pointer;
     overflow: hidden;
+    height: 140px;
 }
 
 .ContentMainImg{
     width: 100%;
     height: 100%;
     object-fit: cover;
+    background-color: #6e6e6e;
 }
 
 .ContentTitle{

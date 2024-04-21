@@ -1,20 +1,19 @@
 package com.app.spotick.service.promotion;
 
-import com.app.spotick.domain.dto.promotion.FileDto;
-import com.app.spotick.domain.dto.promotion.PromotionDetailDto;
-import com.app.spotick.domain.dto.promotion.PromotionListDto;
-import com.app.spotick.domain.dto.promotion.PromotionRegisterDto;
+import com.app.spotick.domain.dto.promotion.*;
 import com.app.spotick.domain.entity.promotion.PromotionBoard;
 import com.app.spotick.domain.entity.user.User;
 import com.app.spotick.domain.type.promotion.PromotionCategory;
 import com.app.spotick.repository.promotion.PromotionRepository;
 import com.app.spotick.repository.user.UserRepository;
+import com.app.spotick.util.type.PromotionSortType;
 import lombok.RequiredArgsConstructor;
 import net.coobird.thumbnailator.Thumbnailator;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -24,10 +23,12 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.UUID;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class PromotionServiceImpl implements PromotionService {
     @Value("${root.dir}")
@@ -66,13 +67,18 @@ public class PromotionServiceImpl implements PromotionService {
     }
 
     @Override
-    public Slice<PromotionListDto> getPromotionBoards(Pageable pageable, PromotionCategory category) {
-        return null;
+    public Slice<PromotionListDto> getPromotionBoards(Pageable pageable, PromotionCategory category, PromotionSortType sortType) {
+        return promotionRepository.findPromotionList(pageable, category, sortType);
     }
 
     @Override
     public Slice<PromotionListDto> getPromotionBoardsOfUser(Pageable pageable, Long writerId, Long promotionId) {
         return promotionRepository.findPromotionListOfUser(pageable, writerId, promotionId);
+    }
+
+    @Override
+    public List<PromotionRecommendListDto> getRecommendPromotionBoards() {
+        return promotionRepository.findRecommendPromotionList();
     }
 
     private FileDto saveFile(MultipartFile file) throws IOException {

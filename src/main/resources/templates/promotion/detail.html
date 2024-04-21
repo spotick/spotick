@@ -2,10 +2,11 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>홍보 리스트 상세보기</title>
+    <title th:text="'Spotick | ' + ${promotion.title}" />
     <meta content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
           name="viewport">
     <meta content="ie=edge" http-equiv="X-UA-Compatible">
+    <link th:href="@{/imgs/logo/favicon.png}" rel="icon">
     <link href="/css/global-css/root.css" rel="stylesheet">
     <link href="/css/promotion/promotion-detail-swiper.css" rel="stylesheet">
     <link href="/css/promotion/promotion-detail.css" rel="stylesheet">
@@ -18,6 +19,8 @@
 
     <div th:replace="~{/global-templates/header-footer :: header}"></div>
 
+    <input id="isLoggedIn" th:value="${#authorization.expression('isAuthenticated()')}" type="hidden"/>
+
     <div class="ReferenceHallDetailContainer" th:object="${promotion}">
         <div class="ReferenceHallDetailTitleImgContainer">
             <img class="TitleImg"
@@ -28,10 +31,15 @@
             <!-- 사이드 메뉴 -->
             <div class="SideMenuContainer">
                 <div class="SideMenuBookMarkContainer">
-                    <div class="SideMenuBtn SideBookMark">
-                        <img alt="북마크" class="SideMenuBtnImg" src="/imgs/bookmark_gray014_24.svg">
+                    <div class="SideMenuBtn SideBookMark" id="likeBtn" th:data-status="*{isLiked}">
+                        <span th:class="*{!isLiked} ? '' : 'none'">
+                            <img alt="좋아요" src="/imgs/heart_line_white_shadow.d5d214d0.png">
+                        </span>
+                        <span th:class="*{isLiked} ? '' : 'none'">
+                            <img alt="좋아요" src="/imgs/heart_filled_white_shadow.708fbebd.png">
+                        </span>
                     </div>
-                    <div class="BookMarkCount">0</div>
+                    <div class="BookMarkCount" id="count" th:text="*{likeCount}"></div>
                 </div>
                 <div class="SideMenuBtn SideMenuLink">
                     <img alt="공유하기" class="SideMenuBtnImg" src="/imgs/share_gray014_24.svg">

@@ -21,7 +21,7 @@ import com.app.spotick.repository.place.reservation.PlaceReservationRepository;
 import com.app.spotick.repository.user.UserRepository;
 import com.app.spotick.service.place.file.PlaceFileService;
 import com.app.spotick.util.search.AreaFilter;
-import com.app.spotick.util.type.SortType;
+import com.app.spotick.util.type.PlaceSortType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
@@ -63,7 +63,7 @@ public class PlaceServiceImpl implements PlaceService {
 
     @Override
     @Transactional(readOnly = true)
-    public Slice<PlaceListDto> findPlaceListPagination(Pageable pageable, Long userId, SortType sortType, AreaFilter areaFilter, String keyword) {
+    public Slice<PlaceListDto> findPlaceListPagination(Pageable pageable, Long userId, PlaceSortType sortType, AreaFilter areaFilter, String keyword) {
         return placeRepository.findPlaceListPaging(pageable, userId, sortType, areaFilter, keyword);
     }
 
