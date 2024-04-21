@@ -6,6 +6,7 @@ import com.app.spotick.domain.dto.user.UserDetailsDto;
 import com.app.spotick.domain.type.promotion.PromotionCategory;
 import com.app.spotick.service.promotion.PromotionService;
 import com.app.spotick.service.promotion.like.PromotionLikeService;
+import com.app.spotick.util.type.PromotionSortType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -24,11 +25,12 @@ public class PromotionRestController {
 
     @GetMapping("/list")
     public ResponseEntity<?> getList(@RequestParam("page") int page,
-                                     @RequestParam(value = "category", required = false) PromotionCategory category) {
+                                     @RequestParam(value = "category", required = false) PromotionCategory category,
+                                     @RequestParam(value = "sort", required = false) PromotionSortType sortType) {
 
         Pageable pageable = PageRequest.of(page, 12);
 
-        Slice<PromotionListDto> contents = promotionService.getPromotionBoards(pageable, category);
+        Slice<PromotionListDto> contents = promotionService.getPromotionBoards(pageable, category, sortType);
 
         return new ResponseEntity<>(CommonResponse.builder()
                 .success(true)

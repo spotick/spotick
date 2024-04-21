@@ -4,6 +4,11 @@ import {loadingMarkService} from "../modules/loadingMark.js";
 const loadingMark = document.getElementById("loadingMark");
 const contentsContainer = document.getElementById("contentsContainer");
 
+const categoryInput = document.getElementById('category');
+
+const modalSortType = document.getElementById("modalSortType");
+const sortType = document.getElementById("sortType");
+
 var topSwiper = new Swiper(".top-swiper", {
     slidesPerView: 4,
     slidesPerGroup: 4,
@@ -82,6 +87,7 @@ modalSaveBtn.addEventListener("click", function () {
             document.querySelectorAll('.CategoryList.Category').forEach(function (categoryButton) {
                 if (categoryButton.textContent.trim() === categoryText) {
                     categoryButton.classList.add('On');
+                    categoryInput.value = categoryButton.getAttribute('category');
                 }
             });
         });
@@ -95,6 +101,9 @@ modalSaveBtn.addEventListener("click", function () {
             }
         });
     }
+
+    sortType.value = modalSortType.value;
+    reloadPage();
 })
 
 modalCategoryBtn.forEach(function (button) {
@@ -118,6 +127,8 @@ CategoryBtn.forEach(function (button) {
                 btn.classList.remove("On");
             });
             button.classList.add("On");
+            categoryInput.value = button.getAttribute("category");
+            reloadPage();
         }
     })
 });
@@ -133,7 +144,6 @@ modalResetBtn.addEventListener("click", function () {
 // 무한 스크롤
 
 // 처음 로드시 ssr방식으로 첫번째 페이지는 불러와졌으므로 1부터 시작.
-let categoryInput = document.getElementById('category');
 let page = 1;
 let isLoading = false;
 let isLastPage = document.getElementById('last').value;
@@ -150,10 +160,9 @@ window.addEventListener('scroll', function () {
 
 const loadNextPage = async () => {
     try {
-        console.log(categoryInput.value)
         setLoading(true);
         await loadingMarkService.show(loadingMark);
-        const returnVal = await promotionListComponent(categoryInput.value, page);
+        const returnVal = await promotionListComponent(categoryInput.value, sortType.value, page);
         await loadingMarkService.hide(loadingMark);
 
         appendContent(returnVal.html);
@@ -167,12 +176,26 @@ const loadNextPage = async () => {
     }
 }
 
-const setLoading = (boo) => {
-    isLoading = boo;
+const reloadPage = async () => {
+    try {
+        setLoading(true);
+        contentsContainer.innerHTML = '';
+        const returnVal = await promotionListComponent(categoryInput.value, sortType.value, 0);
+        await loadingMarkService.hide(loadingMark);
+
+        appendContent(returnVal.html);
+
+        isLastPage = returnVal.isLast;
+        page = 1;
+    } catch (e) {
+        console.error(e);
+    } finally {
+        setLoading(false);
+    }
 }
 
-const reloadPage = () => {
-
+const setLoading = (boo) => {
+    isLoading = boo;
 }
 
 const appendContent = (html) => {

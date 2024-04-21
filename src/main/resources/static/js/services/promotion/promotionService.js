@@ -1,7 +1,7 @@
 export const promotionService = (() => {
 
-    const getList = async (category, page, callback) => {
-        let uri = `/promotion/api/list?page=${page}`;
+    const getList = async (category, sortType, page, callback) => {
+        let uri = `/promotion/api/list?page=${page}&sort=${sortType}`;
 
         if (category) {
             uri += `&category=${category}`;

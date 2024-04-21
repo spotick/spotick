@@ -6,6 +6,7 @@ import com.app.spotick.domain.dto.promotion.PromotionRecommendListDto;
 import com.app.spotick.domain.dto.promotion.PromotionRegisterDto;
 import com.app.spotick.domain.dto.user.UserDetailsDto;
 import com.app.spotick.service.promotion.PromotionService;
+import com.app.spotick.util.type.PromotionSortType;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -36,7 +37,7 @@ public class PromotionController {
         Pageable pageable = PageRequest.of(0, 12);
 
         List<PromotionRecommendListDto> recommendations = promotionService.getRecommendPromotionBoards();
-        Slice<PromotionListDto> promotionList = promotionService.getPromotionBoards(pageable, null);
+        Slice<PromotionListDto> promotionList = promotionService.getPromotionBoards(pageable, null, PromotionSortType.NEWEST);
 
         data.put("recommendations", recommendations);
         data.put("promotionList", promotionList);

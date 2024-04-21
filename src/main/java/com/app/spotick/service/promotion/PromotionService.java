@@ -5,6 +5,7 @@ import com.app.spotick.domain.dto.promotion.PromotionListDto;
 import com.app.spotick.domain.dto.promotion.PromotionRecommendListDto;
 import com.app.spotick.domain.dto.promotion.PromotionRegisterDto;
 import com.app.spotick.domain.type.promotion.PromotionCategory;
+import com.app.spotick.util.type.PromotionSortType;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.lang.Nullable;
@@ -18,7 +19,7 @@ public interface PromotionService {
 
     PromotionDetailDto getPromotionBoardById(Long promotionId, Long userId);
 
-    Slice<PromotionListDto> getPromotionBoards(Pageable pageable, PromotionCategory category);
+    Slice<PromotionListDto> getPromotionBoards(Pageable pageable, PromotionCategory category, PromotionSortType sortType);
 
     Slice<PromotionListDto> getPromotionBoardsOfUser(Pageable pageable, Long writerId, Long promotionId);
 

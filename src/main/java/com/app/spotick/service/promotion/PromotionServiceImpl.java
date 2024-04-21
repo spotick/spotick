@@ -6,6 +6,7 @@ import com.app.spotick.domain.entity.user.User;
 import com.app.spotick.domain.type.promotion.PromotionCategory;
 import com.app.spotick.repository.promotion.PromotionRepository;
 import com.app.spotick.repository.user.UserRepository;
+import com.app.spotick.util.type.PromotionSortType;
 import lombok.RequiredArgsConstructor;
 import net.coobird.thumbnailator.Thumbnailator;
 import org.springframework.beans.factory.annotation.Value;
@@ -66,8 +67,8 @@ public class PromotionServiceImpl implements PromotionService {
     }
 
     @Override
-    public Slice<PromotionListDto> getPromotionBoards(Pageable pageable, PromotionCategory category) {
-        return promotionRepository.findPromotionList(pageable, category);
+    public Slice<PromotionListDto> getPromotionBoards(Pageable pageable, PromotionCategory category, PromotionSortType sortType) {
+        return promotionRepository.findPromotionList(pageable, category, sortType);
     }
 
     @Override

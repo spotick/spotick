@@ -5,6 +5,7 @@ import com.app.spotick.domain.dto.promotion.PromotionDetailDto;
 import com.app.spotick.domain.dto.promotion.PromotionListDto;
 import com.app.spotick.domain.dto.promotion.PromotionRecommendListDto;
 import com.app.spotick.domain.type.promotion.PromotionCategory;
+import com.app.spotick.util.type.PromotionSortType;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Projections;
@@ -67,12 +68,15 @@ public class PromotionQDSLRepositoryImpl implements PromotionQDSLRepository {
 
     @Override
     public Slice<PromotionListDto> findPromotionList(Pageable pageable,
-                                                     PromotionCategory category) {
+                                                     PromotionCategory category,
+                                                     PromotionSortType sortType) {
         BooleanExpression categoryCondition = null;
 
         if (category != null) {
             categoryCondition = promotionBoard.promotionCategory.eq(category);
         }
+
+        OrderSpecifier<?>[] orderByClause = createOrderByClause(sortType);
 
         List<PromotionListDto> contents = queryFactory
                 .select(Projections.constructor(PromotionListDto.class,
@@ -88,7 +92,7 @@ public class PromotionQDSLRepositoryImpl implements PromotionQDSLRepository {
                 .where(
                         categoryCondition
                 )
-                .orderBy(promotionBoard.id.desc())
+                .orderBy(orderByClause)
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize() + 1)
                 .fetch();
@@ -182,5 +186,21 @@ public class PromotionQDSLRepositoryImpl implements PromotionQDSLRepository {
         return new OrderSpecifier<>(
                 Order.DESC, likeCount()
         );
+    }
+
+    private OrderSpecifier<?>[] buildOrderSpecifiers(OrderSpecifier<?>... specifiers) {
+        return specifiers;
+    }
+
+    private OrderSpecifier<?>[] createOrderByClause(PromotionSortType sortType) {
+        return switch (sortType) {
+            case NEWEST -> buildOrderSpecifiers(
+                    promotionBoard.createdDate.desc()
+            );
+            case INTEREST -> buildOrderSpecifiers(
+                    promotionLikeCountDESC(),
+                    promotionBoard.id.desc()
+            );
+        };
     }
 }

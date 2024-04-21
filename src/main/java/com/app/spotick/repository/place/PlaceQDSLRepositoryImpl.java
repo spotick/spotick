@@ -15,7 +15,7 @@ import com.app.spotick.domain.entity.place.QPlaceReview;
 import com.app.spotick.domain.type.place.PlaceReservationStatus;
 import com.app.spotick.domain.type.post.PostStatus;
 import com.app.spotick.util.search.AreaFilter;
-import com.app.spotick.util.type.SortType;
+import com.app.spotick.util.type.PlaceSortType;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.Tuple;
 import com.querydsl.core.types.ExpressionUtils;
@@ -35,7 +35,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
 import org.springframework.data.support.PageableExecutionUtils;
-import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -59,7 +58,7 @@ public class PlaceQDSLRepositoryImpl implements PlaceQDSLRepository {
     private NumberPath<Double> aliasReviewAvg = Expressions.numberPath(Double.class, "reviewAvg");
 
     @Override
-    public Slice<PlaceListDto> findPlaceListPaging(Pageable pageable, Long userId, SortType sortType, AreaFilter areaFilter, String keyword) {
+    public Slice<PlaceListDto> findPlaceListPaging(Pageable pageable, Long userId, PlaceSortType sortType, AreaFilter areaFilter, String keyword) {
         JPQLQuery<Double> reviewAvg = createReviewAvgSub(place);
 
         JPQLQuery<Long> reviewCount = createReviewCountSub(place);
@@ -497,7 +496,7 @@ public class PlaceQDSLRepositoryImpl implements PlaceQDSLRepository {
                 .exists();
     }
 
-    private OrderSpecifier<?>[] createOrderByClause(SortType sortType) {
+    private OrderSpecifier<?>[] createOrderByClause(PlaceSortType sortType) {
         return switch (sortType) {
             case POPULARITY -> buildOrderSpecifiers(
                     place.viewCount.desc(), aliasBookmarkCount.desc(),

@@ -3,7 +3,7 @@ package com.app.spotick.util.type;
 import lombok.Getter;
 
 @Getter
-public enum SortType {
+public enum PlaceSortType {
     POPULARITY("인기순"),
     NEWEST("최신순"),
     INTEREST("관심순"),
@@ -15,7 +15,7 @@ public enum SortType {
 
     private final String displayName;
 
-    SortType(String displayName) {
+    PlaceSortType(String displayName) {
         this.displayName = displayName;
     }
 }

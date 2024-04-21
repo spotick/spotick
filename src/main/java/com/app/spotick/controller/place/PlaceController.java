@@ -9,7 +9,7 @@ import com.app.spotick.domain.dto.place.reservation.PlaceReserveRegisterDto;
 import com.app.spotick.domain.dto.user.UserDetailsDto;
 import com.app.spotick.service.place.PlaceService;
 import com.app.spotick.service.place.reservation.PlaceReservationService;
-import com.app.spotick.util.type.SortType;
+import com.app.spotick.util.type.PlaceSortType;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -61,11 +61,11 @@ public class PlaceController {
         System.out.println(keyword);
         System.out.println("========================");
         Long userId = userDetailsDto==null? null: userDetailsDto.getId();
-        SortType sortType = SortType.valueOf(sort);
+        PlaceSortType sortType = PlaceSortType.valueOf(sort);
 
         Slice<PlaceListDto> placeList = placeService.findPlaceListPagination(pageable,userId,sortType,null,keyword);
         model.addAttribute("placeList",placeList);
-        model.addAttribute("sortTypes", SortType.values());
+        model.addAttribute("sortTypes", PlaceSortType.values());
         return "place/list";
     }
 

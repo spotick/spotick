@@ -3,7 +3,7 @@ package com.app.spotick.controller.main;
 import com.app.spotick.domain.dto.place.PlaceListDto;
 import com.app.spotick.domain.dto.user.UserDetailsDto;
 import com.app.spotick.service.place.PlaceService;
-import com.app.spotick.util.type.SortType;
+import com.app.spotick.util.type.PlaceSortType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
@@ -31,11 +31,11 @@ public class MainController {
                                     direction = Sort.Direction.DESC
                             ) Pageable pageable){
         Long userId = userDetailsDto==null? null: userDetailsDto.getId();
-        SortType sortType = SortType.valueOf(sort);
+        PlaceSortType sortType = PlaceSortType.valueOf(sort);
 
         Slice<PlaceListDto> placeList = placeService.findPlaceListPagination(pageable,userId, sortType,null,keyword);
         model.addAttribute("placeList",placeList);
-        model.addAttribute("sortTypes", SortType.values());
+        model.addAttribute("sortTypes", PlaceSortType.values());
         return "place/list";
     }
 }

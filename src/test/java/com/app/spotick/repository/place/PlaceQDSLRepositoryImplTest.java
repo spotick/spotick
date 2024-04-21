@@ -17,7 +17,7 @@ import com.app.spotick.repository.place.bookmark.PlaceBookmarkRepository;
 import com.app.spotick.repository.place.file.PlaceFileRepository;
 import com.app.spotick.repository.user.UserAuthorityRepository;
 import com.app.spotick.repository.user.UserRepository;
-import com.app.spotick.util.type.SortType;
+import com.app.spotick.util.type.PlaceSortType;
 import com.querydsl.core.Tuple;
 import com.querydsl.core.group.GroupBy;
 import com.querydsl.core.types.Projections;
@@ -30,7 +30,6 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import lombok.extern.slf4j.Slf4j;
 
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -472,7 +471,7 @@ class PlaceQDSLRepositoryImplTest {
     @Test
     void transFormTest2() {
         PageRequest pageRequest = PageRequest.of(0, 12);
-        Slice<PlaceListDto> placeListPaging = placeRepository.findPlaceListPaging(pageRequest, null, SortType.NEWEST,null,null);
+        Slice<PlaceListDto> placeListPaging = placeRepository.findPlaceListPaging(pageRequest, null, PlaceSortType.NEWEST,null,null);
 
         placeListPaging.forEach(place -> {
             System.out.println("place = " + place);
