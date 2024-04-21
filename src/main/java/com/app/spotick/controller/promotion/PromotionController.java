@@ -1,9 +1,6 @@
 package com.app.spotick.controller.promotion;
 
-import com.app.spotick.domain.dto.promotion.PromotionDetailDto;
-import com.app.spotick.domain.dto.promotion.PromotionListDto;
-import com.app.spotick.domain.dto.promotion.PromotionRecommendListDto;
-import com.app.spotick.domain.dto.promotion.PromotionRegisterDto;
+import com.app.spotick.domain.dto.promotion.*;
 import com.app.spotick.domain.dto.user.UserDetailsDto;
 import com.app.spotick.service.promotion.PromotionService;
 import com.app.spotick.util.type.PromotionSortType;
@@ -79,6 +76,34 @@ public class PromotionController {
         }
 
         Long id = promotionService.promotionBoardSave(promotionRegisterDto);
+
+        return "redirect:/promotion/" + id;
+    }
+
+    ///////////////////////////////////////////// 프로모션 수정 //////////////////////////////////////////////
+    @GetMapping("/{id}/edit")
+    public String goToEdit(@PathVariable("id") Long promotionId,
+                           @AuthenticationPrincipal UserDetailsDto userDetailsDto,
+                           Model model) {
+        PromotionEditDto content = promotionService.getPromotionBoardEdit(promotionId, userDetailsDto.getId());
+
+        model.addAttribute("promotion", content);
+        return "promotion/edit";
+    }
+
+    @PostMapping("edit")
+    public String editBoard(@Valid PromotionEditDto promotionEditDto,
+                            BindingResult result,
+                            @AuthenticationPrincipal UserDetailsDto userDetailsDto) throws IOException {
+        promotionEditDto.setUserId(userDetailsDto.getId());
+
+        System.out.println("promotionEditDto = " + promotionEditDto);
+
+        if (result.hasErrors()) {
+            return "/promotion/register";
+        }
+
+        Long id = promotionService.updatePromotionBoard(promotionEditDto);
 
         return "redirect:/promotion/" + id;
     }
