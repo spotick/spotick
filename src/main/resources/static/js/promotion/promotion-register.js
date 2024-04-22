@@ -143,16 +143,13 @@ function uploadSummernoteImg(file, el, caption) {
         enctype: 'multipart/form-data',
         processData: false,
         success: function (data) {
-            console.log(data);
-
-            // /file/display?(link);
-            // $(el).summernote(
-            //     'editor.insertImage',
-            //     data.url,
-            //     function ($image) {
-            //         $image.attr('alt', caption);
-            //     }
-            // )
+            $(el).summernote(
+                'editor.insertImage',
+                '/file/sum?fileName=' + data.data,
+                function ($image) {
+                    $image.attr('alt', caption);
+                }
+            )
         },
     })
 }

@@ -29,6 +29,8 @@ public class FileController {
     private String DEFAULT_UPLOAD_PATH;
     @Value("${root.dir}")
     private String ROOT_PATH;
+    @Value("${summernote.dir}")
+    private String SUMMERNOTE_PATH;
 
 
     //    파일 업로드
@@ -86,10 +88,16 @@ public class FileController {
         return FileCopyUtils.copyToByteArray(resource.getInputStream());
     }
 
+    @GetMapping("/sum")
+    public byte[] sumDisplay(@RequestParam("fileName") String fileName) throws IOException {
+        // 임시 테스트 경로 유지
+        return FileCopyUtils.copyToByteArray(new File(SUMMERNOTE_PATH, fileName));
+    }
+
     @PostMapping("/summernote/upload")
     public ResponseEntity<?> uploadNoteFile(@RequestParam("uploadFile") MultipartFile uploadFile) {
         String path = getPath();
-        String rootPath = ROOT_PATH + path;
+        String rootPath = SUMMERNOTE_PATH + path;
         File file = new File(rootPath);
 
         // 해당 경로에 파일 없을 시 생성
@@ -104,18 +112,11 @@ public class FileController {
 
         // 파일 이동
         try {
-            // 전달받은 파일이 이미지일 시 같은 이름에 t_를 붙혀 썸네일 생성
-            if (Objects.requireNonNull(uploadFile.getContentType()).startsWith("image")) {
-                FileOutputStream out = new FileOutputStream(new File(
-                        rootPath, "t_" + uuid + "_" + fileName)
-                );
-                Thumbnailator.createThumbnail(uploadFile.getInputStream(), out, 200, 200);
-                out.close();
-            }
             uploadFile.transferTo(new File(rootPath, uuid + "_" + fileName));
-        } catch (IOException | IllegalStateException e) {
+        } catch (IOException e) {
             throw new RuntimeException(e);
         }
+
 
         return new ResponseEntity<>(CommonResponse.builder()
                 .success(true)
