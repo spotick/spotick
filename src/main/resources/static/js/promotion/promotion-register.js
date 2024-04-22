@@ -117,23 +117,21 @@ $(document).ready(function() {
         callbacks: {
             onImageUpload: function (files, editor, welEditable) {
                 // 파일 업로드 (다중 업로드를 위해 반복문 사용)
-                for (var i = files.length - 1; i >= 0; i--) {
-                    var fileName = files[i].name
+                for (let i = files.length - 1; i >= 0; i--) {
+                    let fileName = files[i].name
 
-                    // 이미지 alt 속성 삽일을 위한 설정
-                    var caption = prompt('이미지 설명 :', fileName)
-                    if (caption === '') {
-                        caption = '이미지'
-                    }
-                    uploadSummernoteImg(files[i], this, caption)
+                    uploadSummernoteImg(files[i], this)
                 }
             },
         }
     });
 });
 
-function uploadSummernoteImg(file, el, caption) {
+function uploadSummernoteImg(file, el) {
     const data = new FormData();
+
+    console.log(file);
+
     data.append('uploadFile', file)
     $.ajax({
         data: data,
@@ -147,7 +145,7 @@ function uploadSummernoteImg(file, el, caption) {
                 'editor.insertImage',
                 '/file/sum?fileName=' + data.data,
                 function ($image) {
-                    $image.attr('alt', caption);
+                    $image.attr('alt', file.name);
                 }
             )
         },
