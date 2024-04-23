@@ -168,6 +168,25 @@ img {
     margin-top: 29px;
 }
 
+.modify-btn{
+    display: flex;
+    align-items: center;
+    width: fit-content;
+    height: 45px;
+    padding: 0 15px;
+    font-size: 15px;
+    border-radius: 4px;
+    color: #007AFF;
+    background-color: rgb(255, 255, 255);
+    border: 1px solid #007AFF;
+    transition: all 0.1s ease 0s;
+}
+
+.modify-btn:hover {
+    background-color: #007AFF;
+    color: white;
+}
+
 .WriterImg{
     width: 26px;
     height: 26px;

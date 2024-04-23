@@ -147,7 +147,7 @@ function uploadSummernoteImg(file, el) {
                 function ($image) {
                     $image.attr('alt', file.name);
                 }
-            )
+            );
         },
-    })
+    });
 }

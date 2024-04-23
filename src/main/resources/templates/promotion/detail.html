@@ -1,12 +1,13 @@
 <!doctype html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6"
+      xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title th:text="'Spotick | ' + ${promotion.title}" />
+    <title th:text="'Spotick | ' + ${promotion.title}"/>
     <meta content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
           name="viewport">
     <meta content="ie=edge" http-equiv="X-UA-Compatible">
-    <link th:href="@{/imgs/logo/favicon.png}" rel="icon">
+    <link rel="icon" th:href="@{/imgs/logo/favicon.png}">
     <link href="/css/global-css/root.css" rel="stylesheet">
     <link href="/css/promotion/promotion-detail-swiper.css" rel="stylesheet">
     <link href="/css/promotion/promotion-detail.css" rel="stylesheet">
@@ -52,18 +53,25 @@
                     <div class="MainContentContainerHeaderSubTitle" th:text="*{category.displayName}"></div>
                     <div class="MainContentContainerHeaderDate"
                          th:text="*{#temporals.format(createdDate, 'yyyy-MM-dd HH-mm-ss')}"></div>
-                    <div class="MainContentContainerHeaderWriterContainer">
-                        <img class="WriterImg"
-                             th:alt="*{nickName}"
-                             th:if="*{userProfileImage.uuid != null}"
-                             th:src="|/file/display?fileName=*{userProfileImage.uploadPath}/*{userProfileImage.uuid}_*{userProfileImage.fileName}|">
-                        <img class="WriterImg"
-                             th:alt="*{nickName}"
-                             th:src="@{/imgs/defaultProfileImgs/{fileName}(fileName=*{userProfileImage.fileName})}"
-                             th:unless="*{userProfileImage.uuid != null}">
-                        <div class="WriterNickName" th:text="*{nickName}"></div>
-                        <input id="promo" th:value="*{promotionId}" type="hidden">
-                        <input id="user" th:value="*{userId}" type="hidden">
+                    <div class="space-between">
+                        <div class="MainContentContainerHeaderWriterContainer">
+                            <img class="WriterImg"
+                                 th:alt="*{nickName}"
+                                 th:if="*{userProfileImage.uuid != null}"
+                                 th:src="|/file/display?fileName=*{userProfileImage.uploadPath}/*{userProfileImage.uuid}_*{userProfileImage.fileName}|">
+                            <img class="WriterImg"
+                                 th:alt="*{nickName}"
+                                 th:src="@{/imgs/defaultProfileImgs/{fileName}(fileName=*{userProfileImage.fileName})}"
+                                 th:unless="*{userProfileImage.uuid != null}">
+                            <div class="WriterNickName" th:text="*{nickName}"></div>
+                            <input id="promo" th:value="*{promotionId}" type="hidden">
+                            <input id="user" th:value="*{userId}" type="hidden">
+                        </div>
+                        <th:block sec:authorize="isAuthenticated()">
+                            <a class="modify-btn"
+                               th:href="@{/promotion/{promotionId}/edit(promotionId=*{promotionId})}"
+                               th:if="${#authentication.principal != null and #authentication.principal.id == promotion.userId}">수정하기</a>
+                        </th:block>
                     </div>
                     <div class="MainContentContainerHeaderText" th:if="*{subTitle != null}" th:text="*{subTitle}"></div>
                 </div>
