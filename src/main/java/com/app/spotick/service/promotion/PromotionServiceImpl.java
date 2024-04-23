@@ -81,29 +81,54 @@ public class PromotionServiceImpl implements PromotionService {
         return promotionRepository.findRecommendPromotionList();
     }
 
+    @Override
+    public PromotionEditDto getPromotionBoardEdit(Long promotionId, Long userId) {
+        return promotionRepository.findBoardForEditing(promotionId, userId).orElseThrow(
+                NoSuchElementException::new
+        );
+    }
+
+    @Override
+    public Long updatePromotionBoard(PromotionEditDto promotionEditDto) throws IOException {
+        User tmpUser = userRepository.getReferenceById(promotionEditDto.getUserId());
+
+        PromotionBoard originalEntity = promotionRepository.findByIdAndUser(promotionEditDto.getPromotionId(), tmpUser).orElseThrow(
+                NoSuchElementException::new
+        );
+
+        if (!promotionEditDto.getFile().isEmpty()) {
+            FileDto file = saveFile(promotionEditDto.getFile());
+            promotionEditDto.setFileDto(file);
+        }
+
+        originalEntity.update(promotionEditDto);
+
+        return originalEntity.getId();
+    }
+
     private FileDto saveFile(MultipartFile file) throws IOException {
         String originName = file.getOriginalFilename();
-        originName = originName.replace("\\s",""); //파일 이름에 공백 제거
+        originName = originName.replace("\\s", ""); //파일 이름에 공백 제거
         UUID uuid = UUID.randomUUID();
 
-        String sysName = uuid.toString()+"_"+originName;
+        String sysName = uuid.toString() + "_" + originName;
 
-        File uploadPath = new File(ROOT_DIR,getUploadPath());
+        File uploadPath = new File(ROOT_DIR, getUploadPath());
 
-        if(!uploadPath.exists()){
+        if (!uploadPath.exists()) {
             uploadPath.mkdirs();
         }
 
-        File uploadFile = new File(uploadPath,sysName);
+        File uploadFile = new File(uploadPath, sysName);
 
         file.transferTo(uploadFile);
 
-        if(Files.probeContentType(uploadFile.toPath()).startsWith("image")){
-            File thumbnailFile = new File(uploadPath,"t_"+sysName);
+        if (Files.probeContentType(uploadFile.toPath()).startsWith("image")) {
+            File thumbnailFile = new File(uploadPath, "t_" + sysName);
 
-            try(FileOutputStream out = new FileOutputStream(thumbnailFile);
-                InputStream in = file.getInputStream()){
-                Thumbnailator.createThumbnail(file.getInputStream(),out,300,225);
+            try (FileOutputStream out = new FileOutputStream(thumbnailFile);
+                 InputStream in = file.getInputStream()) {
+                Thumbnailator.createThumbnail(file.getInputStream(), out, 300, 225);
             }
             // try resource 를 활용해 자동으로 리소스를 닫아준다 out.close 생략 가능
         }

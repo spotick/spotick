@@ -136,9 +136,12 @@
                      style="position: absolute; inset: 0; box-sizing: border-box; padding: 0; border: none; margin: auto; display: block; width: 0; height: 0; min-width: 100%; max-width: 100%; min-height: 100%; max-height: 100%; object-fit: contain;">
             </span>
     </button>
+    <a href="/promotion/register" class="register-btn">
+        <img alt="작성" src="/imgs/write.png">
+    </a>
     <input id="last" th:value="${data.promotionList.last}" type="hidden">
     <input id="category" type="hidden">
-    <input id="sortType" value="NEWEST" type="hidden">
+    <input id="sortType" type="hidden" value="NEWEST">
 
     <div th:replace="~{/global-templates/header-footer :: footer}"></div>
 </div>

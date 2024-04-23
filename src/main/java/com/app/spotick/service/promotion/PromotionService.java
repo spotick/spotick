@@ -1,9 +1,6 @@
 package com.app.spotick.service.promotion;
 
-import com.app.spotick.domain.dto.promotion.PromotionDetailDto;
-import com.app.spotick.domain.dto.promotion.PromotionListDto;
-import com.app.spotick.domain.dto.promotion.PromotionRecommendListDto;
-import com.app.spotick.domain.dto.promotion.PromotionRegisterDto;
+import com.app.spotick.domain.dto.promotion.*;
 import com.app.spotick.domain.type.promotion.PromotionCategory;
 import com.app.spotick.util.type.PromotionSortType;
 import org.springframework.data.domain.Pageable;
@@ -25,4 +22,7 @@ public interface PromotionService {
 
     List<PromotionRecommendListDto> getRecommendPromotionBoards();
 
+    PromotionEditDto getPromotionBoardEdit(Long promotionId, Long userId);
+
+    Long updatePromotionBoard(PromotionEditDto promotionEditDto) throws IOException;
 }

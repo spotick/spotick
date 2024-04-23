@@ -1,6 +1,7 @@
 package com.app.spotick.repository.promotion;
 
 import com.app.spotick.domain.dto.promotion.PromotionDetailDto;
+import com.app.spotick.domain.dto.promotion.PromotionEditDto;
 import com.app.spotick.domain.dto.promotion.PromotionListDto;
 import com.app.spotick.domain.dto.promotion.PromotionRecommendListDto;
 import com.app.spotick.domain.type.promotion.PromotionCategory;
@@ -20,4 +21,6 @@ public interface PromotionQDSLRepository {
     Slice<PromotionListDto> findPromotionListOfUser(Pageable pageable, Long writerId, Long promotionId);
 
     List<PromotionRecommendListDto> findRecommendPromotionList();
+
+    Optional<PromotionEditDto> findBoardForEditing(Long promotionId, Long userId);
 }

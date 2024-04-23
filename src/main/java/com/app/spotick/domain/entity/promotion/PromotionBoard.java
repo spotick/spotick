@@ -2,6 +2,8 @@ package com.app.spotick.domain.entity.promotion;
 
 import com.app.spotick.domain.base.image.ImageBase;
 import com.app.spotick.domain.base.post.PostBase;
+import com.app.spotick.domain.dto.promotion.FileDto;
+import com.app.spotick.domain.dto.promotion.PromotionEditDto;
 import com.app.spotick.domain.embedded.post.PostAddress;
 import com.app.spotick.domain.entity.user.User;
 import com.app.spotick.domain.type.post.PostStatus;
@@ -26,6 +28,7 @@ public class PromotionBoard extends ImageBase {
     private String subTitle;
     @Lob
     private String content;
+    @Enumerated(EnumType.STRING)
     private PromotionCategory promotionCategory;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "USER_ID")
@@ -43,9 +46,19 @@ public class PromotionBoard extends ImageBase {
         this.user = user;
     }
 
-
-
     public void setWriter(User user) {
         this.user = user;
+    }
+
+    public void update(PromotionEditDto promotionEditDto) {
+        FileDto file = promotionEditDto.getFileDto();
+
+        this.title = promotionEditDto.getTitle();
+        if (subTitle != null) {
+            this.subTitle = promotionEditDto.getSubTitle();
+        }
+        this.content = promotionEditDto.getContent();
+        this.promotionCategory = promotionEditDto.getCategory();
+        super.updateImage(file.getFileName(), file.getUuid(), file.getUploadPath());
     }
 }

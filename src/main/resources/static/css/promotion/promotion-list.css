@@ -457,3 +457,23 @@ img {
     z-index: 1030;
     background: none;
 }
+
+.register-btn {
+    position: fixed;
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    flex-wrap: wrap;
+    left: 91vw;
+    top: 65vh;
+    width: 60px;
+    height: 60px;
+    border-radius: 100%;
+    border: 1px solid #dadada;
+    z-index: 7000;
+}
+
+.register-btn img {
+    width: 30px;
+    height: 30px;
+}

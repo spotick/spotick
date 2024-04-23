@@ -1,9 +1,6 @@
 package com.app.spotick.repository.promotion;
 
-import com.app.spotick.domain.dto.promotion.FileDto;
-import com.app.spotick.domain.dto.promotion.PromotionDetailDto;
-import com.app.spotick.domain.dto.promotion.PromotionListDto;
-import com.app.spotick.domain.dto.promotion.PromotionRecommendListDto;
+import com.app.spotick.domain.dto.promotion.*;
 import com.app.spotick.domain.type.promotion.PromotionCategory;
 import com.app.spotick.util.type.PromotionSortType;
 import com.querydsl.core.types.Order;
@@ -89,9 +86,7 @@ public class PromotionQDSLRepositoryImpl implements PromotionQDSLRepository {
                         )
                 ))
                 .from(promotionBoard)
-                .where(
-                        categoryCondition
-                )
+                .where(categoryCondition)
                 .orderBy(orderByClause)
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize() + 1)
@@ -166,6 +161,31 @@ public class PromotionQDSLRepositoryImpl implements PromotionQDSLRepository {
                 .fetch();
     }
 
+    @Override
+    public Optional<PromotionEditDto> findBoardForEditing(Long promotionId, Long userId) {
+        return Optional.ofNullable(queryFactory
+                .from(promotionBoard)
+                .where(
+                        promotionBoard.id.eq(promotionId),
+                        promotionBoard.user.id.eq(userId)
+                )
+                .select(Projections.constructor(PromotionEditDto.class,
+                        promotionBoard.id,
+                        promotionBoard.title,
+                        promotionBoard.subTitle,
+                        promotionBoard.content,
+                        promotionBoard.promotionCategory,
+                        Projections.constructor(FileDto.class,
+                                promotionBoard.fileName,
+                                promotionBoard.uuid,
+                                promotionBoard.uploadPath
+                        )
+                ))
+                .fetchOne());
+    }
+
+
+    //// private
     private JPQLQuery<Long> likeCount() {
         return JPAExpressions
                 .select(promotionLike.count())
