@@ -1,22 +1,22 @@
 <!doctype html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+<html lang="en" xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6"
+      xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+          name="viewport">
+    <meta content="ie=edge" http-equiv="X-UA-Compatible">
     <!--    달력css-->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css"
+    <link crossorigin="anonymous" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css"
           integrity="sha512-aOG0c6nPNzGk+5zjwyJaoRUgCdOrfSDhmMID2u4+OIslr0GjpLKo7Xm0Ao3xmpM4T8AmIouRkqwj1nrdVsLKEQ=="
-          crossorigin="anonymous" referrerpolicy="no-referrer"/>
-    <link th:href="@{/imgs/logo/favicon.png}" rel="icon">
+          referrerpolicy="no-referrer" rel="stylesheet"/>
+    <link rel="icon" th:href="@{/imgs/logo/favicon.png}">
     <link rel="stylesheet" th:href="@{/css/global-css/datepicker.css}">
     <link rel="stylesheet" th:href="@{/css/global-css/root.css}">
     <link rel="stylesheet" th:href="@{/css/place/detail.css}"/>
-    <link th:href="@{/css/global-css/chat.css}" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/global-css/chat.css}">
 
-    <title>장소 상세보기</title>
+    <title th:text="${place.placeTitle}"/>
 </head>
 <body>
 <div th:replace="~{global-templates/chat :: chat}"></div>
@@ -26,25 +26,25 @@
 
     <!--   장소 대표사진-->
     <div class="place-img-container">
-        <button type="button" class="grid-item main-img" data-imgidx="1">
-            <img th:src="${'/file/display?fileName=' + place.placeFileList[0].uploadPath +
-            '/' + place.placeFileList[0].uuid + '_' + place.placeFileList[0].fileName}"
+        <button class="grid-item main-img" data-imgidx="1" type="button">
+            <img alt="장소 메인이미지"
                  th:alt="${'장소 이미지'+0}"
-                 alt="장소 메인이미지">
+                 th:src="${'/file/display?fileName=' + place.placeFileList[0].uploadPath +
+            '/' + place.placeFileList[0].uuid + '_' + place.placeFileList[0].fileName}">
         </button>
-        <button type="button" th:class="${'common-img grid-item grid'+(i+1)}" th:data-imgidx="${i+1}"
-                th:each="i : ${#numbers.sequence(1,4)}">
-            <img th:src="${'/file/display?fileName=' + place.placeFileList[i].uploadPath +
-            '/' + place.placeFileList[i].uuid + '_' + place.placeFileList[i].fileName}"
-                 th:alt="${'장소 이미지'+i}">
+        <button th:class="${'common-img grid-item grid'+(i+1)}" th:data-imgidx="${i+1}" th:each="i : ${#numbers.sequence(1,4)}"
+                type="button">
+            <img th:alt="${'장소 이미지'+i}"
+                 th:src="${'/file/display?fileName=' + place.placeFileList[i].uploadPath +
+            '/' + place.placeFileList[i].uuid + '_' + place.placeFileList[i].fileName}">
         </button>
 
-        <button type="button" class="more-img-btn flex-align-center">
+        <button class="more-img-btn flex-align-center" type="button">
             +
             <th:block th:if="${place.placeFileList.size() - 5 > 0}">
                 <span th:text="${(place.placeFileList.size() - 5)}"></span>
             </th:block>
-            <img src="https://shareit.kr/_next/static/media/plus_ractangle_repeated_white.e641653f.svg" alt="">
+            <img alt="" src="https://shareit.kr/_next/static/media/plus_ractangle_repeated_white.e641653f.svg">
         </button>
     </div>
     <div class="content-global-wrap">
@@ -60,7 +60,7 @@
                     </button>
                 </div>
                 <div class="place-address-box">
-                    <img src="https://shareit.kr/_next/static/media/location_filled_sweetBlue046.de36d6ce.svg" alt="">
+                    <img alt="" src="https://shareit.kr/_next/static/media/location_filled_sweetBlue046.de36d6ce.svg">
                     <span th:text="${place.placeAddress+' '+place.placeAddressDetail}"></span>
                 </div>
 
@@ -69,38 +69,38 @@
                         <div class="star-box">
                             <!--리뷰 평점%-->
                             <div class="filled-stars" th:style="${'width: '+(place.evalAvg*20)+'%'}">
-                                <img class="filled-star"
-                                     src="https://shareit.kr/_next/static/media/star_filled_paintYellow056.a8eb6e44.svg"
-                                     alt="평점" width="17">
-                                <img class="filled-star"
-                                     src="https://shareit.kr/_next/static/media/star_filled_paintYellow056.a8eb6e44.svg"
-                                     alt="평점" width="17">
-                                <img class="filled-star"
-                                     src="https://shareit.kr/_next/static/media/star_filled_paintYellow056.a8eb6e44.svg"
-                                     alt="평점" width="17">
-                                <img class="filled-star"
-                                     src="https://shareit.kr/_next/static/media/star_filled_paintYellow056.a8eb6e44.svg"
-                                     alt="평점" width="17">
-                                <img class="filled-star"
-                                     src="https://shareit.kr/_next/static/media/star_filled_paintYellow056.a8eb6e44.svg"
-                                     alt="평점" width="17">
+                                <img alt="평점"
+                                     class="filled-star"
+                                     src="https://shareit.kr/_next/static/media/star_filled_paintYellow056.a8eb6e44.svg" width="17">
+                                <img alt="평점"
+                                     class="filled-star"
+                                     src="https://shareit.kr/_next/static/media/star_filled_paintYellow056.a8eb6e44.svg" width="17">
+                                <img alt="평점"
+                                     class="filled-star"
+                                     src="https://shareit.kr/_next/static/media/star_filled_paintYellow056.a8eb6e44.svg" width="17">
+                                <img alt="평점"
+                                     class="filled-star"
+                                     src="https://shareit.kr/_next/static/media/star_filled_paintYellow056.a8eb6e44.svg" width="17">
+                                <img alt="평점"
+                                     class="filled-star"
+                                     src="https://shareit.kr/_next/static/media/star_filled_paintYellow056.a8eb6e44.svg" width="17">
                             </div>
                             <div class="default-stars">
-                                <img class="default-star"
-                                     src="https://shareit.kr/_next/static/media/star_filled_gray084.e69177ff.svg"
-                                     alt="">
-                                <img class="default-star"
-                                     src="https://shareit.kr/_next/static/media/star_filled_gray084.e69177ff.svg"
-                                     alt="">
-                                <img class="default-star"
-                                     src="https://shareit.kr/_next/static/media/star_filled_gray084.e69177ff.svg"
-                                     alt="">
-                                <img class="default-star"
-                                     src="https://shareit.kr/_next/static/media/star_filled_gray084.e69177ff.svg"
-                                     alt="">
-                                <img class="default-star"
-                                     src="https://shareit.kr/_next/static/media/star_filled_gray084.e69177ff.svg"
-                                     alt="">
+                                <img alt=""
+                                     class="default-star"
+                                     src="https://shareit.kr/_next/static/media/star_filled_gray084.e69177ff.svg">
+                                <img alt=""
+                                     class="default-star"
+                                     src="https://shareit.kr/_next/static/media/star_filled_gray084.e69177ff.svg">
+                                <img alt=""
+                                     class="default-star"
+                                     src="https://shareit.kr/_next/static/media/star_filled_gray084.e69177ff.svg">
+                                <img alt=""
+                                     class="default-star"
+                                     src="https://shareit.kr/_next/static/media/star_filled_gray084.e69177ff.svg">
+                                <img alt=""
+                                     class="default-star"
+                                     src="https://shareit.kr/_next/static/media/star_filled_gray084.e69177ff.svg">
                             </div>
                         </div>
                         <span class="review-score" th:text="${place.evalAvg}"></span>
@@ -110,7 +110,7 @@
 
                     <!--장소 수정하기 -->
                     <th:block sec:authorize="isAuthenticated()">
-                        <a th:href="@{/place/edit/{placeId}(placeId=*{placeId})}" class="place-modify-btn"
+                        <a class="place-modify-btn" th:href="@{/place/edit/{placeId}(placeId=*{placeId})}"
                            th:if="${#authentication.principal != null and #authentication.principal.id == place.hostId}">수정하기</a>
                     </th:block>
 
@@ -135,7 +135,7 @@
             <div class="care-wrap">
                 <div class="care-box">
                     <p class="care-title">
-                        <img src="https://shareit.kr/_next/static/media/caution_filled_red066.539a3741.svg" alt="">
+                        <img alt="" src="https://shareit.kr/_next/static/media/caution_filled_red066.539a3741.svg">
                         직거래 유도 주의 안내
                     </p>
                     <p>호스트 현금 결제 유도 시, 신고바랍니다. <br>
@@ -144,24 +144,24 @@
             </div>
 
             <div class="place-content-wrap">
-                <div id="placeIntroduction" class="place-info-box menu">
+                <div class="place-info-box menu" id="placeIntroduction">
                     <p class="title">공간 정보</p>
                     <p class="content" th:text="${place.placeInfo}"></p>
                 </div>
 
                 <div class="place-map-box">
                     <p class="title">위치</p>
-                    <input type="hidden" id="placeLat" th:value="${place.placeLat}">
-                    <input type="hidden" id="placeLng" th:value="${place.placeLng}">
+                    <input id="placeLat" th:value="${place.placeLat}" type="hidden">
+                    <input id="placeLng" th:value="${place.placeLng}" type="hidden">
                     <div id="map"></div>
                     <div class="place-address-box">
-                        <img src="https://shareit.kr/_next/static/media/location_filled_sweetBlue046.de36d6ce.svg"
-                             alt="">
+                        <img alt=""
+                             src="https://shareit.kr/_next/static/media/location_filled_sweetBlue046.de36d6ce.svg">
                         <span th:text="${place.placeAddress +' '+place.placeAddressDetail}"></span>
                     </div>
                 </div>
 
-                <div id="placeRule" class="place-rule-box menu">
+                <div class="place-rule-box menu" id="placeRule">
                     <p class="title">이용규칙</p>
                     <p class="content" th:text="${place.placeRule}">- 대여 시간보다 적게 사용 하더라도 대관비는 환불되지 않습니다.
 
@@ -177,7 +177,7 @@
                         - 이용 후, 쓰레기(일반/재활용/음식물) 분리수거를 꼭 진행해주세요. 미 진행 시, 추가요금이 청구될 수 있습니다.</p>
                 </div>
 
-                <div id="placeReview" class="review-wrap menu">
+                <div class="review-wrap menu" id="placeReview">
                     <div class="flex-between-align">
                         <p class="title">후기 <span class="review-count" th:text="${place.evalCount}"></span></p>
                         <!--                        <button type="button" class="review-write-btn">후기작성</button>-->
@@ -186,38 +186,38 @@
                         <div class="flex-center">
                             <div class="star-box">
                                 <div class="filled-stars" th:style="${'width: '+(place.evalAvg*20)+'%'}">
-                                    <img class="filled-star"
-                                         src="https://shareit.kr/_next/static/media/star_filled_paintYellow056.a8eb6e44.svg"
-                                         alt="평점" width="17">
-                                    <img class="filled-star"
-                                         src="https://shareit.kr/_next/static/media/star_filled_paintYellow056.a8eb6e44.svg"
-                                         alt="평점" width="17">
-                                    <img class="filled-star"
-                                         src="https://shareit.kr/_next/static/media/star_filled_paintYellow056.a8eb6e44.svg"
-                                         alt="평점" width="17">
-                                    <img class="filled-star"
-                                         src="https://shareit.kr/_next/static/media/star_filled_paintYellow056.a8eb6e44.svg"
-                                         alt="평점" width="17">
-                                    <img class="filled-star"
-                                         src="https://shareit.kr/_next/static/media/star_filled_paintYellow056.a8eb6e44.svg"
-                                         alt="평점" width="17">
+                                    <img alt="평점"
+                                         class="filled-star"
+                                         src="https://shareit.kr/_next/static/media/star_filled_paintYellow056.a8eb6e44.svg" width="17">
+                                    <img alt="평점"
+                                         class="filled-star"
+                                         src="https://shareit.kr/_next/static/media/star_filled_paintYellow056.a8eb6e44.svg" width="17">
+                                    <img alt="평점"
+                                         class="filled-star"
+                                         src="https://shareit.kr/_next/static/media/star_filled_paintYellow056.a8eb6e44.svg" width="17">
+                                    <img alt="평점"
+                                         class="filled-star"
+                                         src="https://shareit.kr/_next/static/media/star_filled_paintYellow056.a8eb6e44.svg" width="17">
+                                    <img alt="평점"
+                                         class="filled-star"
+                                         src="https://shareit.kr/_next/static/media/star_filled_paintYellow056.a8eb6e44.svg" width="17">
                                 </div>
                                 <div class="default-stars">
-                                    <img class="default-star"
-                                         src="https://shareit.kr/_next/static/media/star_filled_gray084.e69177ff.svg"
-                                         alt="">
-                                    <img class="default-star"
-                                         src="https://shareit.kr/_next/static/media/star_filled_gray084.e69177ff.svg"
-                                         alt="">
-                                    <img class="default-star"
-                                         src="https://shareit.kr/_next/static/media/star_filled_gray084.e69177ff.svg"
-                                         alt="">
-                                    <img class="default-star"
-                                         src="https://shareit.kr/_next/static/media/star_filled_gray084.e69177ff.svg"
-                                         alt="">
-                                    <img class="default-star"
-                                         src="https://shareit.kr/_next/static/media/star_filled_gray084.e69177ff.svg"
-                                         alt="">
+                                    <img alt=""
+                                         class="default-star"
+                                         src="https://shareit.kr/_next/static/media/star_filled_gray084.e69177ff.svg">
+                                    <img alt=""
+                                         class="default-star"
+                                         src="https://shareit.kr/_next/static/media/star_filled_gray084.e69177ff.svg">
+                                    <img alt=""
+                                         class="default-star"
+                                         src="https://shareit.kr/_next/static/media/star_filled_gray084.e69177ff.svg">
+                                    <img alt=""
+                                         class="default-star"
+                                         src="https://shareit.kr/_next/static/media/star_filled_gray084.e69177ff.svg">
+                                    <img alt=""
+                                         class="default-star"
+                                         src="https://shareit.kr/_next/static/media/star_filled_gray084.e69177ff.svg">
                                 </div>
                             </div>
                             <span class="review-score" th:text="${place.evalAvg}"></span>
@@ -235,19 +235,19 @@
                     <div class="flex-center review-more-btn-box">
                         <button class="review-more-btn" type="button">
                             더보기
-                            <img class="more-img"
-                                 src="https://shareit.kr/_next/static/media/arrow_down_gray014.f502da9d.svg" alt="">
+                            <img alt=""
+                                 class="more-img" src="https://shareit.kr/_next/static/media/arrow_down_gray014.f502da9d.svg">
                         </button>
                     </div>
 
 
                 </div>
 
-                <div id="placeInquiry" class="place-inquiry-box menu">
+                <div class="place-inquiry-box menu" id="placeInquiry">
                     <div class="flex-between-align">
                         <p class="title">문의 <span class="inquiry-count inquiry-cnt"
                                                   th:text="${place.inquiryCount}"></span></p>
-                        <button type="button" class="inquiry-write-btn">문의하기</button>
+                        <button class="inquiry-write-btn" type="button">문의하기</button>
                     </div>
 
                     <div class="inquiry-list-wrap">
@@ -267,11 +267,11 @@
                 <div class="flex-align">
                     <p class="title" th:text="${#numbers.formatInteger(place.placePrice,1,'COMMA')+'원'}">55,000원</p>
                     <!--                    장소기본 요금-->
-                    <input type="hidden" th:value="${place.placePrice}" id="placePrice">
+                    <input id="placePrice" th:value="${place.placePrice}" type="hidden">
                     <!--                    인원 초과시 인당 추가 요금-->
-                    <input type="hidden" th:value="${place.placeSurcharge}" id="placeSurcharge">
+                    <input id="placeSurcharge" th:value="${place.placeSurcharge}" type="hidden">
                     <!--                    장소 기본 인원 -->
-                    <input type="hidden" th:value="${place.placeDefaultPeople}" id="placeDefaultPeople">
+                    <input id="placeDefaultPeople" th:value="${place.placeDefaultPeople}" type="hidden">
                     <p class="hour"> / 시간</p>
                 </div>
                 <div class="line"></div>
@@ -284,20 +284,20 @@
                     <div class="calendar-wrap none">
                         <div class="choice-box">
                             <div class="calendar-box">
-                                <input type="hidden" id="reservationDate">
+                                <input id="reservationDate" type="hidden">
                                 <div id="datepicker"></div>
                             </div>
                             <div class="time-choice-wrap flex-column">
                                 <div>
                                     <p class="time-guide">시작 시간</p>
-                                    <select class="checkInOut" name="reservationCheckIn" id="checkIn">
-                                        <option selected disabled>시작 시간</option>
+                                    <select class="checkInOut" id="checkIn" name="reservationCheckIn">
+                                        <option disabled selected>시작 시간</option>
                                     </select>
                                 </div>
                                 <div>
                                     <p class="time-guide">종료 시간</p>
-                                    <select class="checkInOut" disabled name="reservationCheckOut" id="checkOut">
-                                        <option selected disabled>종료 시간</option>
+                                    <select class="checkInOut" disabled id="checkOut" name="reservationCheckOut">
+                                        <option disabled selected>종료 시간</option>
                                         <!-- <option disabled value="0">-->
                                         <!--    <del>오전 12시</del>-->
                                         <!-- </option>-->
@@ -332,8 +332,8 @@
                             </div>
                         </div>
                         <div class="visitor-ctr-box flex-between-align">
-                            <button type="button" class="visitors-reset">초기화</button>
-                            <button type="button" class="visitors-btn">완료</button>
+                            <button class="visitors-reset" type="button">초기화</button>
+                            <button class="visitors-btn" type="button">완료</button>
 
                         </div>
                     </div>
@@ -343,11 +343,11 @@
 
                 </div>
                 <!--                장소 예약하기 확인 폼-->
-                <form id="reservationForm" th:action="@{/place/check/reserve}" method="get">
-                    <input type="hidden" name="placeId" id="placeId" th:value="${place.placeId}">
-                    <input type="hidden" name="reservationCheckIn" id="reservationCheckIn">
-                    <input type="hidden" name="reservationCheckOut" id="reservationCheckOut">
-                    <input type="hidden" name="reservationVisitors" id="reservationVisitors">
+                <form id="reservationForm" method="get" th:action="@{/place/check/reserve}">
+                    <input id="placeId" name="placeId" th:value="${place.placeId}" type="hidden">
+                    <input id="reservationCheckIn" name="reservationCheckIn" type="hidden">
+                    <input id="reservationCheckOut" name="reservationCheckOut" type="hidden">
+                    <input id="reservationVisitors" name="reservationVisitors" type="hidden">
                 </form>
 
                 <div class="flex-align-center reservation-submit-box">
@@ -381,17 +381,17 @@
                 <div class="modal-img-item"
                      th:each="file :${place.placeFileList}">
                     <img class="modal-img"
+                         th:alt="${file.fileName}"
                          th:src="${'/file/display?fileName=' + file.uploadPath +
-                '/' + file.uuid + '_' + file.fileName}"
-                         th:alt="${file.fileName}">
+                '/' + file.uuid + '_' + file.fileName}">
                 </div>
 
             </div>
-            <button type="button" class="prev">
-                <img th:src="@{/imgs/place/circularArrowLeft.svg}" alt="">
+            <button class="prev" type="button">
+                <img alt="" th:src="@{/imgs/place/circularArrowLeft.svg}">
             </button>
-            <button type="button" class="next">
-                <img th:src="@{/imgs/place/circularArrowRight.svg}" alt="">
+            <button class="next" type="button">
+                <img alt="" th:src="@{/imgs/place/circularArrowRight.svg}">
             </button>
         </div>
     </div>
@@ -402,7 +402,7 @@
 <div class="inquiry-modal-container flex-align-center none">
     <div class="inquiry-modal-wrap flex-align">
         <button class="inquiry-cancel" type="button">
-            <img src="https://s3.hourplace.co.kr/web/images/icon/close_v4.svg" alt="">
+            <img alt="" src="https://s3.hourplace.co.kr/web/images/icon/close_v4.svg">
         </button>
         <p class="small-title">궁금한 내용을 적어주세요</p>
         <p class="sub-title">호스트가 확인 후 답변을 드릴 거예요!</p>
@@ -411,14 +411,14 @@
         </div>
         <!--        <div class="inquiry-title-box ">-->
         <!--        </div>-->
-        <input type="text" id="inquiryTitle" name="inquiryTitle" placeholder="문의 제목을 입력해주세요">
+        <input id="inquiryTitle" name="inquiryTitle" placeholder="문의 제목을 입력해주세요" type="text">
 
         <div class="inquiry-content-box flex-between-align">
             <p class="inquiry-guide">내용</p>
             <p class="letter-count"><span>0</span>/200자</p>
         </div>
-        <textarea name="inquiryContent" id="inquiryContent" cols="30" rows="10"
-                  placeholder="장소에 대해서 궁금한 점을 문의해주세요"></textarea>
+        <textarea cols="30" id="inquiryContent" name="inquiryContent" placeholder="장소에 대해서 궁금한 점을 문의해주세요"
+                  rows="10"></textarea>
         <div class="flex-align-center">
             <button class="inquiry-submit" type="button">문의등록</button>
         </div>
@@ -429,14 +429,14 @@
 <footer th:replace="~{global-templates/header-footer :: footer}"></footer>
 
 
-<script src="https://kit.fontawesome.com/c6992f5b12.js" crossorigin="anonymous"></script>
+<script crossorigin="anonymous" src="https://kit.fontawesome.com/c6992f5b12.js"></script>
 <script src="https://code.jquery.com/jquery-3.6.4.js"></script>
 <!-- 달력-->
 <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
 <script th:src="@{/js/place/detail/calendar.js}"></script>
 
-<script type="text/javascript"
-        src="//dapi.kakao.com/v2/maps/sdk.js?appkey=3dc12d7c2624483dc7c019a0a91b727f&libraries=services"></script>
+<script src="//dapi.kakao.com/v2/maps/sdk.js?appkey=3dc12d7c2624483dc7c019a0a91b727f&libraries=services"
+        type="text/javascript"></script>
 <script th:src="@{/js/global-js/global.js}" type="module"></script>
 <script th:src="@{/js/global-js/loading.js}"></script>
 <script th:src="@{/js/global-js/chat.js}" type="module"></script>

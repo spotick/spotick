@@ -19,8 +19,6 @@ export const ticketService = (() => {
             uri += `&detailDistrict=${encodeURIComponent(detailDistrict)}`;
         }
 
-        console.log(uri)
-
         const response = await fetch(uri,
             {
                 method: "GET"

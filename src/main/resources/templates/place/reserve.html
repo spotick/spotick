@@ -2,11 +2,11 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>장소 예약</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css"
+    <title th:text="${place.placeTitle}"/>
+    <link crossorigin="anonymous" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css"
           integrity="sha512-aOG0c6nPNzGk+5zjwyJaoRUgCdOrfSDhmMID2u4+OIslr0GjpLKo7Xm0Ao3xmpM4T8AmIouRkqwj1nrdVsLKEQ=="
-          crossorigin="anonymous" referrerpolicy="no-referrer"/>
-    <link th:href="@{/imgs/logo/favicon.png}" rel="icon">
+          referrerpolicy="no-referrer" rel="stylesheet"/>
+    <link rel="icon" th:href="@{/imgs/logo/favicon.png}">
     <link rel="stylesheet" th:href="@{/css/global-css/datepicker.css}">
     <link rel="stylesheet" th:href="@{/css/global-css/root.css}">
     <link rel="stylesheet" th:href="@{/css/place/reserve.css}"/>
@@ -22,21 +22,22 @@
 <div class="global-container flex-center">
 
     <div class="reservation-container">
-        <form th:action="@{/place/reserve/register}" id="reservationForm" method="post" th:object="${placeReserveRegisterDto}">
+        <form id="reservationForm" method="post" th:action="@{/place/reserve/register}"
+              th:object="${placeReserveRegisterDto}">
 
             <!--예약할 장소 번호-->
-            <input type="hidden" th:field="*{placeId}">
+            <input th:field="*{placeId}" type="hidden">
             <!--체크인 시간-->
-            <input type="hidden" th:field="*{reservationCheckIn}">
+            <input th:field="*{reservationCheckIn}" type="hidden">
             <!--체크아웃 시간-->
-            <input type="hidden" th:field="*{reservationCheckOut}">
+            <input th:field="*{reservationCheckOut}" type="hidden">
 
-<!--            장소 기본인원-->
-            <input type="hidden" id="placeDefaultPeople" th:value="${place.placeDefaultPeople}">
-<!--            장소 시간당 기본요금-->
-            <input type="hidden" id="placePrice" th:value="${place.placePrice}">
-<!--            장소 추가요금-->
-            <input type="hidden" id="placeSurcharge" th:value="${place.placeSurcharge}">
+            <!--            장소 기본인원-->
+            <input id="placeDefaultPeople" th:value="${place.placeDefaultPeople}" type="hidden">
+            <!--            장소 시간당 기본요금-->
+            <input id="placePrice" th:value="${place.placePrice}" type="hidden">
+            <!--            장소 추가요금-->
+            <input id="placeSurcharge" th:value="${place.placeSurcharge}" type="hidden">
 
             <p class="reserve-receipt">예약접수</p>
 
@@ -44,8 +45,8 @@
                 <p class="section-title">선택한 공간</p>
                 <div class="place-info-box flex-align">
                     <div class="place-img-box">
-                        <img th:src="@{/file/display(fileName=${place.placeFileDto.uploadPath+'/t_'+place.placeFileDto.uuid+'_'+place.placeFileDto.fileName})}"
-                             alt="장소 기본이미지">
+                        <img alt="장소 기본이미지"
+                             th:src="@{/file/display(fileName=${place.placeFileDto.uploadPath+'/t_'+place.placeFileDto.uuid+'_'+place.placeFileDto.fileName})}">
                     </div>
                     <div class="place-info">
                         <p class="place-number">장소 번호 <span th:text="${place.placeId}"></span></p>
@@ -60,13 +61,13 @@
                 <div class="calendar-wrap">
                     <div class="choice-box">
                         <div class="calendar-box">
-                            <input type="hidden" id="reservationDate">
+                            <input id="reservationDate" type="hidden">
                             <div id="datepicker"></div>
                         </div>
                         <div class="time-choice-wrap flex-column">
                             <div>
                                 <p class="time-guide">시작 시간</p>
-                                <select onchange="setCheckOutTimes()" class="checkInOut" id="checkIn">
+                                <select class="checkInOut" id="checkIn" onchange="setCheckOutTimes()">
                                 </select>
                             </div>
                             <div>
@@ -89,13 +90,13 @@
                 <div class="select-wrap flex-align-center">
                     <div class="people-select-box">
                         <button class="minus flex-align-center" type="button">
-                            <img src="https://shareit.kr/_next/static/media/btn-minus-bluegray.2b4551aa.svg" alt="">
+                            <img alt="" src="https://shareit.kr/_next/static/media/btn-minus-bluegray.2b4551aa.svg">
                         </button>
                         <div class="reservation-visitors flex-align-center">
-                            <input class="visitors" th:field="*{reservationVisitors}" max="99" min="1" type="number">
+                            <input class="visitors" max="99" min="1" th:field="*{reservationVisitors}" type="number">
                         </div>
                         <button class="plus flex-align-center" type="button">
-                            <img src="https://shareit.kr/_next/static/media/btn-plus-bluegray.d442947d.svg" alt="">
+                            <img alt="" src="https://shareit.kr/_next/static/media/btn-plus-bluegray.d442947d.svg">
                         </button>
                     </div>
                 </div>
@@ -117,8 +118,8 @@
                 </div>
 
                 <div class="reservation-content-wrap">
-                    <textarea th:field="*{reservationContent}"
-                              placeholder="호스트에게 전달하고 싶은 내용을 적어주세요"></textarea>
+                    <textarea placeholder="호스트에게 전달하고 싶은 내용을 적어주세요"
+                              th:field="*{reservationContent}"></textarea>
                 </div>
             </div>
 
@@ -134,16 +135,16 @@
                         </div>
                     </section>
                     <section class="people-amount-box">
-<!--                        <p class="info-title">인원 추가 금액</p>-->
-<!--                        <div class="flex-column">-->
-<!--                            <p class="amount">+ <span>5500</span> 원</p>-->
-<!--                            <p class="payment-guide">4명</p>-->
-<!--                        </div>-->
+                        <!--                        <p class="info-title">인원 추가 금액</p>-->
+                        <!--                        <div class="flex-column">-->
+                        <!--                            <p class="amount">+ <span>5500</span> 원</p>-->
+                        <!--                            <p class="payment-guide">4명</p>-->
+                        <!--                        </div>-->
                     </section>
                     <section class="total-amount-box flex-between-align">
                         <p>총 금액</p>
                         <p class="total-amount">170,000원</p>
-                        <input type="hidden" th:field="*{reservationAmount}">
+                        <input th:field="*{reservationAmount}" type="hidden">
                     </section>
 
                 </div>
@@ -151,7 +152,7 @@
             </div>
 
             <div class="flex-align-center">
-                <button type="button" class="payment-btn">예약</button>
+                <button class="payment-btn" type="button">예약</button>
             </div>
 
         </form>
@@ -162,7 +163,7 @@
 
 <footer th:replace="~{global-templates/header-footer :: footer}"></footer>
 
-<script src="https://kit.fontawesome.com/c6992f5b12.js" crossorigin="anonymous"></script>
+<script crossorigin="anonymous" src="https://kit.fontawesome.com/c6992f5b12.js"></script>
 <script src="https://code.jquery.com/jquery-3.6.4.js"></script>
 <!-- 달력-->
 <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
