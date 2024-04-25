@@ -1,0 +1,76 @@
+.body-container {
+    height: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.search-manipulator-container {
+
+}
+
+.search-input-box {
+    height: 80px;
+    width: 800px;
+    cursor: pointer;
+    border-radius: 100px;
+    padding: 0 20px;
+    display: flex;
+    align-items: center;
+    box-shadow: inset 7px 2px 10px #babebc, inset -5px -5px 12px #fff;
+    background-color: #f4f4f4;
+}
+
+.search-input-box i {
+    font-size: 40px;
+    margin-right: 10px;
+    color: #5b5b5b;
+}
+
+.search-input-box input {
+    height: 100%;
+    width: 100%;
+    text-align: center;
+    font-size: 24px;
+    font-weight: 600;
+}
+
+.filter-container {
+    border: 1px solid rgb(223 226 231);
+    border-radius: 8px;
+    width: calc(100% - 200px);
+}
+
+.filter-box {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    padding: 0 24px;
+    width: 50%;
+    height: 50px;
+    color: rgb(27 29 31);
+}
+
+.filter-box:not(:last-child) {
+    border-right: 1px solid rgb(223 226 231);
+}
+
+.filter-content {
+    cursor: pointer;
+    width: 100%;
+    height: 100%;
+    text-align: start;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+#districtView {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+#contentsContainer {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    position: relative;
+}

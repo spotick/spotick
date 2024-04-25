@@ -7,6 +7,7 @@ import com.app.spotick.domain.dto.place.PlaceManageListDto;
 import com.app.spotick.domain.dto.place.reservation.PlaceReserveBasicInfoDto;
 import com.app.spotick.domain.dto.place.reservation.PlaceReservedNotReviewedDto;
 import com.app.spotick.domain.dto.place.review.ContractedPlaceDto;
+import com.app.spotick.domain.dto.place.review.PlaceSearchListDto;
 import com.app.spotick.util.search.AreaFilter;
 import com.app.spotick.util.type.PlaceSortType;
 import org.springframework.data.domain.Page;
@@ -32,4 +33,6 @@ public interface PlaceQDSLRepository {
     Optional<ContractedPlaceDto> findPlaceBriefly(Long placeId, Long userId);
 
     Optional<PlaceEditDto> findPlaceInfoByPlaceIdAndUserId(Long placeId, Long userId);
+
+//    Slice<PlaceSearchListDto> findPlaceListByOptions(Pageable pageable, Long userId, PlaceSortType sortType, AreaFilter areaFilter, String keyword);
 }

@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+          name="viewport">
+    <meta content="ie=edge" http-equiv="X-UA-Compatible">
+    <title>Spotick | 검색</title>
+
+    <script src="https://code.jquery.com/jquery-3.6.4.js"></script>
+    <script crossorigin="anonymous" src="https://kit.fontawesome.com/c6992f5b12.js"></script>
+    <link rel="icon" th:href="@{/imgs/logo/favicon.png}">
+    <link rel="stylesheet" th:href="@{/css/global-css/root.css}">
+    <link rel="stylesheet" th:href="@{/css/global-css/chat.css}">
+    <link rel="stylesheet" th:href="@{/css/search/search.css}">
+    <link rel="stylesheet" th:href="@{/css/ticket/list-swiper.css}">
+    <link rel="stylesheet" th:href="@{/css/place/list.css}">
+</head>
+<body>
+<div>
+    <div th:replace="~{global-templates/chat :: chat}"></div>
+
+    <div th:replace="~{global-templates/header-footer :: header}"></div>
+
+    <div id="page-body">
+        <div class="body-container">
+            <div class="search-manipulator-container pt-20 mb-14">
+                <div class="space-between mb-14">
+                    <div>
+                        장소 / 티켓 버튼 제작 예정
+                    </div>
+                    <label class="search-input-box" for="searchInput">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                        <input id="searchInput" placeholder="검색어를 입력해주세요." type="text">
+                    </label>
+                </div>
+                <div class="space-between">
+                    <div class="filter-container flex items-center">
+                        <label class="filter-box" for="category">
+                            <select class="filter-content" id="category">
+                                <option th:each="sortType : ${T(com.app.spotick.util.type.PlaceSortType).values()}"
+                                        th:text="${sortType.displayName}" th:value="${sortType}"/>
+                            </select>
+                            <img alt="" src="/imgs/chevron_down_solid.svg">
+                        </label>
+                        <div class="filter-box">
+                            <button class="filter-content" id="district">
+                                <span id="districtView">지역 전체</span>
+                            </button>
+                            <img alt="" src="/imgs/chevron_down_solid.svg">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="ListItemsContainer">
+
+                <!-- 리스트 아이템 한칸 -->
+                <div class="OneItemContainer hover">
+                    <div class="OneItemImgContainer">
+                        <div class="swiper ImageSwiper swiper-initialized swiper-horizontal swiper-pointer-events swiper-backface-hidden">
+                            <a class="swiper-wrapper ImageLength" style="transform: translate3d(0px, 0px, 0px);">
+                                <!-- 이미지 한칸 -->
+                                <div class="swiper-slide swiper-slide-active" style="width: 287px;">
+                                    <img class="ItemImg">
+                                </div>
+                                <div class="swiper-slide swiper-slide-active" style="width: 287px;">
+                                    <img class="ItemImg">
+                                </div>
+                                <div class="swiper-slide swiper-slide-active" style="width: 287px;">
+                                    <img class="ItemImg">
+                                </div>
+                                <div class="swiper-slide swiper-slide-active" style="width: 287px;">
+                                    <img class="ItemImg">
+                                </div>
+                                <!-- 이미지 한칸 -->
+
+                            </a>
+                        </div>
+                        <button class="ItemBookMarkBtn" type="button">
+                            <span>
+                            <i class="fa-regular fa-bookmark"></i>
+                            </span>
+                            <span class="none">
+                            <i class="fa-solid fa-bookmark" style="color: white"></i>
+                        </span>
+                        </button>
+                    </div>
+                    <div class="ItemTextContainer">
+                        <div class="ItemHostNameContainer">
+                            <span class="ItemHostName">서울특별시</span>
+                            <div class="ItemCountsContainer">
+                                <div class="ItemsStarCountContainer">
+                                    <img alt="후기갯수" class="ItemCountImg"
+                                         th:src="@{/imgs/star_filled_paintYellow056.a8eb6e44.svg}">
+                                    <span class="ItemCountText">0</span>
+                                </div>
+                                <div class="ItemsLikeCountContainer">
+                                    <img alt="북마크갯수" class="bookmark-img" th:src="@{/imgs/bookmark_thin.svg}">
+                                    <span class="ItemCountText bookmark-count">0</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="ItemSpaceNameContainer">
+                            <p class="ItemSpaceName">
+                                <a>타이틀</a>
+                            </p>
+                        </div>
+                        <div class="ItemPriceContainer">
+                            <span class="place-price">10000원</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div th:replace="~{global-templates/header-footer :: footer}"></div>
+</div>
+</body>
+<script th:src="@{/js/global-js/global.js}" type="module"></script>
+<script th:src="@{/js/global-js/chat.js}" type="module"></script>
+<script th:src="@{/js/search/place-search.js}" type="module"></script>
+
+</html>

@@ -202,3 +202,12 @@ const appendContent = (html) => {
     contentsContainer.insertAdjacentHTML("beforeend", html);
 }
 
+
+
+
+document.querySelector('.ScrollTopBtn').addEventListener('click', () => {
+    window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+    });
+});

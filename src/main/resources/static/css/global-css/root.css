@@ -151,6 +151,16 @@ input {
     cursor: pointer;
 }
 
+select {
+    border: none;
+    font-size: 18px;
+    font-weight: bold;
+    text-align: center;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
+
 img {
     vertical-align: top;
 }
@@ -319,7 +329,7 @@ img {
     margin: 0 12px;
 }
 
-.hc-content-icon.alarm > span  {
+.hc-content-icon.alarm > span {
     position: absolute;
     width: 8px;
     height: 8px;
@@ -917,6 +927,14 @@ img {
     font-size: 16px;
 }
 
+.flex {
+    display: flex;
+}
+
+.items-center {
+    align-items: center;
+}
+
 .space-between {
     display: flex;
     justify-content: space-between;
@@ -1021,4 +1039,16 @@ img {
 
 .loading-wrap.show {
     display: flex;
+}
+
+.pt-20 {
+    padding-top: 20px;
+}
+
+.mt-20 {
+    margin-top: 20px !important;
+}
+
+.mb-14 {
+    margin-bottom: 14px !important;
 }
