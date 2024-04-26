@@ -1,5 +1,5 @@
 import {addSlideEvent} from '../../global-js/image-slide.js';
-import {bookmarkFetch} from '../../modules/fetch/bookmarkFetch.js'
+import {bookmarkFetch} from '../../modules/fetch/bookmarkFetch.js';
 
 // 무한 페이징
 let page = 1;

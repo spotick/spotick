@@ -9,6 +9,7 @@ const selectItemContainer = document.querySelector('.selectItemContainer');
 // 선택된 컨테이너의 갯수를 파악하여 컨트롤하기위해 프로퍼티 선언.
 selectItemContainer.checkboxCounter = 0;
 
+const districtView = document.getElementById('districtView');
 const districtInput = document.getElementById('district');
 const detailDistrictInput = document.getElementById('detailDistrict');
 
@@ -17,7 +18,7 @@ const detailDistrictInput = document.getElementById('detailDistrict');
 * city가 값이 있고 district가 비어있을 시 도시 기준으로 조회
 * city가 값이 있고 district가 있을 시 도시 + 상세로 조회
 * */
-let area = {
+export let districtFilter = {
     district: null,
     detailDistrict: []
 };
@@ -34,7 +35,7 @@ const resetCheckboxes = () => {
 
 
 const checkboxEvent = (checkbox) => {
-    area.district = document.querySelector('.AreaGroupBtn.On').getAttribute('data-target');
+    districtFilter.district = document.querySelector('.AreaGroupBtn.On').getAttribute('data-target');
     const detailDistrict = checkbox.name;
     // 체크 되었을 시
     if (checkbox.checked === true) {
@@ -44,7 +45,7 @@ const checkboxEvent = (checkbox) => {
             checkbox.checked = !checkbox.checked;
 
             selectItemContainer.checkboxCounter = 1;
-            area.detailDistrict = [];
+            districtFilter.detailDistrict = [];
         }
         // 상세 지역구 버튼일 시
         else {
@@ -57,7 +58,7 @@ const checkboxEvent = (checkbox) => {
             });
 
             selectItemContainer.checkboxCounter++;
-            area.detailDistrict.push(detailDistrict);
+            districtFilter.detailDistrict.push(detailDistrict);
         }
 
         // 공용 내용
@@ -89,13 +90,13 @@ const checkboxEvent = (checkbox) => {
         }
 
         if (selectItemContainer.checkboxCounter === 0) {
-            area.district = null;
+            districtFilter.district = null;
             selectedListContainer.classList.remove("On");
             changeSize(465);
         }
 
-        const index = area.detailDistrict.indexOf(detailDistrict);
-        area.detailDistrict.splice(index, 1);
+        const index = districtFilter.detailDistrict.indexOf(detailDistrict);
+        districtFilter.detailDistrict.splice(index, 1);
     }
 }
 
@@ -108,14 +109,20 @@ function changeSize(size) {
 }
 
 function setArea() {
-    if (area.district === null) {
+    if (districtView) {
+        districtFilter.district === null
+            ? districtView.innerHTML = '지역 전체'
+            : districtView.innerHTML = districtFilter.district + " " + districtFilter.detailDistrict.join(' ')
+    }
+
+    if (districtFilter.district === null) {
         districtInput.value = ``;
         detailDistrictInput.value = ``;
         return;
     }
 
-    districtInput.value = area.district;
-    detailDistrictInput.value = area.detailDistrict;
+    districtInput.value = districtFilter.district;
+    detailDistrictInput.value = districtFilter.detailDistrict;
 }
 
 ///////////////////////////////////////////////////////////////// 이벤트리스너 선언
@@ -132,13 +139,19 @@ document.getElementById('filterResetBtn').addEventListener('click', () => {
     selectedListContainer.classList.remove("On");
     changeSize(465);
     resetCheckboxes();
-    area.district = null;
-    area.detailDistrict = [];
+    districtFilter.district = null;
+    districtFilter.detailDistrict = [];
+    if (districtView) {
+        districtView.innerHTML = "지역 전체";
+    }
 });
 
 areaButtons.forEach(button => {
     button.addEventListener('click', () => {
         const target = button.getAttribute('data-target');
+
+        districtFilter.district = null;
+        districtFilter.detailDistrict = [];
 
         button.classList.add('On');
 
@@ -180,13 +193,13 @@ selectItemContainer.addEventListener('click', (e) => {
         selectedItem.remove();
 
         if (selectItemContainer.checkboxCounter === 0) {
-            area.district = null;
+            districtFilter.district = null;
             selectedListContainer.classList.remove("On");
             changeSize(465);
         }
 
-        const index = area.detailDistrict.indexOf(detailDistrict);
-        area.detailDistrict.splice(index, 1);
+        const index = districtFilter.detailDistrict.indexOf(detailDistrict);
+        districtFilter.detailDistrict.splice(index, 1);
     }
 });
 

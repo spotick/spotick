@@ -6,6 +6,7 @@ import com.app.spotick.domain.dto.place.reservation.PlaceReserveBasicInfoDto;
 import com.app.spotick.domain.entity.place.Place;
 import com.app.spotick.domain.type.post.PostStatus;
 import com.app.spotick.util.search.AreaFilter;
+import com.app.spotick.util.search.DistrictFilter;
 import com.app.spotick.util.type.PlaceSortType;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
@@ -18,6 +19,8 @@ public interface PlaceService {
     void registerPlace(PlaceRegisterDto placeRegisterDto,Long userId) throws IOException;
 
     Slice<PlaceListDto> findPlaceListPagination(Pageable pageable, Long userId, PlaceSortType sortType, AreaFilter areaFilter, String keyword);
+
+    Slice<PlaceListDto> newFindPlaceListPagination(Pageable pageable, Long userId, PlaceSortType sortType, DistrictFilter districtFilter, String keyword);
 
     PlaceDetailDto findPlaceDetailById(Long placeId,Long userId);
 
