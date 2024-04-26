@@ -15,6 +15,7 @@ import com.app.spotick.domain.entity.place.QPlaceReview;
 import com.app.spotick.domain.type.place.PlaceReservationStatus;
 import com.app.spotick.domain.type.post.PostStatus;
 import com.app.spotick.util.search.AreaFilter;
+import com.app.spotick.util.search.DistrictFilter;
 import com.app.spotick.util.type.PlaceSortType;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.Tuple;
@@ -83,6 +84,93 @@ public class PlaceQDSLRepositoryImpl implements PlaceQDSLRepository {
                 .where(place.placeStatus.eq(PostStatus.APPROVED),
                         createAreaCondition(areaFilter),
                         createSearchCondition(keyword))
+                .orderBy(createOrderByClause(sortType))
+                .offset(pageable.getOffset())   //페이지 번호
+                .limit(pageable.getPageSize() + 1)  //페이지 사이즈
+                .fetch();
+
+        boolean hasNext = false;
+
+        if (placeListDtos.size() > pageable.getPageSize()) {
+            placeListDtos.remove(pageable.getPageSize());
+            hasNext = true;
+        }
+
+//        포스트의 id만 list로 가져온다
+        List<Long> placeIdList = placeListDtos.stream().map(PlaceListDto::getId).toList();
+
+//        가져온 id리스트를 in절의 조건으로 사진정보들을 가져온다.
+        List<PlaceFileDto> fileDtoList = queryFactory.select(
+                        Projections.constructor(PlaceFileDto.class,
+                                placeFile.id,
+                                placeFile.fileName,
+                                placeFile.uuid,
+                                placeFile.uploadPath,
+                                placeFile.place.id
+                        ))
+                .from(placeFile)
+                .where(placeFile.place.id.in(placeIdList))
+                .orderBy(placeFile.id.asc(), placeFile.place.id.desc())
+                .fetch();
+
+//        사진정보를 장소 id별로 묶는다
+        Map<Long, List<PlaceFileDto>> fileListMap = fileDtoList.stream().collect(Collectors.groupingBy(PlaceFileDto::getPlaceId));
+
+//        장소 id별로 구분된 사진들을 각각 게시글 번호에 맞게 추가한다
+        placeListDtos.forEach(placeListDto -> {
+            placeListDto.updatePlaceFiles(fileListMap.get(placeListDto.getId())
+                    .stream().limit(5L).toList());
+            // 화면에서 뿌릴 주소값 가공
+            placeListDto.getPlaceAddress().cutAddress();
+        });
+
+        return new SliceImpl<>(placeListDtos, pageable, hasNext);
+    }
+
+    @Override
+    public Slice<PlaceListDto> findPlaceListPage(Pageable pageable, Long userId, PlaceSortType sortType, DistrictFilter districtFilter, String keyword) {
+        JPQLQuery<Double> reviewAvg = createReviewAvgSub(place);
+
+        JPQLQuery<Long> reviewCount = createReviewCountSub(place);
+
+        JPQLQuery<Long> bookmarkCount = createBookmarkCountSub(place);
+
+        BooleanExpression isBookmarkChecked = isBookmarkCheckedSub(place, userId);
+
+        BooleanBuilder whereClause = new BooleanBuilder();
+        whereClause.and(place.placeStatus.eq(PostStatus.APPROVED));
+
+        if (districtFilter != null && districtFilter.getDistrict() != null) {
+            if (districtFilter.getDetailDistrict() != null) {
+                BooleanBuilder booleanBuilder = new BooleanBuilder();
+                for (String detailDistrict : districtFilter.getDetailDistrict()) {
+                    booleanBuilder.or(place.placeAddress.address.like(districtFilter.getDistrict() + "%" + detailDistrict + "%"));
+                }
+                whereClause.and(booleanBuilder);
+            } else {
+                whereClause.and(place.placeAddress.address.like(districtFilter.getDistrict() + "%"));
+            }
+        }
+
+        if (keyword != null) {
+            whereClause.and(createSearchCondition(keyword));
+        }
+
+
+        List<PlaceListDto> placeListDtos = queryFactory.select(
+                        Projections.constructor(PlaceListDto.class,
+                                place.id,
+                                place.title,
+                                place.price,
+                                place.placeAddress,
+                                ExpressionUtils.as(reviewAvg, aliasReviewAvg),
+                                ExpressionUtils.as(reviewCount, aliasReviewCount),
+                                ExpressionUtils.as(bookmarkCount, aliasBookmarkCount),
+                                isBookmarkChecked
+                        )
+                )
+                .from(place)
+                .where(whereClause)
                 .orderBy(createOrderByClause(sortType))
                 .offset(pageable.getOffset())   //페이지 번호
                 .limit(pageable.getPageSize() + 1)  //페이지 사이즈
@@ -501,13 +589,33 @@ public class PlaceQDSLRepositoryImpl implements PlaceQDSLRepository {
             case POPULARITY -> buildOrderSpecifiers(
                     place.viewCount.desc(), aliasBookmarkCount.desc(),
                     aliasReviewCount.desc(), aliasReviewAvg.desc().nullsLast());
-            case NEWEST -> buildOrderSpecifiers(place.createdDate.desc());
-            case INTEREST -> buildOrderSpecifiers(aliasBookmarkCount.desc());
-            case PRICE_LOW_TO_HIGH -> buildOrderSpecifiers(place.price.asc());
-            case PRICE_HIGH_TO_LOW -> buildOrderSpecifiers(place.price.desc());
-            case VIEWS -> buildOrderSpecifiers(place.viewCount.desc());
-            case REVIEWS -> buildOrderSpecifiers(aliasReviewCount.desc());
-            case RATING_HIGH -> buildOrderSpecifiers(aliasReviewAvg.desc().nullsLast());
+            case NEWEST -> buildOrderSpecifiers(
+                    place.createdDate.desc()
+            );
+            case INTEREST -> buildOrderSpecifiers(
+                    aliasBookmarkCount.desc(),
+                    place.id.desc()
+            );
+            case PRICE_LOW_TO_HIGH -> buildOrderSpecifiers(
+                    place.price.asc(),
+                    place.id.desc()
+            );
+            case PRICE_HIGH_TO_LOW -> buildOrderSpecifiers(
+                    place.price.desc(),
+                    place.id.desc()
+            );
+            case VIEWS -> buildOrderSpecifiers(
+                    place.viewCount.desc(),
+                    place.id.desc()
+            );
+            case REVIEWS -> buildOrderSpecifiers(
+                    aliasReviewCount.desc(),
+                    place.id.desc()
+            );
+            case RATING_HIGH -> buildOrderSpecifiers(
+                    aliasReviewAvg.desc().nullsLast(),
+                    place.id.desc()
+            );
         };
     }
 
@@ -515,6 +623,7 @@ public class PlaceQDSLRepositoryImpl implements PlaceQDSLRepository {
         return specifiers;
     }
 
+    @Deprecated
     private BooleanExpression createAreaCondition(AreaFilter areaFilter) {
         if (areaFilter == null) {
             return null;

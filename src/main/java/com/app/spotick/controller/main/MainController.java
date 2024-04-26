@@ -4,6 +4,7 @@ import com.app.spotick.domain.dto.place.PlaceListDto;
 import com.app.spotick.domain.dto.user.UserDetailsDto;
 import com.app.spotick.service.place.PlaceService;
 import com.app.spotick.util.type.PlaceSortType;
+import io.lettuce.core.dynamic.annotation.Param;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
@@ -40,7 +41,8 @@ public class MainController {
     }
 
     @RequestMapping("/search")
-    public String goToSearch() {
+    public String goToSearch(@RequestParam("k") String keyword, Model model) {
+        model.addAttribute("keyword", keyword);
         return "search/search";
     }
 }

@@ -6,9 +6,11 @@ import com.app.spotick.domain.entity.place.Place;
 import com.app.spotick.domain.type.post.PostStatus;
 import com.app.spotick.service.place.PlaceService;
 import com.app.spotick.util.search.AreaFilter;
+import com.app.spotick.util.search.DistrictFilter;
 import com.app.spotick.util.type.PlaceSortType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.Sort;
@@ -22,6 +24,7 @@ import org.springframework.web.bind.annotation.*;
 import java.beans.PropertyEditorSupport;
 import java.io.IOException;
 import java.net.URLDecoder;
+import java.util.List;
 
 @RestController
 @RequestMapping("/place/api")
@@ -91,6 +94,7 @@ public class PlaceRestController {
                 .body("해당 장소를 삭제했습니다.");
     }
 
+    @Deprecated(since = "240426", forRemoval = true)
     @GetMapping("/list")
     public ResponseEntity<Slice<PlaceListDto>> placeList(@AuthenticationPrincipal UserDetailsDto userDetailsDto,
                                                          @RequestParam(name = "sort", defaultValue = "POPULARITY") String sort,
@@ -99,17 +103,33 @@ public class PlaceRestController {
                                                                  size = 12, sort = "id",
                                                                  direction = Sort.Direction.DESC
                                                          ) Pageable pageable,
-                                                         @RequestParam(name = "area",required = false)AreaFilter areaFilter) {
+                                                         @RequestParam(name = "area", required = false) AreaFilter areaFilter) {
         Long userId = userDetailsDto == null ? null : userDetailsDto.getId();
         PlaceSortType sortType = PlaceSortType.valueOf(sort);
 
-        Slice<PlaceListDto> placeList = placeService.findPlaceListPagination(pageable, userId,sortType, areaFilter,keyword);
+        Slice<PlaceListDto> placeList = placeService.findPlaceListPagination(pageable, userId, sortType, areaFilter, keyword);
         return ResponseEntity.ok(placeList);
     }
 
-//    들어오는 area 파라미터를 커스텀 바인딩
+    @GetMapping("/list/new")
+    public ResponseEntity<Slice<PlaceListDto>> newPlaceList(@RequestParam("page") int page,
+                                                            @RequestParam(name = "sort", defaultValue = "POPULARITY") PlaceSortType sortType,
+                                                            @RequestParam(value = "district", required = false) String district,
+                                                            @RequestParam(value = "detailDistrict", required = false) List<String> detailDistrict,
+                                                            @RequestParam(name = "keyword", required = false) String keyword,
+                                                            @AuthenticationPrincipal UserDetailsDto userDetailsDto) {
+        Pageable pageable = PageRequest.of(page, 12);
+        Long userId = userDetailsDto == null ? null : userDetailsDto.getId();
+
+        DistrictFilter districtFilter = new DistrictFilter(district, detailDistrict);
+
+        Slice<PlaceListDto> placeList = placeService.newFindPlaceListPagination(pageable, userId, sortType, districtFilter, keyword);
+        return ResponseEntity.ok(placeList);
+    }
+
+    //    들어오는 districtFilter 파라미터를 커스텀 바인딩
     @InitBinder
-    public void initBinder(WebDataBinder binder){
+    public void initBinder(WebDataBinder binder) {
         binder.registerCustomEditor(AreaFilter.class, new PropertyEditorSupport() {
             @Override
             public void setAsText(String text) throws IllegalArgumentException {

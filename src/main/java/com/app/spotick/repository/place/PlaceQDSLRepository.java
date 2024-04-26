@@ -9,6 +9,7 @@ import com.app.spotick.domain.dto.place.reservation.PlaceReservedNotReviewedDto;
 import com.app.spotick.domain.dto.place.review.ContractedPlaceDto;
 import com.app.spotick.domain.dto.place.review.PlaceSearchListDto;
 import com.app.spotick.util.search.AreaFilter;
+import com.app.spotick.util.search.DistrictFilter;
 import com.app.spotick.util.type.PlaceSortType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -19,6 +20,9 @@ import java.util.Optional;
 public interface PlaceQDSLRepository {
     //    메인화면에 뿌려줄 게시글 리스트
     Slice<PlaceListDto> findPlaceListPaging(Pageable pageable, Long userId, PlaceSortType sortType, AreaFilter areaFilter, String keyword);
+
+    // 업데이트 버전 게시글 리스트
+    Slice<PlaceListDto> findPlaceListPage(Pageable pageable, Long userId, PlaceSortType placeSortType, DistrictFilter districtFilter, String keyword);
 
     //    장소 상세보기
     Optional<PlaceDetailDto> findPlaceDetailById(Long placeId, Long userId);

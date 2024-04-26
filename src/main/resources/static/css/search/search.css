@@ -63,14 +63,7 @@
     font-weight: bold;
 }
 
-#districtView {
+.districtView {
     font-size: 18px;
     font-weight: bold;
-}
-
-#contentsContainer {
-    display: flex;
-    flex-wrap: wrap;
-    flex-direction: row;
-    position: relative;
 }

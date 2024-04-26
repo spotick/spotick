@@ -1259,7 +1259,7 @@ function dom_commonAncestor(nodeA, nodeB) {
     if (ancestors.indexOf(n) > -1) return n;
   }
 
-  return null; // difference document area
+  return null; // difference document districtFilter
 }
 /**
  * listing all previous siblings (until predicate hit).
@@ -3733,7 +3733,7 @@ var History_History = /*#__PURE__*/function () {
       // Clear the stack.
       this.stack = []; // Restore stackOffset to its original value.
 
-      this.stackOffset = -1; // Clear the editable area.
+      this.stackOffset = -1; // Clear the editable districtFilter.
 
       this.$editable.html(''); // Record our first snapshot (of nothing).
 
@@ -6213,7 +6213,7 @@ var Editor_Editor = /*#__PURE__*/function () {
       $target.css(imageSize);
     }
     /**
-     * returns whether editable area has focus or not.
+     * returns whether editable districtFilter has focus or not.
      */
 
   }, {
@@ -10266,7 +10266,7 @@ var ModalUI_ModalUI = /*#__PURE__*/function () {
 
 var editor = renderer["a" /* default */].create('<div class="note-editor note-frame"/>');
 var toolbar = renderer["a" /* default */].create('<div class="note-toolbar" role="toolbar"/>');
-var editingArea = renderer["a" /* default */].create('<div class="note-editing-area"/>');
+var editingArea = renderer["a" /* default */].create('<div class="note-editing-districtFilter"/>');
 var codable = renderer["a" /* default */].create('<textarea class="note-codable" aria-multiline="true"/>');
 var editable = renderer["a" /* default */].create('<div class="note-editable" contentEditable="true" role="textbox" aria-multiline="true"/>');
 var statusbar = renderer["a" /* default */].create(['<output class="note-status-output" role="status" aria-live="polite"></output>', '<div class="note-statusbar" role="status">', '<div class="note-resizebar" aria-label="resize">', '<div class="note-icon-bar"></div>', '<div class="note-icon-bar"></div>', '<div class="note-icon-bar"></div>', '</div>', '</div>'].join(''));
@@ -10710,7 +10710,7 @@ var ui = function ui(editorOptions) {
     },
 
     /**
-     * get popover content area
+     * get popover content districtFilter
      *
      * @param $popover
      * @returns {*}
@@ -10720,7 +10720,7 @@ var ui = function ui(editorOptions) {
     },
 
     /**
-     * get dialog's body area
+     * get dialog's body districtFilter
      *
      * @param $dialog
      * @returns {*}
@@ -10735,7 +10735,7 @@ var ui = function ui(editorOptions) {
         note: $note,
         editor: $editor,
         toolbar: $editor.find('.note-toolbar'),
-        editingArea: $editor.find('.note-editing-area'),
+        editingArea: $editor.find('.note-editing-districtFilter'),
         editable: $editor.find('.note-editable'),
         codable: $editor.find('.note-codable'),
         statusbar: $editor.find('.note-statusbar')
