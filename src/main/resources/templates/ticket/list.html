@@ -39,10 +39,15 @@
                     <div class="underline"></div>
                 </div>
             </div>
+            <input id="category" type="hidden" value="ALL">
         </div>
         <!-- 카테고리 네비 -->
         <!-- 필터버튼쪽 -->
         <div class="FilterContainer">
+            <label class="search-input-box" for="searchInput">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input id="searchInput" placeholder="검색어를 입력해주세요." type="text">
+            </label>
             <div class="FilterRightContainer">
                 <div class="SelectBox" id="ratingType">
                     <button class="SelectBoxBtn" type="button">
@@ -58,6 +63,7 @@
                                 th:text="${ratingType.displayName}" type="button">
                         </button>
                     </div>
+                    <input id="rate" type="hidden" value="ALL">
                 </div>
                 <div class="SelectBox" id="sortType">
                     <button class="SelectBoxBtn" type="button">
@@ -72,10 +78,13 @@
                                 th:text="${sortType.displayName}" type="button">
                         </button>
                     </div>
+                    <input id="sort" type="hidden" value="POPULARITY">
                 </div>
                 <button class="FilterBtn" id="filterBtn" type="button">
                     <img alt="필터" src="/imgs/filter_filled_rainyblue086.50bb2e40.svg">
                 </button>
+                <input id="district" type="hidden">
+                <input id="detailDistrict" type="hidden">
             </div>
         </div>
         <!-- 필터 모달창 -->
@@ -507,54 +516,57 @@
         </div>
         <!-- 필터 모달창 -->
         <!-- 리스트 -->
-        <div class="ListItemsContainer" id="postContainer">
-            <!-- 리스트 아이템 한칸 -->
-            <div class="OneItemContainer hover" th:each="ticket : ${ticketList}">
-                <th:block th:object="${ticket}">
-                    <div class="OneItemImgContainer">
-                        <a class="swiper" th:href="@{/ticket/detail/{ticketId}(ticketId = *{ticketId})}">
-                            <div class="swiper-wrapper ImageLength">
-                                <div class="swiper-slide swiper-slide-active" style="width: 287px;">
-                                    <img class="ItemImg"
-                                         th:alt="*{ticketTitle}"
-                                         th:src="|/file/display?fileName=*{uploadPath}/t_*{uuid}_*{fileName}|">
+        <div class="content-center" id="contentsContainer">
+            <div class="ListItemsContainer">
+                <!-- 리스트 아이템 한칸 -->
+                <div class="OneItemContainer hover" th:each="ticket : ${ticketList}">
+                    <th:block th:object="${ticket}">
+                        <div class="OneItemImgContainer">
+                            <a class="swiper" th:href="@{/ticket/detail/{ticketId}(ticketId = *{ticketId})}">
+                                <div class="swiper-wrapper ImageLength">
+                                    <div class="swiper-slide swiper-slide-active" style="width: 287px;">
+                                        <img class="ItemImg"
+                                             th:alt="*{ticketTitle}"
+                                             th:src="|/file/display?fileName=*{uploadPath}/t_*{uuid}_*{fileName}|">
+                                    </div>
                                 </div>
-                            </div>
-                        </a>
-                        <button class="ItemLikeBtn" th:data-id="*{ticketId}" th:data-status="*{isLiked}" type="button">
+                            </a>
+                            <button class="ItemLikeBtn" th:data-id="*{ticketId}" th:data-status="*{isLiked}"
+                                    type="button">
                             <span th:class="*{!isLiked} ? '' : 'none'">
                                 <img alt="좋아요" src="/imgs/heart_line_white_shadow.d5d214d0.png">
                             </span>
-                            <span th:class="*{isLiked} ? '' : 'none'">
+                                <span th:class="*{isLiked} ? '' : 'none'">
                                <img alt="좋아요" src="/imgs/heart_filled_white_shadow.708fbebd.png">
                             </span>
-                        </button>
-                    </div>
-                    <div class="ItemTextContainer">
-                        <div class="ItemHostNameContainer">
-                            <span class="ItemHostName" th:text="*{postAddress}"></span>
-                            <div class="ItemCountsContainer">
-                                <div class="ItemsLikeCountContainer">
-                                    <img alt="좋아요갯수" class="ItemCountImg"
-                                         src="/imgs/heart_line_thin_gray054.1ef56fe5.svg">
-                                    <span class="ItemCountText" th:text="*{likeCount}"></span>
+                            </button>
+                        </div>
+                        <div class="ItemTextContainer">
+                            <div class="ItemHostNameContainer">
+                                <span class="ItemHostName" th:text="*{postAddress}"></span>
+                                <div class="ItemCountsContainer">
+                                    <div class="ItemsLikeCountContainer">
+                                        <img alt="좋아요갯수" class="ItemCountImg"
+                                             src="/imgs/heart_line_thin_gray054.1ef56fe5.svg">
+                                        <span class="ItemCountText" th:text="*{likeCount}"></span>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="ItemSpaceNameContainer">
-                            <p class="ItemSpaceName" th:text="*{ticketTitle}"></p>
-                        </div>
-                        <div class="ItemPriceContainer">
-                            <div class="price-wrap">
-                                <span class="price-sub">최저가</span>
-                                <span class="ItemPrice"
-                                      th:text="${#numbers.formatInteger(ticket.lowestPrice, 3, 'COMMA')} + '원'"></span>
+                            <div class="ItemSpaceNameContainer">
+                                <p class="ItemSpaceName" th:text="*{ticketTitle}"></p>
                             </div>
-                            <span class="ItemDate"
-                                  th:text="*{#temporals.format(startDate, 'yyyy.MM.dd') + ' ~ ' + #temporals.format(endDate, 'yyyy.MM.dd')}"></span>
+                            <div class="ItemPriceContainer">
+                                <div class="price-wrap">
+                                    <span class="price-sub">최저가</span>
+                                    <span class="ItemPrice"
+                                          th:text="${#numbers.formatInteger(ticket.lowestPrice, 3, 'COMMA')} + '원'"></span>
+                                </div>
+                                <span class="ItemDate"
+                                      th:text="*{#temporals.format(startDate, 'yyyy.MM.dd') + ' ~ ' + #temporals.format(endDate, 'yyyy.MM.dd')}"></span>
+                            </div>
                         </div>
-                    </div>
-                </th:block>
+                    </th:block>
+                </div>
             </div>
         </div>
         <div class="loading-wrap" id="loadingMark">
@@ -564,12 +576,6 @@
 </div>
 
 <input id="isLoggedIn" th:value="${#authorization.expression('isAuthenticated()')}" type="hidden"/>
-<input id="category" type="hidden" value="ALL">
-<input id="sort" type="hidden" value="POPULARITY">
-<input id="rate" type="hidden" value="ALL">
-<input id="next" th:value="${ticketList.last}" type="hidden">
-<input id="district" type="hidden">
-<input id="detailDistrict" type="hidden">
 
 <div th:replace="~{global-templates/header-footer :: footer}"></div>
 </body>
@@ -579,6 +585,6 @@
 <script th:src="@{/js/global-js/global.js}" type="module"></script>
 <script th:src="@{/js/global-js/chat.js}" type="module"></script>
 <script src="/js/global-js/list-filter-modal.js" type="module"></script>
-<script th:src="@{/js/ticket/list/ticket-list.js}" type="module"></script>
+<script th:src="@{/js/ticket/list/list.js}" type="module"></script>
 
 </html>

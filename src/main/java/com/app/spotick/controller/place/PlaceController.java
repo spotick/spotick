@@ -32,24 +32,13 @@ import java.util.List;
 
 @Slf4j
 @Controller
-@RequestMapping("/place/*")
+@RequestMapping("/place")
 @RequiredArgsConstructor
 public class PlaceController {
     private final PlaceService placeService;
     private final PlaceReservationService reservationService;
 
-    @GetMapping("/detail/{placeId}")
-    public String placeDetail(@PathVariable("placeId") Long placeId,
-                              @AuthenticationPrincipal UserDetailsDto userDetailsDto,
-                              Model model) {
-        Long userId = userDetailsDto == null ? null : userDetailsDto.getId();
-        PlaceDetailDto place = placeService.findPlaceDetailById(placeId, userId);
-
-        model.addAttribute("place", place);
-        return "place/detail";
-    }
-
-    @GetMapping("/list")
+    @GetMapping
     public String placeList(@AuthenticationPrincipal UserDetailsDto userDetailsDto,
                             Model model) {
         Pageable pageable = PageRequest.of(0, 12);
@@ -58,6 +47,17 @@ public class PlaceController {
         Slice<PlaceListDto> contents = placeService.newFindPlaceListPagination(pageable, userId, PlaceSortType.POPULARITY, null, null);
         model.addAttribute("placeList", contents);
         return "place/list";
+    }
+
+    @GetMapping("/{placeId}")
+    public String placeDetail(@PathVariable("placeId") Long placeId,
+                              @AuthenticationPrincipal UserDetailsDto userDetailsDto,
+                              Model model) {
+        Long userId = userDetailsDto == null ? null : userDetailsDto.getId();
+        PlaceDetailDto place = placeService.findPlaceDetailById(placeId, userId);
+
+        model.addAttribute("place", place);
+        return "place/detail";
     }
 
     @GetMapping("/register")
@@ -81,7 +81,7 @@ public class PlaceController {
             return "place/register";
         }
 
-        return "redirect:/place/list";
+        return "redirect:/place";
     }
 
     @GetMapping("/check/reserve")
@@ -107,7 +107,7 @@ public class PlaceController {
 
         reservationService.registerPlaceReservation(
                 placeReserveRegisterDto, userDetailsDto.getId());
-        return "redirect:/place/detail/" + placeReserveRegisterDto.getPlaceId();
+        return "redirect:/place/" + placeReserveRegisterDto.getPlaceId();
     }
 
     @GetMapping("/edit/{placeId}")

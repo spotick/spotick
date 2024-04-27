@@ -26,9 +26,9 @@
     <div id="page-body">
         <div id="ListContainer">
             <div class="FilterContainer pt-20">
-                <label class="search-input-box" for="searchPageInput">
+                <label class="search-input-box" for="searchInput">
                     <i class="fa-solid fa-magnifying-glass"></i>
-                    <input id="searchPageInput" placeholder="검색어를 입력해주세요." type="text">
+                    <input id="searchInput" placeholder="검색어를 입력해주세요." type="text">
                 </label>
                 <div class="FilterRightContainer">
                     <div class="SelectBox" id="sortType">
@@ -487,7 +487,7 @@
                             <div class="swiper ImageSwiper swiper-initialized swiper-horizontal swiper-pointer-events swiper-backface-hidden">
                                 <a class="swiper-wrapper ImageLength"
                                    style="transform: translate3d(0px, 0px, 0px);"
-                                   th:href="@{/place/detail/{placeId}(placeId = ${place.id})}">
+                                   th:href="@{/place/{placeId}(placeId = ${place.id})}">
                                     <!-- 이미지 한칸 -->
                                     <div class="swiper-slide swiper-slide-active" style="width: 287px;"
                                          th:each="placeImg :${place.placeFiles}">
@@ -539,7 +539,7 @@
                             </div>
                             <div class="ItemSpaceNameContainer">
                                 <p class="ItemSpaceName">
-                                    <a th:href="@{/place/detail/{placeId}(placeId = ${place.id})}"
+                                    <a th:href="@{/place/{placeId}(placeId = ${place.id})}"
                                        th:text="${place.title}"></a>
                                 </p>
                             </div>

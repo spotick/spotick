@@ -1,9 +1,11 @@
 export const ticketLayout = (() => {
 
-    const showTicketList = (tickets) => {
+    const showTicketList = (data) => {
+        const contents = data.content;
+        const isLast = data.last;
         let html = ``;
 
-        tickets.forEach(ticket => {
+        contents.forEach(ticket => {
             const formattedPrice = ticket.lowestPrice.toLocaleString('ko-KR');
 
             const startDate = new Date(ticket.startDate);
@@ -67,7 +69,7 @@ export const ticketLayout = (() => {
            `;
         });
 
-        return html;
+        return {html, isLast};
     }
 
     return {

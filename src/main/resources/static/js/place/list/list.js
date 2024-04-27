@@ -13,7 +13,7 @@ const isLoggedIn = document.getElementById('isLoggedIn').value;
 
 const loadingMark = document.getElementById('loadingMark');
 
-const searchPageInput = document.getElementById('searchPageInput');
+const searchInput = document.getElementById('searchInput');
 
 const selectBoxBtn = document.querySelector('.SelectBoxBtn');
 const selectBoxList = document.querySelector('.SelectBoxList');
@@ -52,24 +52,6 @@ sortListItems.forEach(item => {
 });
 
 // 북마킹
-// $(`.ListItemsContainer`).on('click', '.ItemBookMarkBtn', function () {
-//     let isLoggedIn = $('#isLoggedIn').val();
-//     if (isLoggedIn === 'false') {
-//         alert('로그인이 필요한 서비스 입니다');
-//         location.href = '/user/login';
-//         return;
-//     }
-//     const placeId = $(this).data('placeid');
-//     const status = $(this).data('status');
-//
-//     bookmarkFetch(status, placeId)
-//         .then((boo) => {
-//             $(this).data('status', boo);
-//         });
-//
-//     $(this).find('span').toggleClass('none');
-// });
-
 contentsContainer.addEventListener('click', (e) => {
     const bookmarkBtn = e.target.closest(".ItemBookMarkBtn");
 
@@ -114,7 +96,7 @@ async function reloadPage() {
     const {
         html,
         isLast
-    } = await slicePlaceListComponents(0, sortInput.value, district, detailDistrict, searchPageInput.value);
+    } = await slicePlaceListComponents(0, sortInput.value, district, detailDistrict, searchInput.value);
 
     if (!html) {
         htmlC = `
@@ -156,10 +138,15 @@ async function getMoreContents() {
 
     await loadingMarkService.show(loadingMark);
 
+    window.scrollTo({
+        top: document.body.scrollHeight,
+        behavior: 'smooth'
+    });
+
     const {
         html,
         isLast
-    } = await slicePlaceListComponents(page, sortInput.value, district, detailDistrict, searchPageInput.value);
+    } = await slicePlaceListComponents(page, sortInput.value, district, detailDistrict, searchInput.value);
 
     listItemsContainer.insertAdjacentHTML("beforeend", html);
     isLastPage = isLast;
@@ -171,7 +158,7 @@ async function getMoreContents() {
     isLoading = false;
 }
 
-searchPageInput.addEventListener('keyup', (e) => {
+searchInput.addEventListener('keyup', (e) => {
     if (e.key === 'Enter') {
         reloadPage();
     }

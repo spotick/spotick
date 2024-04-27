@@ -67,8 +67,8 @@ public class TicketServiceImpl implements TicketService {
     }
 
     @Override
-    public Slice<TicketListDto> findTicketListPage(Pageable pageable, TicketCategory ticketCategory, TicketRatingType ticketRatingType, TicketSortType ticketSortType, DistrictFilter districtFilter, Long userId) {
-        return ticketRepository.findTicketListPage(pageable, ticketCategory, ticketRatingType, ticketSortType, districtFilter, userId);
+    public Slice<TicketListDto> findTicketListPage(Pageable pageable, TicketCategory ticketCategory, TicketRatingType ticketRatingType, TicketSortType ticketSortType, DistrictFilter districtFilter, Long userId, String keyword) {
+        return ticketRepository.findTicketListPage(pageable, ticketCategory, ticketRatingType, ticketSortType, districtFilter, userId, keyword);
     }
 
 

@@ -3,7 +3,6 @@ package com.app.spotick.repository.ticket;
 import com.app.spotick.domain.dto.page.TicketPage;
 import com.app.spotick.domain.dto.ticket.*;
 import com.app.spotick.domain.dto.ticket.grade.TicketGradeDto;
-import com.app.spotick.domain.dto.ticket.grade.TicketGradeSaleInfoDto;
 import com.app.spotick.domain.type.payment.PaymentStatus;
 import com.app.spotick.domain.type.post.PostStatus;
 import com.app.spotick.domain.type.ticket.TicketCategory;
@@ -29,7 +28,6 @@ import org.springframework.data.support.PageableExecutionUtils;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 import static com.app.spotick.domain.entity.ticket.QTicket.*;
@@ -171,7 +169,8 @@ public class TicketQDSLRepositoryImpl implements TicketQDSLRepository {
                                                    TicketRatingType ticketRatingType,
                                                    TicketSortType ticketSortType,
                                                    DistrictFilter districtFilter,
-                                                   Long userId) {
+                                                   Long userId,
+                                                   String keyword) {
 
         JPQLQuery<Integer> lowestPrice = JPAExpressions.select(ticketGrade.price.min())
                 .from(ticketGrade)
@@ -200,6 +199,10 @@ public class TicketQDSLRepositoryImpl implements TicketQDSLRepository {
             } else {
                 whereClause.and(ticket.ticketEventAddress.address.like(districtFilter.getDistrict() + "%"));
             }
+        }
+
+        if (keyword != null) {
+            whereClause.and(createSearchCondition(keyword));
         }
 
         List<TicketListDto> contents = queryFactory
@@ -411,5 +414,17 @@ public class TicketQDSLRepositoryImpl implements TicketQDSLRepository {
 
     private OrderSpecifier<?>[] buildOrderSpecifiers(OrderSpecifier<?>... specifiers) {
         return specifiers;
+    }
+
+    private BooleanExpression createSearchCondition(String keyword) {
+        BooleanExpression titleContains = ticket.title.contains(keyword);
+        BooleanExpression subTitleContains = ticket.title.contains(keyword);
+        BooleanExpression addressContains = ticket.ticketEventAddress.address.contains(keyword);
+        BooleanExpression addressDetailContains = ticket.ticketEventAddress.address.contains(keyword);
+
+        return titleContains
+                .or(subTitleContains)
+                .or(addressContains)
+                .or(addressDetailContains);
     }
 }

@@ -20,7 +20,7 @@ function toggleContent(type) {
 }
 
 function getMainPageByType(type) {
-    window.location.href = type === "place" ? "/place/list" : "/ticket/list";
+    window.location.href = type === "place" ? "/place" : "/ticket";
 }
 
 function checkUrlType() {

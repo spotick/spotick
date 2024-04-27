@@ -34,13 +34,14 @@ public class TicketRestController {
                                                            @RequestParam("sortType") TicketSortType sortType,
                                                            @RequestParam(value = "district", required = false) String district,
                                                            @RequestParam(value = "detailDistrict", required = false) List<String> detailDistrict,
+                                                           @RequestParam(value = "keyword", required = false) String keyword,
                                                            @AuthenticationPrincipal UserDetailsDto userDetailsDto) {
         Pageable pageable = PageRequest.of(page, 12);
         Long userId = userDetailsDto == null ? null : userDetailsDto.getId();
 
         DistrictFilter districtFilter = new DistrictFilter(district, detailDistrict);
 
-        Slice<TicketListDto> ticketList = ticketService.findTicketListPage(pageable, category, ratingType, sortType, districtFilter, userId);
+        Slice<TicketListDto> ticketList = ticketService.findTicketListPage(pageable, category, ratingType, sortType, districtFilter, userId, keyword);
 
         return ResponseEntity.ok(ticketList);
     }

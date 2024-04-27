@@ -572,10 +572,6 @@ public class PlaceQDSLRepositoryImpl implements PlaceQDSLRepository {
     }
 
     private BooleanExpression createSearchCondition(String keyword) {
-        if (keyword == null) {
-            return null;
-        }
-
         BooleanExpression titleContains = place.title.contains(keyword);
         BooleanExpression subTitleContains = place.subTitle.contains(keyword);
         BooleanExpression addressContains = place.placeAddress.address.contains(keyword);

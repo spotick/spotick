@@ -17,7 +17,7 @@ public interface TicketService {
 
     void registerTicket(TicketRegisterDto ticketRegisterDto, Long userId) throws IOException;
 
-    Slice<TicketListDto> findTicketListPage(Pageable pageable, TicketCategory ticketCategory, TicketRatingType ticketRatingType, TicketSortType ticketSortType, DistrictFilter districtFilter, Long userId);
+    Slice<TicketListDto> findTicketListPage(Pageable pageable, TicketCategory ticketCategory, TicketRatingType ticketRatingType, TicketSortType ticketSortType, DistrictFilter districtFilter, Long userId, String keyword);
 
     List<TicketGradeSaleInfoDto> findTicketGrades(Long ticketId, LocalDate date);
 
