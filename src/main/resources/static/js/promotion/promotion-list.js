@@ -11,33 +11,6 @@ const sortType = document.getElementById("sortType");
 
 const searchInput = document.getElementById('searchInput');
 
-var topSwiper = new Swiper(".top-swiper", {
-    slidesPerView: 4,
-    slidesPerGroup: 4,
-});
-
-var swiper = new Swiper(".category-swiper", {
-    width: 800,
-    slidesPerView: 10,
-    slidesPerGroup: 10,
-});
-
-function swiperPositionSet(el, Xposition, index) {
-    $(el).attr(
-        'style',
-        'transform:translate3d(' + Xposition[index] + 'px ,0px,0px); transition-duration: 300ms;'
-    );
-}
-
-function mainSlideChangeStart() {
-    var swiper_position_X = [0, -190, -380, -520];
-    swiperPositionSet(
-        '.category-swiper .swiper-wrapper',
-        swiper_position_X,
-        mySwiperMainNav.realIndex
-    );
-}
-
 let filterBtn = document.querySelector(".FilterBtn button")
 let filterModal = document.querySelector(".FilterModal")
 let modalCloseBtn = document.querySelector(".FilterModalCloseBtn")
@@ -190,7 +163,7 @@ const getMoreContents = async () => {
 
 const reloadPage = async () => {
     isLoading = true;
-    let htmlC = ``;
+    let htmlC;
 
     await loadingMarkService.show(loadingMark);
 

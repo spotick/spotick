@@ -20,7 +20,6 @@ import com.app.spotick.repository.place.modifyRequest.PlaceModifyReqRepository;
 import com.app.spotick.repository.place.reservation.PlaceReservationRepository;
 import com.app.spotick.repository.user.UserRepository;
 import com.app.spotick.service.place.file.PlaceFileService;
-import com.app.spotick.util.search.AreaFilter;
 import com.app.spotick.util.search.DistrictFilter;
 import com.app.spotick.util.type.PlaceSortType;
 import lombok.RequiredArgsConstructor;

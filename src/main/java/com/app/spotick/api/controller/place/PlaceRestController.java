@@ -111,6 +111,7 @@ public class PlaceRestController {
     }
 
     //    들어오는 districtFilter 파라미터를 커스텀 바인딩
+    @Deprecated(since = "240427", forRemoval = true)
     @InitBinder
     public void initBinder(WebDataBinder binder) {
         binder.registerCustomEditor(AreaFilter.class, new PropertyEditorSupport() {

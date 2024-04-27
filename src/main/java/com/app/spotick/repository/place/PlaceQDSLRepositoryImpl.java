@@ -554,7 +554,7 @@ public class PlaceQDSLRepositoryImpl implements PlaceQDSLRepository {
         return specifiers;
     }
 
-    @Deprecated
+    @Deprecated(since = "240427", forRemoval = true)
     private BooleanExpression createAreaCondition(AreaFilter areaFilter) {
         if (areaFilter == null) {
             return null;

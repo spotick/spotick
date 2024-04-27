@@ -7,8 +7,6 @@ import com.app.spotick.domain.dto.place.PlaceManageListDto;
 import com.app.spotick.domain.dto.place.reservation.PlaceReserveBasicInfoDto;
 import com.app.spotick.domain.dto.place.reservation.PlaceReservedNotReviewedDto;
 import com.app.spotick.domain.dto.place.review.ContractedPlaceDto;
-import com.app.spotick.domain.dto.place.review.PlaceSearchListDto;
-import com.app.spotick.util.search.AreaFilter;
 import com.app.spotick.util.search.DistrictFilter;
 import com.app.spotick.util.type.PlaceSortType;
 import org.springframework.data.domain.Page;

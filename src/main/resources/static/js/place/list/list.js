@@ -19,7 +19,6 @@ const selectBoxBtn = document.querySelector('.SelectBoxBtn');
 const selectBoxList = document.querySelector('.SelectBoxList');
 const selectBoxBtnImg = document.querySelector('.SelectBoxBtnImg');
 
-const sortSelectBoxBtn = document.querySelector('#sortType .SelectBoxBtn');
 const sortSelectBoxList = document.querySelector('#sortType .SelectBoxList');
 const sortSelectBoxBtnImg = document.querySelector('#sortType .SelectBoxBtnImg');
 const sortSelectBoxBtnText = document.querySelector('#sortType .SelectBoxBtnText');
@@ -89,7 +88,7 @@ function changeLike(btn, status) {
 async function reloadPage() {
     const {district, detailDistrict} = districtFilter;
     isLoading = true;
-    let htmlC = ``;
+    let htmlC;
 
     await loadingMarkService.show(loadingMark);
 
