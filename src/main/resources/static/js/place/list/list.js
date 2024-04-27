@@ -142,3 +142,7 @@ window.addEventListener('scroll', function () {
         getMoreContents();
     }
 });
+
+document.getElementById('filterSubmitBtn').addEventListener('click', () => {
+    setAreaAndCallback(reloadPage);
+});

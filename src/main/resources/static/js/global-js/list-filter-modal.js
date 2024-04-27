@@ -203,13 +203,13 @@ selectItemContainer.addEventListener('click', (e) => {
     }
 });
 
-document.getElementById('filterSubmitBtn').addEventListener('click', () => {
-    setArea();
-    filterModal.classList.remove("On");
-
-    const event = new Event('change');
-    districtInput.dispatchEvent(event);
-});
+// document.getElementById('filterSubmitBtn').addEventListener('click', () => {
+//     setArea();
+//     filterModal.classList.remove("On");
+//
+//     const event = new Event('change');
+//     districtInput.dispatchEvent(event);
+// });
 
 export const setAreaAndCallback = (callback) => {
     setArea();
