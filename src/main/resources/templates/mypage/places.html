@@ -37,7 +37,7 @@
                 <th:block th:if="${#lists.size(hostPlacesPage)}">
                     <th:block th:each="hostPlace:${hostPlacesPage}">
                         <div class="OneItemContainer hover mybookmark" th:object="${hostPlace}">
-                            <a class="OneItemImgContainer">
+                            <a class="OneItemImgContainer" th:href="@{/place/{placeId}(placeId=*{id})}">
                                 <div class="swiper ImageSwiper swiper-initialized swiper-horizontal swiper-pointer-events swiper-backface-hidden">
                                     <div class="swiper-wrapper ImageLength"
                                          style="transform: translate3d(0px, 0px, 0px);">
@@ -49,8 +49,6 @@
                                                      th:src="*{'/file/display?fileName=' + uploadPath + '/t_' + uuid + '_' + fileName}">
                                             </div>
                                         </th:block>
-
-                                        <!-- 이미지 한칸 -->
                                     </div>
                                     <div class="NavigationBtnContainer">
                                         <button class="NavigationBtn RightBtn" type="button">

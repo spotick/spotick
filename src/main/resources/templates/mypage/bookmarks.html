@@ -34,7 +34,7 @@
                                 <div class="swiper ImageSwiper swiper-initialized swiper-horizontal swiper-pointer-events swiper-backface-hidden">
                                     <a class="swiper-wrapper ImageLength"
                                        style="transform: translate3d(0px, 0px, 0px);"
-                                       th:href="@{/place/detail/{placeId}(placeId = ${placeDto.id})}">
+                                       th:href="@{/place/{placeId}(placeId = ${placeDto.id})}">
                                         <!-- 이미지 한칸 -->
                                         <th:block th:each="placeFile:${placeDto.placeFiles}">
                                             <div class="swiper-slide swiper-slide-next" th:object="${placeFile}">
@@ -67,7 +67,7 @@
                                     </span>
                                 </button>
                             </div>
-                            <a class="ItemTextContainer" th:href="@{/place/detail/{placeId}(placeId = ${placeDto.id})}">
+                            <a class="ItemTextContainer" th:href="@{/place/{placeId}(placeId = ${placeDto.id})}">
                                 <div class="ItemHostNameContainer">
                                     <span class="ItemHostName" th:text="*{placeAddress.address}"></span>
                                     <div class="ItemCountsContainer">

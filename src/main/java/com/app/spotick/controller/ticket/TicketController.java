@@ -49,7 +49,7 @@ public class TicketController {
         return "ticket/list";
     }
 
-    @GetMapping("/detail/{ticketId}")
+    @GetMapping("/{ticketId}")
     public String goToDetail(@PathVariable("ticketId") Long ticketId,
                              @AuthenticationPrincipal UserDetailsDto userDetailsDto,
                              Model model) {

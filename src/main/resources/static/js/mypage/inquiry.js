@@ -131,7 +131,7 @@ const inquiryService = (function () {
                                 <i aria-hidden="true" class="fa-solid fa-ellipsis"></i>
                                 <div class="mpc-dropdown">
                                     <div class="action-item">
-                                        <a href="/place/detail/${inquiry.id}">해당
+                                        <a href="/place/${inquiry.id}">해당
                                                     게시글로 이동</a>
                                     </div>
                                     <div class="action-item reservationDelete" id="${inquiry.inquiryId}">
@@ -145,7 +145,7 @@ const inquiryService = (function () {
                                 src="/file/display?fileName=${inquiry.placeFileDto.uploadPath}/t_${inquiry.placeFileDto.uuid}_${inquiry.placeFileDto.fileName}">
                                  style="width: 180px;">
                         </div>
-                        <a class="ItemTextContainer" href="/place/detail/${inquiry.id}">
+                        <a class="ItemTextContainer" href="/place/${inquiry.id}">
                             <div class="ItemHostNameContainer">
                                 <span class="ItemHostName">${inquiry.placeAddress.address}</span>
                                 <div class="ItemCountsContainer">
@@ -249,7 +249,7 @@ const inquiryService = (function () {
                                 <i aria-hidden="true" class="fa-solid fa-ellipsis"></i>
                                 <div class="mpc-dropdown">
                                     <div class="action-item">
-                                        <a href="/place/detail/${inquiry.ticketId}">해당
+                                        <a href="/ticket/${inquiry.ticketId}">해당
                                             게시글로 이동</a>
                                     </div>
                                     <div class="action-item ticketDelete" id="${inquiry.inquiryId}">
@@ -258,17 +258,17 @@ const inquiryService = (function () {
                                 </div>
                             </button>
                         </div>
-                        <a class="mpc-ticket-img-con" href="#">
+                        <a class="mpc-ticket-img-con" href="/ticket/${inquiry.ticketId}">
                             <img src="/file/display?fileName=${inquiry.uploadPath}/t_${inquiry.uuid}_${inquiry.fileName}">
                         </a>
                         <div class="mpct-card-content" style="min-width: 40%">
                             <div class="mpccc-row">
                                 <p class="mpccc-ticket-title general-ellipsis-1">
-                                    <a href="#">${inquiry.title}</a>
+                                    <a href="/ticket/${inquiry.ticketId}">${inquiry.title}</a>
                                 </p>
                             </div>
                             <div class="mpccc-row">
-                                <a class="mpccc-title-font general-ellipsis-1" href="#">
+                                <a class="mpccc-title-font general-ellipsis-1" href="/ticket/${inquiry.ticketId}"> 
                                     ${inquiry.ticketAddress.address} ${inquiry.ticketAddress.addressDetail}
                                 </a>
                             </div>

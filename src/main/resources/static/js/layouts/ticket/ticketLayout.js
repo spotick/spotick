@@ -18,7 +18,7 @@ export const ticketLayout = (() => {
                 <div class="OneItemContainer hover">
                     <div class="OneItemImgContainer">
                         <div class="OneItemImgContainer">
-                            <a class="swiper" href="/ticket/detail/${ticket.ticketId}">
+                            <a class="swiper" href="/ticket/${ticket.ticketId}">
                                 <div class="swiper-wrapper ImageLength">
                                     <div class="swiper-slide swiper-slide-active" style="width: 287px;">
                                         <img class="ItemImg"

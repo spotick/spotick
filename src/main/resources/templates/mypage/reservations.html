@@ -144,7 +144,7 @@
                                     </button>
                                 </div>
                                 <a class="mpcr-img-con"
-                                   th:href="@{/place/detail/{placeId}(placeId = ${reservationDto.id})}">
+                                   th:href="@{/place/{placeId}(placeId = ${reservationDto.id})}">
                                     <img style="width: 180px;"
                                          th:alt="*{title}"
                                          th:src="*{'/file/display?fileName='
@@ -167,7 +167,7 @@
                                         </div>
                                     </div>
                                     <a class="ItemSpaceNameContainer"
-                                       th:href="@{/place/detail/{placeId}(placeId = ${reservationDto.id})}">
+                                       th:href="@{/place/{placeId}(placeId = ${reservationDto.id})}">
                                         <p class="ItemSpaceName" th:text="*{title}"></p>
                                     </a>
                                     <div class="ItemPriceContainer">
