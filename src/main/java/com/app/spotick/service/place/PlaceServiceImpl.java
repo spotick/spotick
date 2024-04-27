@@ -46,7 +46,6 @@ public class PlaceServiceImpl implements PlaceService {
     private final UserRepository userRepository;
     private final PlaceFileService placeFileService;
     private final PlaceModifyReqRepository placeModifyReqRepository;
-    private final int PAGE_SIZE = 12;
 
     @Override
     public void registerPlace(PlaceRegisterDto placeRegisterDto, Long userId) throws IOException {
@@ -107,9 +106,7 @@ public class PlaceServiceImpl implements PlaceService {
 
         List<PlaceReservation> foundPlaces = placeReservationRepository.findAllByPlace(tmpPlace);
 
-        foundPlaces.forEach(foundPlace -> {
-            foundPlace.updateStatus(PlaceReservationStatus.REJECTED);
-        });
+        foundPlaces.forEach(foundPlace -> foundPlace.updateStatus(PlaceReservationStatus.REJECTED));
     }
 
     @Override

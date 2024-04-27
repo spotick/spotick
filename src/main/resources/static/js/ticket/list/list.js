@@ -136,7 +136,7 @@ window.addEventListener('scroll', function () {
 async function reloadPage() {
     const {district, detailDistrict} = districtFilter;
     isLoading = true;
-    let htmlC = ``;
+    let htmlC;
 
     await loadingMarkService.show(loadingMark);
 

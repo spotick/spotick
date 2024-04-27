@@ -554,23 +554,6 @@ public class PlaceQDSLRepositoryImpl implements PlaceQDSLRepository {
         return specifiers;
     }
 
-    @Deprecated(since = "240427", forRemoval = true)
-    private BooleanExpression createAreaCondition(AreaFilter areaFilter) {
-        if (areaFilter == null) {
-            return null;
-        }
-        BooleanBuilder booleanBuilder = new BooleanBuilder();
-        List<String> list = areaFilter.getAddress();
-        StringPath address = place.placeAddress.address;
-
-        for (String area : list) {
-            booleanBuilder.or(address.contains(area));
-        }
-
-        return address.startsWith(areaFilter.getCity())
-                .and(booleanBuilder);
-    }
-
     private BooleanExpression createSearchCondition(String keyword) {
         BooleanExpression titleContains = place.title.contains(keyword);
         BooleanExpression subTitleContains = place.subTitle.contains(keyword);

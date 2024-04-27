@@ -80,8 +80,6 @@ function ticketDeleteInquiry(inquiryId) {
 }
 
 const container = document.getElementById('inquiryContainer');
-const placeCount = document.getElementById('placeCount');
-const ticketCount = document.getElementById('ticketCount');
 const paginationContainer = document.querySelector('.pagination-container');
 const loadingMark = document.getElementById('mpLoadingMark');
 const inquiryService = (function () {
