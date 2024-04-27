@@ -1,3 +1,31 @@
+.search-input-box {
+    position: relative;
+    height: 40px;
+    width: 400px;
+    cursor: pointer;
+    border-radius: 100px;
+    padding: 0 20px;
+    display: flex;
+    align-items: center;
+    box-shadow: inset 7px 2px 10px #babebc, inset -5px -5px 12px #fff;
+    background-color: #f4f4f4;
+}
+
+.search-input-box i {
+    font-size: 20px;
+    margin-right: 10px;
+    color: #5b5b5b;
+    position: absolute;
+}
+
+.search-input-box input {
+    height: 100%;
+    width: 100%;
+    text-align: center;
+    font-size: 16px;
+    font-weight: 600;
+}
+
 .CategoryContainer {
     display: block;
     width: 100%;
@@ -26,9 +54,9 @@
     margin: 0 auto 16px;
     display: flex;
     -webkit-box-align: center;
-    align-items: center;
+    align-items: flex-end;
     -webkit-box-pack: justify;
-    justify-content: flex-end;
+    justify-content: space-between;
 }
 
 .EventCheckBoxContainer {

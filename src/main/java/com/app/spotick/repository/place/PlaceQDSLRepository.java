@@ -18,16 +18,11 @@ import org.springframework.data.domain.Slice;
 import java.util.Optional;
 
 public interface PlaceQDSLRepository {
-    //    메인화면에 뿌려줄 게시글 리스트
-    Slice<PlaceListDto> findPlaceListPaging(Pageable pageable, Long userId, PlaceSortType sortType, AreaFilter areaFilter, String keyword);
-
     // 업데이트 버전 게시글 리스트
     Slice<PlaceListDto> findPlaceListPage(Pageable pageable, Long userId, PlaceSortType placeSortType, DistrictFilter districtFilter, String keyword);
-
-    //    장소 상세보기
+    // 장소 상세보기
     Optional<PlaceDetailDto> findPlaceDetailById(Long placeId, Long userId);
-
-    //    장소예약페이지에서  장소에대한 기본정보
+    // 장소예약페이지에서  장소에대한 기본정보
     Optional<PlaceReserveBasicInfoDto> findPlaceReserveBasicInfo(Long placeId);
 
     Page<PlaceReservedNotReviewedDto> findPlaceListNotRelatedToReview(Long userId, Pageable pageable);

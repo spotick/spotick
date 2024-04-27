@@ -13,6 +13,7 @@ import com.app.spotick.util.type.PlaceSortType;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.Sort;
@@ -49,23 +50,13 @@ public class PlaceController {
     }
 
     @GetMapping("/list")
-    public String placeList(Model model,@AuthenticationPrincipal UserDetailsDto userDetailsDto,
-                            @RequestParam(name = "sort", defaultValue = "POPULARITY") String sort,
-                            @RequestParam(name = "keyword", required = false) String keyword,
-                            @PageableDefault(page = 0,
-                                    size = 12, sort = "id",
-                                    direction = Sort.Direction.DESC
-                            ) Pageable pageable){
+    public String placeList(@AuthenticationPrincipal UserDetailsDto userDetailsDto,
+                            Model model) {
+        Pageable pageable = PageRequest.of(0, 12);
+        Long userId = userDetailsDto == null ? null : userDetailsDto.getId();
 
-        System.out.println("========================");
-        System.out.println(keyword);
-        System.out.println("========================");
-        Long userId = userDetailsDto==null? null: userDetailsDto.getId();
-        PlaceSortType sortType = PlaceSortType.valueOf(sort);
-
-        Slice<PlaceListDto> placeList = placeService.findPlaceListPagination(pageable,userId,sortType,null,keyword);
-        model.addAttribute("placeList",placeList);
-        model.addAttribute("sortTypes", PlaceSortType.values());
+        Slice<PlaceListDto> contents = placeService.newFindPlaceListPagination(pageable, userId, PlaceSortType.POPULARITY, null, null);
+        model.addAttribute("placeList", contents);
         return "place/list";
     }
 
@@ -149,7 +140,7 @@ public class PlaceController {
         }
 
         if (placeEditDto.getSaveFileIdList().size() +
-                (hasFiles(placeEditDto.getPlaceNewFiles()) ? placeEditDto.getPlaceNewFiles().size() : 0) < 5) {
+            (hasFiles(placeEditDto.getPlaceNewFiles()) ? placeEditDto.getPlaceNewFiles().size() : 0) < 5) {
             redirectAttributes.addFlashAttribute("fileError", "파일은 총 5개 이상이어야 합니다.");
             return "redirect:/place/edit/" + placeId;
         }
@@ -168,8 +159,6 @@ public class PlaceController {
     private boolean hasFiles(List<MultipartFile> files) {
         return files != null && files.stream().anyMatch(file -> file.getSize() > 0);
     }
-
-
 }
 
 

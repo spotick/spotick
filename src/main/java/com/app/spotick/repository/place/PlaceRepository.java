@@ -16,6 +16,4 @@ public interface PlaceRepository extends JpaRepository<Place, Long>, PlaceQDSLRe
 
     Optional<Place> findByIdAndUser(Long id, User user);
 
-
-
 }

@@ -1,6 +1,6 @@
 import {slicePlaceListComponents} from "../components/place/placeComponents.js";
 import {loadingMarkService} from "../modules/loadingMark.js";
-import {districtFilter} from '../ticket/list/list-filter-modal.js';
+import {districtFilter} from '../global-js/list-filter-modal.js';
 
 let isLoading;
 let page = 0;
