@@ -1,6 +1,13 @@
+import {sliceTicketListComponent} from "../../components/ticket/ticketComponent.js";
 import {requestLike} from "../../modules/fetch/likeFetch.js";
-import {showTicketListEvent} from "../../components/ticket/ticketComponent.js";
+import {districtFilter, setAreaAndCallback} from '../../global-js/list-filter-modal.js';
 import {loadingMarkService} from "../../modules/loadingMark.js";
+
+let isLoading = false;
+let page = 1;
+let isLastPage = false;
+
+const isLoggedIn = document.getElementById('isLoggedIn').value;
 
 // ============================================== 선언부
 const categoryInput = document.getElementById('category');
@@ -19,8 +26,7 @@ const ratingSelectBoxBtnImg = document.querySelector('#ratingType .SelectBoxBtnI
 const ratingSelectBoxBtnText = document.querySelector('#ratingType .SelectBoxBtnText');
 const ratingListItems = document.querySelectorAll('#ratingType .SelectBoxListItem');
 
-const districtInput = document.getElementById('district');
-const detailDistrictInput = document.getElementById('detailDistrict');
+const searchInput = document.getElementById('searchInput');
 
 // 인기순 필터
 sortSelectBoxBtn.addEventListener('click', function () {
@@ -92,16 +98,11 @@ categories.forEach((category) => {
 /////////////////////////////////////////////////////////////////////////////////////////
 HTMLCollection.prototype.forEach = Array.prototype.forEach;
 
-let isLoggedIn = document.getElementById('isLoggedIn').value;
-let page = 1;
-let isLoading = false;
-let isLastPage = document.getElementById("next").value;
-
-const postContainer = document.getElementById('postContainer');
+const contentsContainer = document.getElementById('contentsContainer');
 const loadingMark = document.getElementById('loadingMark');
 
 // 이벤트 위임으로 좋아요 기능 구현
-postContainer.addEventListener('click', function (e) {
+contentsContainer.addEventListener('click', function (e) {
     const itemLikeBtn = e.target.closest(".ItemLikeBtn");
     if (itemLikeBtn) {
         if (isLoggedIn === 'false') {
@@ -114,16 +115,12 @@ postContainer.addEventListener('click', function (e) {
         const status = itemLikeBtn.getAttribute("data-status");
 
         requestLike(status, ticketId, (result) => {
-            this.setAttribute('data-status', result);
+            itemLikeBtn.setAttribute('data-status', result);
 
             changeLike(itemLikeBtn, result);
         });
     }
 });
-
-districtInput.addEventListener('change', () => {
-    reloadPage();
-})
 
 // 스크롤시 슬라이스 로딩
 window.addEventListener('scroll', function () {
@@ -132,51 +129,83 @@ window.addEventListener('scroll', function () {
     let {scrollTop, scrollHeight, clientHeight} = document.documentElement;
 
     if (clientHeight + scrollTop >= scrollHeight) {
-        loadNextPage();
+        getMoreContents();
     }
 });
 
-function loadNextPage() {
+async function reloadPage() {
+    const {district, detailDistrict} = districtFilter;
     isLoading = true;
-    loadingMarkService.show(loadingMark)
-        .then(() => {
-            window.scrollTo({
-                top: document.body.scrollHeight,
-                behavior: 'smooth'
-            });
-            return showTicketListEvent(page, categoryInput.value, rateInput.value, sortInput.value, districtInput.value, detailDistrictInput.value, postContainer);
-        })
-        .then(() => {
-            loadingMarkService.hide(loadingMark);
-            page++;
-            isLoading = false;
-        })
-        .catch(error => {
-            console.error("로드 중 오류 발생 : ", error);
-            isLoading = false;
-        });
+    let htmlC;
+
+    await loadingMarkService.show(loadingMark);
+
+    const {
+        html,
+        isLast
+    } = await sliceTicketListComponent(0, categoryInput.value, rateInput.value, sortInput.value, district, detailDistrict, searchInput.value);
+
+    if (!html) {
+        htmlC = `
+            <div class="empty-list-content">
+                <img src="/imgs/empty.png" alt="empty">
+                <p class="main mt-4">
+                    일치하는 결과가 없어요
+                </p>
+                <p class="sub mt-1">
+                    검색 범위를 넓혀 보세요.
+                </p>
+            </div>
+        `;
+    } else {
+        htmlC = `
+            <div class="ListItemsContainer">
+                ${html}
+            </div>
+        `;
+    }
+
+    contentsContainer.innerHTML = htmlC;
+    isLastPage = isLast;
+
+    await loadingMarkService.hide(loadingMark);
+
+    page = 1;
+    isLoading = false;
 }
 
-function reloadPage() {
-    postContainer.innerHTML = '';
-    page = 0;
-
+async function getMoreContents() {
+    const listItemsContainer = contentsContainer.querySelector('.ListItemsContainer');
+    const {district, detailDistrict} = districtFilter;
     isLoading = true;
-    loadingMarkService.show(loadingMark)
-        .then(() => {
-            window.scrollTo({
-                top: document.body.scrollHeight,
-                behavior: 'smooth'
-            });
-            return showTicketListEvent(page, categoryInput.value, rateInput.value, sortInput.value, districtInput.value, detailDistrictInput.value, postContainer);
-        })
-        .then(() => {
-            loadingMarkService.hide(loadingMark);
-            page++;
-            isLoading = false;
-        })
-        .catch(error => {
-            console.error("로드 중 오류 발생 : ", error);
-            isLoading = false;
-        });
+
+    await loadingMarkService.show(loadingMark);
+
+    window.scrollTo({
+        top: document.body.scrollHeight,
+        behavior: 'smooth'
+    });
+
+    const {
+        html,
+        isLast
+    } = await sliceTicketListComponent(page, categoryInput.value, rateInput.value, sortInput.value, district, detailDistrict, searchInput.value);
+
+    listItemsContainer.insertAdjacentHTML("beforeend", html);
+    isLastPage = isLast;
+
+    await loadingMarkService.hide(loadingMark);
+
+    page++;
+    isLoading = false;
 }
+
+searchInput.addEventListener('keyup', (e) => {
+    if (e.key === 'Enter') {
+        reloadPage();
+    }
+});
+
+document.getElementById('filterSubmitBtn').addEventListener('click', () => {
+    setAreaAndCallback(reloadPage);
+});

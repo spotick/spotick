@@ -67,8 +67,8 @@ public class PromotionServiceImpl implements PromotionService {
     }
 
     @Override
-    public Slice<PromotionListDto> getPromotionBoards(Pageable pageable, PromotionCategory category, PromotionSortType sortType) {
-        return promotionRepository.findPromotionList(pageable, category, sortType);
+    public Slice<PromotionListDto> getPromotionBoards(Pageable pageable, PromotionCategory category, PromotionSortType sortType, String keyword) {
+        return promotionRepository.findPromotionList(pageable, category, sortType, keyword);
     }
 
     @Override
@@ -108,10 +108,12 @@ public class PromotionServiceImpl implements PromotionService {
 
     private FileDto saveFile(MultipartFile file) throws IOException {
         String originName = file.getOriginalFilename();
-        originName = originName.replace("\\s", ""); //파일 이름에 공백 제거
+        if (originName != null) {
+            originName = originName.replace("\\s", ""); //파일 이름에 공백 제거
+        }
         UUID uuid = UUID.randomUUID();
 
-        String sysName = uuid.toString() + "_" + originName;
+        String sysName = uuid + "_" + originName;
 
         File uploadPath = new File(ROOT_DIR, getUploadPath());
 

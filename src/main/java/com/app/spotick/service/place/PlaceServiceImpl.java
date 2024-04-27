@@ -20,7 +20,6 @@ import com.app.spotick.repository.place.modifyRequest.PlaceModifyReqRepository;
 import com.app.spotick.repository.place.reservation.PlaceReservationRepository;
 import com.app.spotick.repository.user.UserRepository;
 import com.app.spotick.service.place.file.PlaceFileService;
-import com.app.spotick.util.search.AreaFilter;
 import com.app.spotick.util.search.DistrictFilter;
 import com.app.spotick.util.type.PlaceSortType;
 import lombok.RequiredArgsConstructor;
@@ -47,7 +46,6 @@ public class PlaceServiceImpl implements PlaceService {
     private final UserRepository userRepository;
     private final PlaceFileService placeFileService;
     private final PlaceModifyReqRepository placeModifyReqRepository;
-    private final int PAGE_SIZE = 12;
 
     @Override
     public void registerPlace(PlaceRegisterDto placeRegisterDto, Long userId) throws IOException {
@@ -108,9 +106,7 @@ public class PlaceServiceImpl implements PlaceService {
 
         List<PlaceReservation> foundPlaces = placeReservationRepository.findAllByPlace(tmpPlace);
 
-        foundPlaces.forEach(foundPlace -> {
-            foundPlace.updateStatus(PlaceReservationStatus.REJECTED);
-        });
+        foundPlaces.forEach(foundPlace -> foundPlace.updateStatus(PlaceReservationStatus.REJECTED));
     }
 
     @Override

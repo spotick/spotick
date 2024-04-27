@@ -5,20 +5,30 @@ export const placeLayouts = (() => {
         const isLast = data.last;
         let html = '';
 
-        contents.forEach(place => {
+        contents.forEach(({
+                              id,
+                              title,
+                              price,
+                              placeAddress,
+                              placeFiles,
+                              evalAvg,
+                              evalCount,
+                              bookmarkCount,
+                              isBookmarkChecked
+                          }) => {
             html += `
                 <div class="OneItemContainer hover">
                     <div class="OneItemImgContainer">
                         <div class="swiper ImageSwiper swiper-initialized swiper-horizontal swiper-pointer-events swiper-backface-hidden">
-                            <a href="/place/detail/${place.id}"
+                            <a href="/place/${id}"
                                class="swiper-wrapper ImageLength" style="transform: translate3d(0px, 0px, 0px);" >
             `;
-            place.placeFiles.forEach(placeImg => {
+            placeFiles.forEach(placeImg => {
                 html += `
                                 <div class="swiper-slide swiper-slide-active" style="width: 287px;">
                                     <img class="ItemImg"
                                          height="1350.6666666666665px" 
-                                         alt="${place.title}" src="/file/display?fileName=${placeImg.uploadPath}/t_${placeImg.uuid}_${placeImg.fileName}">
+                                         alt="${title}" src="/file/display?fileName=${placeImg.uploadPath}/t_${placeImg.uuid}_${placeImg.fileName}">
                                 </div>
                 `;
             });
@@ -36,37 +46,37 @@ export const placeLayouts = (() => {
                                 <p><span class="snapIndex">1</span>/5</p>
                             </div>
                         </div>
-                        <button class="ItemBookMarkBtn" data-placeid="${place.id}" data-status="${place.bookmarkChecked}" type="button">
-                            <span class="${!place.bookmarkChecked ? '' : 'none'}">
+                        <button class="ItemBookMarkBtn" data-placeid="${id}" data-status="${isBookmarkChecked}" type="button">
+                            <span class="${!isBookmarkChecked ? '' : 'none'}">
                                 <i class="fa-regular fa-bookmark"></i>
                             </span>
-                            <span class="${place.bookmarkChecked ? '' : 'none'}">
+                            <span class="${isBookmarkChecked ? '' : 'none'}">
                                 <i class="fa-solid fa-bookmark" style="color: white"></i>
                             </span>
                         </button>
                     </div>
                     <div class="ItemTextContainer">
                         <div class="ItemHostNameContainer">
-                            <span class="ItemHostName">${place.placeAddress.address}</span>
+                            <span class="ItemHostName">${placeAddress.address}</span>
                             <div class="ItemCountsContainer">
                                 <div class="ItemsStarCountContainer">
                                     <img alt="후기갯수" class="ItemCountImg"
                                          src="/imgs/star_filled_paintYellow056.a8eb6e44.svg">
-                                    <span class="ItemCountText">${place.evalAvg}(${place.evalCount})</span>
+                                    <span class="ItemCountText">${evalAvg}(${evalCount})</span>
                                 </div>
                                 <div class="ItemsLikeCountContainer">
                                     <img alt="북마크갯수" class="bookmark-img" src="/imgs/bookmark_thin.svg">
-                                    <span class="ItemCountText bookmark-count">${place.bookmarkCount}</span>
+                                    <span class="ItemCountText bookmark-count">${bookmarkCount}</span>
                                 </div>
                             </div>
                         </div>
                         <div class="ItemSpaceNameContainer">
                             <p class="ItemSpaceName" >
-                                <a href="/place/detail/${place.id}">${place.title}</a>
+                                <a href="/place/${id}">${title}</a>
                             </p>
                         </div>
                         <div class="ItemPriceContainer">
-                            <span class="place-price">${(place.price).toLocaleString()}원</span>
+                            <span class="place-price">${(price).toLocaleString()}원</span>
                         </div>
                     </div>
                 </div>

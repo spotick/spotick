@@ -1,35 +1,30 @@
-* {
-    padding: 0;
-    margin: 0;
-}
-
-*, :after, :before {
-    box-sizing: border-box;
-    outline: none;
-}
-
-a, abbr, acronym, address, applet, article, aside, audio, b, big, blockquote, body, button, canvas, caption, center, cite, code, dd, del, details, dfn, dl, dt, em, embed, fieldset, figcaption, figure, footer, form, h1, h2, h3, h4, h5, h6, header, hgroup, html, i, iframe, img, input, ins, kbd, label, legend, li, mark, menu, nav, object, ol, output, pre, q, ruby, s, samp, section, small, strike, sub, summary, sup, table, time, tt, u, ul, var, video {
-    margin: 0;
-    padding: 0;
-    border: 0;
-}
-
-a, a:hover {
-    text-decoration: none;
-}
-
-a {
-    color: #000;
-}
-
-a, button, label {
+.search-input-box {
+    position: relative;
+    height: 40px;
+    width: 400px;
     cursor: pointer;
+    border-radius: 100px;
+    padding: 0 20px;
+    display: flex;
+    align-items: center;
+    box-shadow: inset 7px 2px 10px #babebc, inset -5px -5px 12px #fff;
+    background-color: #f4f4f4;
 }
 
-img {
-    vertical-align: top;
+.search-input-box i {
+    font-size: 20px;
+    margin-right: 10px;
+    color: #5b5b5b;
+    position: absolute;
 }
 
+.search-input-box input {
+    height: 100%;
+    width: 100%;
+    text-align: center;
+    font-size: 16px;
+    font-weight: 600;
+}
 
 .MainContainer{
     display: flex;
@@ -116,7 +111,7 @@ img {
     min-width: fit-content;
     height: 36px;
     cursor: pointer;
-    margin-right: 0px;
+    margin-right: 0;
     font-size: 14px;
     line-height: 20px;
     letter-spacing: -0.06em;
@@ -130,7 +125,7 @@ img {
     min-width: fit-content;
     height: 36px;
     cursor: pointer;
-    margin-right: 0px;
+    margin-right: 0;
     font-size: 14px;
     line-height: 20px;
     letter-spacing: -0.06em;
@@ -144,7 +139,7 @@ img {
     min-width: fit-content;
     height: 36px;
     cursor: pointer;
-    margin-right: 0px;
+    margin-right: 0;
     font-size: 14px;
     line-height: 20px;
     letter-spacing: -0.06em;
@@ -158,7 +153,7 @@ img {
     min-width: fit-content;
     height: 36px;
     cursor: pointer;
-    margin-right: 0px;
+    margin-right: 0;
     font-size: 14px;
     line-height: 20px;
     letter-spacing: -0.06em;
@@ -184,13 +179,13 @@ img {
 
 .FilterBtn{
     position: absolute;
-    top: 0px;
-    right: 0px;
+    top: 0;
+    right: 0;
     display: flex;
     -webkit-box-align: center;
     align-items: center;
     height: 100%;
-    padding: 20px 0px 30px 14px;
+    padding: 20px 0 30px 14px;
     background-color: rgb(255, 255, 255);
     z-index: 1000;
 }
@@ -199,7 +194,7 @@ img {
     height: 30px;
     border-radius: 50%;
     background-color: rgb(255, 255, 255);
-    box-shadow: rgba(120, 143, 165, 0.2) 0px 2px 6px;
+    box-shadow: rgba(120, 143, 165, 0.2) 0 2px 6px;
 }
 
 /* 필터 모달창 시작 */
@@ -209,8 +204,8 @@ img {
     width: 100%;
     height: 100%;
     position: fixed;
-    left: 0px;
-    top: 0px;
+    left: 0;
+    top: 0;
     background-color: rgba(0, 0, 0, 0.28);
     z-index: 1060;
     overflow-y: auto;
@@ -229,8 +224,8 @@ img {
 
 .FilterModalHeader{
     position: sticky;
-    top: 0px;
-    left: 0px;
+    top: 0;
+    left: 0;
     width: 100%;
     background-color: rgb(255, 255, 255);
     display: flex;
@@ -238,9 +233,9 @@ img {
     align-items: center;
     -webkit-box-pack: center;
     justify-content: center;
-    padding: 18px 0px;
+    padding: 18px 0;
     border-bottom: 1px solid rgb(212, 219, 226);
-    border-radius: 20px 20px 0px 0px;
+    border-radius: 20px 20px 0 0;
 }
 
 .FilterModalHeader > p{
@@ -256,7 +251,7 @@ img {
 }
 
 .FilterModalBody{
-    padding: 43px 18px 0px;
+    padding: 43px 18px 0;
 }
 
 .FilterModalBodyHeader{
@@ -274,7 +269,7 @@ img {
 
 .SelectBox{
     height: 47px;
-    padding: 0px 40px 2px 16px;
+    padding: 0 40px 2px 16px;
     color: rgb(87, 87, 87);
     font-size: 15px;
     letter-spacing: -0.38px;
@@ -307,7 +302,7 @@ img {
     height: 36px;
     padding: 6px 13px 7px;
     border-radius: 18px;
-    box-shadow: rgba(0, 0, 0, 0.03) 1px 2px 2px 0px;
+    box-shadow: rgba(0, 0, 0, 0.03) 1px 2px 2px 0;
     border: 1px solid rgb(212, 219, 226);
     background-color: rgb(255, 255, 255);
     font-size: 15px;
@@ -319,7 +314,7 @@ img {
     height: 36px;
     padding: 6px 13px 7px;
     border-radius: 18px;
-    box-shadow: rgba(0, 0, 0, 0.03) 1px 2px 2px 0px;
+    box-shadow: rgba(0, 0, 0, 0.03) 1px 2px 2px 0;
     border: 1px solid rgb(0, 117, 235);
     background-color: rgb(0, 117, 235);
     font-size: 15px;
@@ -359,7 +354,7 @@ img {
     justify-content: center;
     width: 100%;
     min-height: 50px;
-    padding: 0px 15px;
+    padding: 0 15px;
     font-size: 16px;
     line-height: 27px;
     border-radius: 4px;
@@ -377,7 +372,7 @@ img {
     justify-content: center;
     width: 100%;
     min-height: 50px;
-    padding: 0px 15px;
+    padding: 0 15px;
     font-size: 16px;
     line-height: 27px;
     border-radius: 4px;
@@ -396,6 +391,7 @@ img {
     display: grid;
     gap: 18px;
     grid-template-columns: repeat(4, calc(25% - 13px));
+    width: 100%;
 }
 
 .ContentOneContainer{
@@ -445,17 +441,6 @@ img {
     overflow: hidden;
     text-overflow: ellipsis;
     text-align: left;
-}
-
-.ScrollTopBtn{
-    position: fixed;
-    right: 160px;
-    bottom: 320px;
-    width: 54px;
-    height: 54px;
-    transition: all 0.3s ease 0s;
-    z-index: 1030;
-    background: none;
 }
 
 .register-btn {

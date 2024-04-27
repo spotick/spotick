@@ -9,32 +9,7 @@ const categoryInput = document.getElementById('category');
 const modalSortType = document.getElementById("modalSortType");
 const sortType = document.getElementById("sortType");
 
-var topSwiper = new Swiper(".top-swiper", {
-    slidesPerView: 4,
-    slidesPerGroup: 4,
-});
-
-var swiper = new Swiper(".category-swiper", {
-    width: 800,
-    slidesPerView: 10,
-    slidesPerGroup: 10,
-});
-
-function swiperPositionSet(el, Xposition, index) {
-    $(el).attr(
-        'style',
-        'transform:translate3d(' + Xposition[index] + 'px ,0px,0px); transition-duration: 300ms;'
-    );
-}
-
-function mainSlideChangeStart() {
-    var swiper_position_X = [0, -190, -380, -520];
-    swiperPositionSet(
-        '.category-swiper .swiper-wrapper',
-        swiper_position_X,
-        mySwiperMainNav.realIndex
-    );
-}
+const searchInput = document.getElementById('searchInput');
 
 let filterBtn = document.querySelector(".FilterBtn button")
 let filterModal = document.querySelector(".FilterModal")
@@ -146,7 +121,7 @@ modalResetBtn.addEventListener("click", function () {
 // 처음 로드시 ssr방식으로 첫번째 페이지는 불러와졌으므로 1부터 시작.
 let page = 1;
 let isLoading = false;
-let isLastPage = document.getElementById('last').value;
+let isLastPage = false;
 
 window.addEventListener('scroll', function () {
     if (isLoading === true || isLastPage === true) return;
@@ -154,60 +129,71 @@ window.addEventListener('scroll', function () {
     let {scrollTop, scrollHeight, clientHeight} = document.documentElement;
 
     if (clientHeight + scrollTop >= scrollHeight) {
-        loadNextPage();
+        getMoreContents();
     }
 });
 
-const loadNextPage = async () => {
-    try {
-        setLoading(true);
-        await loadingMarkService.show(loadingMark);
-        const returnVal = await promotionListComponent(categoryInput.value, sortType.value, page);
-        await loadingMarkService.hide(loadingMark);
-
-        appendContent(returnVal.html);
-
-        isLastPage = returnVal.isLast;
-        page++;
-    } catch (e) {
-        console.error(e);
-    } finally {
-        setLoading(false);
+searchInput.addEventListener('keyup', (e) => {
+    if (e.key === 'Enter') {
+        reloadPage();
     }
+});
+
+const getMoreContents = async () => {
+    const contentListContainer = contentsContainer.querySelector('.ContentListContainer');
+    isLoading = true;
+
+    await loadingMarkService.show(loadingMark);
+
+    window.scrollTo({
+        top: document.body.scrollHeight,
+        behavior: 'smooth'
+    });
+
+    const {html, isLast} = await promotionListComponent(categoryInput.value, sortType.value, 0, searchInput.value);
+
+    contentListContainer.insertAdjacentHTML("beforeend", html);
+    isLastPage = isLast;
+
+    await loadingMarkService.hide(loadingMark);
+
+    page++;
+    isLoading = false;
 }
 
 const reloadPage = async () => {
-    try {
-        setLoading(true);
-        contentsContainer.innerHTML = '';
-        const returnVal = await promotionListComponent(categoryInput.value, sortType.value, 0);
-        await loadingMarkService.hide(loadingMark);
+    isLoading = true;
+    let htmlC;
 
-        appendContent(returnVal.html);
+    await loadingMarkService.show(loadingMark);
 
-        isLastPage = returnVal.isLast;
-        page = 1;
-    } catch (e) {
-        console.error(e);
-    } finally {
-        setLoading(false);
+    const {html, isLast} = await promotionListComponent(categoryInput.value, sortType.value, 0, searchInput.value);
+
+    if (!html) {
+        htmlC = `
+            <div class="empty-list-content">
+                <img src="/imgs/empty.png" alt="empty">
+                <p class="main mt-4">
+                    일치하는 결과가 없어요
+                </p>
+                <p class="sub mt-1">
+                    검색 범위를 넓혀 보세요.
+                </p>
+            </div>
+        `;
+    } else {
+        htmlC = `
+            <div class="ContentListContainer">
+                ${html}
+            </div>
+        `;
     }
+
+    contentsContainer.innerHTML = htmlC;
+    isLastPage = isLast;
+
+    await loadingMarkService.hide(loadingMark);
+
+    page = 1;
+    isLoading = false;
 }
-
-const setLoading = (boo) => {
-    isLoading = boo;
-}
-
-const appendContent = (html) => {
-    contentsContainer.insertAdjacentHTML("beforeend", html);
-}
-
-
-
-
-document.querySelector('.ScrollTopBtn').addEventListener('click', () => {
-    window.scrollTo({
-        top: 0,
-        behavior: 'smooth'
-    });
-});

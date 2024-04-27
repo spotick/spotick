@@ -21,7 +21,7 @@ public interface TicketQDSLRepository {
 
     Optional<TicketInfoDto> findTicketInfoByTicketId(Long ticketId, Long userId);
 
-    Slice<TicketListDto> findTicketListPage(Pageable pageable, TicketCategory ticketCategory, TicketRatingType ticketRatingType, TicketSortType ticketSortType, DistrictFilter districtFilter, Long userId);
+    Slice<TicketListDto> findTicketListPage(Pageable pageable, TicketCategory ticketCategory, TicketRatingType ticketRatingType, TicketSortType ticketSortType, DistrictFilter districtFilter, Long userId, String keyword);
 
     Optional<TicketDetailDto> findTicketDetailById(Long ticketId, Long userId);
 

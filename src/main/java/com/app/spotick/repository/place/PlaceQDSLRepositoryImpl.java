@@ -14,7 +14,6 @@ import com.app.spotick.domain.entity.place.QPlaceFile;
 import com.app.spotick.domain.entity.place.QPlaceReview;
 import com.app.spotick.domain.type.place.PlaceReservationStatus;
 import com.app.spotick.domain.type.post.PostStatus;
-import com.app.spotick.util.search.AreaFilter;
 import com.app.spotick.util.search.DistrictFilter;
 import com.app.spotick.util.type.PlaceSortType;
 import com.querydsl.core.BooleanBuilder;
@@ -25,7 +24,6 @@ import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.core.types.dsl.NumberPath;
-import com.querydsl.core.types.dsl.StringPath;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQuery;
@@ -554,28 +552,7 @@ public class PlaceQDSLRepositoryImpl implements PlaceQDSLRepository {
         return specifiers;
     }
 
-    @Deprecated
-    private BooleanExpression createAreaCondition(AreaFilter areaFilter) {
-        if (areaFilter == null) {
-            return null;
-        }
-        BooleanBuilder booleanBuilder = new BooleanBuilder();
-        List<String> list = areaFilter.getAddress();
-        StringPath address = place.placeAddress.address;
-
-        for (String area : list) {
-            booleanBuilder.or(address.contains(area));
-        }
-
-        return address.startsWith(areaFilter.getCity())
-                .and(booleanBuilder);
-    }
-
     private BooleanExpression createSearchCondition(String keyword) {
-        if (keyword == null) {
-            return null;
-        }
-
         BooleanExpression titleContains = place.title.contains(keyword);
         BooleanExpression subTitleContains = place.subTitle.contains(keyword);
         BooleanExpression addressContains = place.placeAddress.address.contains(keyword);

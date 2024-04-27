@@ -10,13 +10,11 @@ const selectItemContainer = document.querySelector('.selectItemContainer');
 selectItemContainer.checkboxCounter = 0;
 
 const districtView = document.getElementById('districtView');
-const districtInput = document.getElementById('district');
-const detailDistrictInput = document.getElementById('detailDistrict');
 
 /*
-* city가 null일 시, 조회조건 없음
-* city가 값이 있고 district가 비어있을 시 도시 기준으로 조회
-* city가 값이 있고 district가 있을 시 도시 + 상세로 조회
+* district null일 시, 조회조건 없음
+* district 값이 있고 detailDistrict 비어있을 시 도시 기준으로 조회
+* district 값이 있고 detailDistrict 있을 시 도시 + 상세로 조회
 * */
 export let districtFilter = {
     district: null,
@@ -114,15 +112,6 @@ function setArea() {
             ? districtView.innerHTML = '지역 전체'
             : districtView.innerHTML = districtFilter.district + " " + districtFilter.detailDistrict.join(' ')
     }
-
-    if (districtFilter.district === null) {
-        districtInput.value = ``;
-        detailDistrictInput.value = ``;
-        return;
-    }
-
-    districtInput.value = districtFilter.district;
-    detailDistrictInput.value = districtFilter.detailDistrict;
 }
 
 ///////////////////////////////////////////////////////////////// 이벤트리스너 선언
@@ -201,14 +190,6 @@ selectItemContainer.addEventListener('click', (e) => {
         const index = districtFilter.detailDistrict.indexOf(detailDistrict);
         districtFilter.detailDistrict.splice(index, 1);
     }
-});
-
-document.getElementById('filterSubmitBtn').addEventListener('click', () => {
-    setArea();
-    filterModal.classList.remove("On");
-
-    const event = new Event('change');
-    districtInput.dispatchEvent(event);
 });
 
 export const setAreaAndCallback = (callback) => {
