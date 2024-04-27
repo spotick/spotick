@@ -66,14 +66,20 @@ public class PromotionQDSLRepositoryImpl implements PromotionQDSLRepository {
     @Override
     public Slice<PromotionListDto> findPromotionList(Pageable pageable,
                                                      PromotionCategory category,
-                                                     PromotionSortType sortType) {
+                                                     PromotionSortType sortType,
+                                                     String keyword) {
         BooleanExpression categoryCondition = null;
+        BooleanExpression searchCondition = null;
 
         if (category != null) {
             categoryCondition = promotionBoard.promotionCategory.eq(category);
         }
+        if (keyword != null) {
+            searchCondition = createSearchCondition(keyword);
+        }
 
         OrderSpecifier<?>[] orderByClause = createOrderByClause(sortType);
+
 
         List<PromotionListDto> contents = queryFactory
                 .select(Projections.constructor(PromotionListDto.class,
@@ -86,7 +92,10 @@ public class PromotionQDSLRepositoryImpl implements PromotionQDSLRepository {
                         )
                 ))
                 .from(promotionBoard)
-                .where(categoryCondition)
+                .where(
+                        categoryCondition,
+                        searchCondition
+                )
                 .orderBy(orderByClause)
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize() + 1)
@@ -222,5 +231,15 @@ public class PromotionQDSLRepositoryImpl implements PromotionQDSLRepository {
                     promotionBoard.id.desc()
             );
         };
+    }
+
+    private BooleanExpression createSearchCondition(String keyword) {
+        BooleanExpression titleContains = promotionBoard.title.contains(keyword);
+        BooleanExpression subTitleContains = promotionBoard.subTitle.contains(keyword);
+        BooleanExpression contentContains = promotionBoard.content.contains(keyword);
+
+        return titleContains
+                .or(subTitleContains)
+                .or(contentContains);
     }
 }

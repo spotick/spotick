@@ -26,11 +26,12 @@ public class PromotionRestController {
     @GetMapping("/list")
     public ResponseEntity<?> getList(@RequestParam("page") int page,
                                      @RequestParam(value = "category", required = false) PromotionCategory category,
-                                     @RequestParam(value = "sort", required = false) PromotionSortType sortType) {
+                                     @RequestParam(value = "sort", required = false) PromotionSortType sortType,
+                                     @RequestParam(value = "keyword", required = false) String keyword) {
 
         Pageable pageable = PageRequest.of(page, 12);
 
-        Slice<PromotionListDto> contents = promotionService.getPromotionBoards(pageable, category, sortType);
+        Slice<PromotionListDto> contents = promotionService.getPromotionBoards(pageable, category, sortType, keyword);
 
         return new ResponseEntity<>(CommonResponse.builder()
                 .success(true)

@@ -34,7 +34,7 @@ public class PromotionController {
         Pageable pageable = PageRequest.of(0, 12);
 
         List<PromotionRecommendListDto> recommendations = promotionService.getRecommendPromotionBoards();
-        Slice<PromotionListDto> promotionList = promotionService.getPromotionBoards(pageable, null, PromotionSortType.NEWEST);
+        Slice<PromotionListDto> promotionList = promotionService.getPromotionBoards(pageable, null, PromotionSortType.NEWEST, null);
 
         data.put("recommendations", recommendations);
         data.put("promotionList", promotionList);

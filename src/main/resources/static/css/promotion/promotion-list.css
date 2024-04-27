@@ -1,35 +1,30 @@
-* {
-    padding: 0;
-    margin: 0;
-}
-
-*, :after, :before {
-    box-sizing: border-box;
-    outline: none;
-}
-
-a, abbr, acronym, address, applet, article, aside, audio, b, big, blockquote, body, button, canvas, caption, center, cite, code, dd, del, details, dfn, dl, dt, em, embed, fieldset, figcaption, figure, footer, form, h1, h2, h3, h4, h5, h6, header, hgroup, html, i, iframe, img, input, ins, kbd, label, legend, li, mark, menu, nav, object, ol, output, pre, q, ruby, s, samp, section, small, strike, sub, summary, sup, table, time, tt, u, ul, var, video {
-    margin: 0;
-    padding: 0;
-    border: 0;
-}
-
-a, a:hover {
-    text-decoration: none;
-}
-
-a {
-    color: #000;
-}
-
-a, button, label {
+.search-input-box {
+    position: relative;
+    height: 40px;
+    width: 400px;
     cursor: pointer;
+    border-radius: 100px;
+    padding: 0 20px;
+    display: flex;
+    align-items: center;
+    box-shadow: inset 7px 2px 10px #babebc, inset -5px -5px 12px #fff;
+    background-color: #f4f4f4;
 }
 
-img {
-    vertical-align: top;
+.search-input-box i {
+    font-size: 20px;
+    margin-right: 10px;
+    color: #5b5b5b;
+    position: absolute;
 }
 
+.search-input-box input {
+    height: 100%;
+    width: 100%;
+    text-align: center;
+    font-size: 16px;
+    font-weight: 600;
+}
 
 .MainContainer{
     display: flex;
@@ -396,6 +391,7 @@ img {
     display: grid;
     gap: 18px;
     grid-template-columns: repeat(4, calc(25% - 13px));
+    width: 100%;
 }
 
 .ContentOneContainer{

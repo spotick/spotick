@@ -67,8 +67,8 @@ public class PromotionServiceImpl implements PromotionService {
     }
 
     @Override
-    public Slice<PromotionListDto> getPromotionBoards(Pageable pageable, PromotionCategory category, PromotionSortType sortType) {
-        return promotionRepository.findPromotionList(pageable, category, sortType);
+    public Slice<PromotionListDto> getPromotionBoards(Pageable pageable, PromotionCategory category, PromotionSortType sortType, String keyword) {
+        return promotionRepository.findPromotionList(pageable, category, sortType, keyword);
     }
 
     @Override

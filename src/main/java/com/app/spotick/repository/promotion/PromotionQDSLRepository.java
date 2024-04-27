@@ -16,7 +16,7 @@ public interface PromotionQDSLRepository {
 
     Optional<PromotionDetailDto> findPromotionById(Long promotionId, Long userId);
 
-    Slice<PromotionListDto> findPromotionList(Pageable pageable, PromotionCategory category, PromotionSortType sortType);
+    Slice<PromotionListDto> findPromotionList(Pageable pageable, PromotionCategory category, PromotionSortType sortType, String keyword);
 
     Slice<PromotionListDto> findPromotionListOfUser(Pageable pageable, Long writerId, Long promotionId);
 

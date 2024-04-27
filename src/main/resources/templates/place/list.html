@@ -19,6 +19,7 @@
 <body>
 <div>
     <div th:replace="~{global-templates/topScroll :: topScrollBtn}"></div>
+
     <div th:replace="~{global-templates/chat :: chat}"></div>
 
     <header th:replace="~{global-templates/header-footer :: header}"></header>
@@ -565,7 +566,7 @@
 <script src="https://code.jquery.com/jquery-3.6.4.js"></script>
 <script th:src="@{/js/global-js/global.js}" type="module"></script>
 <script th:src="@{/js/global-js/chat.js}" type="module"></script>
-<script th:src="@{/js/global-js/topScrollBtn.js}" type="module"></script>
+<script th:src="@{/js/global-js/topScrollBtn.js}"></script>
 <script th:src="@{/js/global-js/image-slide.js}" type="module"></script>
 <script th:src="@{/js/place/list/list.js}" type="module"></script>
 
