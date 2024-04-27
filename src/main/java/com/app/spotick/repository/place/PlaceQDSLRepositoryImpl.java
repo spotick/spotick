@@ -59,75 +59,6 @@ public class PlaceQDSLRepositoryImpl implements PlaceQDSLRepository {
     private NumberPath<Double> aliasReviewAvg = Expressions.numberPath(Double.class, "reviewAvg");
 
     @Override
-    public Slice<PlaceListDto> findPlaceListPaging(Pageable pageable, Long userId, PlaceSortType sortType, AreaFilter areaFilter, String keyword) {
-        JPQLQuery<Double> reviewAvg = createReviewAvgSub(place);
-
-        JPQLQuery<Long> reviewCount = createReviewCountSub(place);
-
-        JPQLQuery<Long> bookmarkCount = createBookmarkCountSub(place);
-
-        BooleanExpression isBookmarkChecked = isBookmarkCheckedSub(place, userId);
-
-        List<PlaceListDto> placeListDtos = queryFactory.select(
-                        Projections.constructor(PlaceListDto.class,
-                                place.id,
-                                place.title,
-                                place.price,
-                                place.placeAddress,
-                                ExpressionUtils.as(reviewAvg, aliasReviewAvg),
-                                ExpressionUtils.as(reviewCount, aliasReviewCount),
-                                ExpressionUtils.as(bookmarkCount, aliasBookmarkCount),
-                                isBookmarkChecked
-                        )
-                )
-                .from(place)
-                .where(place.placeStatus.eq(PostStatus.APPROVED),
-                        createAreaCondition(areaFilter),
-                        createSearchCondition(keyword))
-                .orderBy(createOrderByClause(sortType))
-                .offset(pageable.getOffset())   //페이지 번호
-                .limit(pageable.getPageSize() + 1)  //페이지 사이즈
-                .fetch();
-
-        boolean hasNext = false;
-
-        if (placeListDtos.size() > pageable.getPageSize()) {
-            placeListDtos.remove(pageable.getPageSize());
-            hasNext = true;
-        }
-
-//        포스트의 id만 list로 가져온다
-        List<Long> placeIdList = placeListDtos.stream().map(PlaceListDto::getId).toList();
-
-//        가져온 id리스트를 in절의 조건으로 사진정보들을 가져온다.
-        List<PlaceFileDto> fileDtoList = queryFactory.select(
-                        Projections.constructor(PlaceFileDto.class,
-                                placeFile.id,
-                                placeFile.fileName,
-                                placeFile.uuid,
-                                placeFile.uploadPath,
-                                placeFile.place.id
-                        ))
-                .from(placeFile)
-                .where(placeFile.place.id.in(placeIdList))
-                .orderBy(placeFile.id.asc(), placeFile.place.id.desc())
-                .fetch();
-
-//        사진정보를 장소 id별로 묶는다
-        Map<Long, List<PlaceFileDto>> fileListMap = fileDtoList.stream().collect(Collectors.groupingBy(PlaceFileDto::getPlaceId));
-
-//        장소 id별로 구분된 사진들을 각각 게시글 번호에 맞게 추가한다
-        placeListDtos.forEach(placeListDto -> {
-            placeListDto.updatePlaceFiles(fileListMap.get(placeListDto.getId())
-                    .stream().limit(5L).toList());
-            // 화면에서 뿌릴 주소값 가공
-            placeListDto.getPlaceAddress().cutAddress();
-        });
-
-        return new SliceImpl<>(placeListDtos, pageable, hasNext);
-    }
-
-    @Override
     public Slice<PlaceListDto> findPlaceListPage(Pageable pageable, Long userId, PlaceSortType sortType, DistrictFilter districtFilter, String keyword) {
         JPQLQuery<Double> reviewAvg = createReviewAvgSub(place);
 
@@ -587,8 +518,8 @@ public class PlaceQDSLRepositoryImpl implements PlaceQDSLRepository {
     private OrderSpecifier<?>[] createOrderByClause(PlaceSortType sortType) {
         return switch (sortType) {
             case POPULARITY -> buildOrderSpecifiers(
-                    place.viewCount.desc(), aliasBookmarkCount.desc(),
-                    aliasReviewCount.desc(), aliasReviewAvg.desc().nullsLast());
+                    aliasReviewAvg.desc().nullsLast(), aliasReviewCount.desc(),
+                    place.viewCount.desc(), aliasBookmarkCount.desc());
             case NEWEST -> buildOrderSpecifiers(
                     place.createdDate.desc()
             );

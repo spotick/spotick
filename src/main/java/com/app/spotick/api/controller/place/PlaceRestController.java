@@ -94,30 +94,13 @@ public class PlaceRestController {
                 .body("해당 장소를 삭제했습니다.");
     }
 
-    @Deprecated(since = "240426", forRemoval = true)
     @GetMapping("/list")
-    public ResponseEntity<Slice<PlaceListDto>> placeList(@AuthenticationPrincipal UserDetailsDto userDetailsDto,
-                                                         @RequestParam(name = "sort", defaultValue = "POPULARITY") String sort,
+    public ResponseEntity<Slice<PlaceListDto>> placeList(@RequestParam("page") int page,
+                                                         @RequestParam(name = "sort", defaultValue = "POPULARITY") PlaceSortType sortType,
+                                                         @RequestParam(value = "district", required = false) String district,
+                                                         @RequestParam(value = "detailDistrict", required = false) List<String> detailDistrict,
                                                          @RequestParam(name = "keyword", required = false) String keyword,
-                                                         @PageableDefault(page = 0,
-                                                                 size = 12, sort = "id",
-                                                                 direction = Sort.Direction.DESC
-                                                         ) Pageable pageable,
-                                                         @RequestParam(name = "area", required = false) AreaFilter areaFilter) {
-        Long userId = userDetailsDto == null ? null : userDetailsDto.getId();
-        PlaceSortType sortType = PlaceSortType.valueOf(sort);
-
-        Slice<PlaceListDto> placeList = placeService.findPlaceListPagination(pageable, userId, sortType, areaFilter, keyword);
-        return ResponseEntity.ok(placeList);
-    }
-
-    @GetMapping("/list/new")
-    public ResponseEntity<Slice<PlaceListDto>> newPlaceList(@RequestParam("page") int page,
-                                                            @RequestParam(name = "sort", defaultValue = "POPULARITY") PlaceSortType sortType,
-                                                            @RequestParam(value = "district", required = false) String district,
-                                                            @RequestParam(value = "detailDistrict", required = false) List<String> detailDistrict,
-                                                            @RequestParam(name = "keyword", required = false) String keyword,
-                                                            @AuthenticationPrincipal UserDetailsDto userDetailsDto) {
+                                                         @AuthenticationPrincipal UserDetailsDto userDetailsDto) {
         Pageable pageable = PageRequest.of(page, 12);
         Long userId = userDetailsDto == null ? null : userDetailsDto.getId();
 

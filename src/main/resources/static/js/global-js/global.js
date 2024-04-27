@@ -70,7 +70,7 @@ searchInputDelete.addEventListener("click", () => {
     searchInputDelete.classList.add('hide');
 })
 
-let randomTexts = [
+const randomTexts = [
     '어떤 장소를 찾으시나요?',
     '관심있는 행사가 있으신가요?',
     '어떤 행사를 계획하고 계신가요?'
@@ -269,13 +269,16 @@ const notificationService = (function () {
 
 
 ///////////////////////////////////////////////////////////////////////////
-window.onload = function () {
-    const type = checkUrlType();
-    if (type === null) {
-        return;
+// place ticket 검증장치
+toggleContent(checkUrlType());
+
+searchInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+        window.location.href = checkUrlType() === "place"
+            ? `/place/search?k=${searchInput.value}`
+            : `/ticket/search?k=${searchInput.value}`;
     }
-    toggleContent(type);
-}
+})
 
 document.querySelectorAll('.hc-content-type').forEach(button => {
     button.addEventListener('click', async function () {
@@ -289,7 +292,7 @@ document.querySelectorAll('.hc-content-type').forEach(button => {
     });
 });
 
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     const usermenuElement = document.getElementById('usermenu');
     if (usermenuElement) {
         usermenuElement.addEventListener('click', toggleUsermenu);
@@ -311,15 +314,3 @@ document.addEventListener("DOMContentLoaded", function () {
         notificationService.requestNotificationList();
     }
 });
-
-// 장소 검색
-$('#searchInput').on('keyup',function (e){
-    if (e.code == 'Enter'){
-        e.preventDefault();
-        let keyword = $(this).val();
-        location.href = `/place/list?keyword=${keyword}`;
-    }
-});
-
-
-

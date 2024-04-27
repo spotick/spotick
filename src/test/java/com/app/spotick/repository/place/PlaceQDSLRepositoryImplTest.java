@@ -469,19 +469,6 @@ class PlaceQDSLRepositoryImplTest {
     }
 
     @Test
-    void transFormTest2() {
-        PageRequest pageRequest = PageRequest.of(0, 12);
-        Slice<PlaceListDto> placeListPaging = placeRepository.findPlaceListPaging(pageRequest, null, PlaceSortType.NEWEST,null,null);
-
-        placeListPaging.forEach(place -> {
-            System.out.println("place = " + place);
-            System.out.println("place.getPlaceFiles() = " + place.getPlaceFiles());
-            System.out.println("사진 갯수 = " + place.getPlaceFiles().size());
-            System.out.println("===============================");
-        });
-    }
-
-    @Test
     @DisplayName("예약페이지에서 장소 기본정보 가져오기")
     void findPlaceReserveBasicInfoTest() {
 //        PlaceReserveBasicInfoDto

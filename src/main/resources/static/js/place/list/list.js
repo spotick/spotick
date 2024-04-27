@@ -1,38 +1,33 @@
+import {slicePlaceListComponents} from '../../components/place/placeComponents.js';
+import {districtFilter, setAreaAndCallback} from '../../global-js/list-filter-modal.js';
 import {addSlideEvent} from '../../global-js/image-slide.js';
 import {bookmarkFetch} from '../../modules/fetch/bookmarkFetch.js';
+import {loadingMarkService} from "../../modules/loadingMark.js";
 
 // 무한 페이징
+let isLoading;
 let page = 1;
-let hasNext = true;
-let pagingTargetIdx = 1;
-let sort = 'POPULARITY';
+let isLastPage;
 
-let area = {
-    city: null,
-    address: []
-};
+const loadingMark = document.getElementById('loadingMark');
 
-// 필터쪽 체크박스
-const checkboxes = document.querySelectorAll('input[type="checkbox"]');
-const allCheckboxes = document.querySelectorAll('input[name="전체"]');
-const selectedListContainer = document.querySelector('.SelectedListContainer');
-const SelectItemContainer = document.querySelector('.SelectItemContainer');
-
-const areaGroupContainer = document.querySelector(".AreaGroupContainer");
-const areasCityContainer = document.querySelectorAll(".AreasCityContainer");
-const checkboxImages = document.querySelectorAll('.CheckBoxImg');
-const resetButton = document.querySelector('.FilterResetBtn');
-
-const areaGroupButtons = document.querySelectorAll('.AreaGroupBtn');
+const searchPageInput = document.getElementById('searchPageInput');
 
 const selectBoxBtn = document.querySelector('.SelectBoxBtn');
 const selectBoxList = document.querySelector('.SelectBoxList');
 const selectBoxBtnImg = document.querySelector('.SelectBoxBtnImg');
-const SelectBoxBtnText = document.querySelector('.SelectBoxBtnText');
 
+const sortSelectBoxBtn = document.querySelector('#sortType .SelectBoxBtn');
+const sortSelectBoxList = document.querySelector('#sortType .SelectBoxList');
+const sortSelectBoxBtnImg = document.querySelector('#sortType .SelectBoxBtnImg');
+const sortSelectBoxBtnText = document.querySelector('#sortType .SelectBoxBtnText');
+const sortListItems = document.querySelectorAll('#sortType .SelectBoxListItem');
+
+const sortInput = document.getElementById('sortInput');
+
+const contentsContainer = document.getElementById('contentsContainer');
 
 // 인기순 필터
-
 selectBoxBtn.addEventListener('click', function () {
     // 토글 기능을 이용하여 리스트 보이기/숨기기
     selectBoxList.style.display = (selectBoxList.style.display === 'block') ? 'none' : 'block';
@@ -40,245 +35,19 @@ selectBoxBtn.addEventListener('click', function () {
     selectBoxBtnImg.src = (selectBoxList.style.display === 'block') ? '/imgs/arrow_up_gray014.75d8599e.svg' : '/imgs/arrow_down_gray014.f502da9d.svg';
 });
 
-
-// 각 리스트 아이템에 대한 이벤트 리스너 추가
-const listItems = document.querySelectorAll('.SelectBoxListItem');
-listItems.forEach(item => {
+sortListItems.forEach(item => {
     item.addEventListener('click', function () {
-        // 선택된 아이템에 SelectBoxListItem-select 클래스 추가
-        listItems.forEach(otherItem => {
+        sortListItems.forEach(otherItem => {
             otherItem.classList.remove('SelectBoxListItem-select');
         });
         this.classList.add('SelectBoxListItem-select');
-
-        // 선택된 아이템의 텍스트로 버튼 텍스트 변경
-        SelectBoxBtnText.textContent = this.textContent;
-        // 리스트 숨기기
-        selectBoxList.style.display = 'none';
-
-        // 이미지 변경
-        selectBoxBtnImg.src = '/imgs/arrow_down_gray014.f502da9d.svg';
-        sort = this.dataset.sort;
-        resetListPagination();
-        getPlaceList();
-
+        sortSelectBoxBtnText.textContent = this.textContent;
+        sortSelectBoxList.style.display = 'none';
+        sortSelectBoxBtnImg.src = '/imgs/arrow_down_gray014.f502da9d.svg';
+        sortInput.value = this.getAttribute("sortType");
+        reloadPage();
     });
 });
-
-// 필터 모달창 나오기
-document.querySelector('.FilterBtn').addEventListener("click", function () {
-    document.querySelector('.FilterModalContainer').classList.add('On');
-})
-
-// 필터 모달창 숨기기
-document.querySelector('.FilterModalCloseBtn').addEventListener("click", function () {
-    document.querySelector('.FilterModalContainer').classList.remove('On');
-})
-
-// 필터 적용 버튼
-document.querySelector('.FilterSubmitBtn').addEventListener("click", function () {
-    let city = $('.AreaGroupBtn.On').data('target');
-    let $input = $('input:checkbox:checked');
-
-    area.address.length = 0;
-    if ($input.length === 0) {
-        area.city = null;
-    } else {
-        area.city = city;
-        $input.each((i, item) => {
-            if (item.name !== '전체') {
-                area.address.push(item.name);
-            }
-        });
-    }
-    resetListPagination();
-    getPlaceList();
-    document.querySelector('.FilterModalContainer').classList.remove('On');
-})
-
-// 필터 구 단위 체크박스
-checkboxes.forEach(checkbox => {
-    checkbox.addEventListener('change', function () {
-        const checkBoxContainer = this.parentElement.querySelector('.CheckBoxContainer');
-        const checkBoxImg = checkBoxContainer.querySelector('.CheckBoxImg');
-        const checkBoxText = checkBoxContainer.querySelector('.CheckBoxText');
-
-        if (this.checked) {
-            if (checkBoxText.textContent.includes("전체")) {
-                // 전체 체크박스 해제
-                checkboxes.forEach(otherCheckbox => {
-                    if (otherCheckbox !== checkbox) {
-                        otherCheckbox.checked = false;
-                    }
-                });
-
-                checkboxImages.forEach(img => {
-                    img.src = '/imgs/rectangle_line_rainyBlue086.76bf0d5f.svg';
-                });
-
-                // 선택된 지역 리스트 초기화
-                SelectItemContainer.innerHTML = '';
-
-                changeSize(405);
-
-                checkBoxImg.src = '/imgs/checkRectangle_filled_sweetBlue046.0cd80fee.svg';
-                selectedListContainer.classList.add('On');
-
-                // 선택된 지역 리스트에 아이템 추가
-                const newItem = document.createElement('div');
-                newItem.style.marginRight = '10px';
-                newItem.innerHTML = `
-          <div class="SelectedItem">
-            <span class="SelectedItemText">${checkBoxText.textContent}</span>
-            <button type="button" class="SelectedItemDeleteBtn">
-              <img src="/imgs/cross_1line_gray054.5b1e8cb9.svg" alt="삭제" class="SelectedItemDeleteBtnImg">
-            </button>
-          </div>
-        `;
-                SelectItemContainer.appendChild(newItem);
-            } else {
-
-                allCheckboxes.forEach(allCheckbox => {
-                    allCheckbox.checked = false;
-
-                    // 추가로 실행할 코드
-                    const checkBoxContainer = allCheckbox.parentElement.querySelector('.CheckBoxContainer');
-                    const checkBoxImg = checkBoxContainer.querySelector('.CheckBoxImg');
-                    const checkBoxText = checkBoxContainer.querySelector('.CheckBoxText');
-
-                    checkBoxImg.src = '/imgs/rectangle_line_rainyBlue086.76bf0d5f.svg';
-
-                    // 선택된 지역 리스트에서 아이템 삭제
-                    const itemsToRemove = SelectItemContainer.querySelectorAll('.SelectedItemText');
-                    itemsToRemove.forEach(item => {
-                        if (item.textContent === checkBoxText.textContent) {
-                            item.parentElement.parentElement.remove();
-                        }
-                    });
-                });
-
-                changeSize(405);
-
-                checkBoxImg.src = '/imgs/checkRectangle_filled_sweetBlue046.0cd80fee.svg';
-                selectedListContainer.classList.add('On');
-
-                // 선택된 지역 리스트에 아이템 추가
-                const newItem = document.createElement('div');
-                newItem.style.marginRight = '10px';
-                newItem.innerHTML = `
-          <div class="SelectedItem">
-            <span class="SelectedItemText">${checkBoxText.textContent}</span>
-            <button type="button" class="SelectedItemDeleteBtn">
-              <img src="/imgs/cross_1line_gray054.5b1e8cb9.svg" alt="삭제" class="SelectedItemDeleteBtnImg">
-            </button>
-          </div>
-        `;
-                SelectItemContainer.appendChild(newItem);
-            }
-
-        } else {
-            checkBoxImg.src = '/imgs/rectangle_line_rainyBlue086.76bf0d5f.svg';
-
-            // 선택된 지역 리스트에서 아이템 삭제
-            const itemsToRemove = SelectItemContainer.querySelectorAll('.SelectedItemText');
-            itemsToRemove.forEach(item => {
-                if (item.textContent === checkBoxText.textContent) {
-                    item.parentElement.parentElement.remove();
-                }
-            });
-        }
-
-
-        const checkedCheckboxes = document.querySelectorAll('input[type="checkbox"]:checked');
-        const numberOfCheckedCheckboxes = checkedCheckboxes.length;
-
-        if (numberOfCheckedCheckboxes === 0) {
-            selectedListContainer.classList.remove('On');
-            changeSize(465);
-        }
-
-        if (numberOfCheckedCheckboxes === 5) {
-            checkboxes.forEach(checkbox => {
-                if (!checkbox.checked && checkbox.name !== "전체") {
-                    checkbox.disabled = true;
-                }
-            })
-        } else {
-            checkboxes.forEach(checkbox => {
-                checkbox.disabled = false;
-            })
-        }
-    });
-});
-
-// 필터 하단부분 생길때 위쪽 컨테이너 height 변경
-function changeSize(size) {
-    areaGroupContainer.style.height = size + "px";
-
-    // NodeList를 배열로 변환하여 각 AreasCityContainer에 대해 루프를 돕니다.
-    areasCityContainer.forEach(function (container) {
-        container.style.height = size + "px";
-    });
-}
-
-// 필터 리셋버튼
-resetButton.addEventListener('click', function () {
-    reset();
-    changeSize(465);
-    area.city = null;
-    area.address.length = 0;
-});
-
-// 체크박스 전체 해제
-function reset() {
-    // 전체 체크박스 해제
-    checkboxes.forEach(checkbox => {
-        checkbox.checked = false;
-    });
-
-    checkboxImages.forEach(img => {
-        img.src = '/imgs/rectangle_line_rainyBlue086.76bf0d5f.svg';
-    });
-
-    // 선택된 지역 리스트 초기화
-    SelectItemContainer.innerHTML = '';
-
-    // On 클래스 제거
-    selectedListContainer.classList.remove('On');
-}
-
-// 지역 변경 버튼
-areaGroupButtons.forEach(button => {
-    button.addEventListener('click', function () {
-        // 모든 AreaGroupBtn에서 'On' 클래스 제거
-        areaGroupButtons.forEach(btn => {
-            btn.classList.remove('On');
-        });
-
-        // 클릭된 버튼에 'On' 클래스 추가
-        button.classList.add('On');
-
-        const targetId = button.dataset.target;
-        toggleCityContainer(targetId);
-        reset();
-        changeSize(456);
-    });
-});
-
-// 지역에 맞는 컨테이너 On
-function toggleCityContainer(targetId) {
-    // 모든 AreasCityContainer에 'On' 클래스를 제거
-    document.querySelectorAll('.AreasCityContainer').forEach(container => {
-        container.classList.remove('On');
-    });
-
-    // 클릭된 버튼에 대응하는 AreasCityContainer에 'On' 클래스를 추가
-    const targetContainer = document.getElementById(targetId);
-    if (targetContainer) {
-        targetContainer.classList.add('On');
-    }
-}
-
 
 // 좋아요 버튼
 $(`.ListItemsContainer`).on('click', '.ItemBookMarkBtn', function () {
@@ -299,132 +68,77 @@ $(`.ListItemsContainer`).on('click', '.ItemBookMarkBtn', function () {
     $(this).find('span').toggleClass('none');
 });
 
-function getPlaceList() {
-    let keyword = $('#searchKeyword').val();
-    fetch(`/place/api/list?page=${page++}&sort=${sort}${area.city==null?'':'&area='+encodeURIComponent(JSON.stringify(area))}${keyword!==''?'&keyword='+keyword:''}`)
-        .then(response => {
-            if (!response.ok) {
-                throw new Error();
-            }
-            return response.json();
-        }).then(data => {
-        hasNext = !data.last;
-        displayPlaceList(data)
-    });
+async function reloadPage() {
+    const {district, detailDistrict} = districtFilter;
+    isLoading = true;
+    let htmlC = ``;
+
+    await loadingMarkService.show(loadingMark);
+
+    const {html, isLast} = await slicePlaceListComponents(0, sortInput.value, district, detailDistrict, searchPageInput.value);
+
+    if (!html) {
+        htmlC = `
+            <div class="empty-list-content">
+                <img src="/imgs/empty.png" alt="empty">
+                <p class="main mt-4">
+                    일치하는 결과가 없어요
+                </p>
+                <p class="sub mt-1">
+                    검색 범위를 넓혀 보세요.
+                </p>
+            </div>
+        `;
+    } else {
+        htmlC = `
+            <div class="ListItemsContainer">
+                ${html}
+            </div>
+        `;
+    }
+
+    contentsContainer.innerHTML = htmlC;
+    isLastPage = isLast;
+
+    await loadingMarkService.hide(loadingMark);
+
+    page = 1;
+    isLoading = false;
 }
 
+/*
+* 조건의 변화가 없고 더 많은 컨텐츠를 가져와야할 시 사용할 함수
+* */
+async function getMoreContents() {
+    const listItemsContainer = contentsContainer.querySelector('.ListItemsContainer');
+    const {district, detailDistrict} = districtFilter;
+    isLoading = true;
 
-function displayPlaceList(data) {
-    let text = '';
+    await loadingMarkService.show(loadingMark);
 
-    data.content.forEach(place => {
-        text += `
-       <div class="OneItemContainer hover">
-                <div class="OneItemImgContainer">
-                    <div class="swiper ImageSwiper swiper-initialized swiper-horizontal swiper-pointer-events swiper-backface-hidden">
-                        <a href="/place/detail/${place.id}"
-                           class="swiper-wrapper ImageLength" style="transform: translate3d(0px, 0px, 0px);" >`;
-        place.placeFiles.forEach(placeImg => {
-            text += `
-                           <div class="swiper-slide swiper-slide-active" style="width: 287px;">
-                               <img class="ItemImg"
-                                    height="1350.6666666666665px" 
-                                    alt="${place.title}" src="/file/display?fileName=${placeImg.uploadPath}/t_${placeImg.uuid}_${placeImg.fileName}">
-                           </div>`;
-        });
-        text += `     </a>
-                       <div class="NavigationBtnContainer">
-                           <button class="NavigationBtn RightBtn" type="button">
-                               <img alt="다음" src="/imgs/round_arrow_right_gray024.7f7e18a3.svg">
-                           </button>
-                           <button class="NavigationBtn LeftBtn" type="button">
-                               <img alt="이전" src="/imgs/round_arrow_left_gray024.707193e8.svg">
-                           </button>
-                       </div>
-                       <div class="ItemImgPagination">
-                           <p><span class="snapIndex">1</span>/5</p>
-                       </div>
-                   </div>
-                   <button class="ItemBookMarkBtn" data-placeid="${place.id}" data-status="${place.bookmarkChecked}" type="button">
-                       <span class="${!place.bookmarkChecked ? '' : 'none'}"><i
-                               class="fa-regular fa-bookmark"></i></span>
-                       <span class="${place.bookmarkChecked ? '' : 'none'}"><i class="fa-solid fa-bookmark"
-                                                                                style="color: white"></i></span>
-                   </button>
-               </div>
-               <div class="ItemTextContainer">
-                   <div class="ItemHostNameContainer">
-                       <span class="ItemHostName">${place.placeAddress.address}</span>
-                       <div class="ItemCountsContainer">
-                           <div class="ItemsStarCountContainer">
-                               <img alt="후기갯수" class="ItemCountImg"
-                                    src="/imgs/star_filled_paintYellow056.a8eb6e44.svg">
-                               <span class="ItemCountText">${place.evalAvg}(${place.evalCount})</span>
-                           </div>
-                           <div class="ItemsLikeCountContainer">
-                               <img alt="북마크갯수" class="bookmark-img" src="/imgs/bookmark_thin.svg">
-                               <span class="ItemCountText bookmark-count">${place.bookmarkCount}</span>
-                           </div>
-                       </div>
-                   </div>
-                   <div class="ItemSpaceNameContainer">
-                       <p class="ItemSpaceName" >
-                           <a href="/place/detail/${place.id}">${place.title}</a>
-                       </p>
-                   </div>
-                   <div class="ItemPriceContainer">
-                       <span class="place-price">${(place.price).toLocaleString()}원</span>
-                   </div>
-               </div>
-           </div>
-    `;
-    })
+    const {html, isLast} = await slicePlaceListComponents(page, sortInput.value, district, detailDistrict, searchPageInput.value);
 
-    $('.ListItemsContainer').append(text);
-    // 동적으로 추가된 게시글요소에 이미지 슬라이드 이벤트 추가하기
-    addSlideEvent();
+    listItemsContainer.insertAdjacentHTML("beforeend", html);
+    isLastPage = isLast;
+
+    await loadingMarkService.hide(loadingMark);
+
+    page++;
+    isLoading = false;
 }
 
-
-window.addEventListener('scroll', function () {
-    if (!hasNext) return;
-
-    // 가장 첫 번째 요속가 화면에서 사랴지면 페이징 불러오기
-    // -> 자연스러운 무한페이징
-    let itemContainers = document.querySelectorAll('.OneItemContainer');
-    let {bottom} = itemContainers[pagingTargetIdx - 1].getBoundingClientRect();
-    let {scrollTop, scrollHeight, clientHeight} = document.documentElement;
-
-    if (bottom < 0||(clientHeight + scrollTop >= scrollHeight)) {
-        pagingTargetIdx += 12;
-        getPlaceList();
+searchPageInput.addEventListener('keyup', (e) => {
+    if (e.key === 'Enter') {
+        reloadPage();
     }
 });
 
-function resetListPagination() {
-    page = 0;
-    pagingTargetIdx = 1;
-    $('.ListItemsContainer').html('');
-    $('#searchKeyword').val('');
-}
+window.addEventListener('scroll', function () {
+    if (isLoading === true || isLastPage === true) return;
 
+    let {scrollTop, scrollHeight, clientHeight} = document.documentElement;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    if (clientHeight + scrollTop >= scrollHeight) {
+        getMoreContents();
+    }
+});

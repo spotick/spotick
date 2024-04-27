@@ -18,8 +18,6 @@ public interface PlaceService {
 
     void registerPlace(PlaceRegisterDto placeRegisterDto,Long userId) throws IOException;
 
-    Slice<PlaceListDto> findPlaceListPagination(Pageable pageable, Long userId, PlaceSortType sortType, AreaFilter areaFilter, String keyword);
-
     Slice<PlaceListDto> newFindPlaceListPagination(Pageable pageable, Long userId, PlaceSortType sortType, DistrictFilter districtFilter, String keyword);
 
     PlaceDetailDto findPlaceDetailById(Long placeId,Long userId);

@@ -211,3 +211,9 @@ document.getElementById('filterSubmitBtn').addEventListener('click', () => {
     districtInput.dispatchEvent(event);
 });
 
+export const setAreaAndCallback = (callback) => {
+    setArea();
+    filterModal.classList.remove("On");
+
+    callback();
+}

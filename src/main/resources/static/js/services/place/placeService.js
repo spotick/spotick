@@ -1,7 +1,7 @@
 export const placeService = (() => {
 
     const getList = async (page, sort, district, detailDistrict, keyword, callback) => {
-        let uri = `/place/api/list/new?page=${page}`;
+        let uri = `/place/api/list?page=${page}`;
         if (sort) {
             uri += `&sort=${sort}`;
         }
