@@ -1077,6 +1077,17 @@ img {
     letter-spacing: -.1px;
 }
 
+#scrollTopBtn{
+    position: fixed;
+    right: 160px;
+    bottom: 320px;
+    width: 54px;
+    height: 54px;
+    transition: all 0.3s ease 0s;
+    z-index: 1030;
+    background: none;
+}
+
 .pt-20 {
     padding-top: 20px;
 }

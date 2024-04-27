@@ -102,6 +102,7 @@ async function reloadPage() {
 
     await loadingMarkService.hide(loadingMark);
 
+    await addSlideEvent();
     page = 1;
     isLoading = false;
 }
@@ -123,6 +124,7 @@ async function getMoreContents() {
 
     await loadingMarkService.hide(loadingMark);
 
+    await addSlideEvent();
     page++;
     isLoading = false;
 }

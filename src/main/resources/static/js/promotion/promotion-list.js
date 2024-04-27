@@ -203,9 +203,7 @@ const appendContent = (html) => {
 }
 
 
-
-
-document.querySelector('.ScrollTopBtn').addEventListener('click', () => {
+document.getElementById('scrollTopBtn').addEventListener('click', () => {
     window.scrollTo({
         top: 0,
         behavior: 'smooth'
