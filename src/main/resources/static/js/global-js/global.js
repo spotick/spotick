@@ -37,47 +37,6 @@ function checkUrlType() {
     return (firstSegment === 'place' || firstSegment === 'ticket') ? firstSegment : null;
 }
 
-
-// 검색창 컨트롤
-const searchBarOpen = document.getElementById('searchBarOpen');
-const searchBarClose = document.getElementById('searchBarClose');
-const searchBar = document.getElementById('searchBar');
-const searchInput = document.getElementById('searchInput');
-const searchInputDelete = document.getElementById('searchInputDelete');
-
-searchBarOpen.addEventListener("click", () => {
-    searchBarOpen.classList.add('hide')
-    searchBar.classList.remove('hide')
-    searchInput.focus()
-})
-
-searchBarClose.addEventListener("click", () => {
-    searchBarOpen.classList.remove('hide')
-    searchBar.classList.add('hide')
-})
-
-searchInput.addEventListener("input", () => {
-    if (searchInput.value.trim() !== '') {
-        searchInputDelete.classList.remove('hide');
-    } else {
-        searchInputDelete.classList.add('hide');
-    }
-})
-
-searchInputDelete.addEventListener("click", () => {
-    searchInput.value = '';
-    searchInput.focus()
-    searchInputDelete.classList.add('hide');
-})
-
-const randomTexts = [
-    '어떤 장소를 찾으시나요?',
-    '관심있는 행사가 있으신가요?',
-    '어떤 행사를 계획하고 계신가요?'
-];
-let randomIndex = Math.floor(Math.random() * randomTexts.length);
-searchInput.setAttribute('placeholder', randomTexts[randomIndex]);
-
 // 헤더 유저메뉴, 알림창
 const usermenuPopOver = document.querySelector(".hd-usermenu")
 const notificationPopOver = document.querySelector('.hd-notification');
@@ -271,14 +230,6 @@ const notificationService = (function () {
 ///////////////////////////////////////////////////////////////////////////
 // place ticket 검증장치
 toggleContent(checkUrlType());
-
-searchInput.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter') {
-        window.location.href = checkUrlType() === "place"
-            ? `/place/search?k=${searchInput.value}`
-            : `/ticket/search?k=${searchInput.value}`;
-    }
-})
 
 document.querySelectorAll('.hc-content-type').forEach(button => {
     button.addEventListener('click', async function () {

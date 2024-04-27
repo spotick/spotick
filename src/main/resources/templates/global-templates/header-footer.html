@@ -35,18 +35,6 @@
                         <span class="hc-content-font">홍보 게시판</span>
                     </a>
                 </div>
-                <div class="hc-content-icon" id="searchBarOpen">
-                    <i class="fa-solid fa-magnifying-glass"></i>
-                </div>
-                <div class="h-search-bar-container hide" id="searchBar">
-                    <div class="hc-content-icon" id="searchBarClose" style="margin:0">
-                        <i class="fa-solid fa-magnifying-glass"></i>
-                    </div>
-                    <input id="searchInput" type="text">
-                    <button class="hc-search-bar-erase hide" id="searchInputDelete">
-                        <i class="fa-solid fa-x"></i>
-                    </button>
-                </div>
                 <a class="hc-content-icon" href="#">
                     <i class="fa-solid fa-location-dot"></i>
                 </a>
@@ -68,7 +56,6 @@
                         </a>
                     </div>
                     <div class="h-user-icon" id="usermenu" th:object="${#authentication.principal}">
-                        <!-- src="https://img.hourplace.co.kr/image/user/109990/2023/12/05/79a6f8ac-6b84-4977-a2da-baa111bcd54d?s=2000x2000&amp;amp;t=inside&amp;amp;q=80&amp;amp;f=jpeg&amp;amp;"-->
                         <img th:alt="*{nickName}"
                              th:src="*{isDefaultImage
                         ? '/file/default/display?fileName=' + profileFileName

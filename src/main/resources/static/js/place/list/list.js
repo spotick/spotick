@@ -9,6 +9,8 @@ let isLoading;
 let page = 1;
 let isLastPage;
 
+const isLoggedIn = document.getElementById('isLoggedIn').value;
+
 const loadingMark = document.getElementById('loadingMark');
 
 const searchPageInput = document.getElementById('searchPageInput');
@@ -49,24 +51,58 @@ sortListItems.forEach(item => {
     });
 });
 
-// 좋아요 버튼
-$(`.ListItemsContainer`).on('click', '.ItemBookMarkBtn', function () {
-    let isLoggedIn = $('#isLoggedIn').val();
-    if (isLoggedIn === 'false') {
-        alert('로그인이 필요한 서비스 입니다');
-        location.href = '/user/login';
-        return;
-    }
-    const placeId = $(this).data('placeid');
-    const status = $(this).data('status');
+// 북마킹
+// $(`.ListItemsContainer`).on('click', '.ItemBookMarkBtn', function () {
+//     let isLoggedIn = $('#isLoggedIn').val();
+//     if (isLoggedIn === 'false') {
+//         alert('로그인이 필요한 서비스 입니다');
+//         location.href = '/user/login';
+//         return;
+//     }
+//     const placeId = $(this).data('placeid');
+//     const status = $(this).data('status');
+//
+//     bookmarkFetch(status, placeId)
+//         .then((boo) => {
+//             $(this).data('status', boo);
+//         });
+//
+//     $(this).find('span').toggleClass('none');
+// });
 
-    bookmarkFetch(status, placeId)
-        .then((boo) => {
-            $(this).data('status', boo);
+contentsContainer.addEventListener('click', (e) => {
+    const bookmarkBtn = e.target.closest(".ItemBookMarkBtn");
+
+    if (bookmarkBtn) {
+        if (isLoggedIn === 'false') {
+            alert('로그인이 필요한 서비스 입니다');
+            location.href = '/user/login';
+            return;
+        }
+        const placeId = bookmarkBtn.getAttribute('data-placeid');
+        const status = bookmarkBtn.getAttribute('data-status');
+
+        bookmarkFetch(status, placeId, (r) => {
+            bookmarkBtn.setAttribute('data-status', r);
+
+            changeLike(bookmarkBtn, r);
         });
-
-    $(this).find('span').toggleClass('none');
+    }
 });
+
+function changeLike(btn, status) {
+    // status에 따라서 클래스 변경
+    const off = btn.children[0];
+    const on = btn.children[1];
+
+    if (status) {
+        off.classList.add('none');
+        on.classList.remove('none')
+    } else {
+        off.classList.remove('none');
+        on.classList.add('none')
+    }
+}
 
 async function reloadPage() {
     const {district, detailDistrict} = districtFilter;
@@ -75,7 +111,10 @@ async function reloadPage() {
 
     await loadingMarkService.show(loadingMark);
 
-    const {html, isLast} = await slicePlaceListComponents(0, sortInput.value, district, detailDistrict, searchPageInput.value);
+    const {
+        html,
+        isLast
+    } = await slicePlaceListComponents(0, sortInput.value, district, detailDistrict, searchPageInput.value);
 
     if (!html) {
         htmlC = `
@@ -117,7 +156,10 @@ async function getMoreContents() {
 
     await loadingMarkService.show(loadingMark);
 
-    const {html, isLast} = await slicePlaceListComponents(page, sortInput.value, district, detailDistrict, searchPageInput.value);
+    const {
+        html,
+        isLast
+    } = await slicePlaceListComponents(page, sortInput.value, district, detailDistrict, searchPageInput.value);
 
     listItemsContainer.insertAdjacentHTML("beforeend", html);
     isLastPage = isLast;
