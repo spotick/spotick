@@ -42,9 +42,16 @@ export const promotionService = (() => {
         return response.json();
     }
 
+    const deleteBoard = async (promotionId) => {
+        return await fetch(`/promotion/api/delete?promotionId=${promotionId}`, {
+            method: 'DELETE',
+        })
+    };
+
     return {
         getList: getList,
         getListOfUser: getListOfUser,
         likeRequest: likeRequest,
+        deleteBoard: deleteBoard,
     }
 })();

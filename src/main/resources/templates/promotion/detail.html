@@ -16,6 +16,11 @@
 </head>
 <body>
 <div>
+    <div class="modal-bg" id="modal">
+        <div th:replace="~{global-templates/new-global-dialogue-modal :: global-dialogue}"></div>
+        <div th:replace="~{global-templates/new-global-dialogue-modal :: global-selection}"></div>
+    </div>
+
     <div th:replace="~{global-templates/chat :: chat}"></div>
 
     <div th:replace="~{/global-templates/header-footer :: header}"></div>
@@ -67,11 +72,17 @@
                             <input id="promo" th:value="*{promotionId}" type="hidden">
                             <input id="user" th:value="*{userId}" type="hidden">
                         </div>
-                        <th:block sec:authorize="isAuthenticated()">
-                            <a class="modify-btn"
+                        <div class="flex" sec:authorize="isAuthenticated()">
+                            <a class="master-action-btn blue"
                                th:href="@{/promotion/{promotionId}/edit(promotionId=*{promotionId})}"
-                               th:if="${#authentication.principal != null and #authentication.principal.id == promotion.userId}">수정하기</a>
-                        </th:block>
+                               th:if="${#authentication.principal != null and #authentication.principal.id == promotion.userId}">
+                                수정하기
+                            </a>
+                            <button class="master-action-btn grey" id="delete"
+                                    th:if="${#authentication.principal != null and #authentication.principal.id == promotion.userId}">
+                                삭제하기
+                            </button>
+                        </div>
                     </div>
                     <div class="MainContentContainerHeaderText" th:if="*{subTitle != null}" th:text="*{subTitle}"></div>
                 </div>

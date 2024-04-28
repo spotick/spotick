@@ -3,6 +3,7 @@ package com.app.spotick.service.promotion;
 import com.app.spotick.domain.dto.promotion.*;
 import com.app.spotick.domain.entity.promotion.PromotionBoard;
 import com.app.spotick.domain.entity.user.User;
+import com.app.spotick.domain.type.post.PostStatus;
 import com.app.spotick.domain.type.promotion.PromotionCategory;
 import com.app.spotick.repository.promotion.PromotionRepository;
 import com.app.spotick.repository.user.UserRepository;
@@ -60,6 +61,7 @@ public class PromotionServiceImpl implements PromotionService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public PromotionDetailDto getPromotionBoardById(Long promotionId, Long userId) {
         return promotionRepository.findPromotionById(promotionId, userId).orElseThrow(
                 NoSuchElementException::new
@@ -67,16 +69,19 @@ public class PromotionServiceImpl implements PromotionService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Slice<PromotionListDto> getPromotionBoards(Pageable pageable, PromotionCategory category, PromotionSortType sortType, String keyword) {
         return promotionRepository.findPromotionList(pageable, category, sortType, keyword);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Slice<PromotionListDto> getPromotionBoardsOfUser(Pageable pageable, Long writerId, Long promotionId) {
         return promotionRepository.findPromotionListOfUser(pageable, writerId, promotionId);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<PromotionRecommendListDto> getRecommendPromotionBoards() {
         return promotionRepository.findRecommendPromotionList();
     }
@@ -104,6 +109,17 @@ public class PromotionServiceImpl implements PromotionService {
         originalEntity.update(promotionEditDto);
 
         return originalEntity.getId();
+    }
+
+    @Override
+    public void softDeletePromotionBoard(Long promotionId, Long userId) {
+        User tmpUser = userRepository.getReferenceById(userId);
+
+        PromotionBoard foundEntity = promotionRepository.findByIdAndUser(promotionId, tmpUser).orElseThrow(
+                NoSuchElementException::new
+        );
+
+        foundEntity.updateStatus(PostStatus.DELETED);
     }
 
     private FileDto saveFile(MultipartFile file) throws IOException {

@@ -24,4 +24,6 @@ public interface PromotionService {
     PromotionEditDto getPromotionBoardEdit(Long promotionId, Long userId);
 
     Long updatePromotionBoard(PromotionEditDto promotionEditDto) throws IOException;
+
+    void softDeletePromotionBoard(Long promotionId, Long userId);
 }

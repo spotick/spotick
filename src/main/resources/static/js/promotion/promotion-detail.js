@@ -1,4 +1,5 @@
 import {promotionListOfUserComponent} from "../components/promotion/promotionComponents.js";
+import {showGlobalSelection, showGlobalDialogue} from "../global-js/global-modal.js"
 import {promotionService} from "../services/promotion/promotionService.js";
 import {promotionLayouts} from "../layouts/promotion/promotionLayouts.js";
 import {loadingMarkService} from "../modules/loadingMark.js";
@@ -127,4 +128,26 @@ function changeLike(btn, status) {
         off.classList.remove('none');
         on.classList.add('none')
     }
+}
+
+document.getElementById('delete')?.addEventListener('click', () => {
+    const message = "게시글을<br>삭제하시겠습니까?";
+    showGlobalSelection(message, deleteBoard);
+});
+
+const deleteBoard = () => {
+    promotionService.deleteBoard(promotionId)
+        .then(r => {
+
+            if (r.ok === true) {
+                const message = "게시글이 삭제 되었습니다.";
+
+                showGlobalDialogue(message, () => {
+                    window.location.href = "/promotion";
+                });
+            }
+        })
+        .catch(() => {
+            showGlobalDialogue("오류가 발생했습니다<br>나중에 시도해주세요.");
+        });
 }

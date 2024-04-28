@@ -1,6 +1,7 @@
 package com.app.spotick.repository.promotion;
 
 import com.app.spotick.domain.dto.promotion.*;
+import com.app.spotick.domain.type.post.PostStatus;
 import com.app.spotick.domain.type.promotion.PromotionCategory;
 import com.app.spotick.util.type.PromotionSortType;
 import com.querydsl.core.types.Order;
@@ -35,7 +36,8 @@ public class PromotionQDSLRepositoryImpl implements PromotionQDSLRepository {
         return Optional.ofNullable(queryFactory
                 .from(promotionBoard)
                 .where(
-                        promotionBoard.id.eq(promotionId)
+                        promotionBoard.id.eq(promotionId),
+                        promotionBoard.status.eq(PostStatus.APPROVED)
                 )
                 .join(user.userProfileFile, userProfileFile)
                 .select(Projections.constructor(PromotionDetailDto.class,
@@ -93,6 +95,7 @@ public class PromotionQDSLRepositoryImpl implements PromotionQDSLRepository {
                 ))
                 .from(promotionBoard)
                 .where(
+                        promotionBoard.status.eq(PostStatus.APPROVED),
                         categoryCondition,
                         searchCondition
                 )
@@ -125,6 +128,7 @@ public class PromotionQDSLRepositoryImpl implements PromotionQDSLRepository {
                 ))
                 .from(promotionBoard)
                 .where(
+                        promotionBoard.status.eq(PostStatus.APPROVED),
                         promotionBoard.user.id.eq(writerId),
                         promotionBoard.id.ne(promotionId)
                 )
@@ -150,6 +154,7 @@ public class PromotionQDSLRepositoryImpl implements PromotionQDSLRepository {
         return queryFactory
                 .from(promotionBoard)
                 .where(
+                        promotionBoard.status.eq(PostStatus.APPROVED),
                         promotionBoard.createdDate.after(oneMonthAgo)
                 )
                 .orderBy(
@@ -175,6 +180,7 @@ public class PromotionQDSLRepositoryImpl implements PromotionQDSLRepository {
         return Optional.ofNullable(queryFactory
                 .from(promotionBoard)
                 .where(
+                        promotionBoard.status.eq(PostStatus.APPROVED),
                         promotionBoard.id.eq(promotionId),
                         promotionBoard.user.id.eq(userId)
                 )

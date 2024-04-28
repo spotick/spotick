@@ -30,21 +30,26 @@ public class PromotionBoard extends ImageBase {
     private String content;
     @Enumerated(EnumType.STRING)
     private PromotionCategory promotionCategory;
+    @Enumerated(EnumType.STRING)
+    private PostStatus status;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "USER_ID")
     private User user;
 
 
     @Builder
-    public PromotionBoard(String fileName, String uuid, String uploadPath, Long id, String title, String subTitle, String content, PromotionCategory promotionCategory, User user) {
+    public PromotionBoard(String fileName, String uuid, String uploadPath, Long id, String title, String subTitle, String content, PromotionCategory promotionCategory, PostStatus status, User user) {
         super(fileName, uuid, uploadPath);
         this.id = id;
         this.title = title;
         this.subTitle = subTitle;
         this.content = content;
         this.promotionCategory = promotionCategory;
+        this.status = status;
         this.user = user;
     }
+
 
     public void setWriter(User user) {
         this.user = user;
@@ -60,5 +65,9 @@ public class PromotionBoard extends ImageBase {
         this.content = promotionEditDto.getContent();
         this.promotionCategory = promotionEditDto.getCategory();
         super.updateImage(file.getFileName(), file.getUuid(), file.getUploadPath());
+    }
+
+    public void updateStatus(PostStatus status) {
+        this.status = status;
     }
 }
