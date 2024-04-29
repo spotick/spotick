@@ -89,14 +89,19 @@ export const closeGlobalSelection = () => {
 
 /*
 * 모든 모달창을 닫아주는 함수
+* @param {function} callback - Nullable 모달창을 닫을 시 특정함수를 실행시켜야 한다면 callback에 함수 할당
 * */
-export const closeEveryModal = () => {
+export const closeEveryModal = (callback) => {
     modalWrap.classList.remove('show');
 
     const showElements = modalWrap.querySelectorAll('.show');
     showElements.forEach(element => {
         element.classList.remove('show');
     });
+
+    if (callback) {
+        callback();
+    }
 }
 
 export const showCustomModal = (custom) => {

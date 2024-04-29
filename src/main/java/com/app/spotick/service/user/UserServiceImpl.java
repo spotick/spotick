@@ -136,7 +136,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         DefaultMessageService messageService = NurigoApp.INSTANCE.initialize("NCS25SRQDFKRGDMH", "MKL9HRNYWZ2FPCYDRRPHBAOU9MMYBRHG", "https://api.coolsms.co.kr");
 
         Message message = new Message();
-        message.setFrom("01036316448");
+        message.setFrom("01011111111");
         message.setTo(tel);
         message.setText("인증번호는 " + code + "입니다. 1분 이내로 인증해주세요.");
 
