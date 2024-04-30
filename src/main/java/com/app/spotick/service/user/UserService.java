@@ -14,6 +14,7 @@ import com.app.spotick.domain.dto.user.UserJoinDto;
 import com.app.spotick.domain.dto.user.UserProfileDto;
 import com.app.spotick.domain.entity.user.UserProfileFile;
 import com.app.spotick.domain.type.ticket.TicketRequestType;
+import com.app.spotick.util.type.PlaceReservationSortType;
 import com.app.spotick.util.type.PlaceSortType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -41,7 +42,7 @@ public interface UserService {
 
     Page<PlaceListDto> findBookmarkedPlacesByUserId(Long userId, Pageable pageable, PlaceSortType sortType);
 
-    Page<PlaceReservationListDto> findReservationsByUserId(Long userId, Pageable pageable);
+    Page<PlaceReservationListDto> findReservationsByUserId(Long userId, Pageable pageable, PlaceReservationSortType sortType);
 
     Page<PlaceReservedNotReviewedDto> findPlacesNotReviewed(Long userId, Pageable pageable);
 

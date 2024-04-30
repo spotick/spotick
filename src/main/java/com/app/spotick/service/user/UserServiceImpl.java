@@ -28,6 +28,7 @@ import com.app.spotick.repository.user.UserAuthorityRepository;
 import com.app.spotick.repository.user.UserRepository;
 import com.app.spotick.service.redis.RedisService;
 import com.app.spotick.service.util.MailService;
+import com.app.spotick.util.type.PlaceReservationSortType;
 import com.app.spotick.util.type.PlaceSortType;
 import lombok.RequiredArgsConstructor;
 import net.nurigo.sdk.NurigoApp;
@@ -189,8 +190,8 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     @Transactional(readOnly = true)
-    public Page<PlaceReservationListDto> findReservationsByUserId(Long userId, Pageable pageable) {
-        return placeReservationRepository.findReservationsByUserId(userId, pageable);
+    public Page<PlaceReservationListDto> findReservationsByUserId(Long userId, Pageable pageable, PlaceReservationSortType sortType) {
+        return placeReservationRepository.findReservationsByUserId(userId, pageable, sortType);
     }
 
     @Override

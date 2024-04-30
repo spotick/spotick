@@ -1,8 +1,8 @@
-import {promotionListOfUserComponent} from "../components/promotion/promotionComponents.js";
+import {promotionListOfUserComponent} from "../modules/promotion/promotionComponents.js";
 import {showGlobalSelection, showGlobalDialogue} from "../global-js/global-modal.js"
 import {promotionService} from "../services/promotion/promotionService.js";
 import {promotionLayouts} from "../layouts/promotion/promotionLayouts.js";
-import {loadingMarkService} from "../modules/loadingMark.js";
+import {loadingMarkService} from "../utils/loadingMark.js";
 
 const shareBtn = document.querySelector(".SideMenuLink")
 const modalCloseBtn = document.querySelector(".ShareModalCloseBtn")

@@ -13,10 +13,8 @@
 */
 
 
-
-
 // 장소 빌린 날짜 기준의 캘린더
-const calendarService = (function () {
+export const calendarService = (function () {
     // 당일 날짜 정보 저장
     const today = new Date();
     today.setHours(0, 0, 0, 0);

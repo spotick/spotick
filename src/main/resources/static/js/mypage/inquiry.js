@@ -1,4 +1,4 @@
-import { loadingMarkService } from '../modules/loadingMark.js';
+import { loadingMarkService } from '../utils/loadingMark.js';
 
 
 const content = document.getElementById('detailContent');

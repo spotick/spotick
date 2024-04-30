@@ -32,8 +32,8 @@
                             <img alt="" src="/imgs/arrow_down_gray014.f502da9d.svg">
                         </button>
                         <div class="select-box-list">
-                            <button th:each="sortType : ${T(com.app.spotick.util.type.PlaceSortType).values()}"
-                                    th:class="${sortType.toString() == sort.toString()} ? 'selected' : ''"
+                            <button th:class="${sortType.toString() == sort.toString()} ? 'selected' : ''"
+                                    th:each="sortType : ${T(com.app.spotick.util.type.PlaceSortType).values()}"
                                     th:sortType="${sortType}"
                                     th:text="${sortType.displayName}" type="button">
                             </button>
@@ -124,7 +124,8 @@
                     <i class="fa-solid fa-chevron-left"></i>
                     <i class="fa-solid fa-chevron-left"></i>
                 </a>
-                <a class="pagination-btns" th:href="@{/mypage/bookmarks(page=${pagination.startPage - 1}, sort=${sort})}" title="이전">
+                <a class="pagination-btns"
+                   th:href="@{/mypage/bookmarks(page=${pagination.startPage - 1}, sort=${sort})}" title="이전">
                     <i class="fa-solid fa-chevron-left"></i>
                 </a>
             </span>
@@ -139,7 +140,8 @@
             </span>
 
                 <span class="pagination-next" th:if="${pagination.hasNextBlock()}">
-                <a class="pagination-btns" th:href="@{/mypage/bookmarks(page=${pagination.endPage+1}, sort=${sort})}" title="다음">
+                <a class="pagination-btns" th:href="@{/mypage/bookmarks(page=${pagination.endPage+1}, sort=${sort})}"
+                   title="다음">
                     <i class="fa-solid fa-chevron-right"></i>
                 </a>
                 <a class="pagination-btns end" th:href="@{/mypage/bookmarks(page=${pagination.lastPage}, sort=${sort})}"
@@ -160,13 +162,12 @@
     document.getElementById('bookmarks').classList.add('active');
 
     const currentPage = [[${pagination.currentPage}]];
-    let sort = [[${sort}]];
+    const sort = [[${sort}]];
 </script>
 <script src="https://code.jquery.com/jquery-3.6.4.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
-<script src="/js/global-js/global.js" type="module"></script>
-<script src="/js/global-js/image-slide.js" type="module"></script>
-<script src="/js/global-js/chat.js" type="module"></script>
-<script src="/js/mypage/bookmarks.js" type="module"></script>
+<script th:src="@{/js/global-js/global.js}" type="module"></script>
+<script th:src="@{/js/global-js/chat.js}" type="module"></script>
+<script th:src="@{/js/mypage/bookmarks.js}" type="module"></script>
 
 </html>

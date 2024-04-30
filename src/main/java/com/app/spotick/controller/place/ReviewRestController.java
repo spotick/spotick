@@ -39,7 +39,8 @@ public class ReviewRestController {
                                                       BindingResult result,
                                                       @AuthenticationPrincipal UserDetailsDto userDetailsDto) {
         // 해야될 검증 : reservationId와 userId를 통해 실존하는지 알맞는지 검증, 벨리데이션을 이용한 에러검출 -> 이후 등록
-        PlaceReservation foundReservation = placeReservationService.findReservationByIdAndUser(placeReviewRegisterDto.getReservationId(), userDetailsDto.getId()).orElse(null);
+        PlaceReservation foundReservation = placeReservationService
+                .findReservationByIdAndUser(placeReviewRegisterDto.getReservationId(), userDetailsDto.getId());
 
         if (foundReservation == null) {
             ReviewResponse response = new ReviewResponse(false);
@@ -78,7 +79,7 @@ public class ReviewRestController {
         }
 
         PlaceReservation reservation = placeReservationService
-                .findReservationByIdAndUser(reservationId, userDetailsDto.getId()).orElse(null);
+                .findReservationByIdAndUser(reservationId, userDetailsDto.getId());
 
         if (reservation == null) {
             // 예약 정보를 찾을 수 없을 시

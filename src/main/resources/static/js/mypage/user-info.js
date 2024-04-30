@@ -1,5 +1,5 @@
 import {showGlobalDialogue, showGlobalSelection, showCustomModal, closeEveryModal} from "../global-js/global-modal.js";
-import {mypageService} from "../services/mypage/mypageService.js";
+import {userService} from "../services/mypage/userService.js";
 
 const userImage = document.getElementById('userImage');
 const profileModal = document.getElementById('profileModal');
@@ -18,7 +18,7 @@ defaultImages.forEach(image => {
     image.addEventListener('click', async () => {
         const imageName = image.getAttribute('img');
 
-        const {success, message} = await mypageService.updateDefaultImage(imageName);
+        const {success, message} = await userService.updateDefaultImage(imageName);
 
 
         if (success) {
@@ -43,7 +43,7 @@ imageUploadInput.addEventListener('change', async (e) => {
         return;
     }
 
-    const {success, message, data} = await mypageService.updatePersonalImage(file);
+    const {success, message, data} = await userService.updatePersonalImage(file);
 
     if (success) {
         const {uploadPath, uuid, fileName} = data;
@@ -96,7 +96,7 @@ function checkNickname() {
 }
 
 async function changeNickname() {
-    const {success, message, data} = await mypageService.updateNickname(newNicknameInput.value);
+    const {success, message, data} = await userService.updateNickname(newNicknameInput.value);
 
     if (success) {
         successUser.innerHTML = message;
@@ -148,7 +148,7 @@ newTelInputEraseBtn.addEventListener('click', () => {
 });
 
 requestAuthCodeButton.addEventListener('click', async () => {
-    const r = await mypageService.startTelVerification(newTelInput.value);
+    const r = await userService.startTelVerification(newTelInput.value);
 
     if (!r) {
         console.error('오류 발생');
@@ -171,7 +171,7 @@ authNumInput.addEventListener("input", () => {
 });
 
 authConfirmButton.addEventListener('click', async () => {
-    const {success, message, data} = await mypageService.updateTel(newTelInput.value, authNumInput.value);
+    const {success, message, data} = await userService.updateTel(newTelInput.value, authNumInput.value);
 
     if (success) {
         stopTimer();
@@ -266,7 +266,7 @@ pwChangeConfirm.addEventListener('click', async () => {
         return;
     }
 
-    const {success, message} = await mypageService.updatePassword(password);
+    const {success, message} = await userService.updatePassword(password);
 
     if (success) {
         successPw.innerHTML = message;

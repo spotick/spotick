@@ -1,4 +1,4 @@
-import {loadingMarkService} from "../modules/loadingMark.js";
+import {loadingMarkService} from "../utils/loadingMark.js";
 import {ticketService} from "../services/ticket/ticketService.js";
 import {mypageTicketLayout} from "../layouts/ticket/mypage.js";
 

@@ -1,4 +1,4 @@
-export const mypageService = (() => {
+export const userService = (() => {
 
     const updateDefaultImage = async (image) => {
         const response = await fetch(`/mypage/api/updateDefaultImg?imgName=${image}`, {

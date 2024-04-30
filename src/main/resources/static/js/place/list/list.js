@@ -1,8 +1,8 @@
-import {slicePlaceListComponents} from '../../components/place/placeComponents.js';
+import {slicePlaceListComponents} from '../../modules/place/placeComponents.js';
 import {districtFilter, setAreaAndCallback} from '../../global-js/list-filter-modal.js';
 import {addSlideEvent} from '../../global-js/image-slide.js';
 import {bookmarkFetch} from '../../modules/fetch/bookmarkFetch.js';
-import {loadingMarkService} from "../../modules/loadingMark.js";
+import {loadingMarkService} from "../../utils/loadingMark.js";
 
 // 무한 페이징
 let isLoading;

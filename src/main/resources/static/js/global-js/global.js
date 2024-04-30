@@ -1,5 +1,5 @@
-import {getTimeGapFromToday} from '../modules/timeUtils.js';
-import {loadingMarkService} from '../modules/loadingMark.js';
+import {getTimeGapFromToday} from '../utils/timeUtils.js';
+import {loadingMarkService} from '../utils/loadingMark.js';
 
 
 const notification = document.getElementById('notification');

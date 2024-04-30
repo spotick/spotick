@@ -5,7 +5,13 @@ import com.app.spotick.domain.dto.place.PlaceReservationListDto;
 import com.app.spotick.domain.dto.place.reservation.ReservationRequestListDto;
 import com.app.spotick.domain.type.place.PlaceReservationStatus;
 import com.app.spotick.domain.type.post.PostStatus;
+import com.app.spotick.util.type.PlaceReservationSortType;
+import com.app.spotick.util.type.PlaceSortType;
+import com.querydsl.core.types.Order;
+import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Projections;
+import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQuery;
@@ -17,11 +23,13 @@ import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
 import org.springframework.data.support.PageableExecutionUtils;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static com.app.spotick.domain.entity.place.QPlace.*;
 import static com.app.spotick.domain.entity.place.QPlaceBookmark.placeBookmark;
 import static com.app.spotick.domain.entity.place.QPlaceFile.*;
+import static com.app.spotick.domain.entity.place.QPlaceInquiry.placeInquiry;
 import static com.app.spotick.domain.entity.place.QPlaceReservation.*;
 import static com.app.spotick.domain.entity.place.QPlaceReview.placeReview;
 import static com.app.spotick.domain.entity.user.QUser.*;
@@ -32,24 +40,12 @@ public class PlaceReservationQDSLRepositoryImpl implements PlaceReservationQDSLR
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public Page<PlaceReservationListDto> findReservationsByUserId(Long userId, Pageable pageable) {
+    public Page<PlaceReservationListDto> findReservationsByUserId(Long userId, Pageable pageable, PlaceReservationSortType sortType) {
         // 게시글 전체 갯수 확인
         JPAQuery<Long> totalCountQuery = queryFactory.select(placeReservation.count())
                 .from(placeReservation)
                 .join(placeReservation.place, place)
                 .where(placeReservation.user.id.eq(userId), place.placeStatus.eq(PostStatus.APPROVED));
-
-        JPQLQuery<Double> reviewAvg = JPAExpressions.select(placeReview.score.avg())
-                .from(placeReview)
-                .where(placeReview.placeReservation.place.eq(place));
-
-        JPQLQuery<Long> reviewCount = JPAExpressions.select(placeReview.count())
-                .from(placeReview)
-                .where(placeReview.placeReservation.place.eq(place));
-
-        JPQLQuery<Long> bookmarkCount = JPAExpressions.select(placeBookmark.count())
-                .from(placeBookmark)
-                .where(placeBookmark.place.eq(place));
 
         List<PlaceReservationListDto> placeReservationListDtos = queryFactory
                 .from(placeReservation)
@@ -63,7 +59,7 @@ public class PlaceReservationQDSLRepositoryImpl implements PlaceReservationQDSLR
                                         .where(placeFile.place.id.eq(place.id))
                         )
                 )
-                .orderBy(placeReservation.id.desc())
+                .orderBy(createOrderByClause(sortType))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .select(
@@ -80,9 +76,9 @@ public class PlaceReservationQDSLRepositoryImpl implements PlaceReservationQDSLR
                                         placeFile.uploadPath,
                                         place.id
                                 ),
-                                reviewAvg,
-                                reviewCount,
-                                bookmarkCount,
+                                createReviewAvgSub(),
+                                createReviewCountSub(),
+                                createBookmarkCountSub(),
                                 placeReservation.visitors,
                                 placeReservation.checkIn,
                                 placeReservation.checkOut,
@@ -133,7 +129,7 @@ public class PlaceReservationQDSLRepositoryImpl implements PlaceReservationQDSLR
 
         boolean hasNext = false;
 
-        if(contents.size() > pageable.getPageSize()){
+        if (contents.size() > pageable.getPageSize()) {
             contents.remove(pageable.getPageSize());
             hasNext = true;
         }
@@ -141,6 +137,63 @@ public class PlaceReservationQDSLRepositoryImpl implements PlaceReservationQDSLR
         return new SliceImpl<>(contents, pageable, hasNext);
     }
 
+    private JPQLQuery<Double> createReviewAvgSub() {
+        return JPAExpressions.select(placeReview.score.avg())
+                .from(placeReview)
+                .where(placeReview.placeReservation.place.eq(place));
+    }
+
+    private JPQLQuery<Long> createReviewCountSub() {
+        return JPAExpressions.select(placeReview.count())
+                .from(placeReview)
+                .where(placeReview.placeReservation.place.eq(place));
+    }
+
+    private JPQLQuery<Long> createBookmarkCountSub() {
+
+        return JPAExpressions.select(placeBookmark.count())
+                .from(placeBookmark)
+                .where(placeBookmark.place.eq(place));
+    }
+
+    private JPQLQuery<Long> createInquiryCountSub() {
+        return JPAExpressions.select(placeInquiry.id.count())
+                .from(placeInquiry)
+                .where(placeInquiry.place.eq(place));
+    }
+
+    private OrderSpecifier<?>[] createOrderByClause(PlaceReservationSortType sortType) {
+        return switch (sortType) {
+            case UPCOMING -> buildOrderSpecifiers(
+                    placeReservation.checkIn.desc()
+            );
+            case NEWEST -> buildOrderSpecifiers(
+                    place.createdDate.desc()
+            );
+            case PRICE_LOW_TO_HIGH -> buildOrderSpecifiers(
+                    place.price.asc(),
+                    place.id.desc()
+            );
+            case PRICE_HIGH_TO_LOW -> buildOrderSpecifiers(
+                    place.price.desc(),
+                    place.id.desc()
+            );
+            case RATING_HIGH -> buildOrderSpecifiers(
+                    reviewAvgASC(),
+                    place.id.desc()
+            );
+        };
+    }
+
+    private OrderSpecifier<?> reviewAvgASC() {
+        return new OrderSpecifier<>(
+                Order.ASC, createReviewAvgSub()
+        );
+    }
+
+    private OrderSpecifier<?>[] buildOrderSpecifiers(OrderSpecifier<?>... specifiers) {
+        return specifiers;
+    }
 }
 
 

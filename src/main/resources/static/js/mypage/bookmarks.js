@@ -1,4 +1,7 @@
 import {bookmarkFetch} from "../modules/fetch/bookmarkFetch.js";
+import {addSlideEvent} from "../global-js/image-slide.js";
+
+addSlideEvent();
 
 const bookmarkButtons = document.querySelectorAll('.ItemBookMarkBtn');
 
@@ -34,7 +37,6 @@ function toggleBookmark(btn) {
 //
 const selectButton = document.querySelector('.select-box-btn');
 const selectButtonImg = selectButton.querySelector('img');
-const selectButtonText = selectButton.querySelector('span');
 const selectBoxList = document.querySelector('.select-box-list');
 
 const selectBoxItems = document.querySelectorAll('.select-box-list button');
