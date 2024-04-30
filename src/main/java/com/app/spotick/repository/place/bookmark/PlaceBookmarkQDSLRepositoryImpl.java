@@ -2,8 +2,13 @@ package com.app.spotick.repository.place.bookmark;
 
 import com.app.spotick.domain.dto.place.file.PlaceFileDto;
 import com.app.spotick.domain.dto.place.PlaceListDto;
+import com.app.spotick.domain.entity.place.QPlace;
 import com.app.spotick.domain.type.post.PostStatus;
+import com.app.spotick.util.type.PlaceSortType;
+import com.querydsl.core.types.Order;
+import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Projections;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.JPQLQuery;
@@ -21,6 +26,7 @@ import java.util.stream.Collectors;
 import static com.app.spotick.domain.entity.place.QPlace.*;
 import static com.app.spotick.domain.entity.place.QPlaceBookmark.*;
 import static com.app.spotick.domain.entity.place.QPlaceFile.*;
+import static com.app.spotick.domain.entity.place.QPlaceInquiry.placeInquiry;
 import static com.app.spotick.domain.entity.place.QPlaceReview.*;
 import static com.querydsl.core.group.GroupBy.list;
 
@@ -29,24 +35,20 @@ public class PlaceBookmarkQDSLRepositoryImpl implements PlaceBookmarkQDSLReposit
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public Page<PlaceListDto> findBookmarkedPlacesByUserId(Long userId, Pageable pageable) {
+    public Page<PlaceListDto> findBookmarkedPlacesByUserId(Long userId, Pageable pageable, PlaceSortType sortType) {
+        System.out.println("sortType = " + sortType);
+
         // 게시글 전체 갯수 확인
         JPAQuery<Long> totalCountQuery = queryFactory.select(place.count())
                 .from(placeBookmark)
                 .join(placeBookmark.place, place)
                 .where(placeBookmark.user.id.eq(userId), place.placeStatus.eq(PostStatus.APPROVED));
 
-        JPQLQuery<Double> reviewAvg = JPAExpressions.select(placeReview.score.avg())
-                .from(placeReview)
-                .where(placeReview.placeReservation.place.eq(place));
+        JPQLQuery<Double> reviewAvg = createReviewAvgSub();
 
-        JPQLQuery<Long> reviewCount = JPAExpressions.select(placeReview.count())
-                .from(placeReview)
-                .where(placeReview.placeReservation.place.eq(place));
+        JPQLQuery<Long> reviewCount = createReviewCountSub();
 
-        JPQLQuery<Long> bookmarkCount = JPAExpressions.select(placeBookmark.count())
-                .from(placeBookmark)
-                .where(placeBookmark.place.eq(place));
+        JPQLQuery<Long> bookmarkCount = createBookmarkCountSub();
 
         /*
             리스트 생성 쿼리, (생성자에서 placeFileDto 리스트는 제외하여 Projections.constructor 사용에 걸림이 없게 한다.
@@ -67,7 +69,7 @@ public class PlaceBookmarkQDSLRepositoryImpl implements PlaceBookmarkQDSLReposit
                 .from(placeBookmark)
                 .join(placeBookmark.place, place)
                 .where(placeBookmark.user.id.eq(userId), place.placeStatus.eq(PostStatus.APPROVED))
-                .orderBy(place.id.desc())
+                .orderBy(createOrderByClause(sortType))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
@@ -84,14 +86,14 @@ public class PlaceBookmarkQDSLRepositoryImpl implements PlaceBookmarkQDSLReposit
                         ))
                 .from(placeFile)
                 .where(placeFile.place.id.in(placeIdList))
-                .orderBy(placeFile.id.asc(),placeFile.place.id.desc())
+                .orderBy(placeFile.id.asc(), placeFile.place.id.desc())
                 .fetch();
 
 //        사진정보를 장소 id별로 묶는다
         Map<Long, List<PlaceFileDto>> fileListMap = fileDtoList.stream().collect(Collectors.groupingBy(PlaceFileDto::getPlaceId));
 
 //        장소 id별로 구분된 사진들을 각각 게시글 번호에 맞게 추가한다
-        placeListDtos.forEach(placeListDto->{
+        placeListDtos.forEach(placeListDto -> {
             placeListDto.updatePlaceFiles(fileListMap.get(placeListDto.getId())
                     .stream().limit(5L).toList());
             // 화면에서 뿌릴 주소값 가공
@@ -137,6 +139,100 @@ public class PlaceBookmarkQDSLRepositoryImpl implements PlaceBookmarkQDSLReposit
 //        });
 
         return PageableExecutionUtils.getPage(placeListDtos, pageable, totalCountQuery::fetchOne);
+    }
+
+    private JPQLQuery<Double> createReviewAvgSub() {
+        return JPAExpressions.select(placeReview.score.avg())
+                .from(placeReview)
+                .where(placeReview.placeReservation.place.eq(place));
+    }
+
+    private JPQLQuery<Long> createReviewCountSub() {
+        return JPAExpressions.select(placeReview.count())
+                .from(placeReview)
+                .where(placeReview.placeReservation.place.eq(place));
+    }
+
+    private JPQLQuery<Long> createBookmarkCountSub() {
+
+        return JPAExpressions.select(placeBookmark.count())
+                .from(placeBookmark)
+                .where(placeBookmark.place.eq(place));
+    }
+
+    private JPQLQuery<Long> createInquiryCountSub() {
+        return JPAExpressions.select(placeInquiry.id.count())
+                .from(placeInquiry)
+                .where(placeInquiry.place.eq(place));
+    }
+
+    private BooleanExpression isBookmarkCheckedSub(Long userId) {
+        return userId == null ?
+                Expressions.asBoolean(false)
+                : JPAExpressions.select(placeBookmark.id.isNotNull())
+                .from(placeBookmark)
+                .where(placeBookmark.place.eq(place).and(placeBookmark.user.id.eq(userId)))
+                .exists();
+    }
+
+    private OrderSpecifier<?>[] buildOrderSpecifiers(OrderSpecifier<?>... specifiers) {
+        return specifiers;
+    }
+
+    private OrderSpecifier<?>[] createOrderByClause(PlaceSortType sortType) {
+        return switch (sortType) {
+            case POPULARITY -> buildOrderSpecifiers(
+                    reviewAvgASC(),
+                    reviewCountDESC(),
+                    place.viewCount.desc(),
+                    bookmarkCountDESC()
+            );
+            case NEWEST -> buildOrderSpecifiers(
+                    place.createdDate.desc()
+            );
+            case INTEREST -> buildOrderSpecifiers(
+                    bookmarkCountDESC(),
+                    place.id.desc()
+            );
+            case PRICE_LOW_TO_HIGH -> buildOrderSpecifiers(
+                    place.price.asc(),
+                    place.id.desc()
+            );
+            case PRICE_HIGH_TO_LOW -> buildOrderSpecifiers(
+                    place.price.desc(),
+                    place.id.desc()
+            );
+            case VIEWS -> buildOrderSpecifiers(
+                    place.viewCount.desc(),
+                    place.id.desc()
+            );
+            case REVIEWS -> buildOrderSpecifiers(
+                    reviewCountDESC(),
+                    place.id.desc()
+            );
+            case RATING_HIGH -> buildOrderSpecifiers(
+                    reviewAvgASC(),
+                    place.id.desc()
+            );
+        };
+    }
+
+    private OrderSpecifier<?> reviewAvgASC() {
+        return new OrderSpecifier<>(
+                Order.ASC, createReviewAvgSub()
+        );
+    }
+
+    private OrderSpecifier<?> reviewCountDESC() {
+        return new OrderSpecifier<>(
+                Order.DESC, createReviewCountSub()
+        );
+    }
+
+    private OrderSpecifier<?> bookmarkCountDESC() {
+        return new OrderSpecifier<>(
+                Order.DESC, createBookmarkCountSub()
+        );
     }
 }
 

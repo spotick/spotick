@@ -87,9 +87,10 @@
 .mpc-title {
     display: flex;
     align-items: center;
+    justify-content: space-between;
     position: relative;
-    margin-bottom: 24.5px;
-    padding-bottom: 18.5px;
+    margin-bottom: 25px;
+    padding-bottom: 19px;
     border-bottom: 1px solid rgb(212, 219, 226);
 }
 
@@ -195,7 +196,7 @@
     border-bottom: 1px solid rgb(240, 240, 240);
     -webkit-box-align: center;
     align-items: center;
-    padding-bottom: 24.5px;
+    padding-bottom: 25px;
 }
 
 .mpc-user-info-user figcaption {
@@ -346,15 +347,15 @@
     background: rgb(240, 240, 240)
 }
 
-.OneItemContainer:hover .NavigationBtnContainer{
-    display:block;
+.OneItemContainer:hover .NavigationBtnContainer {
+    display: block;
 }
 
-.NavigationBtnContainer{
+.NavigationBtnContainer {
     display: none;
 }
 
-.RightBtn{
+.RightBtn {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
@@ -374,7 +375,7 @@
     width: 100%;
 }
 
-.LeftBtn{
+.LeftBtn {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
@@ -394,7 +395,7 @@
     width: 100%;
 }
 
-.ItemImgPagination{
+.ItemImgPagination {
     position: absolute;
     bottom: 0;
     margin-bottom: 14px;
@@ -925,7 +926,7 @@
 }
 
 .mpcwre-line-divider {
-    width: 1.5px;
+    width: 2px;
     height: 14px;
     margin: 0 6px;
     background-color: rgb(163, 163, 163);
@@ -1331,12 +1332,12 @@
     width: 100%;
 }
 
-.ticket-table thead tr td{
+.ticket-table thead tr td {
     border-bottom: 1px solid #b4b4b4;
     padding-bottom: 10px;
 }
 
-.ticket-table tbody tr td{
+.ticket-table tbody tr td {
     padding: 10px 0;
 }
 
@@ -1394,4 +1395,72 @@
     -webkit-box-pack: justify;
     justify-content: space-between;
     gap: 15px;
+}
+
+.select-box {
+    position: relative;
+}
+
+.select-box-btn {
+    display: flex;
+    -webkit-box-align: center;
+    align-items: center;
+    gap: 5px;
+
+    font-size: 14px;
+    line-height: 20px;
+    color: rgb(36, 36, 36);
+}
+
+.select-box-btn img {
+    width: 16px;
+    height: 16px;
+    transition: all ease 0.1s;
+}
+
+/* selectbox 리스트 */
+.select-box-list {
+    position: absolute;
+    top: 31px;
+    right: -2px;
+    display: none;
+    flex-direction: column;
+    -webkit-box-pack: justify;
+    justify-content: space-between;
+    -webkit-box-align: center;
+    align-items: center;
+    border: 1px solid rgb(214, 214, 214);
+    border-radius: 4px;
+    background-color: rgb(255, 255, 255);
+    z-index: 1020;
+    overflow: hidden;
+    transition: all 0.1s ease 0s;
+    box-shadow: rgba(94, 117, 141, 0.2);
+}
+
+.select-box-list.show {
+    display: flex;
+}
+
+.select-box-list > button {
+    width: 100%;
+    height: 40px;
+    display: flex;
+    -webkit-box-align: center;
+    align-items: center;
+    -webkit-box-pack: center;
+    justify-content: center;
+    font-size: 14px;
+    line-height: 21px;
+    color: rgb(138, 138, 138);
+    white-space: nowrap;
+    padding: 0px 15px;
+}
+
+.SelectBoxList > button:first-child {
+    border-radius: 4px 4px 0 0;
+}
+
+.select-box-list .selected {
+    color: rgb(0, 117, 235) !important;
 }

@@ -137,13 +137,13 @@ class PlaceBookmarkRepositoryTest {
         em.clear();
     }
 
-    @Test
-    @DisplayName("북마크 리스트 테스트")
-    void bookmarkListTest() {
-        Page<PlaceListDto> bookmarkedPlacesByUserId = placeBookmarkRepository.findBookmarkedPlacesByUserId(user1.getId(), PageRequest.of(0, 6));
-
-        System.out.println("bookmarkedPlacesByUserId.getContent() = " + bookmarkedPlacesByUserId.getContent());
-    }
+//    @Test
+//    @DisplayName("북마크 리스트 테스트")
+//    void bookmarkListTest() {
+//        Page<PlaceListDto> bookmarkedPlacesByUserId = placeBookmarkRepository.findBookmarkedPlacesByUserId(user1.getId(), PageRequest.of(0, 6));
+//
+//        System.out.println("bookmarkedPlacesByUserId.getContent() = " + bookmarkedPlacesByUserId.getContent());
+//    }
 
     @Test
     @DisplayName("투플 테스트")

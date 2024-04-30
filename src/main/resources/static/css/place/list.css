@@ -173,7 +173,7 @@ input[type=checkbox] {
     z-index: 1020;
     overflow: hidden;
     transition: all 0.1s ease 0s;
-    box-shadow: rgba(94, 117, 141, 0.2) 0px
+    box-shadow: rgba(94, 117, 141, 0.2);
 }
 
 .SelectBoxList.On{
@@ -197,7 +197,7 @@ input[type=checkbox] {
 }
 
 .SelectBoxList > button:first-child {
-    border-radius: 4px 4px 0px 0px;
+    border-radius: 4px 4px 0 0;
 }
 
 .SelectBoxListItem-select{

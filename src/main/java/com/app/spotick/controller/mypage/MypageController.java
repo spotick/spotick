@@ -20,6 +20,7 @@ import com.app.spotick.service.place.reservation.PlaceReservationService;
 import com.app.spotick.service.redis.RedisService;
 import com.app.spotick.service.user.UserProfileFileService;
 import com.app.spotick.service.user.UserService;
+import com.app.spotick.util.type.PlaceSortType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -62,35 +63,19 @@ public class MypageController {
         model.addAttribute("userProfile", userProfileDto);
     }
 
-    @PostMapping("/changePassword")
-    public RedirectView changePassword(@RequestParam("password") String password,
-                                       @RequestParam("passwordCheck") String passwordCheck,
-                                       @AuthenticationPrincipal UserDetailsDto userDetailsDto,
-                                       RedirectAttributes redirectAttributes) {
-        String passwordRegex = "^(?=.*[a-zA-Z])(?=.*[0-9!@#$%^&*()-+=<>]).{6,15}$";
-
-        if (password != null && Objects.equals(password, passwordCheck) && password.matches(passwordRegex)) {
-            userService.updatePassword(userDetailsDto.getId(), password);
-
-            redirectAttributes.addFlashAttribute("successPassword", "비밀번호가 수정되었습니다.");
-            return new RedirectView("/mypage/user-info");
-        }
-
-        redirectAttributes.addFlashAttribute("errorPassword", "비밀번호 수정에 실패했습니다.");
-        return new RedirectView("/mypage/user-info");
-    }
-
     /* =================================================북마크====================================================== */
     @GetMapping("/bookmarks")
     public void goToBookmarks(@RequestParam(value = "page", defaultValue = "1") int page,
+                              @RequestParam(value = "sort", defaultValue = "POPULARITY") PlaceSortType sortType,
                               @AuthenticationPrincipal UserDetailsDto userDetailsDto,
                               Model model) {
         Pageable pageable = PageRequest.of(page - 1, 6);
 
-        Page<PlaceListDto> bookmarkedPlaces = userService.findBookmarkedPlacesByUserId(userDetailsDto.getId(), pageable);
+        Page<PlaceListDto> bookmarkedPlaces = userService.findBookmarkedPlacesByUserId(userDetailsDto.getId(), pageable, sortType);
         Pagination<PlaceListDto> pagination = new Pagination<>(5, pageable, bookmarkedPlaces);
 
         model.addAttribute("placeDtoList", bookmarkedPlaces);
+        model.addAttribute("sort", sortType);
         model.addAttribute("pagination", pagination);
     }
 
@@ -228,9 +213,5 @@ public class MypageController {
     private String getMaskedEmail(String email) {
         // 이메일 주소의 처음 4글자와 마지막 @ 이전 부분을 유지하고 나머지를 *로 마스킹
         return email.substring(0, 4) + "****@" + email.substring(email.indexOf('@') + 1);
-    }
-
-    private String getPath() {
-        return LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd"));
     }
 }

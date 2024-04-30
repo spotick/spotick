@@ -209,12 +209,10 @@
 </div>
 </body>
 <script src="https://code.jquery.com/jquery-3.6.4.js"></script>
-<script src="/js/global-js/global.js" type="module"></script>
-<script src="/js/mypage/mypage.js"></script>
-<script src="/js/global-js/loading.js"></script>
-<!--<script src="/js/mypage/user-info.js"></script>-->
-<script th:src="@{/js/mypage/new-user-info.js}" type="module"></script>
-<script src="/js/global-js/chat.js" type="module"></script>
+<script th:src="@{/js/global-js/global.js}" type="module"></script>
+<script th:src="@{/js/global-js/chat.js}" type="module"></script>
+<script th:src="@{/js/mypage/mypage.js}"></script>
+<script th:src="@{/js/mypage/user-info.js}" type="module"></script>
 <script>
     document.getElementById('userInfo').classList.add('active');
 </script>
