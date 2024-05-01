@@ -87,7 +87,7 @@ const showDetail = (item) => {
     const dto = reservationList[index];
     const {checkIn, checkOut} = dto
 
-    modalLayouts.placeReservationDetailModal(dto, calendarService.prevCalendar, calendarService.nextCalendar)
+    modalLayouts.placeReservationDetailModalLayout(dto, calendarService.prevCalendar, calendarService.nextCalendar)
         .then((html) => {
             reservationModal.innerHTML = html;
         })

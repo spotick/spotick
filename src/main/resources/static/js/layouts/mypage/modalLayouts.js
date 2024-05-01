@@ -2,10 +2,9 @@ import {getPlaceStatusName} from "../../utils/place-status.js";
 
 export const modalLayouts = (() => {
 
-    const placeReservationDetailModal = async (dto, prevCalendarCallback, nextCalendarCallback) => {
+    const placeReservationDetailModalLayout = async (dto) => {
         const {
             id,
-            reservationId,
             title,
             price,
             placeAddress,
@@ -41,7 +40,7 @@ export const modalLayouts = (() => {
                                 <div class="ItemsStarCountContainer">
                                     <img alt="후기갯수" class="ItemCountImg"
                                          src="/imgs/star_filled_paintYellow056.a8eb6e44.svg">
-                                    <span class="ItemCountText">${evalAvg}(${evalCount})</span>
+                                    <span class="ItemCountText">${evalAvg.toFixed(1)}(${evalCount})</span>
                                 </div>
                                 <div class="ItemsLikeCountContainer">
                                     <img alt="북마크갯수" class="ItemCountImg bookmark"
@@ -116,7 +115,35 @@ export const modalLayouts = (() => {
         `;
     }
 
+    const inquiryDetailModalLayout = async (dto) => {
+        const {content, response, responded} = dto;
+
+        let responseTextarea = '';
+        if (responded) {
+            responseTextarea = response;
+        } else {
+            responseTextarea = "아직 답변받지 못했습니다!";
+        }
+
+        return `
+            <div class="modal-place-content-container">
+                <div class="modal-place-con-box">
+                    <div class="modal-place-title">문의 내용</div>
+                    <div class="modal-place-input-con">
+                        <textarea class="modal-place-txarea" cols="30" readonly rows="10">${content}</textarea>
+                    </div>
+                    <div class="modal-place-title">답변</div>
+                    <div class="modal-place-input-con">
+                        <textarea class="modal-place-txarea" cols="30" readonly rows="10">${responseTextarea}</textarea>
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+
+
     return {
-        placeReservationDetailModal: placeReservationDetailModal,
+        placeReservationDetailModalLayout: placeReservationDetailModalLayout,
+        inquiryDetailModalLayout: inquiryDetailModalLayout,
     }
 })();
