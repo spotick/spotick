@@ -1,190 +1,103 @@
-const contentTextArea = document.getElementById('content');
-const typeCounter = document.getElementById('typeCounter');
-const mrConfirmBtn = document.getElementById('mrConfirmBtn');
-const reviewRating = document.getElementById('score');
-const stars = document.querySelectorAll('.mrf-star');
-const reservationIdInput = document.getElementById('reservationId');
+import {showCustomModal, showGlobalDialogue, showGlobalSelection, closeSingleModal} from "../global-js/global-modal.js";
+import {addSlideEvent} from "../global-js/image-slide.js";
+import {modalLayouts} from "../layouts/mypage/modalLayouts.js";
+import {reviewService} from "../services/mypage/reviewService.js";
 
-// 작성하기 버튼 클릭시 아이템 값 넘겨주며 모달창 on
-const detailImage = document.getElementById('detailImage');
-const detailAddress = document.getElementById('detailAddress');
-const detailEval = document.getElementById('detailEval');
-const detailBookmark = document.getElementById('detailBookmark');
-const detailTitle = document.getElementById('detailTitle');
-const detailPrice = document.getElementById('detailPrice');
-const detailCheckIn = document.getElementById('detailCheckIn');
-const detailCheckOut = document.getElementById('detailCheckOut');
-const detailVisitors = document.getElementById('detailVisitors');
-const detailContent = document.getElementById('detailContent');
-const detailStatus = document.getElementById('detailStatus');
+addSlideEvent();
 
-const errorContent = document.getElementById('errorContent');
-const errorScore = document.getElementById('errorScore');
+const reviewWriteFormModal = document.getElementById('reviewWriteFormModal');
+////
+// 리뷰 작성 모달
+document.querySelectorAll('.reservationWrite').forEach(write => {
+    write.addEventListener('click', async () => {
+        const index = write.getAttribute('idx');
 
-function popupReviewFrom(reservationId, image, address, eval, bookmarkCount, title, price, checkIn, checkOut, visitors, content, status) {
-    modalBg.classList.add('show');
-    modalReviewForm.classList.add('show');
+        reviewWriteFormModal.innerHTML = await modalLayouts.reviewWriteFormModalLayout(contents[index]);
 
-    reservationIdInput.value = reservationId;
-    detailImage.src = "/file/display?fileName=" + image;
-    detailAddress.innerHTML = address;
-    detailEval.innerHTML = eval;
-    detailBookmark.innerHTML = bookmarkCount;
-    detailTitle.innerHTML = title;
-    detailPrice.innerHTML = price;
-    detailCheckIn.innerHTML = checkIn;
-    detailCheckOut.innerHTML = checkOut;
-    detailVisitors.innerHTML = visitors;
-    detailContent.innerHTML = content;
-    detailStatus.innerHTML = status;
+        showCustomModal(reviewWriteFormModal);
 
-    mrConfirmBtn.onclick = () => recheckReviewForm();
-    contentTextArea.value = '';
-    typeCounter.innerHTML = '0';
-    reviewRating.value = 1
-    errorScore.innerHTML = '';
-    errorContent.innerHTML = '';
-    stars.forEach(star => {
-        star === stars[0] ? star.classList.add('on') : star.classList.remove('on')
-    })
-    mrConfirmBtn.disabled = true;
-}
+        const reviewWriteTxArea = reviewWriteFormModal.querySelector('#reviewWriteTxArea');
+        const typeCounter = reviewWriteFormModal.querySelector('#typeCounter');
+        const stars = reviewWriteFormModal.querySelectorAll('.mrf-star');
+        const reviewScoreInput = reviewWriteFormModal.querySelector('#reviewScoreInput');
+        const reviewWriteButton = reviewWriteFormModal.querySelector('#reviewWriteButton');
 
-// 평점 작동
-
-function setReviewScore(score) {
-    stars.forEach(star => {
-        star.classList.remove('on')
-    })
-    for (let i = 0; i < score; i++) {
-        stars[i].classList.add('on');
-    }
-    reviewRating.value = score;
-}
-
-// 리뷰 작성시 글자수 체크 및 작성버튼 완료 검증
-function checkTypeCounts() {
-    // 작성 완료 버튼 통제
-    mrConfirmBtn.disabled = contentTextArea.value.length < 10
-
-    // 글자 수 통제
-    const maxCharCount = 200;
-    if (contentTextArea.value.length > maxCharCount) {
-        contentTextArea.value = contentTextArea.value.slice(0, maxCharCount);
-    }
-    typeCounter.textContent = `${contentTextArea.value.length}`;
-}
-
-// 후기 등록 재확인
-function recheckReviewForm() {
-    const reservationId = reservationIdInput.value;
-    const score = reviewRating.value;
-    const content = contentTextArea.value;
-
-    console.log(reservationId)
-    console.log(score)
-    console.log(content)
-
-
-    showGlobalSelection("후기를 작성하시겠습니까?<br><br>후기 작성후 삭제가 불가능하나<br>작성일로부터 7일 동안 수정이<br>가능합니다.",
-        () => postReview(reservationId, score, content))
-}
-
-// 후기 등록 비동기 통신 처리
-function postReview(reservationId, score, content) {
-    closeOnlyThisModal(globalSelection);
-
-    const reviewRegisterDto = {
-        reservationId: reservationId,
-        score: score,
-        content: content
-    }
-
-    fetch('/reviews/write', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(reviewRegisterDto)
-    })
-        .then(response => {
-            if (response.ok) {
-                alert("리뷰가 등록되었습니다.");
-                window.location.reload();
-            } else {
-                throw response
+        reviewWriteTxArea.addEventListener('input', () => {
+            const maxCharCount = 200;
+            if (reviewWriteTxArea.value.length > maxCharCount) {
+                reviewWriteTxArea.value = reviewWriteTxArea.value.slice(0, maxCharCount);
             }
-        })
-        .catch(error => {
-            console.error('Error:', error);
+            typeCounter.textContent = `${reviewWriteTxArea.value.length}`;
 
-            error.json().then(data => {
-
-                vibrateTarget(modalReviewForm);
-
-                data.errors.forEach(error => {
-                    if (error.field === 'content') {
-                        errorContent.innerHTML = error.message;
-                    } else if (error.field === 'score') {
-                        errorScore.innerHTML = error.message;
-                    }
-                })
-            })
+            reviewWriteButton.disabled = reviewWriteTxArea.value.length < 10;
         });
-}
 
-function recheckReviewableDelete(reservationId) {
-    showGlobalSelection("리뷰는 호스트에게<br>큰 힘이 됩니다!<br>그래도 삭제하시겠습니까?", () => deleteReviewable(reservationId));
-}
+        stars.forEach(star => {
+            star.addEventListener('click', () => {
+                const score = star.getAttribute('value');
 
-function deleteReviewable(reservationId) {
-    fetch('/reviews/notReviewing/' + reservationId, {
-        method: 'PATCH'
-    })
-        .then(response => {
-            if (response.ok) {
-                return response.text();
-            } else {
-                throw response
-            }
-        })
-        .then(message => {
-            alert(message);
-            window.location.reload();
-        })
-        .catch(error => {
-            console.error('Error:', error);
+                stars.forEach(star => {
+                    star.classList.remove('on')
+                });
 
-            error.text().then(message => showGlobalDialogue(message))
+                for (let i = 0; i < score; i++) {
+                    stars[i].classList.add('on');
+                }
+
+                reviewScoreInput.value = score;
+            });
         });
+
+        reviewWriteButton.addEventListener('click', () => {
+            const msg = "후기를 작성하시겠습니까?<br><br>후기 작성후 삭제가 불가능하나<br>작성일로부터 7일 동안 수정이<br>가능합니다.";
+            const reservationId = reviewWriteButton.getAttribute('rId');
+
+            showGlobalSelection(
+                msg,
+                async () => registerReview(reservationId, reviewScoreInput.value, reviewWriteTxArea.value),
+                null,
+                false
+            );
+        });
+    });
+});
+
+const registerReview = async (reservationId, score, content) => {
+    const {success, data, message} = await reviewService.registerReview(reservationId, score, content);
+
+    if (success) {
+       alert(message);
+       window.location.reload();
+    } else {
+        closeSingleModal("gs");
+
+        const errorContent = reviewWriteFormModal.querySelector('#errorContent');
+
+        errorContent.innerText = data[0].message;
+    }
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////이벤트핸들러
-// 작성 버튼
-document.querySelectorAll('.reservationWrite').forEach(reservationWrite => {
-    reservationWrite.addEventListener('click', function () {
-        const reservationId = this.getAttribute('data-reservation-id');
-        const image = this.getAttribute('data-image');
-        const address = this.getAttribute('data-address');
-        const eval = this.getAttribute('data-eval');
-        const bookmarkCount = this.getAttribute('data-bookmark-count');
-        const title = this.getAttribute('data-title');
-        const price = this.getAttribute('data-price');
-        const checkIn = this.getAttribute('data-check-in');
-        const checkOut = this.getAttribute('data-check-out');
-        const visitors = this.getAttribute('data-visitors');
-        const content = this.getAttribute('data-content');
-        const status = this.getAttribute('data-status');
-
-        popupReviewFrom(reservationId, image, address, eval, bookmarkCount, title, price, checkIn, checkOut, visitors, content, status);
-    })
-})
-
-// 삭제 버튼
 document.querySelectorAll('.reservationDelete').forEach(reservationDelete => {
     reservationDelete.addEventListener('click', function () {
-        const reservationId = this.getAttribute('data-reservation-id');
+        const reservationId = this.getAttribute('rid');
 
-        recheckReviewableDelete(reservationId);
+        showGlobalSelection(
+            "리뷰는 호스트에게<br>큰 힘이 됩니다!<br>그래도 삭제하시겠습니까?",
+            () => {
+                setNotReview(reservationId);
+            }
+        )
     })
 })
+
+const setNotReview = async (reservationId) => {
+    const {success, message} = await reviewService.setNotReviewing(reservationId);
+
+    if (success) {
+        alert(message);
+
+        window.location.reload();
+    } else {
+        showGlobalDialogue(message);
+    }
+}

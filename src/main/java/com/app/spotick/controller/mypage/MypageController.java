@@ -78,11 +78,12 @@ public class MypageController {
         model.addAttribute("sort", sortType);
         model.addAttribute("pagination", pagination);
     }
-
+    /* =================================================문의내역====================================================== */
     @GetMapping("/inquiries")
     public void goToInquiries() {
     }
 
+    /* =================================================리뷰내역====================================================== */
     @GetMapping("/reviews")
     public RedirectView goToReviews() {
         return new RedirectView("/mypage/reviews/reviewable");
@@ -120,6 +121,7 @@ public class MypageController {
         model.addAttribute("pagination", pagination);
     }
 
+    /* =================================================장소관리====================================================== */
     @GetMapping("/places")
     public void goToPlaces(@RequestParam(value = "page", defaultValue = "1") int page,
                            @AuthenticationPrincipal UserDetailsDto userDetailsDto,
@@ -163,6 +165,7 @@ public class MypageController {
         return "/mypage/places/reservations";
     }
 
+    /* =================================================티켓관리====================================================== */
     @GetMapping("/tickets")
     public void goToTickets(@RequestParam(value = "page", defaultValue = "1") int page,
                             @RequestParam(value = "view", defaultValue = "all") String viewType,

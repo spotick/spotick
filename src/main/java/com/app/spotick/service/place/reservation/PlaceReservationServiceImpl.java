@@ -36,7 +36,7 @@ public class PlaceReservationServiceImpl implements PlaceReservationService {
         User tmpUser = userRepository.getReferenceById(userId);
 
         return placeReservationRepository.findByIdAndUser(reservationId, tmpUser).orElseThrow(
-                NoSuchElementException::new
+                () -> new NoSuchElementException("예약내역을 찾을 수 없습니다.")
         );
     }
 

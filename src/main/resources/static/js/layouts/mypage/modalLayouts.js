@@ -141,9 +141,113 @@ export const modalLayouts = (() => {
         `;
     }
 
+    const reviewWriteFormModalLayout = async (dto) => {
+        const {
+            id,
+            reservationId,
+            title,
+            price,
+            placeAddress,
+            placeFiles,
+            evalAvg,
+            evalCount,
+            bookmarkCount,
+            visitors,
+            checkIn,
+            checkOut,
+            content,
+            reservationStatus
+        } = dto;
+        const {address} = placeAddress;
+        const {uploadPath, uuid, fileName} = placeFiles[0];
+
+        return `
+            <div style="display: flex; margin-bottom: 20px;">
+                <div class="mpcr-img-con">
+                    <img height="100px" style="width: 180px;" alt="${title}" src="/file/display?fileName=${uploadPath}/t_${uuid}_${fileName}">
+                </div>
+                <div class="ItemTextContainer" style="min-width: 300px; max-width: 300px">
+                    <div class="ItemHostNameContainer">
+                        <span class="ItemHostName">${address}</span>
+                        <div class="ItemCountsContainer">
+                            <div class="ItemsStarCountContainer">
+                                <img alt="후기갯수" class="ItemCountImg"
+                                     src="/imgs/star_filled_paintYellow056.a8eb6e44.svg">
+                                <span class="ItemCountText">${evalAvg.toFixed(1)}(${evalCount})</span>
+                            </div>
+                            <div class="ItemsLikeCountContainer">
+                                <img alt="북마크갯수" class="ItemCountImg bookmark"
+                                     src="/imgs/bookmark_thin.svg">
+                                <span class="ItemCountText">${bookmarkCount}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="ItemSpaceNameContainer">
+                        <p class="ItemSpaceName">${title}</p>
+                    </div>
+                    <div class="ItemPriceContainer">
+                        <span class="ItemPrice">${price}</span>
+                    </div>
+                    <div class="mpccc-row content-between" style="margin-top: 10px;">
+                        <div class="mpccc-status">
+                            <span>${reservationStatus}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="mpcr-divider"></div>
+                <div class="mpcr-info">
+                    <div class="mpcri-title">예약 정보</div>
+                    <div class="mpcri-date">
+                        <span>${checkIn}</span>
+                        <span style="margin: 0 4px; color: #868686;">~</span>
+                        <span>${checkOut}</span>
+                    </div>
+                    <div class="mpcri-people-count">
+                        <div>
+                            사용 인원: <span>${visitors}</span>명
+                        </div>
+                    </div>
+                    <div class="mpcri-content">${content}</div>
+                </div>
+            </div>
+            <h2 class="mri-title">후기작성</h2>
+            <input type="hidden">
+            <div class="mrf-star-rating-con">
+                <span class="mrf-star on" value="1"></span>
+                <span class="mrf-star" value="2"></span>
+                <span class="mrf-star" value="3"></span>
+                <span class="mrf-star" value="4"></span>
+                <span class="mrf-star" value="5"></span>
+                <div class="mrf-rating-count-con">
+                    <input id="reviewScoreInput" readonly value="1" type="text">점
+                </div>
+                <div class="error-score" id="errorScore"></div>
+            </div>
+            <div class="mr-form">
+            <textarea cols="30" maxlength="200" id="reviewWriteTxArea" 
+                      placeholder="최소 10자 이상 입력해주세요"
+                      rows="10" spellcheck="false"></textarea>
+            </div>
+            <div class="space-between">
+                <div class="error-content" id="errorContent"></div>
+                <div class="mr-type-counter">
+                    <span>글자수</span>
+                    <span id="typeCounter">0</span>
+                    <span>/ 200</span>
+                </div>
+            </div>
+            <div style="display: flex; justify-content: center;">
+                <button class="modal-confirm-btn" disabled id="reviewWriteButton" rId="${reservationId}">
+                    <p>작성 완료</p>
+                </button>
+            </div>
+        `;
+    }
+
 
     return {
         placeReservationDetailModalLayout: placeReservationDetailModalLayout,
         inquiryDetailModalLayout: inquiryDetailModalLayout,
+        reviewWriteFormModalLayout: reviewWriteFormModalLayout,
     }
 })();

@@ -14,7 +14,6 @@ public class PlaceReviewRegisterDto {
     @Max(value = 5, message = "평가는 반드시 5 이하여야 합니다.")
     private Integer score;
 
-    @NotBlank(message = "내용을 입력해주세요.")
     @Size(min = 10, message = "내용은 최소 10자 이상 입력해주세요.")
     @Size(max = 200, message = "내용은 최대 200자로 제한해주세요.")
     private String content;
