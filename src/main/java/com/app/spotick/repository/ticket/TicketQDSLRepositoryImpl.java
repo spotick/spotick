@@ -190,7 +190,7 @@ public class TicketQDSLRepositoryImpl implements TicketQDSLRepository {
 
         if (districtFilter != null && districtFilter.getDistrict() != null) {
 
-            if (districtFilter.getDetailDistrict() != null) {
+            if (!districtFilter.getDetailDistrict().isEmpty()) {
                 BooleanBuilder booleanBuilder = new BooleanBuilder();
                 for (String detailDistrict : districtFilter.getDetailDistrict()) {
                     booleanBuilder.or(ticket.ticketEventAddress.address.like(districtFilter.getDistrict() + "%" + detailDistrict + "%"));

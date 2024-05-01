@@ -1,4 +1,5 @@
 import {getPlaceStatusName, getReservationStatusName} from "../../status/status.js";
+import {formatKoreanDatetime} from "../../utils/timeUtils.js";
 
 export const modalLayouts = (() => {
 
@@ -198,9 +199,9 @@ export const modalLayouts = (() => {
                 <div class="mpcr-info">
                     <div class="mpcri-title">예약 정보</div>
                     <div class="mpcri-date">
-                        <span>${checkIn}</span>
+                        <span>${formatKoreanDatetime(checkIn)}</span>
                         <span style="margin: 0 4px; color: #868686;">~</span>
-                        <span>${checkOut}</span>
+                        <span>${formatKoreanDatetime(checkOut)}</span>
                     </div>
                     <div class="mpcri-people-count">
                         <div>

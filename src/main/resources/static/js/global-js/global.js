@@ -1,4 +1,4 @@
-import {getTimeGapFromToday} from '../utils/timeUtils.js';
+import {getTimeGapFromNow} from '../utils/timeUtils.js';
 import {loadingMarkService} from '../utils/loadingMark.js';
 
 
@@ -132,7 +132,7 @@ const notificationService = (function () {
                 <div class="hdn-item" id="${notification.noticeId}" link="${notification.link}">
                     <div style="display: flex; justify-content: space-between;">
                         <div class="hdn-title">${notification.title}</div>
-                        <div class="hdn-date">${getTimeGapFromToday(notification.createdDate)}</div>
+                        <div class="hdn-date">${getTimeGapFromNow(notification.createdDate)}</div>
                     </div>
                     <div style="display: flex; justify-content: space-between;">
                         <div class="hdn-content">${notification.content}</div>

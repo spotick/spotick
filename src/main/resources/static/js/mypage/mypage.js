@@ -24,26 +24,6 @@ function vibrateTarget(target) {
     }, 200);
 }
 
-// 날짜를 한국어 방식으로 변경
-function formatKoreanDatetime(datetimeString) {
-    return new Date(datetimeString).toLocaleString('ko-KR', {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-        hour: 'numeric',
-        minute: 'numeric',
-        hour12: false,
-    });
-}
-
-function formatKoreanDate(dateString) {
-    return new Date(dateString).toLocaleString('ko-KR', {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric'
-    });
-}
-
 function dateDifferenceInDays(date1, date2) {
     const oneDay = 24 * 60 * 60 * 1000;
 
