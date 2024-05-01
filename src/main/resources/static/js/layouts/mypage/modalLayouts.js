@@ -1,4 +1,4 @@
-import {getPlaceStatusName} from "../../utils/place-status.js";
+import {getPlaceStatusName, getReservationStatusName} from "../../status/status.js";
 
 export const modalLayouts = (() => {
 
@@ -190,7 +190,7 @@ export const modalLayouts = (() => {
                     </div>
                     <div class="mpccc-row content-between" style="margin-top: 10px;">
                         <div class="mpccc-status">
-                            <span>${reservationStatus}</span>
+                            <span>${getReservationStatusName(reservationStatus)}</span>
                         </div>
                     </div>
                 </div>

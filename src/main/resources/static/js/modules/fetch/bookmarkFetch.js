@@ -4,8 +4,10 @@ export const bookmarkFetch = async (status, placeId, callback) => {
         const result = await response.json();
 
         if (callback) {
-            callback(result);
+            return callback(result);
         }
+
+        return result;
     } catch (e) {
         console.error("리퀘스트 오류 발생:", e);
     }

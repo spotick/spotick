@@ -48,7 +48,7 @@
                                 <div class="OneItemImgContainer">
                                     <div class="swiper ImageSwiper swiper-initialized swiper-horizontal swiper-pointer-events swiper-backface-hidden">
                                         <a class="swiper-wrapper ImageLength"
-                                           th:href="@{/place/detail/{placeId}(placeId = ${reviewableItem.id})}">
+                                           th:href="@{/place/{placeId}(placeId = ${reviewableItem.id})}">
                                             <!-- 이미지 한칸 -->
                                             <th:block th:each="placeFile:${reviewableItem.placeFiles}">
                                                 <div class="swiper-slide swiper-slide-next" th:object="${placeFile}">
@@ -71,11 +71,15 @@
                                             <p><span class="snapIndex">1</span>/<span class="slideIndex">5</span></p>
                                         </div>
                                     </div>
-<!--                                    <button onclick="toggleBookmark(this)"-->
-<!--                                            th:class="${reviewableItem.isBookmarkChecked?'ItemBookMarkBtn active':'ItemBookMarkBtn'}"-->
-<!--                                            th:data-id="*{id}" type="button">-->
-<!--                                        <img alt="북마크" src="/imgs/bookmark_line_white_shadow_48.png">-->
-<!--                                    </button>-->
+                                    <button class="ItemBookMarkBtn active" th:data-id="*{id}"
+                                            th:data-status="*{isBookmarkChecked}" type="button">
+                                        <span th:class="${!reviewableItem.isBookmarkChecked?'':'none'}">
+                                            <i class="fa-regular fa-bookmark"></i>
+                                        </span>
+                                        <span th:class="${reviewableItem.isBookmarkChecked?'':'none'}">
+                                            <i class="fa-solid fa-bookmark" style="color: white"></i>
+                                        </span>
+                                    </button>
                                 </div>
                                 <a class="ItemTextContainer" th:href="@{/place/{placeId}(placeId = ${reviewableItem.id})}">
                                     <div class="ItemHostNameContainer">
@@ -98,7 +102,7 @@
                                         <p class="ItemSpaceName" th:text="*{title}"></p>
                                     </div>
                                     <div class="ItemPriceContainer">
-                                    <span class="ItemPrice"
+                                    <span class="ItemPrice" style="height: 30px"
                                           th:text="${#numbers.formatInteger(reviewableItem.price, 3, 'COMMA')} + '원'"></span>
                                     </div>
                                 </a>

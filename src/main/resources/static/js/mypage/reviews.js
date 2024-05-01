@@ -2,6 +2,7 @@ import {showCustomModal, showGlobalDialogue, showGlobalSelection, closeSingleMod
 import {addSlideEvent} from "../global-js/image-slide.js";
 import {modalLayouts} from "../layouts/mypage/modalLayouts.js";
 import {reviewService} from "../services/mypage/reviewService.js";
+import {bookmarkFetch} from "../modules/fetch/bookmarkFetch.js";
 
 addSlideEvent();
 
@@ -77,6 +78,7 @@ const registerReview = async (reservationId, score, content) => {
     }
 }
 
+// 리뷰 작성 안함
 document.querySelectorAll('.reservationDelete').forEach(reservationDelete => {
     reservationDelete.addEventListener('click', function () {
         const reservationId = this.getAttribute('rid');
@@ -100,4 +102,35 @@ const setNotReview = async (reservationId) => {
     } else {
         showGlobalDialogue(message);
     }
+}
+
+////
+// 북마크 기능
+const bookmarkButtons = document.querySelectorAll('.ItemBookMarkBtn');
+
+bookmarkButtons.forEach(btn => {
+
+    btn.addEventListener('click', () => {
+        toggleBookmark(btn);
+    });
+})
+
+function toggleBookmark(btn) {
+    const placeId = btn.getAttribute('data-id');
+    const status = btn.getAttribute('data-status');
+
+    bookmarkFetch(status, placeId)
+        .then(boo => {
+            btn.setAttribute('data-status', boo);
+            const off = btn.children[0];
+            const on = btn.children[1];
+
+            if (boo) {
+                off.classList.add('none');
+                on.classList.remove('none')
+            } else {
+                off.classList.remove('none');
+                on.classList.add('none')
+            }
+        });
 }

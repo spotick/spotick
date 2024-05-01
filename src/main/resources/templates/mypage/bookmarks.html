@@ -73,12 +73,12 @@
                                     </div>
                                     <button class="ItemBookMarkBtn active" th:data-id="*{id}"
                                             th:data-status="*{isBookmarkChecked}" type="button">
-                                    <span th:class="${!placeDto.isBookmarkChecked?'':'none'}">
-                                        <i class="fa-regular fa-bookmark"></i>
-                                    </span>
-                                        <span th:class="${placeDto.isBookmarkChecked?'':'none'}">
-                                        <i class="fa-solid fa-bookmark" style="color: white"></i>
-                                    </span>
+                                        <span th:class="${!placeDto.isBookmarkChecked?'':'none'}">
+                                            <i class="fa-regular fa-bookmark"></i>
+                                        </span>
+                                            <span th:class="${placeDto.isBookmarkChecked?'':'none'}">
+                                            <i class="fa-solid fa-bookmark" style="color: white"></i>
+                                        </span>
                                     </button>
                                 </div>
                                 <a class="ItemTextContainer" th:href="@{/place/{placeId}(placeId = ${placeDto.id})}">
