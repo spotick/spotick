@@ -1,6 +1,6 @@
 /* list-swiper와 ticket-list 일부 발췌하여 새로 만듦 */
 
-.OneItemContainer{
+.OneItemContainer {
     display: flex;
     position: relative;
     width: 100%;
@@ -10,7 +10,7 @@
     cursor: pointer;
 }
 
-.OneItemImgContainer{
+.OneItemImgContainer {
     position: relative;
     width: 100%;
     border-radius: 4px;
@@ -18,18 +18,18 @@
     margin-bottom: 8px;
 }
 
-.ItemImg{
+.ItemImg {
     width: 100%;
     min-height: 215px;
     height: 215px;
     background: rgb(240, 240, 240);
 }
 
-.OneItemContainer.hover:hover .NavigationBtnContainer{
-    display:block;
+.OneItemContainer.hover:hover .NavigationBtnContainer {
+    display: block;
 }
 
-.NavigationBtnContainer{
+.NavigationBtnContainer {
     display: none;
 }
 
@@ -57,7 +57,7 @@
     width: 100%;
 }
 
-.ItemImgPagination{
+.ItemImgPagination {
     position: absolute;
     bottom: 0;
     margin-bottom: 14px;
@@ -82,7 +82,7 @@
     font-size: 12px;
 }
 
-.ItemBadges{
+.ItemBadges {
     position: absolute;
     top: 10px;
     left: 10px;
@@ -101,7 +101,7 @@
     z-index: 1010;
 }
 
-.ItemBookMarkBtn > span{
+.ItemBookMarkBtn > span {
     width: 100%;
     background: none;
     animation-duration: 0.6s;
@@ -116,14 +116,14 @@
     font-size: 24px;
 }
 
-.ItemTextContainer{
+.ItemTextContainer {
     width: 300px;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
 }
 
-.ItemHostNameContainer{
+.ItemHostNameContainer {
     width: 100%;
     display: flex;
     -webkit-box-align: center;
@@ -133,7 +133,7 @@
     gap: 15px;
 }
 
-.ItemHostName{
+.ItemHostName {
     font-family: Medium, SCDream7, sans-serif;
     font-size: 13px;
     line-height: 20px;
@@ -144,43 +144,43 @@
     text-overflow: ellipsis;
 }
 
-.ItemCountsContainer{
+.ItemCountsContainer {
     display: flex;
     -webkit-box-align: center;
     align-items: center;
     gap: 8px;
 }
 
-.ItemsStarCountContainer{
+.ItemsStarCountContainer {
     display: flex;
     -webkit-box-align: center;
     align-items: center;
     gap: 2px;
 }
 
-.ItemCountImg{
+.ItemCountImg {
     width: 15px;
 }
 
-.ItemCountImg.bookmark{
+.ItemCountImg.bookmark {
     width: 12px;
 }
 
-.ItemCountText{
+.ItemCountText {
 
     font-size: 12px;
     line-height: 20px;
     color: rgb(138, 138, 138);
 }
 
-.ItemsLikeCountContainer{
+.ItemsLikeCountContainer {
     display: flex;
     -webkit-box-align: center;
     align-items: center;
     gap: 2px;
 }
 
-.ItemSpaceNameContainer{
+.ItemSpaceNameContainer {
     width: 100%;
     display: flex;
     -webkit-box-align: center;
@@ -188,7 +188,7 @@
     gap: 8px;
 }
 
-.ItemSpaceName{
+.ItemSpaceName {
     font-weight: 600;
     font-size: 17px;
     line-height: 20px;
@@ -199,7 +199,7 @@
     text-overflow: ellipsis;
 }
 
-.ItemAddress{
+.ItemAddress {
     width: 100%;
 
     font-size: 13px;
@@ -212,7 +212,7 @@
     text-overflow: ellipsis;
 }
 
-.ItemPriceContainer{
+.ItemPriceContainer {
     display: flex;
     justify-content: space-between;
     -webkit-box-align: center;
@@ -222,25 +222,25 @@
     width: 100%;
 }
 
-.ItemPrice{
+.ItemPrice {
     font-size: 16px;
     line-height: 24px;
     color: rgb(36, 36, 36);
     font-weight: 500;
 }
 
-.ItemRuleType{
+.ItemRuleType {
 
     font-size: 12px;
     line-height: 24px;
     color: rgb(36, 36, 36);
 }
 
-.none{
+.none {
     display: none;
 }
 
-.place-price{
+.place-price {
     font-size: 16px;
     line-height: 24px;
     color: rgb(36, 36, 36);

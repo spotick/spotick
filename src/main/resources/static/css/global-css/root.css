@@ -1088,6 +1088,10 @@ img {
     background: none;
 }
 
+.relative {
+    position: relative;
+}
+
 .pt-20 {
     padding-top: 20px;
 }

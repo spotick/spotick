@@ -168,7 +168,7 @@ img {
     margin-top: 29px;
 }
 
-.modify-btn{
+.master-action-btn {
     display: flex;
     align-items: center;
     width: fit-content;
@@ -176,13 +176,32 @@ img {
     padding: 0 15px;
     font-size: 15px;
     border-radius: 4px;
-    color: #007AFF;
-    background-color: rgb(255, 255, 255);
-    border: 1px solid #007AFF;
+    transition: all 0.1s ease 0s;
     transition: all 0.1s ease 0s;
 }
 
-.modify-btn:hover {
+.master-action-btn:first-child {
+    margin-right: 10px;
+}
+
+.master-action-btn.grey {
+    color: #848484;
+    background-color: rgb(255, 255, 255);
+    border: 1px solid #848484;
+}
+
+.master-action-btn.blue {
+    color: #007AFF;
+    background-color: rgb(255, 255, 255);
+    border: 1px solid #007AFF;
+}
+
+.master-action-btn.grey:hover {
+    background-color: #ff003b;
+    color: white;
+}
+
+.master-action-btn.blue:hover {
     background-color: #007AFF;
     color: white;
 }

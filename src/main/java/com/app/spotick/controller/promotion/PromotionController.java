@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -91,7 +92,7 @@ public class PromotionController {
         return "promotion/edit";
     }
 
-    @PostMapping("edit")
+    @PostMapping("/edit")
     public String editBoard(@Valid PromotionEditDto promotionEditDto,
                             BindingResult result,
                             @AuthenticationPrincipal UserDetailsDto userDetailsDto) throws IOException {

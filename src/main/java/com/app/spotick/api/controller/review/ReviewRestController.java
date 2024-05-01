@@ -1,5 +1,6 @@
-package com.app.spotick.controller.place;
+package com.app.spotick.api.controller.review;
 
+import com.app.spotick.api.response.CommonResponse;
 import com.app.spotick.api.response.ReviewResponse;
 import com.app.spotick.domain.dto.place.review.PlaceReviewListDto;
 import com.app.spotick.domain.dto.place.review.PlaceReviewRegisterDto;
@@ -9,7 +10,9 @@ import com.app.spotick.domain.entity.place.PlaceReservation;
 import com.app.spotick.domain.entity.place.PlaceReview;
 import com.app.spotick.service.place.reservation.PlaceReservationService;
 import com.app.spotick.service.place.review.PlaceReviewService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
@@ -25,71 +28,87 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
-@RequestMapping("/reviews")
+@RequestMapping("/reviews/api")
 @RequiredArgsConstructor
+@Slf4j
 public class ReviewRestController {
     private final PlaceReviewService placeReviewService;
     private final PlaceReservationService placeReservationService;
 
     @PostMapping("/write")
-    public ResponseEntity<ReviewResponse> writeReview(@Validated @RequestBody PlaceReviewRegisterDto placeReviewRegisterDto,
-                                                      BindingResult result,
-                                                      @AuthenticationPrincipal UserDetailsDto userDetailsDto) {
-        // 해야될 검증 : reservationId와 userId를 통해 실존하는지 알맞는지 검증, 벨리데이션을 이용한 에러검출 -> 이후 등록
-        PlaceReservation foundReservation = placeReservationService.findReservationByIdAndUser(placeReviewRegisterDto.getReservationId(), userDetailsDto.getId()).orElse(null);
+    public ResponseEntity<CommonResponse<?>> writeReview(@Valid @RequestBody PlaceReviewRegisterDto placeReviewRegisterDto,
+                                                         BindingResult result,
+                                                         @AuthenticationPrincipal UserDetailsDto userDetailsDto) {
+        List<Map<String, String>> response = new ArrayList<>();
 
-        if (foundReservation == null) {
-            ReviewResponse response = new ReviewResponse(false);
-            response.addError("error", "예약 내역을 확인 할 수 없습니다.<br>상황이 지속될 시 문의해주시길 바랍니다.");
+        try {
+            placeReservationService
+                    .findReservationByIdAndUser(placeReviewRegisterDto.getReservationId(), userDetailsDto.getId());
 
-            return ResponseEntity.status(HttpStatus.FORBIDDEN)
-                    .body(response);
-        }
+            if (result.hasErrors()) {
+                List<FieldError> errors = result.getFieldErrors();
 
-        if (result.hasErrors()) {
-            List<FieldError> errors = result.getFieldErrors();
-            ReviewResponse response = new ReviewResponse(false);
+                for (FieldError error : errors) {
+                    Map<String, String> errorMap = new HashMap<>();
+                    errorMap.put("field", error.getField());
+                    errorMap.put("message", error.getDefaultMessage());
+                    response.add(errorMap);
+                }
 
-            for (FieldError error : errors) {
-                response.addError(error.getField(), error.getDefaultMessage());
+                return new ResponseEntity<>(CommonResponse.builder()
+                        .success(false)
+                        .data(response)
+                        .build(), HttpStatus.BAD_REQUEST
+                );
             }
 
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(response);
+            placeReviewRegisterDto.setUserId(userDetailsDto.getId());
+            placeReviewService.registerReview(placeReviewRegisterDto);
+
+            return new ResponseEntity<>(CommonResponse.builder()
+                    .success(true)
+                    .message("리뷰가 등록되었습니다.")
+                    .build(), HttpStatus.OK
+            );
+        } catch (Exception e) {
+            log.error("유저 리뷰 작성 [Err_Msg]: {}", e.getMessage());
+            Map<String, String> errorMap = new HashMap<>();
+            errorMap.put("server", e.getMessage());
+
+            return new ResponseEntity<>(CommonResponse.builder()
+                    .success(false)
+                    .data(response.add(errorMap))
+                    .build(), HttpStatus.BAD_REQUEST
+            );
         }
-
-        placeReviewRegisterDto.setUserId(userDetailsDto.getId());
-        placeReviewService.registerReview(placeReviewRegisterDto);
-
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(new ReviewResponse(true));
     }
 
     @PatchMapping("/notReviewing/{reservationId}")
-    public ResponseEntity<String> updateNotReviewing(@PathVariable("reservationId") Long reservationId,
+    public ResponseEntity<CommonResponse<?>> updateNotReviewing(@PathVariable("reservationId") Long reservationId,
                                                      @AuthenticationPrincipal UserDetailsDto userDetailsDto) {
+        try {
+            placeReservationService.updateNotReviewing(reservationId);
 
-        if (reservationId == null) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body("잘못된 요청입니다.");
+            return new ResponseEntity<>(CommonResponse.builder()
+                    .success(true)
+                    .message("작성가능한 후기에서 삭제되었습니다.")
+                    .build(), HttpStatus.OK
+            );
+        } catch (Exception e) {
+            log.error("유저 리뷰 작성 거절 [Err_Msg]: {}", e.getMessage());
+
+            return new ResponseEntity<>(CommonResponse.builder()
+                    .success(false)
+                    .message(e.getMessage())
+                    .build(), HttpStatus.BAD_REQUEST
+            );
         }
-
-        PlaceReservation reservation = placeReservationService
-                .findReservationByIdAndUser(reservationId, userDetailsDto.getId()).orElse(null);
-
-        if (reservation == null) {
-            // 예약 정보를 찾을 수 없을 시
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("예약 정보를 찾을 수 없습니다.<br>문제가 지속될 시 문의해주세요.");
-        }
-
-        placeReservationService.updateNotReviewing(reservationId);
-
-        return ResponseEntity.status(HttpStatus.OK)
-                .body("작성가능한 후기에서 삭제되었습니다.");
     }
 
     @PatchMapping("/update")

@@ -7,6 +7,7 @@ import com.app.spotick.domain.entity.place.PlaceReservation;
 import com.app.spotick.domain.type.place.PlaceReservationStatus;
 import com.app.spotick.service.place.reservation.PlaceReservationService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
@@ -20,6 +21,7 @@ import java.time.LocalDateTime;
 @RestController
 @RequestMapping("/reservation/api")
 @RequiredArgsConstructor
+@Slf4j
 public class ReservationRestController {
     private final PlaceReservationService placeReservationService;
 
@@ -77,86 +79,44 @@ public class ReservationRestController {
         return ResponseEntity.ok("예약 요청을 거절했습니다.");
     }
 
-    @GetMapping("/cancel/{reservationId}")
-    public ResponseEntity<String> cancelReservation(@PathVariable("reservationId") Long reservationId,
-                                                    @AuthenticationPrincipal UserDetailsDto userDetailsDto) {
-        if (reservationId == null) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body("잘못된 요청입니다.");
-        }
-
-        // reservationId검증: userId 동일한지 검증 필요 -> 시간정보 찾아와서 checkIn시간 체크하여 지나지 않았는지 검증 -> accepted 검증(아닐 시 취소 불가능)
-        PlaceReservation reservation = placeReservationService
-                .findReservationByIdAndUser(reservationId, userDetailsDto.getId()).orElse(null);
-
-
-        if (reservation.getCheckIn().isBefore(LocalDateTime.now())) {
-            // checkIn시간이 현재 시간보다 이전일 경우, 이미 승인된 예약일 경우
-            return ResponseEntity.status(HttpStatus.FORBIDDEN)
-                    .body("예약 시간이 지나간 예약은<br>취소할 수 없습니다.");
-        }
-
-        if (reservation.getReservationStatus().equals(PlaceReservationStatus.APPROVED)) {
-            // 승인된 예약은 취소 불가
-            return ResponseEntity.status(HttpStatus.FORBIDDEN)
-                    .body("이미 승인된 예약은<br>취소할 수 없습니다.");
-        }
-
+    @PatchMapping("/cancel/{reservationId}")
+    public ResponseEntity<CommonResponse<?>> cancelReservation(@PathVariable("reservationId") Long reservationId,
+                                                               @AuthenticationPrincipal UserDetailsDto userDetailsDto) {
         try {
-            placeReservationService.updateReservationStatusAsUser(reservationId, userDetailsDto.getId(), PlaceReservationStatus.CANCELLED);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.badRequest()
-                    .body("예약 내역을 찾을 수 없습니다.");
-        }
+            String returnLog = placeReservationService
+                    .updateReservationStatusAsUser(reservationId, userDetailsDto.getId(), PlaceReservationStatus.CANCELLED);
 
-        return ResponseEntity.status(HttpStatus.OK)
-                .body("예약이 취소되었습니다.");
+            return new ResponseEntity<>(CommonResponse.builder()
+                    .success(true)
+                    .data(PlaceReservationStatus.CANCELLED.getDisplayName())
+                    .message(returnLog)
+                    .build(), HttpStatus.OK);
+        } catch (Exception e) {
+            log.error("유저 예약 내역 취소 [Err_Msg]: {}", e.getMessage());
+            return new ResponseEntity<>(CommonResponse.builder()
+                    .success(false)
+                    .message(e.getMessage())
+                    .build(), HttpStatus.BAD_REQUEST);
+        }
     }
 
-    @GetMapping("/delete/{reservationId}")
-    public ResponseEntity<String> deleteReservation(@PathVariable("reservationId") Long reservationId,
+    @PatchMapping("/delete/{reservationId}")
+    public ResponseEntity<CommonResponse<?>> deleteReservation(@PathVariable("reservationId") Long reservationId,
                                                     @AuthenticationPrincipal UserDetailsDto userDetailsDto) {
-        if (reservationId == null) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body("잘못된 요청입니다.");
-        }
-
-        // reservationId검증: userId 동일한지 검증 필요 -> 시간정보 찾아와서 checkOut시간 체크하여 지나갔는지 검증 -> accepted, rejected, cancled아닐 시 삭제 불가.
-        PlaceReservation reservation = placeReservationService
-                .findReservationByIdAndUser(reservationId, userDetailsDto.getId()).orElse(null);
-
-        if (reservation == null) {
-            // 예약 정보를 찾을 수 없을 시
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("예약 정보를 찾을 수 없습니다.");
-        }
-
-        if (reservation.getReservationStatus() != PlaceReservationStatus.CANCELLED) {
-            // 캔슬 된 경우가 아니라면 아래 과정을 거쳐야 함
-            if (reservation.getCheckOut().isAfter(LocalDateTime.now())) {
-                // checkIn시간이 현재 시간보다 이전일 경우, 이미 승인된 예약일 경우
-                return ResponseEntity.status(HttpStatus.FORBIDDEN)
-                        .body("예약시간이 지나지 않은 예약은<br>삭제할 수 없습니다.");
-            }
-        }
-
-        if (reservation.getReservationStatus().equals(PlaceReservationStatus.PENDING)
-            || reservation.getReservationStatus().equals(PlaceReservationStatus.WAITING_PAYMENT)) {
-            // 예약이 해지되지 못하고 유효한 상태일 시 삭제불가
-            return ResponseEntity.status(HttpStatus.FORBIDDEN)
-                    .body("예약이 해지되어있지 않습니다.<br>예약을 취소하고 삭제를 시도하여주십시오.");
-        }
-
         try {
-            placeReservationService.updateReservationStatusAsUser(reservationId, userDetailsDto.getId(), PlaceReservationStatus.DELETED);
+            String returnLog = placeReservationService
+                    .updateReservationStatusAsUser(reservationId, userDetailsDto.getId(), PlaceReservationStatus.DELETED);
+            return new ResponseEntity<>(CommonResponse.builder()
+                    .success(true)
+                    .data(PlaceReservationStatus.CANCELLED.getDisplayName())
+                    .message(returnLog)
+                    .build(), HttpStatus.OK);
         } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body("예약 내역을 찾을 수 없습니다.");
+            log.error("유저 예약 내역 삭제 [Err_Msg]: {}", e.getMessage());
+            return new ResponseEntity<>(CommonResponse.builder()
+                    .success(false)
+                    .message(e.getMessage())
+                    .build(), HttpStatus.BAD_REQUEST);
         }
-
-        return ResponseEntity.status(HttpStatus.OK)
-                .body("예약내역이 삭제되었습니다.");
     }
 }

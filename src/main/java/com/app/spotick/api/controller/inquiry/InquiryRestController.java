@@ -12,6 +12,7 @@ import com.app.spotick.service.place.inquiry.PlaceInquiryService;
 import com.app.spotick.service.ticket.inquiry.TicketInquiryService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -27,6 +28,7 @@ import java.util.NoSuchElementException;
 @RestController
 @RequestMapping("/inquiries/api")
 @RequiredArgsConstructor
+@Slf4j
 public class InquiryRestController {
     private final PlaceInquiryService placeInquiryService;
     private final TicketInquiryService ticketInquiryService;
@@ -45,7 +47,7 @@ public class InquiryRestController {
 
             return new ResponseEntity<>(response, HttpStatus.OK);
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("유저 장소문의 내역 [Err_Msg]: {}", e.getMessage());
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -63,46 +65,48 @@ public class InquiryRestController {
 
             return new ResponseEntity<>(response, HttpStatus.OK);
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("유저 티켓문의 내역 [Err_Msg]: {}", e.getMessage());
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     @DeleteMapping("/placeDelete/{placeInquiryId}")
-    public ResponseEntity<String> deletePlaceInquiry(@PathVariable("placeInquiryId") Long placeInquiryId,
-                                                     @AuthenticationPrincipal UserDetailsDto userDetailsDto) {
-        if (placeInquiryId == null) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body("잘못된 요청입니다.");
-        }
-
+    public ResponseEntity<CommonResponse<?>> deletePlaceInquiry(@PathVariable("placeInquiryId") Long placeInquiryId,
+                                                                @AuthenticationPrincipal UserDetailsDto userDetailsDto) {
         try {
             placeInquiryService.deleteInquiryById(placeInquiryId, userDetailsDto.getId());
 
-            return ResponseEntity.ok("문의 내역을 삭제했습니다.");
+            return new ResponseEntity<>(CommonResponse.builder()
+                    .success(true)
+                    .data(placeInquiryId)
+                    .message("문의 내역을 삭제했습니다.")
+                    .build(), HttpStatus.OK);
         } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.badRequest().body("오류가 발생했습니다.<br>다시 시도해주세요.");
+            log.error("장소 문의 삭제 [Err_Msg]: {}", e.getMessage());
+            return new ResponseEntity<>(CommonResponse.builder()
+                    .success(false)
+                    .message("문의 내역을 삭제에 실패했습니다.")
+                    .build(), HttpStatus.BAD_REQUEST);
         }
     }
 
-
     @DeleteMapping("/ticketDelete/{ticketInquiryId}")
-    public ResponseEntity<String> deleteTicketInquiry(@PathVariable("ticketInquiryId") Long ticketInquiryId,
+    public ResponseEntity<CommonResponse<?>> deleteTicketInquiry(@PathVariable("ticketInquiryId") Long ticketInquiryId,
                                                       @AuthenticationPrincipal UserDetailsDto userDetailsDto) {
-
-        if (ticketInquiryId == null) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body("잘못된 요청입니다.");
-        }
-
         try {
             ticketInquiryService.deleteInquiry(ticketInquiryId, userDetailsDto.getId());
 
-            return ResponseEntity.ok("문의 내역을 삭제했습니다.");
+            return new ResponseEntity<>(CommonResponse.builder()
+                    .success(true)
+                    .data(ticketInquiryId)
+                    .message("문의 내역을 삭제했습니다.")
+                    .build(), HttpStatus.OK);
         } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.badRequest().body("오류가 발생했습니다.<br>다시 시도해주세요.");
+            log.error("티켓 문의 삭제 [Err_Msg]: {}", e.getMessage());
+            return new ResponseEntity<>(CommonResponse.builder()
+                    .success(false)
+                    .message("문의 내역을 삭제에 실패했습니다.")
+                    .build(), HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -140,7 +144,7 @@ public class InquiryRestController {
 
     @PatchMapping("/responsePlaceInquiry")
     public ResponseEntity<String> updatePlaceResponse(@Valid @RequestBody InquiryResponseDto inquiryResponseDto,
-                                                 BindingResult result) {
+                                                      BindingResult result) {
         if (result.hasErrors()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body("답변을 제대로 입력해주세요.");
@@ -159,7 +163,7 @@ public class InquiryRestController {
 
     @PatchMapping("/responseTicketInquiry")
     public ResponseEntity<String> updateTicketResponse(@Valid @RequestBody InquiryResponseDto inquiryResponseDto,
-                                                      BindingResult result) {
+                                                       BindingResult result) {
         if (result.hasErrors()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body("답변을 제대로 입력해주세요.");

@@ -1,5 +1,6 @@
 package com.app.spotick.service.user;
 
+import com.app.spotick.domain.dto.promotion.FileDto;
 import com.app.spotick.domain.entity.user.UserProfileFile;
 import com.app.spotick.repository.user.UserProfileFileRepository;
 import jakarta.transaction.Transactional;
@@ -7,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import net.coobird.thumbnailator.Thumbnailator;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
 import java.net.URL;
@@ -15,6 +17,7 @@ import java.nio.file.Path;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.NoSuchElementException;
+import java.util.Objects;
 import java.util.Random;
 import java.util.UUID;
 
@@ -41,13 +44,55 @@ public class UserProfileFileServiceImpl implements UserProfileFileService {
     }
 
     @Override
-    public void updatePersonalImg(String fileName, String uuid, Long fileId) {
-        UserProfileFile userProfileFile = userProfileFileRepository.findById(fileId).orElseThrow(
-                NoSuchElementException::new
-        );
+    public FileDto updatePersonalImg(MultipartFile profileFile, Long userId) {
+        try {
+            FileDto savedFile = saveProfilefileAndGet(profileFile);
 
-        userProfileFile.updateImage(fileName, uuid, getFilePath());
-        userProfileFile.setDefaultImage(false);
+            UserProfileFile userProfileFile = userProfileFileRepository.findById(userId).orElseThrow(
+                    NoSuchElementException::new
+            );
+
+            userProfileFile.updateImage(savedFile.getFileName(), savedFile.getUuid(), savedFile.getUploadPath());
+            userProfileFile.setDefaultImage(false);
+
+            return savedFile;
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private FileDto saveProfilefileAndGet(MultipartFile profileFile) throws IOException {
+        String originalFileName = profileFile.getOriginalFilename();
+        originalFileName = Objects.requireNonNull(originalFileName).replace("\\s", "");
+        UUID uuid = UUID.randomUUID();
+
+        String sysName = uuid + "_" + originalFileName;
+
+        File uploadPath = new File(ROOT_DIR, getUploadPath());
+
+        if (!uploadPath.exists()) {
+            uploadPath.mkdirs();
+        }
+
+        File uploadFile = new File(uploadPath, sysName);
+
+        profileFile.transferTo(uploadFile);
+
+        if (Files.probeContentType(uploadFile.toPath()).startsWith("image")) {
+            File thumbnailFile = new File(uploadPath, "t_" + sysName);
+
+            try (FileOutputStream out = new FileOutputStream(thumbnailFile);
+                 InputStream in = profileFile.getInputStream()) {
+                Thumbnailator.createThumbnail(profileFile.getInputStream(), out, 300, 225);
+            }
+            // try resource 를 활용해 자동으로 리소스를 닫아준다 out.close 생략 가능
+        }
+
+        return FileDto.builder()
+                .uuid(uuid.toString())
+                .fileName(originalFileName)
+                .uploadPath(getUploadPath())
+                .build();
     }
 
     @Override
@@ -58,10 +103,6 @@ public class UserProfileFileServiceImpl implements UserProfileFileService {
                 .uploadPath(DEFAULT_UPLOAD_PATH)
                 .isDefaultImage(true)
                 .build());
-    }
-
-    private String getFilePath() {
-        return LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd"));
     }
 
     @Override
@@ -90,7 +131,7 @@ public class UserProfileFileServiceImpl implements UserProfileFileService {
 
             try (InputStream in = new FileInputStream(imgPath.toFile());
                  OutputStream out = new FileOutputStream(thumbnailPath.toFile())) {
-                Thumbnailator.createThumbnail(in,out,300,200);
+                Thumbnailator.createThumbnail(in, out, 300, 200);
             }
 
             return UserProfileFile.builder()

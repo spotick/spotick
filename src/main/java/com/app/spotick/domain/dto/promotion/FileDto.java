@@ -1,6 +1,7 @@
 package com.app.spotick.domain.dto.promotion;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -11,6 +12,7 @@ public class FileDto {
     private String uuid;
     private String uploadPath;
 
+    @Builder
     public FileDto(String fileName, String uuid, String uploadPath) {
         this.fileName = fileName;
         this.uuid = uuid;

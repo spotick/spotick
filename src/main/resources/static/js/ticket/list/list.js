@@ -1,7 +1,7 @@
-import {sliceTicketListComponent} from "../../components/ticket/ticketComponent.js";
+import {sliceTicketListComponent} from "../../modules/ticket/ticketComponent.js";
 import {requestLike} from "../../modules/fetch/likeFetch.js";
 import {districtFilter, setAreaAndCallback} from '../../global-js/list-filter-modal.js';
-import {loadingMarkService} from "../../modules/loadingMark.js";
+import {loadingMarkService} from "../../utils/loadingMark.js";
 
 let isLoading = false;
 let page = 1;

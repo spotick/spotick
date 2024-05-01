@@ -16,265 +16,186 @@
 </head>
 
 <body>
+<div>
+    <div th:replace="~{global-templates/chat :: chat}"></div>
 
-<div th:replace="~{global-templates/chat :: chat}"></div>
-
-<div class="modal-bg">
-    <div th:replace="~{global-templates/global-dialogue-modal :: global-dialogue}"></div>
-    <div th:replace="~{global-templates/global-dialogue-modal :: global-selection}"></div>
-    <div class="modal-reservation-info">
-        <div style="display: flex; margin-bottom: 20px;">
-            <div class="mpcr-img-con">
-                <img id="detailImg" style="width: 180px;">
-            </div>
-            <div class="ItemTextContainer">
-                <div class="ItemHostNameContainer">
-                    <span class="ItemHostName" id="detailAddress"></span>
-                    <div class="ItemCountsContainer">
-                        <div class="ItemsStarCountContainer">
-                            <img alt="후기갯수" class="ItemCountImg"
-                                 src="/imgs/star_filled_paintYellow056.a8eb6e44.svg">
-                            <span class="ItemCountText" id="detailEval"></span>
-                        </div>
-                        <div class="ItemsLikeCountContainer">
-                            <img alt="북마크갯수" class="ItemCountImg bookmark"
-                                 src="/imgs/bookmark_thin.svg">
-                            <span class="ItemCountText" id="detailBookmark"></span>
-                        </div>
-                    </div>
-                </div>
-                <div class="ItemSpaceNameContainer">
-                    <p class="ItemSpaceName" id="detailTitle"></p>
-                </div>
-                <div class="ItemPriceContainer">
-                    <span class="ItemPrice" id="detailPrice"></span>
-                </div>
-                <div class="mpccc-row content-between" style="margin-top: 10px;">
-                    <div class="mpccc-status">
-                        <span id="detailStatus"></span>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <h2 class="mri-title">예약 정보</h2>
-        <div class="mri-content">
-            <div>
-                <div class="mri-input-title">사용 인원</div>
-                <div class="mri-input-container" style="width: 100px; margin-bottom: 20px;">
-                    <input id="detailVisitors" readonly type="text">
-                    <span>명</span>
-                </div>
-                <div class="mri-input-title">내 요청 사항</div>
-                <div class="mri-input-container">
-                            <textarea class="mri-textarea" cols="30" id="detailContent" readonly
-                                      rows="10"></textarea>
-                </div>
-            </div>
-            <div class="mri-divider"></div>
-            <div>
-                <table class="calendar">
-                    <thead class="calendar-head">
-                    <tr class="ch-title">
-                        <td onClick="calendarService.prevCalendar()" style="cursor:pointer;">&#60;</td>
-                        <td colspan="5">
-                            <span id="calYear"></span>년
-                            <span id="calMonth"></span>월
-                        </td>
-                        <td onClick="calendarService.nextCalendar()" style="cursor:pointer;">&#62;</td>
-                    </tr>
-                    <tr class="ch-day">
-                        <td>일</td>
-                        <td>월</td>
-                        <td>화</td>
-                        <td>수</td>
-                        <td>목</td>
-                        <td>금</td>
-                        <td>토</td>
-                    </tr>
-                    </thead>
-                    <tbody class="calendar-body">
-                    </tbody>
-                </table>
-                <div class="mri-input-title">대여 시작시간</div>
-                <div class="mri-input-container" style="margin-bottom: 10px;">
-                    <input id="detailCheckIn" readonly type="text" value="">
-                </div>
-                <div class="mri-input-title">대여 시작시간</div>
-                <div class="mri-input-container">
-                    <input id="detailCheckOut" readonly type="text" value="2023년 12월 18일 10시">
-                </div>
-            </div>
-        </div>
+    <div class="modal-bg" id="modal">
+        <div th:replace="~{global-templates/new-global-dialogue-modal :: global-dialogue}"></div>
+        <div th:replace="~{global-templates/new-global-dialogue-modal :: global-selection}"></div>
+        <div class="modal-reservation-info" id="reservationModal"></div>
     </div>
-</div>
 
-<header th:replace="~{global-templates/header-footer :: header}"></header>
+    <header th:replace="~{global-templates/header-footer :: header}"></header>
 
-<main class="my-page-main" id="page-body">
-    <div th:replace="~{global-templates/mypage :: mypage-menu}"></div>
-    <div class="mp-content">
-        <article>
-            <div class="mpc-title">
-                <h2>예약내역</h2>
-            </div>
-            <div class="mpcr-container">
-                <th:block th:if="${#lists.size(reservationDtoList)}">
-                    <th:block th:each="reservationDto : ${reservationDtoList}">
-                        <article th:object="${reservationDto}">
-                            <div class="mpcr-item-container">
-                                <div class="mpcr-action-btn">
-                                    <button onclick="toggleDropdown(this)" type="button">
-                                        <i class="fa-solid fa-ellipsis-vertical"></i>
-                                        <div class="mpc-dropdown">
-                                            <div class="action-item">
-                                                <a th:href="@{/place/detail/{placeId}(placeId = ${reservationDto.id})}">해당
-                                                    게시글로 이동</a>
-                                            </div>
-                                            <div class="action-item cancel" th:id="*{reservationId}"
-                                                 th:if="*{reservationStatus == reservationStatus.PENDING
+    <main class="my-page-main" id="page-body">
+        <div th:replace="~{global-templates/mypage :: mypage-menu}"></div>
+        <div class="mp-content">
+            <article>
+                <div class="mpc-title">
+                    <h2>예약내역</h2>
+                    <div class="select-box" id="sortType">
+                        <button class="select-box-btn" type="button">
+                            <span th:text="*{sort.displayName}"></span>
+                            <input id="sortInput" type="hidden">
+                            <img alt="" src="/imgs/arrow_down_gray014.f502da9d.svg">
+                        </button>
+                        <div class="select-box-list">
+                            <button th:class="${sortType.toString() == sort.toString()} ? 'selected' : ''"
+                                    th:each="sortType : ${T(com.app.spotick.util.type.PlaceReservationSortType).values()}"
+                                    th:sortType="${sortType}"
+                                    th:text="${sortType.displayName}" type="button">
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="mpcr-container" id="contentsContainer">
+                    <th:block th:if="${#lists.size(reservationDtoList)}">
+                        <th:block th:each="reservationDto, idx : ${reservationDtoList}">
+                            <article th:object="${reservationDto}" th:rId="*{reservationId}">
+                                <div class="mpcr-item-container">
+                                    <div class="mpcr-action-btn">
+                                        <button onclick="toggleDropdown(this)" type="button">
+                                            <i class="fa-solid fa-ellipsis-vertical"></i>
+                                            <div class="mpc-dropdown">
+                                                <div class="action-item">
+                                                    <a th:href="@{/place/{placeId}(placeId = ${reservationDto.id})}">해당
+                                                        게시글로 이동</a>
+                                                </div>
+                                                <div class="action-item cancel" th:id="*{reservationId}"
+                                                     th:if="*{reservationStatus == reservationStatus.PENDING
                                                 or reservationStatus == reservationStatus.WAITING_PAYMENT}">
-                                                예약 취소
-                                            </div>
-                                            <div class="action-item delete" th:id="*{reservationId}"
-                                                 th:unless="*{reservationStatus == reservationStatus.PENDING
+                                                    예약 취소
+                                                </div>
+                                                <div class="action-item delete" th:id="*{reservationId}"
+                                                     th:unless="*{reservationStatus == reservationStatus.PENDING
                                                 or reservationStatus == reservationStatus.WAITING_PAYMENT}">
-                                                기록 삭제
+                                                    기록 삭제
+                                                </div>
                                             </div>
-                                        </div>
-                                    </button>
-                                </div>
-                                <a class="mpcr-img-con"
-                                   th:href="@{/place/{placeId}(placeId = ${reservationDto.id})}">
-                                    <img style="width: 180px;"
-                                         th:alt="*{title}"
-                                         th:src="*{'/file/display?fileName='
-                                         + placeFileDto.uploadPath + '/t_' + placeFileDto.uuid + '_' + placeFileDto.fileName}">
-                                </a>
-                                <div class="ItemTextContainer">
-                                    <div class="ItemHostNameContainer">
-                                        <span class="ItemHostName" th:text="*{placeAddress.address}"></span>
-                                        <div class="ItemCountsContainer">
-                                            <div class="ItemsStarCountContainer">
-                                                <img alt="후기갯수" class="ItemCountImg"
-                                                     src="/imgs/star_filled_paintYellow056.a8eb6e44.svg">
-                                                <span class="ItemCountText" th:text="|*{evalAvg}(*{evalCount})|"></span>
-                                            </div>
-                                            <div class="ItemsLikeCountContainer">
-                                                <img alt="북마크갯수" class="ItemCountImg bookmark"
-                                                     src="/imgs/bookmark_thin.svg">
-                                                <span class="ItemCountText" th:text="*{bookmarkCount}"></span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <a class="ItemSpaceNameContainer"
-                                       th:href="@{/place/{placeId}(placeId = ${reservationDto.id})}">
-                                        <p class="ItemSpaceName" th:text="*{title}"></p>
-                                    </a>
-                                    <div class="ItemPriceContainer">
-                                        <span class="ItemPrice"
-                                              th:text="${#numbers.formatInteger(reservationDto.price, 3, 'COMMA')} + '원'"></span>
-                                    </div>
-                                    <div class="mpccc-row content-between" style="margin-top: 10px;">
-                                        <div class="mpccc-status">
-                                            <span th:text="*{reservationStatus.displayName}"></span>
-                                        </div>
-                                        <button class="mpccc-btn reservationPay" th:data-id="*{reservationId}"
-                                                th:if="*{reservationStatus == reservationStatus.WAITING_PAYMENT}"
-                                                type="button">
-                                            <span>결제 하기</span>
                                         </button>
                                     </div>
-                                </div>
-                                <div class="mpcr-divider"></div>
-                                <div class="mpcr-info details"
-                                     th:data-address="*{placeAddress.address}"
-                                     th:data-bookmarkCount="*{bookmarkCount}"
-                                     th:data-checkIn="*{checkIn}"
-                                     th:data-checkOut="*{checkOut}"
-                                     th:data-content="*{content}"
-                                     th:data-display-checkIn="*{#temporals.format(checkIn, 'yyyy년 MM월 dd일 HH시')}"
-                                     th:data-display-checkOut="*{#temporals.format(checkOut, 'yyyy년 MM월 dd일 HH시')}"
-                                     th:data-evalAvg="*{evalAvg}"
-                                     th:data-evalCount="*{evalCount}"
-                                     th:data-img="*{'/file/display?fileName='
-                                         + placeFileDto.uploadPath + '/t_' + placeFileDto.uuid + '_' + placeFileDto.fileName}"
-                                     th:data-price="${#numbers.formatInteger(reservationDto.price, 3, 'COMMA')} + '원'"
-                                     th:data-status="*{reservationStatus.displayName}" th:data-title="*{title}"
-                                     th:data-visitors="*{visitors}">
-                                    <div class="mpcri-title">예약 정보</div>
-                                    <div class="mpcri-date">
-                                        <span th:text="*{#temporals.format(checkIn, 'yyyy년 MM월dd일 HH시')}"></span>
-                                        <span style="margin: 0 4px; color: #868686;">~</span>
-                                        <span th:text="*{#temporals.format(checkOut, 'yyyy년 MM월dd일 HH시')}"></span>
-                                    </div>
-                                    <div class="mpcri-people-count">
-                                        <div>
-                                            사용 인원: <span th:text="*{visitors}"></span>명
+                                    <a class="mpcr-img-con"
+                                       th:href="@{/place/{placeId}(placeId = ${reservationDto.id})}">
+                                        <img style="width: 180px;"
+                                             th:alt="*{title}"
+                                             th:src="*{'/file/display?fileName='
+                                         + placeFileDto.uploadPath + '/t_' + placeFileDto.uuid + '_' + placeFileDto.fileName}">
+                                    </a>
+                                    <div class="ItemTextContainer">
+                                        <div class="ItemHostNameContainer">
+                                            <span class="ItemHostName" th:text="*{placeAddress.address}"></span>
+                                            <div class="ItemCountsContainer">
+                                                <div class="ItemsStarCountContainer">
+                                                    <img alt="후기갯수" class="ItemCountImg"
+                                                         src="/imgs/star_filled_paintYellow056.a8eb6e44.svg">
+                                                    <span class="ItemCountText"
+                                                          th:text="|*{evalAvg}(*{evalCount})|"></span>
+                                                </div>
+                                                <div class="ItemsLikeCountContainer">
+                                                    <img alt="북마크갯수" class="ItemCountImg bookmark"
+                                                         src="/imgs/bookmark_thin.svg">
+                                                    <span class="ItemCountText" th:text="*{bookmarkCount}"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <a class="ItemSpaceNameContainer"
+                                           th:href="@{/place/{placeId}(placeId = ${reservationDto.id})}">
+                                            <p class="ItemSpaceName" th:text="*{title}"></p>
+                                        </a>
+                                        <div class="ItemPriceContainer">
+                                        <span class="ItemPrice"
+                                              th:text="${#numbers.formatInteger(reservationDto.price, 3, 'COMMA')} + '원'"></span>
+                                        </div>
+                                        <div class="mpccc-row content-between" style="margin-top: 10px;">
+                                            <div class="mpccc-status">
+                                                <span class="status" th:text="*{reservationStatus.displayName}"></span>
+                                            </div>
+                                            <button class="mpccc-btn reservationPay" th:data-id="*{reservationId}"
+                                                    th:if="*{reservationStatus == reservationStatus.WAITING_PAYMENT}"
+                                                    type="button">
+                                                <span>결제 하기</span>
+                                            </button>
                                         </div>
                                     </div>
-                                    <div class="mpcri-content" th:utext="'요청사항: ' + *{content}"></div>
+                                    <div class="mpcr-divider"></div>
+                                    <div class="mpcr-info details" th:idx="${idx.index}">
+                                        <div class="mpcri-title">예약 정보</div>
+                                        <div class="mpcri-date">
+                                            <span th:text="*{#temporals.format(checkIn, 'yyyy년 MM월dd일 HH시')}"></span>
+                                            <span style="margin: 0 4px; color: #868686;">~</span>
+                                            <span th:text="*{#temporals.format(checkOut, 'yyyy년 MM월dd일 HH시')}"></span>
+                                        </div>
+                                        <div class="mpcri-people-count">
+                                            <div>
+                                                사용 인원: <span th:text="*{visitors}"></span>명
+                                            </div>
+                                        </div>
+                                        <div class="mpcri-content" th:utext="'요청사항: ' + *{content}"></div>
+                                    </div>
                                 </div>
-                            </div>
-                        </article>
+                            </article>
+                        </th:block>
                     </th:block>
-                </th:block>
-            </div>
-            <th:block th:if="${reservationDtoList.getTotalElements() == 0}">
-                <div class="mp-no-list">
-                    <span>예약내역이 없습니다.</span>
                 </div>
-            </th:block>
-        </article>
+                <th:block th:if="${reservationDtoList.getTotalElements() == 0}">
+                    <div class="mp-no-list">
+                        <span>예약내역이 없습니다.</span>
+                    </div>
+                </th:block>
+            </article>
 
 
-        <section class="pagination-container" th:fragment="pagination-v2">
+            <section class="pagination-container" th:fragment="pagination-v2">
             <span class="pagination-previous" th:if="${pagination.hasPrevBlock()}">
-                <a class="pagination-btns first" th:href="@{/mypage/reservations(page=1)}" title="맨 처음">
+                <a class="pagination-btns first" th:href="@{/mypage/reservations(page=1, sort=${sort})}" title="맨 처음">
                     <i class="fa-solid fa-chevron-left"></i>
                     <i class="fa-solid fa-chevron-left"></i>
                 </a>
-                <a class="pagination-btns" th:href="@{/mypage/reservations(page=${pagination.startPage - 1})}"
+                <a class="pagination-btns" th:href="@{/mypage/reservations(page=${pagination.startPage - 1}, sort=${sort})}"
                    title="이전">
                     <i class="fa-solid fa-chevron-left"></i>
                 </a>
             </span>
 
-            <span class="pagination-body">
+                <span class="pagination-body">
                 <span class="pagination-btns"
                       th:each="i : ${#numbers.sequence(pagination.startPage, pagination.endPage)}">
                     <a th:class="${i == pagination.currentPage ? 'active' : ''}"
-                       th:href="@{/mypage/reservations(page=${i})}"
+                       th:href="@{/mypage/reservations(page=${i}, sort=${sort})}"
                        th:text="${i}"></a>
                 </span>
             </span>
 
-            <span class="pagination-next" th:if="${pagination.hasNextBlock()}">
-                <a class="pagination-btns" th:href="@{/mypage/reservations(page=${pagination.endPage+1})}" title="다음">
+                <span class="pagination-next" th:if="${pagination.hasNextBlock()}">
+                <a class="pagination-btns" th:href="@{/mypage/reservations(page=${pagination.endPage+1}, sort=${sort})}" title="다음">
                     <i class="fa-solid fa-chevron-right"></i>
                 </a>
-                <a class="pagination-btns end" th:href="@{/mypage/reservations(page=${pagination.lastPage})}"
+                <a class="pagination-btns end" th:href="@{/mypage/reservations(page=${pagination.lastPage}, sort=${sort})}"
                    title="맨 끝">
                     <i class="fa-solid fa-chevron-right"></i>
                     <i class="fa-solid fa-chevron-right"></i>
                 </a>
             </span>
-        </section>
+            </section>
 
-    </div>
-</main>
+        </div>
+    </main>
 
-<footer th:replace="~{global-templates/header-footer :: footer}"></footer>
-
+    <footer th:replace="~{global-templates/header-footer :: footer}"></footer>
+</div>
 </body>
+<script th:inline="javascript">
+    document.getElementById('reservations').classList.add('active');
+
+    const reservationList = [[${reservationDtoList.content}]];
+    const currentPage = [[${pagination.currentPage}]];
+    const sort = [[${sort}]];
+</script>
 <script src="https://code.jquery.com/jquery-3.6.4.js"></script>
 <script src="https://js.bootpay.co.kr/bootpay-4.3.4.min.js" type="application/javascript"></script>
-<script src="/js/global-js/calendar.js"></script>
-<script src="/js/global-js/chat.js" type="module"></script>
-<script src="/js/global-js/global.js" type="module"></script>
-<script src="/js/mypage/mypage.js"></script>
-<script src="/js/mypage/reservations.js" type="module"></script>
-<script>
-    document.getElementById('reservations').classList.add('active');
-</script>
+<script th:src="@{/js/global-js/global.js}" type="module"></script>
+<script th:src="@{/js/global-js/chat.js}" type="module"></script>
+<script th:src="@{/js/mypage/mypage.js}"></script>
+<script th:src="@{/js/mypage/reservations.js}" type="module"></script>
 
 </html>

@@ -67,6 +67,7 @@ public class TicketServiceImpl implements TicketService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Slice<TicketListDto> findTicketListPage(Pageable pageable, TicketCategory ticketCategory, TicketRatingType ticketRatingType, TicketSortType ticketSortType, DistrictFilter districtFilter, Long userId, String keyword) {
         return ticketRepository.findTicketListPage(pageable, ticketCategory, ticketRatingType, ticketSortType, districtFilter, userId, keyword);
     }
@@ -74,6 +75,7 @@ public class TicketServiceImpl implements TicketService {
 
 
     @Override
+    @Transactional(readOnly = true)
     public List<TicketGradeSaleInfoDto> findTicketGrades(Long ticketId, LocalDate date) {
         return ticketGradeRepository.findTicketGradesByTicketId(ticketId, date);
     }

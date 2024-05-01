@@ -1,5 +1,5 @@
-import { loadingMarkService } from '../modules/loadingMark.js';
-import { extractVariableFromURL } from '../modules/extractFromUrl.js'
+import { loadingMarkService } from '../utils/loadingMark.js';
+import { extractVariableFromURL } from '../utils/extractFromUrl.js'
 
 
 let page = 0;

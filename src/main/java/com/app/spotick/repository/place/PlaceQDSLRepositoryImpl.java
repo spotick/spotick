@@ -69,8 +69,9 @@ public class PlaceQDSLRepositoryImpl implements PlaceQDSLRepository {
         BooleanBuilder whereClause = new BooleanBuilder();
         whereClause.and(place.placeStatus.eq(PostStatus.APPROVED));
 
-        if (districtFilter != null && districtFilter.getDistrict() != null) {
-            if (districtFilter.getDetailDistrict() != null) {
+        if (districtFilter != null) {
+
+            if (!districtFilter.getDetailDistrict().isEmpty()) {
                 BooleanBuilder booleanBuilder = new BooleanBuilder();
                 for (String detailDistrict : districtFilter.getDetailDistrict()) {
                     booleanBuilder.or(place.placeAddress.address.like(districtFilter.getDistrict() + "%" + detailDistrict + "%"));

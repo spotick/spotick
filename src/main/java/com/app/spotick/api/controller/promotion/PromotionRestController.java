@@ -8,6 +8,7 @@ import com.app.spotick.service.promotion.PromotionService;
 import com.app.spotick.service.promotion.like.PromotionLikeService;
 import com.app.spotick.util.type.PromotionSortType;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/promotion/api")
 @RequiredArgsConstructor
+@Slf4j
 public class PromotionRestController {
     private final PromotionService promotionService;
     private final PromotionLikeService promotionLikeService;
@@ -70,6 +72,19 @@ public class PromotionRestController {
             promotionLikeService.undoLike(promotionId, userDetailsDto.getId());
 
             return false;
+        }
+    }
+
+    ///////////////////////////////////////////// 프로모션 삭제 //////////////////////////////////////////////
+    @DeleteMapping("/delete")
+    public ResponseEntity<Void> softDeleteBoard(@RequestParam("promotionId") Long promotionId, @AuthenticationPrincipal UserDetailsDto userDetailsDto) {
+        System.out.println("promotionId = " + promotionId);
+        try {
+            promotionService.softDeletePromotionBoard(promotionId, userDetailsDto.getId());
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            log.error("promotionBoard 삭제 [Err_Msg]: {}", e.getMessage());
+            return ResponseEntity.badRequest().build();
         }
     }
 }

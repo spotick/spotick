@@ -1,5 +1,5 @@
-import {promotionListComponent} from "../components/promotion/promotionComponents.js"
-import {loadingMarkService} from "../modules/loadingMark.js";
+import {promotionListComponent} from "../modules/promotion/promotionComponents.js"
+import {loadingMarkService} from "../utils/loadingMark.js";
 
 const loadingMark = document.getElementById("loadingMark");
 const contentsContainer = document.getElementById("contentsContainer");

@@ -1,4 +1,4 @@
-import {loadingMarkService} from '../loadingMark.js';
+import {loadingMarkService} from '../../utils/loadingMark.js';
 
 export function requestAiResponse(aiChatArr, callback, loadingMark) {
     if (loadingMark) {

@@ -28,6 +28,8 @@ import com.app.spotick.repository.user.UserAuthorityRepository;
 import com.app.spotick.repository.user.UserRepository;
 import com.app.spotick.service.redis.RedisService;
 import com.app.spotick.service.util.MailService;
+import com.app.spotick.util.type.PlaceReservationSortType;
+import com.app.spotick.util.type.PlaceSortType;
 import lombok.RequiredArgsConstructor;
 import net.nurigo.sdk.NurigoApp;
 import net.nurigo.sdk.message.model.Message;
@@ -136,7 +138,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         DefaultMessageService messageService = NurigoApp.INSTANCE.initialize("NCS25SRQDFKRGDMH", "MKL9HRNYWZ2FPCYDRRPHBAOU9MMYBRHG", "https://api.coolsms.co.kr");
 
         Message message = new Message();
-        message.setFrom("01036316448");
+        message.setFrom("01011111111");
         message.setTo(tel);
         message.setText("인증번호는 " + code + "입니다. 1분 이내로 인증해주세요.");
 
@@ -182,14 +184,14 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     @Transactional(readOnly = true)
-    public Page<PlaceListDto> findBookmarkedPlacesByUserId(Long userId, Pageable pageable) {
-        return placeBookmarkRepository.findBookmarkedPlacesByUserId(userId, pageable);
+    public Page<PlaceListDto> findBookmarkedPlacesByUserId(Long userId, Pageable pageable, PlaceSortType sortType) {
+        return placeBookmarkRepository.findBookmarkedPlacesByUserId(userId, pageable, sortType);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public Page<PlaceReservationListDto> findReservationsByUserId(Long userId, Pageable pageable) {
-        return placeReservationRepository.findReservationsByUserId(userId, pageable);
+    public Page<PlaceReservationListDto> findReservationsByUserId(Long userId, Pageable pageable, PlaceReservationSortType sortType) {
+        return placeReservationRepository.findReservationsByUserId(userId, pageable, sortType);
     }
 
     @Override

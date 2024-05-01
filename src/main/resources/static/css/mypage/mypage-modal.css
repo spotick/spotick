@@ -239,19 +239,19 @@
     cursor: pointer;
 }
 
-.modal-input-button.disable {
+.modal-input-button:disabled {
     background: rgb(231, 234, 238);
     cursor: not-allowed;
 }
 
-.modal-input-button p {
+.modal-input-button span {
     font-weight: 500;
     font-size: 14px;
     line-height: 20px;
     color: rgb(255, 255, 255);
 }
 
-.modal-input-button.disable p {
+.modal-input-button.disable span {
     font-weight: 500;
     font-size: 14px;
     line-height: 20px;
