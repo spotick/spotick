@@ -1,6 +1,5 @@
 package com.app.spotick.repository.place.reservation;
 
-import com.app.spotick.domain.dto.place.PlaceReservationListDto;
 import com.app.spotick.domain.entity.place.Place;
 import com.app.spotick.domain.dto.place.reservation.PlaceReservationTimeDto;
 import com.app.spotick.domain.entity.place.PlaceReservation;
@@ -37,8 +36,8 @@ public interface PlaceReservationRepository extends JpaRepository<PlaceReservati
      */
     @Query("""
                 SELECT EXISTS (
-                    SELECT 1 FROM PlaceReservation p 
-                    WHERE p.place.id = :placeId        
+                    SELECT 1 FROM PlaceReservation p
+                    WHERE p.place.id = :placeId
                     AND p.place.placeStatus NOT IN ('REJECTED', 'CANCELLED')
                     AND (p.checkIn < :checkOut AND p.checkOut > :checkIn)
                 )

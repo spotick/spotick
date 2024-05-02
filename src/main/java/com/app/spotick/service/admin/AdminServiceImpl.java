@@ -52,10 +52,10 @@ public class AdminServiceImpl implements AdminService{
     private final PlaceInquiryRepository placeInquiryRepository;
     private final PlaceReservationRepository placeReservationRepository;
     private final UserAuthorityRepository userAuthorityRepository;
-    private final TicketInquiryRepository ticketInquiryRepository;
-    private final TicketLikeRepository ticketLikeRepository;
-    private final TicketOrderRepository ticketOrderRepository;
-    private final TicketGradeRepository ticketGradeRepository;
+//    private final TicketInquiryRepository ticketInquiryRepository;
+//    private final TicketLikeRepository ticketLikeRepository;
+//    private final TicketOrderRepository ticketOrderRepository;
+//    private final TicketGradeRepository ticketGradeRepository;
     private final UserRepository userRepository;
     private final UserService userService;
 

@@ -61,14 +61,10 @@ public class PlaceQDSLRepositoryImpl implements PlaceQDSLRepository {
 
     @Override
     public Slice<PlaceListDto> findPlaceListPage(Pageable pageable, Long userId, PlaceSortType sortType, DistrictFilter districtFilter, String keyword) {
-        JPQLQuery<Double> reviewAvg = createReviewAvgSub(place);
-
-        JPQLQuery<Long> reviewCount = createReviewCountSub(place);
-
-        JPQLQuery<Long> bookmarkCount = createBookmarkCountSub(place);
-
-        BooleanExpression isBookmarkChecked = isBookmarkCheckedSub(place, userId);
-
+        JPQLQuery<Double> reviewAvg = createReviewAvgSub();
+        JPQLQuery<Long> reviewCount = createReviewCountSub();
+        JPQLQuery<Long> bookmarkCount = createBookmarkCountSub();
+        BooleanExpression isBookmarkChecked = isBookmarkCheckedSub(userId);
         BooleanBuilder whereClause = new BooleanBuilder();
         whereClause.and(place.placeStatus.eq(PostStatus.APPROVED));
 
@@ -149,10 +145,10 @@ public class PlaceQDSLRepositoryImpl implements PlaceQDSLRepository {
 
     @Override
     public Optional<PlaceDetailDto> findPlaceDetailById(Long placeId, Long userId) {
-        JPQLQuery<Double> reviewAvgSub = createReviewAvgSub(place);
-        JPQLQuery<Long> reviewCountSub = createReviewCountSub(place);
-        JPQLQuery<Long> inquiryCountSub = createInquiryCountSub(place);
-        BooleanExpression bookmarkCheckedSub = isBookmarkCheckedSub(place, userId);
+        JPQLQuery<Double> reviewAvgSub = createReviewAvgSub();
+        JPQLQuery<Long> reviewCountSub = createReviewCountSub();
+        JPQLQuery<Long> inquiryCountSub = createInquiryCountSub();
+        BooleanExpression bookmarkCheckedSub = isBookmarkCheckedSub(userId);
         QPlaceReview subReview = new QPlaceReview("pr");
         JPQLQuery<Long> review5scoreCount = JPAExpressions.select(subReview.id.count())
                 .from(subReview)
@@ -228,13 +224,10 @@ public class PlaceQDSLRepositoryImpl implements PlaceQDSLRepository {
                         placeReservation.notReviewing.eq(false),
                         placeReview.isNull());
 
-        JPQLQuery<Double> reviewAvg = createReviewAvgSub(place);
-
-        JPQLQuery<Long> reviewCount = createReviewCountSub(place);
-
-        JPQLQuery<Long> bookmarkCount = createBookmarkCountSub(place);
-
-        BooleanExpression isBookmarkChecked = isBookmarkCheckedSub(place, userId);
+        JPQLQuery<Double> reviewAvg = createReviewAvgSub();
+        JPQLQuery<Long> reviewCount = createReviewCountSub();
+        JPQLQuery<Long> bookmarkCount = createBookmarkCountSub();
+        BooleanExpression isBookmarkChecked = isBookmarkCheckedSub(userId);
 
         List<PlaceReservedNotReviewedDto> notReviewListDtos = queryFactory.select(
                         Projections.constructor(PlaceReservedNotReviewedDto.class,
@@ -311,11 +304,9 @@ public class PlaceQDSLRepositoryImpl implements PlaceQDSLRepository {
                         place.placeStatus.ne(PostStatus.MODIFICATION_REQUESTED)
                 );
 
-        JPQLQuery<Double> reviewAvg = createReviewAvgSub(place);
-
-        JPQLQuery<Long> reviewCount = createReviewCountSub(place);
-
-        JPQLQuery<Long> bookmarkCount = createBookmarkCountSub(place);
+        JPQLQuery<Double> reviewAvg = createReviewAvgSub();
+        JPQLQuery<Long> reviewCount = createReviewCountSub();
+        JPQLQuery<Long> bookmarkCount = createBookmarkCountSub();
 
         List<PlaceManageListDto> placeManageListDtos = queryFactory.select(
                         Projections.constructor(PlaceManageListDto.class,
@@ -375,11 +366,9 @@ public class PlaceQDSLRepositoryImpl implements PlaceQDSLRepository {
     @Override
     public Optional<ContractedPlaceDto> findPlaceBriefly(Long placeId, Long userId) {
 
-        JPQLQuery<Double> reviewAvg = createReviewAvgSub(place);
-
-        JPQLQuery<Long> reviewCount = createReviewCountSub(place);
-
-        JPQLQuery<Long> bookmarkCount = createBookmarkCountSub(place);
+        JPQLQuery<Double> reviewAvg = createReviewAvgSub();
+        JPQLQuery<Long> reviewCount = createReviewCountSub();
+        JPQLQuery<Long> bookmarkCount = createBookmarkCountSub();
 
         Optional<ContractedPlaceDto> contractedPlaceDto = Optional.ofNullable(queryFactory
                 .from(place)
@@ -469,32 +458,32 @@ public class PlaceQDSLRepositoryImpl implements PlaceQDSLRepository {
         return content;
     }
 
-    private JPQLQuery<Double> createReviewAvgSub(QPlace place) {
+    private JPQLQuery<Double> createReviewAvgSub() {
         return JPAExpressions.select(placeReview.score.avg())
                 .from(placeReview)
                 .where(placeReview.placeReservation.place.eq(place));
     }
 
-    private JPQLQuery<Long> createReviewCountSub(QPlace place) {
+    private JPQLQuery<Long> createReviewCountSub() {
         return JPAExpressions.select(placeReview.count())
                 .from(placeReview)
                 .where(placeReview.placeReservation.place.eq(place));
     }
 
-    private JPQLQuery<Long> createBookmarkCountSub(QPlace place) {
+    private JPQLQuery<Long> createBookmarkCountSub() {
 
         return JPAExpressions.select(placeBookmark.count())
                 .from(placeBookmark)
                 .where(placeBookmark.place.eq(place));
     }
 
-    private JPQLQuery<Long> createInquiryCountSub(QPlace place) {
+    private JPQLQuery<Long> createInquiryCountSub() {
         return JPAExpressions.select(placeInquiry.id.count())
                 .from(placeInquiry)
                 .where(placeInquiry.place.eq(place));
     }
 
-    private BooleanExpression isBookmarkCheckedSub(QPlace place, Long userId) {
+    private BooleanExpression isBookmarkCheckedSub(Long userId) {
         return userId == null ?
                 Expressions.asBoolean(false)
                 : JPAExpressions.select(placeBookmark.id.isNotNull())

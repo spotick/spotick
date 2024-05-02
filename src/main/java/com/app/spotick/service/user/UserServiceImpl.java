@@ -279,7 +279,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public void sendCodeToEmail(String toEmail) throws ConnectException, MailSendException {
+    public void sendCodeToEmail(String toEmail) throws MailSendException {
         String title = "Spotick 이메일 인증 번호";
         String certCode = createKey();
         mailService.sendEmail(toEmail, title, certCode);
