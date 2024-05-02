@@ -28,6 +28,7 @@ import com.app.spotick.repository.user.UserAuthorityRepository;
 import com.app.spotick.repository.user.UserRepository;
 import com.app.spotick.service.redis.RedisService;
 import com.app.spotick.service.util.MailService;
+import com.app.spotick.util.type.PlaceManagerSortType;
 import com.app.spotick.util.type.PlaceReservationSortType;
 import com.app.spotick.util.type.PlaceSortType;
 import lombok.RequiredArgsConstructor;
@@ -208,8 +209,8 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     @Transactional(readOnly = true)
-    public Page<PlaceManageListDto> findHostPlacesPage(Long userId, Pageable pageable) {
-        return placeRepository.findHostPlaceListByUserId(userId, pageable);
+    public Page<PlaceManageListDto> findHostPlacesPage(Long userId, Pageable pageable, PlaceManagerSortType sortType) {
+        return placeRepository.findHostPlaceListByUserId(userId, pageable, sortType);
     }
 
     @Override

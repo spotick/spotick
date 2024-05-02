@@ -15,6 +15,7 @@ import com.app.spotick.domain.entity.place.QPlaceReview;
 import com.app.spotick.domain.type.place.PlaceReservationStatus;
 import com.app.spotick.domain.type.post.PostStatus;
 import com.app.spotick.util.search.DistrictFilter;
+import com.app.spotick.util.type.PlaceManagerSortType;
 import com.app.spotick.util.type.PlaceSortType;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.Tuple;
@@ -52,9 +53,11 @@ import static com.app.spotick.domain.entity.place.QPlaceReview.placeReview;
 public class PlaceQDSLRepositoryImpl implements PlaceQDSLRepository {
     private final JPAQueryFactory queryFactory;
 
-    private NumberPath<Long> aliasBookmarkCount = Expressions.numberPath(Long.class, "bookmarkCount");
-    private NumberPath<Long> aliasReviewCount = Expressions.numberPath(Long.class, "reviewCount");
-    private NumberPath<Double> aliasReviewAvg = Expressions.numberPath(Double.class, "reviewAvg");
+    private final NumberPath<Long> aliasBookmarkCount = Expressions.numberPath(Long.class, "bookmarkCount");
+    private final NumberPath<Long> aliasReviewCount = Expressions.numberPath(Long.class, "reviewCount");
+    private final NumberPath<Double> aliasReviewAvg = Expressions.numberPath(Double.class, "reviewAvg");
+    private final NumberPath<Long> aliasReservationCount = Expressions.numberPath(Long.class, "reservationCount");
+    private final NumberPath<Long> aliasNotRespondedInquiryCount = Expressions.numberPath(Long.class, "inquiriesCount");
 
     @Override
     public Slice<PlaceListDto> findPlaceListPage(Pageable pageable, Long userId, PlaceSortType sortType, DistrictFilter districtFilter, String keyword) {
@@ -297,7 +300,7 @@ public class PlaceQDSLRepositoryImpl implements PlaceQDSLRepository {
     }
 
     @Override
-    public Page<PlaceManageListDto> findHostPlaceListByUserId(Long userId, Pageable pageable) {
+    public Page<PlaceManageListDto> findHostPlaceListByUserId(Long userId, Pageable pageable, PlaceManagerSortType sortType) {
 
         JPAQuery<Long> totalCount = queryFactory.select(place.count())
                 .from(place)
@@ -314,32 +317,18 @@ public class PlaceQDSLRepositoryImpl implements PlaceQDSLRepository {
 
         JPQLQuery<Long> bookmarkCount = createBookmarkCountSub(place);
 
-        JPQLQuery<Long> reservationRequestCount = JPAExpressions.select(placeReservation.count())
-                .from(placeReservation)
-                .where(
-                        placeReservation.place.eq(place),
-                        placeReservation.reservationStatus.eq(PlaceReservationStatus.PENDING)
-                );
-
-        JPQLQuery<Long> inquiriesCount = JPAExpressions.select(placeInquiry.count())
-                .from(placeInquiry)
-                .where(
-                        placeInquiry.place.eq(place),
-                        placeInquiry.response.isNull()
-                );
-
         List<PlaceManageListDto> placeManageListDtos = queryFactory.select(
                         Projections.constructor(PlaceManageListDto.class,
                                 place.id,
                                 place.title,
                                 place.price,
                                 place.placeAddress,
-                                reviewAvg,
-                                reviewCount,
-                                bookmarkCount,
+                                ExpressionUtils.as(reviewAvg, aliasReviewAvg),
+                                ExpressionUtils.as(reviewCount, aliasReviewCount),
+                                ExpressionUtils.as(bookmarkCount, aliasBookmarkCount),
                                 place.placeStatus,
-                                reservationRequestCount,
-                                inquiriesCount
+                                ExpressionUtils.as(createReservationCountSub(), aliasReservationCount),
+                                ExpressionUtils.as(createNotRespondedInquiriesCountSub(), aliasNotRespondedInquiryCount)
                         ))
                 .from(place)
                 .where(
@@ -348,7 +337,7 @@ public class PlaceQDSLRepositoryImpl implements PlaceQDSLRepository {
                         place.placeStatus.ne(PostStatus.DELETED),
                         place.placeStatus.ne(PostStatus.MODIFICATION_REQUESTED)
                 )
-                .orderBy(place.id.desc())
+                .orderBy(createOrderByClause(sortType))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
@@ -514,11 +503,73 @@ public class PlaceQDSLRepositoryImpl implements PlaceQDSLRepository {
                 .exists();
     }
 
+    private JPQLQuery<Long> createReservationCountSub() {
+        return JPAExpressions.select(placeReservation.count())
+                .from(placeReservation)
+                .where(
+                        placeReservation.place.eq(place),
+                        placeReservation.reservationStatus.eq(PlaceReservationStatus.PENDING)
+                );
+    }
+
+    private JPQLQuery<Long> createNotRespondedInquiriesCountSub() {
+        return JPAExpressions.select(placeInquiry.count())
+                .from(placeInquiry)
+                .where(
+                        placeInquiry.place.eq(place),
+                        placeInquiry.response.isNull()
+                );
+    }
+
     private OrderSpecifier<?>[] createOrderByClause(PlaceSortType sortType) {
         return switch (sortType) {
             case POPULARITY -> buildOrderSpecifiers(
                     aliasReviewAvg.desc().nullsLast(), aliasReviewCount.desc(),
                     place.viewCount.desc(), aliasBookmarkCount.desc());
+            case NEWEST -> buildOrderSpecifiers(
+                    place.createdDate.desc()
+            );
+            case INTEREST -> buildOrderSpecifiers(
+                    aliasBookmarkCount.desc(),
+                    place.id.desc()
+            );
+            case PRICE_LOW_TO_HIGH -> buildOrderSpecifiers(
+                    place.price.asc(),
+                    place.id.desc()
+            );
+            case PRICE_HIGH_TO_LOW -> buildOrderSpecifiers(
+                    place.price.desc(),
+                    place.id.desc()
+            );
+            case VIEWS -> buildOrderSpecifiers(
+                    place.viewCount.desc(),
+                    place.id.desc()
+            );
+            case REVIEWS -> buildOrderSpecifiers(
+                    aliasReviewCount.desc(),
+                    place.id.desc()
+            );
+            case RATING_HIGH -> buildOrderSpecifiers(
+                    aliasReviewAvg.desc().nullsLast(),
+                    place.id.desc()
+            );
+        };
+    }
+
+    private OrderSpecifier<?>[] createOrderByClause(PlaceManagerSortType sortType) {
+        return switch (sortType) {
+            case RESERVATION -> buildOrderSpecifiers(
+                    aliasReservationCount.desc(),
+                    place.id.desc()
+            );
+            case INQUIRY -> buildOrderSpecifiers(
+                    aliasNotRespondedInquiryCount.desc(),
+                    place.id.desc()
+            );
+            case POPULARITY -> buildOrderSpecifiers(
+                    aliasReviewAvg.desc().nullsLast(), aliasReviewCount.desc(),
+                    place.viewCount.desc(), aliasBookmarkCount.desc()
+            );
             case NEWEST -> buildOrderSpecifiers(
                     place.createdDate.desc()
             );

@@ -26,8 +26,34 @@ export const placeService = (() => {
         return data;
     }
 
+    const disablePlaceService = async (placeId) => {
+        const response = await fetch(`/place/api/disable/${placeId}`, {
+            method: 'PATCH'
+        });
+
+        return response.json();
+    }
+
+    const reopenPlaceService = async (placeId) => {
+        const response = await fetch(`/place/api/approve/${placeId}`, {
+            method: 'PATCH'
+        });
+
+        return response.json();
+    }
+
+    const deletePlace = async (placeId) => {
+        const response = await fetch(`/place/api/delete/${placeId}`, {
+            method: 'DELETE'
+        });
+
+        return response.json();
+    }
 
     return {
         getList: getList,
+        disablePlaceService: disablePlaceService,
+        reopenPlaceService: reopenPlaceService,
+        deletePlace: deletePlace,
     }
 })();

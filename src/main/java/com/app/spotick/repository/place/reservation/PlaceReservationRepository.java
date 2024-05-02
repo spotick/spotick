@@ -28,7 +28,7 @@ public interface PlaceReservationRepository extends JpaRepository<PlaceReservati
     Optional<PlaceReservation> findByIdAndHost(@Param("reservationId") Long reservationId,
                                                @Param("userId") Long userId);
 
-    List<PlaceReservation> findAllByPlace(Place place);
+    List<PlaceReservation> findAllByPlaceAndUser(Place place, User user);
 
     /**
      * 사용자가 선택한 장소 예약이 가능한지 확인하는 메소드

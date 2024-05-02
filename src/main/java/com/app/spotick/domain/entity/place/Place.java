@@ -71,7 +71,7 @@ public class Place extends PostBase {
     }
 
     //    장소 상태 설정 메소드
-    public void setPlaceStatus(PostStatus placeStatus) {
+    public void updatePlaceStatus(PostStatus placeStatus) {
         this.placeStatus = placeStatus;
     }
 

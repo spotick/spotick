@@ -1,5 +1,6 @@
 package com.app.spotick.api.controller.place;
 
+import com.app.spotick.api.response.MessageResponse;
 import com.app.spotick.domain.dto.place.PlaceListDto;
 import com.app.spotick.domain.dto.user.UserDetailsDto;
 import com.app.spotick.domain.entity.place.Place;
@@ -10,6 +11,7 @@ import com.app.spotick.util.search.DistrictFilter;
 import com.app.spotick.util.type.PlaceSortType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
@@ -28,70 +30,9 @@ import java.util.List;
 @RestController
 @RequestMapping("/place/api")
 @RequiredArgsConstructor
+@Slf4j
 public class PlaceRestController {
     private final PlaceService placeService;
-
-    @PatchMapping("/disable/{placeId}")
-    public ResponseEntity<String> disablePlace(@PathVariable("placeId") Long placeId,
-                                               @AuthenticationPrincipal UserDetailsDto userDetailsDto) {
-        Place foundPlace = placeService.findPlace(placeId, userDetailsDto.getId()).orElse(null);
-
-        if (foundPlace == null) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN)
-                    .body("등록된 장소를 조회하는데 실패했습니다.<br>다시 시도해주세요.");
-        }
-
-        if (foundPlace.getPlaceStatus() != PostStatus.APPROVED) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN)
-                    .body("해당 장소는 이미 활성화 되어있지 않은 상태입니다.");
-        }
-
-        placeService.rejectAllReservationRequests(placeId);
-
-        placeService.updateStatus(placeId, PostStatus.DISABLED);
-
-        return ResponseEntity.status(HttpStatus.OK)
-                .body("해당 장소를 비활성화시켰습니다.");
-    }
-
-    @PatchMapping("/approved/{placeId}")
-    public ResponseEntity<String> enablePlace(@PathVariable("placeId") Long placeId,
-                                              @AuthenticationPrincipal UserDetailsDto userDetailsDto) {
-        Place foundPlace = placeService.findPlace(placeId, userDetailsDto.getId()).orElse(null);
-
-        if (foundPlace == null) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN)
-                    .body("등록된 장소를 조회하는데 실패했습니다.<br>다시 시도해주세요.");
-        }
-
-        if (foundPlace.getPlaceStatus() != PostStatus.DISABLED) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN)
-                    .body("비활성화된 장소만 활성화로 전환 할 수 있습니다.");
-        }
-
-        placeService.updateStatus(placeId, PostStatus.APPROVED);
-
-        return ResponseEntity.status(HttpStatus.OK)
-                .body("해당 장소를 활성화시켰습니다. 이제부터 대여가 가능합니다.");
-    }
-
-    @PatchMapping("/delete/{placeId}")
-    public ResponseEntity<String> softDeletePlace(@PathVariable("placeId") Long placeId,
-                                                  @AuthenticationPrincipal UserDetailsDto userDetailsDto) {
-        Place foundPlace = placeService.findPlace(placeId, userDetailsDto.getId()).orElse(null);
-
-        if (foundPlace == null) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN)
-                    .body("등록된 장소를 조회하는데 실패했습니다.<br>다시 시도해주세요.");
-        }
-
-        placeService.rejectAllReservationRequests(placeId);
-
-        placeService.updateStatus(placeId, PostStatus.DELETED);
-
-        return ResponseEntity.status(HttpStatus.OK)
-                .body("해당 장소를 삭제했습니다.");
-    }
 
     @GetMapping("/list")
     public ResponseEntity<Slice<PlaceListDto>> placeList(@RequestParam("page") int page,
@@ -109,20 +50,63 @@ public class PlaceRestController {
         return ResponseEntity.ok(placeList);
     }
 
-    //    들어오는 districtFilter 파라미터를 커스텀 바인딩
-    @Deprecated(since = "240427", forRemoval = true)
-    @InitBinder
-    public void initBinder(WebDataBinder binder) {
-        binder.registerCustomEditor(AreaFilter.class, new PropertyEditorSupport() {
-            @Override
-            public void setAsText(String text) throws IllegalArgumentException {
-                try {
-                    ObjectMapper mapper = new ObjectMapper();
-                    setValue(mapper.readValue(URLDecoder.decode(text, StandardCharsets.UTF_8), AreaFilter.class));
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-        });
+    @PatchMapping("/disable/{placeId}")
+    public ResponseEntity<MessageResponse> disablePlace(@PathVariable("placeId") Long placeId,
+                                                        @AuthenticationPrincipal UserDetailsDto userDetailsDto) {
+        try {
+            placeService.disablePlaceService(placeId, userDetailsDto.getId());
+            return new ResponseEntity<>(MessageResponse.builder()
+                    .success(true)
+                    .message("해당 장소를 비활성화시켰습니다.")
+                    .build(), HttpStatus.OK
+            );
+        } catch (Exception e) {
+            log.error("pId: {}, uId: {}, 장소 비활성화 [Err_Msg]: {}", placeId, userDetailsDto.getId(), e.getMessage());
+            return new ResponseEntity<>(MessageResponse.builder()
+                    .success(false)
+                    .message(e.getMessage())
+                    .build(), HttpStatus.BAD_REQUEST
+            );
+        }
+    }
+
+    @PatchMapping("/approve/{placeId}")
+    public ResponseEntity<MessageResponse> enablePlace(@PathVariable("placeId") Long placeId,
+                                                       @AuthenticationPrincipal UserDetailsDto userDetailsDto) {
+        try {
+            placeService.reopenPlaceService(placeId, userDetailsDto.getId());
+            return new ResponseEntity<>(MessageResponse.builder()
+                    .success(true)
+                    .message("해당 장소를 활성화시켰습니다. 이제부터 대여가 가능합니다.")
+                    .build(), HttpStatus.OK
+            );
+        } catch (Exception e) {
+            log.error("pId: {}, uId: {}, 장소 서비스 재개 [Err_Msg]: {}", placeId, userDetailsDto.getId(), e.getMessage());
+            return new ResponseEntity<>(MessageResponse.builder()
+                    .success(false)
+                    .message(e.getMessage())
+                    .build(), HttpStatus.BAD_REQUEST
+            );
+        }
+    }
+
+    @DeleteMapping("/delete/{placeId}")
+    public ResponseEntity<MessageResponse> softDeletePlace(@PathVariable("placeId") Long placeId,
+                                                           @AuthenticationPrincipal UserDetailsDto userDetailsDto) {
+        try {
+            placeService.softDeletePlace(placeId, userDetailsDto.getId());
+            return new ResponseEntity<>(MessageResponse.builder()
+                    .success(true)
+                    .message("해당 장소를 삭제시켰습니다.")
+                    .build(), HttpStatus.OK
+            );
+        } catch (Exception e) {
+            log.error("pId: {}, uId: {}, 장소 소프트딜리트 [Err_Msg]: {}", placeId, userDetailsDto.getId(), e.getMessage());
+            return new ResponseEntity<>(MessageResponse.builder()
+                    .success(false)
+                    .message(e.getMessage())
+                    .build(), HttpStatus.BAD_REQUEST
+            );
+        }
     }
 }

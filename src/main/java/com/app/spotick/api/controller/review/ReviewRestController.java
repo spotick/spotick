@@ -98,7 +98,7 @@ public class ReviewRestController {
                     .build(), HttpStatus.OK
             );
         } catch (Exception e) {
-            log.error("rId: {}, uId: {}유저 리뷰 작성 거절 [Err_Msg]: {}", reservationId, userDetailsDto.getId(), e.getMessage());
+            log.error("rId: {}, uId: {}, 유저 리뷰 작성 거절 [Err_Msg]: {}", reservationId, userDetailsDto.getId(), e.getMessage());
             return new ResponseEntity<>(DataResponse.builder()
                     .success(false)
                     .message(e.getMessage())

@@ -16,134 +16,149 @@
 </head>
 
 <body>
+<div>
+    <div th:replace="~{global-templates/chat :: chat}"></div>
 
-<div th:replace="~{global-templates/chat :: chat}"></div>
+    <div class="modal-bg" id="modal">
+        <div th:replace="~{global-templates/new-global-dialogue-modal :: global-dialogue}"></div>
+        <div th:replace="~{global-templates/new-global-dialogue-modal :: global-selection}"></div>
+    </div>
 
-<div class="modal-bg">
-    <div th:replace="~{global-templates/global-dialogue-modal :: global-dialogue}"></div>
-    <div th:replace="~{global-templates/global-dialogue-modal :: global-selection}"></div>
-</div>
+    <header th:replace="~{global-templates/header-footer :: header}"></header>
 
-<header th:replace="~{global-templates/header-footer :: header}"></header>
-
-<main class="my-page-main" id="page-body">
-    <div th:replace="~{global-templates/mypage :: mypage-menu}"></div>
-    <div class="mp-content">
-        <article>
-            <div class="mpc-title">
-                <h2>장소 관리</h2>
-            </div>
-            <div class="mpc-cards-wrap">
-                <th:block th:if="${#lists.size(hostPlacesPage)}">
-                    <th:block th:each="hostPlace:${hostPlacesPage}">
-                        <div class="OneItemContainer hover mybookmark" th:object="${hostPlace}">
-                            <a class="OneItemImgContainer" th:href="@{/place/{placeId}(placeId=*{id})}">
-                                <div class="swiper ImageSwiper swiper-initialized swiper-horizontal swiper-pointer-events swiper-backface-hidden">
-                                    <div class="swiper-wrapper ImageLength"
-                                         style="transform: translate3d(0px, 0px, 0px);">
-                                        <!-- 이미지 한칸 -->
-                                        <th:block th:each="placeFile:${hostPlace.placeFiles}">
-                                            <div class="swiper-slide swiper-slide-next" th:object="${placeFile}">
-                                                <img class="ItemImg"
-                                                     th:alt="${hostPlace.title}"
-                                                     th:src="*{'/file/display?fileName=' + uploadPath + '/t_' + uuid + '_' + fileName}">
+    <main class="my-page-main" id="page-body">
+        <div th:replace="~{global-templates/mypage :: mypage-menu}"></div>
+        <div class="mp-content">
+            <article>
+                <div class="mpc-title">
+                    <h2>장소 관리</h2>
+                    <div class="select-box" id="sortType">
+                        <button class="select-box-btn" type="button">
+                            <span th:text="*{sort.displayName}"></span>
+                            <input id="sortInput" type="hidden">
+                            <img alt="" src="/imgs/arrow_down_gray014.f502da9d.svg">
+                        </button>
+                        <div class="select-box-list">
+                            <button th:class="${sortType.toString() == sort.toString()} ? 'selected' : ''"
+                                    th:each="sortType : ${T(com.app.spotick.util.type.PlaceManagerSortType).values()}"
+                                    th:sortType="${sortType}"
+                                    th:text="${sortType.displayName}" type="button">
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="mpc-cards-wrap">
+                    <th:block th:if="${#lists.size(hostPlacesPage)}">
+                        <th:block th:each="hostPlace:${hostPlacesPage}">
+                            <div class="OneItemContainer hover mybookmark" th:object="${hostPlace}">
+                                <a class="OneItemImgContainer" th:href="@{/place/{placeId}(placeId=*{id})}">
+                                    <div class="swiper ImageSwiper swiper-initialized swiper-horizontal swiper-pointer-events swiper-backface-hidden">
+                                        <div class="swiper-wrapper ImageLength"
+                                             style="transform: translate3d(0px, 0px, 0px);">
+                                            <!-- 이미지 한칸 -->
+                                            <th:block th:each="placeFile:${hostPlace.placeFiles}">
+                                                <div class="swiper-slide swiper-slide-next" th:object="${placeFile}">
+                                                    <img class="ItemImg"
+                                                         th:alt="${hostPlace.title}"
+                                                         th:src="*{'/file/display?fileName=' + uploadPath + '/t_' + uuid + '_' + fileName}">
+                                                </div>
+                                            </th:block>
+                                        </div>
+                                        <div class="NavigationBtnContainer">
+                                            <button class="NavigationBtn RightBtn" type="button">
+                                                <img alt="다음" src="/imgs/round_arrow_right_gray024.7f7e18a3.svg">
+                                            </button>
+                                            <button class="NavigationBtn LeftBtn" type="button">
+                                                <img alt="이전" src="/imgs/round_arrow_left_gray024.707193e8.svg">
+                                            </button>
+                                        </div>
+                                        <div class="ItemImgPagination">
+                                            <p><span class="snapIndex">1</span>/<span class="slideIndex">5</span></p>
+                                        </div>
+                                    </div>
+                                </a>
+                                <div class="ItemTextContainer">
+                                    <div class="ItemHostNameContainer">
+                                        <span class="ItemHostName" th:text="*{placeAddress.address}"></span>
+                                        <div class="ItemCountsContainer">
+                                            <div class="ItemsStarCountContainer">
+                                                <img alt="후기갯수" class="ItemCountImg"
+                                                     src="/imgs/star_filled_paintYellow056.a8eb6e44.svg">
+                                                <span class="ItemCountText" th:text="|*{evalAvg}(*{evalCount})|"></span>
                                             </div>
-                                        </th:block>
-                                    </div>
-                                    <div class="NavigationBtnContainer">
-                                        <button class="NavigationBtn RightBtn" type="button">
-                                            <img alt="다음" src="/imgs/round_arrow_right_gray024.7f7e18a3.svg">
-                                        </button>
-                                        <button class="NavigationBtn LeftBtn" type="button">
-                                            <img alt="이전" src="/imgs/round_arrow_left_gray024.707193e8.svg">
-                                        </button>
-                                    </div>
-                                    <div class="ItemImgPagination">
-                                        <p><span class="snapIndex">1</span>/<span class="slideIndex">5</span></p>
-                                    </div>
-                                </div>
-                            </a>
-                            <div class="ItemTextContainer">
-                                <div class="ItemHostNameContainer">
-                                    <span class="ItemHostName" th:text="*{placeAddress.address}"></span>
-                                    <div class="ItemCountsContainer">
-                                        <div class="ItemsStarCountContainer">
-                                            <img alt="후기갯수" class="ItemCountImg"
-                                                 src="/imgs/star_filled_paintYellow056.a8eb6e44.svg">
-                                            <span class="ItemCountText" th:text="|*{evalAvg}(*{evalCount})|"></span>
-                                        </div>
-                                        <div class="ItemsLikeCountContainer">
-                                            <img alt="북마크갯수" class="ItemCountImg bookmark"
-                                                 src="/imgs/bookmark_thin.svg">
-                                            <span class="ItemCountText" th:text="*{bookmarkCount}"></span>
+                                            <div class="ItemsLikeCountContainer">
+                                                <img alt="북마크갯수" class="ItemCountImg bookmark"
+                                                     src="/imgs/bookmark_thin.svg">
+                                                <span class="ItemCountText" th:text="*{bookmarkCount}"></span>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="ItemSpaceNameContainer">
-                                    <p class="ItemSpaceName" th:text="*{title}"></p>
-                                </div>
-                                <div class="ItemPriceContainer">
+                                    <div class="ItemSpaceNameContainer">
+                                        <p class="ItemSpaceName" th:text="*{title}"></p>
+                                    </div>
+                                    <div class="ItemPriceContainer">
                                     <span class="ItemPrice"
                                           th:text="${#numbers.formatInteger(hostPlace.price, 3, 'COMMA')} + '원'"></span>
-                                    <div th:text="*{postStatus.displayName}"></div>
-                                </div>
-                                <div class="mpcp-actions">
-                                    <div class="mpcpa-btn-con">
-                                        <a th:href="@{/mypage/places/reservations/{placeId}(placeId = *{id})}">
-                                            <button class="mpcpa-btn" type="button">
-                                                <span>예약 관리</span>
-                                                <div class="mpcpa-alarm" th:unless="*{reservationRequestCount == 0}">
-                                                    <span th:text="*{reservationRequestCount}"></span>
-                                                </div>
-                                            </button>
-                                        </a>
-                                        <a th:href="@{/mypage/places/inquiries/{placeId}(placeId = *{id})}">
-                                            <button class="mpcpa-btn" type="button">
-                                                <span>문의 관리</span>
-                                                <div class="mpcpa-alarm" th:unless="*{inquiriesCount == 0}">
-                                                    <span th:text="*{inquiriesCount}"></span>
-                                                </div>
-                                            </button>
-                                        </a>
+                                        <div th:id="*{id}" th:text="*{postStatus.displayName}"></div>
                                     </div>
-                                    <div class="mpcpa-modal-btn">
-                                        <button onclick="toggleDropdown(this)" type="button">
-                                            <i class="fa-solid fa-ellipsis"></i>
-                                            <div class="mpc-dropdown" th:data-id="*{id}">
-                                                <div class="action-item disablePlace"
-                                                     th:if="*{postStatus == postStatus.APPROVED}">
-                                                    <span>장소 대여 중지</span>
+                                    <div class="mpcp-actions">
+                                        <div class="mpcpa-btn-con">
+                                            <a th:href="@{/mypage/places/reservations/{placeId}(placeId = *{id})}">
+                                                <button class="mpcpa-btn" type="button">
+                                                    <span>예약 관리</span>
+                                                    <div class="mpcpa-alarm"
+                                                         th:unless="*{reservationRequestCount == 0}">
+                                                        <span th:text="*{reservationRequestCount}"></span>
+                                                    </div>
+                                                </button>
+                                            </a>
+                                            <a th:href="@{/mypage/places/inquiries/{placeId}(placeId = *{id})}">
+                                                <button class="mpcpa-btn" type="button">
+                                                    <span>문의 관리</span>
+                                                    <div class="mpcpa-alarm" th:unless="*{inquiriesCount == 0}">
+                                                        <span th:text="*{inquiriesCount}"></span>
+                                                    </div>
+                                                </button>
+                                            </a>
+                                        </div>
+                                        <div class="mpcpa-modal-btn">
+                                            <button onclick="toggleDropdown(this)" type="button">
+                                                <i class="fa-solid fa-ellipsis"></i>
+                                                <div class="mpc-dropdown" th:data-id="*{id}">
+                                                    <div class="action-item disablePlace"
+                                                         th:if="*{postStatus == postStatus.APPROVED}">
+                                                        <span>장소 대여 중지</span>
+                                                    </div>
+                                                    <div class="action-item enablePlace"
+                                                         th:if="*{postStatus == postStatus.DISABLED}">
+                                                        <span>장소 대여 재개</span>
+                                                    </div>
+                                                    <div class="action-item editPlace"
+                                                         th:if="*{postStatus == postStatus.APPROVED or postStatus == postStatus.DISABLED}">
+                                                        <span>장소 정보 수정</span>
+                                                    </div>
+                                                    <div class="action-item deletePlace">
+                                                        <span>장소 삭제</span>
+                                                    </div>
                                                 </div>
-                                                <div class="action-item enablePlace"
-                                                     th:if="*{postStatus == postStatus.DISABLED}">
-                                                    <span>장소 대여 재개</span>
-                                                </div>
-                                                <div class="action-item editPlace"
-                                                     th:if="*{postStatus == postStatus.APPROVED or postStatus == postStatus.DISABLED}">
-                                                    <span>장소 정보 수정</span>
-                                                </div>
-                                                <div class="action-item deletePlace">
-                                                    <span>장소 삭제</span>
-                                                </div>
-                                            </div>
-                                        </button>
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </th:block>
                     </th:block>
-                </th:block>
-            </div>
-
-            <th:block th:if="${hostPlacesPage.getTotalElements() == 0}">
-                <div class="mp-no-list">
-                    <span>장소 정보가 없습니다.</span>
                 </div>
-            </th:block>
 
-        </article>
+                <th:block th:if="${hostPlacesPage.getTotalElements() == 0}">
+                    <div class="mp-no-list">
+                        <span>장소 정보가 없습니다.</span>
+                    </div>
+                </th:block>
 
-        <section class="pagination-container">
+            </article>
+
+            <section class="pagination-container">
             <span class="pagination-previous" th:if="${pagination.hasPrevBlock()}">
                 <a class="pagination-btns first" th:href="@{/mypage/places(page=1)}" title="맨 처음">
                     <i class="fa-solid fa-chevron-left"></i>
@@ -155,7 +170,7 @@
                 </a>
             </span>
 
-            <span class="pagination-body">
+                <span class="pagination-body">
                 <span class="pagination-btns"
                       th:each="i : ${#numbers.sequence(pagination.startPage, pagination.endPage)}">
                     <a th:class="${i == pagination.currentPage ? 'active' : ''}"
@@ -164,7 +179,7 @@
                 </span>
             </span>
 
-            <span class="pagination-next" th:if="${pagination.hasNextBlock()}">
+                <span class="pagination-next" th:if="${pagination.hasNextBlock()}">
                 <a class="pagination-btns" th:href="@{/mypage/places(page=${pagination.endPage+1})}"
                    title="다음">
                     <i class="fa-solid fa-chevron-right"></i>
@@ -175,23 +190,25 @@
                     <i class="fa-solid fa-chevron-right"></i>
                 </a>
             </span>
-        </section>
+            </section>
 
-    </div>
-</main>
+        </div>
+    </main>
 
-<footer th:replace="~{global-templates/header-footer :: footer}"></footer>
-
+    <footer th:replace="~{global-templates/header-footer :: footer}"></footer>
+</div>
 </body>
+<script th:inline="javascript">
+    document.getElementById('places').classList.add('active');
+
+    const currentPage = [[${pagination.currentPage}]];
+    const sort = [[${sort}]];
+</script>
 <script src="https://code.jquery.com/jquery-3.6.4.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
-<script src="/js/global-js/global.js" type="module"></script>
-<script src="/js/global-js/image-slide.js" type="module"></script>
-<script src="/js/mypage/mypage.js"></script>
-<script src="/js/mypage/place.js"></script>
-<script src="/js/global-js/chat.js" type="module"></script>
-<script>
-    document.getElementById('places').classList.add('active');
-</script>
+<script th:src="@{/js/global-js/global.js}" type="module"></script>
+<script th:src="@{/js/global-js/chat.js}" type="module"></script>
+<script th:src="@{/js/mypage/mypage.js}"></script>
+<script th:src="@{/js/mypage/place.js}" type="module"></script>
 
 </html>

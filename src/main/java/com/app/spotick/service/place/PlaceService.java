@@ -23,11 +23,11 @@ public interface PlaceService {
 
     PlaceReserveBasicInfoDto findPlaceReserveDefaultInfo(Long placeId);
 
-    Optional<Place> findPlace(Long placeId, Long userId);
+    void disablePlaceService(Long placeId, Long userId);
 
-    void updateStatus(Long placeId, PostStatus postStatus);
+    void reopenPlaceService(Long placeId, Long userId);
 
-    void rejectAllReservationRequests(Long placeId);
+    void softDeletePlace(Long placeId, Long userId);
 
     Optional<PlaceEditDto> findPlaceInfo(Long placeId, Long userId);
 

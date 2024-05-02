@@ -87,7 +87,7 @@ public class AdminServiceImpl implements AdminService{
                         .orElseThrow(() -> new IllegalStateException("존재하지 않는 장소 id"));
                 PostStatus changedStatus = approveDto.getIsApprove()?
                         PostStatus.APPROVED:PostStatus.REJECTED;
-                place.setPlaceStatus(changedStatus);
+                place.updatePlaceStatus(changedStatus);
             }
             case MODIFICATION_REQUESTED ->{
                 handlePlaceModification(approveDto);
@@ -105,8 +105,8 @@ public class AdminServiceImpl implements AdminService{
 
 //        거절된 경우 먼저 처리후 early return
         if(!approveDto.getIsApprove()){
-            changedPlace.setPlaceStatus(PostStatus.REJECTED);
-            originalPlace.setPlaceStatus(PostStatus.APPROVED);
+            changedPlace.updatePlaceStatus(PostStatus.REJECTED);
+            originalPlace.updatePlaceStatus(PostStatus.APPROVED);
             modifyRequest.setPlaceModifyStatus(PostModifyStatus.REJECTED);
             return ;
         }
@@ -118,8 +118,8 @@ public class AdminServiceImpl implements AdminService{
         placeReservationRepository.bulkUpdateReservationPlace(originalPlace,changedPlace);
 
         changedPlace.setViewCount(originalPlace.getViewCount());
-        changedPlace.setPlaceStatus(PostStatus.APPROVED);
-        originalPlace.setPlaceStatus(PostStatus.REPLACED);
+        changedPlace.updatePlaceStatus(PostStatus.APPROVED);
+        originalPlace.updatePlaceStatus(PostStatus.REPLACED);
         modifyRequest.setPlaceModifyStatus(PostModifyStatus.APPROVED);
     }
 

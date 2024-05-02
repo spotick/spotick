@@ -2,6 +2,7 @@ package com.app.spotick.repository.place;
 
 import com.app.spotick.domain.entity.place.Place;
 import com.app.spotick.domain.entity.user.User;
+import com.app.spotick.domain.type.post.PostStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
