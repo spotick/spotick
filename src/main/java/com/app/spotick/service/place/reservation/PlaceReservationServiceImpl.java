@@ -13,8 +13,6 @@ import com.app.spotick.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -84,9 +82,10 @@ public class PlaceReservationServiceImpl implements PlaceReservationService {
     }
 
     @Override
-    public void updateNotReviewing(Long reservationId) {
-        PlaceReservation foundReservation = placeReservationRepository.findById(reservationId).orElseThrow(
-                NoSuchElementException::new
+    public void updateNotReviewing(Long reservationId, Long userId) {
+        User tmpUser = userRepository.getReferenceById(userId);
+        PlaceReservation foundReservation = placeReservationRepository.findByIdAndUser(reservationId, tmpUser).orElseThrow(
+                () -> new NoSuchElementException("기존의 예약 정보를 찾을 수 없습니다.")
         );
         foundReservation.updateNotReviewing(true);
     }

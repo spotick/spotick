@@ -23,11 +23,7 @@ import com.app.spotick.repository.place.bookmark.PlaceBookmarkRepository;
 import com.app.spotick.repository.place.inquiry.PlaceInquiryRepository;
 import com.app.spotick.repository.place.modifyRequest.PlaceModifyReqRepository;
 import com.app.spotick.repository.place.reservation.PlaceReservationRepository;
-import com.app.spotick.repository.ticket.grade.TicketGradeRepository;
-import com.app.spotick.repository.ticket.inquiry.TicketInquiryRepository;
-import com.app.spotick.repository.ticket.like.TicketLikeRepository;
 import com.app.spotick.repository.ticket.modifyRequest.TicketModifyReqRepository;
-import com.app.spotick.repository.ticket.order.TicketOrderRepository;
 import com.app.spotick.repository.user.UserAuthorityRepository;
 import com.app.spotick.repository.user.UserRepository;
 import com.app.spotick.service.user.UserService;
@@ -52,10 +48,10 @@ public class AdminServiceImpl implements AdminService{
     private final PlaceInquiryRepository placeInquiryRepository;
     private final PlaceReservationRepository placeReservationRepository;
     private final UserAuthorityRepository userAuthorityRepository;
-    private final TicketInquiryRepository ticketInquiryRepository;
-    private final TicketLikeRepository ticketLikeRepository;
-    private final TicketOrderRepository ticketOrderRepository;
-    private final TicketGradeRepository ticketGradeRepository;
+//    private final TicketInquiryRepository ticketInquiryRepository;
+//    private final TicketLikeRepository ticketLikeRepository;
+//    private final TicketOrderRepository ticketOrderRepository;
+//    private final TicketGradeRepository ticketGradeRepository;
     private final UserRepository userRepository;
     private final UserService userService;
 
@@ -87,7 +83,7 @@ public class AdminServiceImpl implements AdminService{
                         .orElseThrow(() -> new IllegalStateException("존재하지 않는 장소 id"));
                 PostStatus changedStatus = approveDto.getIsApprove()?
                         PostStatus.APPROVED:PostStatus.REJECTED;
-                place.setPlaceStatus(changedStatus);
+                place.updatePlaceStatus(changedStatus);
             }
             case MODIFICATION_REQUESTED ->{
                 handlePlaceModification(approveDto);
@@ -105,8 +101,8 @@ public class AdminServiceImpl implements AdminService{
 
 //        거절된 경우 먼저 처리후 early return
         if(!approveDto.getIsApprove()){
-            changedPlace.setPlaceStatus(PostStatus.REJECTED);
-            originalPlace.setPlaceStatus(PostStatus.APPROVED);
+            changedPlace.updatePlaceStatus(PostStatus.REJECTED);
+            originalPlace.updatePlaceStatus(PostStatus.APPROVED);
             modifyRequest.setPlaceModifyStatus(PostModifyStatus.REJECTED);
             return ;
         }
@@ -118,8 +114,8 @@ public class AdminServiceImpl implements AdminService{
         placeReservationRepository.bulkUpdateReservationPlace(originalPlace,changedPlace);
 
         changedPlace.setViewCount(originalPlace.getViewCount());
-        changedPlace.setPlaceStatus(PostStatus.APPROVED);
-        originalPlace.setPlaceStatus(PostStatus.REPLACED);
+        changedPlace.updatePlaceStatus(PostStatus.APPROVED);
+        originalPlace.updatePlaceStatus(PostStatus.REPLACED);
         modifyRequest.setPlaceModifyStatus(PostModifyStatus.APPROVED);
     }
 

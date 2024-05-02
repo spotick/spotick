@@ -34,7 +34,7 @@ function toggleBookmark(btn) {
 }
 
 
-//
+// sort
 const selectButton = document.querySelector('.select-box-btn');
 const selectButtonImg = selectButton.querySelector('img');
 const selectBoxList = document.querySelector('.select-box-list');

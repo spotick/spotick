@@ -13,15 +13,12 @@
 
     <div class="global-dialogue-container" id="globalDialogue" th:fragment="global-dialogue">
         <p class="gd-content" id="gdCont"></p>
-        <div class="gd-confirm" id="gdConf">확인</div>
+        <div id="gdButtonWrap"></div>
     </div>
 
     <div class="global-selection-container" id="globalSelection" th:fragment="global-selection">
         <p class="gs-question" id="gsCont"></p>
-        <div style="display: flex;">
-            <div class="gs-select-btn" id="gsCancel">취소</div>
-            <div class="gs-select-btn gs-confirm" id="gsConf" style="color: rgb(0, 117, 235);">확인</div>
-        </div>
+        <div id="gsButtonWrap"></div>
     </div>
 
 </div>

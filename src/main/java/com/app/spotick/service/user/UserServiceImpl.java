@@ -28,6 +28,7 @@ import com.app.spotick.repository.user.UserAuthorityRepository;
 import com.app.spotick.repository.user.UserRepository;
 import com.app.spotick.service.redis.RedisService;
 import com.app.spotick.service.util.MailService;
+import com.app.spotick.util.type.PlaceManagerSortType;
 import com.app.spotick.util.type.PlaceReservationSortType;
 import com.app.spotick.util.type.PlaceSortType;
 import lombok.RequiredArgsConstructor;
@@ -44,7 +45,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.net.ConnectException;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -208,8 +208,8 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     @Transactional(readOnly = true)
-    public Page<PlaceManageListDto> findHostPlacesPage(Long userId, Pageable pageable) {
-        return placeRepository.findHostPlaceListByUserId(userId, pageable);
+    public Page<PlaceManageListDto> findHostPlacesPage(Long userId, Pageable pageable, PlaceManagerSortType sortType) {
+        return placeRepository.findHostPlaceListByUserId(userId, pageable, sortType);
     }
 
     @Override
@@ -278,7 +278,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public void sendCodeToEmail(String toEmail) throws ConnectException, MailSendException {
+    public void sendCodeToEmail(String toEmail) throws MailSendException {
         String title = "Spotick 이메일 인증 번호";
         String certCode = createKey();
         mailService.sendEmail(toEmail, title, certCode);

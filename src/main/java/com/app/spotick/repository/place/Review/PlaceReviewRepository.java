@@ -19,12 +19,12 @@ public interface PlaceReviewRepository extends JpaRepository<PlaceReview, Long>,
     @Query("""
             select new com.app.spotick.domain.dto.place.review.PlaceReviewListDto(
                r.id, r.content, r.score, pr.place.id,u.id, u.nickName, r.createdDate
-            ) 
+            )
             from PlaceReservation pr
             join pr.placeReview r
             join r.user u
             where pr.place.id = :placeId
-            order by r.id desc 
+            order by r.id desc
             """)
     Slice<PlaceReviewListDto> findReviewSliceByPlaceId(@Param("placeId") Long placeId, Pageable pageable);
 

@@ -15,6 +15,7 @@ import com.app.spotick.domain.dto.user.UserProfileDto;
 import com.app.spotick.domain.pagination.Pagination;
 import com.app.spotick.domain.type.ticket.TicketRequestType;
 import com.app.spotick.service.user.UserService;
+import com.app.spotick.util.type.PlaceManagerSortType;
 import com.app.spotick.util.type.PlaceReservationSortType;
 import com.app.spotick.util.type.PlaceSortType;
 import lombok.RequiredArgsConstructor;
@@ -124,16 +125,18 @@ public class MypageController {
     /* =================================================장소관리====================================================== */
     @GetMapping("/places")
     public void goToPlaces(@RequestParam(value = "page", defaultValue = "1") int page,
+                           @RequestParam(value = "sort", defaultValue = "RESERVATION") PlaceManagerSortType sortType,
                            @AuthenticationPrincipal UserDetailsDto userDetailsDto,
                            Model model) {
         Pageable pageable = PageRequest.of(page - 1, 6);
 
         Page<PlaceManageListDto> hostPlacesPage
-                = userService.findHostPlacesPage(userDetailsDto.getId(), pageable);
+                = userService.findHostPlacesPage(userDetailsDto.getId(), pageable, sortType);
         Pagination<PlaceManageListDto> pagination
                 = new Pagination<>(5, pageable, hostPlacesPage);
 
         model.addAttribute("hostPlacesPage", hostPlacesPage);
+        model.addAttribute("sort", sortType);
         model.addAttribute("pagination", pagination);
     }
 

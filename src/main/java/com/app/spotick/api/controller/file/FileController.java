@@ -1,6 +1,6 @@
 package com.app.spotick.api.controller.file;
 
-import com.app.spotick.api.response.CommonResponse;
+import com.app.spotick.api.response.DataResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.coobird.thumbnailator.Thumbnailator;
@@ -118,7 +118,7 @@ public class FileController {
         }
 
 
-        return new ResponseEntity<>(CommonResponse.builder()
+        return new ResponseEntity<>(DataResponse.builder()
                 .success(true)
                 .message("성공")
                 .data(path + "/" + uuid + "_" + fileName)

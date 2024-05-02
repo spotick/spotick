@@ -2,7 +2,7 @@ package com.app.spotick.service.place.payment;
 
 import com.app.spotick.api.dto.place.PlacePaymentDto;
 import com.app.spotick.api.dto.place.PlacePaymentInfoDto;
-import com.app.spotick.api.response.CommonResponse;
+import com.app.spotick.api.response.DataResponse;
 import com.app.spotick.domain.entity.place.PlacePayment;
 import com.app.spotick.domain.entity.place.PlaceReservation;
 import com.app.spotick.domain.entity.user.User;
@@ -52,7 +52,7 @@ public class PlacePaymentServiceImpl implements PlacePaymentService {
         );
 
         return new ResponseEntity<>(
-                CommonResponse.builder()
+                DataResponse.builder()
                         .success(true)
                         .message("주문 저장 성공")
                         .data(paymentDetail)

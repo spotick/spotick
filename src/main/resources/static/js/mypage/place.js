@@ -1,128 +1,105 @@
-const placeManageService = (function () {
-    let dialogueString = "";
+import {showGlobalDialogue, showGlobalSelection} from "../global-js/global-modal.js";
+import {placeService} from "../services/place/placeService.js";
 
-    function disablePlace(placeId) {
-        dialogueString = "장소 대여를 중단하시겠습니까?<br>(대여 중지 시, 이미 들어온 대여 요청은 모두 취소 됩니다.)"
-        showGlobalSelection(dialogueString, () => requestDisable(placeId));
-    }
-
-    function requestDisable(placeId) {
-        fetch(`/place/api/disable/` + placeId, {
-            method: 'PATCH'
-        })
-            .then(response => {
-                if (response.ok) {
-                    return response.text();
-                } else {
-                    throw response
-                }
-            })
-            .then(message => {
-                alert(message);
-                window.location.reload();
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                closeOnlyThisModal(globalSelection);
-
-                error.text().then(message => showGlobalDialogue(message))
-            });
-    }
-
-    function enablePlace(placeId) {
-        dialogueString = "장소를 다시 활성화 시키겠습니까?";
-        showGlobalSelection(dialogueString, () => requestEnable(placeId))
-    }
-
-    function requestEnable(placeId) {
-        fetch(`/place/api/approved/${placeId}`, {
-            method: 'PATCH'
-        })
-            .then(response => {
-                if (response.ok) {
-                    return response.text();
-                } else {
-                    throw response
-                }
-            })
-            .then(message => {
-                alert(message);
-                window.location.reload();
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                closeOnlyThisModal(globalSelection);
-
-                error.text().then(message => showGlobalDialogue(message))
-            });
-    }
-
-    function deletePlace(placeId) {
-        dialogueString = "장소를 삭제할 시<br>다시 되돌릴 수 없습니다!<br>등록한 장소를 삭제하시겠습니까?"
-        showGlobalSelection(dialogueString, () => requestDelete(placeId))
-    }
-
-    function requestDelete(placeId) {
-        fetch(`/place/api/delete/${placeId}`, {
-            method: 'PATCH'
-        })
-            .then(response => {
-                if (response.ok) {
-                    return response.text();
-                } else {
-                    throw response
-                }
-            })
-            .then(message => {
-                alert(message);
-                window.location.reload();
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                closeOnlyThisModal(globalSelection);
-
-                error.text().then(message => showGlobalDialogue(message))
-            });
-    }
-
-    return {
-        disablePlace: disablePlace,
-        enablePlace: enablePlace,
-        deletePlace: deletePlace
-    }
-})();
-
-/////////////////////////////////////////////////////////////
-
+////
+// 장소 비활성화
 document.querySelectorAll('.disablePlace').forEach(place => {
     place.addEventListener('click', function () {
-        let placeId = this.parentElement.getAttribute('data-id');
+        const placeId = this.parentElement.getAttribute('data-id');
 
-        placeManageService.disablePlace(placeId);
-    })
-})
+        showGlobalSelection(
+            "장소 대여를 중단하시겠습니까?<br>(대여 중지 시, 이미 들어온 대여 요청은 모두 취소 됩니다.)",
+            () => disablePlace(placeId)
+        );
+    });
+});
 
+const disablePlace = async (placeId) => {
+    const {success, message} = await placeService.disablePlaceService(placeId);
+
+    if (success) {
+        alert(message);
+        window.location.reload();
+    } else {
+        showGlobalDialogue(message);
+    }
+}
+
+// 장소 활성화
 document.querySelectorAll('.enablePlace').forEach(place => {
     place.addEventListener('click', function () {
-        let placeId = this.parentElement.getAttribute('data-id');
+        const placeId = this.parentElement.getAttribute('data-id');
 
-        placeManageService.enablePlace(placeId);
-    })
-})
+        showGlobalSelection(
+            "장소를 다시<br>활성화 시키겠습니까?",
+            () => reopenPlace(placeId)
+        );
+    });
+});
 
+const reopenPlace = async (placeId) => {
+    const {success, message} = await placeService.reopenPlaceService(placeId);
+
+    if (success) {
+        alert(message);
+        window.location.reload();
+    } else {
+        showGlobalDialogue(message);
+    }
+}
+
+// 장소 삭제
 document.querySelectorAll('.deletePlace').forEach(place => {
     place.addEventListener('click', function () {
-        let placeId = this.parentElement.getAttribute('data-id');
+        const placeId = this.parentElement.getAttribute('data-id');
 
-        placeManageService.deletePlace(placeId);
-    })
-})
+        showGlobalSelection(
+            "장소를 삭제할 시<br>다시 되돌릴 수 없습니다!<br>등록한 장소를 삭제하시겠습니까?",
+            () => deletePlace(placeId)
+        );
+    });
+});
 
+const deletePlace = async (placeId) => {
+    const {success, message} = await placeService.deletePlace(placeId);
+
+    if (success) {
+        alert(message);
+        window.location.reload();
+    } else {
+        showGlobalDialogue(message);
+    }
+}
+
+// 장소 수정
 document.querySelectorAll('.editPlace').forEach(place => {
     place.addEventListener('click', function () {
-        let placeId = this.parentElement.getAttribute('data-id');
+        const placeId = this.parentElement.getAttribute('data-id');
 
         window.location.href = `/place/edit/${placeId}`;
-    })
-})
+    });
+});
 
+// sort
+const selectButton = document.querySelector('.select-box-btn');
+const selectButtonImg = selectButton.querySelector('img');
+const selectBoxList = document.querySelector('.select-box-list');
+
+const selectBoxItems = document.querySelectorAll('.select-box-list button');
+
+selectButton.addEventListener('click', () => {
+    selectBoxList.classList.toggle('show');
+    transformSelectBoxImg(selectBoxList.classList.contains('show'));
+});
+
+selectBoxItems.forEach(item => {
+    item.addEventListener('click', () => {
+        const sortType = item.getAttribute('sortType');
+
+        window.location.href = `/mypage/places?page=${currentPage}&sort=${sortType}`;
+    });
+});
+
+const transformSelectBoxImg = (boo) => {
+    boo ? selectButtonImg.style.transform = 'rotate(180deg)' : selectButtonImg.style.transform = 'rotate(0deg)';
+}

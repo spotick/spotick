@@ -85,28 +85,58 @@ public class PlaceServiceImpl implements PlaceService {
     }
 
     @Override
-    public Optional<Place> findPlace(Long placeId, Long userId) {
+    public void disablePlaceService(Long placeId, Long userId) {
+        Place tmpPlace = placeRepository.getReferenceById(placeId);
         User tmpUser = userRepository.getReferenceById(userId);
 
-        return placeRepository.findByIdAndUser(placeId, tmpUser);
-    }
+        List<PlaceReservation> foundReservations = placeReservationRepository.findAllByPlaceAndUser(tmpPlace, tmpUser);
 
-    @Override
-    public void updateStatus(Long placeId, PostStatus postStatus) {
-        Place foundPlace = placeRepository.findById(placeId).orElseThrow(
-                NoSuchElementException::new
+        foundReservations.forEach(
+                reservation -> reservation.updateStatus(PlaceReservationStatus.REJECTED)
         );
 
-        foundPlace.setPlaceStatus(postStatus);
+        Place foundPlace = placeRepository.findByIdAndUser(placeId, tmpUser).orElseThrow(
+                () -> new NoSuchElementException("장소 정보를 찾을 수 없습니다.")
+        );
+
+        if (foundPlace.getPlaceStatus() != PostStatus.APPROVED) {
+            throw new IllegalArgumentException("해당 장소는 이미 활성화 되어있지 않습니다.");
+        }
+
+        foundPlace.updatePlaceStatus(PostStatus.DISABLED);
     }
 
     @Override
-    public void rejectAllReservationRequests(Long placeId) {
+    public void reopenPlaceService(Long placeId, Long userId) {
+        User tmpUser = userRepository.getReferenceById(userId);
+
+        Place foundPlace = placeRepository.findByIdAndUser(placeId, tmpUser).orElseThrow(
+                () -> new NoSuchElementException("장소 정보를 찾을 수 없습니다.")
+        );
+
+        if (foundPlace.getPlaceStatus() != PostStatus.DISABLED) {
+            throw new IllegalArgumentException("비활성화된 장소만 활성화로 전환 할 수 있습니다.");
+        }
+
+        foundPlace.updatePlaceStatus(PostStatus.APPROVED);
+    }
+
+    @Override
+    public void softDeletePlace(Long placeId, Long userId) {
         Place tmpPlace = placeRepository.getReferenceById(placeId);
+        User tmpUser = userRepository.getReferenceById(userId);
 
-        List<PlaceReservation> foundPlaces = placeReservationRepository.findAllByPlace(tmpPlace);
+        List<PlaceReservation> foundReservations = placeReservationRepository.findAllByPlaceAndUser(tmpPlace, tmpUser);
 
-        foundPlaces.forEach(foundPlace -> foundPlace.updateStatus(PlaceReservationStatus.REJECTED));
+        foundReservations.forEach(
+                reservation -> reservation.updateStatus(PlaceReservationStatus.REJECTED)
+        );
+
+        Place foundPlace = placeRepository.findByIdAndUser(placeId, tmpUser).orElseThrow(
+                () -> new NoSuchElementException("장소 정보를 찾을 수 없습니다.")
+        );
+
+        foundPlace.updatePlaceStatus(PostStatus.DELETED);
     }
 
     @Override
@@ -122,7 +152,7 @@ public class PlaceServiceImpl implements PlaceService {
                 NoSuchElementException::new
         );
         // 기존의 장소정보는 status만 교체한다.
-        originalPlace.setPlaceStatus(PostStatus.MODIFICATION_PENDING);
+        originalPlace.updatePlaceStatus(PostStatus.MODIFICATION_PENDING);
 
         // 업데이트된 장소정보는 통째로 새로 등록시킨다.
         Place updatedPlace = placeEditDto.toEntity();

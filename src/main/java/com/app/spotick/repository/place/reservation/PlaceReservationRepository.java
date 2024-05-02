@@ -1,6 +1,5 @@
 package com.app.spotick.repository.place.reservation;
 
-import com.app.spotick.domain.dto.place.PlaceReservationListDto;
 import com.app.spotick.domain.entity.place.Place;
 import com.app.spotick.domain.dto.place.reservation.PlaceReservationTimeDto;
 import com.app.spotick.domain.entity.place.PlaceReservation;
@@ -28,7 +27,7 @@ public interface PlaceReservationRepository extends JpaRepository<PlaceReservati
     Optional<PlaceReservation> findByIdAndHost(@Param("reservationId") Long reservationId,
                                                @Param("userId") Long userId);
 
-    List<PlaceReservation> findAllByPlace(Place place);
+    List<PlaceReservation> findAllByPlaceAndUser(Place place, User user);
 
     /**
      * 사용자가 선택한 장소 예약이 가능한지 확인하는 메소드
@@ -37,8 +36,8 @@ public interface PlaceReservationRepository extends JpaRepository<PlaceReservati
      */
     @Query("""
                 SELECT EXISTS (
-                    SELECT 1 FROM PlaceReservation p 
-                    WHERE p.place.id = :placeId        
+                    SELECT 1 FROM PlaceReservation p
+                    WHERE p.place.id = :placeId
                     AND p.place.placeStatus NOT IN ('REJECTED', 'CANCELLED')
                     AND (p.checkIn < :checkOut AND p.checkOut > :checkIn)
                 )
