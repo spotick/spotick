@@ -4,15 +4,13 @@ import lombok.Builder;
 import lombok.Data;
 
 @Data
-public class CommonResponse<T> {
+public class MessageResponse {
     private boolean success;
     private String message;
-    private T data;
 
     @Builder
-    public CommonResponse(boolean success, String message, T data) {
+    public MessageResponse(boolean success, String message) {
         this.success = success;
         this.message = message;
-        this.data = data;
     }
 }

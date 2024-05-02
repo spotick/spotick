@@ -1,6 +1,6 @@
 package com.app.spotick.api.controller.ticket;
 
-import com.app.spotick.api.response.CommonResponse;
+import com.app.spotick.api.response.DataResponse;
 import com.app.spotick.domain.dto.ticket.TicketListDto;
 import com.app.spotick.domain.dto.ticket.grade.TicketGradeSaleInfoDto;
 import com.app.spotick.domain.dto.user.UserDetailsDto;
@@ -47,8 +47,8 @@ public class TicketRestController {
     }
 
     @GetMapping("/getGrades")
-    public ResponseEntity<CommonResponse<List<TicketGradeSaleInfoDto>>> getTicketGrades(@RequestParam("ticketId") Long ticketId,
-                                                                                        @RequestParam("date") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date) {
+    public ResponseEntity<DataResponse<List<TicketGradeSaleInfoDto>>> getTicketGrades(@RequestParam("ticketId") Long ticketId,
+                                                                                      @RequestParam("date") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date) {
         List<TicketGradeSaleInfoDto> ticketGrades;
         try {
             ticketGrades = ticketService.findTicketGrades(ticketId, date);
@@ -56,6 +56,6 @@ public class TicketRestController {
             throw new RuntimeException(e);
         }
 
-        return ResponseEntity.ok(new CommonResponse<>(true, "조회 성공", ticketGrades));
+        return ResponseEntity.ok(new DataResponse<>(true, "조회 성공", ticketGrades));
     }
 }

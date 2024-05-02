@@ -2,7 +2,7 @@ package com.app.spotick.service.ticket.order;
 
 import com.app.spotick.api.dto.ticket.TicketOrderDetailDto;
 import com.app.spotick.api.dto.ticket.TicketOrderDto;
-import com.app.spotick.api.response.CommonResponse;
+import com.app.spotick.api.response.DataResponse;
 import com.app.spotick.domain.entity.ticket.Ticket;
 import com.app.spotick.domain.entity.ticket.TicketGrade;
 import com.app.spotick.domain.entity.ticket.TicketOrder;
@@ -93,7 +93,7 @@ public class TicketOrderServiceImpl implements TicketOrderService {
         TicketOrderDto.Info returnValue = ticketOrderRepository.findOrderInfoById(savedOrder.getId());
 
         return new ResponseEntity<>(
-                CommonResponse.builder()
+                DataResponse.builder()
                         .success(true)
                         .message("티켓 결제정보 저장")
                         .data(returnValue)

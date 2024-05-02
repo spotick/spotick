@@ -1,7 +1,6 @@
 package com.app.spotick.service.bootpay;
 
 import com.app.spotick.api.response.BootPayResponse;
-import com.app.spotick.api.response.CommonResponse;
 import com.app.spotick.domain.entity.place.PlacePayment;
 import com.app.spotick.domain.entity.place.PlaceReservation;
 import com.app.spotick.domain.entity.ticket.TicketOrder;

@@ -222,7 +222,6 @@ export const modalLayouts = (() => {
                 <div class="mrf-rating-count-con">
                     <input id="reviewScoreInput" readonly value="1" type="text">점
                 </div>
-                <div class="error-score" id="errorScore"></div>
             </div>
             <div class="mr-form">
             <textarea cols="30" maxlength="200" id="reviewWriteTxArea" 
@@ -245,10 +244,49 @@ export const modalLayouts = (() => {
         `;
     }
 
+    const reviewEditFormModalLayout = (dto) => {
+        const {
+            reviewId,
+            score,
+            content,
+        } = dto;
+
+        return `
+            <div>
+                <h2 class="mri-title">후기 수정</h2>
+                <div class="mrf-star-rating-con">
+                ${Array.from({length: 5}, (_, index) => `
+                    <span class="mrf-star ${index < score ? 'on' : ''}" value="${index + 1}"></span>
+                `).join('')}
+                    <div class="mrf-rating-count-con">
+                        <input id="reviewScoreInput" value="${score}" readonly type="text">점
+                    </div>
+                </div>
+                <div class="mr-form">
+                    <textarea cols="30" id="reviewWriteTxArea" maxlength="200" placeholder="최소 10자 이상 입력해주세요"
+                              rows="10" spellcheck="false">${content}</textarea>
+                </div>
+                <div class="space-between">
+                    <div class="error-content" id="errorLine"></div>
+                    <div class="mr-type-counter">
+                        <span>글자수</span>
+                        <span id="typeCounter">${content.length}</span>
+                        <span>/ 200</span>
+                    </div>
+                </div>
+                <div style="display: flex; justify-content: center;">
+                    <button class="modal-confirm-btn" id="reviewWriteButton" rId="${reviewId}">
+                        <p>작성 완료</p>
+                    </button>
+                </div>
+            </div>
+        `;
+    }
 
     return {
         placeReservationDetailModalLayout: placeReservationDetailModalLayout,
         inquiryDetailModalLayout: inquiryDetailModalLayout,
         reviewWriteFormModalLayout: reviewWriteFormModalLayout,
+        reviewEditFormModalLayout: reviewEditFormModalLayout,
     }
 })();

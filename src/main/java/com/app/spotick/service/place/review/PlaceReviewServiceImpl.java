@@ -15,6 +15,8 @@ import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
@@ -43,9 +45,18 @@ public class PlaceReviewServiceImpl implements PlaceReviewService {
 
     @Override
     public void updateReview(PlaceReviewUpdateDto placeReviewUpdateDto) {
-        PlaceReview foundReview = placeReviewRepository.findById(placeReviewUpdateDto.getReviewId()).orElseThrow(
-                NoSuchElementException::new
+        User tmpUser = userRepository.getReferenceById(placeReviewUpdateDto.getUserId());
+        PlaceReview foundReview = placeReviewRepository.findByIdAndUser(placeReviewUpdateDto.getReviewId(), tmpUser).orElseThrow(
+                () -> new NoSuchElementException("리뷰를 찾을 수 없습니다.")
         );
+
+        LocalDateTime createdDate = foundReview.getCreatedDate();
+        LocalDateTime currentDate = LocalDateTime.now();
+        long daysBetween = ChronoUnit.DAYS.between(createdDate, currentDate);
+
+        if (daysBetween >= 7) {
+            throw new IllegalStateException("작성 후 7일이 지난 리뷰는 수정할 수 없습니다.");
+        }
 
         foundReview.updateReview(placeReviewUpdateDto.getContent(), placeReviewUpdateDto.getScore());
     }
@@ -60,6 +71,6 @@ public class PlaceReviewServiceImpl implements PlaceReviewService {
     @Override
     @Transactional(readOnly = true)
     public Slice<PlaceReviewListDto> findPlaceReviewSlice(Long placeId, Pageable pageable) {
-        return placeReviewRepository.findReviewSliceByPlaceId(placeId,pageable);
+        return placeReviewRepository.findReviewSliceByPlaceId(placeId, pageable);
     }
 }

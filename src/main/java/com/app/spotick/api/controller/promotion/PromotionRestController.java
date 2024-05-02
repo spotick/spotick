@@ -1,6 +1,6 @@
 package com.app.spotick.api.controller.promotion;
 
-import com.app.spotick.api.response.CommonResponse;
+import com.app.spotick.api.response.DataResponse;
 import com.app.spotick.domain.dto.promotion.PromotionListDto;
 import com.app.spotick.domain.dto.user.UserDetailsDto;
 import com.app.spotick.domain.type.promotion.PromotionCategory;
@@ -35,7 +35,7 @@ public class PromotionRestController {
 
         Slice<PromotionListDto> contents = promotionService.getPromotionBoards(pageable, category, sortType, keyword);
 
-        return new ResponseEntity<>(CommonResponse.builder()
+        return new ResponseEntity<>(DataResponse.builder()
                 .success(true)
                 .message("조회 성공")
                 .data(contents)
@@ -52,7 +52,7 @@ public class PromotionRestController {
 
         Slice<PromotionListDto> contents = promotionService.getPromotionBoardsOfUser(pageable, userId, promotionId);
 
-        return new ResponseEntity<>(CommonResponse.builder()
+        return new ResponseEntity<>(DataResponse.builder()
                 .success(true)
                 .message("조회 성공")
                 .data(contents)

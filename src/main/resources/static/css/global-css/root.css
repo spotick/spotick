@@ -714,6 +714,12 @@ img {
     display: block;
 }
 
+.global-dialogue-container > div {
+    display: flex;
+    overflow: hidden;
+    border-radius: 0 0 10px 10px;
+}
+
 .gd-content {
     font-size: 15px;
     letter-spacing: -0.45px;
@@ -735,7 +741,6 @@ img {
     letter-spacing: -0.8px;
     color: rgb(0, 117, 235);
     background-color: rgb(255, 255, 255);
-    border-radius: 0 0 10px 10px;
     cursor: pointer;
 }
 
@@ -761,6 +766,10 @@ img {
     display: block;
 }
 
+.global-selection-container > div {
+    display: flex;
+}
+
 .gs-question {
     font-size: 15px;
     letter-spacing: -0.45px;
@@ -782,6 +791,10 @@ img {
     letter-spacing: -0.8px;
     background-color: rgb(255, 255, 255);
     cursor: pointer;
+}
+
+.gs-select-btn.conf {
+    color: rgb(0, 117, 235);
 }
 
 .gs-select-btn:active {
@@ -1077,7 +1090,7 @@ img {
     letter-spacing: -.1px;
 }
 
-#scrollTopBtn{
+#scrollTopBtn {
     position: fixed;
     right: 160px;
     bottom: 320px;

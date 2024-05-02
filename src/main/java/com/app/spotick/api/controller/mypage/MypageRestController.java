@@ -1,6 +1,6 @@
 package com.app.spotick.api.controller.mypage;
 
-import com.app.spotick.api.response.CommonResponse;
+import com.app.spotick.api.response.DataResponse;
 import com.app.spotick.domain.dto.promotion.FileDto;
 import com.app.spotick.domain.dto.user.UserDetailsDto;
 import com.app.spotick.service.redis.RedisService;
@@ -14,8 +14,6 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.util.unit.DataSize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import org.springframework.web.servlet.view.RedirectView;
 
 import java.io.IOException;
 import java.util.Objects;
@@ -30,20 +28,20 @@ public class MypageRestController {
     private final RedisService redisService;
 
     @PatchMapping("/updateDefaultImg")
-    public ResponseEntity<CommonResponse<?>> updateDefaultImg(@RequestParam("imgName") String imgName,
-                                                              @AuthenticationPrincipal UserDetailsDto userDetailsDto) {
+    public ResponseEntity<DataResponse<?>> updateDefaultImg(@RequestParam("imgName") String imgName,
+                                                            @AuthenticationPrincipal UserDetailsDto userDetailsDto) {
         try {
             profileFileService.updateDefaultImg(imgName, userDetailsDto.getId());
             userDetailsDto.updateProfileImage(imgName, null, null, true);
 
-            return new ResponseEntity<>(CommonResponse.builder()
+            return new ResponseEntity<>(DataResponse.builder()
                     .success(true)
                     .message("프로필 사진이 수정되었습니다.")
                     .build(), HttpStatus.OK);
         } catch (Exception e) {
             log.error("프로필 사진 [Err_Msg]: {}", e.getMessage());
 
-            return new ResponseEntity<>(CommonResponse.builder()
+            return new ResponseEntity<>(DataResponse.builder()
                     .success(false)
                     .message("프로필 사진이 수정되지 못했습니다.")
                     .build(), HttpStatus.BAD_REQUEST);
@@ -51,14 +49,14 @@ public class MypageRestController {
     }
 
     @PatchMapping("/updatePersonalImg")
-    public ResponseEntity<CommonResponse<?>> updatePersonalImg(@RequestBody MultipartFile uploadFile,
-                                                               @AuthenticationPrincipal UserDetailsDto userDetailsDto) {
+    public ResponseEntity<DataResponse<?>> updatePersonalImg(@RequestBody MultipartFile uploadFile,
+                                                             @AuthenticationPrincipal UserDetailsDto userDetailsDto) {
 
         System.out.println("uploadFile = " + uploadFile);
 
         if (uploadFile.getSize() > DataSize.ofMegabytes(1).toBytes()) {
             return ResponseEntity.badRequest()
-                    .body(CommonResponse.builder()
+                    .body(DataResponse.builder()
                             .success(false)
                             .message("파일 크기는 1MB를 넘을 수 없습니다.")
                             .build());
@@ -67,7 +65,7 @@ public class MypageRestController {
         try {
             FileDto fileDto = profileFileService.updatePersonalImg(uploadFile, userDetailsDto.getId());
 
-            return new ResponseEntity<>(CommonResponse.builder()
+            return new ResponseEntity<>(DataResponse.builder()
                     .success(true)
                     .data(fileDto)
                     .message("프로필 사진이 수정되었습니다.")
@@ -75,7 +73,7 @@ public class MypageRestController {
         } catch (IOException e) {
             log.error("프로필 사진 업로드 [Err_Msg]: {}", e.getMessage());
 
-            return new ResponseEntity<>(CommonResponse.builder()
+            return new ResponseEntity<>(DataResponse.builder()
                     .success(false)
                     .message("프로필 사진 등록에 실패했습니다.")
                     .build(), HttpStatus.BAD_REQUEST);
@@ -83,12 +81,12 @@ public class MypageRestController {
     }
 
     @PatchMapping("/updateNickName")
-    public ResponseEntity<CommonResponse<?>> updateNickName(@RequestParam("nickname") String nickname,
-                                                            @AuthenticationPrincipal UserDetailsDto userDetailsDto) {
+    public ResponseEntity<DataResponse<?>> updateNickName(@RequestParam("nickname") String nickname,
+                                                          @AuthenticationPrincipal UserDetailsDto userDetailsDto) {
 
         // 검증
         if (nickname == null || nickname.length() < 2 || nickname.length() > 10) {
-            return new ResponseEntity<>(CommonResponse.builder()
+            return new ResponseEntity<>(DataResponse.builder()
                     .success(false)
                     .message("닉네임은 최소 2자에서 최대 10자까지 가능합니다.")
                     .build(), HttpStatus.BAD_REQUEST);
@@ -98,7 +96,7 @@ public class MypageRestController {
             userService.updateNickName(userDetailsDto.getId(), nickname);
             userDetailsDto.updateNickName(nickname);
 
-            return new ResponseEntity<>(CommonResponse.builder()
+            return new ResponseEntity<>(DataResponse.builder()
                     .success(true)
                     .data(nickname)
                     .message("닉네임이 수정되었습니다.")
@@ -106,7 +104,7 @@ public class MypageRestController {
         } catch (Exception e) {
             log.error("닉네임 업데이트 [Err_Msg]: {}", e.getMessage());
 
-            return new ResponseEntity<>(CommonResponse.builder()
+            return new ResponseEntity<>(DataResponse.builder()
                     .success(false)
                     .data(nickname)
                     .message("닉네임 수정에 실패했습니다.")
@@ -128,38 +126,38 @@ public class MypageRestController {
     }
 
     @PatchMapping("/authenticateTel")
-    public ResponseEntity<CommonResponse<?>> authenticateTel(@RequestParam("tel") String tel,
-                                                             @RequestParam("code") String code,
-                                                             @AuthenticationPrincipal UserDetailsDto userDetailsDto) {
+    public ResponseEntity<DataResponse<?>> authenticateTel(@RequestParam("tel") String tel,
+                                                           @RequestParam("code") String code,
+                                                           @AuthenticationPrincipal UserDetailsDto userDetailsDto) {
         // 검증
         if (Objects.equals(redisService.getValues(tel), code)) {
             userService.updateTel(userDetailsDto.getId(), tel);
 
             redisService.deleteValues(tel);
 
-            return new ResponseEntity<>(CommonResponse.builder()
+            return new ResponseEntity<>(DataResponse.builder()
                     .success(true)
                     .data(tel)
                     .message("전화번호가 수정되었습니다.")
                     .build(), HttpStatus.OK);
         }
 
-        return new ResponseEntity<>(CommonResponse.builder()
+        return new ResponseEntity<>(DataResponse.builder()
                 .success(false)
                 .message("잘못된 코드입니다. 다시 확인해주세요.")
                 .build(), HttpStatus.BAD_REQUEST);
     }
 
     @PatchMapping("/changePassword")
-    public ResponseEntity<CommonResponse<?>> changePassword(@RequestParam("password") String password,
-                                       @AuthenticationPrincipal UserDetailsDto userDetailsDto) {
+    public ResponseEntity<DataResponse<?>> changePassword(@RequestParam("password") String password,
+                                                          @AuthenticationPrincipal UserDetailsDto userDetailsDto) {
         try {
             String passwordRegex = "^(?=.*[a-zA-Z])(?=.*[0-9!@#$%^&*()-+=<>]).{6,15}$";
 
             if (password.matches(passwordRegex)) {
                 userService.updatePassword(userDetailsDto.getId(), password);
 
-                return new ResponseEntity<>(CommonResponse.builder()
+                return new ResponseEntity<>(DataResponse.builder()
                         .success(true)
                         .message("비밀번호가 수정되었습니다.")
                         .build(), HttpStatus.OK);
@@ -168,7 +166,7 @@ public class MypageRestController {
             log.error("비밀번호 변경 [Err_Msg]: {}", e.getMessage());
         }
 
-        return new ResponseEntity<>(CommonResponse.builder()
+        return new ResponseEntity<>(DataResponse.builder()
                 .success(true)
                 .message("비밀번호 수정에 실패 했습니다")
                 .build(), HttpStatus.OK);

@@ -1,7 +1,7 @@
 package com.app.spotick.api.controller.inquiry;
 
 import com.app.spotick.api.dto.place.InquiryResponseDto;
-import com.app.spotick.api.response.CommonResponse;
+import com.app.spotick.api.response.DataResponse;
 import com.app.spotick.api.response.PageResponse;
 import com.app.spotick.domain.dto.place.PlaceInquiryListDto;
 import com.app.spotick.domain.dto.place.inquiry.UnansweredInquiryDto;
@@ -71,19 +71,19 @@ public class InquiryRestController {
     }
 
     @DeleteMapping("/placeDelete/{placeInquiryId}")
-    public ResponseEntity<CommonResponse<?>> deletePlaceInquiry(@PathVariable("placeInquiryId") Long placeInquiryId,
-                                                                @AuthenticationPrincipal UserDetailsDto userDetailsDto) {
+    public ResponseEntity<DataResponse<?>> deletePlaceInquiry(@PathVariable("placeInquiryId") Long placeInquiryId,
+                                                              @AuthenticationPrincipal UserDetailsDto userDetailsDto) {
         try {
             placeInquiryService.deleteInquiryById(placeInquiryId, userDetailsDto.getId());
 
-            return new ResponseEntity<>(CommonResponse.builder()
+            return new ResponseEntity<>(DataResponse.builder()
                     .success(true)
                     .data(placeInquiryId)
                     .message("문의 내역을 삭제했습니다.")
                     .build(), HttpStatus.OK);
         } catch (Exception e) {
             log.error("장소 문의 삭제 [Err_Msg]: {}", e.getMessage());
-            return new ResponseEntity<>(CommonResponse.builder()
+            return new ResponseEntity<>(DataResponse.builder()
                     .success(false)
                     .message("문의 내역을 삭제에 실패했습니다.")
                     .build(), HttpStatus.BAD_REQUEST);
@@ -91,19 +91,19 @@ public class InquiryRestController {
     }
 
     @DeleteMapping("/ticketDelete/{ticketInquiryId}")
-    public ResponseEntity<CommonResponse<?>> deleteTicketInquiry(@PathVariable("ticketInquiryId") Long ticketInquiryId,
-                                                      @AuthenticationPrincipal UserDetailsDto userDetailsDto) {
+    public ResponseEntity<DataResponse<?>> deleteTicketInquiry(@PathVariable("ticketInquiryId") Long ticketInquiryId,
+                                                               @AuthenticationPrincipal UserDetailsDto userDetailsDto) {
         try {
             ticketInquiryService.deleteInquiry(ticketInquiryId, userDetailsDto.getId());
 
-            return new ResponseEntity<>(CommonResponse.builder()
+            return new ResponseEntity<>(DataResponse.builder()
                     .success(true)
                     .data(ticketInquiryId)
                     .message("문의 내역을 삭제했습니다.")
                     .build(), HttpStatus.OK);
         } catch (Exception e) {
             log.error("티켓 문의 삭제 [Err_Msg]: {}", e.getMessage());
-            return new ResponseEntity<>(CommonResponse.builder()
+            return new ResponseEntity<>(DataResponse.builder()
                     .success(false)
                     .message("문의 내역을 삭제에 실패했습니다.")
                     .build(), HttpStatus.BAD_REQUEST);
@@ -111,9 +111,9 @@ public class InquiryRestController {
     }
 
     @GetMapping("/getPlace/{placeId}")
-    public ResponseEntity<CommonResponse<Slice<UnansweredInquiryDto>>> getUnansweredInquiriesOfPlace(@PathVariable("placeId") Long placeId,
-                                                                                                     @AuthenticationPrincipal UserDetailsDto userDetailsDto,
-                                                                                                     @RequestParam(name = "page", defaultValue = "0") int page) {
+    public ResponseEntity<DataResponse<Slice<UnansweredInquiryDto>>> getUnansweredInquiriesOfPlace(@PathVariable("placeId") Long placeId,
+                                                                                                   @AuthenticationPrincipal UserDetailsDto userDetailsDto,
+                                                                                                   @RequestParam(name = "page", defaultValue = "0") int page) {
 
         Pageable pageable = PageRequest.of(page, 10);
 
@@ -123,13 +123,13 @@ public class InquiryRestController {
             return ResponseEntity.noContent().build();
         }
 
-        return ResponseEntity.ok(new CommonResponse<>(true, "조회 성공", contentsSlice));
+        return ResponseEntity.ok(new DataResponse<>(true, "조회 성공", contentsSlice));
     }
 
     @GetMapping("/getTicket/{ticketId}")
-    public ResponseEntity<CommonResponse<Slice<UnansweredInquiryDto>>> getUnansweredInquiriesOfTicket(@PathVariable("ticketId") Long ticketId,
-                                                                                                      @AuthenticationPrincipal UserDetailsDto userDetailsDto,
-                                                                                                      @RequestParam(name = "page", defaultValue = "0") int page) {
+    public ResponseEntity<DataResponse<Slice<UnansweredInquiryDto>>> getUnansweredInquiriesOfTicket(@PathVariable("ticketId") Long ticketId,
+                                                                                                    @AuthenticationPrincipal UserDetailsDto userDetailsDto,
+                                                                                                    @RequestParam(name = "page", defaultValue = "0") int page) {
 
         Pageable pageable = PageRequest.of(page, 10);
 
@@ -139,7 +139,7 @@ public class InquiryRestController {
             return ResponseEntity.noContent().build();
         }
 
-        return ResponseEntity.ok(new CommonResponse<>(true, "조회 성공", contentsSlice));
+        return ResponseEntity.ok(new DataResponse<>(true, "조회 성공", contentsSlice));
     }
 
     @PatchMapping("/responsePlaceInquiry")

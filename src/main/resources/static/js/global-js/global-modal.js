@@ -2,12 +2,11 @@ const modalWrap = document.getElementById('modal');
 
 const globalDialogue = document.getElementById('globalDialogue')
 const globalDialogContent = document.getElementById('gdCont');
-const globalDialogConfirm = document.getElementById('gdConf');
+const globalDialogueButtonWrap = document.getElementById('gdButtonWrap');
 
 const globalSelection = document.getElementById('globalSelection');
 const globalSelectionContent = document.getElementById('gsCont');
-const globalSelectionCancel = document.getElementById('gsCancel');
-const globalSelectionConfirm = document.getElementById('gsConf');
+const globalSelectionButtonWrap = document.getElementById('gsButtonWrap');
 
 
 modalWrap.addEventListener('click', (e) => {
@@ -25,6 +24,8 @@ modalWrap.addEventListener('click', (e) => {
 * @Param {boolean} closeOthers - default=true global dialogue 창을 띄울 때 다른 모달창들을 닫을 것인지 결정한다.
 * */
 export const showGlobalDialogue = (dialogue, callback, closeOthers = true) => {
+    globalDialogueButtonWrap.innerHTML = ``;
+
     if (closeOthers) {
         const showElements = modalWrap.querySelectorAll('.show');
         showElements.forEach(element => {
@@ -37,12 +38,19 @@ export const showGlobalDialogue = (dialogue, callback, closeOthers = true) => {
 
     globalDialogContent.innerHTML = dialogue;
 
+    const confirmButton = document.createElement('button');
+    confirmButton.type = "button";
+    confirmButton.classList.add('gs-select-btn', 'conf');
+    confirmButton.textContent = "확인";
+
+    globalDialogueButtonWrap.appendChild(confirmButton);
+
     if (callback) {
-        globalDialogConfirm.addEventListener('click', callback);
+        confirmButton.addEventListener('click', callback);
         return;
     }
 
-    globalDialogConfirm.addEventListener('click', closeGlobalDialogue);
+    confirmButton.addEventListener('click', closeGlobalDialogue);
 }
 
 /*
@@ -62,6 +70,11 @@ export const closeGlobalDialogue = () => {
 * @Param {boolean} closeOthers - default=true global selection 창을 띄울 때 다른 모달창들을 닫을 것인지 결정한다.
 * */
 export const showGlobalSelection = (dialogue, confirmCallback, cancelCallback, closeOthers = true) => {
+    // 이벤트 중첩 효과를 제거하기 위해 버튼들을 전부 제거한다.
+    globalSelectionButtonWrap.innerHTML = ``;
+
+    // 기본적으로 이 모달 창이 켜지면 다른 모달창은 전부 꺼지게 된다.
+    // 그러나 closeOthers를 false 설정하면 이 모달창이 켜져도 꺼지지 않게 된다.
     if (closeOthers) {
         const showElements = modalWrap.querySelectorAll('.show');
         showElements.forEach(element => {
@@ -74,14 +87,31 @@ export const showGlobalSelection = (dialogue, confirmCallback, cancelCallback, c
 
     globalSelectionContent.innerHTML = dialogue;
 
-    globalSelectionConfirm.addEventListener('click', confirmCallback);
+    // 버튼 태그를 만든다.
+    const confirmButton = document.createElement('button');
+    confirmButton.type = "button";
+    confirmButton.classList.add('gs-select-btn', 'conf');
+    confirmButton.textContent = "확인";
+
+    const cancelButton = document.createElement('button');
+    cancelButton.type = "button";
+    cancelButton.classList.add('gs-select-btn');
+    cancelButton.textContent = "취소";
+
+    // 버튼 태그를 html 상에 삽입한다.
+    globalSelectionButtonWrap.appendChild(cancelButton);
+    globalSelectionButtonWrap.appendChild(confirmButton);
+
+    // 이벤트리스너를 새롭게 걸어준다. 이미 초기화 하여 버튼태그를 새롭게 만들어 html상에 삽입했으므로,
+    // 이벤트리스너 중첩 효과는 없게 된다.
+    confirmButton.addEventListener('click', confirmCallback);
 
     if (cancelCallback) {
-        globalSelectionCancel.addEventListener('click', cancelCallback);
+        cancelButton.addEventListener('click', cancelCallback);
         return;
     }
 
-    globalSelectionCancel.addEventListener('click', closeGlobalSelection);
+    cancelButton.addEventListener('click', closeGlobalSelection);
 }
 
 /*

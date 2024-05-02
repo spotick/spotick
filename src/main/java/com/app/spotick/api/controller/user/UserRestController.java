@@ -1,6 +1,6 @@
 package com.app.spotick.api.controller.user;
 
-import com.app.spotick.api.response.CommonResponse;
+import com.app.spotick.api.response.DataResponse;
 import com.app.spotick.api.dto.user.FindIdCertDto;
 import com.app.spotick.api.dto.user.UserFindEmailDto;
 import com.app.spotick.api.dto.user.UserFindPwDto;
@@ -27,28 +27,28 @@ public class UserRestController {
     }
 
     @PostMapping("/tel/cert/code")
-    public ResponseEntity<CommonResponse<Boolean>> sendTelCertCode(@RequestBody FindIdCertDto findIdCertDto) {
-        CommonResponse<Boolean> resp = null;
+    public ResponseEntity<DataResponse<Boolean>> sendTelCertCode(@RequestBody FindIdCertDto findIdCertDto) {
+        DataResponse<Boolean> resp = null;
         String nickname = findIdCertDto.getNickname();
         String tel = findIdCertDto.getTel();
 
         if (!userService.checkUserByNicknameAndTel(nickname, tel)) {
-            resp = new CommonResponse<>(false, "닉네임과 전화번호를 확인해주세요", false);
+            resp = new DataResponse<>(false, "닉네임과 전화번호를 확인해주세요", false);
             return ResponseEntity
                     .status(HttpStatus.NOT_FOUND)
                     .body(resp);
         }
         userService.sendAuthCodeToTel(tel);
-        resp = new CommonResponse<>(true, "인증번호를 전송했습니다.", true);
+        resp = new DataResponse<>(true, "인증번호를 전송했습니다.", true);
         return ResponseEntity.ok().body(resp);
     }
 
     @PostMapping("/find/email")
-    public ResponseEntity<CommonResponse<UserFindEmailDto.Response>> findEmail(@RequestBody UserFindEmailDto.Request findEmailReq) {
+    public ResponseEntity<DataResponse<UserFindEmailDto.Response>> findEmail(@RequestBody UserFindEmailDto.Request findEmailReq) {
         String tel = findEmailReq.getTel();
         String nickname = findEmailReq.getNickname();
         UserFindEmailDto.Response userFindEmailDto = null;
-        CommonResponse<UserFindEmailDto.Response> findEmailResp = new CommonResponse<>(false, "", null);
+        DataResponse<UserFindEmailDto.Response> findEmailResp = new DataResponse<>(false, "", null);
 
         if (!userService.isValidCertCode(findEmailReq.getCertCode(), tel)) {
             findEmailResp.setMessage("인증번호를 다시 입력해 주세요");
@@ -70,8 +70,8 @@ public class UserRestController {
     }
 
     @PostMapping("/email/cert/code")
-    public ResponseEntity<CommonResponse<Boolean>> sendEmailCertCode(@RequestBody String email) {
-        CommonResponse<Boolean> response = new CommonResponse<>(true,"",true);
+    public ResponseEntity<DataResponse<Boolean>> sendEmailCertCode(@RequestBody String email) {
+        DataResponse<Boolean> response = new DataResponse<>(true,"",true);
 
         if(!userService.isExistsEmail(email)){
 //            해당 이메일이 존재하지 않을 경우

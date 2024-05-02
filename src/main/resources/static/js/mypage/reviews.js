@@ -6,22 +6,22 @@ import {bookmarkFetch} from "../modules/fetch/bookmarkFetch.js";
 
 addSlideEvent();
 
-const reviewWriteFormModal = document.getElementById('reviewWriteFormModal');
+const reviewFormModal = document.getElementById('reviewFormModal');
 ////
 // 리뷰 작성 모달
 document.querySelectorAll('.reservationWrite').forEach(write => {
     write.addEventListener('click', async () => {
         const index = write.getAttribute('idx');
 
-        reviewWriteFormModal.innerHTML = await modalLayouts.reviewWriteFormModalLayout(contents[index]);
+        reviewFormModal.innerHTML = await modalLayouts.reviewWriteFormModalLayout(contents[index]);
 
-        showCustomModal(reviewWriteFormModal);
+        showCustomModal(reviewFormModal);
 
-        const reviewWriteTxArea = reviewWriteFormModal.querySelector('#reviewWriteTxArea');
-        const typeCounter = reviewWriteFormModal.querySelector('#typeCounter');
-        const stars = reviewWriteFormModal.querySelectorAll('.mrf-star');
-        const reviewScoreInput = reviewWriteFormModal.querySelector('#reviewScoreInput');
-        const reviewWriteButton = reviewWriteFormModal.querySelector('#reviewWriteButton');
+        const reviewWriteTxArea = reviewFormModal.querySelector('#reviewWriteTxArea');
+        const typeCounter = reviewFormModal.querySelector('#typeCounter');
+        const stars = reviewFormModal.querySelectorAll('.mrf-star');
+        const reviewScoreInput = reviewFormModal.querySelector('#reviewScoreInput');
+        const reviewWriteButton = reviewFormModal.querySelector('#reviewWriteButton');
 
         reviewWriteTxArea.addEventListener('input', () => {
             const maxCharCount = 200;
@@ -72,7 +72,7 @@ const registerReview = async (reservationId, score, content) => {
     } else {
         closeSingleModal("gs");
 
-        const errorContent = reviewWriteFormModal.querySelector('#errorContent');
+        const errorContent = reviewFormModal.querySelector('#errorContent');
 
         errorContent.innerText = data[0].message;
     }
