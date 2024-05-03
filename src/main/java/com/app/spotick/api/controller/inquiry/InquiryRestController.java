@@ -2,6 +2,7 @@ package com.app.spotick.api.controller.inquiry;
 
 import com.app.spotick.api.dto.place.InquiryResponseDto;
 import com.app.spotick.api.response.DataResponse;
+import com.app.spotick.api.response.MessageResponse;
 import com.app.spotick.api.response.PageResponse;
 import com.app.spotick.domain.dto.place.PlaceInquiryListDto;
 import com.app.spotick.domain.dto.place.inquiry.UnansweredInquiryDto;
@@ -21,8 +22,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 
 @RestController
@@ -111,19 +114,14 @@ public class InquiryRestController {
     }
 
     @GetMapping("/getPlace/{placeId}")
-    public ResponseEntity<DataResponse<Slice<UnansweredInquiryDto>>> getUnansweredInquiriesOfPlace(@PathVariable("placeId") Long placeId,
-                                                                                                   @AuthenticationPrincipal UserDetailsDto userDetailsDto,
-                                                                                                   @RequestParam(name = "page", defaultValue = "0") int page) {
-
+    public ResponseEntity<Slice<UnansweredInquiryDto>> getUnansweredInquiriesOfPlace(@PathVariable("placeId") Long placeId,
+                                                                                     @RequestParam(name = "page", defaultValue = "0") int page,
+                                                                                     @AuthenticationPrincipal UserDetailsDto userDetailsDto) {
         Pageable pageable = PageRequest.of(page, 10);
 
         Slice<UnansweredInquiryDto> contentsSlice = placeInquiryService.findUnanswerdInquiriesSlice(placeId, userDetailsDto.getId(), pageable);
 
-        if (contentsSlice.isEmpty()) {
-            return ResponseEntity.noContent().build();
-        }
-
-        return ResponseEntity.ok(new DataResponse<>(true, "조회 성공", contentsSlice));
+        return ResponseEntity.ok(contentsSlice);
     }
 
     @GetMapping("/getTicket/{ticketId}")
@@ -143,21 +141,36 @@ public class InquiryRestController {
     }
 
     @PatchMapping("/responsePlaceInquiry")
-    public ResponseEntity<String> updatePlaceResponse(@Valid @RequestBody InquiryResponseDto inquiryResponseDto,
-                                                      BindingResult result) {
+    public ResponseEntity<MessageResponse> updatePlaceResponse(@Valid @RequestBody InquiryResponseDto inquiryResponseDto,
+                                                               BindingResult result) {
         if (result.hasErrors()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body("답변을 제대로 입력해주세요.");
+            List<FieldError> errors = result.getFieldErrors();
+
+            FieldError firstError = errors.get(0);
+            String errorMessage = firstError.getDefaultMessage();
+
+            return new ResponseEntity<>(MessageResponse.builder()
+                    .success(false)
+                    .message(errorMessage)
+                    .build(), HttpStatus.BAD_REQUEST
+            );
         }
 
         try {
             placeInquiryService.updateInquiryResponse(inquiryResponseDto);
 
-            return ResponseEntity.status(HttpStatus.OK)
-                    .body("답변이 작성되었습니다.");
-        } catch (NoSuchElementException e) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN)
-                    .body("오류가 발생했습니다. 다시 시도해주세요.");
+            return new ResponseEntity<>(MessageResponse.builder()
+                    .success(true)
+                    .message("답변이 작성되었습니다.")
+                    .build(), HttpStatus.OK
+            );
+        } catch (Exception e) {
+            log.error("장소 문의 답변 [Err_Msg]: {}", e.getMessage());
+            return new ResponseEntity<>(MessageResponse.builder()
+                    .success(false)
+                    .message(e.getMessage())
+                    .build(), HttpStatus.BAD_REQUEST
+            );
         }
     }
 

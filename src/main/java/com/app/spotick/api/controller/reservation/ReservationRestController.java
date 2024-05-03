@@ -1,6 +1,7 @@
 package com.app.spotick.api.controller.reservation;
 
 import com.app.spotick.api.response.DataResponse;
+import com.app.spotick.api.response.MessageResponse;
 import com.app.spotick.domain.dto.place.reservation.ReservationRequestListDto;
 import com.app.spotick.domain.dto.user.UserDetailsDto;
 import com.app.spotick.domain.type.place.PlaceReservationStatus;
@@ -22,10 +23,10 @@ import org.springframework.web.bind.annotation.*;
 public class ReservationRestController {
     private final PlaceReservationService placeReservationService;
 
-    @GetMapping("/get/{placeId}")
-    public ResponseEntity<DataResponse<Slice<ReservationRequestListDto>>> getReservationsOfPlace(@PathVariable("placeId") Long placeId,
-                                                                                                 @AuthenticationPrincipal UserDetailsDto userDetailsDto,
-                                                                                                 @RequestParam(name = "page", defaultValue = "0") int page) {
+    @GetMapping("/getList/{placeId}")
+    public ResponseEntity<Slice<ReservationRequestListDto>> getReservationsOfPlace(@PathVariable("placeId") Long placeId,
+                                                                                   @RequestParam(name = "page", defaultValue = "0") int page,
+                                                                                   @AuthenticationPrincipal UserDetailsDto userDetailsDto) {
         // placeId 검증은 없으면 요청 자체를 할 수 없으므로 검증은 무의미 할 것으로 판단.
         // placeId와 userId를 통해 place의 주인을 쿼리에서 검증해내므로 결과는 거기서 판단될 것.
 
@@ -33,47 +34,55 @@ public class ReservationRestController {
 
         Slice<ReservationRequestListDto> contentsSlice = placeReservationService.getReservationsOfPlace(placeId, userDetailsDto.getId(), pageable);
 
-        if (contentsSlice.isEmpty()) {
-            return ResponseEntity.noContent().build();
-        }
-
-        return ResponseEntity.ok(new DataResponse<>(true, "조회 성공", contentsSlice));
+        return ResponseEntity.ok(contentsSlice);
     }
 
     @PatchMapping("/approve/{reservationId}")
-    public ResponseEntity<String> approveReservation(@PathVariable("reservationId") Long reservationId,
-                                                     @AuthenticationPrincipal UserDetailsDto userDetailsDto) {
-
+    public ResponseEntity<MessageResponse> approveReservation(@PathVariable("reservationId") Long reservationId,
+                                                              @AuthenticationPrincipal UserDetailsDto userDetailsDto) {
         try {
             placeReservationService.updateReservationStatusAsHost(
                     reservationId,
                     userDetailsDto.getId(),
                     PlaceReservationStatus.WAITING_PAYMENT // 결제를 할 수 있도록 승인 하는 것이 우선, 결제 이후 승인이 됨
             );
+            return new ResponseEntity<>(MessageResponse.builder()
+                    .success(true)
+                    .message("예약 요청을 승인했습니다.")
+                    .build(), HttpStatus.OK
+            );
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("요청을 찾을 수 없습니다. 나중에 다시 시도해주세요.");
+            log.error("rId: {}, uId: {}, 호스트 예약 승인 [Err_Msg]: {}", reservationId, userDetailsDto.getId(), e.getMessage());
+            return new ResponseEntity<>(MessageResponse.builder()
+                    .success(false)
+                    .message(e.getMessage())
+                    .build(), HttpStatus.BAD_REQUEST
+            );
         }
-
-        return ResponseEntity.ok("예약 요청을 승인했습니다.");
     }
 
     @PatchMapping("/reject/{reservationId}")
-    public ResponseEntity<String> rejectReservation(@PathVariable("reservationId") Long reservationId,
+    public ResponseEntity<MessageResponse> rejectReservation(@PathVariable("reservationId") Long reservationId,
                                                     @AuthenticationPrincipal UserDetailsDto userDetailsDto) {
-
         try {
             placeReservationService.updateReservationStatusAsHost(
                     reservationId,
                     userDetailsDto.getId(),
                     PlaceReservationStatus.REJECTED
             );
+            return new ResponseEntity<>(MessageResponse.builder()
+                    .success(true)
+                    .message("예약 요청을 거절했습니다.")
+                    .build(), HttpStatus.OK
+            );
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("요청을 찾을 수 없습니다. 나중에 다시 시도해주세요.");
+            log.error("rId: {}, uId: {}, 호스트 예약 거절 [Err_Msg]: {}", reservationId, userDetailsDto.getId(), e.getMessage());
+            return new ResponseEntity<>(MessageResponse.builder()
+                    .success(false)
+                    .message(e.getMessage())
+                    .build(), HttpStatus.BAD_REQUEST
+            );
         }
-
-        return ResponseEntity.ok("예약 요청을 거절했습니다.");
     }
 
     @PatchMapping("/cancel/{reservationId}")

@@ -159,32 +159,32 @@
             </article>
 
             <section class="pagination-container">
-            <span class="pagination-previous" th:if="${pagination.hasPrevBlock()}">
-                <a class="pagination-btns first" th:href="@{/mypage/places(page=1)}" title="맨 처음">
-                    <i class="fa-solid fa-chevron-left"></i>
-                    <i class="fa-solid fa-chevron-left"></i>
-                </a>
-                <a class="pagination-btns" th:href="@{/mypage/places(page=${pagination.startPage - 1})}"
-                   title="이전">
-                    <i class="fa-solid fa-chevron-left"></i>
-                </a>
-            </span>
+                <span class="pagination-previous" th:if="${pagination.hasPrevBlock()}">
+                    <a class="pagination-btns first" th:href="@{/mypage/places(page=1, sort=${sort})}" title="맨 처음">
+                        <i class="fa-solid fa-chevron-left"></i>
+                        <i class="fa-solid fa-chevron-left"></i>
+                    </a>
+                    <a class="pagination-btns" th:href="@{/mypage/places(page=${pagination.startPage - 1}, sort=${sort})}"
+                       title="이전">
+                        <i class="fa-solid fa-chevron-left"></i>
+                    </a>
+                </span>
 
                 <span class="pagination-body">
                 <span class="pagination-btns"
                       th:each="i : ${#numbers.sequence(pagination.startPage, pagination.endPage)}">
                     <a th:class="${i == pagination.currentPage ? 'active' : ''}"
-                       th:href="@{/mypage/places(page=${i})}"
+                       th:href="@{/mypage/places(page=${i}, sort=${sort})}"
                        th:text="${i}"></a>
                 </span>
             </span>
 
                 <span class="pagination-next" th:if="${pagination.hasNextBlock()}">
-                <a class="pagination-btns" th:href="@{/mypage/places(page=${pagination.endPage+1})}"
+                <a class="pagination-btns" th:href="@{/mypage/places(page=${pagination.endPage+1}, sort=${sort})}"
                    title="다음">
                     <i class="fa-solid fa-chevron-right"></i>
                 </a>
-                <a class="pagination-btns end" th:href="@{/mypage/places(page=${pagination.lastPage})}"
+                <a class="pagination-btns end" th:href="@{/mypage/places(page=${pagination.lastPage}, sort=${sort})}"
                    title="맨 끝">
                     <i class="fa-solid fa-chevron-right"></i>
                     <i class="fa-solid fa-chevron-right"></i>
@@ -208,7 +208,6 @@
 <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 <script th:src="@{/js/global-js/global.js}" type="module"></script>
 <script th:src="@{/js/global-js/chat.js}" type="module"></script>
-<script th:src="@{/js/mypage/mypage.js}"></script>
 <script th:src="@{/js/mypage/place.js}" type="module"></script>
 
 </html>

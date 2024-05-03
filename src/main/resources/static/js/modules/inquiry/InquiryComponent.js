@@ -1,5 +1,5 @@
-import {inquiryService} from "../../services/mypage/inquiryService.js";
-import {inquiryLayouts} from "../../layouts/mypage/inquiryLayouts.js";
+import {inquiryService} from "../../services/inquiry/inquiryService.js";
+import {inquiryLayouts} from "../../layouts/inquiry/inquiryLayouts.js";
 import {paginationLayout} from "../../layouts/pagination/paginationLayout.js";
 
 const placeInquiriesPaginationComponent = async (page) => {
@@ -22,4 +22,8 @@ const ticketInquiriesPaginationComponent = async (page) => {
     return {inquiries, contentHtml, paginationHtml};
 }
 
-export {placeInquiriesPaginationComponent, ticketInquiriesPaginationComponent}
+const slicePlaceInquiryListHostComponent = async (placeId, page) => {
+    return inquiryService.getPlaceInquiriesOfHost(placeId, page, inquiryLayouts.placeInquiryListHostLayout);
+}
+
+export {placeInquiriesPaginationComponent, ticketInquiriesPaginationComponent, slicePlaceInquiryListHostComponent}

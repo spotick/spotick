@@ -1,207 +1,130 @@
-import { loadingMarkService } from '../utils/loadingMark.js';
-import { extractVariableFromURL } from '../utils/extractFromUrl.js'
+import {loadingMarkService} from '../utils/loadingMark.js';
+import {slicePlaceInquiryListHostComponent} from "../modules/inquiry/InquiryComponent.js";
+import {modalLayouts} from "../layouts/mypage/modalLayouts.js";
+import {closeSingleModal, showCustomModal, showGlobalDialogue, showGlobalSelection} from "../global-js/global-modal.js";
+import {inquiryService} from "../services/inquiry/inquiryService.js";
 
+const placeModal = document.getElementById('placeModal');
+const inquiriesContainer = document.getElementById('inquiriesContainer');
+const loadingMark = document.getElementById('mpLoadingMark');
 
 let page = 0;
-let hasNext = true;
+let isLastPage = false;
 let isLoading = false;
+let contentsSaver = [];
 
+window.onload = () => {
+    // 첫 리스트 출력
+    getInquiryList();
 
-const currentPath = window.location.pathname;
-const pathSegments = currentPath.split('/');
-const placeId = pathSegments[pathSegments.length - 1];
-
-
-const img = document.getElementById('detailProfileImg');
-const nickname = document.getElementById('detailNickName');
-const contentArea = document.getElementById('detailContent');
-
-const inquiryIdInput = document.getElementById('inquiryId');
-const responseInput = document.getElementById('response');
-
-const errorContent = document.querySelector('.error-content');
-
-const inquiryContainer = document.getElementById('inquiriesContainer');
-
-const loadingMark = document.getElementById('mpLoadingMark');
-const inquiryService = (function () {
-
-    function requestInquiries(callback) {
-        loadingMarkService.show(loadingMark);
-
-        const placeId = extractVariableFromURL();
-
-        //todo : 로딩 마스크 테스트용, 테스트 후 삭제 필요
-        setTimeout(() => {
-
-            fetch(`/inquiries/api/getPlace/${placeId}?page=${page}`, {
-                method: 'GET'
-            })
-                .then(response => {
-                    loadingMarkService.hide(loadingMark);
-                    if (response.status === 204) {
-                        return null;
-                    } else if (response.status === 200) {
-                        return response.json();
-                    } else {
-                        throw response;
-                    }
-                })
-                .then(response => {
-                    if (response && response.data && response.data.content) {
-                        if (response.data.last) {
-                            hasNext = false;
-                        }
-                        callback(response.data.content);
-                    } else {
-                        hasNext = false;
-                        loadNoList();
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                })
-                .finally(() => {
-                    isLoading = false;
-                })
-
-        }, 500);
-    }
-
-    function loadInquiries(content) {
-
-        content.forEach(inquiry => {
-            let html =
-                `<div class="mpcp-item">
-                    <div class="mpcpi-top">
-                        <div class="mpcpi-request-user-con">
-                            <div class="mpcpi-ruser-icon">
-                                ${inquiry.defaultImage ?
-                    `<img src="/file/default/display?fileName=${inquiry.fileName}">` :
-                    `<img src="/file/display?fileName=${inquiry.uploadPath}/t_${inquiry.uuid}_${inquiry.fileName}">`
-                }
-                            </div>
-                            <span class="mpcp-ruser-name">${inquiry.nickname}</span>
-                        </div>
-                    </div>
-                    <div class="mpcp-body">
-                        <div class="mpcp-content" style="font-size: 18px;">
-                            <span>${inquiry.inquiryTitle}</span>
-                        </div>
-                        <div class="mpcp-btn detailInquiryBtn"
-                             data-content="${inquiry.content}"
-                             data-id="${inquiry.id}"
-                             data-nickname="${inquiry.nickname}"
-                             data-title="${inquiry.inquiryTitle}"
-                             ${inquiry.defaultImage ?
-                    `data-img="/file/default/display?fileName=${inquiry.fileName}">` :
-                    `data-img="/file/display?fileName=${inquiry.uploadPath}/t_${inquiry.uuid}_${inquiry.fileName}">`
-                }
-                            <span>상세보기</span>
-                        </div>
-                    </div>
-                </div>`
-
-            inquiryContainer.insertAdjacentHTML("beforeend", html);
-        })
-
-        document.querySelectorAll('.detailInquiryBtn').forEach(inquiryBtn => {
-            inquiryBtn.addEventListener('click', function () {
-                img.src = this.getAttribute('data-img');
-                nickname.innerHTML = this.getAttribute('data-nickname');
-                contentArea.value = this.getAttribute('data-content');
-                inquiryIdInput.value = this.getAttribute('data-id');
-
-                responseInput.value = '';
-                errorContent.innerHTML = '';
-
-                openModal(modalPlace);
-            });
-        });
-    }
-
-    function requestUploadResponse(inquiryId, placeId, responseString) {
-        closeOnlyThisModal(globalSelection);
-
-        const inquiryResponse = {
-            id: placeId,
-            inquiryId: inquiryId,
-            response: responseString
-        }
-
-        fetch('/inquiries/api/responsePlaceInquiry', {
-            method: 'PATCH',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(inquiryResponse)
-        })
-            .then(response => {
-                if (response.ok) {
-                    alert("답변이 등록되었습니다.");
-                    window.location.reload();
-                } else {
-                    throw response
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-
-                error.text().then(message => {
-
-                    vibrateTarget(modalPlace);
-
-                    errorContent.innerHTML = message;
-                })
-            });
-    }
-
-    function loadNoList() {
-        inquiryContainer.innerHTML =
-            `<div class="mpcp-no-list">
-            <span>문의 내역이 없습니다.</span>
-         </div>`;
-    }
-
-    return {
-        requestInquiries: requestInquiries,
-        loadInquiries: loadInquiries,
-        requestUploadResponse: requestUploadResponse
-    }
-})();
-
-/////////////////////////////////////////////////////////////
-
-window.onload = function () {
-    // 화면 로드
-    inquiryService.requestInquiries(inquiryService.loadInquiries);
-
-    // 스크롤 이벤트 리스너
+    // 이후 리스트 출력
     window.addEventListener('scroll', function () {
         if (isLoading || !hasNext) return;
 
         let {scrollTop, scrollHeight, clientHeight} = document.documentElement;
 
         if (clientHeight + scrollTop >= scrollHeight) {
-            isLoading = true;
-            page++;
-            inquiryService.requestInquiries(inquiryService.loadInquiries);
+            getInquiryList();
         }
-    })
+    });
+};
 
 
+const getInquiryList = async () => {
+    if (!isLastPage && !isLoading) {
+        isLoading = true;
+        await loadingMarkService.show(loadingMark);
+
+        const {isLast, html, contents} = await slicePlaceInquiryListHostComponent(pId, page);
+
+        contentsSaver = contentsSaver.concat(contents);
+        isLastPage = isLast;
+
+        if (html === '') {
+            loadNoList();
+        }
+
+        inquiriesContainer.insertAdjacentHTML("beforeend", html);
+
+        loadingMarkService.hide(loadingMark);
+        isLoading = false;
+        page++;
+    }
 }
 
-document.getElementById('requestBtn').addEventListener('click', function () {
-    let inquiryId = inquiryIdInput.value;
-    let placeId = extractVariableFromURL();
-    let responseString = responseInput.value;
+function loadNoList() {
+    inquiriesContainer.innerHTML =
+        `<div class="mpcp-no-list">
+            <span>문의가 없습니다.</span>
+         </div>`;
+}
+
+function generateEventListenerOnModal() {
+    const responseTxArea = placeModal.querySelector('#response');
+    const requestButton = placeModal.querySelector('#requestBtn');
+    const typeCounter = placeModal.querySelector('#typeCounter');
+
+    responseTxArea.addEventListener('input', () => {
+        const maxCharCount = 200;
+        if (responseTxArea.value.length > maxCharCount) {
+            responseTxArea.value = responseTxArea.value.slice(0, maxCharCount);
+        }
+        typeCounter.textContent = `${responseTxArea.value.length}`;
+
+        requestButton.disabled = responseTxArea.value.length < 10;
+    });
+
+    requestButton.addEventListener('click', () => {
+        const inquiryId = parseInt(requestButton.getAttribute('iId'));
+        showGlobalSelection(
+            "답변을 등록하시겠습니까?",
+            () => responseInquiry(pId, inquiryId, responseTxArea.value),
+            null,
+            false
+        );
+    });
+}
+
+const responseInquiry = async (placeId, inquiryId, response) => {
+    const {success, message} = await inquiryService.responsePlaceInquiry(placeId, inquiryId, response);
+
+    if (success) {
+        const inquiries = inquiriesContainer.querySelectorAll('.inquiry');
+        if (inquiries.length === 1) {
+            loadNoList();
+        }
+
+        inquiries.forEach(inquiry => {
+            const iId = parseInt(inquiry.getAttribute('iId'));
+            if (iId === inquiryId) {
+                inquiry.remove();
+            }
+        });
+
+        contentsSaver = contentsSaver.filter(content => content.id !== inquiryId);
+        console.log(contentsSaver)
+
+        showGlobalDialogue(message);
+    } else {
+        const errorLine = placeModal.querySelector('#errorContent');
+        closeSingleModal("gs");
+        errorLine.innerHTML = message;
+    }
+}
 
 
-    showGlobalSelection(
-        "답변을 등록하시겠습니까?",
-        () => inquiryService.requestUploadResponse(inquiryId, placeId, responseString)
-    );
-})
+inquiriesContainer.addEventListener('click', (e) => {
+    const button = e.target.closest('.detailOpen');
+    if (button) {
+        const reviewId = parseInt(button.getAttribute('iId'));
 
+        contentsSaver.forEach(content => {
+            if (content.id === reviewId) {
+                placeModal.innerHTML = modalLayouts.inquiryRequestModalLayout(content);
+                generateEventListenerOnModal();
 
+                showCustomModal(placeModal);
+            }
+        });
+    }
+});

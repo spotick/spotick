@@ -29,8 +29,9 @@ public class PlaceInquiryServiceImpl implements PlaceInquiryService {
     private final UserRepository userRepository;
     private final PlaceRepository placeRepository;
     private final NoticeService noticeService;
+
     @Override
-    public PlaceInquiryDto.Response register(PlaceInquiryDto.Request inquiryReq,Long userId) {
+    public PlaceInquiryDto.Response register(PlaceInquiryDto.Request inquiryReq, Long userId) {
         User userProxy = userRepository.getReferenceById(userId);
         Place place = placeRepository.findById(inquiryReq.getPlaceId())
                 .orElseThrow(IllegalStateException::new);
@@ -43,13 +44,14 @@ public class PlaceInquiryServiceImpl implements PlaceInquiryService {
                 .build();
         PlaceInquiry savedInquiry = inquiryRepository.save(placeInquiry);
 
-        noticeService.saveNotice(NoticeType.PLACE_INQUIRY_REGISTER,place.getUser().getId());
+        noticeService.saveNotice(NoticeType.PLACE_INQUIRY_REGISTER, place.getUser().getId());
 
         return PlaceInquiryDto.Response.from(savedInquiry);
     }
+
     @Override
     public Page<PlaceInquiryDto.Response> inquiryListWithPage(Long placeId, Pageable pageable) {
-        return inquiryRepository.inquiryListWithPage(placeId,pageable)
+        return inquiryRepository.inquiryListWithPage(placeId, pageable)
                 .map(PlaceInquiryDto.Response::from);
     }
 
@@ -60,22 +62,22 @@ public class PlaceInquiryServiceImpl implements PlaceInquiryService {
     }
 
     @Override
-    public void deleteInquiryById(Long placeInquiryId,  Long userId) {
+    public void deleteInquiryById(Long placeInquiryId, Long userId) {
         User tmpUser = userRepository.getReferenceById(userId);
 
-        PlaceInquiry foundInquiry = inquiryRepository.findByIdAndUser(placeInquiryId, tmpUser).orElseThrow(() -> {
-            throw new NoSuchElementException("예약 내역 찾을 수 없음");
-        });
+        PlaceInquiry foundInquiry = inquiryRepository.findByIdAndUser(placeInquiryId, tmpUser).orElseThrow(
+                () -> new NoSuchElementException("예약 내역 찾을 수 없음")
+        );
 
         inquiryRepository.delete(foundInquiry);
     }
 
     @Override
     public void updateInquiryResponse(InquiryResponseDto inquiryResponseDto) {
-        Place tmpPlace = placeRepository.getReferenceById(inquiryResponseDto.getId());
+        Place tmpPlace = placeRepository.getReferenceById(inquiryResponseDto.getPlaceId());
 
         PlaceInquiry foundInquiry = inquiryRepository.findByIdAndPlace(inquiryResponseDto.getInquiryId(), tmpPlace).orElseThrow(
-                NoSuchElementException::new
+                () -> new NoSuchElementException("해당 문의를 찾을 수 없습니다.")
         );
 
         noticeService.saveNotice(NoticeType.INQUIRY_RESPONSE, foundInquiry.getUser().getId());
