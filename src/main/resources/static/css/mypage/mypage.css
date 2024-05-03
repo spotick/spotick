@@ -1244,20 +1244,19 @@
 }
 
 .mpctd-none {
-    margin: auto;
     color: rgb(87, 87, 87);
-}
-
-.mpctd-none.hide {
-    display: none;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
 }
 
 .mpctd-container {
-    display: none;
-}
-
-.mpctd-container.show {
-    display: block;
+    display: flex;
+    height: 100%;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
 }
 
 .mpctd-title {

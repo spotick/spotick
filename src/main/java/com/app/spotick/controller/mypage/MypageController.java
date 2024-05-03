@@ -189,7 +189,7 @@ public class MypageController {
         model.addAttribute("viewType", viewType);
     }
 
-    @GetMapping("/tickets/{ticketId}/inquiries")
+    @GetMapping("/tickets/inquiries/{ticketId}")
     public String goToTicketsInquiryList(@PathVariable("ticketId") Long ticketId,
                                          @AuthenticationPrincipal UserDetailsDto userDetailsDto,
                                          Model model) {
