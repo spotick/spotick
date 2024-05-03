@@ -37,12 +37,41 @@ export const inquiryService = (() => {
 
     const responsePlaceInquiry = async (placeId, inquiryId, response) => {
         const inquiryResponseDto = {
-            placeId: placeId,
+            id: placeId,
             inquiryId: inquiryId,
             response: response
         }
 
         const res = await fetch(`/inquiries/api/responsePlaceInquiry`, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(inquiryResponseDto)
+        });
+
+        return res.json();
+    }
+
+    const getTicketInquiriesOfHost = async (ticketId, page, callback) => {
+        const response = await fetch(`/inquiries/api/getTicket/${ticketId}?page=${page}`);
+        const data = await response.json();
+
+        if (callback) {
+            return callback(data);
+        }
+
+        return data;
+    }
+
+    const responseTicketInquiry = async (ticketId, inquiryId, response) => {
+        const inquiryResponseDto = {
+            id: ticketId,
+            inquiryId: inquiryId,
+            response: response
+        }
+
+        const res = await fetch(`/inquiries/api/responseTicketInquiry`, {
             method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json',
@@ -60,5 +89,7 @@ export const inquiryService = (() => {
         deleteTicketInquiry: deleteTicketInquiry,
         getPlaceInquiriesOfHost: getPlaceInquiriesOfHost,
         responsePlaceInquiry: responsePlaceInquiry,
+        getTicketInquiriesOfHost: getTicketInquiriesOfHost,
+        responseTicketInquiry: responseTicketInquiry,
     }
 })();

@@ -39,6 +39,7 @@ document.querySelectorAll('.ticketItem').forEach(ticket => {
                 dateItem.classList.add('active');
 
                 const date = dateItem.getAttribute('data-date');
+                detailGrades.innerHTML = ``;
                 await loadingMarkService.show(loadingMark);
                 detailGrades.innerHTML = await checkGrade(ticketId, date);
                 loadingMarkService.hide(loadingMark);

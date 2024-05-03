@@ -19,7 +19,7 @@ window.onload = () => {
 
     // 이후 리스트 출력
     window.addEventListener('scroll', function () {
-        if (isLoading || !hasNext) return;
+        if (isLoading || isLastPage) return;
 
         let {scrollTop, scrollHeight, clientHeight} = document.documentElement;
 
@@ -102,7 +102,6 @@ const responseInquiry = async (placeId, inquiryId, response) => {
         });
 
         contentsSaver = contentsSaver.filter(content => content.id !== inquiryId);
-        console.log(contentsSaver)
 
         showGlobalDialogue(message);
     } else {
@@ -116,10 +115,10 @@ const responseInquiry = async (placeId, inquiryId, response) => {
 inquiriesContainer.addEventListener('click', (e) => {
     const button = e.target.closest('.detailOpen');
     if (button) {
-        const reviewId = parseInt(button.getAttribute('iId'));
+        const inquiryId = parseInt(button.getAttribute('iId'));
 
         contentsSaver.forEach(content => {
-            if (content.id === reviewId) {
+            if (content.id === inquiryId) {
                 placeModal.innerHTML = modalLayouts.inquiryRequestModalLayout(content);
                 generateEventListenerOnModal();
 

@@ -167,7 +167,7 @@ export const inquiryLayouts = (() => {
         return html;
     }
 
-    const placeInquiryListHostLayout = (data) => {
+    const inquiryListHostLayout = (data) => {
         const contents = data.content;
         const isLast = data.last;
         let html = ``;
@@ -211,6 +211,6 @@ export const inquiryLayouts = (() => {
     return {
         placeInquiryListLayout: placeInquiryListLayout,
         ticketInquiryListLayout: ticketInquiryListLayout,
-        placeInquiryListHostLayout: placeInquiryListHostLayout,
+        inquiryListHostLayout: inquiryListHostLayout,
     }
 })();
