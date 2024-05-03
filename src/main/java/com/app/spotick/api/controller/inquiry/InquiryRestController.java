@@ -125,19 +125,14 @@ public class InquiryRestController {
     }
 
     @GetMapping("/getTicket/{ticketId}")
-    public ResponseEntity<DataResponse<Slice<UnansweredInquiryDto>>> getUnansweredInquiriesOfTicket(@PathVariable("ticketId") Long ticketId,
-                                                                                                    @AuthenticationPrincipal UserDetailsDto userDetailsDto,
-                                                                                                    @RequestParam(name = "page", defaultValue = "0") int page) {
-
+    public ResponseEntity<Slice<UnansweredInquiryDto>> getUnansweredInquiriesOfTicket(@PathVariable("ticketId") Long ticketId,
+                                                                                      @RequestParam(name = "page", defaultValue = "0") int page,
+                                                                                      @AuthenticationPrincipal UserDetailsDto userDetailsDto) {
         Pageable pageable = PageRequest.of(page, 10);
 
         Slice<UnansweredInquiryDto> contentsSlice = ticketInquiryService.findUnanswerdInquiriesSlice(ticketId, userDetailsDto.getId(), pageable);
 
-        if (contentsSlice.isEmpty()) {
-            return ResponseEntity.noContent().build();
-        }
-
-        return ResponseEntity.ok(new DataResponse<>(true, "조회 성공", contentsSlice));
+        return ResponseEntity.ok(contentsSlice);
     }
 
     @PatchMapping("/responsePlaceInquiry")
@@ -175,20 +170,35 @@ public class InquiryRestController {
     }
 
     @PatchMapping("/responseTicketInquiry")
-    public ResponseEntity<String> updateTicketResponse(@Valid @RequestBody InquiryResponseDto inquiryResponseDto,
-                                                       BindingResult result) {
+    public ResponseEntity<MessageResponse> updateTicketResponse(@Valid @RequestBody InquiryResponseDto inquiryResponseDto,
+                                                                BindingResult result) {
         if (result.hasErrors()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body("답변을 제대로 입력해주세요.");
+            List<FieldError> errors = result.getFieldErrors();
+
+            FieldError firstError = errors.get(0);
+            String errorMessage = firstError.getDefaultMessage();
+
+            return new ResponseEntity<>(MessageResponse.builder()
+                    .success(false)
+                    .message(errorMessage)
+                    .build(), HttpStatus.BAD_REQUEST
+            );
         }
 
         try {
             ticketInquiryService.updateInquiryResponse(inquiryResponseDto);
-            return ResponseEntity.status(HttpStatus.OK)
-                    .body("답변이 작성되었습니다.");
+            return new ResponseEntity<>(MessageResponse.builder()
+                    .success(true)
+                    .message("답변이 작성되었습니다.")
+                    .build(), HttpStatus.OK
+            );
         } catch (NoSuchElementException e) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN)
-                    .body("오류가 발생했습니다.<br>다시 시도해주세요.");
+            log.error("티켓 문의 답변 [Err_Msg]: {}", e.getMessage());
+            return new ResponseEntity<>(MessageResponse.builder()
+                    .success(false)
+                    .message(e.getMessage())
+                    .build(), HttpStatus.BAD_REQUEST
+            );
         }
     }
 }

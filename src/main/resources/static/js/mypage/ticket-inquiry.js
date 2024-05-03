@@ -1,204 +1,84 @@
 import {loadingMarkService} from "../utils/loadingMark.js";
 import {ticketService} from "../services/ticket/ticketService.js";
-import {mypageTicketLayout} from "../layouts/ticket/mypage.js";
+import {showGradeInfo} from "../layouts/ticket/mypage/ticketsLayout.js";
+import {dateDifferenceInDays, formatDate} from "../utils/timeUtils.js";
+import {sliceTicketInquiryListHostComponent} from "../modules/inquiry/InquiryComponent.js";
+import {showGlobalSelection, showCustomModal, showGlobalDialogue, closeSingleModal} from "../global-js/global-modal.js";
+import {modalLayouts} from "../layouts/mypage/modalLayouts.js";
+import {inquiryService} from "../services/inquiry/inquiryService.js";
 
 let page = 0;
-let hasNext = true;
+let isLastPage = false;
 let isLoading = false;
+let contentsSaver = [];
+let gradeData = [];
 
-const startDate = document.getElementById('startDate').value;
-const endDate = document.getElementById('endDate').value;
 const detailDates = document.getElementById('detailDates');
 const detailGrades = document.getElementById('detailGrades');
-
-const img = document.getElementById('detailProfileImg');
-const nickname = document.getElementById('detailNickName');
-const contentArea = document.getElementById('detailContent');
-
-const inquiryIdInput = document.getElementById('inquiryId');
-const responseInput = document.getElementById('response');
-
-const errorContent = document.querySelector('.error-content');
-
-const inquiryContainer = document.getElementById('inquiryContainer');
-
 const loadingMark = document.getElementById('mpLoadingMark');
-const loadingMarkGrade = document.getElementById('loadingMark');
-const ticketId = document.getElementById('id').value;
+const gradeLoadingMark = document.getElementById('loadingMark');
+const inquiriesContainer = document.getElementById('inquiryContainer');
 
-const inquiryService = (function () {
+window.onload = async () => {
+    getInquiries(ticketId, page);
 
-    function requestInquiries(callback) {
-        loadingMarkService.show(loadingMark);
+    detailDates.innerHTML = await setGradeDates(startDate, endDate);
+    detailGrades.innerHTML = await checkGrade(ticketId, startDate);
 
-        //todo : 로딩 마스크 테스트용, 테스트 후 삭제 필요
-        setTimeout(() => {
+    // 스크롤 이벤트 리스너
+    window.addEventListener('scroll', function () {
+        if (isLoading || isLastPage) return;
 
-            fetch(`/inquiries/api/getTicket/${ticketId}?page=${page}`, {
-                method: 'GET'
-            })
-                .then(response => {
-                    loadingMarkService.hide(loadingMark);
-                    if (response.status === 204) {
-                        return null;
-                    } else if (response.status === 200) {
-                        return response.json();
-                    } else {
-                        throw response;
-                    }
-                })
-                .then(response => {
-                    if (response && response.data && response.data.content) {
-                        if (response.data.last) {
-                            hasNext = false;
-                        }
-                        callback(response.data.content);
-                    } else {
-                        hasNext = false;
-                        loadNoList();
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                })
-                .finally(() => {
-                    isLoading = false;
-                })
+        let {scrollTop, scrollHeight, clientHeight} = document.documentElement;
 
-        }, 500);
-    }
+        if (clientHeight + scrollTop >= scrollHeight) {
+            getInquiries(ticketId, page);
+        }
+    })
 
-    function loadInquiries(content) {
-        content.forEach(inquiry => {
+    const dateItems = document.querySelectorAll('.date-item');
+    dateItems.forEach(dateItem => {
+        dateItem.addEventListener('click', async () => {
+            dateItems.forEach(item => item.classList.remove('active'));
 
-            let html =
-                `<div class="mpcp-item">
-                    <div class="mpcpi-top">
-                        <div class="mpcpi-request-user-con">
-                            <div class="mpcpi-ruser-icon">
-                                ${inquiry.defaultImage ?
-                    `<img src="/file/default/display?fileName=${inquiry.fileName}">` :
-                    `<img src="/file/display?fileName=${inquiry.uploadPath}/t_${inquiry.uuid}_${inquiry.fileName}">`
-                }
-                            </div>
-                            <span class="mpcp-ruser-name">${inquiry.nickname}</span>
-                        </div>
-                    </div>
-                    <div class="mpcp-body">
-                        <div class="mpcp-content" style="font-size: 18px;">
-                            <span>${inquiry.inquiryTitle}</span>
-                        </div>
-                        <div class="mpcp-btn detailInquiryBtn"
-                             data-content="${inquiry.content}"
-                             data-id="${inquiry.id}"
-                             data-nickname="${inquiry.nickname}"
-                             data-title="${inquiry.inquiryTitle}"
-                             ${inquiry.defaultImage ?
-                    `data-img="/file/default/display?fileName=${inquiry.fileName}">` :
-                    `data-img="/file/display?fileName=${inquiry.uploadPath}/t_${inquiry.uuid}_${inquiry.fileName}">`
-                }
-                            <span>상세보기</span>
-                        </div>
-                    </div>
-                </div>`;
+            dateItem.classList.add('active');
 
-            inquiryContainer.insertAdjacentHTML("beforeend", html);
+            const date = dateItem.getAttribute('data-date');
+
+            detailGrades.innerHTML = await checkGrade(ticketId, date);
         });
+    });
+}
 
-        document.querySelectorAll('.detailInquiryBtn').forEach(inquiryBtn => {
-            inquiryBtn.addEventListener('click', function () {
-                img.src = this.getAttribute('data-img');
-                nickname.innerHTML = this.getAttribute('data-nickname');
-                contentArea.value = this.getAttribute('data-content');
-                inquiryIdInput.value = this.getAttribute('data-id');
+const getInquiries = async (ticketId, page) => {
+    if (!isLastPage && !isLoading) {
+        isLoading = true;
+        await loadingMarkService.show(loadingMark);
+        const {isLast, html, contents} = await sliceTicketInquiryListHostComponent(ticketId, page);
 
-                responseInput.value = '';
-                errorContent.innerHTML = '';
+        contentsSaver = contentsSaver.concat(contents);
+        isLastPage = isLast;
 
-                openModal(modalPlace);
-            });
-        });
-    }
-
-    function requestUploadResponse(ticketId, inquiryId, responseString) {
-        closeOnlyThisModal(globalSelection);
-
-        const inquiryResponse = {
-            id: ticketId,
-            inquiryId: inquiryId,
-            response: responseString
+        if (html === '') {
+            loadNoList();
         }
 
-        fetch('/inquiries/api/responseTicketInquiry', {
-            method: 'PATCH',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(inquiryResponse)
-        })
-            .then(response => {
-                if (response.ok) {
-                    alert("답변이 등록되었습니다.");
-                    window.location.reload();
-                } else {
-                    throw response
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
+        inquiriesContainer.insertAdjacentHTML("beforeend", html);
 
-                error.text().then(message => {
-
-                    vibrateTarget(modalPlace);
-
-                    errorContent.innerHTML = message;
-                })
-            });
-    }
-
-    function loadNoList() {
-        inquiryContainer.innerHTML =
-            `<div class="mpcp-no-list">
-            <span>문의 내역이 없습니다.</span>
-         </div>`;
-    }
-
-    return {
-        requestInquiries: requestInquiries,
-        loadInquiries: loadInquiries,
-        requestUploadResponse: requestUploadResponse
-    }
-})();
-
-let gradeData = [];
-async function checkGrade(ticketId, date) {
-    const existingKV = gradeData.find(data => data.ticketId === ticketId && data.date === date);
-
-    if (existingKV) {
-        detailGrades.innerHTML = mypageTicketLayout.showGradeInfo(existingKV.grade)
-        return;
-    }
-
-    try {
-        const responseData = await ticketService.getGrades(ticketId, date);
-        const newData = {ticketId: ticketId, date: date, grade: responseData};
-
-        // gradeData에 추가
-        gradeData.push(newData);
-
-        detailGrades.innerHTML = mypageTicketLayout.showGradeInfo(responseData);
-    } catch (error) {
-        console.error('Error:', error);
+        loadingMarkService.hide(loadingMark);
+        isLoading = false;
+        page++;
     }
 }
 
-///////////////////////////////////////////////////////////////////////////////
+function loadNoList() {
+    inquiriesContainer.innerHTML =
+        `<div class="mpcp-no-list">
+            <span>문의가 없습니다.</span>
+         </div>`;
+}
 
-window.onload = function () {
-    // 문의 내역 화면 로드
-    inquiryService.requestInquiries(inquiryService.loadInquiries);
-
-    // 날짜 기능 추가
+const setGradeDates = async (startDate, endDate) => {
     let dateDifference = dateDifferenceInDays(new Date(startDate), new Date(endDate));
     let start = new Date(startDate).getDate();
     dateDifference++;
@@ -215,47 +95,95 @@ window.onload = function () {
         datesHTML += `<div class="date-item ${isActive}" data-date="${formattedDate}"><span>${start + i}</span></div>`;
     }
 
-    detailDates.innerHTML = datesHTML;
+    return datesHTML;
+}
 
-    // 날짜의 첫번째 grade 로드
-    loadingMarkService.show(loadingMarkGrade)
-        .then(() => checkGrade(ticketId, startDate))
-        .then(() => loadingMarkService.hide(loadingMarkGrade));
+const checkGrade = async (ticketId, date) => {
+    detailGrades.innerHTML = ``;
+    await loadingMarkService.show(gradeLoadingMark);
+    const existingKV = gradeData.find(data => data.ticketId === ticketId && data.date === date);
 
-    // 스크롤 이벤트 리스너
-    window.addEventListener('scroll', function () {
-        if (isLoading || !hasNext) return;
+    if (existingKV) {
+        loadingMarkService.hide(gradeLoadingMark);
+        return showGradeInfo(existingKV.grade);
+    }
 
-        let {scrollTop, scrollHeight, clientHeight} = document.documentElement;
+    const responseData = await ticketService.getGrades(ticketId, date);
+    const newData = {ticketId: ticketId, date: date, grade: responseData};
 
-        if (clientHeight + scrollTop >= scrollHeight) {
-            isLoading = true;
-            page++;
-            inquiryService.requestInquiries(inquiryService.loadInquiries);
-        }
-    })
+    // gradeData에 추가
+    gradeData.push(newData);
 
-    let dateItems = document.querySelectorAll('.date-item');
-    dateItems.forEach(dateItem => {
-        dateItem.addEventListener('click', function () {
-            dateItems.forEach(item => item.classList.remove('active'));
+    loadingMarkService.hide(gradeLoadingMark);
+    return showGradeInfo(responseData);
+}
 
-            this.classList.add('active');
+const ticketModal = document.getElementById('ticketModal');
+inquiriesContainer.addEventListener('click', (e) => {
+    const button = e.target.closest('.detailOpen');
+    if (button) {
+        const inquiryId = parseInt(button.getAttribute('iId'));
 
-            let date = this.getAttribute('data-date');
+        contentsSaver.forEach(content => {
+            if (content.id === inquiryId) {
+                ticketModal.innerHTML = modalLayouts.inquiryRequestModalLayout(content);
+                generateEventListenerOnModal();
 
-            checkGrade(ticketId, date);
+                showCustomModal(ticketModal);
+            }
         });
+    }
+});
+
+
+function generateEventListenerOnModal() {
+    const responseTxArea = ticketModal.querySelector('#response');
+    const requestButton = ticketModal.querySelector('#requestBtn');
+    const typeCounter = ticketModal.querySelector('#typeCounter');
+
+    responseTxArea.addEventListener('input', () => {
+        const maxCharCount = 200;
+        if (responseTxArea.value.length > maxCharCount) {
+            responseTxArea.value = responseTxArea.value.slice(0, maxCharCount);
+        }
+        typeCounter.textContent = `${responseTxArea.value.length}`;
+
+        requestButton.disabled = responseTxArea.value.length < 10;
+    });
+
+    requestButton.addEventListener('click', () => {
+        const inquiryId = parseInt(requestButton.getAttribute('iId'));
+        showGlobalSelection(
+            "답변을 등록하시겠습니까?",
+            () => responseInquiry(ticketId, inquiryId, responseTxArea.value),
+            null,
+            false
+        );
     });
 }
 
-document.getElementById('requestBtn').addEventListener('click', function () {
-    let inquiryId = inquiryIdInput.value;
-    let responseString = responseInput.value;
+const responseInquiry = async (ticketId, inquiryId, response) => {
+    const {success, message} = await inquiryService.responseTicketInquiry(ticketId, inquiryId, response);
 
+    if (success) {
+        const inquiries = inquiriesContainer.querySelectorAll('.inquiry');
+        if (inquiries.length === 1) {
+            loadNoList();
+        }
 
-    showGlobalSelection(
-        "답변을 등록하시겠습니까?",
-        () => inquiryService.requestUploadResponse(ticketId, inquiryId, responseString)
-    );
-})
+        inquiries.forEach(inquiry => {
+            const iId = parseInt(inquiry.getAttribute('iId'));
+            if (iId === inquiryId) {
+                inquiry.remove();
+            }
+        });
+
+        contentsSaver = contentsSaver.filter(content => content.id !== inquiryId);
+
+        showGlobalDialogue(message);
+    } else {
+        const errorLine = placeModal.querySelector('#errorContent');
+        closeSingleModal("gs");
+        errorLine.innerHTML = message;
+    }
+}

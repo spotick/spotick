@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 
 @Data @NoArgsConstructor
 public class InquiryResponseDto {
-    private Long placeId;
+    private Long id;
     private Long inquiryId;
     @NotBlank(message = "답변을 입력해주세요.")
     @Size(min = 10, message = "최소 10자 이상 입력해주세요.")

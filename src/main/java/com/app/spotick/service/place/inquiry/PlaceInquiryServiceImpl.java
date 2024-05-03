@@ -74,7 +74,7 @@ public class PlaceInquiryServiceImpl implements PlaceInquiryService {
 
     @Override
     public void updateInquiryResponse(InquiryResponseDto inquiryResponseDto) {
-        Place tmpPlace = placeRepository.getReferenceById(inquiryResponseDto.getPlaceId());
+        Place tmpPlace = placeRepository.getReferenceById(inquiryResponseDto.getId());
 
         PlaceInquiry foundInquiry = inquiryRepository.findByIdAndPlace(inquiryResponseDto.getInquiryId(), tmpPlace).orElseThrow(
                 () -> new NoSuchElementException("해당 문의를 찾을 수 없습니다.")

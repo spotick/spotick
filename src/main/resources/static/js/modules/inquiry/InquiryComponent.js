@@ -23,7 +23,11 @@ const ticketInquiriesPaginationComponent = async (page) => {
 }
 
 const slicePlaceInquiryListHostComponent = async (placeId, page) => {
-    return inquiryService.getPlaceInquiriesOfHost(placeId, page, inquiryLayouts.placeInquiryListHostLayout);
+    return inquiryService.getPlaceInquiriesOfHost(placeId, page, inquiryLayouts.inquiryListHostLayout);
 }
 
-export {placeInquiriesPaginationComponent, ticketInquiriesPaginationComponent, slicePlaceInquiryListHostComponent}
+const sliceTicketInquiryListHostComponent = async (ticketId, page) => {
+    return inquiryService.getTicketInquiriesOfHost(ticketId, page, inquiryLayouts.inquiryListHostLayout);
+}
+
+export {placeInquiriesPaginationComponent, ticketInquiriesPaginationComponent, slicePlaceInquiryListHostComponent, sliceTicketInquiryListHostComponent}

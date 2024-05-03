@@ -43,10 +43,10 @@ public class TicketInquiryServiceImpl implements TicketInquiryService {
 
     @Override
     public void updateInquiryResponse(InquiryResponseDto inquiryResponseDto) {
-        Ticket tmpTicket = ticketRepository.getReferenceById(inquiryResponseDto.getPlaceId());
+        Ticket tmpTicket = ticketRepository.getReferenceById(inquiryResponseDto.getId());
 
         TicketInquiry foundInquiry = ticketInquiryRepository.findByIdAndTicket(inquiryResponseDto.getInquiryId(), tmpTicket).orElseThrow(
-                NoSuchElementException::new
+                () -> new NoSuchElementException("문의 내역을 찾을 수 없습니다.")
         );
 
         noticeService.saveNotice(NoticeType.INQUIRY_RESPONSE, foundInquiry.getUser().getId());
