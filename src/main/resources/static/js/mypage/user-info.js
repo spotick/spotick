@@ -1,5 +1,5 @@
 import {showGlobalDialogue, showGlobalSelection, showCustomModal, closeEveryModal} from "../global-js/global-modal.js";
-import {userService} from "../services/mypage/userService.js";
+import {userService} from "../services/user/userService.js";
 
 const userImage = document.getElementById('userImage');
 const profileModal = document.getElementById('profileModal');

@@ -1,6 +1,7 @@
 import { loadingMarkService } from '../utils/loadingMark.js';
 import { extractVariableFromURL } from '../utils/extractFromUrl.js'
 
+const loadingMark = document.getElementById('mpLoadingMark');
 
 let page = 0;
 let hasNext = true;
@@ -23,7 +24,6 @@ const errorContent = document.querySelector('.error-content');
 
 const inquiryContainer = document.getElementById('inquiriesContainer');
 
-const loadingMark = document.getElementById('mpLoadingMark');
 const inquiryService = (function () {
 
     function requestInquiries(callback) {

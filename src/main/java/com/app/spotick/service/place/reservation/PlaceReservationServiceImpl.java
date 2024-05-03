@@ -111,7 +111,7 @@ public class PlaceReservationServiceImpl implements PlaceReservationService {
     @Override
     public void updateReservationStatusAsHost(Long reservationId, Long userId, PlaceReservationStatus status) {
         PlaceReservation foundReservation = placeReservationRepository.findByIdAndHost(reservationId, userId).orElseThrow(
-                NoSuchElementException::new
+                () -> new NoSuchElementException("예약내역을 찾을 수 없습니다.")
         );
 
         foundReservation.updateStatus(status);

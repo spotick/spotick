@@ -283,10 +283,104 @@ export const modalLayouts = (() => {
         `;
     }
 
+    const reservationRequestModalLayout = (dto) => {
+        const {
+            id,
+            visitors,
+            checkIn,
+            checkOut,
+            amount,
+            content,
+            nickname,
+            fileName,
+            uuid,
+            uploadPath,
+            defaultImage
+        } = dto;
+
+        return `
+             <div class="modal-place-user-con">
+                <div class="modal-user-icon">
+                    <img alt="${nickname}" ${defaultImage ? `src="/file/default/display?fileName=${fileName}"` : `src="/file/display?fileName=${uploadPath}/t_${uuid}_${fileName}`}>
+                </div>
+                <span class="modal-user-name">${nickname}</span>
+            </div>
+            <div class="modal-place-content-container">
+                <div class="modal-place-con-box">
+                    <div style="display: flex;">
+                        <div style="margin-right: 50px">
+                            <div class="modal-place-title">사용 인원</div>
+                            <div class="modal-place-input-con" style="width: 100px; margin-bottom: 20px;">
+                                <input value="${visitors}" readonly type="text">
+                                <span>명</span>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="modal-place-title">총 지불 비용</div>
+                            <div class="modal-place-input-con" style="width: 100px; margin-bottom: 20px;">
+                                <input value="${amount}" readonly type="text">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-place-title">요청 사항</div>
+                    <div class="modal-place-input-con">
+                            <textarea class="mri-textarea" cols="30" id="detailContent" readonly
+                                      rows="10">${content}</textarea>
+                    </div>
+                </div>
+                <div class="modal-place-con-box">
+                    <table class="calendar">
+                        <thead class="calendar-head">
+                        <tr class="ch-title">
+                            <td id="prevCalendar" style="cursor:pointer;">&#60;</td>
+                            <td colspan="5">
+                                <span id="calYear"></span>년
+                                <span id="calMonth"></span>월
+                            </td>
+                            <td id="nextCalendar" style="cursor:pointer;">&#62;</td>
+                        </tr>
+                        <tr class="ch-day">
+                            <td>일</td>
+                            <td>월</td>
+                            <td>화</td>
+                            <td>수</td>
+                            <td>목</td>
+                            <td>금</td>
+                            <td>토</td>
+                        </tr>
+                        </thead>
+                        <tbody class="calendar-body">
+                        </tbody>
+                    </table>
+                    <div class="mri-input-title">대여 시작시간</div>
+                    <div class="mri-input-container" style="margin-bottom: 10px;">
+                        <input value="${formatKoreanDatetime(checkIn)}" readonly type="text">
+                    </div>
+                    <div class="mri-input-title">대여 시작시간</div>
+                    <div class="mri-input-container">
+                        <input value="${formatKoreanDatetime(checkOut)}" readonly type="text">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-place-btn-wrap" rId="${id}">
+                <button class="modal-place-btn" id="approveRequestBtn"
+                        style="background-color: #007aff; margin-right: 20px;"
+                        type="button">
+                    <span>승인</span>
+                </button>
+                <button class="modal-place-btn" id="rejectRequestBtn"
+                    style="background-color: #ffa200;" type="button">
+                    <span>거절</span>
+                </button>
+            </div>
+        `;
+    }
+
     return {
         placeReservationDetailModalLayout: placeReservationDetailModalLayout,
         inquiryDetailModalLayout: inquiryDetailModalLayout,
         reviewWriteFormModalLayout: reviewWriteFormModalLayout,
         reviewEditFormModalLayout: reviewEditFormModalLayout,
+        reservationRequestModalLayout: reservationRequestModalLayout,
     }
 })();

@@ -1,6 +1,6 @@
 import {showGlobalDialogue, showGlobalSelection, showCustomModal, closeSingleModal} from "../global-js/global-modal.js";
 import {modalLayouts} from "../layouts/mypage/modalLayouts.js";
-import {reviewService} from "../services/mypage/reviewService.js";
+import {reviewService} from "../services/review/reviewService.js";
 
 const reviewFormModal = document.getElementById('reviewFormModal');
 

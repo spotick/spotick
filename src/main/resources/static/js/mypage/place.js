@@ -1,5 +1,8 @@
 import {showGlobalDialogue, showGlobalSelection} from "../global-js/global-modal.js";
 import {placeService} from "../services/place/placeService.js";
+import {addSlideEvent} from "../global-js/image-slide.js";
+
+addSlideEvent();
 
 ////
 // 장소 비활성화

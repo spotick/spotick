@@ -1,7 +1,7 @@
 import {showCustomModal, showGlobalDialogue, showGlobalSelection, closeSingleModal} from "../global-js/global-modal.js";
 import {addSlideEvent} from "../global-js/image-slide.js";
 import {modalLayouts} from "../layouts/mypage/modalLayouts.js";
-import {reviewService} from "../services/mypage/reviewService.js";
+import {reviewService} from "../services/review/reviewService.js";
 import {bookmarkFetch} from "../modules/fetch/bookmarkFetch.js";
 
 addSlideEvent();

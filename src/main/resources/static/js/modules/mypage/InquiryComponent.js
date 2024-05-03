@@ -1,4 +1,4 @@
-import {inquiryService} from "../../services/mypage/inquiryService.js";
+import {inquiryService} from "../../services/inquiry/inquiryService.js";
 import {inquiryLayouts} from "../../layouts/mypage/inquiryLayouts.js";
 import {paginationLayout} from "../../layouts/pagination/paginationLayout.js";
 

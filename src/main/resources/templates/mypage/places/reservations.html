@@ -16,157 +16,84 @@
 </head>
 
 <body>
+<div>
+    <div th:replace="~{global-templates/chat :: chat}"></div>
 
-<div th:replace="~{global-templates/chat :: chat}"></div>
-
-<div class="modal-bg">
-    <div th:replace="~{global-templates/global-dialogue-modal :: global-dialogue}"></div>
-    <div th:replace="~{global-templates/global-dialogue-modal :: global-selection}"></div>
-    <div class="modal-place">
-        <div class="modal-place-user-con">
-            <div class="modal-user-icon">
-                <img id="detailImg">
-            </div>
-            <span class="modal-user-name" id="detailNickname"></span>
-        </div>
-        <div class="modal-place-content-container">
-            <div class="modal-place-con-box">
-                <div style="display: flex;">
-                    <div style="margin-right: 50px">
-                        <div class="modal-place-title">사용 인원</div>
-                        <div class="modal-place-input-con" style="width: 100px; margin-bottom: 20px;">
-                            <input id="detailVisitors" readonly type="text">
-                            <span>명</span>
-                        </div>
-                    </div>
-                    <div>
-                        <div class="modal-place-title">총 지불 비용</div>
-                        <div class="modal-place-input-con" style="width: 100px; margin-bottom: 20px;">
-                            <input id="detailAmount" readonly type="text">
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-place-title">요청 사항</div>
-                <div class="modal-place-input-con">
-                            <textarea class="mri-textarea" cols="30" id="detailContent" readonly
-                                      rows="10"></textarea>
-                </div>
-            </div>
-            <div class="modal-place-con-box">
-                <table class="calendar">
-                    <thead class="calendar-head">
-                    <tr class="ch-title">
-                        <td onClick="calendarService.prevCalendar()" style="cursor:pointer;">&#60;</td>
-                        <td colspan="5">
-                            <span id="calYear"></span>년
-                            <span id="calMonth"></span>월
-                        </td>
-                        <td onClick="calendarService.nextCalendar()" style="cursor:pointer;">&#62;</td>
-                    </tr>
-                    <tr class="ch-day">
-                        <td>일</td>
-                        <td>월</td>
-                        <td>화</td>
-                        <td>수</td>
-                        <td>목</td>
-                        <td>금</td>
-                        <td>토</td>
-                    </tr>
-                    </thead>
-                    <tbody class="calendar-body">
-                    </tbody>
-                </table>
-                <div class="mri-input-title">대여 시작시간</div>
-                <div class="mri-input-container" style="margin-bottom: 10px;">
-                    <input id="detailCheckIn" readonly type="text">
-                </div>
-                <div class="mri-input-title">대여 시작시간</div>
-                <div class="mri-input-container">
-                    <input id="detailCheckOut" readonly type="text">
-                </div>
-            </div>
-        </div>
-        <div class="modal-place-btn-wrap">
-            <input id="detailId" type="hidden">
-            <button class="modal-place-btn" id="approveRequestBtn"
-                    style="background-color: #007aff; margin-right: 20px;"
-                    type="button">
-                <span>승인</span>
-            </button>
-            <button class="modal-place-btn" id="rejectRequestBtn" style="background-color: #ffa200;" type="button">
-                <span>거절</span>
-            </button>
-        </div>
+    <div class="modal-bg" id="modal">
+        <div th:replace="~{global-templates/new-global-dialogue-modal :: global-dialogue}"></div>
+        <div th:replace="~{global-templates/new-global-dialogue-modal :: global-selection}"></div>
+        <div class="modal-place" id="placeModal"></div>
     </div>
-</div>
 
-<header th:replace="~{global-templates/header-footer :: header}"></header>
+    <header th:replace="~{global-templates/header-footer :: header}"></header>
 
-<main class="my-page-main" id="page-body">
-    <div th:replace="~{global-templates/mypage :: mypage-menu}"></div>
-    <div class="mp-content">
-        <article>
-            <div class="mpc-title">
-                <h2>장소 관리</h2>
-                <i class="fa-solid fa-angle-right"></i>
-                <h2>예약 요청</h2>
-            </div>
-            <div class="mpcp-wrap" style="flex-direction: row">
-                <div class="mpcp-main">
-                    <div class="mpcp-target" th:object="${placeDto}">
-                        <div style="display: flex; justify-content: space-between;">
-                            <div class="ItemTextContainer" style="max-width: 400px">
-                                <div class="ItemHostNameContainer">
-                                    <span class="ItemHostName" th:text="*{placeAddress.address}"></span>
-                                    <div class="ItemCountsContainer">
-                                        <div class="ItemsStarCountContainer">
-                                            <img alt="후기갯수" class="ItemCountImg"
-                                                 src="/imgs/star_filled_paintYellow056.a8eb6e44.svg">
-                                            <span class="ItemCountText" th:text="|*{evalAvg}(*{evalCount})|"></span>
-                                        </div>
-                                        <div class="ItemsLikeCountContainer">
-                                            <img alt="북마크갯수" class="ItemCountImg bookmark"
-                                                 src="/imgs/bookmark_thin.svg">
-                                            <span class="ItemCountText" th:text="*{bookmarkCount}"></span>
+    <main class="my-page-main" id="page-body">
+        <div th:replace="~{global-templates/mypage :: mypage-menu}"></div>
+        <div class="mp-content">
+            <article>
+                <div class="mpc-title">
+                    <div class="flex items-center">
+                        <h2>장소 관리</h2>
+                        <i class="fa-solid fa-angle-right"></i>
+                        <h2>예약 요청</h2>
+                    </div>
+                </div>
+                <div class="mpcp-wrap" style="flex-direction: row">
+                    <div class="mpcp-main">
+                        <a th:href="@{/place/{placeId}(placeId = *{id})}" class="mpcp-target" th:object="${placeDto}">
+                            <div style="display: flex; justify-content: space-between;">
+                                <div class="ItemTextContainer" style="max-width: 400px">
+                                    <div class="ItemHostNameContainer">
+                                        <span class="ItemHostName" th:text="*{placeAddress.address}"></span>
+                                        <div class="ItemCountsContainer">
+                                            <div class="ItemsStarCountContainer">
+                                                <img alt="후기갯수" class="ItemCountImg"
+                                                     src="/imgs/star_filled_paintYellow056.a8eb6e44.svg">
+                                                <span class="ItemCountText" th:text="|*{evalAvg}(*{evalCount})|"></span>
+                                            </div>
+                                            <div class="ItemsLikeCountContainer">
+                                                <img alt="북마크갯수" class="ItemCountImg bookmark"
+                                                     src="/imgs/bookmark_thin.svg">
+                                                <span class="ItemCountText" th:text="*{bookmarkCount}"></span>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="ItemSpaceNameContainer">
-                                    <p class="ItemSpaceName" th:text="*{title}"></p>
-                                </div>
-                                <div class="ItemPriceContainer">
+                                    <div class="ItemSpaceNameContainer">
+                                        <p class="ItemSpaceName" th:text="*{title}"></p>
+                                    </div>
+                                    <div class="ItemPriceContainer">
                                     <span class="ItemPrice"
                                           th:text="${#numbers.formatInteger(placeDto.price, 3, 'COMMA')} + '원'"></span>
+                                    </div>
+                                </div>
+                                <div class="mpcre-img-con" style="margin-right: 0;">
+                                    <img th:src="|/file/display?fileName=*{placeFileDto.uploadPath}/t_*{placeFileDto.uuid}_*{placeFileDto.fileName}|">
                                 </div>
                             </div>
-                            <div class="mpcre-img-con" style="margin-right: 0;">
-                                <img th:src="|/file/display?fileName=*{placeFileDto.uploadPath}/t_*{placeFileDto.uuid}_*{placeFileDto.fileName}|">
+                        </a>
+                        <div class="mpcp-list">
+                            <div id="reservationsContainer"></div>
+                            <div class="loading-wrap" id="mpLoadingMark">
+                                <img alt="" src="/imgs/loading.svg">
                             </div>
-                        </div>
-                    </div>
-                    <div class="mpcp-list">
-                        <div id="reservationsContainer"></div>
-                        <div class="loading-wrap" id="mpLoadingMark">
-                            <img alt="" src="/imgs/loading.svg">
                         </div>
                     </div>
                 </div>
-            </div>
-        </article>
-    </div>
-</main>
+            </article>
+        </div>
+    </main>
 
-<footer th:replace="~{global-templates/header-footer :: footer}"></footer>
-
+    <footer th:replace="~{global-templates/header-footer :: footer}"></footer>
+</div>
 </body>
-<script src="https://code.jquery.com/jquery-3.6.4.js"></script>
-<script src="/js/global-js/global.js" type="module"></script>
-<script src="/js/mypage/mypage.js"></script>
-<script src="/js/mypage/place-reservation.js" type="module"></script>
-<script src="/js/global-js/calendar.js"></script>
-<script src="/js/global-js/chat.js" type="module"></script>
-<script>
+<script th:inline="javascript">
     document.getElementById('places').classList.add('active');
+
+    const pId = [[${placeDto.id}]];
 </script>
+<script src="https://code.jquery.com/jquery-3.6.4.js"></script>
+<script th:src="@{/js/global-js/global.js}" type="module"></script>
+<script th:src="@{/js/global-js/chat.js}" type="module"></script>
+<script th:src="@{/js/mypage/place-reservation.js}" type="module"></script>
 
 </html>
