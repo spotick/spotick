@@ -21,38 +21,7 @@
     <div class="modal-bg" id="modal">
         <div th:replace="~{global-templates/new-global-dialogue-modal :: global-dialogue}"></div>
         <div th:replace="~{global-templates/new-global-dialogue-modal :: global-selection}"></div>
-        <div class="modal-place">
-            <div class="modal-place-user-con">
-                <div class="modal-user-icon">
-                    <img id="detailProfileImg">
-                </div>
-                <span class="modal-user-name" id="detailNickName"></span>
-            </div>
-            <div class="modal-place-content-container">
-                <div class="modal-place-con-box">
-                    <div class="modal-place-title">요청 사항</div>
-                    <div class="modal-place-input-con">
-                    <textarea class="modal-place-txarea" cols="30"
-                              id="detailContent" readonly
-                              rows="10"></textarea>
-                    </div>
-                    <div class="modal-place-title">답변 작성</div>
-                    <div class="modal-place-input-con">
-                    <textarea class="modal-place-txarea" cols="30" id="response"
-                              placeholder="여기에 입력하세요." rows="10"></textarea>
-                    </div>
-                    <div class="error-content" style="margin-top: 4px;"></div>
-                </div>
-            </div>
-            <div class="modal-place-btn-wrap" style="justify-content: center;">
-                <button class="modal-place-btn" id="requestBtn"
-                        style="background-color: rgb(40, 184, 40);"
-                        type="button">
-                    <span>작성 완료</span>
-                </button>
-            </div>
-            <input id="inquiryId" type="hidden">
-        </div>
+        <div class="modal-place" id="placeModal"></div>
     </div>
 
     <header th:replace="~{global-templates/header-footer :: header}"></header>
@@ -62,13 +31,15 @@
         <div class="mp-content">
             <article>
                 <div class="mpc-title">
-                    <h2>장소 관리</h2>
-                    <i class="fa-solid fa-angle-right"></i>
-                    <h2>문의</h2>
+                    <div class="flex items-center">
+                        <h2>장소 관리</h2>
+                        <i class="fa-solid fa-angle-right"></i>
+                        <h2>문의</h2>
+                    </div>
                 </div>
                 <div class="mpcp-wrap">
                     <div class="mpcp-main">
-                        <div class="mpcp-target" th:object="${placeDto}">
+                        <a class="mpcp-target" th:href="@{/place/{placeId}(placeId = *{id})}" th:object="${placeDto}">
                             <div style="display: flex; justify-content: space-between;">
                                 <div class="ItemTextContainer" style="max-width: 400px">
                                     <div class="ItemHostNameContainer">
@@ -98,7 +69,7 @@
                                     <img th:src="|/file/display?fileName=*{placeFileDto.uploadPath}/t_*{placeFileDto.uuid}_*{placeFileDto.fileName}|">
                                 </div>
                             </div>
-                        </div>
+                        </a>
                         <div class="mpcp-list">
                             <div id="inquiriesContainer"></div>
                             <div class="loading-wrap" id="mpLoadingMark">
@@ -116,6 +87,8 @@
 </body>
 <script th:inline="javascript">
     document.getElementById('places').classList.add('active');
+
+    const pId = [[${placeDto.id}]];
 </script>
 <script src="https://code.jquery.com/jquery-3.6.4.js"></script>
 <script th:src="@{/js/global-js/global.js}" type="module"></script>

@@ -376,11 +376,61 @@ export const modalLayouts = (() => {
         `;
     }
 
+    const inquiryRequestModalLayout = (dto) => {
+        const {
+            id,
+            inquiryTitle,
+            content,
+            nickname,
+            fileName,
+            uuid,
+            uploadPath,
+            defaultImage
+        } = dto;
+
+        return `
+            <div class="modal-place-user-con">
+                <div class="modal-user-icon">
+                    <img alt="${nickname}" ${defaultImage ? `src="/file/default/display?fileName=${fileName}"` : `src="/file/display?fileName=${uploadPath}/t_${uuid}_${fileName}`}>
+                </div>
+                <span class="modal-user-name">${nickname}</span>
+            </div>
+            <div class="modal-place-content-container">
+                <div class="modal-place-con-box">
+                    <div class="modal-place-title">요청 사항</div>
+                    <div class="modal-place-input-con">
+                        <textarea class="modal-place-txarea" cols="30" readonly
+                                rows="10">${content}</textarea>
+                    </div>
+                    <div class="modal-place-title">답변 작성</div>
+                    <div class="modal-place-input-con">
+                        <textarea class="modal-place-txarea" cols="30" id="response"
+                                placeholder="최소 10자 이상 입력해주세요." rows="10"></textarea>
+                    </div>
+                    <div class="space-between">
+                        <div class="error-content" id="errorContent"></div>
+                        <div class="mr-type-counter">
+                            <span>글자수</span>
+                            <span id="typeCounter">0</span>
+                            <span>/ 200</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-place-btn-wrap" style="justify-content: center;">
+                <button class="modal-place-btn green" id="requestBtn" iId="${id}" disabled type="button">
+                    <span>작성 완료</span>
+                </button>
+            </div>
+        `;
+    }
+
     return {
         placeReservationDetailModalLayout: placeReservationDetailModalLayout,
         inquiryDetailModalLayout: inquiryDetailModalLayout,
         reviewWriteFormModalLayout: reviewWriteFormModalLayout,
         reviewEditFormModalLayout: reviewEditFormModalLayout,
         reservationRequestModalLayout: reservationRequestModalLayout,
+        inquiryRequestModalLayout: inquiryRequestModalLayout,
     }
 })();

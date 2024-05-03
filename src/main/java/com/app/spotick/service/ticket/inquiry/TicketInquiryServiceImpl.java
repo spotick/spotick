@@ -43,7 +43,7 @@ public class TicketInquiryServiceImpl implements TicketInquiryService {
 
     @Override
     public void updateInquiryResponse(InquiryResponseDto inquiryResponseDto) {
-        Ticket tmpTicket = ticketRepository.getReferenceById(inquiryResponseDto.getId());
+        Ticket tmpTicket = ticketRepository.getReferenceById(inquiryResponseDto.getPlaceId());
 
         TicketInquiry foundInquiry = ticketInquiryRepository.findByIdAndTicket(inquiryResponseDto.getInquiryId(), tmpTicket).orElseThrow(
                 NoSuchElementException::new

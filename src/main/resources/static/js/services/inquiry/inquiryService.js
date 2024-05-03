@@ -24,10 +24,41 @@ export const inquiryService = (() => {
         return response.json();
     }
 
+    const getPlaceInquiriesOfHost = async (placeId, page, callback) => {
+        const response = await fetch(`/inquiries/api/getPlace/${placeId}?page=${page}`);
+        const data = await response.json();
+
+        if (callback) {
+            return callback(data);
+        }
+
+        return data;
+    }
+
+    const responsePlaceInquiry = async (placeId, inquiryId, response) => {
+        const inquiryResponseDto = {
+            placeId: placeId,
+            inquiryId: inquiryId,
+            response: response
+        }
+
+        const res = await fetch(`/inquiries/api/responsePlaceInquiry`, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(inquiryResponseDto)
+        });
+
+        return res.json();
+    }
+
     return {
         getPlaceInquiriesOfUser: getPlaceInquiriesOfUser,
         getTicketInquiriesOfUser: getTicketInquiriesOfUser,
         deletePlaceInquiry: deletePlaceInquiry,
         deleteTicketInquiry: deleteTicketInquiry,
+        getPlaceInquiriesOfHost: getPlaceInquiriesOfHost,
+        responsePlaceInquiry: responsePlaceInquiry,
     }
 })();

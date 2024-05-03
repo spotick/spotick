@@ -1,5 +1,5 @@
 import {loadingMarkService} from '../utils/loadingMark.js';
-import {placeInquiriesPaginationComponent, ticketInquiriesPaginationComponent} from "../modules/mypage/InquiryComponent.js";
+import {placeInquiriesPaginationComponent, ticketInquiriesPaginationComponent} from "../modules/inquiry/InquiryComponent.js";
 import {showGlobalSelection, showGlobalDialogue, closeEveryModal, showCustomModal} from "../global-js/global-modal.js";
 import {inquiryService} from "../services/inquiry/inquiryService.js";
 import {modalLayouts} from "../layouts/mypage/modalLayouts.js";

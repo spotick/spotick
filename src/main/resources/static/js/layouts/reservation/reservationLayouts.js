@@ -46,7 +46,7 @@ export const reservationLayouts = (() => {
             `;
         });
 
-        return {isLast, html, contents}
+        return {isLast, html, contents};
     }
 
     return {

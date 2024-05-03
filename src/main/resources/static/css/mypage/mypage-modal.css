@@ -104,6 +104,16 @@
     cursor: pointer;
 }
 
+.modal-place-btn.green {
+    background-color: rgb(40, 184, 40);
+}
+
+.modal-place-btn:disabled {
+    cursor: not-allowed;
+    background-color: #e7eaee;
+    color: #9ea4aa;
+}
+
 .modal-place-txarea {
     width: 600px;
     height: 200px;

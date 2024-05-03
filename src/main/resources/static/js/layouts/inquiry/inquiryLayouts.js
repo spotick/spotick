@@ -1,3 +1,5 @@
+import {formatKoreanDate} from "../../utils/timeUtils.js";
+
 export const inquiryLayouts = (() => {
 
     const placeInquiryListLayout = (contents) => {
@@ -71,7 +73,7 @@ export const inquiryLayouts = (() => {
                             <div class="mpcriq-content">${content}</div>
                         ${isResponded
                 ? `<div class="mpcriq-check" title="답변 받음">
-                                <img src="/imgs/green_check.svg">
+                                <img src="/imgs/green_check.svg" alt="답변받음">
                             </div>`
                 : ''
             }
@@ -123,7 +125,7 @@ export const inquiryLayouts = (() => {
                             </button>
                         </div>
                         <a class="mpc-ticket-img-con" href="/ticket/${ticketId}">
-                            <img src="/file/display?fileName=${uploadPath}/t_${uuid}_${fileName}">
+                            <img src="/file/display?fileName=${uploadPath}/t_${uuid}_${fileName}" alt="${title}">
                         </a>
                         <div class="mpct-card-content" style="min-width: 40%">
                             <div class="mpccc-row">
@@ -149,7 +151,7 @@ export const inquiryLayouts = (() => {
                                 <div class="mpcri-title">문의 내용</div>
                             ${isResponded ?
                 `<div class="response-check-icon" title="답변 받음">
-                                    <img src="/imgs/green_check.svg">
+                                    <img src="/imgs/green_check.svg" alt="답변받음">
                                 </div>`
                 : ''
             }
@@ -165,8 +167,50 @@ export const inquiryLayouts = (() => {
         return html;
     }
 
+    const placeInquiryListHostLayout = (data) => {
+        const contents = data.content;
+        const isLast = data.last;
+        let html = ``;
+
+        contents.forEach((inquiry) => {
+            const {
+                id,
+                inquiryTitle,
+                nickname,
+                fileName,
+                uuid,
+                uploadPath,
+                defaultImage
+            } = inquiry;
+
+            html += `
+                <div class="mpcp-item inquiry" iId="${id}">
+                    <div class="mpcpi-top">
+                        <div class="mpcpi-request-user-con">
+                            <div class="mpcpi-ruser-icon">
+                                <img alt="${nickname}" ${defaultImage ? `src="/file/default/display?fileName=${fileName}"` : `src="/file/display?fileName=${uploadPath}/t_${uuid}_${fileName}`}>
+                            </div>
+                            <span class="mpcp-ruser-name">${nickname}</span>
+                        </div>
+                    </div>
+                    <div class="mpcp-body">
+                        <div class="mpcp-content" style="font-size: 18px;">
+                            <span>${inquiryTitle}</span>
+                        </div>
+                        <div class="mpcp-btn detailOpen" iId="${id}">
+                            <span>상세보기</span>
+                        </div>
+                    </div>
+                </div> 
+            `;
+        });
+
+        return {isLast, html, contents};
+    }
+
     return {
         placeInquiryListLayout: placeInquiryListLayout,
         ticketInquiryListLayout: ticketInquiryListLayout,
+        placeInquiryListHostLayout: placeInquiryListHostLayout,
     }
 })();
