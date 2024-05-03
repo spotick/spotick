@@ -1,6 +1,6 @@
 import {payService} from "../global-js/bootpay.js";
 import {reservationService} from "../services/reservation/reservationService.js";
-import {showGlobalSelection, showGlobalDialogue, closeEveryModal, showCustomModal} from "../global-js/global-modal.js";
+import {showGlobalSelection, showGlobalDialogue, showCustomModal} from "../global-js/global-modal.js";
 import {modalLayouts} from "../layouts/mypage/modalLayouts.js";
 import {calendarService} from "../global-js/calendar.js";
 

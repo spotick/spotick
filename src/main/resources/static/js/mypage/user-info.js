@@ -1,4 +1,4 @@
-import {showGlobalDialogue, showGlobalSelection, showCustomModal, closeEveryModal} from "../global-js/global-modal.js";
+import {showGlobalDialogue, showCustomModal, closeEveryModal} from "../global-js/global-modal.js";
 import {userService} from "../services/user/userService.js";
 
 const userImage = document.getElementById('userImage');

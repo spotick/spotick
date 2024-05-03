@@ -65,9 +65,9 @@ public class PlaceInquiryServiceImpl implements PlaceInquiryService {
     public void deleteInquiryById(Long placeInquiryId, Long userId) {
         User tmpUser = userRepository.getReferenceById(userId);
 
-        PlaceInquiry foundInquiry = inquiryRepository.findByIdAndUser(placeInquiryId, tmpUser).orElseThrow(() -> {
-            throw new NoSuchElementException("예약 내역 찾을 수 없음");
-        });
+        PlaceInquiry foundInquiry = inquiryRepository.findByIdAndUser(placeInquiryId, tmpUser).orElseThrow(
+                () -> new NoSuchElementException("예약 내역 찾을 수 없음")
+        );
 
         inquiryRepository.delete(foundInquiry);
     }

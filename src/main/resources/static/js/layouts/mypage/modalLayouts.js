@@ -119,7 +119,7 @@ export const modalLayouts = (() => {
     const inquiryDetailModalLayout = async (dto) => {
         const {content, response, responded} = dto;
 
-        let responseTextarea = '';
+        let responseTextarea;
         if (responded) {
             responseTextarea = response;
         } else {
@@ -144,7 +144,6 @@ export const modalLayouts = (() => {
 
     const reviewWriteFormModalLayout = async (dto) => {
         const {
-            id,
             reservationId,
             title,
             price,
