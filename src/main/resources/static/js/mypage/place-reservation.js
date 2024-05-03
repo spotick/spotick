@@ -25,8 +25,7 @@ window.onload = () => {
         let {scrollTop, scrollHeight, clientHeight} = document.documentElement;
 
         if (clientHeight + scrollTop >= scrollHeight) {
-            isLoading = true;
-            reservationService.requestReservations(reservationService.loadReservations);
+            getReservationList();
         }
     });
 };
@@ -50,6 +49,7 @@ const getReservationList = async () => {
 
         loadingMarkService.hide(loadingMark);
         isLoading = false;
+        page++;
     }
 }
 
