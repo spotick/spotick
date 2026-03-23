@@ -4,9 +4,9 @@ import com.app.spotick.api.response.DataResponse;
 import com.app.spotick.domain.dto.promotion.PromotionListDto;
 import com.app.spotick.domain.dto.user.UserDetailsDto;
 import com.app.spotick.domain.type.promotion.PromotionCategory;
+import com.app.spotick.global.util.type.PromotionSortType;
 import com.app.spotick.service.promotion.PromotionService;
 import com.app.spotick.service.promotion.like.PromotionLikeService;
-import com.app.spotick.util.type.PromotionSortType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
@@ -28,12 +28,15 @@ public class PromotionRestController {
     @GetMapping("/list")
     public ResponseEntity<?> getList(@RequestParam("page") int page,
                                      @RequestParam(value = "category", required = false) PromotionCategory category,
-                                     @RequestParam(value = "sort", required = false) PromotionSortType sortType,
+                                     @RequestParam(value = "sort", required = false, defaultValue = "NEWEST") PromotionSortType sortType,
                                      @RequestParam(value = "keyword", required = false) String keyword) {
 
         Pageable pageable = PageRequest.of(page, 12);
 
         Slice<PromotionListDto> contents = promotionService.getPromotionBoards(pageable, category, sortType, keyword);
+
+
+        System.out.println("contents.getContent() = " + contents.getContent());
 
         return new ResponseEntity<>(DataResponse.builder()
                 .success(true)
@@ -51,7 +54,7 @@ public class PromotionRestController {
         Pageable pageable = PageRequest.of(page, 3);
 
         Slice<PromotionListDto> contents = promotionService.getPromotionBoardsOfUser(pageable, userId, promotionId);
-
+        
         return new ResponseEntity<>(DataResponse.builder()
                 .success(true)
                 .message("조회 성공")

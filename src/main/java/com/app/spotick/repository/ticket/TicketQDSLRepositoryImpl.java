@@ -8,16 +8,19 @@ import com.app.spotick.domain.type.post.PostStatus;
 import com.app.spotick.domain.type.ticket.TicketCategory;
 import com.app.spotick.domain.type.ticket.TicketRatingType;
 import com.app.spotick.domain.type.ticket.TicketRequestType;
-import com.app.spotick.util.search.DistrictFilter;
-import com.app.spotick.util.type.TicketSortType;
+import com.app.spotick.global.util.search.DistrictFilter;
+import com.app.spotick.global.util.type.TicketSortType;
 import com.querydsl.core.BooleanBuilder;
+import com.querydsl.core.types.Expression;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.CaseBuilder;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.JPQLQuery;
+import com.querydsl.jpa.JPQLSubQuery;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -72,12 +75,12 @@ public class TicketQDSLRepositoryImpl implements TicketQDSLRepository {
                         ticket.endDate.before(LocalDate.now())
                 );
 
-        JPQLQuery<Integer> minPrice = JPAExpressions.select(ticketGrade.price.min())
+        JPQLSubQuery<Integer> minPrice = JPAExpressions.select(ticketGrade.price.min())
                 .from(ticketGrade)
                 .where(ticketGrade.ticket.eq(ticket))
                 .groupBy(ticketGrade.ticket.id);
 
-        JPQLQuery<Long> inquiriesCount = JPAExpressions.select(ticketInquiry.count())
+        JPQLSubQuery<Long> inquiriesCount = JPAExpressions.select(ticketInquiry.count())
                 .from(ticketInquiry)
                 .where(
                         ticketInquiry.ticket.eq(ticket),
@@ -172,7 +175,7 @@ public class TicketQDSLRepositoryImpl implements TicketQDSLRepository {
                                                    Long userId,
                                                    String keyword) {
 
-        JPQLQuery<Integer> lowestPrice = JPAExpressions.select(ticketGrade.price.min())
+        JPQLSubQuery<Integer> lowestPrice = JPAExpressions.select(ticketGrade.price.min())
                 .from(ticketGrade)
                 .where(ticketGrade.ticket.eq(ticket))
                 .groupBy(ticketGrade.ticket);
@@ -188,11 +191,11 @@ public class TicketQDSLRepositoryImpl implements TicketQDSLRepository {
             whereClause.and(ticket.ticketCategory.eq(ticketCategory));
         }
 
-        if (districtFilter != null && districtFilter.getDistrict() != null) {
+        if (districtFilter != null && districtFilter.getRegion() != null) {
 
-            if (!districtFilter.getDetailDistrict().isEmpty()) {
+            if (!districtFilter.getDistrict().isEmpty()) {
                 BooleanBuilder booleanBuilder = new BooleanBuilder();
-                for (String detailDistrict : districtFilter.getDetailDistrict()) {
+                for (String detailDistrict : districtFilter.getDistrict()) {
                     booleanBuilder.or(ticket.ticketEventAddress.address.like(districtFilter.getDistrict() + "%" + detailDistrict + "%"));
                 }
                 whereClause.and(booleanBuilder);
@@ -323,25 +326,32 @@ public class TicketQDSLRepositoryImpl implements TicketQDSLRepository {
         return Optional.ofNullable(content.get(0));
     }
 
-    private JPQLQuery<Long> likeCount() {
+    private JPQLSubQuery<Long> likeCount() {
         return JPAExpressions.select(ticketLike.count())
                 .from(ticketLike)
                 .where(ticketLike.ticket.eq(ticket));
     }
 
-    private JPQLQuery<Long> inquiryCount() {
+    private JPQLSubQuery<Long> inquiryCount() {
         return JPAExpressions.select(ticketInquiry.count())
                 .from(ticketInquiry)
                 .where(ticketInquiry.ticket.eq(ticket));
     }
 
-    private BooleanExpression isLiked(Long userId) {
-        return userId == null ?
-                Expressions.asBoolean(false)
-                : JPAExpressions.select(ticketLike.id.isNotNull())
-                .from(ticketLike)
-                .where(ticketLike.ticket.eq(ticket).and(ticketLike.user.id.eq(userId)))
-                .exists();
+    private Expression<Boolean> isLiked(Long userId) {
+        if (userId == null) {
+            return Expressions.constant(false);
+        }
+
+        return new CaseBuilder()
+                .when(
+                        JPAExpressions.selectOne()
+                                .from(ticketLike)
+                                .where(ticketLike.ticket.eq(ticket).and(ticketLike.user.id.eq(userId)))
+                                .exists()
+                )
+                .then(true)
+                .otherwise(false);
     }
 
     private OrderSpecifier<?>[] createOrderByClause(TicketSortType ticketSortType) {

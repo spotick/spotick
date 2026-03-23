@@ -13,19 +13,22 @@ import com.app.spotick.domain.entity.place.QPlaceFile;
 import com.app.spotick.domain.entity.place.QPlaceReview;
 import com.app.spotick.domain.type.place.PlaceReservationStatus;
 import com.app.spotick.domain.type.post.PostStatus;
-import com.app.spotick.util.search.DistrictFilter;
-import com.app.spotick.util.type.PlaceManagerSortType;
-import com.app.spotick.util.type.PlaceSortType;
+import com.app.spotick.global.util.search.DistrictFilter;
+import com.app.spotick.global.util.type.PlaceManagerSortType;
+import com.app.spotick.global.util.type.PlaceSortType;
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.Tuple;
+import com.querydsl.core.types.Expression;
 import com.querydsl.core.types.ExpressionUtils;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.CaseBuilder;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.core.types.dsl.NumberPath;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.JPQLQuery;
+import com.querydsl.jpa.JPQLSubQuery;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -34,6 +37,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
 import org.springframework.data.support.PageableExecutionUtils;
+import org.springframework.util.StringUtils;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -60,29 +64,32 @@ public class PlaceQDSLRepositoryImpl implements PlaceQDSLRepository {
 
     @Override
     public Slice<PlaceListDto> findPlaceListPage(Pageable pageable, Long userId, PlaceSortType sortType, DistrictFilter districtFilter, String keyword) {
-        JPQLQuery<Double> reviewAvg = createReviewAvgSub();
-        JPQLQuery<Long> reviewCount = createReviewCountSub();
-        JPQLQuery<Long> bookmarkCount = createBookmarkCountSub();
-        BooleanExpression isBookmarkChecked = isBookmarkCheckedSub(userId);
+        JPQLSubQuery<Double> reviewAvg = createReviewAvgSub();
+        JPQLSubQuery<Long> reviewCount = createReviewCountSub();
+        JPQLSubQuery<Long> bookmarkCount = createBookmarkCountSub();
+
         BooleanBuilder whereClause = new BooleanBuilder();
         whereClause.and(place.placeStatus.eq(PostStatus.APPROVED));
 
-        if (districtFilter != null && districtFilter.getDistrict() != null) {
-            if (!districtFilter.getDetailDistrict().isEmpty()) {
-                BooleanBuilder booleanBuilder = new BooleanBuilder();
-                for (String detailDistrict : districtFilter.getDetailDistrict()) {
-                    booleanBuilder.or(place.placeAddress.address.like(districtFilter.getDistrict() + "%" + detailDistrict + "%"));
+        if (districtFilter != null && StringUtils.hasText(districtFilter.getRegion())) {
+            BooleanBuilder areaBuilder = new BooleanBuilder();
+            String regionName = districtFilter.getRegion();
+
+            if (districtFilter.getDistrict() != null && !districtFilter.getDistrict().isEmpty()) {
+                // 상세 구군이 있는 경우 (서울, 부산 등)
+                for (String detail : districtFilter.getDistrict()) {
+                    areaBuilder.or(place.placeAddress.address.like(regionName + "%" + detail + "%"));
                 }
-                whereClause.and(booleanBuilder);
             } else {
-                whereClause.and(place.placeAddress.address.like(districtFilter.getDistrict() + "%"));
+                // 상세 구군이 없는 경우 (세종특별자치시 전체 조회 등)
+                areaBuilder.and(place.placeAddress.address.like(regionName + "%"));
             }
+            whereClause.and(areaBuilder);
         }
 
         if (keyword != null) {
             whereClause.and(createSearchCondition(keyword));
         }
-
 
         List<PlaceListDto> placeListDtos = queryFactory.select(
                         Projections.constructor(PlaceListDto.class,
@@ -93,7 +100,7 @@ public class PlaceQDSLRepositoryImpl implements PlaceQDSLRepository {
                                 ExpressionUtils.as(reviewAvg, aliasReviewAvg),
                                 ExpressionUtils.as(reviewCount, aliasReviewCount),
                                 ExpressionUtils.as(bookmarkCount, aliasBookmarkCount),
-                                isBookmarkChecked
+                                Expressions.asBoolean(false)
                         )
                 )
                 .from(place)
@@ -110,59 +117,94 @@ public class PlaceQDSLRepositoryImpl implements PlaceQDSLRepository {
             hasNext = true;
         }
 
-//        포스트의 id만 list로 가져온다
+        // 포스트의 id만 list로 가져온다
         List<Long> placeIdList = placeListDtos.stream().map(PlaceListDto::getId).toList();
 
-//        가져온 id리스트를 in절의 조건으로 사진정보들을 가져온다.
-        List<PlaceFileDto> fileDtoList = queryFactory.select(
-                        Projections.constructor(PlaceFileDto.class,
-                                placeFile.id,
-                                placeFile.fileName,
-                                placeFile.uuid,
-                                placeFile.uploadPath,
-                                placeFile.place.id
-                        ))
-                .from(placeFile)
-                .where(placeFile.place.id.in(placeIdList))
-                .orderBy(placeFile.id.asc(), placeFile.place.id.desc())
-                .fetch();
+        // 2. 가져온 게시글 ID들을 IN 절로 한 번에 조회하여 북마크 여부를 자바 단에서 매핑한다.
+        if (userId != null && !placeIdList.isEmpty()) {
+            List<Long> bookmarkedPlaceIds = queryFactory.select(placeBookmark.place.id)
+                    .from(placeBookmark)
+                    .where(placeBookmark.user.id.eq(userId)
+                            .and(placeBookmark.place.id.in(placeIdList)))
+                    .fetch();
 
-//        사진정보를 장소 id별로 묶는다
-        Map<Long, List<PlaceFileDto>> fileListMap = fileDtoList.stream().collect(Collectors.groupingBy(PlaceFileDto::getPlaceId));
+            placeListDtos.forEach(dto ->
+                    dto.setBookmarkChecked(bookmarkedPlaceIds.contains(dto.getId()))
+            );
+        }
 
-//        장소 id별로 구분된 사진들을 각각 게시글 번호에 맞게 추가한다
-        placeListDtos.forEach(placeListDto -> {
-            placeListDto.updatePlaceFiles(fileListMap.get(placeListDto.getId())
-                    .stream().limit(5L).toList());
-            // 화면에서 뿌릴 주소값 가공
-            placeListDto.getPlaceAddress().cutAddress();
-        });
+        // 가져온 id리스트를 in절의 조건으로 사진정보들을 가져온다.
+        if (!placeIdList.isEmpty()) {
+            List<PlaceFileDto> fileDtoList = queryFactory.select(
+                            Projections.constructor(PlaceFileDto.class,
+                                    placeFile.id,
+                                    placeFile.fileName,
+                                    placeFile.uuid,
+                                    placeFile.uploadPath,
+                                    placeFile.place.id
+                            ))
+                    .from(placeFile)
+                    .where(placeFile.place.id.in(placeIdList))
+                    .orderBy(placeFile.id.asc(), placeFile.place.id.desc())
+                    .fetch();
+
+            // 사진정보를 장소 id별로 묶는다
+            Map<Long, List<PlaceFileDto>> fileListMap = fileDtoList.stream().collect(Collectors.groupingBy(PlaceFileDto::getPlaceId));
+
+            // 장소 id별로 구분된 사진들을 각각 게시글 번호에 맞게 추가한다
+            placeListDtos.forEach(placeListDto -> {
+                if (fileListMap.containsKey(placeListDto.getId())) {
+                    placeListDto.updatePlaceFiles(fileListMap.get(placeListDto.getId())
+                            .stream().limit(5L).toList());
+                }
+                // 화면에서 뿌릴 주소값 가공
+                placeListDto.getPlaceAddress().cutAddress();
+            });
+        }
 
         return new SliceImpl<>(placeListDtos, pageable, hasNext);
     }
 
     @Override
     public Optional<PlaceDetailDto> findPlaceDetailById(Long placeId, Long userId) {
-        JPQLQuery<Double> reviewAvgSub = createReviewAvgSub();
-        JPQLQuery<Long> reviewCountSub = createReviewCountSub();
-        JPQLQuery<Long> inquiryCountSub = createInquiryCountSub();
-        BooleanExpression bookmarkCheckedSub = isBookmarkCheckedSub(userId);
-        QPlaceReview subReview = new QPlaceReview("pr");
-        JPQLQuery<Long> review5scoreCount = JPAExpressions.select(subReview.id.count())
-                .from(subReview)
-                .where(subReview.placeReservation.place.id.eq(placeId), subReview.score.eq(5));
+        JPQLSubQuery<Double> reviewAvgSub = createReviewAvgSub();
+        JPQLSubQuery<Long> reviewCountSub = createReviewCountSub();
+        JPQLSubQuery<Long> inquiryCountSub = createInquiryCountSub();
 
+        // SELECT 절에서 문제가 되던 상수(5) 및 파라미터(userId) 포함 서브쿼리들을 모두 걷어냈다.
         List<Tuple> tupleList = queryFactory.select(
                         place,
                         reviewAvgSub,
                         reviewCountSub,
-                        inquiryCountSub,
-                        bookmarkCheckedSub,
-                        review5scoreCount
+                        inquiryCountSub
                 ).from(place)
-                .join(place.placeFileList).fetchJoin()
+                .leftJoin(place.placeFileList).fetchJoin()
                 .where(place.id.eq(placeId))
                 .fetch();
+
+        if (tupleList.isEmpty()) {
+            return Optional.empty();
+        }
+
+        boolean isBookmarked;
+        if (userId != null) {
+            Long bookmarkCount = queryFactory.select(placeBookmark.id.count())
+                    .from(placeBookmark)
+                    .where(placeBookmark.place.id.eq(placeId)
+                            .and(placeBookmark.user.id.eq(userId)))
+                    .fetchOne();
+            isBookmarked = bookmarkCount != null && bookmarkCount > 0;
+        } else {
+            isBookmarked = false;
+        }
+
+        QPlaceReview placeReview = QPlaceReview.placeReview;
+        Long review5ScoreCount = queryFactory.select(placeReview.id.count())
+                .from(placeReview)
+                .where(placeReview.placeReservation.place.id.eq(placeId)
+                        .and(placeReview.score.eq(5)))
+                .fetchOne();
+
         PlaceDetailDto placeDetailDto = tupleList.stream().map(tuple -> {
             Place foundPlace = tuple.get(place);
             PlaceDetailDto placeDetail = PlaceDetailDto.from(foundPlace);
@@ -170,8 +212,11 @@ public class PlaceQDSLRepositoryImpl implements PlaceQDSLRepository {
             placeDetail.setEvalAvg(tuple.get(reviewAvgSub) == null ? 0.0 : tuple.get(reviewAvgSub));
             placeDetail.setEvalCount(tuple.get(reviewCountSub));
             placeDetail.setInquiryCount(tuple.get(inquiryCountSub));
-            placeDetail.setBookmarkChecked(tuple.get(bookmarkCheckedSub));
-            placeDetail.setEval5ScoreCount(tuple.get(review5scoreCount));
+
+            // 분리한 쿼리의 결과값을 DTO에 주입
+            placeDetail.setBookmarkChecked(isBookmarked);
+            placeDetail.setEval5ScoreCount(review5ScoreCount == null ? 0L : review5ScoreCount);
+
             return placeDetail;
         }).findFirst().orElseThrow(() -> new IllegalStateException("잘못된 게시글"));
 
@@ -222,10 +267,14 @@ public class PlaceQDSLRepositoryImpl implements PlaceQDSLRepository {
                         placeReservation.notReviewing.eq(false),
                         placeReview.isNull());
 
-        JPQLQuery<Double> reviewAvg = createReviewAvgSub();
-        JPQLQuery<Long> reviewCount = createReviewCountSub();
-        JPQLQuery<Long> bookmarkCount = createBookmarkCountSub();
-        BooleanExpression isBookmarkChecked = isBookmarkCheckedSub(userId);
+        JPQLSubQuery<Double> reviewAvg = createReviewAvgSub();
+        JPQLSubQuery<Long> reviewCount = createReviewCountSub();
+        JPQLSubQuery<Long> bookmarkCount = createBookmarkCountSub();
+
+        Expression<Boolean> isBookmarkChecked = new CaseBuilder()
+                .when(isBookmarkCheckedSub(userId))
+                .then(true)
+                .otherwise(false);
 
         List<PlaceReservedNotReviewedDto> notReviewListDtos = queryFactory.select(
                         Projections.constructor(PlaceReservedNotReviewedDto.class,
@@ -302,9 +351,9 @@ public class PlaceQDSLRepositoryImpl implements PlaceQDSLRepository {
                         place.placeStatus.ne(PostStatus.MODIFICATION_REQUESTED)
                 );
 
-        JPQLQuery<Double> reviewAvg = createReviewAvgSub();
-        JPQLQuery<Long> reviewCount = createReviewCountSub();
-        JPQLQuery<Long> bookmarkCount = createBookmarkCountSub();
+        JPQLSubQuery<Double> reviewAvg = createReviewAvgSub();
+        JPQLSubQuery<Long> reviewCount = createReviewCountSub();
+        JPQLSubQuery<Long> bookmarkCount = createBookmarkCountSub();
 
         List<PlaceManageListDto> placeManageListDtos = queryFactory.select(
                         Projections.constructor(PlaceManageListDto.class,
@@ -322,9 +371,9 @@ public class PlaceQDSLRepositoryImpl implements PlaceQDSLRepository {
                 .from(place)
                 .where(
                         place.user.id.eq(userId),
-                        place.placeStatus.ne(PostStatus.REPLACED),
-                        place.placeStatus.ne(PostStatus.DELETED),
-                        place.placeStatus.ne(PostStatus.MODIFICATION_REQUESTED)
+                        place.placeStatus.stringValue().ne(PostStatus.REPLACED.name()),
+                        place.placeStatus.stringValue().ne(PostStatus.DELETED.name()),
+                        place.placeStatus.stringValue().ne(PostStatus.MODIFICATION_REQUESTED.name())
                 )
                 .orderBy(createOrderByClause(sortType))
                 .offset(pageable.getOffset())
@@ -364,9 +413,9 @@ public class PlaceQDSLRepositoryImpl implements PlaceQDSLRepository {
     @Override
     public Optional<ContractedPlaceDto> findPlaceBriefly(Long placeId, Long userId) {
 
-        JPQLQuery<Double> reviewAvg = createReviewAvgSub();
-        JPQLQuery<Long> reviewCount = createReviewCountSub();
-        JPQLQuery<Long> bookmarkCount = createBookmarkCountSub();
+        JPQLSubQuery<Double> reviewAvg = createReviewAvgSub();
+        JPQLSubQuery<Long> reviewCount = createReviewCountSub();
+        JPQLSubQuery<Long> bookmarkCount = createBookmarkCountSub();
 
         Optional<ContractedPlaceDto> contractedPlaceDto = Optional.ofNullable(queryFactory
                 .from(place)
@@ -456,26 +505,26 @@ public class PlaceQDSLRepositoryImpl implements PlaceQDSLRepository {
         return content;
     }
 
-    private JPQLQuery<Double> createReviewAvgSub() {
+    private JPQLSubQuery<Double> createReviewAvgSub() {
         return JPAExpressions.select(placeReview.score.avg())
                 .from(placeReview)
                 .where(placeReview.placeReservation.place.eq(place));
     }
 
-    private JPQLQuery<Long> createReviewCountSub() {
+    private JPQLSubQuery<Long> createReviewCountSub() {
         return JPAExpressions.select(placeReview.count())
                 .from(placeReview)
                 .where(placeReview.placeReservation.place.eq(place));
     }
 
-    private JPQLQuery<Long> createBookmarkCountSub() {
+    private JPQLSubQuery<Long> createBookmarkCountSub() {
 
         return JPAExpressions.select(placeBookmark.count())
                 .from(placeBookmark)
                 .where(placeBookmark.place.eq(place));
     }
 
-    private JPQLQuery<Long> createInquiryCountSub() {
+    private JPQLSubQuery<Long> createInquiryCountSub() {
         return JPAExpressions.select(placeInquiry.id.count())
                 .from(placeInquiry)
                 .where(placeInquiry.place.eq(place));
@@ -484,22 +533,22 @@ public class PlaceQDSLRepositoryImpl implements PlaceQDSLRepository {
     private BooleanExpression isBookmarkCheckedSub(Long userId) {
         return userId == null ?
                 Expressions.asBoolean(false)
-                : JPAExpressions.select(placeBookmark.id.isNotNull())
+                : JPAExpressions.select(placeBookmark.id.count())
                 .from(placeBookmark)
                 .where(placeBookmark.place.eq(place).and(placeBookmark.user.id.eq(userId)))
-                .exists();
+                .gt(0L);
     }
 
-    private JPQLQuery<Long> createReservationCountSub() {
+    private JPQLSubQuery<Long> createReservationCountSub() {
         return JPAExpressions.select(placeReservation.count())
                 .from(placeReservation)
                 .where(
                         placeReservation.place.eq(place),
-                        placeReservation.reservationStatus.eq(PlaceReservationStatus.PENDING)
+                        placeReservation.reservationStatus.stringValue().eq(PlaceReservationStatus.PENDING.name())
                 );
     }
 
-    private JPQLQuery<Long> createNotRespondedInquiriesCountSub() {
+    private JPQLSubQuery<Long> createNotRespondedInquiriesCountSub() {
         return JPAExpressions.select(placeInquiry.count())
                 .from(placeInquiry)
                 .where(
@@ -601,7 +650,5 @@ public class PlaceQDSLRepositoryImpl implements PlaceQDSLRepository {
                 .or(subTitleContains)
                 .or(addressContains)
                 .or(addressDetailContains);
-
     }
-
 }

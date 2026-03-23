@@ -5,9 +5,9 @@ import com.app.spotick.domain.entity.promotion.PromotionBoard;
 import com.app.spotick.domain.entity.user.User;
 import com.app.spotick.domain.type.post.PostStatus;
 import com.app.spotick.domain.type.promotion.PromotionCategory;
+import com.app.spotick.global.util.type.PromotionSortType;
 import com.app.spotick.repository.promotion.PromotionRepository;
 import com.app.spotick.repository.user.UserRepository;
-import com.app.spotick.util.type.PromotionSortType;
 import lombok.RequiredArgsConstructor;
 import net.coobird.thumbnailator.Thumbnailator;
 import org.springframework.beans.factory.annotation.Value;
@@ -53,6 +53,7 @@ public class PromotionServiceImpl implements PromotionService {
                 .fileName(fileDto.getFileName())
                 .uuid(fileDto.getUuid())
                 .uploadPath(fileDto.getUploadPath())
+                .status(PostStatus.REGISTRATION_PENDING)
                 .build();
 
         PromotionBoard savedEntity = promotionRepository.save(entity);

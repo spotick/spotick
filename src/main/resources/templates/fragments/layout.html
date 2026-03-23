@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+          name="viewport">
+    <meta content="ie=edge" http-equiv="X-UA-Compatible">
+    <meta name="bootpay-key" th:content="${bootpayJsKey}">
+
+    <title layout:fragment="title">Spotick</title>
+
+    <link rel="icon" th:href="@{/imgs/logo/favicon.png}">
+
+    <link rel="preload" href="/dist/css/global/root.min.css" as="style">
+    <link rel="stylesheet" href="/dist/css/global/root.min.css">
+</head>
+<body>
+<div class="layout-wrapper">
+    <header th:replace="~{fragments/header-footer :: header}"></header>
+
+    <main class="layout-wrapper__main" layout:fragment="content"></main>
+
+    <footer th:replace="~{fragments/header-footer :: footer}"></footer>
+
+    <div id="sonner-toaster" class="sonner-toaster"></div>
+</div>
+
+<script th:src="@{/dist/js/global/global.min.js}" type="module"></script>
+<th:block layout:fragment="script"></th:block>
+
+<input id="isLoggedIn" th:value="${#authorization.expression('isAuthenticated()')}" type="hidden"/>
+</body>
+</html>
